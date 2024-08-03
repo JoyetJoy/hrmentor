@@ -20,7 +20,6 @@ import  setup from '/assets/icons/admin-icons/setup.svg'
 import alert from '/assets/icons/admin-icons/alert-circle.svg'
 import calcu from '/assets/icons/admin-icons/calendar.svg'
 import more from '/assets/icons/admin-icons/more-horizontal.svg'
-import edit from '/assets/icons/admin-icons/edit.svg'
 import trash from '/assets/icons/admin-icons/trash-red.svg'
 import icon from '/assets/icons/admin-icons/i-icon.svg'
 
@@ -29,7 +28,6 @@ import icon from '/assets/icons/admin-icons/i-icon.svg'
 import profile from  '/assets/images/profile.jpg'
 import logo from '/assets/images/logo-header.svg'
 export const iconIcon =icon
-export const editIcon = edit
 export const trashiIcon = trash
 export const alertIcon = alert
 export const calcuIcon = calcu

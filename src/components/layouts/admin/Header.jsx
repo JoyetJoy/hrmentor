@@ -48,7 +48,7 @@ const adminItems = [
   {
     icon: accountIcon,
     label: "Account Management",
-    path: "/admin-management/role",
+    path: "/admin/roles",
   },
   { icon: logoutIcon, label: "Log Out", path: "/logout" },
 ];
