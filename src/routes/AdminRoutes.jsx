@@ -47,7 +47,7 @@ export const appRoutes = createBrowserRouter([
         element: <Dashbord />,
       },
       {
-        path: "menu",
+        path: "role",
         element: <Role />,
       },
     ],
