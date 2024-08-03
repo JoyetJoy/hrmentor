@@ -1,12 +1,11 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../pages/auth/admin/Login";
-import  { AdminLayout } from "../layouts/admin/AdminLayouts";
-import Dashbord from "../pages/admin/Dashbord";
-import Role from "../pages/admin/superadmin/accountmanagement/Role";
-// import Subscription from "../pages/admin/superadmin/accountmanagement/Subscription";
+import { AdminLayout } from "../layouts/admin/AdminLayouts";
+
 import ForgotPassword from "../pages/auth/admin/ForgotPass";
 import { AdminDashboard } from "../pages/admin/dashboard";
+import { MenuRoles } from "../pages/admin/menu/role";
 
 // function AdminRoutes() {
 //   return (
@@ -48,8 +47,8 @@ export const appRoutes = createBrowserRouter([
         element: <AdminDashboard />,
       },
       {
-        path: "menu",
-        element: <Role />,
+        path: "roles",
+        element: <MenuRoles />,
       },
     ],
   },
