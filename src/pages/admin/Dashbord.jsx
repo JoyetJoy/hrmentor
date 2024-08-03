@@ -31,36 +31,6 @@ function Dashbord() {
     ];
 
 
-    const stats = [
-        {
-            title: 'Total Employees',
-            value: '856',
-            percentage: '10.0%',
-            icon: increaseIcon,
-            description: 'Employees',
-        },
-        {
-            title: 'Job Views',
-            value: '856',
-            percentage: '10.0%',
-            icon: increaseIcon,
-            description: 'Viewers',
-        },
-        {
-            title: 'Application',
-            value: '856',
-            percentage: '10.0%',
-            icon: decreaseIcon,
-            description: 'Employees',
-        },
-        {
-            title: 'On leave',
-            value: '856',
-            percentage: '10.0%',
-            icon: decreaseIcon,
-            description: 'Employees',
-        },
-    ];
 
     return (
         <div className=' rounded-md mt-4 flex items-baseline justify-between gap-8'>
