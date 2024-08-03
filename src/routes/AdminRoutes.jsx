@@ -6,6 +6,7 @@ import Dashbord from "../pages/admin/Dashbord";
 import Role from "../pages/admin/superadmin/accountmanagement/Role";
 // import Subscription from "../pages/admin/superadmin/accountmanagement/Subscription";
 import ForgotPassword from "../pages/auth/admin/ForgotPass";
+import { AdminDashboard } from "../pages/admin/dashboard";
 
 // function AdminRoutes() {
 //   return (
@@ -44,7 +45,7 @@ export const appRoutes = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <Dashbord />,
+        element: <AdminDashboard />,
       },
       {
         path: "menu",
