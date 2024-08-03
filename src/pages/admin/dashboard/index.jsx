@@ -10,17 +10,16 @@ export const AdminDashboard = () => {
         <div className="flex justify-between items-center">
           <h1 className="font-extrabold text-xl  text-black">Dashbord</h1>
           <div className="flex items-center gap-6">
-            <div className=" btn flex  justify-center items-center px-9 bg-btncolor hover:bg-btncolor ">
-              <div className="w-4">
-                <Clock4 />
-              </div>
+            <div className=" btn flex  justify-center items-center px-6 h-11 min-h-11 bg-btncolor hover:bg-btncolor ">
+                <Clock4 className=" text-white object-conatine size-4" />
               <button className=" text-white ">Clock in </button>
             </div>
-            <label className="input outline-none border-none pr-28 flex items-center gap-2">
-              <Search />
+            <label className="input outline-none border-none pr-28 flex items-center  h-11 gap-2">
+              <Search className="text-gray-200 object-contain size-5" />
+             
               <input
                 type="text"
-                className="grow placeholder:text-sm focus:outline-none "
+                className="grow placeholder:text-sm focus:outline-none placeholder:text-gray-200 "
                 placeholder="Search"
               />
             </label>
@@ -29,10 +28,10 @@ export const AdminDashboard = () => {
         <div className="grid grid-cols-4 gap-4 mt-5">
           {employeeDetails.map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-md">
-              <h2 className="text-base text-black font-bold mb-6">
+              <h2 className="text-sm text-black font-semibold mb-6">
                 {stat.title}
               </h2>
-              <h1 className="flex items-end gap-3 text-black font-bold text-4xl">
+              <h1 className="flex items-end gap-3 text-black font-semibold text-4xl">
                 {stat.value}
                 <span className="text-textcolor-green flex items-center gap-1 justify-center text-sm">
                   <div className="w-3 h-3">
@@ -45,7 +44,7 @@ export const AdminDashboard = () => {
                   {stat.percentage}
                 </span>
               </h1>
-              <p className="text-gray-200 text-xs">{stat.description}</p>
+              <p className="text-gray-200 text-xs mt-1">{stat.description}</p>
             </div>
           ))}
         </div>
@@ -61,9 +60,9 @@ export const AdminDashboard = () => {
       <aside className="flex flex-col  w-3/12">
         <div className=" bg-white rounded-md px-6 py-3">
           <h1 className="text-base font-semibold mb-5">
-            Employee Coomposition
+            Employee Composition
             <br />
-            <span className="text-gray-200 text-sm font-normal">
+            <span className="text-gray-200 text-xs font-normal">
               Total Empployee:800
             </span>
           </h1>

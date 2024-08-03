@@ -1,30 +1,34 @@
+import trendingup from '/icons/trending-up.svg' 
+import trendingdown from '/icons/trending-down.svg' 
+
+
 export const employeeDetails = [
   {
     title: "Total Employees",
     value: "856",
     percentage: "10.0%",
-    // icon: increaseIcon,
+    icon: trendingup,
     description: "Employees",
   },
   {
     title: "Job Views",
     value: "856",
     percentage: "10.0%",
-    // icon: increaseIcon,
+    icon: trendingup,
     description: "Viewers",
   },
   {
     title: "Application",
     value: "856",
     percentage: "10.0%",
-    // icon: decreaseIcon,
+    icon: trendingdown,
     description: "Employees",
   },
   {
     title: "On leave",
     value: "856",
     percentage: "10.0%",
-    // icon: decreaseIcon,
+    icon: trendingup,
     description: "Employees",
   },
 ];

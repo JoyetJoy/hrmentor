@@ -75,7 +75,7 @@ export const AdminHeader = () => {
               className="object-contain w-full"
             />
           </div>
-          <span className="font-monorope text-lg font-normal ">
+          <span className="font-monorope text-base font-normal ">
             Welcome,
             <h1 className="font-semibold text-lg">Tech Butomy Pvt Ltd</h1>
           </span>
@@ -143,7 +143,7 @@ export const AdminHeader = () => {
                 <div className="w-11 h-11 overflow-hidden rounded-full bg-gray-100">
                   {/* <img src={ProfileImage} alt="logo image" className='object-contain w-full' /> */}
                 </div>
-                <h1 className="text-textcolor-100 flex font-semibold flex-col text-base">
+                <h1 className="text-textcolor-100  text-base flex font-semibold flex-col text-start">
                   Super Admin
                   <span className="text-textcolor-200 font-semibold text-xs">
                     Administrator

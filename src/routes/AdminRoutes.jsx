@@ -2,7 +2,7 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Login from "../pages/auth/admin/Login";
 import  { AdminLayout } from "../layouts/admin/AdminLayouts";
-import Dashbord from "../pages/admin/Dashbord";
+// import Dashbord from "../pages/admin/Dashbord";
 import Role from "../pages/admin/superadmin/accountmanagement/Role";
 // import Subscription from "../pages/admin/superadmin/accountmanagement/Subscription";
 import ForgotPassword from "../pages/auth/admin/ForgotPass";
