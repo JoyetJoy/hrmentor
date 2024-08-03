@@ -3,7 +3,7 @@ import loginimg from "/assets/images/login-img.png";
 import hrlogo from "/assets/images/hr-logo.svg";
 import { Link } from "react-router-dom";
 
-function ForgotPass() {
+function ForgotPassword() {
     return (
         <>
             <div className="flex flex-row h-screen items-center gap-48 p-9  ">
@@ -50,4 +50,4 @@ function ForgotPass() {
     )
 }
 
-export default ForgotPass
+export default ForgotPassword

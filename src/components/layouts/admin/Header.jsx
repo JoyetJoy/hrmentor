@@ -21,7 +21,8 @@ import {
   rosterIcon,
   payrollIcon,
   setupIcon,
-} from "../../utils";
+} from "../../../utils";
+
 
 const menuitems = [
   { id: 1, image: DashbordIcon, name: "Dashboard" },

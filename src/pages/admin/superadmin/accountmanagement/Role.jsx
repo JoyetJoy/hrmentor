@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { FaChevronUp, FaChevronDown, FaPlus, FaMinus } from 'react-icons/fa';
-import { MdOutlineNavigateNext } from "react-icons/md";
-import { BsArrowLeftShort } from "react-icons/bs";
+// import { FaChevronUp, FaChevronDown, FaPlus, FaMinus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-
 import SideBar from './SideBar';
 
 function Role() {
@@ -13,10 +10,10 @@ function Role() {
 
     return (
         <>
-        <div className='bg-white py-1 px-6 flex flex-row items-center justify-between mt-3 rounded-md'>
+        {/* <div className='bg-white py-1 px-6 flex flex-row items-center justify-between mt-3 rounded-md'>
             <h1 className='text-sm font-semibold text-black flex items-center justify-between gap-1'> <BsArrowLeftShort  className='size-5'/>Menu <MdOutlineNavigateNext className='size-3'/> Account Management<MdOutlineNavigateNext className='size-3'/> <span className='text-red-600'>Role</span></h1>
             <div className='text-base flex items-center gap-5 font-semibold '><Link>Role</Link> <Link  to="/admin-management/subscription" className=' flex items-center gap-6  text-[#808080]  '>Subscription</Link></div> 
-        </div>
+        </div> */}
         <div className='flex flex-row mt-3 gap-7'>
             <SideBar />
             <div className='w-full bg-white px-10 pt-9 rounded-md'>
@@ -36,7 +33,7 @@ function Role() {
                 <div className="relative my-6">
                     <Menu>
                         <MenuButton className="text-base font-extrabold text-black flex items-center gap-2" onClick={() => setShowJobOptions(!showJobOptions)}>
-                            Recruiter {showJobOptions ? <FaChevronUp /> : <FaChevronDown />}
+                            {/* Recruiter {showJobOptions ? <FaChevronUp /> : <FaChevronDown />} */}
                         </MenuButton>
                         <MenuItems anchor="bottom ">
                             <MenuItem class>

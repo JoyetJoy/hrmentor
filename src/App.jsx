@@ -1,12 +1,12 @@
 import React from "react";
-import AdminRoutes from "./routes/AdminRoutes";
-import Header from "./components/admin/Header";
+import { appRoutes } from "./routes/AdminRoutes";
+
+import { RouterProvider } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <AdminRoutes/>
-    
+      <RouterProvider router={appRoutes} />
     </>
   );
 }
