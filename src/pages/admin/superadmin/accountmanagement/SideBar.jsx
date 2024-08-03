@@ -1,17 +1,7 @@
 import React from 'react'
 import { editIcon, trashiIcon } from '../../../../utils'
 function SideBar() {
-    const roleItems = [
-        { id: '1', name: "Project Manager", no: "5", edit: editIcon, trash: trashiIcon },
-        { id: '2', name: "UI/UX Designer", no: "4", edit: editIcon, trash: trashiIcon },
-        { id: '3', name: "Frontend Developer", no: "1", edit: editIcon, trash: trashiIcon },
-        { id: '4', name: "UI/UX Designer", no: "4", edit: editIcon, trash: trashiIcon },
-        { id: '5', name: "Project Manager", no: "5", edit: editIcon, trash: trashiIcon },
-        { id: '6', name: "Frontend Developer", no: "7", edit: editIcon, trash: trashiIcon },
-        { id: '7', name: "UI/UX Designer", no: "1", edit: editIcon, trash: trashiIcon },
-        { id: '8', name: "Project Manager", no: "0", edit: editIcon, trash: trashiIcon },
-        { id: '9', name: "Frontend Developer", no: "2", edit: editIcon, trash: trashiIcon },
-    ]
+
 
     return (
         <div className='flex flex-col w-1/2'>

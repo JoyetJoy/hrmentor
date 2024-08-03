@@ -13,6 +13,8 @@ function Subscription() {
     const data = [
         
         {
+            price: '$10/Month',
+            name: 'Basic Plan',
             title: 'Recruiter',
             items: ['Audit log and data history', 'Unlimited individual users', 'Unlimited individual users'],
             bgColor: '#D1FADF',
@@ -20,6 +22,8 @@ function Subscription() {
             textColor: '#000000',
         },
         {
+            price: '$10/Month',
+            name: 'Basic Plan',
             title: 'Hiring',
             items: ['Audit log and data history', 'Unlimited individual users', 'Unlimited individual users'],
             bgColor: '#F1F1F1',
@@ -27,6 +31,8 @@ function Subscription() {
             textColor: '#101828',
         },
         {
+            price: '$10/Month',
+            name: 'Basic Plan',
             title: 'Hiring',
             items: ['Audit log and data history', 'Unlimited individual users', 'Unlimited individual users'],
             bgColor: '#F1F1F1',
@@ -44,13 +50,7 @@ function Subscription() {
         },
 
     ];
-    const [count, setCount] = useState(0);
-    const increment = () => {
-        setCount(count + 1);
-    };
-    const decrement = () => {
-        setCount(count - 1);
-    };
+
 
     return (
         <>
