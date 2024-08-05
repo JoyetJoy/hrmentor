@@ -1,6 +1,7 @@
-import trendingup from '/icons/trending-up.svg' 
-import trendingdown from '/icons/trending-down.svg' 
-
+import trendingup from '/public/assets/icons/admin/trending-up.svg' 
+import trendingdown from '/public/assets/icons/admin/trending-down.svg' 
+import tickgreen from '/public/assets/icons/admin/tick-green.svg';
+import tickgray from '/public/assets/icons/admin/tick-gray.svg';
 
 export const employeeDetails = [
   {
@@ -28,7 +29,7 @@ export const employeeDetails = [
     title: "On leave",
     value: "856",
     percentage: "10.0%",
-    icon: trendingup,
+    icon: trendingdown,
     description: "Employees",
   },
 ];
@@ -71,17 +72,33 @@ export const roleSidebarData = [
   { id: "9", name: "Frontend Developer", no: "2" },
 ];
 
+
 export const availablePlanData = [
   {
-    price: "$10/Month",
+    price: "$10",
     name: "Basic Plan",
-    title: "Recruiter",
- 
-    bgColor: "#D1FADF",
-    textColor: "#000000",
+
+   
     list: [
       {
-        name: "",
+        
+        title: "Recruiter",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
+
+        value: [
+          "Audit log and data history",
+          "Unlimited individual users",
+          "Unlimited individual users",
+          
+        ],
+      },
+      {
+        title: "Hiring",
+        bgColor: '#F1F1F1',
+        textColor: '#667085',
+        imgSrc: tickgray,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -89,15 +106,10 @@ export const availablePlanData = [
         ],
       },
       {
-        name: "",
-        value: [
-          "Audit log and data history",
-          "Unlimited individual users",
-          "Unlimited individual users",
-        ],
-      },
-      {
-        name: "",
+        title: "Employees",
+        bgColor: '#F1F1F1',
+        textColor: '#667085',
+        imgSrc: tickgray,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -107,12 +119,15 @@ export const availablePlanData = [
     ],
   },
   {
-    price: "$10/Month",
-    name: "Basic Plan",
-    title: "Hiring",
+    price: "$10",
+    name: "Business",
+
     list: [
       {
-        name: "",
+        title: "Recruiter",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -120,7 +135,10 @@ export const availablePlanData = [
         ],
       },
       {
-        name: "",
+        title: "Hiring",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -128,7 +146,10 @@ export const availablePlanData = [
         ],
       },
       {
-        name: "",
+        title: "Employee",
+        bgColor: '#F1F1F1',
+        textColor: '#667085',
+        imgSrc: tickgray,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -136,16 +157,18 @@ export const availablePlanData = [
         ],
       },
     ],
-    bgColor: "#F1F1F1",
-    textColor: "#101828",
+   
   },
   {
-    price: "$10/Month",
-    name: "Basic Plan",
-    title: "Hiring",
+    price: "$10",
+    name: "Enterprises",
+   
     list: [
       {
-        name: "",
+        title: "Recruiter",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -153,7 +176,10 @@ export const availablePlanData = [
         ],
       },
       {
-        name: "",
+        title: "Hiring",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -161,7 +187,10 @@ export const availablePlanData = [
         ],
       },
       {
-        name: "",
+        title: "Employee",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
         value: [
           "Audit log and data history",
           "Unlimited individual users",
@@ -169,7 +198,37 @@ export const availablePlanData = [
         ],
       },
     ],
-    bgColor: "#F1F1F1",
-    textColor: "#101828",
+
   },
 ];
+
+export const subcriptionModalData = [
+  {
+    text: "Morem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus.",
+    list: [
+      {
+        title: "Recruiter",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
+        value: [
+          "Audit log and data history",
+          "Unlimited individual users",
+          "Unlimited individual users",
+        ],
+      },
+      {
+        title: "Hiring",
+        bgColor: '#D1FADF',
+        textColor: "#000000",
+        imgSrc: tickgreen,
+        value: [
+          "Audit log and data history",
+          "Unlimited individual users",
+          "Unlimited individual users",
+        ],
+      },
+    ],
+  },
+];
+

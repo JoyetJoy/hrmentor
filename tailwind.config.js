@@ -14,14 +14,22 @@ export default {
           300: "#ECE9F1",
           400: "#E6E7EF",
           500: "#EBEBF0",
+          600:"#929292"
         },
         textcolor: {
           100: "#181C3A",
           200: "#646464",
           green: "#0B8A00",
+          300:"#3A3A3A",
+          blue:" #030E5C",  
         },
         btncolor: "#283277",
+        bgColor:"#FFFFFF"
+        
       },
+      backgroundImage:{
+        "subcription":"url('/public/assets/images/bg-subcription.png')"
+      }
     },
   },
 
