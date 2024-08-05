@@ -21,7 +21,7 @@ import alert from '/assets/icons/admin/alert-circle.svg'
 import calcu from '/assets/icons/admin/calendar.svg'
 import more from '/assets/icons/admin/more-horizontal.svg'
 import trash from '/assets/icons/admin/trash-red.svg'
-import icon from '/public/assets/icons/admin/i-icon.svg'
+import icon from '/assets/icons/admin/i-icon.svg'
 
 
 

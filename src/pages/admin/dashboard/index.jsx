@@ -2,7 +2,7 @@ import { Clock4, Search } from "lucide-react";
 import React from "react";
 import { employeeDetails, meetings } from "../../../constants/dummyData";
 import graph from "/public/assets/images/graph.png";
-import { calcuIcon,alertIcon,moreIcon } from "../../../utils";
+import { calcuIcon, alertIcon, moreIcon } from "../../../utils";
 
 export const AdminDashboard = () => {
   return (
@@ -13,12 +13,12 @@ export const AdminDashboard = () => {
           <h1 className="font-extrabold text-xl  text-black">Dashbord</h1>
           <div className="flex items-center gap-6">
             <div className=" btn flex  justify-center items-center px-6 h-11 min-h-11 bg-btncolor hover:bg-btncolor ">
-                <Clock4 className=" text-white object-conatine size-4" />
+              <Clock4 className=" text-white object-conatine size-4" />
               <button className=" text-white ">Clock in </button>
             </div>
             <label className="input outline-none border-none pr-28 flex items-center  h-11 gap-2">
               <Search className="text-gray-200 object-contain size-5" />
-             
+
               <input
                 type="text"
                 className="grow placeholder:text-sm focus:outline-none placeholder:text-gray-200 "
@@ -50,19 +50,43 @@ export const AdminDashboard = () => {
             </div>
           ))}
         </div>
-         <div className='bg-white py-4 px-16'>
-                    <div className='flex items-center justify-between py-3'>
-                        <h1 className='text-black font-bold text-xl flex items-center justify-center gap-3'>Total Count <div className='w-5 h-5'><img src={alertIcon} alt="alertIcon" className='w-full object-contain' /></div></h1>
-                        <div className='flex items-center gap-3'>
-                            <p className='text-xs text-gray-200'>Provision Month </p>
-                            <h1 className='flex items-center text-black font-medium text-xs  gap-1'> <div className='w-4 h-4'><img src={calcuIcon} alt="calcuIcon" className='w-full object-contain' /></div>March 2020</h1>
-                            <div className='w-4 h-4'><img src={moreIcon} alt="moreIcon" className='object-contain w-full' /></div>
-                        </div>
-                    </div>
-                    <div>
-                        <img src={graph} alt="" className='w-full object-contain' />
-                    </div>
+        <div className="bg-white py-4 px-16">
+          <div className="flex items-center justify-between py-3">
+            <h1 className="text-black font-bold text-xl flex items-center justify-center gap-3">
+              Total Count{" "}
+              <div className="w-5 h-5">
+                <img
+                  src={alertIcon}
+                  alt="alertIcon"
+                  className="w-full object-contain"
+                />
+              </div>
+            </h1>
+            <div className="flex items-center gap-3">
+              <p className="text-xs text-gray-200">Provision Month </p>
+              <h1 className="flex items-center text-black font-medium text-xs  gap-1">
+                <div className="w-4 h-4">
+                  <img
+                    src={calcuIcon}
+                    alt="calcuIcon"
+                    className="w-full object-contain"
+                  />
                 </div>
+                March 2020
+              </h1>
+              <div className="w-4 h-4">
+                <img
+                  src={moreIcon}
+                  alt="moreIcon"
+                  className="object-contain w-full"
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <img src={graph} alt="" className="w-full object-contain" />
+          </div>
+        </div>
       </aside>
       {/* -------right------- */}
       <aside className="flex flex-col  w-3/12">
@@ -76,7 +100,7 @@ export const AdminDashboard = () => {
           </h1>
           <div className="w-48 m-auto">
             <img
-              src={"/public/assets/images/dataflow.png"}
+              src={"/assets/images/dataflow.png"}
               alt=""
               className="w-full"
             />
