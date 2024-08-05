@@ -2,7 +2,7 @@ import { ChevronRight, ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
 import { availablePlanData } from "../../../../constants/dummyData";
 import { Link } from "react-router-dom";
-import cube from '/public/assets/images/cube.svg'
+import cube from "/assets/images/cube.svg";
 import PurchasePlan from "../../../../components/popups/subscription/PurchasePlan";
 import AvailablePlans from "../../../../components/subscription/AvailablePlans";
 
@@ -15,17 +15,15 @@ export const MenuSubscription = () => {
     setCount(count - 1);
   };
 
-
-
   return (
     <>
-      <div className='bg-white py-1 px-6 flex flex-row items-center justify-between mt-3 rounded-md'>
-        <h1 className='text-sm font-semibold text-black flex items-center justify-between gap-1'>
+      <div className="bg-white py-1 px-6 flex flex-row items-center justify-between mt-3 rounded-md">
+        <h1 className="text-sm font-semibold text-black flex items-center justify-between gap-1">
           Menu
           <ChevronRight className="size-3" />
           Account Management
           <ChevronRight className="size-3" />
-          <span className='text-red-600'>Subscription</span>
+          <span className="text-red-600">Subscription</span>
         </h1>
       </div>
       <ArrowLeft className="relative top-16 left-7 size-5" />
@@ -41,18 +39,23 @@ export const MenuSubscription = () => {
               <div className="size-5">
                 <img src={cube} alt="cube" className="object-contain w-full" />
               </div>
-              <h1 className="text-bgColor font-medium text-xs">Current Plan Details</h1>
+              <h1 className="text-bgColor font-medium text-xs">
+                Current Plan Details
+              </h1>
             </div>
             <h3 className="text-sm text-white font-semibold">Basic Plan</h3>
             <h1 className="text-white text-3xl font-semibold my-1">
               $10<span className="text-lg">/User/Month/Build annually</span>
-            </h1 >
+            </h1>
             <hr className="my-3 text-white opacity-20" />
             <div className="flex flex-row  items-center justify-between">
-              <h1 className=' flex flex-col text-sm font-medium text-white text-opacity-25 '>Number Of License:10
-                <span className=' text-red-500 '>Valid till 22th July 2024</span>
+              <h1 className=" flex flex-col text-sm font-medium text-white text-opacity-25 ">
+                Number Of License:10
+                <span className=" text-red-500 ">
+                  Valid till 22th July 2024
+                </span>
               </h1>
-              <button className='btn  bg-white  hover:bg-white text-sm font-semibold min-h-11 h-11 text-[#181C3A] px-8 py-0 '>
+              <button className="btn  bg-white  hover:bg-white text-sm font-semibold min-h-11 h-11 text-[#181C3A] px-8 py-0 ">
                 Add More License
               </button>
             </div>
@@ -61,11 +64,13 @@ export const MenuSubscription = () => {
         {/* ----plans----- */}
         <hr className="w-max-" />
 
-        <h1 className="font-extrabold text-textcolor-blue my-4 text-lg">Available Plans</h1>
+        <h1 className="font-extrabold text-textcolor-blue my-4 text-lg">
+          Available Plans
+        </h1>
 
         <div className="grid grid-cols-3 gap-4 mb-12">
           {availablePlanData.map((plan, planIndex) => (
-            <AvailablePlans data={plan} key={planIndex}/>
+            <AvailablePlans data={plan} key={planIndex} />
           ))}
         </div>
       </div>
