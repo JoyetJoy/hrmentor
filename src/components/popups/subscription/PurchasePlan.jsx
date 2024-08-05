@@ -10,7 +10,6 @@ function PurchasePlan({ isOpen, closeModal }) {
   const increment = () => setCount(count + 1);
   const decrement = () => setCount(count > 0 ? count - 1 : 0);
 
-  // Fetching the first item from the data array
   const data = subcriptionModalData[0];
   return (
     <Transition show={isOpen} as={Fragment}>
@@ -31,10 +30,9 @@ function PurchasePlan({ isOpen, closeModal }) {
               <h1 className="text-2xl font-extrabold text-black my-3">Business</h1>
               <h2 className="text-4xl font-extrabold text-black">$20/Month</h2>
               
-              {/* Display text */}
               <p className="text-justify my-4 text-sm">{data.text}</p>
 
-              {/* Map through the list of features */}
+              
               {data.list.map((item, index) => (
                 <div key={index} className="mb-8">
                   <h3 className="text-xl font-semibold" style={{ color: item.textColor }}>
@@ -52,7 +50,6 @@ function PurchasePlan({ isOpen, closeModal }) {
                   </div>
                 </div>
               ))}
-
               <div className="flex flex-row justify-between w-full mt-3 items-center">
                 <div className="flex flex-row items-center gap-2">
                   <p className="text-xs font-bold text-[#000000]">Number Of License</p>
@@ -81,6 +78,5 @@ function PurchasePlan({ isOpen, closeModal }) {
   </Transition>
   )
 }
-
 export default PurchasePlan
 

@@ -78,7 +78,6 @@ export const availablePlanData = [
     price: "$10",
     name: "Basic Plan",
 
-   
     list: [
       {
         
