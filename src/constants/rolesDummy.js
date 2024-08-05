@@ -5,146 +5,92 @@ export const rolesDummydata = [
       data: [
         {
           id: 165,
-          guard_name: "Dashboard View",
+          guard_name: "Job",
           data: [
             {
-              name: "Account Summery",
-              slug: "account-summery",
+              name: "Create",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Payment Sent vs Payment Received",
-              slug: "payment-sent-vs-payment-received",
+              name: "Delete ",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Recent Activities",
-              slug: "recent-activities",
+              name: "Edit",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Sales vs Purchases",
-              slug: "sales-vs-purchases",
+              name: "Update",
+              slug: "",
               created_at: null,
               updated_at: null
             },
-            {
-              name: "Stock Alert",
-              slug: "stock-alert",
-              created_at: null,
-              updated_at: null
-            },
-            {
-              name: "Top Clients",
-              slug: "top-clients",
-              created_at: null,
-              updated_at: null
-            },
-            {
-              name: "Top Selling Products",
-              slug: "top-selling-products",
-              created_at: null,
-              updated_at: null
-            }
           ]
         },
         {
           id: 16,
-          guard_name: "Dashboard View",
+          guard_name: "Candidate",
           data: [
             {
-              name: "Account Summery",
-              slug: "account-summery",
+              name: "Create",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Payment Sent vs Payment Received",
-              slug: "payment-sent-vs-payment-received",
+              name: "Delete ",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Recent Activities",
-              slug: "recent-activities",
+              name: "Edit",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Sales vs Purchases",
-              slug: "sales-vs-purchases",
+              name: "Update",
+              slug: "",
               created_at: null,
               updated_at: null
             },
-            {
-              name: "Stock Alert",
-              slug: "stock-alert",
-              created_at: null,
-              updated_at: null
-            },
-            {
-              name: "Top Clients",
-              slug: "top-clients",
-              created_at: null,
-              updated_at: null
-            },
-            {
-              name: "Top Selling Products",
-              slug: "top-selling-products",
-              created_at: null,
-              updated_at: null
-            }
           ]
         },
         {
           id: 15,
-          guard_name: "Dashboard View",
+          guard_name: "Report",
           data: [
             {
-              name: "Account Summery",
-              slug: "account-summery",
+              name: "Create",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Payment Sent vs Payment Received",
-              slug: "payment-sent-vs-payment-received",
+              name: "Delete ",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Recent Activities",
-              slug: "recent-activities",
+              name: "Edit",
+              slug: "",
               created_at: null,
               updated_at: null
             },
             {
-              name: "Sales vs Purchases",
-              slug: "sales-vs-purchases",
+              name: "Update",
+              slug: "",
               created_at: null,
               updated_at: null
             },
-            {
-              name: "Stock Alert",
-              slug: "stock-alert",
-              created_at: null,
-              updated_at: null
-            },
-            {
-              name: "Top Clients",
-              slug: "top-clients",
-              created_at: null,
-              updated_at: null
-            },
-            {
-              name: "Top Selling Products",
-              slug: "top-selling-products",
-              created_at: null,
-              updated_at: null
-            }
           ]
         },
       ]
