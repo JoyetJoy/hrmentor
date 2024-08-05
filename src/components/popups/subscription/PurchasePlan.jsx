@@ -23,27 +23,32 @@ function PurchasePlan({ isOpen, closeModal }) {
             <form method="dialog">
               <button
                 type="button"
-                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                className="btn btn-sm btn-circle btn-ghost absolute right-4 top-6 text-gray font-semibold"
                 onClick={closeModal}
               >
                 ✕
               </button>
             </form>
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start p-14">
               <p className="text-red-600 text-sm font-bold">Pricing</p>
               <h1 className="text-2xl font-extrabold text-black my-3">
                 Business
               </h1>
-              <h2 className="text-4xl font-extrabold text-black">$20/Month</h2>
+              <h2 className="text-5xl font-extrabold text-black">$20<span className="text-xl font-semibold">/ User/ Month/ Build annually</span></h2>
 
               {/* Display text */}
-              <p className="text-justify my-4 text-sm">{data.text}</p>
-
+              <p className="text-justify my-3 text-sm text-gray">{data.text}</p>
               
-              {data.list.map((item, index) => (
-                <div key={index} className="mb-8">
+              <div className="flex flex-row justify-between items-baseline w-full">
+
+                <div className="flex flex-col w-full">
+                <h1 className="font-bold text-lg mb-2">Features</h1>
+
+                {data.list.map((item, index) => (
+                <div key={index} className="mb-5 flex flex-col">
+                   
                   <h3
-                    className="text-xl font-semibold"
+                    className="text-sm font-bold my-2"
                     style={{ color: item.textColor }}
                   >
                     {item.title}
@@ -70,29 +75,47 @@ function PurchasePlan({ isOpen, closeModal }) {
                   </div>
                 </div>
               ))}
-              <div className="flex flex-row justify-between w-full mt-3 items-center">
-                <div className="flex flex-row items-center gap-2">
+                </div>
+              
+               <div className="flex flex-col justify-between gap-1 w-full mt-3 items-start">
+               <h1 className="font-bold text-lg">Payment</h1>
+               <p className="text-sm text-[#667085]  ">Your current plan amount will be deducted from the new package cost. </p>
+               <div className="flex flex-col items-start gap-2 my-3">
                   <p className="text-xs font-bold text-[#000000]">
-                    Number Of License
-                  </p>
+                  Choose number of license</p>
+                  <div className="flex flex-row items-start gap-4">
                   <button
                     onClick={decrement}
-                    className="rounded-full p-1 flex items-center size-5 justify-center border border-[#EAECF0]"
+                    className="rounded-md p-1 flex items-center size-6 bg-[#F1F1F1] justify-center border border-[#EAECF0]"
                   >
                     <Minus className="w-full object-contain" />
                   </button>
-                  <span>{count}</span>
+                  <span className="font-semibold text-sm">{count}</span>
                   <button
                     onClick={increment}
-                    className="rounded-full p-1 flex items-center size-5 justify-center border border-[#EAECF0]"
+                    className="rounded-md p-1 flex items-center size-6 justify-center border border-[#EAECF0]"
                   >
                     <Plus className="w-full object-contain" />
                   </button>
+                  </div>g
+                  <div className="w-full">
+                    <h1 className="flex  justify-between flex-row ">Current Plan Amount<span>$ 120</span></h1>
+                    <h1>Previous Plan Balance<span>$ 80</span></h1>
+                     <h1>Amount to be paid<span>$ 20</span></h1>
+                  </div>
+                  
+                 
                 </div>
                 <button className="btn bg-[#181C3A] text-xs font-normal text-white px-4 py-0">
                   Purchase
                 </button>
               </div>
+                </div>
+             
+              
+              
+             
+             
             </div>
           </Dialog.Panel>
         </div>
