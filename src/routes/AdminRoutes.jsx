@@ -6,6 +6,7 @@ import ForgotPassword from "../pages/auth/admin/ForgotPass";
 import { AdminDashboard } from "../pages/admin/dashboard";
 import { MenuRoles } from "../pages/admin/menu/role";
 import { MenuSubscription } from "../pages/admin/menu/subscription";
+import EmployeeLists from "../pages/admin/menu/employee";
 
 // function AdminRoutes() {
 //   return (
@@ -53,6 +54,10 @@ export const appRoutes = createBrowserRouter([
       {
         path: "subscription",
         element: <MenuSubscription />,
+      },
+      {
+        path: "employeeLists",
+        element: <EmployeeLists />,
       },
     ],
   },
