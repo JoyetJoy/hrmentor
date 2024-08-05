@@ -7,6 +7,7 @@ import { AdminDashboard } from "../pages/admin/dashboard";
 import { MenuRoles } from "../pages/admin/menu/role";
 import { MenuSubscription } from "../pages/admin/menu/subscription";
 import EmployeeLists from "../pages/admin/menu/employee";
+import CreateEmployee from "../pages/admin/menu/employee/create";
 
 // function AdminRoutes() {
 //   return (
@@ -56,8 +57,17 @@ export const appRoutes = createBrowserRouter([
         element: <MenuSubscription />,
       },
       {
-        path: "employeeLists",
-        element: <EmployeeLists />,
+        path: "employees",
+        children: [
+          {
+            path: "list",
+            element: <EmployeeLists />,
+          },
+          {
+            path: "create",
+            element: <CreateEmployee />,
+          },
+        ],
       },
     ],
   },

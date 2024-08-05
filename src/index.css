@@ -78,3 +78,20 @@ select:focus {
   background-color: #e6e2df;
   border-radius: 100px;
 }
+
+
+@layer components {
+  .input-box {
+    @apply rounded border border-[#C7C7C7]  px-2 focus:border-[#2E2E2E] text-sm border-opacity-60  text-zinc-500
+    
+  }
+
+  .label-text {
+    @apply text-[#3A3A3A] text-[0.8rem] group-focus-within:text-[#2E2E2E] font-medium
+  }
+
+  .active-bar {
+    @apply bg-[#F4F4FF] underline underline-offset-8 decoration-2 decoration-[#FF5906] font-bold
+  }
+  
+}
