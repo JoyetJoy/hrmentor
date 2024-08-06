@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ArrowLeft,
   ChevronRight,
@@ -8,9 +8,67 @@ import {
   Plus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import QueryTable from "../../../../components/table/QueryTable";
+import { TableData } from "@/constants/tableDummy";
+import { MoveDiagonal, Trash2 } from "lucide-react";
+
+import QueryTable from "@/components/table/QueryTable";
+
+
+
 
 export default function EmployeeLists() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+  const list = React.useMemo(() => TableData, [TableData]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessorKey: "name",
+      },
+      { Header: "ID Number", accessorKey: "addNo" },
+      {
+        Header: "Designation",
+        accessorKey: "dignation",
+      },
+      {
+        Header: "Type",
+        accessorKey: "type",
+      },
+  
+      {
+        Header: "Document",
+        accessorKey: "designation",
+        cell: ({ row }) => <p className="font-medium underline  text-[#1A75FF]">{row?.original?.designation}</p>,
+      },
+      {
+        Header: "Action",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex relative gap-1 text-xs ">
+            <Link
+              to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+            >
+              <MoveDiagonal />
+            </Link>
+            <Link
+              to={""}
+              className="cursor-pointer flex items-center bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+            >
+              <img src="/assets/icons/admin/marker.svg" />
+            </Link>
+            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
+              <Trash2 className="w-5 h-5" />
+            </span>
+          </div>
+        ),
+      },
+    ],
+  
+    []
+  );
   return (
     <div className="my-2">
       <div className="bg-white py-2 px-6 flex flex-row items-center justify-between  rounded-md">
@@ -51,7 +109,7 @@ export default function EmployeeLists() {
         </label>
         <div className="flex items-center gap-3">
           <div className="bg-white rounded-md p-3 border border-gray-400">
-            <img src={"/assets/icons/employees/filter.svg"} alt="filter" />
+          <Filter className="size-4"/>
           </div>
           <div className="bg-white flex flex-row items-center justify-center min-h-11 h-11 rounded-md py-1 px-4 border border-gray-400 gap-1">
             <ArrowUpFromLine className="size-4" />
@@ -68,7 +126,12 @@ export default function EmployeeLists() {
           </div>
         </div>
       </div>
-      <QueryTable />
+      <QueryTable 
+       columns={columns}
+       list={list}
+       currentPage={currentPage}
+       setCurrentPage={setCurrentPage}
+       totalPages={totalPages}/>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
 import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
-import QueryTable from "@/components/table/QueryTable";
+import QueryTable from "@/components/table/QueryTable"; 
 import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";

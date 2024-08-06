@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { menuitems ,adminItems, activityItems,} from "@/constants/dummyData";
-import { LayoutGrid } from "lucide-react";
+import { menuitems, adminItems, activityItems, } from "@/constants/dummyData";
+import { LayoutGrid ,MessageSquareText  } from "lucide-react";
 
 
 
@@ -21,7 +21,7 @@ export const AdminHeader = () => {
   const handleNavigation = (path) => {
     navigate(path);
   };
-
+  const activeClassName = 'text-[#E95D39] border-b-2 border-[#E95D39]';
   return (
     <>
       <div className="flex flex-row items-center justify-between bg-white py-3 px-5 rounded-md">
@@ -40,28 +40,30 @@ export const AdminHeader = () => {
         </div>
         <div className="flex items-center justify-center gap-7">
       {menuitems.map((item) => (
-        <Link to={item.path} key={item.id} className="flex flex-col items-center gap-1">
+        <NavLink
+          to={item.path}
+          key={item.id}
+          className={({ isActive }) =>
+            `flex flex-col items-center gap-1 ${isActive ? activeClassName : ''}`
+          }
+        >
           {item.iconType === 'image' ? (
             <img src={item.iconSrc} alt={item.alt} className="w-5 h-5" />
           ) : (
             React.createElement(item.icon, { size: 20 })
           )}
           <p className="text-sm font-semibold">{item.name}</p>
-        </Link>
+        </NavLink>
       ))}
     </div>
         <div className="flex gap-3 items-center justify-center">
           <div className="w-10 h-10 p-2 rounded-full bg-gray-100 flex justify-center items-center">
-            <img
-              src={'/assets/icons/admin/notification.svg'}
-              alt="notification icon"
-              className="object-contain"
-            />
+          <MessageSquareText  className="size-5 text-textcolor-blue"  />
           </div>
           <Menu as="div" className="relative inline-block text-left">
             <div className="w-10 h-10 p-3 rounded-full bg-gray-100 flex justify-center items-center cursor-pointer">
               <Menu.Button>
-              <LayoutGrid />
+                <LayoutGrid className="size-5 text-textcolor-blue" />
               </Menu.Button>
             </div>
             <Menu.Items className="absolute top-12 w-36 bg-white shadow-lg z-20 rounded-lg p-4">
@@ -70,9 +72,8 @@ export const AdminHeader = () => {
                   <Menu.Item key={index}>
                     {({ active }) => (
                       <li
-                        className={`text-xs font-semibold flex gap-3 whitespace-nowrap items-center  cursor-pointer ${
-                          active ? "" : ""
-                        }`}
+                        className={`text-xs font-semibold flex gap-3 whitespace-nowrap items-center  cursor-pointer ${active ? "" : ""
+                          }`}
                       >
                         <div className="w-4 h-4">
                           <img
@@ -109,9 +110,8 @@ export const AdminHeader = () => {
                       {({ active }) => (
                         <li
                           onClick={() => handleNavigation(item.path)}
-                          className={`text-xs font-semibold flex gap-2 whitespace-nowrap items-center cursor-pointer ${
-                            active ? "" : ""
-                          }`}
+                          className={`text-xs font-semibold flex gap-2 whitespace-nowrap items-center cursor-pointer ${active ? "" : ""
+                            }`}
                         >
                           <div className="w-4 h-4">
                             <img
