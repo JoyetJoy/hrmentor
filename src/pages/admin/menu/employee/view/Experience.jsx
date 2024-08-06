@@ -13,28 +13,28 @@ export const Experience = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Name",
+        header: "Name",
         accessorKey: "name",
       },
-      { Header: "ID Number", accessorKey: "addNo" },
+      { header: "ID Number", accessorKey: "addNo" },
       {
-        Header: "Designation",
+        header: "Designation",
         accessorKey: "designation",
       },
       {
-        Header: "Type",
+        header: "Type",
         accessorKey: "type",
       },
       {
-        Header: "Department",
+        header: "Department",
         accessorKey: "department",
       },
       {
-        Header: "Location",
+        header: "Location",
         accessorKey: "location",
       },
       {
-        Header: "Status",
+        header: "Status",
         accessorKey: "status",
       },
     ],
