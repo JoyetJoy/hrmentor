@@ -1,7 +1,6 @@
 import React from "react";
-import { appRoutes } from "./routes/AdminRoutes";
-
 import { RouterProvider } from "react-router-dom";
+import { appRoutes } from "./routes/AdminRoutes";
 
 function App() {
   return (

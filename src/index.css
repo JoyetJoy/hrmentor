@@ -80,6 +80,25 @@ select:focus {
 }
 
 
+.activeTabar {
+  position: relative;
+  color: #282828 !important;
+  font-weight: 500;
+  padding-bottom: 4px;
+}
+
+.activeTabar::after {
+  position: absolute;
+  left: 0;
+  content: "";
+  bottom: -2.5px;
+  height: 4px;
+  width: 100%;
+  background-color: #E95D39;
+  border-radius: 50px;
+}
+
+
 @layer components {
   .input-box {
     @apply rounded border border-[#C7C7C7]  px-2 focus:border-[#2E2E2E] text-sm border-opacity-60  text-zinc-500

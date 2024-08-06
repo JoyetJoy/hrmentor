@@ -1,8 +1,7 @@
 import { Clock4, Search } from "lucide-react";
 import React from "react";
-import { employeeDetails, meetings } from "../../../constants/dummyData";
-import graph from "/public/assets/images/graph.png";
 import { calcuIcon, alertIcon, moreIcon } from "../../../utils";
+import { employeeDetails, meetings } from "@/constants/dummyData";
 
 export const AdminDashboard = () => {
   return (
@@ -84,7 +83,7 @@ export const AdminDashboard = () => {
             </div>
           </div>
           <div>
-            <img src={graph} alt="" className="w-full object-contain" />
+            <img src={'/assets/images/graph.png'} alt="" className="w-full object-contain" />
           </div>
         </div>
       </aside>
