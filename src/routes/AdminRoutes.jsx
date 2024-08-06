@@ -6,8 +6,9 @@ import ForgotPassword from "../pages/auth/admin/ForgotPass";
 import { AdminDashboard } from "../pages/admin/dashboard";
 import { MenuRoles } from "../pages/admin/menu/role";
 import { MenuSubscription } from "../pages/admin/menu/subscription";
-import EmployeeLists from "../pages/admin/menu/employee";
+import EmployeeLists from "../pages/admin/menu/employee/view";
 import CreateEmployee from "../pages/admin/menu/employee/create";
+import PrimaryInformation from "../pages/admin/menu/employee/primary";
 
 // function AdminRoutes() {
 //   return (
@@ -67,6 +68,10 @@ export const appRoutes = createBrowserRouter([
             path: "create",
             element: <CreateEmployee />,
           },
+          {
+            path:"primary",
+            element:<PrimaryInformation/>
+          }
         ],
       },
     ],

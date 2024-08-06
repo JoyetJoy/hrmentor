@@ -14,7 +14,9 @@ export default {
           300: "#ECE9F1",
           400: "#E6E7EF",
           500: "#EBEBF0",
-          600:"#929292"
+          600:"#929292",
+          700:"#667085",
+          800:"#808080",
         },
         textcolor: {
           100: "#181C3A",
@@ -24,7 +26,10 @@ export default {
           blue:" #030E5C",  
         },
         btncolor: "#283277",
-        bgColor:"#FFFFFF"
+        bgColor:{
+         100:"#181C3A" ,
+         200:"#FFFFFF",
+        }
         
       },
       backgroundImage:{

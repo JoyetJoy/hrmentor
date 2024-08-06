@@ -28,6 +28,9 @@ export const MenuRoles = () => {
                 <span className='text-red-600'>Role</span>
             </div>
             <div className='text-sm flex items-center gap-5 font-semibold '>
+                 <div className="w-1">
+                        <img src={line} alt="line" className="object-contain w-full" />
+                    </div>
                 <Link>Role</Link> 
                 <Link to="/admin/subscription" 
                     className=' flex items-center gap-6  text-[#808080]  '>

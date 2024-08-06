@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus,Info } from "lucide-react";
 import { subcriptionModalData } from "../../../constants/dummyData";
 
 export default function PurchasePlan({ isOpen, closeModal }) {
@@ -26,17 +26,17 @@ export default function PurchasePlan({ isOpen, closeModal }) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="w-[50rem] h-fit  transform px-9 py-4 bg-white rounded-lg">
+                <Popover.Panel className="w-[50rem] h-fit  transform px-14 py-5 bg-white ">
                   <div className="flex justify-end items-center">
                     <button
                       onClick={() => closeModal(false)}
-                      className="text-black font-extrabold text-xl"
+                      className="text-gray font-extrabold text-g  mt-2"
                     >
                       ✕
                     </button>
                   </div>
-                  <div className="flex flex-col items-start ">
-                    <p className="text-red-600 text-sm font-bold">Pricing</p>
+                  <div className="flex flex-col items-start px-5 py-5 ">
+                    <p className="text-red-600 text-xs font-bold">Pricing</p>
                     <h1 className="text-2xl font-extrabold text-black my-3">
                       Business
                     </h1>
@@ -54,7 +54,7 @@ export default function PurchasePlan({ isOpen, closeModal }) {
 
                     <div className="flex flex-row justify-between items-baseline w-full">
                       <div className="flex flex-col w-full">
-                        <h1 className="font-bold text-lg mb-2">Features</h1>
+                        <h1 className="font-bold text-base mb-2">Features</h1>
 
                         {data.list.map((item, index) => (
                           <div key={index} className="mb-5 flex flex-col">
@@ -89,16 +89,16 @@ export default function PurchasePlan({ isOpen, closeModal }) {
                       </div>
 
                       <div className="flex flex-col justify-between gap-1 w-full mt-3 items-start">
-                        <h1 className="font-bold text-lg">Payment</h1>
+                        <h1 className="font-bold text-base">Payment</h1>
                         <p className="text-sm text-[#667085]  ">
                           Your current plan amount will be deducted from the new
                           package cost.{" "}
                         </p>
-                        <div className="flex flex-col items-start gap-2 my-3">
+                        <div className="flex flex-col items-start  w-full gap-2 my-3">
                           <p className="text-xs font-bold text-[#000000]">
                             Choose number of license
                           </p>
-                          <div className="flex flex-row items-start gap-4">
+                          <div className="flex flex-row items-start my-3 gap-4">
                             <button
                               onClick={decrement}
                               className="rounded-md p-1 flex items-center size-6 bg-[#F1F1F1] justify-center border border-[#EAECF0]"
@@ -115,21 +115,21 @@ export default function PurchasePlan({ isOpen, closeModal }) {
                               <Plus className="w-full object-contain" />
                             </button>
                           </div>
-                          g
-                          <div className="w-full">
-                            <h1 className="flex  justify-between flex-row ">
+                          <div className="w-full border-y border-gray-300 py-3 flex flex-col gap-2">
+                            <h1 className="flex justify-between flex-row text-xs text-gray-700 font-semibold ">
                               Current Plan Amount<span>$ 120</span>
                             </h1>
-                            <h1>
+                            <h1  className="flex justify-between flex-row text-xs text-gray-700 font-semibold ">
                               Previous Plan Balance<span>$ 80</span>
                             </h1>
-                            <h1>
+                            <h1  className="flex justify-between flex-row text-xs text-gray-700 font-semibold ">
                               Amount to be paid<span>$ 20</span>
                             </h1>
                           </div>
                         </div>
-                        <button className="btn bg-[#181C3A] text-xs font-normal text-white px-4">
-                          Purchase
+                        <p className="flex flex-row gap-1 items-center text-xs text-gray-800"> <Info className="size-3" />Fee applies if you can cancel after 10 days </p>
+                        <button className="btn bg-bgColor-100  flex flex-row items-center text-xs font-normal w-11/12 mb-5	mt-2 min-h-10 h-10 text-white px-4">
+                        Pay $40                        
                         </button>
                       </div>
                     </div>
