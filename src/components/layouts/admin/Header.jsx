@@ -28,7 +28,7 @@ const menuitems = [
   { id: 1, image: DashbordIcon, name: "Dashboard" },
   { id: 2, image: recruiterIcon, name: "Recruiter" },
   { id: 3, image: hiringIcon, name: "Hiring" },
-  { id: 4, image: employeeIcon, name: "Employee" },
+  { id: 4, image: employeeIcon, name: "Employee" , path:'/admin/employees/list' },
   { id: 5, image: attendanceIcon, name: "Attendance" },
 ];
 const activityItems = [
@@ -82,7 +82,7 @@ export const AdminHeader = () => {
         </div>
         <div className="flex items-center justify-center gap-7">
           {menuitems.map((item) => (
-            <Link key={item.id} className="flex flex-col items-center gap-1">
+            <Link to={item.path} key={item.id} className="flex flex-col items-center gap-1"   >
               <div>
                 <img
                   src={item.image}
@@ -90,6 +90,7 @@ export const AdminHeader = () => {
                   className="object-contain"
                 />
               </div>
+              
               <p className="text-sm font-semibold">{item.name}</p>
             </Link>
           ))}
@@ -112,7 +113,7 @@ export const AdminHeader = () => {
                 />
               </Menu.Button>
             </div>
-            <Menu.Items className="absolute top-12 w-36 bg-white shadow-lg rounded-lg p-4">
+            <Menu.Items className="absolute top-12 w-36 bg-white shadow-lg z-20 rounded-lg p-4">
               <ul className="flex flex-col gap-5">
                 {activityItems.map((item, index) => (
                   <Menu.Item key={index}>
@@ -150,7 +151,7 @@ export const AdminHeader = () => {
                   </span>
                 </h1>
               </Menu.Button>
-              <Menu.Items className="absolute top-12 w-48 bg-white shadow-lg rounded-lg p-4">
+              <Menu.Items className="absolute top-12 w-48 bg-white shadow-lg rounded-lg p-4 z-20">
                 <ul className="flex flex-col gap-5">
                   {adminItems.map((item, index) => (
                     <Menu.Item key={index}>

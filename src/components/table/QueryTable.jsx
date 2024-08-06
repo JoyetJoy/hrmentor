@@ -74,7 +74,7 @@ export default function QueryTable({ list, columns }) {
   const { getHeaderGroups, getRowModel } = tableInstance;
 
   return (
-    <div className="bg-[#FFFFFF] rounded-md border border-[#2C2C2C4D] pb-2">
+    <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
       <div className="table table-md  mx-auto  w-full">
         <table style={{ borderSpacing: "0", width: "100%" }}>
           <thead className="bg-[#C0C0C033]">
@@ -84,7 +84,7 @@ export default function QueryTable({ list, columns }) {
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
-                    className="py-4 px-4  text-left text-[0.95rem] font-semibold text-[#525252] capitalize"
+                    className="py-4 px-4  text-left text-base font-semibold text-[#525252] capitalize"
                   >
                     {flexRender(
                       column.column.columnDef.header,
