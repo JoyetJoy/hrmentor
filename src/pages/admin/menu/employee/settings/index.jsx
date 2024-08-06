@@ -15,21 +15,21 @@ export const EmployeeSettings = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Name",
+        header: "Name",
         accessorKey: "name",
       },
-      { Header: "ID Number", accessorKey: "addNo" },
+      { header: "ID Number", accessorKey: "addNo" },
       {
-        Header: "Designation",
+        header: "Designation",
         accessorKey: "dignation",
       },
       {
-        Header: "Type",
+        header: "Type",
         accessorKey: "type",
       },
 
       {
-        Header: "Document",
+        header: "Document",
         accessorKey: "designation",
         cell: ({ row }) => (
           <p className="font-medium underline  text-[#1A75FF]">
