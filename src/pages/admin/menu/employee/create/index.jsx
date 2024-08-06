@@ -1,11 +1,10 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { customSelectStyles } from "../../../../../utils/customStyles";
 import { Select } from "@headlessui/react";
 import { Plus } from "lucide-react";
 import { ArrowLeft, ChevronRight, } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { customSelectStyles } from "@/utils/customStyles";
 
 export default function CreateEmployee() {
   const {

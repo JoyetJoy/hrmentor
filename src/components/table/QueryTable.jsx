@@ -4,72 +4,22 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { TableData } from "../../constants/tableDummy";
 import Pagination from "./Pagination";
-import { getRandomPastelColor } from "../../utils/helpers";
 
-export default function QueryTable({ list, columns }) {
-  //remove later
-  const pageLimit = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
-
-  // remove later
-  const dcolumns = React.useMemo(
-    () => [
-      {
-        Header: "Name",
-        accessorKey: "name",
-        cell: ({ row }) => (
-          <div className="flex gap-x-2 items-center ">
-            <p
-              style={{ backgroundColor: getRandomPastelColor() }}
-              className="bg-[#F3] font-medium text-[#202020] size-8 rounded-full flex justify-center items-center"
-            >
-              {row?.original?.name?.match(/\b\w/g).join("")}
-            </p>
-            <p>{row?.original?.name}</p>
-          </div>
-        ),
-      },
-      { Header: "ID Number", accessorKey: "addNo" },
-      {
-        Header: "Designation",
-        accessorKey: "designation",
-      },
-      {
-        Header: "Type",
-        accessorKey: "type",
-      },
-      {
-        Header: "Department",
-        accessorKey: "department",
-      },
-      {
-        Header: "Location",
-        accessorKey: "location",
-      },
-      {
-        Header: "Status",
-        accessorKey: "status",
-      },
-    ],
-
-    []
-  );
+export default function QueryTable({
+  list,
+  columns,
+  totalPages,
+  currentPage,
+  setCurrentPage,
+}) {
   // Table instance
   const tableInstance = useReactTable({
-    columns: dcolumns,
-    data: TableData,
+    columns,
+    data: list,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // like this
-  // const tableInstance = useReactTable({
-  //   columns,
-  //   data: list,
-  //   getCoreRowModel: getCoreRowModel(),
-  // });
   // Access the table state and methods
   const { getHeaderGroups, getRowModel } = tableInstance;
 
@@ -120,12 +70,13 @@ export default function QueryTable({ list, columns }) {
           </tbody>
         </table>
       </div>
-
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={20}
-      />
+      {totalPages && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
     </div>
   );
 }
