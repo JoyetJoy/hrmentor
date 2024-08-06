@@ -1,5 +1,6 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import CreateEmployee from "@/pages/admin/menu/employee/create";
+import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
 import { BankDetails } from "@/pages/admin/menu/employee/view/BankDetails";
 import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Documents } from "@/pages/admin/menu/employee/view/Documents";
@@ -64,5 +65,14 @@ export const EmployeeRoutes = [
   {
     path: "payslip",
     element: <Payslip />,
+  },
+  {
+    path: "settings",
+    children: [
+      {
+        path: ":id",
+        element: <EmployeeSettings />,
+      },
+    ],
   },
 ];

@@ -55,3 +55,47 @@ export const employeesSidebarList = [
     name: "Payslip",
   },
 ];
+export const employeesSettingsSideList = [
+  {
+    id: 1,
+    link: "/admin/employees/settings/employee-type",
+    name: "Employee Type",
+  },
+  {
+    id: 2,
+    link: "/admin/employees/settings/designation",
+    name: "Designation",
+  },
+  {
+    id: 3,
+    link: "/admin/employees/settings/department",
+    name: "Department",
+  },
+  {
+    id: 4,
+    link: "/admin/employees/settings/work-location",
+    name: "Work Location",
+  },
+  {
+    id: 5,
+    link: "/admin/employees/settings/document-category",
+    name: "Document Category",
+  },
+  {
+    id: 6,
+    link: "/admin/employees/settings/document-type",
+    name: "Document Type",
+  },
+  {
+    id: 7,
+    link: "/admin/employees/settings/ethnicity",
+    name: "Ethnicity",
+  },
+  {
+    id: 8,
+    link: "/admin/employees/settings/eeo-job",
+    name: "EEO Job Categorys",
+  },
+
+
+];
