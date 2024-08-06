@@ -1,6 +1,5 @@
-import { Clock4, Search } from "lucide-react";
 import React from "react";
-import { calcuIcon, alertIcon, moreIcon } from "../../../utils";
+import { Clock4, Search,Calendar ,CircleAlert } from "lucide-react";
 import { employeeDetails, meetings } from "@/constants/dummyData";
 
 export const AdminDashboard = () => {
@@ -49,33 +48,24 @@ export const AdminDashboard = () => {
             </div>
           ))}
         </div>
+        {/* --------------- */}
         <div className="bg-white py-4 px-16">
           <div className="flex items-center justify-between py-3">
             <h1 className="text-black font-bold text-xl flex items-center justify-center gap-3">
               Total Count{" "}
-              <div className="w-5 h-5">
-                <img
-                  src={alertIcon}
-                  alt="alertIcon"
-                  className="w-full object-contain"
-                />
-              </div>
+              <CircleAlert  className="size-5"/>
+
             </h1>
             <div className="flex items-center gap-3">
               <p className="text-xs text-gray-200">Provision Month </p>
               <h1 className="flex items-center text-black font-medium text-xs  gap-1">
-                <div className="w-4 h-4">
-                  <img
-                    src={calcuIcon}
-                    alt="calcuIcon"
-                    className="w-full object-contain"
-                  />
-                </div>
+              <Calendar className="size-4" />
+
                 March 2020
               </h1>
               <div className="w-4 h-4">
                 <img
-                  src={moreIcon}
+                  src={'/assets/icons/admin/more-horizontal.svg'}
                   alt="moreIcon"
                   className="object-contain w-full"
                 />

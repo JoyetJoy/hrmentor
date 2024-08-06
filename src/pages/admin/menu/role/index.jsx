@@ -42,7 +42,7 @@ export const MenuRoles = () => {
               className="object-contain w-full"
             />
           </div>
-          <div>Role</div>
+          <Link to="">Role</Link>
           <Link
             to="/admin/subscription"
             className=" flex items-center gap-6  text-[#808080]  "

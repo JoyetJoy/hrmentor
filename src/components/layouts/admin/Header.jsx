@@ -2,56 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-
-import {
-  HeaderLogo,
-  DashbordIcon,
-  recruiterIcon,
-  hiringIcon,
-  employeeIcon,
-  attendanceIcon,
-  notificationIcon,
-  dashbordgroupIcon,
-  profilemangIcon,
-  companyIcon,
-  accountIcon,
-  logoutIcon,
-  projectIcon,
-  taskIcon,
-  rosterIcon,
-  payrollIcon,
-  setupIcon,
-} from "../../../utils";
+import { menuitems ,adminItems, activityItems,} from "@/constants/dummyData";
+import { LayoutGrid } from "lucide-react";
 
 
-const menuitems = [
-  { id: 1, image: DashbordIcon, name: "Dashboard" },
-  { id: 2, image: recruiterIcon, name: "Recruiter" },
-  { id: 3, image: hiringIcon, name: "Hiring" },
-  { id: 4, image: employeeIcon, name: "Employee" , path:'/admin/employees/list' },
-  { id: 5, image: attendanceIcon, name: "Attendance" },
-];
-const activityItems = [
-  { icon: projectIcon, label: "Project" },
-  { icon: taskIcon, label: "Task" },
-  { icon: rosterIcon, label: "Roster" },
-  { icon: payrollIcon, label: "Payroll" },
-  { icon: setupIcon, label: "Setup" },
-];
-const adminItems = [
-  {
-    icon: profilemangIcon,
-    label: "Profile Management",
-    path: "/profile-management",
-  },
-  { icon: companyIcon, label: "Company Settings", path: "/company-settings" },
-  {
-    icon: accountIcon,
-    label: "Account Management",
-    path: "/admin/role",
-  },
-  { icon: logoutIcon, label: "Log Out", path: "/logout" },
-];
+
+
+
+
 export const AdminHeader = () => {
   const [visibleSection, setVisibleSection] = useState(null);
 
@@ -70,7 +28,7 @@ export const AdminHeader = () => {
         <div className="flex flex-row gap-3">
           <div className="w-12">
             <img
-              src={HeaderLogo}
+              src={"/assets/images/logo-header.svg"}
               alt="logo image"
               className="object-contain w-full"
             />
@@ -81,24 +39,21 @@ export const AdminHeader = () => {
           </span>
         </div>
         <div className="flex items-center justify-center gap-7">
-          {menuitems.map((item) => (
-            <Link to={item.path} key={item.id} className="flex flex-col items-center gap-1"   >
-              <div>
-                <img
-                  src={item.image}
-                  alt={`${item.name} icon`}
-                  className="object-contain"
-                />
-              </div>
-              
-              <p className="text-sm font-semibold">{item.name}</p>
-            </Link>
-          ))}
-        </div>
+      {menuitems.map((item) => (
+        <Link to={item.path} key={item.id} className="flex flex-col items-center gap-1">
+          {item.iconType === 'image' ? (
+            <img src={item.iconSrc} alt={item.alt} className="w-5 h-5" />
+          ) : (
+            React.createElement(item.icon, { size: 20 })
+          )}
+          <p className="text-sm font-semibold">{item.name}</p>
+        </Link>
+      ))}
+    </div>
         <div className="flex gap-3 items-center justify-center">
           <div className="w-10 h-10 p-2 rounded-full bg-gray-100 flex justify-center items-center">
             <img
-              src={notificationIcon}
+              src={'/assets/icons/admin/notification.svg'}
               alt="notification icon"
               className="object-contain"
             />
@@ -106,11 +61,7 @@ export const AdminHeader = () => {
           <Menu as="div" className="relative inline-block text-left">
             <div className="w-10 h-10 p-3 rounded-full bg-gray-100 flex justify-center items-center cursor-pointer">
               <Menu.Button>
-                <img
-                  src={dashbordgroupIcon}
-                  alt="dashboard icons"
-                  className="object-contain"
-                />
+              <LayoutGrid />
               </Menu.Button>
             </div>
             <Menu.Items className="absolute top-12 w-36 bg-white shadow-lg z-20 rounded-lg p-4">

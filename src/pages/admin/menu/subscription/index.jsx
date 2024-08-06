@@ -1,8 +1,6 @@
-import { ChevronRight, ArrowLeft } from "lucide-react";
 import React, { useState } from "react";
+import { ChevronRight, ArrowLeft } from "lucide-react";
 import { availablePlanData } from "../../../../constants/dummyData";
-import { Link } from "react-router-dom";
-import cube from "/assets/images/cube.svg";
 import PurchasePlan from "../../../../components/popups/subscription/PurchasePlan";
 import AvailablePlans from "../../../../components/subscription/AvailablePlans";
 
@@ -37,7 +35,7 @@ export const MenuSubscription = () => {
           <div className="px-16 py-6 bg-subcription  bg-cover bg-no-repeat w-full h-full my-6 ">
             <div className="flex flex-row items-center gap-1 mb-7 bg-bgColor bg-opacity-25 rounded-full py-1 px-2  w-1/4">
               <div className="size-5">
-                <img src={cube} alt="cube" className="object-contain w-full" />
+                <img src={"/assets/images/cube.svg"} alt="cube" className="object-contain w-full" />
               </div>
               <h1 className="text-bgColor font-medium text-xs">
                 Current Plan Details
