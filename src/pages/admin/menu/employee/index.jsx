@@ -100,7 +100,6 @@ export default function EmployeeLists() {
       <div className="flex justify-between items-center my-2">
         <label className="input outline-none border-none pr-28 flex items-center  h-11 gap-2">
           <Search className="text-gray-200 object-contain size-5" />
-
           <input
             type="text"
             className="grow placeholder:text-sm focus:outline-none placeholder:text-gray-200 "
