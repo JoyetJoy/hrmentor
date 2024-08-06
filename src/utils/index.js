@@ -1,8 +1,6 @@
 
-import  dashbordgroupicon from '/assets/icons/admin/dashbord-group.svg'
 import  clockicon from '/assets/icons/admin/fi_clock.svg'
-import  increaseicon from '/assets/icons/admin/increase.svg'
-import  decreaseicon from '/assets/icons/admin/decrease.svg'
+
 
 
 import  logout from '/assets/icons/admin/logout.svg'
@@ -22,10 +20,8 @@ export const iconIcon =icon
 export const trashiIcon = trash
 
 
-export const dashbordgroupIcon = dashbordgroupicon
 export const clockIcon = clockicon
-export const increaseIcon =increaseicon
-export const decreaseIcon =decreaseicon
+
 
 
 

@@ -45,7 +45,17 @@ export default function CreateEmployee() {
             Settings</Link>
         </div>
       </div>
+      <div className="flex flex-row justify-between items-center">
       <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
+      <div className="text-white font-semibold flex  items-center">
+            <Link
+              to={"/admin/employees/primary"}
+              className="btn bg-btncolor text-white hover:bg-btncolor"
+            >
+              Save          </Link>
+          </div>
+      </div>
+      
       <div
         onSubmit={handleSubmit(onSubmit)}
         
