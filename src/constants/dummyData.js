@@ -1,7 +1,8 @@
-import trendingup from '/public/assets/icons/admin/trending-up.svg' 
-import trendingdown from '/public/assets/icons/admin/trending-down.svg' 
-import tickgreen from '/public/assets/icons/admin/tick-green.svg';
-import tickgray from '/public/assets/icons/admin/tick-gray.svg';
+import trendingup from '/assets/icons/admin/trending-up.svg' 
+import trendingdown from '/assets/icons/admin/trending-down.svg' 
+import tickgreen from '/assets/icons/admin/tick-green.svg';
+import tickgray from '/assets/icons/admin/tick-gray.svg';
+import{LayoutGrid , Users, UserPlus, Briefcase} from "lucide-react"
 
 export const employeeDetails = [
   {
@@ -230,4 +231,34 @@ export const subcriptionModalData = [
     ],
   },
 ];
+// header list
+export const menuitems = [
+  { id: 1, icon: LayoutGrid, name: "Dashboard", path: '/dashboard' },
+  { id: 2, icon:    Briefcase , alt: "Recruiter", name: "Recruiter", path: '/recruiter' },
+  { id: 3, icon:    UserPlus , alt: "Hiring", name: "Hiring", path: '/hiring' },
+  { id: 4, icon: Users, name: "Employee", path: '/admin/employees/list' },
+  { id: 5, iconType: 'image', iconSrc: '/assets/icons/admin/attendance-black.svg', alt: "Attendance", name: "Attendance", path: '/attendance' }
+];
 
+export const adminItems = [
+  {
+    icon: '/assets/icons/admin/profilemang.svg',
+    label: "Profile Management",
+    path: "/profile-management",
+  },
+  { icon:  '/assets/icons/admin/company.svg', label: "Company Settings", path: "/company-settings" },
+  {
+    icon: '/assets/icons/admin/ac.svg',
+    label: "Account Management",
+    path: "/admin/role",
+  },
+  { icon:'/assets/icons/admin/logout.svg', label: "Log Out", path: "/logout" },
+];
+
+export const activityItems = [
+  { icon:'/assets/icons/admin/project.svg', label: "Project" },
+  { icon: '/assets/icons/admin/task.svg', label: "Task" },
+  { icon: '/assets/icons/admin/roster.svg', label: "Roster" },
+  { icon:'/assets/icons/admin/payroll.svg', label: "Payroll" },
+  { icon: '/assets/icons/admin/setup.svg', label: "Setup" },
+];

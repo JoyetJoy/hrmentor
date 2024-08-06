@@ -4,7 +4,6 @@ import { customSelectStyles } from "../../../../../utils/customStyles";
 import { Select } from "@headlessui/react";
 import { Plus } from "lucide-react";
 import { ArrowLeft, ChevronRight, } from "lucide-react";
-import line from '/public/assets/icons/employees/line.svg'
 import { Link } from "react-router-dom";
 
 
@@ -40,7 +39,7 @@ export default function CreateEmployee() {
         </div>
         <div className='text-sm flex items-center gap-5 font-semibold '>
           <div className="w-1">
-            <img src={line} alt="line" className="object-contain w-full" />
+            <img src={"/assets/icons/employees/line.svg"} alt="line" className="object-contain w-full" />
           </div>
           <Link className="text-textcolor-blue font-extrabold text-base">Employees</Link>
           <Link className=' text-base text-[#808080]  '>
