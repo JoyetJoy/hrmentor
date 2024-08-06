@@ -42,8 +42,6 @@ export const SkillsQualifications = () => {
               className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
             >
               <MoveDiagonal />
-
-              {/* <Eye className="w-6 h-6" /> */}
             </Link>
             <Link
               to={""}
