@@ -19,10 +19,9 @@ export default function QueryTable({
     data: list,
     getCoreRowModel: getCoreRowModel(),
   });
-
+  
   // Access the table state and methods
   const { getHeaderGroups, getRowModel } = tableInstance;
-
   return (
     <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
       <div className="table table-md  mx-auto  w-full">
@@ -45,7 +44,6 @@ export default function QueryTable({
               </tr>
             ))}
           </thead>
-
           <tbody className="px-2">
             {getRowModel().rows.map((row) => {
               return (

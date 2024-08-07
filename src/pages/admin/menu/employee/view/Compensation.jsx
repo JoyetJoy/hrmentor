@@ -35,8 +35,27 @@ export const Compensation = () => {
         accessorKey: "location",
       },
       {
-        header: "Status",
-        accessorKey: "status",
+        header: "Action",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex relative gap-1 text-xs ">
+            <Link
+              to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              className="cursor-pointer flex items-center  bg-gray-500text-black p-2  size-8 rounded-full"
+            >
+              <MoveDiagonal />
+            </Link>
+            <Link
+              to={""}
+              className="cursor-pointer flex items-center bg-gray-500 text-black p-2  size-8 rounded-full"
+            >
+              <img src="/assets/icons/admin/marker.svg" />
+            </Link>
+            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500 size-8 rounded-full">
+              <Trash2 className="w-5 h-5" />
+            </span>
+          </div>
+        ),
       },
     ],
 

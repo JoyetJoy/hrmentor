@@ -1,7 +1,6 @@
 import React from "react";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Plus } from "lucide-react";
 import { Select } from "@headlessui/react";
-import { Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -41,7 +40,17 @@ export const WorkInformation = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Work Information</h1>
+            <div className="flex flex-row justify-between items-center">
+              <h1 className="font-bold text-lg  mb-3">Work  Information</h1>
+              <div className="text-white font-semibold flex  items-center gap-2 ">
+                <Link
+                  to={""}
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  flex items-center gap-1"
+                >
+                  <Plus />
+                  Add Skills/Qualification</Link>
+              </div>
+            </div>
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"
@@ -311,239 +320,231 @@ export const WorkInformation = () => {
                 </div>
               </div>
               <div className="flex flex-col  px-5 py-4 rounded-md bg-white border border-[#EBEBF0]">
-                <h1 className="font-bold text-base px-3"> EEO Details</h1>
+                <h1 className="font-bold text-base px-3">Work Details</h1>
 
                 <div
                   onSubmit={handleSubmit(onSubmit)}
                   className="grid w-full grid-cols-2 gap-x-2 mt-4 "
                 >
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">
-                      Employee ID{" "}
-                      <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-5 h-5 p-[0.2rem]" />
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text flex items-center gap-1">
+                      Department{" "}
+                      <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
                     </label>
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("employeeId", { required: true })}
-                      className="input-box h-10 w-full"
+                      {...register("department", { required: true })}
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
                     />
-                    {errors.employeeId && (
+                    {errors.department && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.employeeId?.message}
+                        {errors.department?.message}
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col space-y-2">
+                  <div className="flex px-3 group flex-col py-2">
                     <label className="label-text">
-                      First Name <span className="text-red-500">*</span>
+                      Role<span className="text-red-500">*</span>
                     </label>
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("firstName", { required: true })}
-                      className="input-box h-10 w-full"
+                      {...register("role", { required: true })}
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
                     />
-                    {errors.firstName && (
+                    {errors.role && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.firstName?.message}
+                        {errors.role?.message}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">surname</label>
-                    <input
-                      {...register("surname")}
-                      autoComplete="off"
-                      type="text"
-                      className="input-box h-10 w-full"
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text  flex items-center gap-1">Designation
+                      <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
+
+                    </label>
+                    <Controller
+                      name="designation"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          // required
+                          //   selected={''}
+                          //   value={''}
+                          //   onChange={(selectedOption) => {
+                          //     handle(selectedOption);
+                          //     field.onChange(selectedOption);
+                          //   }}
+                          //   options={}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select Designation"
+                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                        />
+                      )}
                     />
-                    {errors.surname && (
+                    {errors.designation && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.surname?.message}
+                        {errors.designation?.message}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">Date of birth</label>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">Date of Joinging</label>
                     <input
-                      {...register("dateOBbirth", { required: true })}
+
+                      {...register("dateOfJoinging", { required: true })}
                       autoComplete="off"
                       type="date"
-                      className="input-box h-10 w-full"
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
                     />
-                    {errors.dateOfBirth && (
+                    {errors.dateOfJoinging && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.dateOBbirth?.message}
+                        {errors.dateOfJoinging?.message}
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col space-y-2">
+                  <div className="flex px-3 group flex-col py-2">
                     <label
                       onClick={() => setPopupOpen(true)}
-                      className="label-text"
+                      className="label-text flex  items-center gap-1"
                     >
-                      Gender
-                    </label>
+                      Work Location
+                      <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
 
-                    <Controller
-                      name="gender"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Gender"
-                          className="input-box h-10 w-full"
-                        />
-                      )}
-                    />
-                    {errors.gender && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.gender?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">Nationality</label>
-                    <Controller
-                      name="nationality"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Gender"
-                          className="input-box h-10 w-full"
-                        />
-                      )}
-                    />
-                    {errors.nationality && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.nationality?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">Country</label>
-                    <Controller
-                      name="country"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Gender"
-                          className="input-box h-10 w-full"
-                        />
-                      )}
-                    />
-                    {errors.country && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.country?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">City</label>
-                    <Controller
-                      name="city"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Gender"
-                          className="input-box h-10 w-full"
-                        />
-                      )}
-                    />
-                    {errors.city && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.city?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">Blood Group</label>
-                    <Controller
-                      name="bloodGroup"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Gender"
-                          className="input-box h-10 w-full"
-                        />
-                      )}
-                    />
-                    {errors.bloodGroup && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.bloodGroup?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">
-                      National Insurance Number
                     </label>
+                    <Controller
+                      name="worklocation"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          // required
+                          //   selected={''}
+                          //   value={''}
+                          //   onChange={(selectedOption) => {
+                          //     handle(selectedOption);
+                          //     field.onChange(selectedOption);
+                          //   }}
+                          //   options={}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select Work location"
+                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                        />
+                      )}
+                    />
+                    {errors.worklocation && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.worklocation?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">Employenment Type</label>
+                    <Controller
+                      name="employementype"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          // required
+                          //   selected={''}
+                          //   value={''}
+                          //   onChange={(selectedOption) => {
+                          //     handle(selectedOption);
+                          //     field.onChange(selectedOption);
+                          //   }}
+                          //   options={}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select Employement Type"
+                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                        />
+                      )}
+                    />
+                    {errors.employementype && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.employementype?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">
+                      Mobile Number  </label>
                     <input
-                      {...register("nationalInsurance", { required: true })}
+                      {...register("mobileNumber", { required: true })}
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full"
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
                     />
-                    {errors.nationalInsurance && (
+                    {errors.mobileNumber && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.nationalInsurance?.message}
+                        {errors.mobileNumber?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">Marital status</label>
+                    <Controller
+                      name="maritalstatus"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          // required
+                          //   selected={''}
+                          //   value={''}
+                          //   onChange={(selectedOption) => {
+                          //     handle(selectedOption);
+                          //     field.onChange(selectedOption);
+                          //   }}
+                          //   options={}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select Marital status"
+                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                        />
+                      )}
+                    />
+                    {errors.maritalstatus && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.maritalstatus?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">
+                      Personal Email Address  </label>
+                    <input
+                      {...register("personalEmailAddress", { required: true })}
+                      autoComplete="off"
+                      type="text"
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    />
+                    {errors.personalEmailAddress && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.personalEmailAddress?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">
+                      Work Email Address
+                    </label>
+                    <input
+                      {...register("workEmailAddress", { required: true })}
+                      autoComplete="off"
+                      type="text"
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    />
+                    {errors.workEmailAddress && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.workEmailAddress?.message}
                       </span>
                     )}
                   </div>

@@ -59,7 +59,9 @@ export default function EmployeeLists() {
         cell: ({ row }) => (
           <div className="flex relative gap-1 text-xs ">
             <Link
-              to={`/sales/invoices/detail-view/${row?.original?.id}`}
+            //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
+            to={"/admin/employees/primary"}
+
               className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
             >
               <MoveDiagonal />

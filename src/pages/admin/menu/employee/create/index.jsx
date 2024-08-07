@@ -49,7 +49,7 @@ export default function CreateEmployee() {
         <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
         <div className="text-white font-semibold flex  items-center ">
           <Link
-            to={"/admin/employees/primary"}
+            to={"/admin/employees/list"}
             className="btn bg-btncolor text-white hover:bg-btncolor w-28 "
           >
             <div className="size-4">
