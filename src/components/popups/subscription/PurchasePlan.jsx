@@ -9,7 +9,6 @@ export default function PurchasePlan({ isOpen, closeModal }) {
   const decrement = () => setCount(count > 0 ? count - 1 : 0);
 
   const data = subcriptionModalData[0];
-
   return (
     <>
       {isOpen && (
@@ -46,16 +45,13 @@ export default function PurchasePlan({ isOpen, closeModal }) {
                         / User/ Month/ Build annually
                       </span>
                     </h2>
-
                     {/* Display text */}
                     <p className="text-justify my-3 text-sm text-gray">
                       {data.text}
                     </p>
-
                     <div className="flex flex-row justify-between items-baseline w-full">
                       <div className="flex flex-col w-full">
                         <h1 className="font-bold text-base mb-2">Features</h1>
-
                         {data.list.map((item, index) => (
                           <div key={index} className="mb-5 flex flex-col">
                             <h3
@@ -87,7 +83,6 @@ export default function PurchasePlan({ isOpen, closeModal }) {
                           </div>
                         ))}
                       </div>
-
                       <div className="flex flex-col justify-between gap-1 w-full mt-3 items-start">
                         <h1 className="font-bold text-base">Payment</h1>
                         <p className="text-sm text-[#667085]  ">
