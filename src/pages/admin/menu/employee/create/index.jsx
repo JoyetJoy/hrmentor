@@ -46,23 +46,25 @@ export default function CreateEmployee() {
         </div>
       </div>
       <div className="flex flex-row justify-between items-center">
-      <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
-      <div className="text-white font-semibold flex  items-center">
-            <Link
-              to={"/admin/employees/primary"}
-              className="btn bg-btncolor text-white hover:bg-btncolor"
-            >
-              Save          </Link>
-          </div>
+        <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
+        <div className="text-white font-semibold flex  items-center ">
+          <Link
+            to={"/admin/employees/primary"}
+            className="btn bg-btncolor text-white hover:bg-btncolor w-28 "
+          >
+            <div className="size-4">
+              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain w-full" /></div>
+            Save          </Link>
+        </div>
       </div>
-      
+
       <div
         onSubmit={handleSubmit(onSubmit)}
-        
+
         className=" grid grid-cols-2 gap-x-3 py-2" >
-        
+
         <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
-            <h1  className="font-bold text-base px-3">Basic Details</h1>
+          <h1 className="font-bold text-base px-3">Basic Details</h1>
           <div className="grid w-full grid-cols-2 gap-y-2 mt-4 ">
             <div className="flex px-3 group flex-col space-y-2">
               <label className="label-text">
@@ -320,12 +322,13 @@ export default function CreateEmployee() {
             </div>
           </div>
         </div>
+        {/* -------work details--------- */}
         <div className="flex flex-col  px-5 py-4 rounded-md bg-white border border-[#EBEBF0]">
-        <h1  className="font-bold text-base px-3">Work Details</h1>
+          <h1 className="font-bold text-base px-3">Work Details</h1>
 
           <div
             onSubmit={handleSubmit(onSubmit)}
-            className="grid w-full grid-cols-2 gap-x-2 mt-4 "
+            className="grid w-full grid-cols-2 gap-y-2 mt-4 "
           >
             <div className="flex px-3 group flex-col space-y-2">
               <label className="label-text">

@@ -5,8 +5,8 @@ import { Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 
 export const WorkInformation = () => {
   const {
@@ -39,15 +39,15 @@ export const WorkInformation = () => {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
         <EmployeesSidebar />
-        <div className=" flex-[0.8] bg">
+        <div className=" w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
+            <h1 className="font-bold text-lg  ">Work Information</h1>
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"
             >
               <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
-                <h1 className="font-bold text-base px-3">Basic Details</h1>
+                <h1 className="font-bold text-base px-3">Reporting to</h1>
                 <div className="grid w-full grid-cols-2 gap-y-2 mt-4 ">
                   <div className="flex px-3 group flex-col space-y-2">
                     <label className="label-text">
@@ -311,7 +311,7 @@ export const WorkInformation = () => {
                 </div>
               </div>
               <div className="flex flex-col  px-5 py-4 rounded-md bg-white border border-[#EBEBF0]">
-                <h1 className="font-bold text-base px-3">Work Details</h1>
+                <h1 className="font-bold text-base px-3"> EEO Details</h1>
 
                 <div
                   onSubmit={handleSubmit(onSubmit)}

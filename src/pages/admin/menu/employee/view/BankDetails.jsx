@@ -1,6 +1,7 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import React, { useState } from "react";
@@ -57,7 +58,7 @@ export const BankDetails = () => {
         <EmployeesSidebar />
         <div className=" flex-[0.8] bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
+            <h1 className="font-bold text-lg  mb-5 ">Bank Details</h1>
             <div>
               <QueryTable
                 columns={columns}

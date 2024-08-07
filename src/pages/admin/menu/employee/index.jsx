@@ -31,19 +31,30 @@ export default function EmployeeLists() {
       {
         header: "Designation",
         accessorKey: "dignation",
+        cell: ({ row }) => <p className="font-medium">{row?.original?.designation}</p>,
+
       },
       {
         header: "Type",
         accessorKey: "type",
       },
-  
       {
-        header: "Document",
-        accessorKey: "designation",
-        cell: ({ row }) => <p className="font-medium underline  text-[#1A75FF]">{row?.original?.designation}</p>,
+        header: "Location",
+        accessorKey: "location",
       },
       {
-        header: "Action",
+        header: "Department",
+        accessorKey: "designation",
+        cell: ({ row }) => <p className="font-medium">{row?.original?.designation}</p>,
+      },
+      {
+        header:"Status",
+        accessorKey:"status",
+        cell:({row}) => <div className="bg-pink-100 text p-1 rounded-md">{row?.original?.status}</div>
+    },
+
+      {
+        header: "",
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex relative gap-1 text-xs ">
@@ -59,9 +70,9 @@ export default function EmployeeLists() {
             >
               <img src="/assets/icons/admin/marker.svg" />
             </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
+            {/* <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
               <Trash2 className="w-5 h-5" />
-            </span>
+            </span> */}
           </div>
         ),
       },

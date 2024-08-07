@@ -1,5 +1,5 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable"; 
 import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal, Trash2 } from "lucide-react";
@@ -14,17 +14,25 @@ export const SkillsQualifications = () => {
   const columns = React.useMemo(
     () => [
       {
-        header: "Name",
-        accessorKey: "name",
-      },
-      { header: "ID Number", accessorKey: "addNo" },
-      {
-        header: "Designation",
-        accessorKey: "dignation",
-      },
-      {
         header: "Type",
         accessorKey: "type",
+      },
+      { header: "Title", accessorKey: "title" },
+      {
+        header: "Instituation",
+        accessorKey: "instituation",
+      },
+      {
+        header: "Start Date",
+        accessorKey: "start type",
+      },
+      {
+        header: "End Date",
+        accessorKey: "start type",
+      },
+      {
+        header: "Status",
+        accessorKey: "start type",
       },
 
       {
@@ -75,7 +83,7 @@ export const SkillsQualifications = () => {
         <EmployeesSidebar />
         <div className=" flex-[0.8] bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
+            <h1 className="font-bold text-lg  ">Skills/Qualifications</h1>
             <div>
               <QueryTable
                 columns={columns}

@@ -1,12 +1,12 @@
 import React from "react";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Share2 ,} from "lucide-react";
 import { Select } from "@headlessui/react";
 import { Plus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 
 function PrimaryInformation() {
   const {
@@ -39,9 +39,25 @@ function PrimaryInformation() {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
         <EmployeesSidebar />
-        <div className=" flex-[0.8] bg">
+        <div className=" w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
+            <div className="flex flex-row justify-between items-center">
+              <h1 className="font-bold text-lg  mb-3">Primary Information</h1>
+              <div className="text-white font-semibold flex  items-center gap-2 ">
+              <Link
+                  to={""}
+                  className="btn bg-bgColor-300 text-sm text-black hover:bg-bgColor-300 w-48 flex  items-center justify-center gap-1 "
+                >
+                    <Share2 className="size-4" />
+
+                  Onboarding Form</Link>
+                <Link
+                  to={""}
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-28 "
+                >
+                  Update </Link>
+              </div>
+            </div>
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"
