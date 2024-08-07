@@ -34,6 +34,7 @@ export default {
         bgColor: {
           100: "#181C3A",
           200: "#FFFFFF",
+          300:"#E0E2F3"
         },
       },
       backgroundImage: {

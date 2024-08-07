@@ -1,6 +1,6 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import React, { useState } from "react";
@@ -55,10 +55,10 @@ export const Payslip = () => {
       />
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
-        <EmployeesSidebar />
-        <div className=" flex-[0.8] bg">
+        <EmployeesSidebar  />
+        <div className="w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
+            <h1 className="font-bold text-lg mb-5  ">Payslip</h1>
             <div>
               <QueryTable
                 columns={columns}

@@ -1,5 +1,6 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+// import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
 import { TableData } from "@/constants/tableDummy";
@@ -55,7 +56,7 @@ export const EmployeeSettings = () => {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
         <EmployeesSidebar sidebarList={employeesSettingsSideList} />
-        <div className=" flex-[0.8] bg-white rounded-md px-5 py-4">
+        <div className=" w-full bg-white rounded-md px-5 py-4">
           <div className="flex items-center justify-between my-4">
             <div className="flex gap-2 placeholder:text-black items-center input-box h-10 w-72">
               <Search />

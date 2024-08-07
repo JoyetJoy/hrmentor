@@ -1,5 +1,5 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
+// import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import React, { useState } from "react";

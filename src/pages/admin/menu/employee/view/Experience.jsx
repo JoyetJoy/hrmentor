@@ -1,9 +1,12 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+// import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
+import { MoveDiagonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Experience = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,29 +16,48 @@ export const Experience = () => {
   const columns = React.useMemo(
     () => [
       {
-        header: "Name",
-        accessorKey: "name",
+        header: "jobe role",
+        accessorKey: "jobe role",
       },
-      { header: "ID Number", accessorKey: "addNo" },
+      { header: "Employer", accessorKey: "employer" },
       {
-        header: "Designation",
-        accessorKey: "designation",
-      },
-      {
-        header: "Type",
-        accessorKey: "type",
+        header: "Employer details",
+        accessorKey: "employer details",
       },
       {
-        header: "Department",
-        accessorKey: "department",
+        header: "Start Date",
+        accessorKey: "start date",
       },
       {
-        header: "Location",
-        accessorKey: "location",
+        header: "End Date",
+        accessorKey: "end date",
+      },
+      {
+        header: "Document",
+        accessorKey: "document",
       },
       {
         header: "Status",
-        accessorKey: "status",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex relative gap-1 text-xs ">
+            <Link
+              to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+            >
+              <MoveDiagonal />
+            </Link>
+            <Link
+              to={""}
+              className="cursor-pointer flex items-center bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+            >
+              <img src="/assets/icons/admin/marker.svg" />
+            </Link>
+            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
+              <Trash2 className="w-5 h-5" />
+            </span>
+          </div>
+        ),
       },
     ],
 
@@ -53,11 +75,11 @@ export const Experience = () => {
         nextHeading={"Settings"}
       />
       {/* ----sidebar---- */}
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 ">
         <EmployeesSidebar />
-        <div className=" flex-[0.8] bg">
+        <div className="  w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
+            <h1 className="font-bold text-lg mb-4  ">Experience</h1>
             <div>
               <QueryTable
                 columns={columns}

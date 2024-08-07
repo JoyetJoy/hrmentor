@@ -6,13 +6,13 @@ function EmployeesSidebar({ sidebarList = employeesSidebarList }) {
   const { pathname } = useLocation();
   console.log(pathname);
   return (
-    <div className="bg-white rounded-b-md px-5 py-4 flex-[0.2]">
+    <div className="bg-white rounded-md px-5 py-4 w-1/5 ">
       <ul className="flex flex-col  gap-y-3 justify-center text-[#7F7F7F] font-medium">
         {sidebarList?.map((item) => (
           <li
             key={item?.id}
             className={
-              pathname.includes(item?.link) && "text-[#E95D39] font-semibold"
+              pathname.includes(item?.link) && "text-[#E95D39] font-bold text-base"
             }
           >
             <Link to={item?.link}>{item?.name}</Link>

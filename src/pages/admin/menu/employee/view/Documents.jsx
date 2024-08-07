@@ -1,5 +1,4 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
-import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import React, { useState } from "react";
 import {
   Disclosure,
@@ -9,6 +8,7 @@ import {
 import { ChevronDownIcon, ChevronRight, Search } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 export const Documents = () => {
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
@@ -54,16 +54,16 @@ export const Documents = () => {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
         <EmployeesSidebar />
-        <div className=" flex-[0.8] bg">
+        <div className="  w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Documents</h1>
+            <h1 className="font-bold text-lg mb-5  ">Documents</h1>
             <div className="w-full h-full rounded-md bg-white">
               <Disclosure as="div" className="p-5" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
                   <div className="bg-[#F7F7F7] size-8 flex justify-center items-center rounded-full">
                     <ChevronRight className="size-6 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                   </div>
-                  <p>Passport, Visa & Identity</p>
+                  <p className="text-sm">Passport, Visa & Identity</p>
                 </DisclosureButton>
                 <DisclosurePanel className="ml-10 my-4 text-sm/5 text-black/50">
                   <div>
