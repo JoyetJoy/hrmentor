@@ -1,8 +1,9 @@
 import RecruiterHeader from "@/components/common/RecruiterHeader";
+import AddEducation from "@/components/popups/employees/view/AddEducation";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal, Trash2 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function RecruiterDashbaord() {
@@ -33,8 +34,10 @@ export default function RecruiterDashbaord() {
 
     []
   );
+  const [popupOpen, setPopupOpen] = useState(true);
   return (
     <>
+      <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <RecruiterHeader
         backlink={""}
         menu={"Menu"}
@@ -120,7 +123,7 @@ export default function RecruiterDashbaord() {
                 <MoveDiagonal />
               </Link>
             </div>
-            
+
             <div className="bg-[#F5F5F7] w-full h-20 rounded-md flex justify-between items-center py-2 px-3">
               <div className="flex gap-x-2 items-center">
                 <div className="avatar">
