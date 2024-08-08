@@ -6,10 +6,6 @@ import { menuitems, adminItems, activityItems, } from "@/constants/dummyData";
 import { LayoutGrid ,MessageSquareText  } from "lucide-react";
 
 
-
-
-
-
 export const AdminHeader = () => {
   const [visibleSection, setVisibleSection] = useState(null);
 

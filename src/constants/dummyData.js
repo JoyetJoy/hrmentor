@@ -234,8 +234,8 @@ export const subcriptionModalData = [
 // header list
 export const menuitems = [
   { id: 1, icon: LayoutGrid, name: "Dashboard", path: '/dashboard' },
-  { id: 2, icon:    Briefcase , alt: "Recruiter", name: "Recruiter", path: '/recruiter' },
-  { id: 3, icon:    UserPlus , alt: "Hiring", name: "Hiring", path: '/hiring' },
+  { id: 2, icon:  Briefcase , alt: "Recruiter", name: "Recruiter", path: '/admin/recruiter/dashbord' },
+  { id: 3, icon:  UserPlus , alt: "Hiring", name: "Hiring", path: '/hiring' },
   { id: 4, icon: Users, name: "Employee", path: '/admin/employees/list' },
   { id: 5, iconType: 'image', iconSrc: '/assets/icons/admin/attendance-black.svg', alt: "Attendance", name: "Attendance", path: '/attendance' }
 ];

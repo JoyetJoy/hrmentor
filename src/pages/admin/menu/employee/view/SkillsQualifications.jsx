@@ -76,7 +76,7 @@ export const SkillsQualifications = () => {
         currentPath={" Employee Detail"}
         pageHeading={"Employees"}
         nextLink={""}
-        nextHeading={"Settings"}
+        nextHeading={"Setting"}
       />
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">

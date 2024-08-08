@@ -33,7 +33,7 @@ export default function QueryTable({
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
-                    className="py-4 px-4  text-left text-base font-semibold text-[#525252] capitalize"
+                    className="py-4 px-4  text-left text-sm font-semibold text-[#525252] capitalize"
                   >
                     {flexRender(
                       column.column.columnDef.header,
