@@ -67,16 +67,16 @@ function RecruiterSideBar() {
                 />
             </h1>
             <hr className='border-gray-500 border-1 my-4' />
-            <div className='flex justify-between font-medium text-black text-sm  mb-3'> Job status  
-                  <Select name="status" aria-label="Project status">
+            <div className='flex justify-between items-center font-medium text-black text-sm  mb-3 '> Job status  
+                  <Select name="status" aria-label="Project status " className="bg-[#EBEBF0] w-3/6 py-2 px-3  pl-3 rounded-md">
                         <option value="active">Active</option>
                         <option value="paused">Paused</option>
                         <option value="delayed">Delayed</option>
                         <option value="canceled">Canceled</option>
                  </Select>
           </div>
-          <div className='flex justify-between font-medium text-black text-sm  mb-3'> Hiring manager 
-                  <Select name="status" aria-label="Project status">
+          <div className='flex justify-between font-medium text-black text-sm  mb-3 '> Hiring manager 
+                  <Select name="status" aria-label="Project status" className="bg-[#EBEBF0] w-3/6 py-2 px-3  pl-3 rounded-md">
                         <option value="active">Active</option>
                         <option value="paused">Paused</option>
                         <option value="delayed">Delayed</option>
@@ -84,7 +84,7 @@ function RecruiterSideBar() {
                  </Select>
           </div>
           <div className='flex justify-between font-medium text-black text-sm'> Interviewer
-                  <Select name="status" aria-label="Project status">
+                  <Select name="status" aria-label="Project status" className="bg-[#EBEBF0] w-3/6 py-2 px-3  pl-3 rounded-md">
                         <option value="active">Active</option>
                         <option value="paused">Paused</option>
                         <option value="delayed">Delayed</option>

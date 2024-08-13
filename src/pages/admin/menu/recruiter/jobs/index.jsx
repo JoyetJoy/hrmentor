@@ -14,64 +14,67 @@ function RecruiterJobs() {
 
     const columns = React.useMemo(
         () => [
-            {
-                header: "Name",
-                accessorKey: "name",
-            },
-            { header: "ID Number", accessorKey: "addNo" },
-            {
-                header: "Designation",
-                accessorKey: "dignation",
-                cell: ({ row }) => <p className="font-medium">{row?.original?.designation}</p>,
+          {
+            header: "Name",
+            accessorKey: "name",
+          },
+          { header: "ID Number", accessorKey: "addNo" },
+          {
+            header: "Designation",
+            accessorKey: "dignation",
+            cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+    
+          },
+          {
+            header: "Type",
+            accessorKey: "type",
+          },
+          {
+            header: "Location",
+            accessorKey: "location",
+          },
+          {
+            header: "Department",
+            accessorKey: "designation",
+            cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+          },
+          {
+            header: "Status",
+            accessorKey: "status",
+            cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
+          },
+    
+    
+          {
+            header: "",
+            accessorKey: "action",
+            cell: ({ row }) => (
+              <div className="flex items-center justify-end gap-3  text-xs ">
+                <Link
+                  //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
+    
+                  className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
+                  to={"/admin/recruiter/candidate"}
 
-            },
-            {
-                header: "Type",
-                accessorKey: "type",
-            },
-            {
-                header: "Location",
-                accessorKey: "location",
-            },
-            {
-                header: "Department",
-                accessorKey: "designation",
-                cell: ({ row }) => <p className="font-medium">{row?.original?.designation}</p>,
-            },
-            {
-                header: "Status",
-                accessorKey: "status",
-                cell: ({ row }) => <div className="bg-pink-100 text-black text-center p-1 rounded-md">{row?.original?.status}</div>
-            },
-
-            {
-                header: "",
-                accessorKey: "action",
-                cell: ({ row }) => (
-                    <div className="flex relative gap-1 text-xs ">
-                        <Link
-                            //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-                            to={"/admin/recruiter/candidate"}
-
-                            className="cursor-pointer flex items-center  bg-[#F5F5F5]  p-2  size-8 rounded-full"
-                        >
-                            <MoveDiagonal />
-                        </Link>
-                        <Link
-                            to={""}
-                            className="cursor-pointer flex items-center bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
-                        >
-                            <img src="/assets/icons/admin/marker.svg" />
-                        </Link>
-                        <span className="cursor-pointer flex justify-center items-center  bg-[#F5F5F5]  size-8 rounded-full">
-                            <Trash2 className="w-5 h-5" />
-                        </span>
-                    </div>
-                ),
-            },
+                >
+                  <MoveDiagonal />
+                </Link>
+                <Link
+                  to={""}
+                  className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-8 rounded-full"
+                >
+                  <img src="/assets/icons/admin/marker.svg" />
+                </Link>
+                {/* <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
+                  <Trash2 className="w-5 h-5" />
+                </span> */}
+              </div>
+            ),
+          },
         ],
+    
         []
-    );
+      );
     return (
         <div className=''> 
             <RecruiterHeader

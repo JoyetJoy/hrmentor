@@ -16,7 +16,7 @@ function Candidate() {
     const columns = React.useMemo(
         () => [
 
-            { header: "Applied Date", accessorKey: "addNo" },
+            { header: "Applied Date", accessorKey: "addNo" ,className:"text-[#181C3A] " },
             {
                 header: "Candidate name",
                 accessorKey: "name",
@@ -25,24 +25,24 @@ function Candidate() {
             {
                 header: "Candidate Status",
                 accessorKey: "status",
-                cell: ({ row }) => <div className="bg-blue-100  py-2 rounded-md border text-center text-black font-semibold  border-[#92BEE4]">{row?.original?.status}</div>
+                cell: ({ row }) => <div className="bg-blue-100  py-2 rounded-md border text-center font-semibold  border-[#92BEE4]">{row?.original?.status}</div>
             },
             {
                 header: "Action",
                 accessorKey: "action",
                 cell: ({ row }) => (
-                    <div className="flex relative gap-1 text-xs ">
+                    <div className="flex relative gap-1 text-xs text-[#181C3A] ">
                         <Link
                             //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
                             to={"/admin/recruiter/candidate"}
 
                             className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
                         >
-                            <MoveDiagonal />
+                            <MoveDiagonal className="w-4 h-4"  />
                         </Link>
 
                         <span className="cursor-pointer flex justify-center items-center text-red-700 bg-[#F5F5F5]  size-8 rounded-full">
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-4 h-4" />
                         </span>
                     </div>
                 ),
@@ -83,7 +83,7 @@ function Candidate() {
                     <div className='flex flex-row  items-center justify-between my-3 '>
                     <h1 className='text-base font-semibold text-black'>Candidate</h1>
                     <div className="text-white font-semibold flex  items-center gap-2">
-                        <label className="input outline-none border-gray-300 pr-28 flex items-center  h-11 gap-2">
+                        <label className="input outline-none border-gray-300 pr-28 flex items-center   min-h-10 h-10 gap-2">
                             <Search className="text-gray-200 object-contain size-5" />
                             <input
                                 type="text"
@@ -91,19 +91,19 @@ function Candidate() {
                                 placeholder="Search"
                             />
                         </label>
-                        <div className="bg-white rounded-md p-3 border border-gray-400">
+                        <div className="bg-white rounded-md p-3 border border-gray-400  min-h-10 h-10">
                             <Filter className="size-4 text-black" />
                         </div>
                         <Link
                             to={"/admin/employees/create"}
-                            className="btn bg-btncolor text-white hover:bg-btncolor"
+                            className="btn bg-btncolor text-white hover:bg-btncolor min-h-10 h-10"
                         >
                             <Plus />
                             Add Candidate
                         </Link>
                         <Link
                             to={""}
-                            className="btn bg-btncolor text-white hover:bg-btncolor"
+                            className="btn bg-btncolor text-white hover:bg-btncolor  min-h-10 h-10"
                         >
                             Export
                         </Link>
