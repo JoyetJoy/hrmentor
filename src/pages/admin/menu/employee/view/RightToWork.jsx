@@ -5,13 +5,16 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import React, { useState } from "react";
-import { MoveDiagonal, Trash2 } from "lucide-react";
+import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import AddRightToWork from "@/components/popups/employees/view/AddRightToWork";
 
 
 export const RightToWork = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupOpen, setPopupOpen] = useState(false);
+
 
   const list = React.useMemo(() => TableData,[TableData]);
   const columns = React.useMemo(
@@ -84,8 +87,22 @@ export const RightToWork = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <h1 className="font-bold text-lg  mb-5">Right to Work</h1>
-            <div>
+            <div className="flex flex-row items-center justify-between"> 
+            <h1 className="font-bold text-lg  ">Right to Work</h1>            
+            <div className="text-white text-sm font-semibold flex  items-center gap-2 ">
+                <Link
+                  to={""}
+                  onClick={setPopupOpen}
+
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  text-sm flex items-center gap-1"
+                >
+                  <Plus className="size-5" />
+                  Add Right to Work </Link>
+              </div>
+              <AddRightToWork popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
+              </div>
+            <div className="py-2">
               <QueryTable
                 columns={columns}
                 list={list}

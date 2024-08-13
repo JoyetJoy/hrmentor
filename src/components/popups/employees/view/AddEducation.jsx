@@ -1,10 +1,11 @@
 import { customSelectStyles } from "@/utils/customStyles";
-import { Popover, Transition } from "@headlessui/react";
+import { Button, Popover, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 
 import React from "react";
+import { Upload } from "lucide-react";
 
 export default function AddEducation({ popupOpen, setPopupOpen }) {
   function closeModal() {
@@ -27,29 +28,28 @@ export default function AddEducation({ popupOpen, setPopupOpen }) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="w-[20rem] transform px-9 py-4 bg-white rounded-lg">
+                <Popover.Panel className="w-[20rem] transform px-9 py-5 bg-white rounded-lg">
                   <div className="flex justify-between items-center">
-                    <h1 className="text-neutral-700 text-base font-semibold leading-7">
+                    <h1 className="text-neutral-700 text-sm font-semibold leading-7">
                       Add Education Details
                     </h1>
                     <button
                       onClick={closeModal}
-                      className="text-black font-extrabold text-xl"
+                      className="text-[#00000080] font-extrabold  text-lg"
                     >
                       ✕
                     </button>
                   </div>
 
-                  <form className="grid mt-4 gap-1 grid-cols-1">
+                  <form className="grid mt-4 gap-3 grid-cols-1">
                     <div className="flex group flex-col space-y-1">
                       <label className="text-[#3A3A3A] text-[0.8rem] group-focus-within:text-[#2E2E2E] font-medium">
                         Type
                       </label>
                       <input
                         // {...register("name", { required: true })}
-                        placeholder="Enter name"
                         type="text"
-                        className="w-full h-8 input-box"
+                        className="w-full h-10 input-box"
                       />
                       {/* {errors.name && (
                         <span className="text-xs font-medium text-red-500">
@@ -59,22 +59,11 @@ export default function AddEducation({ popupOpen, setPopupOpen }) {
                     </div>
                     <div className="flex group flex-col space-y-1">
                       <label className="text-[#3A3A3A] text-[0.8rem] group-focus-within:text-[#2E2E2E] font-medium">
-                        Institution
-                      </label>
-                      <input
-                        placeholder="Enter code"
-                        type="text"
-                        className="w-full h-8 input-box"
-                      />
-                    </div>
-                    <div className="flex group flex-col space-y-1">
-                      <label className="text-[#3A3A3A] text-[0.8rem] group-focus-within:text-[#2E2E2E] font-medium">
                         Title
                       </label>
                       <input
-                        placeholder="Enter code"
                         type="text"
-                        className="w-full h-8 input-box"
+                        className="w-full  h-10 input-box border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     </div>
                     <div className="flex group flex-col space-y-1">
@@ -82,19 +71,20 @@ export default function AddEducation({ popupOpen, setPopupOpen }) {
                         Start Date
                       </label>
                       <input
-                        placeholder="Enter code"
-                        type="text"
-                        className="w-full h-8 input-box"
+                        type="date"
+                        className="w-full   h-10 input-box border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     </div>
+                   
                     <div className="flex group flex-col space-y-1">
                       <label className="text-[#3A3A3A] text-[0.8rem] group-focus-within:text-[#2E2E2E] font-medium">
                         End Date
                       </label>
                       <input
-                        placeholder="Enter code"
-                        type="text"
-                        className="w-full h-8 input-box"
+                        type="date"
+                        className="w-full  h-10 input-box border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        autoComplete="off"
+
                       />
                     </div>
                     <div className="flex group flex-col space-y-1">
@@ -102,25 +92,33 @@ export default function AddEducation({ popupOpen, setPopupOpen }) {
                         Status
                       </label>
                       <input
-                        placeholder="Enter code"
                         type="text"
-                        className="w-full h-8 input-box"
+                        className="w-full  h-10 input-box border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     </div>
                     <div className="flex group flex-col space-y-1">
                       <label className="text-[#3A3A3A] text-[0.8rem] group-focus-within:text-[#2E2E2E] font-medium">
-                        Status
+                        Institution
                       </label>
                       <input
-                        placeholder="Enter code"
                         type="text"
-                        className="w-full h-8 input-box"
+                        className="w-full  h-10 input-box border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
+                    </div>
+                    <Button className="border border-dashed flex flex-row gap-2 items-center justify-center text-sm font-semibold border-[#C2C1C1] h-10 mt-3 rounded-md  bg-[#181C3A80] ">
+                    <Upload className="size-4" />
+                     Upload Certificates
+                    </Button>
+                    <div className="flex flex-row items-center justify-center gap-2 mt-2 ">
+                    <button className="flex  cursor-pointer bg-[#030E5C] text-white focus:outline-none text-sm gap-2 w-32 font-normal h-10 justify-center items-center rounded">
+                      Save
+                    </button>
+                    <button className="flex cursor-pointer text-black border border-black focus:outline-none text-sm gap-2 w-32 font-semibold h-10 justify-center items-center rounded">
+                      Cancel
+                    </button>
                     </div>
 
-                    <button className="flex mt-10 cursor-pointer bg-[#030E5C] text-white focus:outline-none text-sm gap-2 w-32 font-normal h-10 justify-center items-center rounded">
-                      Update
-                    </button>
+                  
                   </form>
                 </Popover.Panel>
               </Transition>

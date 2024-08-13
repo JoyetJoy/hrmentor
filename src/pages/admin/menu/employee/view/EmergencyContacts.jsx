@@ -4,7 +4,9 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const EmergencyContacts = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,10 +58,20 @@ export const EmergencyContacts = () => {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
         <EmployeesSidebar />
-        <div className=" flex-[0.8] bg">
+        <div className=" w-full bg">
           <>
-            <h1 className="font-bold text-lg  ">Add New Employees</h1>
-            <div>
+            <div className="flex flex-row items-center justify-between"> 
+            <h1 className="font-bold text-lg   ">Emergency Contact</h1>
+            <div className="text-white font-semibold flex  items-center gap-2 ">
+                <Link
+                  to={""}
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  text-sm flex items-center gap-1"
+                >
+                  <Plus className="size-5" />
+                  Add Contact</Link>
+              </div>
+              </div>
+            <div className="my-2">
               <QueryTable
                 columns={columns}
                 list={list}

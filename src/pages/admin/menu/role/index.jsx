@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
+import EmployeeHeader from "@/components/common/EmployeeHeader";
 export const MenuRoles = () => {
   const [collapseState, setCollapseState] = useState(false);
 
@@ -25,32 +26,13 @@ export const MenuRoles = () => {
   };
   return (
     <div className="flex flex-col ">
-      <div className="bg-white py-1 px-6 flex flex-row items-center justify-between mt-3 rounded-md">
-        <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
-          <ArrowLeft className="size-3" />
-          Menu
-          <ChevronRight className="size-3" />
-          Account Management
-          <ChevronRight className="size-3" />
-          <span className="text-red-600">Role</span>
-        </div>
-        <div className="text-sm flex items-center gap-5 font-semibold ">
-          <div className="w-1">
-            <img
-              src={"/assets/icons/employees/line.svg"}
-              alt="line"
-              className="object-contain w-full"
-            />
-          </div>
-          <Link to="">Role</Link>
-          <Link
-            to="/admin/subscription"
-            className=" flex items-center gap-6  text-[#808080]  "
-          >
-            Subscription
-          </Link>
-        </div>
-      </div>
+      <EmployeeHeader
+      menu={"Menu"}
+      subMenu={"Account Management"}
+      pageHeading={"Role"}
+      nextHeading={"Subscription"}
+      nextLink={"/admin/subscription"}
+      />
       <div className="flex flex-row mt-3 gap-7">
         <RoleSidebar />
         <div className="w-full bg-white px-10 pt-9 rounded-md">
@@ -62,10 +44,10 @@ export const MenuRoles = () => {
             </h1>
             <input
               type="text"
-              placeholder="Type here"
-              className="input w-full border border-gray-300 max-w-xs h-10 focus:border-gray-300 focus:outline-none"
+              placeholder="Enter role name"
+              className="input w-full border border-gray-300 max-w-xs h-10 focus:border-gray-300 focus:outline-none placeholder:text-[#7F7F7F] placeholder:text-xs "
             />
-            <button className="text-white btn px-20 bg-btncolor hover:bg-btncolor h-11 min-h-11">
+            <button className="text-white btn px-20 bg-textcolor-blue hover:bg-textcolor-blue h-10 min-h-10">
               Create
             </button>
           </div>
@@ -121,7 +103,6 @@ export const MenuRoles = () => {
                         )}
                       </div>
                       <div className="collapse-content border-t border-t-[#EAEAEA] flex flex-col gap-1 !text-[#3A3A3A] text-[0.78rem]">
-                        {/* Mapping over items within a category */}
                         {category?.data?.map((item) => (
                           <div
                             key={item?.name}

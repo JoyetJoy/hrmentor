@@ -28,12 +28,12 @@ export default function QueryTable({
         <table style={{ borderSpacing: "0", width: "100%" }}>
           <thead className="bg-[#C0C0C033]">
             {getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
+              <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((column) => (
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
-                    className="py-4 px-4  text-left text-sm font-semibold text-[#525252] capitalize"
+                    className="py-4 px-4   text-left text-sm font-semibold text-[#525252] capitalize border-[#C0C0C0]"
                   >
                     {flexRender(
                       column.column.columnDef.header,
@@ -44,17 +44,18 @@ export default function QueryTable({
               </tr>
             ))}
           </thead>
-          <tbody className="px-2">
+          {/* -padding--- */}
+          <tbody className=" ">
             {getRowModel().rows.map((row) => {
               return (
                 <tr
                   key={row.id}
-                  className="borde-b-[0.6px]  borde-[#C0C0C0] last:border-none"
+                  className="borde-b-2  borde-[#C0C0C0] last:border-none"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="px-2 py-3 text-left text-[0.9rem]  text-[#525252] font-normal capitalize"
+                      className=" py-3 text-left text-[0.9rem]    text-[#525252] font-normal capitalize"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
