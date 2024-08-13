@@ -60,13 +60,13 @@ export const Payslip = () => {
           <>
             <h1 className="font-bold text-lg mb-5  ">Payslip</h1>
             <div>
-              <QueryTable
+              {/* <QueryTable
                 columns={columns}
                 list={list}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 totalPages={totalPages}
-              />
+              /> */}
             </div>
           </>
         </div>

@@ -41,7 +41,7 @@ function RecruiterJobs() {
             {
                 header: "Status",
                 accessorKey: "status",
-                cell: ({ row }) => <div className="bg-pink-100 text p-1 rounded-md">{row?.original?.status}</div>
+                cell: ({ row }) => <div className="bg-pink-100 text-black text-center p-1 rounded-md">{row?.original?.status}</div>
             },
 
             {
@@ -53,7 +53,7 @@ function RecruiterJobs() {
                             //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
                             to={"/admin/recruiter/candidate"}
 
-                            className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+                            className="cursor-pointer flex items-center  bg-[#F5F5F5]  p-2  size-8 rounded-full"
                         >
                             <MoveDiagonal />
                         </Link>
@@ -63,7 +63,7 @@ function RecruiterJobs() {
                         >
                             <img src="/assets/icons/admin/marker.svg" />
                         </Link>
-                        <span className="cursor-pointer flex justify-center items-center text-black bg-[#F5F5F5]  size-8 rounded-full">
+                        <span className="cursor-pointer flex justify-center items-center  bg-[#F5F5F5]  size-8 rounded-full">
                             <Trash2 className="w-5 h-5" />
                         </span>
                     </div>
@@ -73,7 +73,7 @@ function RecruiterJobs() {
         []
     );
     return (
-        <div>
+        <div className=''> 
             <RecruiterHeader
                 backlink={""}
                 menu={"Menu"}
@@ -81,7 +81,7 @@ function RecruiterJobs() {
                 currentpath={"Recruiter"}
                 firsttLink={"Dashboard"}
                 secondLink={"Jobs"}
-                thirdLink={"Candidate"}
+                thirdLink={"candidate"}
                 fourthLink={"Interview"}
                 fifthLink={"Report"}
                 six={"Setttings"}

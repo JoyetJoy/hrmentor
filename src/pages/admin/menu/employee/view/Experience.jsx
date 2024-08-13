@@ -1,16 +1,23 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import AddExperience from "@/components/popups/employees/view/AddExperience";
+import EditExperience from "@/components/popups/employees/view/EditExperience";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Trash2 } from "lucide-react";
+import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const Experience = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupEditOpen, setEditOpen] = useState(false);
+
+
+
 
   const list = React.useMemo(() => TableData,[TableData]);
   const columns = React.useMemo(
@@ -49,6 +56,8 @@ export const Experience = () => {
             </Link>
             <Link
               to={""}
+              onClick={setEditOpen}
+
               className="cursor-pointer flex items-center bg-gray-500 text-black p-2  size-8 rounded-full"
             >
               <img src="/assets/icons/admin/marker.svg" />
@@ -76,11 +85,26 @@ export const Experience = () => {
       />
       {/* ----sidebar---- */}
       <div className="flex gap-x-3 ">
+      <EditExperience  popupEditOpen={popupEditOpen} setEditOpen={setEditOpen}/>
+
         <EmployeesSidebar />
         <div className="  w-full bg">
           <>
-            <h1 className="font-bold text-lg mb-4  ">Experience</h1>
-            <div>
+          <div className="flex flex-row items-center justify-between"> <h1 className="font-bold text-lg   ">Experience</h1>
+            <div className="text-white font-semibold flex  items-center gap-2 ">
+                <Link
+                  to={""}
+                  onClick={setPopupOpen}
+
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  text-sm flex items-center gap-1"
+                >
+                  <Plus className="size-5" />
+                  Add Experience</Link>
+              </div>
+              <AddExperience popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
+              </div>
+            <div className="py-3">
               <QueryTable
                 columns={columns}
                 list={list}

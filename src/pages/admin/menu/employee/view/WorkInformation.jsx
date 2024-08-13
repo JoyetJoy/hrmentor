@@ -45,22 +45,22 @@ export const WorkInformation = () => {
               <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
                   to={""}
-                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  flex items-center gap-1"
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-full text-sm  flex items-center gap-1"
                 >
-                  <Plus />
-                  Add Skills/Qualification</Link>
+                 
+                  Add Work</Link>
               </div>
             </div>
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"
             >
-              <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
+              <div className="flex flex-col items-baseline  st px-5 py-4 rounded-md h- bg-white border border-gray-300">
                 <h1 className="font-bold text-base px-3">Reporting to</h1>
-                <div className="grid w-full grid-cols-2 gap-y-2 mt-4 ">
+                <div className="grid w-full items-start grid-cols-2 gap-y-2 mt-4 ">
                   <div className="flex px-3 group flex-col space-y-2">
                     <label className="label-text">
-                      Employee ID <span className="text-red-500">*</span>
+                      Reporting Manager <span className="text-red-500">*</span>
                     </label>
                     <input
                       autoComplete="off"
@@ -76,7 +76,7 @@ export const WorkInformation = () => {
                   </div>
                   <div className="flex px-3 group flex-col space-y-2">
                     <label className="label-text">
-                      First Name <span className="text-red-500">*</span>
+                      HR Manager<span className="text-red-500">*</span>
                     </label>
                     <input
                       autoComplete="off"
@@ -90,7 +90,7 @@ export const WorkInformation = () => {
                       </span>
                     )}
                   </div>
-
+{/* 
                   <div className="flex px-3 group flex-col space-y-2">
                     <label className="label-text">surname</label>
                     <input
@@ -316,53 +316,18 @@ export const WorkInformation = () => {
                         {errors.communicationAddress?.message}
                       </span>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="flex flex-col  px-5 py-4 rounded-md bg-white border border-[#EBEBF0]">
-                <h1 className="font-bold text-base px-3">Work Details</h1>
+                <h1 className="font-bold text-base px-3">EEO Details</h1>
 
                 <div
                   onSubmit={handleSubmit(onSubmit)}
                   className="grid w-full grid-cols-2 gap-x-2 mt-4 "
                 >
                   <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text flex items-center gap-1">
-                      Department{" "}
-                      <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
-                    </label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("department", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
-                    />
-                    {errors.department && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.department?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">
-                      Role<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("role", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
-                    />
-                    {errors.role && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.role?.message}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text  flex items-center gap-1">Designation
-                      <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
+                    <label className="label-text  flex items-center gap-1"> Ethnicity
 
                     </label>
                     <Controller
@@ -392,9 +357,74 @@ export const WorkInformation = () => {
                       </span>
                     )}
                   </div>
-
                   <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">Date of Joinging</label>
+                    <label className="label-text  flex items-center gap-1">EEO Job Category
+
+                    </label>
+                    <Controller
+                      name="designation"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          // required
+                          //   selected={''}
+                          //   value={''}
+                          //   onChange={(selectedOption) => {
+                          //     handle(selectedOption);
+                          //     field.onChange(selectedOption);
+                          //   }}
+                          //   options={}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select Designation"
+                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                        />
+                      )}
+                    />
+                    {errors.designation && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.designation?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text flex items-center gap-1">
+                    Probation Period(In Days)
+                    </label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      {...register("department", { required: true })}
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    />
+                    {errors.department && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.department?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text flex items-center gap-1">
+                    Notice Period(In Days)
+                    </label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      {...register("department", { required: true })}
+                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    />
+                    {errors.department && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.department?.message}
+                      </span>
+                    )}
+                  </div>
+
+                  
+
+                  {/* <div className="flex px-3 group flex-col py-2">
+                    <label className="label-text">Notice Period (In Days)</label>
                     <input
 
                       {...register("dateOfJoinging", { required: true })}
@@ -407,8 +437,8 @@ export const WorkInformation = () => {
                         {errors.dateOfJoinging?.message}
                       </span>
                     )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  </div> */}
+                  {/* <div className="flex px-3 group flex-col py-2">
                     <label
                       onClick={() => setPopupOpen(true)}
                       className="label-text flex  items-center gap-1"
@@ -443,8 +473,8 @@ export const WorkInformation = () => {
                         {errors.worklocation?.message}
                       </span>
                     )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  </div> */}
+                  {/* <div className="flex px-3 group flex-col py-2">
                     <label className="label-text">Employenment Type</label>
                     <Controller
                       name="employementype"
@@ -472,8 +502,8 @@ export const WorkInformation = () => {
                         {errors.employementype?.message}
                       </span>
                     )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  </div> */}
+                  {/* <div className="flex px-3 group flex-col py-2">
                     <label className="label-text">
                       Mobile Number  </label>
                     <input
@@ -487,8 +517,8 @@ export const WorkInformation = () => {
                         {errors.mobileNumber?.message}
                       </span>
                     )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  </div> */}
+                  {/* <div className="flex px-3 group flex-col py-2">
                     <label className="label-text">Marital status</label>
                     <Controller
                       name="maritalstatus"
@@ -516,8 +546,8 @@ export const WorkInformation = () => {
                         {errors.maritalstatus?.message}
                       </span>
                     )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  </div> */}
+                  {/* <div className="flex px-3 group flex-col py-2">
                     <label className="label-text">
                       Personal Email Address  </label>
                     <input
@@ -531,8 +561,8 @@ export const WorkInformation = () => {
                         {errors.personalEmailAddress?.message}
                       </span>
                     )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  </div> */}
+                  {/* <div className="flex px-3 group flex-col py-2">
                     <label className="label-text">
                       Work Email Address
                     </label>
@@ -547,7 +577,7 @@ export const WorkInformation = () => {
                         {errors.workEmailAddress?.message}
                       </span>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

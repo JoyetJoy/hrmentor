@@ -31,7 +31,7 @@ export const employeesSidebarList = [
   },
   {
     id: 7,
-    link: "/admin/employees/emeergency-contact",
+    link: "/admin/employees/emergency-contact",
     name: "Emergency Contacts",
   },
   {

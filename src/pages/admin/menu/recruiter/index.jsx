@@ -34,10 +34,10 @@ export default function RecruiterDashbaord() {
 
     []
   );
-  const [popupOpen, setPopupOpen] = useState(true);
+  // const [popupOpen, setPopupOpen] = useState(true);
   return (
     <>
-      <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      {/* <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} /> */}
       <RecruiterHeader
         backlink={""}
         menu={"Menu"}

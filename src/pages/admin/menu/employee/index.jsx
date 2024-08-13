@@ -12,6 +12,7 @@ import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal, Trash2 } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
+import EmployeeHeader from "@/components/common/EmployeeHeader";
 
 
 
@@ -31,7 +32,7 @@ export default function EmployeeLists() {
       {
         header: "Designation",
         accessorKey: "dignation",
-        cell: ({ row }) => <p className="font-medium">{row?.original?.designation}</p>,
+        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
 
       },
       {
@@ -45,30 +46,31 @@ export default function EmployeeLists() {
       {
         header: "Department",
         accessorKey: "designation",
-        cell: ({ row }) => <p className="font-medium">{row?.original?.designation}</p>,
+        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
       },
       {
-        header:"Status",
-        accessorKey:"status",
-        cell:({row}) => <div className="bg-pink-100 text p-1 rounded-md">{row?.original?.status}</div>
-    },
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
+      },
+
 
       {
         header: "",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex relative gap-1 text-xs ">
+          <div className="flex items-center justify-end gap-3  text-xs ">
             <Link
-            //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-            to={"/admin/employees/primary"}
+              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              to={""}
 
-              className="cursor-pointer flex items-center  bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
             >
               <MoveDiagonal />
             </Link>
             <Link
-              to={""}
-              className="cursor-pointer flex items-center bg-[#F5F5F5] text-black p-2  size-8 rounded-full"
+              to={"/admin/employees/primary"}
+              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-8 rounded-full"
             >
               <img src="/assets/icons/admin/marker.svg" />
             </Link>
@@ -79,39 +81,38 @@ export default function EmployeeLists() {
         ),
       },
     ],
-  
+
     []
   );
   return (
     <div className="my-2">
-      <div className="bg-white py-2 px-6 flex flex-row items-center justify-between  rounded-md">
-        <div className="text-base font-semibold text-black flex items-center justify-between gap-1">
+      <div className="bg-white py-2.5 px-6 flex flex-row items-center justify-between  rounded-md">
+        <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
           <ArrowLeft className="size-4" />
           Menu
           <ChevronRight className="size-4" />
           <span className="text-red-600">Employee</span>
         </div>
-        <h1 className="text-base font-semibold text-black flex items-center justify-between gap-1">
-          {" "}
+        <h1 className="text-[0.8rem] font-medium text-black flex items-center justify-between gap-1">
           Number of licence is limited to 8:{" "}
-          <span className="text-red-600 underline">Add More Licence</span>{" "}
+          <span className="text-textcolor-lightred font-semibold underline underline-offset-4">Add More Licence</span>{" "}
         </h1>
         <div className="text-sm flex items-center gap-5 font-semibold ">
-          <div className="w-1">
+          {/* <div className="w-1">
             <img
               src={"/assets/icons/employees/line.svg"}
               alt="line"
               className="object-contain w-full"
             />
-          </div>
-          <Link className="text-textcolor-blue font-extrabold text-base">
+          </div> */}
+          <Link className="text-textcolor-blue font-extrabold text-sm">
             Employees
           </Link>
-          <Link className=" text-base text-[#808080]  ">Settings</Link>
+          <Link className=" text-sm text-[#808080]  ">Settings</Link>
         </div>
       </div>
-      <div className="flex justify-between items-center my-2">
-        <label className="input outline-none border-none pr-28 flex items-center  h-11 gap-2">
+      <div className="flex justify-between items-center mt-2 mb-3">
+        <label className="input outline-none border-none pr-28 flex items-center min-h-10  h-10 gap-2">
           <Search className="text-gray-200 object-contain size-5" />
           <input
             type="text"
@@ -120,30 +121,30 @@ export default function EmployeeLists() {
           />
         </label>
         <div className="flex items-center gap-3">
-          <div className="bg-white rounded-md p-3 border border-gray-400">
-          <Filter className="size-4"/>
+          <div className="bg-white rounded-md p-3 border border-gray-400 min-h-10 h-10  ">
+            <Filter className="size-4" />
           </div>
-          <div className="bg-white flex flex-row items-center justify-center min-h-11 h-11 rounded-md py-1 px-4 border border-gray-400 gap-1">
+          <div className="bg-white flex flex-row items-center justify-center min-h-10 h-10 rounded-md py-1 px-4 border border-gray-400 gap-1">
             <ArrowUpFromLine className="size-4" />
-            <h1 className="text-base font-semibold">Export</h1>
+            <h1 className="text-xs font-semibold">Export</h1>
           </div>
           <div className="text-white font-semibold flex  items-center">
             <Link
               to={"/admin/employees/create"}
-              className="btn bg-btncolor text-white hover:bg-btncolor"
+              className="btn bg-btncolor text-white text-xs hover:bg-btncolor min-h-10 h-10"
             >
-              <Plus />
+              <Plus className="size-5" />
               Add Employee{" "}
             </Link>
           </div>
         </div>
       </div>
-      <QueryTable 
-       columns={columns}
-       list={list}
-       currentPage={currentPage}
-       setCurrentPage={setCurrentPage}
-       totalPages={totalPages}/>
+      <QueryTable
+        columns={columns}
+        list={list}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages} />
     </div>
   );
 }

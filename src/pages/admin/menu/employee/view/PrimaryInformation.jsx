@@ -42,18 +42,18 @@ function PrimaryInformation() {
         <div className=" w-full bg">
           <>
             <div className="flex flex-row justify-between items-center">
-              <h1 className="font-bold text-lg  mb-3">Primary Information</h1>
+              <h1 className="font-bold text-base  mb-3">Primary Information</h1>
               <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
                   to={""}
-                  className="btn bg-bgColor-300 text-sm text-black hover:bg-bgColor-300 w-48 flex  items-center justify-center gap-1 "
+                  className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 w-48 flex  items-center justify-center gap-1 min-h-10 h-10 "
                 >
                   <Share2 className="size-4" />
 
                   Onboarding Form</Link>
                 <Link
                   to={""}
-                  className="btn bg-btncolor text-white hover:bg-btncolor w-28 "
+                  className="btn bg-btncolor text-white text-xs hover:bg-btncolor w-28 min-h-10 h-10 "
                 >
                   Update </Link>
               </div>
@@ -65,7 +65,7 @@ function PrimaryInformation() {
               <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
                 <h1 className="font-bold text-base px-3">Basic Details</h1>
                 <div className="grid w-full grid-cols-2 gap-y-2 mt-4 ">
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Employee ID <span className="text-red-500">*</span>
                     </label>
@@ -81,7 +81,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2space-y-1 ">
                     <label className="label-text">
                       First Name <span className="text-red-500">*</span>
                     </label>
@@ -98,8 +98,8 @@ function PrimaryInformation() {
                     )}
                   </div>
 
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">surname</label>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                    <label className="label-text">Surname</label>
                     <input
                       {...register("surname")}
                       autoComplete="off"
@@ -113,8 +113,8 @@ function PrimaryInformation() {
                     )}
                   </div>
 
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">Date of birth</label>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                    <label className="label-text">Date of birth <span className="text-red-500">*</span></label>
                     <input
                       {...register("dateOBbirth", { required: true })}
                       autoComplete="off"
@@ -127,12 +127,13 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1 ">
                     <label
                       onClick={() => setPopupOpen(true)}
                       className="label-text"
                     >
                       Gender
+                      <span className="text-red-500">*</span>
                     </label>
 
                     <Controller
@@ -162,7 +163,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">Nationality</label>
                     <Controller
                       name="nationality"
@@ -191,8 +192,10 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">Country</label>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                    <label className="label-text">Country
+                    <span className="text-red-500">*</span>
+                    </label>
                     <Controller
                       name="country"
                       control={control}
@@ -220,8 +223,8 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">City</label>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                    <label className="label-text">City <span className="text-red-500">*</span></label>
                     <Controller
                       name="city"
                       control={control}
@@ -249,7 +252,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">Blood Group</label>
                     <Controller
                       name="bloodGroup"
@@ -278,7 +281,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       National Insurance Number
                     </label>
@@ -294,8 +297,8 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text">Home Address</label>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                    <label className="label-text">Home Address <span className="text-red-500">*</span></label>
                     <textarea
                       {...register("homeAddress", { required: true })}
                       autoComplete="off"
@@ -308,7 +311,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">Communication Address</label>
                     <textarea
                       {...register("communicationAddress", { required: true })}
@@ -331,7 +334,7 @@ function PrimaryInformation() {
                   onSubmit={handleSubmit(onSubmit)}
                   className="grid w-full grid-cols-2 gap-x-2 mt-4 "
                 >
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text flex items-center gap-1">
                       Department{" "}
                       <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
@@ -348,7 +351,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Role<span className="text-red-500">*</span>
                     </label>
@@ -365,8 +368,9 @@ function PrimaryInformation() {
                     )}
                   </div>
 
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text  flex items-center gap-1">Designation
+                  
                       <Plus className="inline-block cursor-pointer text-white bg-[#2C2C2C]  rounded-full w-4 h-4 p-[0.2rem]" />
 
                     </label>
@@ -398,7 +402,7 @@ function PrimaryInformation() {
                     )}
                   </div>
 
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">Date of Joinging</label>
                     <input
 
@@ -413,7 +417,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label
                       onClick={() => setPopupOpen(true)}
                       className="label-text flex  items-center gap-1"
@@ -449,7 +453,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">Employenment Type</label>
                     <Controller
                       name="employementype"
@@ -478,7 +482,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Mobile Number  </label>
                     <input
@@ -493,7 +497,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">Marital status</label>
                     <Controller
                       name="maritalstatus"
@@ -522,7 +526,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Personal Email Address  </label>
                     <input
@@ -537,7 +541,7 @@ function PrimaryInformation() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2">
+                  <div className="flex px-3 group flex-col py-2 space-y-1 ">
                     <label className="label-text">
                       Work Email Address
                     </label>

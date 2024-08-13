@@ -1,8 +1,8 @@
-import trendingup from '/assets/icons/admin/trending-up.svg' 
-import trendingdown from '/assets/icons/admin/trending-down.svg' 
+import trendingup from '/assets/icons/admin/trending-up.svg'
+import trendingdown from '/assets/icons/admin/trending-down.svg'
 import tickgreen from '/assets/icons/admin/tick-green.svg';
 import tickgray from '/assets/icons/admin/tick-gray.svg';
-import{LayoutGrid , Users, UserPlus, Briefcase} from "lucide-react"
+import { LayoutGrid, Users, UserPlus, Briefcase } from "lucide-react"
 
 export const employeeDetails = [
   {
@@ -81,7 +81,7 @@ export const availablePlanData = [
 
     list: [
       {
-        
+
         title: "Recruiter",
         bgColor: '#D1FADF',
         textColor: "#000000",
@@ -91,7 +91,7 @@ export const availablePlanData = [
           "Audit log and data history",
           "Unlimited individual users",
           "Unlimited individual users",
-          
+
         ],
       },
       {
@@ -157,12 +157,12 @@ export const availablePlanData = [
         ],
       },
     ],
-   
+
   },
   {
     price: "$10",
     name: "Enterprises",
-   
+
     list: [
       {
         title: "Recruiter",
@@ -204,7 +204,7 @@ export const availablePlanData = [
 
 export const subcriptionModalData = [
   {
-    text:"Get advanced features and priority support for $20 per user per month, billed annually. Boost productivity and streamline operations with our comprehensive Business Plan. Invest in your business’s success today!",
+    text: "Get advanced features and priority support for $20 per user per month, billed annually. Boost productivity and streamline operations with our comprehensive Business Plan. Invest in your business’s success today!",
     list: [
       {
         title: "Recruiter",
@@ -233,11 +233,11 @@ export const subcriptionModalData = [
 ];
 // header list
 export const menuitems = [
-  { id: 1, icon: LayoutGrid, name: "Dashboard", path: '/dashboard' },
-  { id: 2, icon:  Briefcase , alt: "Recruiter", name: "Recruiter", path: '/admin/recruiter/dashbord' },
-  { id: 3, icon:  UserPlus , alt: "Hiring", name: "Hiring", path: '/hiring' },
-  { id: 4, icon: Users, name: "Employee", path: '/admin/employees/list' },
-  { id: 5, iconType: 'image', iconSrc: '/assets/icons/admin/attendance-black.svg', alt: "Attendance", name: "Attendance", path: '/attendance' }
+  { id: 1, icon: LayoutGrid, name: "Dashboard", path: '/admin/dashboard', active: "dashboard" },
+  { id: 2, icon: Briefcase, name: "Recruiter", path: '/admin/recruiter/dashbord', active: "recruiter" },
+  { id: 3, icon: UserPlus, name: "Hiring", path: '/hiring', active: "hiring" },
+  { id: 4, icon: Users, name: "Employee", path: '/admin/employees/list', active: "employees" },
+  { id: 5, iconType: 'image', iconSrc: '/assets/icons/admin/attendance-black.svg', name: "Attendance", path: '/attendance', active: "attendance" }
 ];
 
 export const adminItems = [
@@ -246,19 +246,19 @@ export const adminItems = [
     label: "Profile Management",
     path: "/profile-management",
   },
-  { icon:  '/assets/icons/admin/company.svg', label: "Company Settings", path: "/company-settings" },
+  { icon: '/assets/icons/admin/company.svg', label: "Company Settings", path: "/company-settings" },
   {
     icon: '/assets/icons/admin/ac.svg',
     label: "Account Management",
     path: "/admin/role",
   },
-  { icon:'/assets/icons/admin/logout.svg', label: "Log Out", path: "/logout" },
+  { icon: '/assets/icons/admin/logout.svg', label: "Log Out", path: "/logout" },
 ];
 
 export const activityItems = [
-  { icon:'/assets/icons/admin/project.svg', label: "Project" },
+  { icon: '/assets/icons/admin/project.svg', label: "Project" },
   { icon: '/assets/icons/admin/task.svg', label: "Task" },
   { icon: '/assets/icons/admin/roster.svg', label: "Roster" },
-  { icon:'/assets/icons/admin/payroll.svg', label: "Payroll" },
+  { icon: '/assets/icons/admin/payroll.svg', label: "Payroll" },
   { icon: '/assets/icons/admin/setup.svg', label: "Setup" },
 ];

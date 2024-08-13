@@ -3,7 +3,9 @@ import EmployeeHeader from "@/components/common/EmployeeHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
+import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 export const Compensation = () => {
@@ -38,10 +40,10 @@ export const Compensation = () => {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex relative gap-1 text-xs ">
+          <div className="flex  gap-2 text-xs  ">
             <Link
               to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500text-black p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8 rounded-full"
             >
               <MoveDiagonal />
             </Link>
@@ -77,7 +79,18 @@ export const Compensation = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <h1 className="font-bold text-lg mb-5  ">Compensation </h1>
+          <div className="flex flex-row items-center justify-between mb-4"> 
+            <h1 className="font-bold text-lg  ">Compensation</h1>
+            <div className="text-white font-semibold flex  items-center gap-2 ">
+                <Link
+                  to={""}
+                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  min-h-10 h-10 text-sm flex items-center gap-1"
+                >
+                  <Plus className="size-5" />
+                  Compensation</Link>
+              </div>
+              </div>
+
             <div>
               <QueryTable
                 columns={columns}

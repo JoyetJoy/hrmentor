@@ -14,7 +14,7 @@ export default function EmployeeHeader(props) {
   } = props;
   return (
     <div className="bg-white py-2 px-6 flex flex-row items-center justify-between  rounded-md my-3">
-      <div className="text-base font-semibold text-black flex items-center justify-between gap-1">
+      <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
         <ArrowLeft className="size-4" />
         {menu}
         <ChevronRight className="size-4" />
@@ -30,10 +30,10 @@ export default function EmployeeHeader(props) {
             className="object-contain w-full"
           />
         </div>
-        <div className="text-textcolor-blue font-extrabold text-base">
+        <Link className="text-textcolor-blue font-extrabold text-sm">
           {pageHeading}
-        </div>
-        <Link className=" text-base text-[#808080]  ">{nextHeading}</Link>
+        </Link>
+        <Link to ={nextLink} className=" text-sm text-[#808080]  ">{nextHeading}</Link>
       </div>
     </div>
   );

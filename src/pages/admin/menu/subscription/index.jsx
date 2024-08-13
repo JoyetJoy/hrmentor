@@ -32,12 +32,12 @@ export const MenuSubscription = () => {
             Select Your Plan to Enhance
             <br /> HR Management
           </h1>
-          <div className="px-16 py-6 bg-subcription  bg-cover bg-no-repeat w-full h-full my-6 ">
-            <div className="flex flex-row items-center gap-1 mb-7 bg-bgColor bg-opacity-25 rounded-full py-1 px-2  w-1/4">
+          <div className="px-16 py-7 bg-subcription rounded-xl bg-cover bg-no-repeat my-6">
+            <div className="flex flex-row items-center gap-1 mb-7 bg-white bg-opacity-25 rounded-full py-1 px-2  w-1/5 h-full">
               <div className="size-5">
                 <img src={"/assets/images/cube.svg"} alt="cube" className="object-contain w-full" />
               </div>
-              <h1 className="text-bgColor font-medium text-xs">
+              <h1 className="text-white font-medium text-xs">
                 Current Plan Details
               </h1>
             </div>
@@ -53,19 +53,19 @@ export const MenuSubscription = () => {
                   Valid till 22th July 2024
                 </span>
               </h1>
-              <button className="btn  bg-white  hover:bg-white text-sm font-semibold min-h-11 h-11 text-[#181C3A] px-8 py-0 ">
+              <button className="btn  bg-white  hover:bg-white text-xs font-semibold min-h-10 h-10 text-[#181C3A] px-8 py-0 ">
                 Add More License
               </button>
             </div>
           </div>
+
+
         </div>
         {/* ----plans----- */}
-        <hr className="w-max-" />
-
+        <div className="h-[1px] w-full bg-black/10" />
         <h1 className="font-extrabold text-textcolor-blue my-4 text-lg">
           Available Plans
         </h1>
-
         <div className="grid grid-cols-3 gap-4 mb-12">
           {availablePlanData.map((plan, planIndex) => (
             <AvailablePlans data={plan} key={planIndex} />
