@@ -26,7 +26,7 @@ export default function QueryTable({
     <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
       <div className="table table-md  mx-auto  w-full">
         <table style={{ borderSpacing: "0", width: "100%" }}>
-          <thead className="bg-[#C0C0C033]">
+          <thead className="bg-[#EBEBF0]">
             {getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((column) => (

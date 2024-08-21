@@ -13,7 +13,7 @@ export default function EmployeeHeader(props) {
     nextHeading,
   } = props;
   return (
-    <div className="bg-white py-2 px-6 flex flex-row items-center justify-between  rounded-md my-3">
+    <div className="bg-white py-2 px-6 flex flex-row items-center justify-between  rounded-md my-2">
       <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
         <ArrowLeft className="size-4" />
         {menu}

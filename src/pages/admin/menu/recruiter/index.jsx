@@ -43,7 +43,7 @@ export default function RecruiterDashbaord() {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        firsttLink={"Dashboard"}
+        firstLink={"Dashboard"}
         secondLink={"Jobs"}
         thirdLink={"Candidate"}
         fourthLink={"Interview"}
@@ -123,7 +123,6 @@ export default function RecruiterDashbaord() {
                 <MoveDiagonal />
               </Link>
             </div>
-
             <div className="bg-[#F5F5F7] w-full h-20 rounded-md flex justify-between items-center py-2 px-3">
               <div className="flex gap-x-2 items-center">
                 <div className="avatar">

@@ -3,7 +3,7 @@ import QueryTable from '@/components/table/QueryTable'
 import React, { useState } from 'react'
 import { Link } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
-import { ArrowLeft, Filter, MoveDiagonal, Plus, Search, Trash2 } from 'lucide-react';
+import { ArrowLeft, ArrowUpFromLine, Filter, MoveDiagonal, Plus, Search, Trash2 } from 'lucide-react';
 import ProjectManagerHeader from '@/components/common/ProjectManagerHeader';
 import RecruiterHeader from '@/components/common/RecruiterHeader';
 
@@ -25,7 +25,7 @@ function Candidate() {
             {
                 header: "Candidate Status",
                 accessorKey: "status",
-                cell: ({ row }) => <div className="bg-blue-100  py-2 rounded-md border text-center font-semibold  border-[#92BEE4]">{row?.original?.status}</div>
+                cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
             },
             {
                 header: "Action",
@@ -59,32 +59,32 @@ function Candidate() {
                 subMenu={""}
                 pageHeading={"Dashbord"}
                 currentpath={"Recruiter"}
-                firsttLink={""}
+                firstLink={"Dashbord"}
                 secondLink={"Jobs"}
-                thirdLink={"candidate"}
+                thirdLink={"Candidate"}
                 fourthLink={"Interview"}
                 fifthLink={"Report"}
                 six={"Setttings"}
             />
-            <div className='flex flex-row justify-between items-center mt-3'>
-                <h1 className='font-semibold text-base flex items-center gap-1 '>
+            <div className='flex flex-row justify-between items-center my-5 '>
+                <h1 className='font-bold text-base flex items-center gap-1 '>
                     <ArrowLeft className="size-4" />
                     Project manger</h1>
                 <div className='flex gap-5 '>
-                    <Link to="/admin/recruiter/candidate" className='text-sm font-extrabold text-btncolor'>Candidate</Link>
+                    <Link to="/admin/recruiter/candidate" className='text-sm font-extrabold text-bgColor-100'>Candidate</Link>
                     <Link to="/admin/recruiter/promote" className='text-sm font-medium text-gray-200'>Promote</Link>
-                    <Link to="" className='text-sm font-medium text-gray-200'>Refer</Link>
+                    <Link to="/admin/recruiter/refer" className='text-sm font-medium text-gray-200'>Refer</Link>
                 </div>
             </div>
             <div className='flex flex-row gap-2 my-3 '>
                 <RecruiterSideBar />
 
-                <div className='bg-white w-full rounded-md px-8 flex justify-between flex-col '>
-                    <div className='flex flex-row  items-center justify-between my-3 '>
+                <div className='bg-white w-full rounded-md p-7 flex justify-between flex-col '>
+                    <div className='flex flex-row  items-center justify-between mb-5 '>
                     <h1 className='text-base font-semibold text-black'>Candidate</h1>
                     <div className="text-white font-semibold flex  items-center gap-2">
                         <label className="input outline-none border-gray-300 pr-28 flex items-center   min-h-10 h-10 gap-2">
-                            <Search className="text-gray-200 object-contain size-5" />
+                            <Search className="text-gray-200 object-contain size-4" />
                             <input
                                 type="text"
                                 className="grow placeholder:text-sm focus:outline-none placeholder:text-gray-200 "
@@ -95,17 +95,18 @@ function Candidate() {
                             <Filter className="size-4 text-black" />
                         </div>
                         <Link
-                            to={"/admin/employees/create"}
-                            className="btn bg-btncolor text-white hover:bg-btncolor min-h-10 h-10"
+                            to={""}
+                            className="btn bg-bgColor-100 text-white text-sm hover:bg-bgColor-100 min-h-10 h-10"
                         >
-                            <Plus />
+                            <Plus className=' size-5'/>
                             Add Candidate
                         </Link>
                         <Link
                             to={""}
-                            className="btn bg-btncolor text-white hover:bg-btncolor  min-h-10 h-10"
+                            className="btn bg-bgColor-100 text-sm text-white hover:bg-bgColor-100  min-h-10 h-10"
                         >
-                            Export
+                                <ArrowUpFromLine className="text-white size-4" />
+                                Export
                         </Link>
 
 
