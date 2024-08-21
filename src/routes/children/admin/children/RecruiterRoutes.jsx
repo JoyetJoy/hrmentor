@@ -1,5 +1,13 @@
 
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
+import CandidatesList from "@/pages/admin/menu/recruiter/candidate";
+import AddCandidates from "@/pages/admin/menu/recruiter/candidate/addcandidates";
+import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
+import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
+import Email from "@/pages/admin/menu/recruiter/candidate/details/email";
+import History from "@/pages/admin/menu/recruiter/candidate/details/history";
+import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
+import Profile from "@/pages/admin/menu/recruiter/candidate/details/profile";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
@@ -59,5 +67,40 @@ element:<Refer/>
    path:"team",
    element:<Team/>
  },
+//  ------- candidate-------
+ {
+  path:"candidate",
+  element:<CandidatesList/>
+ },
+ {
+  path:"add-candidate",
+  element:<AddCandidates/>
+ },
+ {
+  path:"profile",
+  element:<Profile/>
+ },
+ {
+  path:"interview",
+  element:<Interviews/>
+ },
+ {
+  path:"discussions",
+  element:<Discussions/>
+ },
+ {
+  path:"documents",
+  element:<Documents/>
+ },
+ {
+  path:"email",
+  element:<Email/>
+ },
+ {
+  path:"history",
+  element:<History/>
+ },
+
+ 
  ]
 

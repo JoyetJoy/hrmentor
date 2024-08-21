@@ -329,15 +329,15 @@ function Post() {
                       Work type 
                     </label>
                    <div className='flex flex-row items-start gap-4 '>
-                        <label className="label cursor-pointer flex flex-row items-center justify-start border-2 border-gray-300  focus:border-gray-300 rounded-md gap-3  w-2/12">
+                        <label className="label cursor-pointer flex flex-row items-center justify-start border-2 border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
                           <input type="checkbox" defaultChecked className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                           <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Remote(work from office)</span>
                         </label>
-                        <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-gray-300  focus:border-gray-300 rounded-md gap-3  w-2/12 ">
+                        <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12 ">
                           <input type="checkbox"  className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                           <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Work from office</span>
                         </label>
-                        <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-gray-300  focus:border-gray-300 rounded-md gap-3  w-2/12">
+                        <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
                           <input type="checkbox"  className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                           <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Hybrid</span>
                         </label>
@@ -362,9 +362,9 @@ function Post() {
             </DisclosurePanel>
           </Disclosure> */}
           </div>
+          <CreateJobSideBar/>
 
         </div>
-        {/* <CreateJobSideBar/> */}
       </div>
 
   )
