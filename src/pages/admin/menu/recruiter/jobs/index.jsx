@@ -5,6 +5,7 @@ import { TableData } from "@/constants/tableDummy";
 import { ArrowUpFromLine, Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
+import MenuHeader from '@/components/common/MenuHeader';
 
 function RecruiterJobs() {
     const [totalPages, setTotalPages] = useState(10);
@@ -79,7 +80,7 @@ function RecruiterJobs() {
     );
     return (
         <div className=''>
-            <RecruiterHeader
+            <MenuHeader
                 backlink={""}
                 menu={"Menu"}
                 subMenu={""}
@@ -90,6 +91,8 @@ function RecruiterJobs() {
                 fourthLink={"Interview"}
                 fifthLink={"Report"}
                 six={"Setttings"}
+                firstpath={"/admin/recruiter/index"}
+                secondpath={"/admin/recruiter/jobs"}
             />
             <div className="flex justify-between items-center mb-4 mt-4">
                 <div className="text-white font-semibold flex  items-center gap-2">

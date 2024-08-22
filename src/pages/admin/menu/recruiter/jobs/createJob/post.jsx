@@ -2,7 +2,7 @@ import RecruiterHeader from '@/components/common/RecruiterHeader'
 import CreateJobSideBar from '@/components/sidebars/recruiter/CreateJobSideBar'
 import { customSelectStyles } from '@/utils/customStyles'
 import { Disclosure, DisclosureButton, DisclosurePanel, Select } from '@headlessui/react'
-import { ArrowLeft, ArrowUpFromLine, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ArrowUpFromLine, ChevronRight, Search } from 'lucide-react'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
@@ -350,18 +350,36 @@ function Post() {
                   </div>
                 </div>
               </div>
-            </div>
-            {/* <Disclosure>
-            <DisclosureButton className="py-2 flex">
-            <div className="bg-[#F7F7F7] size-5 flex justify-center items-center rounded-full">
+              <Disclosure as="div" className="p-5" defaultOpen={false}>
+                <DisclosureButton className="group flex w-full items-center gap-x-2 ">
+                  <div className="bg-gray-200 size-5 flex justify-center items-center rounded-full">
                     <ChevronRight className="size-6 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                  </div> 
-              Is team pricing available?</DisclosureButton>
-            <DisclosurePanel className="text-gray-500">
-              Yes! You can purchase a license that you can share with your entire team.
-            </DisclosurePanel>
-          </Disclosure> */}
+                  </div>
+                  <p className="text-sm font-bold  flex flex-row items-center">Passport, Visa & Identity <hr /></p>
+                </DisclosureButton>
+                <DisclosurePanel className="ml-10 my-4 text-sm/5 text-black/50">
+                  <div>
+                    <div className="flex items-center justify-between my-4">
+                      <div className="flex gap-2 placeholder:text-black items-center input-box h-10 w-72">
+                        <Search />
+                        <input
+                          type="text"
+                          className=" w-full h-full "
+                          placeholder="Search"
+                        />
+                      </div>
+                      <div className="flex gap-2 bg-[#030E5C] items-center input-box h-10 w-40 justify-center text-white">
+                        + Add Documents
+                      </div>
+                    </div>
+                    {/* <QueryTable columns={columns} list={list} /> */}
+                  </div>
+                </DisclosurePanel>
+              </Disclosure>
+            </div>
+           
           </div>
+         
           <CreateJobSideBar/>
 
         </div>

@@ -13,6 +13,7 @@ import { MoveDiagonal, Trash2 } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 
 
 
@@ -86,7 +87,7 @@ export default function EmployeeLists() {
   );
   return (
     <div className="my-2">
-      <div className="bg-white py-2.5 px-6 flex flex-row items-center justify-between  rounded-md">
+      {/* <div className="bg-white py-2.5 px-6 flex flex-row items-center justify-between  rounded-md">
         <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
           <ArrowLeft className="size-4" />
           Menu
@@ -98,19 +99,31 @@ export default function EmployeeLists() {
           <span className="text-textcolor-lightred font-semibold underline underline-offset-4">Add More Licence</span>{" "}
         </h1>
         <div className="text-sm flex items-center gap-5 font-semibold ">
-          {/* <div className="w-1">
+          <div className="w-1">
             <img
               src={"/assets/icons/employees/line.svg"}
               alt="line"
               className="object-contain w-full"
             />
-          </div> */}
+          </div>
           <Link className="text-textcolor-blue font-extrabold text-sm">
             Employees
           </Link>
           <Link className=" text-sm text-[#808080]  ">Settings</Link>
         </div>
-      </div>
+      </div> */}
+      <MenuHeader
+      menu={"Menu"}
+      currentpath={"Employee"}
+      centertextmain={"  Number of licence is limited to 8:"}
+      centertext={"Add More Licence"}
+      fifthLink={"Employees"}
+      sixthLink={"Settings"}
+      // firstpath={""}
+
+
+
+      />
       <div className="flex justify-between items-center mt-2 mb-3">
         <label className="input outline-none border-none pr-28 flex items-center min-h-10  h-10 gap-2">
           <Search className="text-gray-200 object-contain size-5" />

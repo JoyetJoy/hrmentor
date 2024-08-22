@@ -1,3 +1,4 @@
+import MenuHeader from "@/components/common/MenuHeader";
 import RecruiterHeader from "@/components/common/RecruiterHeader";
 import AddEducation from "@/components/popups/employees/view/AddEducation";
 import QueryTable from "@/components/table/QueryTable";
@@ -38,7 +39,7 @@ export default function RecruiterDashbaord() {
   return (
     <>
       {/* <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} /> */}
-      <RecruiterHeader
+      <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={""}
@@ -49,6 +50,9 @@ export default function RecruiterDashbaord() {
         fourthLink={"Interview"}
         fifthLink={"Report"}
         six={"Setttings"}
+        firstpath={"/admin/recruiter/index"}
+        secondpath={"/admin/recruiter/jobs"}
+
       />
       <div className="grid grid-cols-6 gap-5">
         {/* ---images---- */}
