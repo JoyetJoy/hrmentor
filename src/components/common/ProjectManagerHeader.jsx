@@ -14,7 +14,8 @@ function ProjectManagerHeader(props) {
     } = props;
   return (
     <div className='flex flex-row justify-between items-center mt-3'>
-      <h1 className='font-semibold text-base flex items-center gap-1 '>         <ArrowLeft className="size-4" />
+      <h1 className='font-semibold text-base flex items-center gap-1 '>        
+         <ArrowLeft className="size-4" />
       Project manger</h1>
       <div className='flex gap-5 '>
         <Link to={currentpath} className='text-base font-semibold text-btncolor'>{ currentLink}</Link>

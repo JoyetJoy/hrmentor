@@ -31,7 +31,7 @@ function PrimaryInformation() {
         backLink={""}
         menu={"Menu"}
         subMenu={"Employee"}
-        currentPath={" Employee Detail"}
+        currentPath={"Employee Detail"}
         pageHeading={"Employees"}
         nextLink={""}
         nextHeading={"Settings"}

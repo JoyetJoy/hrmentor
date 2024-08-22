@@ -1,3 +1,4 @@
+import MenuHeader from "@/components/common/MenuHeader";
 import RecruiterHeader from "@/components/common/RecruiterHeader";
 import AddEducation from "@/components/popups/employees/view/AddEducation";
 import QueryTable from "@/components/table/QueryTable";
@@ -38,17 +39,20 @@ export default function RecruiterDashbaord() {
   return (
     <>
       {/* <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} /> */}
-      <RecruiterHeader
+      <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        firsttLink={"Dashboard"}
+        firstLink={"Dashboard"}
         secondLink={"Jobs"}
         thirdLink={"Candidate"}
         fourthLink={"Interview"}
         fifthLink={"Report"}
         six={"Setttings"}
+        firstpath={"/admin/recruiter/index"}
+        secondpath={"/admin/recruiter/jobs"}
+
       />
       <div className="grid grid-cols-6 gap-5">
         {/* ---images---- */}
@@ -123,7 +127,6 @@ export default function RecruiterDashbaord() {
                 <MoveDiagonal />
               </Link>
             </div>
-
             <div className="bg-[#F5F5F7] w-full h-20 rounded-md flex justify-between items-center py-2 px-3">
               <div className="flex gap-x-2 items-center">
                 <div className="avatar">

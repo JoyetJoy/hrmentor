@@ -60,7 +60,7 @@ export const Documents = () => {
             <div className="w-full h-full rounded-md bg-white">
               <Disclosure as="div" className="p-5" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
-                  <div className="bg-[#F7F7F7] size-8 flex justify-center items-center rounded-full">
+                  <div className="bg-[#F7F7F7] size-5 flex justify-center items-center rounded-full">
                     <ChevronRight className="size-6 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                   </div>
                   <p className="text-sm">Passport, Visa & Identity</p>
