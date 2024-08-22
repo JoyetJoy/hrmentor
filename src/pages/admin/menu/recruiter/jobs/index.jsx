@@ -93,6 +93,8 @@ function RecruiterJobs() {
                 six={"Setttings"}
                 firstpath={"/admin/recruiter/index"}
                 secondpath={"/admin/recruiter/jobs"}
+                thirdpath={"/admin/recruiter/candidatelist"}
+
             />
             <div className="flex justify-between items-center mb-4 mt-4">
                 <div className="text-white font-semibold flex  items-center gap-2">

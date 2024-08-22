@@ -67,8 +67,9 @@ element:<Refer/>
    path:"team",
    element:<Team/>
  },
+//  ------candidate----------
  {
-  path:"candidate",
+  path:"candidatelist",
   element:<CandidatesList/>
  },
  {
