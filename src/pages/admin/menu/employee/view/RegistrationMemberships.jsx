@@ -1,4 +1,5 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddRegistrationMembership from "@/components/popups/employees/view/AddRegistrationMembership";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
@@ -82,7 +83,8 @@ export const RegistrationMemberships = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-          <div className="flex flex-row items-center justify-between"> <h1 className="font-bold text-lg   ">Registration &Memberships</h1>
+          {/* <div className="flex flex-row items-center justify-between"> 
+            <h1 className="font-bold text-lg   ">Registration &Memberships</h1>
             <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
                   to={""}
@@ -92,10 +94,15 @@ export const RegistrationMemberships = () => {
                 >
                   <Plus className="size-5" />
                   Add  </Link>
-              </div>
+              </div> */}
+               <MenuSubHeader
+                heading={"Registration & Memberships"}
+                SecondLink={{ label: "Add Registration", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
               <AddRegistrationMembership popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
 
-              </div>
+              
             <div className="py-3">
               <QueryTable
                 columns={columns}

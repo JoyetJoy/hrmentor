@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 
 function PrimaryInformation() {
   const {
@@ -41,23 +42,11 @@ function PrimaryInformation() {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <div className="flex flex-row justify-between items-center">
-              <h1 className="font-bold text-base  mb-3">Primary Information</h1>
-              <div className="text-white font-semibold flex  items-center gap-2 ">
-                <Link
-                  to={""}
-                  className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 w-48 flex  items-center justify-center gap-1 min-h-10 h-10 "
-                >
-                  <Share2 className="size-4" />
-
-                  Onboarding Form</Link>
-                <Link
-                  to={""}
-                  className="btn bg-btncolor text-white text-xs hover:bg-btncolor w-28 min-h-10 h-10 "
-                >
-                  Update </Link>
-              </div>
-            </div>
+              <MenuSubHeader
+                heading={"Primary Information"}
+                FirstLink={"Upadate "}
+                />
+            
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"

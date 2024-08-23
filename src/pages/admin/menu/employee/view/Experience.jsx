@@ -1,5 +1,6 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddExperience from "@/components/popups/employees/view/AddExperience";
 import EditExperience from "@/components/popups/employees/view/EditExperience";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -90,7 +91,8 @@ export const Experience = () => {
         <EmployeesSidebar />
         <div className="  w-full bg">
           <>
-          <div className="flex flex-row items-center justify-between"> <h1 className="font-bold text-lg   ">Experience</h1>
+          {/* <div className="flex flex-row items-center justify-between"> 
+            <h1 className="font-bold text-lg   ">Experience</h1>
             <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
                   to={""}
@@ -100,10 +102,13 @@ export const Experience = () => {
                 >
                   <Plus className="size-5" />
                   Add Experience</Link>
-              </div>
+              </div> */}
+                <MenuSubHeader
+                heading={"Experience"}
+                SecondLink={{ label: "Add Experience ", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
               <AddExperience popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-
-              </div>
             <div className="py-3">
               <QueryTable
                 columns={columns}

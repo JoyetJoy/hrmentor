@@ -57,6 +57,11 @@ export const Documents = () => {
         <div className="  w-full bg">
           <>
             <h1 className="font-bold text-lg mb-5  ">Documents</h1>
+            <MenuSubHeader
+                heading={"Emergency Contact"}
+                SecondLink={{ label: "Add Emergency Contact ", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
             <div className="w-full h-full rounded-md bg-white">
               <Disclosure as="div" className="p-5" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
