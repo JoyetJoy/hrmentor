@@ -45,6 +45,7 @@ function PrimaryInformation() {
               <MenuSubHeader
                 heading={"Primary Information"}
                 FirstLink={"Upadate "}
+
                 />
             
             <div
@@ -53,7 +54,7 @@ function PrimaryInformation() {
             >
               <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
                 <h1 className="font-bold text-base px-3">Basic Details</h1>
-                <div className="grid w-full grid-cols-2 gap-y-2 mt-4 ">
+                <div className="grid w-full grid-cols-2 mt-4 ">
                   <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Employee ID <span className="text-red-500">*</span>
@@ -321,7 +322,7 @@ function PrimaryInformation() {
 
                 <div
                   onSubmit={handleSubmit(onSubmit)}
-                  className="grid w-full grid-cols-2 gap-x-2 mt-4 "
+                  className="grid w-full grid-cols-2 gap-y-2 mt-4 "
                 >
                   <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text flex items-center gap-1">

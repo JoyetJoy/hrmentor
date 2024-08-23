@@ -5,11 +5,15 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { ChevronDownIcon, ChevronRight, Search } from "lucide-react";
+import { ChevronDownIcon, ChevronRight, Plus, Search } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 export const Documents = () => {
+  const [popupEditOpen, setEditOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
     () => [
@@ -56,7 +60,7 @@ export const Documents = () => {
         <EmployeesSidebar />
         <div className="  w-full bg">
           <>
-            <h1 className="font-bold text-lg mb-5  ">Documents</h1>
+            
             <MenuSubHeader
                 heading={"Emergency Contact"}
                 SecondLink={{ label: "Add Emergency Contact ", onClick: setPopupOpen }}

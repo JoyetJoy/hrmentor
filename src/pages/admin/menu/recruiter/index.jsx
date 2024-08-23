@@ -115,7 +115,7 @@ export default function RecruiterDashbaord() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-bold text-base">Harshal H</h3>
+                  <h3 className="font-semibold text-base">Harshal H</h3>
                   <p className="text-[13px] text-[#2C2C2C66] 
 ]">UI/UX Design Intern</p>
                 </div>
@@ -136,7 +136,7 @@ export default function RecruiterDashbaord() {
                   </div>
                 </div>
                 <div>
-                <h3 className="font-bold text-base">Harshal H</h3>
+                <h3 className="font-semibold text-base">Harshal H</h3>
                   <p className="text-[13px] text-[#2C2C2C66] 
 ]">UI/UX Design Intern</p>
                 </div>
