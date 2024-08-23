@@ -153,3 +153,15 @@ select:focus {
   color: #E95D39;
  padding-bottom: 0;
 }
+
+.required:after {
+  content: " *";
+  color: red;
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.0rem* calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.0rem* var(--tw-space-y-reverse));
+}
+

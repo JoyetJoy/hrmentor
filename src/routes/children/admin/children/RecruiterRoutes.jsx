@@ -8,6 +8,7 @@ import Email from "@/pages/admin/menu/recruiter/candidate/details/email";
 import History from "@/pages/admin/menu/recruiter/candidate/details/history";
 import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
 import Profile from "@/pages/admin/menu/recruiter/candidate/details/profile";
+import Question from "@/pages/admin/menu/recruiter/candidate/details/question";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
@@ -81,8 +82,12 @@ element:<Refer/>
   element:<Profile/>
  },
  {
-  path:"interview",
+  path:"interviews",
   element:<Interviews/>
+ },
+ {
+path:"question-answers",
+element:<Question/>
  },
  {
   path:"discussions",
