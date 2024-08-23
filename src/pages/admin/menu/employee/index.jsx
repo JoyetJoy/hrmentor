@@ -121,8 +121,6 @@ export default function EmployeeLists() {
       sixthLink={"Settings"}
       // firstpath={""}
 
-
-
       />
       <div className="flex justify-between items-center mt-2 mb-3">
         <label className="input outline-none border-none pr-28 flex items-center min-h-10  h-10 gap-2">

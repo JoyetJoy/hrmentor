@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 export const EmergencyContacts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupEditOpen, setEditOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const list = React.useMemo(() => TableData,[TableData]);
   const columns = React.useMemo(

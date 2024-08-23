@@ -43,18 +43,18 @@ function Post() {
       />
       <div className='flex flex-row items-start justify-between gap-3'>
         <div className='w-full '>
-          {/* <div className='flex flex-row items-center justify-between mt-1 mb-3 '>
+          <div className='flex flex-row items-center justify-between mt-1 mb-3 '>
             <h1 className='text-sm font-bold text-black flex flex-row gap-1 items-center justify-center'>
                <ArrowLeft className='size-4' />
               Create New Job <span className='text-xs'> <div className=''></div>Post</span></h1>
-            <Link to="" className=' btn text-white bg-bgColor-100 hover:bg-bgColor-100 min-h-10 h-10'>Next</Link>
-          </div> */}
-           <MenuSubHeader
+            <Link to="" className=' btn text-white bg-bgColor-100 px-6 hover:bg-bgColor-100 min-h-10 h-10'>Next</Link>
+          </div>
+           {/* <MenuSubHeader
           heading={"Create New Job"}
-          SecondLink={"Next"}
+          SecondLink={{label:"Next"}}
           currentpage={"post"}
           menuicon={<ArrowLeft className='size-4' />}
-          /> 
+          />  */}
           <div className='w-full bg-white rounded-md  '>
             <div
               onSubmit={handleSubmit(onSubmit)}

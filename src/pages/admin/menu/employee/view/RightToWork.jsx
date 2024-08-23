@@ -14,6 +14,7 @@ import MenuSubHeader from "@/components/common/MenuSubHeader";
 export const RightToWork = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupEditOpen, setEditOpen] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
 
 
@@ -49,22 +50,23 @@ export const RightToWork = () => {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex relative gap-1 text-xs ">
+          <div className="flex  gap-2 text-xs ">
             <Link
               to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500text-black p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8  rounded-full"
             >
-              <MoveDiagonal />
+              <MoveDiagonal className=""/>
             </Link>
             <Link
               to={""}
-              className="cursor-pointer flex items-center bg-gray-500 text-black p-2  size-8 rounded-full"
+              onClick={setEditOpen}
+              className="cursor-pointer flex items-center bg-gray-500 text-black p-2 size-8   rounded-full "
             >
-              <img src="/assets/icons/admin/marker.svg" />
+              <img src="/assets/icons/admin/marker.svg"  className=""/>
             </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500 size-8 rounded-full">
-              <Trash2 className="w-5 h-5" />
-            </span>
+            <Link className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500  p-2 size-8  rounded-full">
+              <Trash2 className="" />
+            </Link>
           </div>
         ),
       },
