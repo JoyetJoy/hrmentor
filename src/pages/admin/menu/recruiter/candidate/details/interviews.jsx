@@ -1,82 +1,65 @@
+import React, { useState } from "react";
 import MenuHeader from "@/components/common/MenuHeader";
-import React from "react";
+
+// Update button names here
+const buttonSequence = ["addInterviewer", "considerCandidate", "move"];
 
 function Interviews() {
+  const [activeButton, setActiveButton] = useState("addInterviewer");
+  const [clickedButtons, setClickedButtons] = useState(["addInterviewer"]);
+
+  const handleButtonClick = (buttonName) => {
+    const currentIndex = buttonSequence.indexOf(activeButton);
+    const newIndex = buttonSequence.indexOf(buttonName);
+    if (
+      newIndex === currentIndex + 1 ||
+      newIndex === currentIndex - 1 ||
+      buttonName === activeButton
+    ) {
+      setActiveButton(buttonName);
+      if (!clickedButtons.includes(buttonName)) {
+        setClickedButtons([...clickedButtons, buttonName]);
+      }
+    }
+  };
+
+  const getButtonClass = (buttonName) =>
+    clickedButtons.includes(buttonName)
+      ? "bg-[#030E5C] text-white py-1.5 px-5 rounded"
+      : "bg-[#ECE9F1] text-white py-1.5 px-5 rounded";
+
   return (
     <>
       <MenuHeader
-        backlink={""}
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Recruiter"}
-        firstLink={"Dashboard"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
+        backlink=""
+        menu="Menu"
+        subMenu=""
+        currentpath="Recruiter"
+        firstLink="Dashboard"
+        secondLink="Jobs"
+        thirdLink="Candidate"
+        fourthLink="Interview"
+        fifthLink="Report"
+        six="Settings"
       />
-      <div className="bg-white flex flex-col gap-4 px-24 h-screen py-20">
-        <h1 className="font-bold text-base pt-3">Questions & Answers</h1>
-        <div className="collapse collapse-arrow rounded-sm  bg-[#F0F8FF]">
-          <input type="radio" name="my-accordion-2" defaultChecked />
-          <h1 className="collapse-title  font-bold text-base">
-            How do you handle constructive criticism?
-          </h1>
-          <div className="collapse-content">
-            <p className="">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </div>
+      <div className="bg-white flex flex-col justify-between px-6 h-screen py-6">
+        <div className="flex gap-4 items-center">
+          {buttonSequence.map((buttonName) => (
+            <button
+              key={buttonName}
+              onClick={() => handleButtonClick(buttonName)}
+              className={getButtonClass(buttonName)}
+            >
+              {buttonName === "addInterviewer" && "Add Interviewer"}
+              {buttonName === "considerCandidate" && "Consider the Candidate"}
+              {buttonName === "move" && "Move"}
+            </button>
+          ))}
         </div>
-        <div className="collapse collapse-arrow rounded-sm  bg-[#F0F8FF]">
-          <input type="radio" name="my-accordion-2" />
-          <div className="collapse-title font-bold text-base">
-            Click to open this one and close others
-          </div>
-          <div className="collapse-content">
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </div>
-        </div>
-        <div className="collapse collapse-arrow rounded-sm  bg-[#F0F8FF]">
-          <input type="radio" name="my-accordion-2" />
-          <div className="collapse-title font-bold text-base">
-            Click to open this one and close others
-          </div>
-          <div className="collapse-content">
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </div>
+        <div className="flex-grow mt-4">
+          {activeButton === "addInterviewer" && <p>This is the content for Add Interviewer. It shows by default.</p>}
+          {activeButton === "considerCandidate" && <p>This is the content for Consider the Candidate.</p>}
+          {activeButton === "move" && <p>This is the content for Move.</p>}
         </div>
       </div>
     </>

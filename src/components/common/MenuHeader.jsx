@@ -31,9 +31,9 @@ function MenuHeader(props) {
     QuestionAnswersPath = "/admin/recruiter/question-answers",
     InterviewsLink = "/admin/recruiter/interviews",
     DiscussionsLink = "/admin/recruiter/discussions",
-    EmailsLink = "/admin/recruiter/emails",
+    EmailsLink = "/admin/recruiter/email",
     DocumentsLink = "/admin/recruiter/documents",
-    CandidateHistoryLink = "/admin/recruiter/candidate-history",
+    CandidateHistoryLink = "/admin/recruiter/history",
   } = props;
 
   const candidatePaths = [
@@ -89,6 +89,11 @@ function MenuHeader(props) {
                 "/admin/recruiter/candidatelist",
                 "/admin/recruiter/profile",
                 "/admin/recruiter/question-answers",
+                "/admin/recruiter/interviews",
+                "/admin/recruiter/discussions",
+                "/admin/recruiter/email",
+                "/admin/recruiter/documents",
+                "/admin/recruiter/history",
               ])
                 ? "font-extrabold text-bgColor-100"
                 : "font-normal text-[#808080]"
