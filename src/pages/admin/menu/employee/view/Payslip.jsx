@@ -1,8 +1,10 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
 
 
@@ -58,7 +60,12 @@ export const Payslip = () => {
         <EmployeesSidebar  />
         <div className="w-full bg">
           <>
-            <h1 className="font-bold text-lg mb-5  ">Payslip</h1>
+            {/* <h1 className="font-bold text-base my-2   ">Payslip</h1> */}
+            <MenuSubHeader
+                heading={"Payslip"}
+                SecondLink={{ label: "Add Payslip", }}
+                Secondicon={ <Plus className="size-4" />}
+                />
             <div>
               {/* <QueryTable
                 columns={columns}

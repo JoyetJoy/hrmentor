@@ -1,4 +1,5 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddEducation from "@/components/popups/employees/view/AddEducation";
 import EditEducation from "@/components/popups/employees/view/EditEducation";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -91,8 +92,9 @@ export const SkillsQualifications = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-          <div className="flex flex-row items-center justify-between mb-2"> <h1 className="font-bold text-lg   ">Skills/Qualifications</h1>
-            <div className="text-white text-sm font-semibold flex  items-center gap-2 ">
+        
+            {/* <h1 className="font-bold text-lg   ">Skills/Qualifications</h1> */}
+            {/* <div className="text-white text-sm font-semibold flex  items-center gap-2 ">
                 <Link
                   to={""}
                   className="btn bg-btncolor text-white hover:bg-btncolor w-full  text-xs flex items-center gap-1"
@@ -100,9 +102,14 @@ export const SkillsQualifications = () => {
                 >
                   <Plus className="size-4" />
                   Add Skills/Qualification</Link>
-              </div>
+              </div> */}
+                <MenuSubHeader
+                heading={"Skills/Qualifications"}
+                SecondLink={{ label: "Add Skills/Qualification", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
               <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-              </div>
+            
             
             <div className="py-2">
               <QueryTable

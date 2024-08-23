@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import AddRightToWork from "@/components/popups/employees/view/AddRightToWork";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 
 
 export const RightToWork = () => {
@@ -87,7 +88,7 @@ export const RightToWork = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <div className="flex flex-row items-center justify-between"> 
+            {/* <div className="flex flex-row items-center justify-between"> 
             <h1 className="font-bold text-lg  ">Right to Work</h1>            
             <div className="text-white text-sm font-semibold flex  items-center gap-2 ">
                 <Link
@@ -97,11 +98,17 @@ export const RightToWork = () => {
                   className="btn bg-btncolor text-white hover:bg-btncolor w-full  text-sm flex items-center gap-1"
                 >
                   <Plus className="size-5" />
-                  Add Right to Work </Link>
-              </div>
+                  Add Right 
+                  to Work </Link>
+              </div> */}
+               <MenuSubHeader
+                heading={"Right to Work"}
+                SecondLink={{ label: "Add Right ", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
               <AddRightToWork popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
 
-              </div>
+              
             <div className="py-2">
               <QueryTable
                 columns={columns}

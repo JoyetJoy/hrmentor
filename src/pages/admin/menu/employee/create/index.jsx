@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { ArrowLeft, ChevronRight, } from "lucide-react";
 import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 
 export default function CreateEmployee() {
   const {
@@ -45,7 +46,7 @@ export default function CreateEmployee() {
             Settings</Link>
         </div>
       </div>
-      <div className="flex flex-row justify-between items-center">
+      {/* <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
         <div className="text-white font-semibold flex  items-center ">
           <Link
@@ -56,8 +57,13 @@ export default function CreateEmployee() {
               <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain w-full" /></div>
             Save          </Link>
         </div>
-      </div>
-
+      </div> */}
+ <MenuSubHeader
+                heading={"Add New Employees"}
+                SecondLink={{ label: " Save " }}
+                Secondicon={  <div className="size-4">
+              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain w-full" /></div>}
+                />
       <div
         onSubmit={handleSubmit(onSubmit)}
 
