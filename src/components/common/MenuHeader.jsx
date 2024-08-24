@@ -12,6 +12,7 @@ function MenuHeader(props) {
     subMenu,
     currentpath,
     activeMenu,
+    activeSubMenu = "none",
     icon,
     centertextmain,
     centertext,
@@ -34,7 +35,8 @@ function MenuHeader(props) {
     DocumentsLink,
     CandidateHistoryLink,
   ];
-
+  console.log(activeSubMenu)
+  const menuItem = recruiterMenu.find((item) => item.name === activeSubMenu);
   return (
     <div className="flex flex-col">
       <div className="bg-white py-2 px-6 flex flex-row items-center justify-between rounded-md my-2">
@@ -57,21 +59,137 @@ function MenuHeader(props) {
         </h1>
         <div className="text-sm flex items-center gap-7 font-semibold">
           {recruiterMenu?.map((item) => (
-            <Link
-              key={item?.id}
-              to={item?.link}
-              className={`text-sm  ${
-                activeMenu === item?.name
-                  ? "font-extrabold text-[#181C3A] before:bg-[#181C3A]  py-1 px-2 activate-menu"
-                  : "font-bold text-[#808080]"
-              }`}
-            >
-              {item?.name}
-            </Link>
+            <React.Fragment key={item?.id}>
+              <Link
+                to={item?.link}
+                className={`text-sm  ${
+                  activeMenu === item?.name
+                    ? "font-extrabold text-[#181C3A] before:bg-[#181C3A]  py-1 px-2 active-menu"
+                    : "font-bold text-[#808080]"
+                }`}
+              >
+                {item?.name}
+              </Link>
+              {/* <div className="py-2 flex flex-row items-center justify-between rounded-md">
+                <div className="flex justify-center items-center gap-2">
+                  <div className="rounded-full border">
+                    <User />
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="text-sm font-semibold">Sandeep Biju</div>
+                    <div className="text-xs text-[#7F7F7F]">
+                      Clinical Quality Analyst
+                    </div>
+                  </div>
+                </div>
+                <div className="text-sm flex items-center gap-10 font-semibold">
+                  <Link
+                    to={ProfileLink}
+                    className={`text-sm ${
+                      isActive(["/admin/recruiter/profile"])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to={QuestionAnswersPath}
+                    className={`text-sm ${
+                      isActive(["/admin/recruiter/question-answers"])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Question & Answers
+                  </Link>
+                  <Link
+                    to={InterviewsLink}
+                    className={`text-sm ${
+                      isActive([InterviewsLink])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Interviews
+                  </Link>
+                  <Link
+                    to={DiscussionsLink}
+                    className={`text-sm ${
+                      isActive([DiscussionsLink])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Discussions
+                  </Link>
+                  <Link
+                    to={EmailsLink}
+                    className={`text-sm ${
+                      isActive([EmailsLink])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Emails
+                  </Link>
+                  <Link
+                    to={DocumentsLink}
+                    className={`text-sm ${
+                      isActive([DocumentsLink])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Documents
+                  </Link>
+                  <Link
+                    to={CandidateHistoryLink}
+                    className={`text-sm ${
+                      isActive([CandidateHistoryLink])
+                        ? "font-extrabold text-bgColor-100"
+                        : "font-normal text-[#808080]"
+                    }`}
+                  >
+                    Candidate History
+                  </Link>
+                </div>
+              </div> */}
+            </React.Fragment>
           ))}
         </div>
       </div>
-      {candidatePaths.includes(location.pathname) && (
+      {console.log(menuItem)}
+      {menuItem?.subMenu && menuItem.subMenu.list && (
+        <div className="flex mb-3 flex-row items-center justify-between rounded-md">
+          <div className="flex justify-center items-center gap-2">
+            <div className="rounded-full border size-7 flex justify-center items-center">
+              <User className="fill-black size-4" />
+            </div>
+            <div className="flex flex-col">
+              <div className="text-sm font-semibold">Sandeep Biju</div>
+              <div className="text-xs text-[#7F7F7F]">
+                Clinical Quality Analyst
+              </div>
+            </div>
+          </div>
+          <div className="text-sm flex items-center gap-10 font-semibold">
+            {menuItem.subMenu.list?.map((item) => (
+              <Link
+                to={item?.link}
+                className={`text-sm px-2 py-1 ${
+                  isActive([item?.link])
+                    ? "font-extrabold active-menu before:bg-[#181C3A]  text-bgColor-100"
+                    : "font-normal text-[#808080]"
+                }`}
+              >
+                {item?.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+      {/* {candidatePaths.includes("location.pathname") && (
         <div className="py-2 flex flex-row items-center justify-between rounded-md">
           <div className="flex justify-center items-center gap-2">
             <div className="rounded-full border">
@@ -157,7 +275,7 @@ function MenuHeader(props) {
             </Link>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

@@ -16,12 +16,11 @@ export const AdminHeader = () => {
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
- 
 
   return (
     <>
-      <div className="flex flex-row items-center relative justify-between  py-2 bg-white  px-5 rounded-md">
-        <div className="flex flex-row gap-3 ">
+      <div className="flex flex-row relative justify-between  bg-white  px-5 rounded-md">
+        <div className="flex flex-row gap-3 py-2.5">
           <div className="w-11">
             <img
               src={"/assets/images/logo-header.svg"}
@@ -34,26 +33,28 @@ export const AdminHeader = () => {
             <h1 className="font-semibold mt-0">Tech Butomy Pvt Ltd</h1>
           </span>
         </div>
-        <div className="flex items-center relative justify-center gap-7">
+        <div className="flex items gap-x-10">
           {menuitems.map((item) => (
             <NavLink
               to={item.path}
               key={item.id}
-              className={`flex flex-col items-center  text-textcolor-darkblue gap-1  ${isActiveLink(item.active) ? "activeLink" :""}`}
+              className={`flex flex-col py-1 items-center justify-end     px-2 border-[#E95D39]   ${
+                isActiveLink(item.active) ? "border-b-4 font-bold text-[#E95D39]" : " text-textcolor-darkblue"
+              }`}
             >
-              {item.iconType === 'image' ? (
+              {item.iconType === "image" ? (
                 <img src={item.iconSrc} alt={item.alt} className="w-5 h-5" />
               ) : (
                 React.createElement(item.icon, {
                   size: 20,
-                  className: isActiveLink(item.active) ? 'text-[#E95D39]' : 'text-textColor-darkblue',
                 })
               )}
-              <p className={`text-xs mb-4 font-semibold ${isActiveLink(item.active) ? " text-[#E95D39]" :"text-textcolor-darkblue"}`}>{item.name}</p>
+              <p>{item?.name}</p>
+              {/* <p className={`text-xs  font-semibold ${isActiveLink(item.active) ? " text-[#E95D39]" :"text-textcolor-darkblue"}`}>{item.name}</p> */}
             </NavLink>
           ))}
         </div>
-        <div className="flex gap-3 items-center justify-center">
+        <div className="flex gap-3 items-center py-2.5">
           <div className="w-10 h-10 p-2 rounded-full bg-gray-100 flex justify-center items-center">
             <MessageSquareText className="size-5 text-textcolor-blue" />
           </div>
@@ -69,8 +70,9 @@ export const AdminHeader = () => {
                   <Menu.Item key={index}>
                     {({ active }) => (
                       <li
-                        className={`text-xs font-semibold flex gap-3 whitespace-nowrap items-center cursor-pointer ${active ? "" : ""
-                          }`}
+                        className={`text-xs font-semibold flex gap-3 whitespace-nowrap items-center cursor-pointer ${
+                          active ? "" : ""
+                        }`}
                       >
                         <div className="w-4 h-4">
                           <img
@@ -91,10 +93,12 @@ export const AdminHeader = () => {
             <Menu>
               <Menu.Button className="flex flex-row gap-3 items-center cursor-pointer">
                 <div className="w-10 h-10 overflow-hidden rounded-full bg-gray-100">
-                
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" className="w-full object-contain" />
-                  </div>                 
-                <h1 className="text-textcolor-100 text-sm flex font-medium flex-col text-start text-textcolor-darkblue">
+                  <img
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    className="w-full object-contain"
+                  />
+                </div>
+                <h1 className="text-textcolor-100 text-sm flex font-semibold flex-col text-start text-textcolor-darkblue">
                   Super Admin
                   <span className="text-textcolor-200 font-semibold text-xs">
                     Administrator
@@ -108,8 +112,9 @@ export const AdminHeader = () => {
                       {({ active }) => (
                         <li
                           onClick={() => handleNavigation(item.path)}
-                          className={`text-xs font-semibold flex gap-2 whitespace-nowrap items-center cursor-pointer ${active ? "" : ""
-                            }`}
+                          className={`text-xs font-semibold flex gap-2 whitespace-nowrap items-center cursor-pointer ${
+                            active ? "" : ""
+                          }`}
                         >
                           <div className="w-4 h-4">
                             <img

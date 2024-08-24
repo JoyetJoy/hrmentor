@@ -138,7 +138,7 @@ select:focus {
     @apply bg-[#F4F4FF] underline underline-offset-8 decoration-2 decoration-[#FF5906] font-bold
   }
 
-  .activate-menu {
+  .active-menu {
     @apply   relative before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:rounded-r-full
   }
 

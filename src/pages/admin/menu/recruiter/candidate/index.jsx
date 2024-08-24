@@ -91,7 +91,14 @@ function CandidatesList() {
   );
   return (
     <div className="">
-      <MenuHeader
+          <MenuHeader
+        backlink={""}
+        menu={"Menu"}
+        subMenu={""}
+        currentpath={"Recruiter"}
+        activeMenu={'Candidates'}
+      />
+      {/* <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={""}
@@ -105,7 +112,7 @@ function CandidatesList() {
         firstpath={"/admin/recruiter/index"}
         secondpath={"/admin/recruiter/jobs"}
         thirdpath={"/admin/recruiter/candidate"}
-      />
+      /> */}
       <div className="flex justify-between items-center my-3 mx-3">
         <div className="text-white font-semibold flex  items-center gap-2">
           <div className="text-sm pr-2 font-semibold text text-black flex items-center justify-between gap-1">

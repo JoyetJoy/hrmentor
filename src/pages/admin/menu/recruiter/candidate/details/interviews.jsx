@@ -9,12 +9,8 @@ function Interviews() {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        firstLink={"Dashboard"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
+        activeSubMenu={"Candidates"}
+        activeMenu={"Candidates"}
       />
       <div className="bg-white flex flex-col gap-4 px-24 h-screen py-20">
         <h1 className="font-bold text-base pt-3">Questions & Answers</h1>

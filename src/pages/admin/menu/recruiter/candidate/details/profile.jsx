@@ -30,23 +30,10 @@ function Profile() {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        firstLink={"Dashboard"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
-        // Candidate Links Active
-        // ProfileLink={"Profile"}
-        // QuestionAnswersLink={"Question & Answers"}
-        // InterviewsLink={"Interviews"}
-        // DiscussionsLink={"Discussions"}
-        // EmailsLink={"Emails"}
-        // DocumentsLink={"Documents"}
-        // CandidateHistoryLink={"Candidate History"}
-        firstpath={"/admin/recruiter/index"}
-        secondpath={"/admin/recruiter/jobs"}
+        activeSubMenu={"Candidates"}
+        activeMenu={"Candidates"}
       />
+
       <div className="bg-white p-2 mt-2 pb-12 rounded-md grid gap-7 grid-cols-2 px-5">
         <div className="">
           <h1 className="font-bold text-base pt-3">Basic Details</h1>
