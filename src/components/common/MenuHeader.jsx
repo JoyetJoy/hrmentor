@@ -8,8 +8,9 @@ function MenuHeader(props) {
 
   const {
     menu,
-    subMenu,
+    submenu,
     currentpath,
+    icon,
     pageHeading,
     centertextmain,
     centertext,
@@ -49,25 +50,27 @@ function MenuHeader(props) {
   return (
     <div className="flex flex-col">
       <div className="bg-white py-2 px-6 flex flex-row items-center justify-between rounded-md my-2">
-        <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
-          <ArrowLeft className="size-4" />
+        <div className="text-sm font-semibold text-black flex items-center justify-between ">
+          <ArrowLeft className="size-4 mr-2" />
           {menu}
-          <ChevronRight className="size-4" />
-          <span className="text-red-600 text-sm"> {currentpath}</span>
+          <ChevronRight className="size-3" />
+          {submenu}
+          {icon}
+          <span className="text-textcolor-lightred text-sm"> {currentpath}</span>
         </div>
         <h1 className="text-[0.8rem] font-medium text-black flex items-center justify-between gap-1">
           {centertextmain}
-          <span className="text-textcolor-lightred font-semibold underline underline-offset-4">
+          <span className="text-textcolor-lightred font-bold underline underline-offset-4">
             {centertext}
           </span>
         </h1>
-        <div className="text-sm flex items-center gap-10 font-semibold">
+        <div className="text-sm flex items-center gap-7 font-semibold">
           <Link
             to={firstpath}
-            className={`text-sm ${
+            className={`text-sm  ${
               isActive(["", "/admin/recruiter/index"])
-                ? "font-extrabold text-bgColor-100"
-                : "font-normal text-[#808080]"
+                ? "font-extrabold text-[#030E5C]"
+                : "font-bold text-[#808080]"
             }`}
           >
             {firstLink}
@@ -76,8 +79,8 @@ function MenuHeader(props) {
             to={secondpath}
             className={`text-sm ${
               isActive(["/admin/recruiter/jobs", ""])
-                ? "font-extrabold text-bgColor-100"
-                : "font-normal text-[#808080]"
+                ? "font-extrabold text-[#030E5C]"
+                : "font-bold text-[#808080]"
             }`}
           >
             {secondLink}
@@ -90,8 +93,8 @@ function MenuHeader(props) {
                 "/admin/recruiter/profile",
                 "/admin/recruiter/question-answers",
               ])
-                ? "font-extrabold text-bgColor-100"
-                : "font-normal text-[#808080]"
+                ? "font-extrabold text-[#030E5C]"
+                : "font-bold text-[#808080]"
             }`}
           >
             {thirdLink}
@@ -99,9 +102,9 @@ function MenuHeader(props) {
           <Link
             to={fourthpath}
             className={`text-sm ${
-              isActive(["", ""])
-                ? "font-extrabold text-bgColor-100"
-                : "font-normal text-[#808080]"
+              isActive(["/admin/employees/list", "/admin/employees/create"])
+                ? "font-extrabold text-[#030E5C]"
+                : "font-bold text-[#808080]"
             }`}
           >
             {fourthLink}
@@ -110,8 +113,8 @@ function MenuHeader(props) {
             to={fifthpath}
             className={`text-sm ${
               isActive([""])
-                ? "font-extrabold text-bgColor-100"
-                : "font-normal text-[#808080]"
+                ? "font-extrabold text-[#030E5C]"
+                : "font-bold text-[#808080]"
             }`}
           >
             {fifthLink}
@@ -120,8 +123,8 @@ function MenuHeader(props) {
             to={sixthpath}
             className={`text-sm ${
               isActive([""])
-                ? "font-extrabold text-bgColor-100"
-                : "font-normal text-[#808080]"
+                ? "font-extrabold text-[#030E5C]"
+                : "font-bold text-[#808080]"
             }`}
           >
             {sixthLink}
