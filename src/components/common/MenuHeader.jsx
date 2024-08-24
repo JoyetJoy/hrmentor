@@ -9,7 +9,7 @@ function MenuHeader(props) {
 
   const {
     menu,
-    submenu,
+    subMenu,
     currentpath,
     activeMenu,
     icon,
@@ -42,7 +42,7 @@ function MenuHeader(props) {
           <ArrowLeft className="size-4 mr-2" />
           {menu}
           <ChevronRight className="size-3" />
-          {submenu}
+          {subMenu}
           {icon}
           <span className="text-textcolor-lightred text-sm">
             {" "}

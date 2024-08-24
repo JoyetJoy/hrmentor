@@ -43,9 +43,8 @@ export default function RecruiterDashbaord() {
         backlink={""}
         menu={"Menu"}
         subMenu={""}
+        currentpath={"Recruiter"}
         activeMenu={'Dashboard'}
-      
-
       />
       <div className="grid grid-cols-6 gap-5">
         {/* ---images---- */}

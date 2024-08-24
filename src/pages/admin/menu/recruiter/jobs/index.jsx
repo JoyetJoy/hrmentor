@@ -64,7 +64,7 @@ function RecruiterJobs() {
           <div className="flex items-center justify-end gap-3  text-xs ">
             <Link
               //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              to={""}
+              to={"/admin/recruiter/candidate"}
               className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
             >
               <MoveDiagonal />
@@ -126,6 +126,7 @@ function RecruiterJobs() {
         backlink={""}
         menu={"Menu"}
         subMenu={""}
+        currentpath={"Recruiter"}
         activeMenu={"Jobs"}
       />
       <div className="flex justify-between items-center mb-4 mt-4">
