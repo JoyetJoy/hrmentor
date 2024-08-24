@@ -86,7 +86,7 @@ export default function EmployeeLists() {
     []
   );
   return (
-    <div className="my-2">
+    <div className="">
       {/* <div className="bg-white py-2.5 px-6 flex flex-row items-center justify-between  rounded-md">
         <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
           <ArrowLeft className="size-4" />
@@ -114,16 +114,16 @@ export default function EmployeeLists() {
       </div> */}
       <MenuHeader
       menu={"Menu"}
-      currentpath={"Employee"}
+      currentpath={"Employees"}
       centertextmain={"  Number of licence is limited to 8:"}
       centertext={"Add More Licence"}
-      fifthLink={"Employees"}
-      sixthLink={"Settings"}
+      fourthLink={"Employees"}
+      fifthLink={"Settings"}
       // firstpath={""}
 
       />
       <div className="flex justify-between items-center mt-2 mb-3">
-        <label className="input outline-none border-none pr-28 flex items-center min-h-10  h-10 gap-2">
+        <label className="input outline-none b border rounded-md min-w-96  border-gray-400  flex items-center min-h-10  h-10 gap-2">
           <Search className="text-gray-200 object-contain size-5" />
           <input
             type="text"
@@ -131,7 +131,7 @@ export default function EmployeeLists() {
             placeholder="Search"
           />
         </label>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div className="bg-white rounded-md p-3 border border-gray-400 min-h-10 h-10  ">
             <Filter className="size-4" />
           </div>
@@ -142,7 +142,7 @@ export default function EmployeeLists() {
           <div className="text-white font-semibold flex  items-center">
             <Link
               to={"/admin/employees/create"}
-              className="btn bg-btncolor text-white text-xs hover:bg-btncolor min-h-10 h-10"
+              className="btn bg-[#030E5C] text-white text-xs hover:bg-[#030E5C] min-h-10 h-10"
             >
               <Plus className="size-5" />
               Add Employee{" "}

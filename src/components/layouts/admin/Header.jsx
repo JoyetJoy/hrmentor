@@ -90,7 +90,7 @@ export const AdminHeader = () => {
           <div className="flex flex-col gap-3 items-center relative">
             <Menu>
               <Menu.Button className="flex flex-row gap-3 items-center cursor-pointer">
-                <div className="w-11 h-11 overflow-hidden rounded-full bg-gray-100">
+                <div className="w-10 h-10 overflow-hidden rounded-full bg-gray-100">
                 
                     <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" className="w-full object-contain" />
                   </div>                 

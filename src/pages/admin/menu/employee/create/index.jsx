@@ -49,22 +49,22 @@ export default function CreateEmployee() {
       </div> */}
       <MenuHeader
         menu={"Menu"}
-        currentpath={"Employee"}
-        centertextmain={"  Number of licence is limited to 8:"}
-        centertext={"Add More Licence"}
-        fourthLink={"Employee"}
+        submenu={"Employee"}
+        currentpath={"Add Employee"}
+        icon={<ChevronRight className="size-3" />}
+        fourthLink={"Employees"}
         fifthLink={"Settings"}
-        firstpath={""}
+        
       />
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
         <div className="text-white font-semibold flex  items-center ">
           <Link
             to={"/admin/employees/list"}
-            className="btn bg-btncolor text-white text-sm hover:bg-btncolor w-24 min-h-10 h-10 "
+            className="btn bg-[#030E5C] text-white text-sm hover:bg-[#030E5C] font-normal w-24 min-h-10 h-10 "
           >
             <div className="size-4">
-              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain w-full" /></div>
+              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain size-4 " /></div>
             Save          </Link>
         </div>
       </div>
