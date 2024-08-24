@@ -12,7 +12,7 @@ export const recruiterMenu = [
   {
     id: 3,
     name: "Candidates",
-    link: "/admin/recruiter/candidate",
+    link: "/admin/recruiter/candidatelist",
   },
   {
     id: 4,

@@ -1,3 +1,4 @@
+import MenuHeader from '@/components/common/MenuHeader'
 import RecruiterHeader from '@/components/common/RecruiterHeader'
 import RecruiterSideBar from '@/components/sidebars/recruiter/RecruiterSideBar'
 import { customSelectStyles } from '@/utils/customStyles'
@@ -20,19 +21,14 @@ function Refer() {
   });
   return (
     <div>
-              <RecruiterHeader
-                backlink={""}
-                menu={"Menu"}
-                subMenu={""}
-                pageHeading={"Dashbord"}
-                currentpath={"Recruiter"}
-                firstLink={"Dashbord"}
-                secondLink={"Jobs"}
-                thirdLink={"Candidate"}
-                fourthLink={"Interview"}
-                fifthLink={"Report"}
-                six={"Setttings"}
-            />
+        
+        <MenuHeader
+        backlink={""}
+        menu={"Menu"}
+        subMenu={""}
+        currentpath={"Recruiter"}
+        activeMenu={"Jobs"}
+      />
       <div className='flex flex-row justify-between items-center my-5'>
         <h1 className='font-semibold text-base flex items-center gap-1 '>
           <ArrowLeft className="size-4" />
