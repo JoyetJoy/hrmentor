@@ -43,15 +43,8 @@ export default function RecruiterDashbaord() {
         backlink={""}
         menu={"Menu"}
         subMenu={""}
-        currentpath={"Recruiter"}
-        firstLink={"Dashboard"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
-        firstpath={"/admin/recruiter/index"}
-        secondpath={"/admin/recruiter/jobs"}
+        activeMenu={'Dashboard'}
+      
 
       />
       <div className="grid grid-cols-6 gap-5">

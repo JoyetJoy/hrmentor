@@ -1,3 +1,4 @@
+import { recruiterMenu } from "@/constants/menus/recruiter";
 import { ArrowLeft, ChevronRight, User } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -10,23 +11,10 @@ function MenuHeader(props) {
     menu,
     submenu,
     currentpath,
+    activeMenu,
     icon,
-    pageHeading,
     centertextmain,
     centertext,
-    firstLink,
-    secondLink,
-    thirdLink,
-    fourthLink,
-    fifthLink, 
-    sixthLink,
-    firstpath,
-    secondpath,
-    thirdpath,
-    fourthpath,
-    fifthpath,
-    sixthpath,
-
     // cnadidate Links
     ProfileLink = "/admin/recruiter/profile",
     QuestionAnswersPath = "/admin/recruiter/question-answers",
@@ -56,7 +44,10 @@ function MenuHeader(props) {
           <ChevronRight className="size-3" />
           {submenu}
           {icon}
-          <span className="text-textcolor-lightred text-sm"> {currentpath}</span>
+          <span className="text-textcolor-lightred text-sm">
+            {" "}
+            {currentpath}
+          </span>
         </div>
         <h1 className="text-[0.8rem] font-medium text-black flex items-center justify-between gap-1">
           {centertextmain}
@@ -65,70 +56,19 @@ function MenuHeader(props) {
           </span>
         </h1>
         <div className="text-sm flex items-center gap-7 font-semibold">
-          <Link
-            to={firstpath}
-            className={`text-sm  ${
-              isActive(["", "/admin/recruiter/index"])
-                ? "font-extrabold text-[#030E5C]"
-                : "font-bold text-[#808080]"
-            }`}
-          >
-            {firstLink}
-          </Link>
-          <Link
-            to={secondpath}
-            className={`text-sm ${
-              isActive(["/admin/recruiter/jobs", ""])
-                ? "font-extrabold text-[#030E5C]"
-                : "font-bold text-[#808080]"
-            }`}
-          >
-            {secondLink}
-          </Link>
-          <Link
-            to={thirdpath}
-            className={`text-sm ${
-              isActive([
-                "/admin/recruiter/candidatelist",
-                "/admin/recruiter/profile",
-                "/admin/recruiter/question-answers",
-              ])
-                ? "font-extrabold text-[#030E5C]"
-                : "font-bold text-[#808080]"
-            }`}
-          >
-            {thirdLink}
-          </Link>
-          <Link
-            to={fourthpath}
-            className={`text-sm ${
-              isActive(["/admin/employees/list", "/admin/employees/create"])
-                ? "font-extrabold text-[#030E5C]"
-                : "font-bold text-[#808080]"
-            }`}
-          >
-            {fourthLink}
-          </Link>
-          <Link
-            to={fifthpath}
-            className={`text-sm ${
-              isActive([""])
-                ? "font-extrabold text-[#030E5C]"
-                : "font-bold text-[#808080]"
-            }`}
-          >
-            {fifthLink}
-          </Link>
-          <Link
-            to={sixthpath}
-            className={`text-sm ${
-              isActive([""])
-                ? "font-extrabold text-[#030E5C]"
-                : "font-bold text-[#808080]"
-            }`}
-          >
-            {sixthLink}
-          </Link>
+          {recruiterMenu?.map((item) => (
+            <Link
+              key={item?.id}
+              to={item?.link}
+              className={`text-sm  ${
+                activeMenu === item?.name
+                  ? "font-extrabold text-[#181C3A] before:bg-[#181C3A]  py-1 px-2 activate-menu"
+                  : "font-bold text-[#808080]"
+              }`}
+            >
+              {item?.name}
+            </Link>
+          ))}
         </div>
       </div>
       {candidatePaths.includes(location.pathname) && (
