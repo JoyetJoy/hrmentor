@@ -1,11 +1,12 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddEducation from "@/components/popups/employees/view/AddEducation";
 import EditEducation from "@/components/popups/employees/view/EditEducation";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable"; 
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -76,17 +77,15 @@ export const SkillsQualifications = () => {
   );
   return (
     <div className=" flex flex-col">
-      <EmployeeHeader
-        backLink={""}
-        menu={"Menu"}
-        subMenu={"Employee"}
-        currentPath={" Employee Detail"}
-        pageHeading={"Employees"}
-        nextLink={""}
-        nextHeading={"Setting"}
+      <MenuHeader
+      menu={"Menu"}
+      subMenu={"Employee"}
+      currentpath={"Employee Detail"}
+      icon={<ChevronRight className="size-3" />}
+      activeMenu={'Employees'}
       />
       {/* ----sidebar---- */}
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 ">
       <EditEducation  popupEditOpen={popupEditOpen} setEditOpen={setEditOpen}/>
 
         <EmployeesSidebar />

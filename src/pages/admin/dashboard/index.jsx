@@ -4,18 +4,18 @@ import { employeeDetails, meetings } from "@/constants/dummyData";
 
 export const AdminDashboard = () => {
   return (
-    <div className=" rounded-md mt-4 flex items-baseline justify-between gap-8">
+    <div className=" rounded-md my-3 flex items-baseline justify-between gap-4">
       {/* -----left------ */}
-      <aside className="flex flex-col w-9/12 gap-4">
+      <aside className="flex flex-col min-w-9/12 gap-3">
         <div className="flex justify-between items-center">
-          <h1 className="font-extrabold text-xl  text-black">Dashbord</h1>
-          <div className="flex items-center gap-6">
-            <div className=" btn flex  justify-center items-center px-6 h-11 min-h-11 bg-btncolor hover:bg-btncolor ">
-              <Clock4 className=" text-white object-conatine size-4" />
-              <button className=" text-white ">Clock in </button>
+          <h1 className="font-bold text-xl  text-black">Dashbord</h1>
+          <div className="flex items-center gap-3">
+            <div className=" btn flex  justify-center  rounded-md font-normal text-xs items-center text-white px-6 h-10 min-h-10 bg-[#030E5C] hover:bg-[#030E5C] ">
+              <Clock4 className=" size-4" />
+              Clock in 
             </div>
-            <label className="input outline-none border-none pr-28 flex items-center  h-11 gap-2">
-              <Search className="text-gray-200 object-contain size-5" />
+            <label className="input outline-none border-none pr-28 flex items-center rounded-md  h-10 min-h-10 gap-2">
+              <Search className="text-gray-200 object-contain size-4" />
 
               <input
                 type="text"
@@ -25,13 +25,13 @@ export const AdminDashboard = () => {
             </label>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-4 mt-5">
+        <div className="grid grid-cols-4 gap-4 ">
           {employeeDetails.map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-md">
               <h2 className="text-sm text-black font-semibold mb-6">
                 {stat.title}
               </h2>
-              <h1 className="flex items-end gap-3 text-black font-semibold text-4xl">
+              <h1 className="flex items-end gap-3 text-black font-semibold text-3xl">
                 {stat.value}
                 <span className="text-textcolor-green flex items-center gap-1 justify-center text-sm">
                   <div className="w-3 h-3">
@@ -105,7 +105,7 @@ export const AdminDashboard = () => {
                 key={index}
                 className="flex flex-row border border-gray-300 rounded-md "
               >
-                <h1 className="text-black font-semibold text-sm text-center bg-gray-400 p-4">
+                <h1 className="text-bgColor-100 font-medium text-sm text-center bg-gray-400 p-4">
                   {meeting.date} <br />
                   <span>{meeting.month}</span>
                 </h1>

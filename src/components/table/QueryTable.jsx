@@ -26,14 +26,14 @@ export default function QueryTable({
     <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
       <div className="table table-md  mx-auto  w-full">
         <table style={{ borderSpacing: "0", width: "100%" }}>
-          <thead className="bg-[#EBEBF0]">
+          <thead className="bg-[#EBEBF0] rounded-md overflow-hidden">
             {getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((column) => (
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
-                    className="py-4 px-4   text-left text-sm font-semibold text-[#181C3A] capitalize border-[#C0C0C0]"
+                    className="py-3 px-8 text-left text-sm font-semibold text-[#525252] capitalize "
                   >
                     {flexRender(
                       column.column.columnDef.header,
@@ -55,7 +55,7 @@ export default function QueryTable({
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className=" py-3 text-left text-[0.9rem]    text-[#525252] font-normal capitalize"
+                      className="   py-3 px-8 text-left text-[0.8rem]    text-[#525252] font-medium capitalize"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

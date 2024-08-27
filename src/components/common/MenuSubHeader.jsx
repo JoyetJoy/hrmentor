@@ -21,7 +21,7 @@ function MenuSubHeader(props) {
   return (
     <div>
       <div className="flex flex-row justify-between items-center my-2 ">
-        <h1 className='text-base font-bold text-black flex flex-row gap-1 items-center justify-center'>
+        <h1 className='text-lg  font-bold text-[#2C2C2C] flex flex-row gap-1 items-center justify-center'>
           {menuicon}
           {heading}  <span className='text-xs'>{currentpage}</span>
         </h1>
@@ -30,7 +30,7 @@ function MenuSubHeader(props) {
             <>
               <Link
                 to=""
-                className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 w-48 flex items-center justify-center gap-1 min-h-10 h-10"
+                className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 min-w-40 shadow-none flex items-center justify-center gap-1 min-h-10 h-10"
               >
                 <Share2 className="size-4" />
                 Onboarding Form
