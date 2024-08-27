@@ -62,7 +62,23 @@ export const Integrations = () => {
   );
   return (
     <div className="flex flex-col w-full gap-x-3 h-full ">
-      <MenuHeader menu="Menu" currentpath="Recruiter" />
+      <MenuHeader menu="Menu" currentpath="Recruiter"  activeMenu={"Settings"} />
+      <div className="flex flex-row justify-between items-center px-1 mt-2">
+        <h1 className="font-bold text-base flex items-center gap-1 ">
+          Settings
+        </h1>
+        <div className="flex gap-5 ">
+          <Link
+            to="#"
+            className="text-sm font-extrabold text-bgColor-100 active-menu before:bg-[#181C3A] px-2 py-0.5"
+          >
+            General settings
+          </Link>
+          <Link to="#" className="text-sm font-medium text-gray-200">
+            Notification
+          </Link>
+        </div>
+      </div>
       <div className="flex gap-x-3 h-screen overflow-y-hidden my-4">
         <SettingsSidebar sidebarList={recruiterSetting} active="Integrations" />
         <div className="w-full bg-white rounded p-5 h-full ">

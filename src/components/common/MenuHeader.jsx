@@ -30,7 +30,7 @@ function MenuHeader(props) {
 
   return (
     <div className="flex flex-col">
-      <div className="bg-white py-2 px-6 flex flex-row items-center justify-between rounded-md my-2">
+      <div className="bg-white h-12 py-2 px-6 flex flex-row items-center justify-between rounded-md my-2">
         <div className="text-sm font-semibold text-[#030E5C] flex items-center justify-between ">
           <ArrowLeft className="size-4 mr-2" />
           {menu}

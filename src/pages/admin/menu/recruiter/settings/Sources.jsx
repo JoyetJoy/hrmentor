@@ -63,12 +63,28 @@ export const Sources = () => {
   );
   return (
     <div className="flex flex-col w-full gap-x-3 h-full ">
-      <MenuHeader menu="Menu" currentpath="Recruiter" />
+      <MenuHeader menu="Menu" currentpath="Recruiter"  activeMenu={"Settings"} />
+      <div className="flex flex-row justify-between items-center px-1 mt-2">
+        <h1 className="font-bold text-base flex items-center gap-1 ">
+          Settings
+        </h1>
+        <div className="flex gap-5 ">
+          <Link
+            to="#"
+            className="text-sm font-extrabold text-bgColor-100 active-menu before:bg-[#181C3A] px-2 py-0.5"
+          >
+            General settings
+          </Link>
+          <Link to="#" className="text-sm font-medium text-gray-200">
+            Notification
+          </Link>
+        </div>
+      </div>  
       <div className="flex gap-x-3 h-full my-4">
         <SettingsSidebar sidebarList={recruiterSetting} active="Sources" />
         <div className="w-full bg-white rounded p-5">
           <div className="flex justify-between w-full mb-4 items-center">
-            <h3 className="text-[#2C2C2C] font-semibold">Job Description</h3>
+            <h3 className="text-[#2C2C2C] font-semibold">Sources</h3>
             <div className="h-10 w-fit px-5 text-white bg-[#181C3A] flex items-center font-medium rounded">+ Insert Descriptions</div>
           </div>
           <QueryTable
