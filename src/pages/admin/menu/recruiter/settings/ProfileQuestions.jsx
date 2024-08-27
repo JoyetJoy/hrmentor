@@ -32,15 +32,11 @@ export const ProfileQuestions = () => {
       {
         header: "Action",
         accessorKey: "action",
+        accessorFn: row => row.lastName,
+          header: () => <span className="flex justify-center font-bold">Action</span>,
+    
         cell: ({ row }) => (
-          <div className="flex items-center  gap-3  text-xs ">
-            <Link
-              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              to={""}
-              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
-            >
-              <MoveDiagonal className="size-3" />
-            </Link>
+          <div className="flex items-center justify-center  gap-3  text-xs ">
             <Link
               to={"/admin/employees/primary"}
               className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-7 rounded-full"
