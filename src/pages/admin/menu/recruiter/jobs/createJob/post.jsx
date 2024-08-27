@@ -1,4 +1,4 @@
-import RecruiterHeader from '@/components/common/RecruiterHeader'
+import MenuHeader from '@/components/common/MenuHeader'
 import CreateJobSideBar from '@/components/sidebars/recruiter/CreateJobSideBar'
 import { customSelectStyles } from '@/utils/customStyles'
 import { Disclosure, DisclosureButton, DisclosurePanel, Select } from '@headlessui/react'
@@ -6,6 +6,9 @@ import { ArrowLeft, ArrowUpFromLine, ChevronRight, Search } from 'lucide-react'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import PostList from "@/pages/admin/menu/recruiter/jobs/createJob/list";
+import MenuSubHeader from '@/components/common/MenuSubHeader'
+
 
 function Post() {
   const {
@@ -22,7 +25,7 @@ function Post() {
   };
   return (
     <div>
-      <RecruiterHeader
+      <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={""}
@@ -34,22 +37,32 @@ function Post() {
         fourthLink={"Interview"}
         fifthLink={"Report"}
         six={"Setttings"}
+        firstpath={"/admin/recruiter/index"}
+        secondpath={"/admin/recruiter/jobs"}
+        thirdpath={"/admin/recruiter/candidatelist"}
       />
       <div className='flex flex-row items-start justify-between gap-3'>
-        <div className='w-full'>
+        <div className='w-full '>
           <div className='flex flex-row items-center justify-between mt-1 mb-3 '>
-            <h1 className='text-base font-bold text-black flex flex-row gap-1 items-center justify-center'> <ArrowLeft className='size-4' />
-              Create New Job  <span className='text-xs  '> Post</span></h1>
-            <Link to="" className=' btn text-white bg-bgColor-100 hover:bg-bgColor-100 min-h-10 h-10'>Next</Link>
+            <h1 className='text-sm font-bold text-black flex flex-row gap-1 items-center justify-center'>
+               <ArrowLeft className='size-4' />
+              Create New Job <span className='text-xs'> <div className=''></div>Post</span></h1>
+            <Link to="" className=' btn text-white bg-bgColor-100 px-6 hover:bg-bgColor-100 min-h-10 h-10'>Next</Link>
           </div>
-          <div className='w-full bg-white rounded-md'>
+           {/* <MenuSubHeader
+          heading={"Create New Job"}
+          SecondLink={{label:"Next"}}
+          currentpage={"post"}
+          menuicon={<ArrowLeft className='size-4' />}
+          />  */}
+          <div className='w-full bg-white rounded-md  '>
             <div
               onSubmit={handleSubmit(onSubmit)}
-              className=" grid grid-cols-1 gap-x-3 py-2"
+              className=" grid grid-cols-1 gap-x-3 py-2 mb-9"
             >
               <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md ">
-                    <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
-                    <div className="flex px-3 group flex-col py-2 space-y-1">
+                <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Job title <span className="text-red-500">*</span>
                     </label>
@@ -105,9 +118,9 @@ function Post() {
                     )}
                   </div>
 
-                    </div>
-                    <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
-                    <div className="flex px-3 group flex-col py-2 space-y-1">
+                </div>
+                <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
+                  <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text flex flex-row items-center gap-1">
                       Minimum Experience <span className="text-red-500">*</span>
                       <h6 className='text-blue-700 font-bold'>(Create)</h6>
@@ -203,8 +216,8 @@ function Post() {
                       </span>
                     )}
                   </div>
-                    </div>
-                  <div  className='flex flex-row items-center gap-y-2 mt-4  w-full'>
+                </div>
+                <div className='flex flex-row items-center gap-y-2 mt-4  w-full'>
                   <div className="flex px-3 group flex-col py-2 space-y-1 w-8/12 ">
                     <label className="label-text flex flex-row items-center gap-1">
                       Job description <h6 className='text-blue-700 font-bold'>(Create)</h6>
@@ -243,8 +256,8 @@ function Post() {
                     <Link to="" className='bg-[#D9D9D933] h-10 min-h-10 text-center rounded-md text-sm flex flex-row gap-2 items-center justify-center '>     <ArrowUpFromLine className="size-4" strokeWidth={1} />
                       update Job Description</Link>
                   </div>
-                  </div>
-                  <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
+                </div>
+                <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
                   <div className="flex px-3 group flex-col py-2 space-y-1  ">
                     <label className="label-text flex flex-row items-center gap-1">
                       State,Province or territory
@@ -278,7 +291,7 @@ function Post() {
                   </div>
                   <div className="flex px-3 group flex-col py-2 space-y-1 ">
                     <label className="label-text flex flex-row items-center gap-1">
-                     City or Town
+                      City or Town
                     </label>
                     <Controller
                       name="city"
@@ -323,67 +336,40 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1 w-full">
-                    <label className="label-text">
-                      Work type 
+                </div>
+                <div className="flex px-3 group flex-col py-2 space-y-1 w-full">
+                  <label className="label-text">
+                    Work type
+                  </label>
+                  <div className='flex flex-row items-start gap-4 '>
+                    <label className="label cursor-pointer flex flex-row items-center justify-start border-2 border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
+                      <input type="checkbox" defaultChecked className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
+                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Remote(work from office)</span>
                     </label>
-                   <div className='flex flex-row items-start gap-4 '>
-                        <label className="label cursor-pointer flex flex-row items-center justify-start border-2 border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
-                          <input type="checkbox" defaultChecked className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                          <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Remote(work from office)</span>
-                        </label>
-                        <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12 ">
-                          <input type="checkbox"  className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                          <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Work from office</span>
-                        </label>
-                        <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
-                          <input type="checkbox"  className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                          <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Hybrid</span>
-                        </label>
-                   </div>
-                    {errors.jobtitle && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.jobtitle?.message}
-                      </span>
-                    )}
+                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12 ">
+                      <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
+                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Work from office</span>
+                    </label>
+                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
+                      <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
+                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Hybrid</span>
+                    </label>
                   </div>
+                  {errors.jobtitle && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.jobtitle?.message}
+                    </span>
+                  )}
                 </div>
               </div>
-              <Disclosure as="div" className="p-5" defaultOpen={false}>
-                <DisclosureButton className="group flex w-full items-center gap-x-2 ">
-                  <div className="bg-gray-200 size-5 flex justify-center items-center rounded-full">
-                    <ChevronRight className="size-6 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                  </div>
-                  <p className="text-sm font-bold  flex flex-row items-center">Passport, Visa & Identity <hr /></p>
-                </DisclosureButton>
-                <DisclosurePanel className="ml-10 my-4 text-sm/5 text-black/50">
-                  <div>
-                    <div className="flex items-center justify-between my-4">
-                      <div className="flex gap-2 placeholder:text-black items-center input-box h-10 w-72">
-                        <Search />
-                        <input
-                          type="text"
-                          className=" w-full h-full "
-                          placeholder="Search"
-                        />
-                      </div>
-                      <div className="flex gap-2 bg-[#030E5C] items-center input-box h-10 w-40 justify-center text-white">
-                        + Add Documents
-                      </div>
-                    </div>
-                    {/* <QueryTable columns={columns} list={list} /> */}
-                  </div>
-                </DisclosurePanel>
-              </Disclosure>
             </div>
-           
-          </div>
-         
-          <CreateJobSideBar/>
-
+            <PostList />    
+            </div>
         </div>
+        <CreateJobSideBar />
+
       </div>
+    </div>
 
   )
 }

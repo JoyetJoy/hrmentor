@@ -1,5 +1,6 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 
 import QueryTable from "@/components/table/QueryTable";
@@ -11,6 +12,8 @@ import { Link } from "react-router-dom";
 export const BankDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupEditOpen, setEditOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const list = React.useMemo(() => TableData,[TableData]);
   const columns = React.useMemo(
@@ -40,22 +43,23 @@ export const BankDetails = () => {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex relative gap-2 text-xs ">
+          <div className="flex  gap-2 text-xs ">
             <Link
               to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8  rounded-full"
             >
-              <MoveDiagonal />
+              <MoveDiagonal className=""/>
             </Link>
             <Link
               to={""}
-              className="cursor-pointer flex items-center bg-gray-500 text-black p-2  size-8 rounded-full"
+              onClick={setEditOpen}
+              className="cursor-pointer flex items-center bg-gray-500 text-black p-2 size-8   rounded-full "
             >
-              <img src="/assets/icons/admin/marker.svg" />
+              <img src="/assets/icons/admin/marker.svg"  className=""/>
             </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500 size-8 rounded-full">
-              <Trash2 className="w-5 h-5" />
-            </span>
+            <Link className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500  p-2 size-8  rounded-full">
+              <Trash2 className="" />
+            </Link>
           </div>
         ),
       },
@@ -79,7 +83,7 @@ export const BankDetails = () => {
         <EmployeesSidebar />
         <div className="w-full bg">
           <>
-            <div className="flex flex-row items-center justify-between"> 
+            {/* <div className="flex flex-row items-center justify-between"> 
             <h1 className="font-bold text-lg  ">Bank Details</h1>
             <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
@@ -89,7 +93,12 @@ export const BankDetails = () => {
                   <Plus className="size-5" />
                   Add Account</Link>
               </div>
-              </div>
+              </div> */}
+               <MenuSubHeader
+                heading={"Bank Details"}
+                SecondLink={{ label: "Add Account ", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
             <div className="py-2 ">
               <QueryTable
                 columns={columns}

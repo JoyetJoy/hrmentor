@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 
 export const WorkInformation = () => {
   const {
@@ -40,7 +41,7 @@ export const WorkInformation = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <div className="flex flex-row justify-between items-center">
+            {/* <div className="flex flex-row justify-between items-center">
               <h1 className="font-bold text-lg  mb-3">Work  Information</h1>
               <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
@@ -50,7 +51,11 @@ export const WorkInformation = () => {
                  
                   Add Work</Link>
               </div>
-            </div>
+            </div> */}
+            <MenuSubHeader
+                heading={"Work  Information"}
+                SecondLink={{ label:"Add Work"}}
+                />
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"

@@ -1,5 +1,6 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
@@ -11,6 +12,8 @@ import { Link } from "react-router-dom";
 export const EmergencyContacts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupEditOpen, setEditOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const list = React.useMemo(() => TableData,[TableData]);
   const columns = React.useMemo(
@@ -60,7 +63,7 @@ export const EmergencyContacts = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <div className="flex flex-row items-center justify-between"> 
+            {/* <div className="flex flex-row items-center justify-between"> 
             <h1 className="font-bold text-lg   ">Emergency Contact</h1>
             <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
@@ -70,7 +73,12 @@ export const EmergencyContacts = () => {
                   <Plus className="size-5" />
                   Add Contact</Link>
               </div>
-              </div>
+              </div> */}
+               <MenuSubHeader
+                heading={"Emergency Contact"}
+                SecondLink={{ label: "Add Emergency Contact ", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
             <div className="my-2">
               <QueryTable
                 columns={columns}

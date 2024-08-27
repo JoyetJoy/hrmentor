@@ -30,6 +30,7 @@ export default {
           300: "#3A3A3A",
           blue: " #030E5C",
           lightred:"#E95D39",
+          400:"#2C2C2C"
 
         },
         btncolor: "#283277",

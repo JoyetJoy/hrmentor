@@ -1,5 +1,6 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddExperience from "@/components/popups/employees/view/AddExperience";
 import EditExperience from "@/components/popups/employees/view/EditExperience";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -47,24 +48,23 @@ export const Experience = () => {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex relative gap-1 text-xs ">
+          <div className="flex  gap-2 text-xs ">
             <Link
               to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8  rounded-full"
             >
-              <MoveDiagonal />
+              <MoveDiagonal className=""/>
             </Link>
             <Link
               to={""}
               onClick={setEditOpen}
-
-              className="cursor-pointer flex items-center bg-gray-500 text-black p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center bg-gray-500 text-black p-2 size-8   rounded-full "
             >
-              <img src="/assets/icons/admin/marker.svg" />
+              <img src="/assets/icons/admin/marker.svg"  className=""/>
             </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500  size-8 rounded-full">
-              <Trash2 className="w-5 h-5" />
-            </span>
+            <Link className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500  p-2 size-8  rounded-full">
+              <Trash2 className="" />
+            </Link>
           </div>
         ),
       },
@@ -90,7 +90,8 @@ export const Experience = () => {
         <EmployeesSidebar />
         <div className="  w-full bg">
           <>
-          <div className="flex flex-row items-center justify-between"> <h1 className="font-bold text-lg   ">Experience</h1>
+          {/* <div className="flex flex-row items-center justify-between"> 
+            <h1 className="font-bold text-lg   ">Experience</h1>
             <div className="text-white font-semibold flex  items-center gap-2 ">
                 <Link
                   to={""}
@@ -100,10 +101,13 @@ export const Experience = () => {
                 >
                   <Plus className="size-5" />
                   Add Experience</Link>
-              </div>
+              </div> */}
+                <MenuSubHeader
+                heading={"Experience"}
+                SecondLink={{ label: "Add Experience ", onClick: setPopupOpen }}
+                Secondicon={ <Plus className="size-4" />}
+                />
               <AddExperience popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-
-              </div>
             <div className="py-3">
               <QueryTable
                 columns={columns}

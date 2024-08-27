@@ -1,4 +1,3 @@
-
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
 import CandidatesList from "@/pages/admin/menu/recruiter/candidate";
 import AddCandidates from "@/pages/admin/menu/recruiter/candidate/addcandidates";
@@ -19,93 +18,95 @@ import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
 
- export  const  RecruiterRoutes = [
- {
-    path:"index",
-    element:<RecruiterDashbaord/>
- },
- {
-    path:"jobs",
-    element:<RecruiterJobs/>
- },
- {
-    path:"candidate",
-    element:<Candidate/>
- },
- {
-   path:"promote",
-   element:<Promote/>
- },
- {
-path:"refer",
-element:<Refer/>
- },
- {
- path:"job-details",
- element:<JobDetails/>
- },
- {
-   path:"post",
-   element:<Post/>
- },
- {
-   path:"application",
-   element:<Application/>
- },
- {
-   path:"interview",
-   element:<Interview/>
- },
- {
-   path:"promote",
-   element:<Promote/>
- },
+export const RecruiterRoutes = [
   {
-   path:"create-job-refer",
-   element:<Refer/>
- },
- {
-   path:"team",
-   element:<Team/>
- },
-//  ------candidate----------
- {
-  path:"candidatelist",
-  element:<CandidatesList/>
- },
- {
-  path:"add-candidate",
-  element:<AddCandidates/>
- },
- {
-  path:"profile",
-  element:<Profile/>
- },
- {
-  path:"interviews",
-  element:<Interviews/>
- },
- {
-path:"question-answers",
-element:<Question/>
- },
- {
-  path:"discussions",
-  element:<Discussions/>
- },
- {
-  path:"documents",
-  element:<Documents/>
- },
- {
-  path:"email",
-  element:<Email/>
- },
- {
-  path:"history",
-  element:<History/>
- },
+    index:true,
+    element: <RecruiterDashbaord />,
+  },
+  {
+    path: "jobs",
+    element: <RecruiterJobs />,
+  },
+  {
+    path: "candidate",
+    element: <Candidate />,
+  },
+  {
+    path: "promote",
+    element: <Promote />,
+  },
+  {
+    path: "refer",
+    element: <Refer />,
+  },
+  {
+    path: "job-details",
+    element: <JobDetails />,
+  },
+  {
+    path: "post",
+    element: <Post />,
+  },
+  {
+    path: "application",
+    element: <Application />,
+  },
+  {
+    path: "interview",
+    element: <Interview />,
+  },
+  {
+    path: "settings",
+    element: <Interview />,
+  },
+  {
+    path: "promote",
+    element: <Promote />,
+  },
+  {
+    path: "create-job-refer",
+    element: <Refer />,
+  },
+  {
+    path: "team",
+    element: <Team />,
+  },
 
- 
- ]
-
+  //  ------candidate----------
+  {
+    path: "candidatelist",
+    element: <CandidatesList />,
+  },
+  {
+    path: "add-candidate",
+    element: <AddCandidates />,
+  },
+  {
+    path: "profile",
+    element: <Profile />,
+  },
+  {
+    path: "interviews",
+    element: <Interviews />,
+  },
+  {
+    path: "question-answers",
+    element: <Question />,
+  },
+  {
+    path: "discussions",
+    element: <Discussions />,
+  },
+  {
+    path: "documents",
+    element: <Documents />,
+  },
+  {
+    path: "email",
+    element: <Email />,
+  },
+  {
+    path: "history",
+    element: <History />,
+  },
+];

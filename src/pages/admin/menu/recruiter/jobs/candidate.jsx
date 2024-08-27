@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import ProjectManagerHeader from "@/components/common/ProjectManagerHeader";
 import RecruiterHeader from "@/components/common/RecruiterHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 
 function Candidate() {
   const [totalPages, setTotalPages] = useState(10);
@@ -37,7 +38,7 @@ function Candidate() {
         header: "Candidate Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
+          <div className="bg-[#473A990D]  w-fit text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
             {row?.original?.status}
           </div>
         ),
@@ -67,18 +68,12 @@ function Candidate() {
 
   return (
     <div>
-      <RecruiterHeader
+          <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={""}
-        pageHeading={"Dashbord"}
         currentpath={"Recruiter"}
-        firstLink={"Dashbord"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
+        activeMenu={"Jobs"}
       />
       <div className="flex flex-row justify-between items-center my-5 ">
         <h1 className="font-bold text-base flex items-center gap-1 ">
@@ -106,6 +101,7 @@ function Candidate() {
           </Link>
         </div>
       </div>
+      
       <div className="flex flex-row gap-2 my-3 ">
         <RecruiterSideBar />
 

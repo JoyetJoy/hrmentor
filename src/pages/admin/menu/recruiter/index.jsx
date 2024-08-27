@@ -44,15 +44,7 @@ export default function RecruiterDashbaord() {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        firstLink={"Dashboard"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
-        firstpath={"/admin/recruiter/index"}
-        secondpath={"/admin/recruiter/jobs"}
-
+        activeMenu={'Dashboard'}
       />
       <div className="grid grid-cols-6 gap-5">
         {/* ---images---- */}
@@ -115,8 +107,9 @@ export default function RecruiterDashbaord() {
                   </div>
                 </div>
                 <div>
-                  <h3>Harshal H</h3>
-                  <p>UI/UX Design Intern</p>
+                  <h3 className="font-semibold text-base">Harshal H</h3>
+                  <p className="text-[13px] text-[#2C2C2C66] 
+]">UI/UX Design Intern</p>
                 </div>
               </div>
               <Link
@@ -135,8 +128,9 @@ export default function RecruiterDashbaord() {
                   </div>
                 </div>
                 <div>
-                  <h3>Harshal H</h3>
-                  <p>UI/UX Design Intern</p>
+                <h3 className="font-semibold text-base">Harshal H</h3>
+                  <p className="text-[13px] text-[#2C2C2C66] 
+]">UI/UX Design Intern</p>
                 </div>
               </div>
               <Link

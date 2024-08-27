@@ -96,16 +96,12 @@ function Interviews() {
   return (
     <>
       <MenuHeader
-        backlink=""
-        menu="Menu"
-        subMenu=""
-        currentpath="Recruiter"
-        firstLink="Dashboard"
-        secondLink="Jobs"
-        thirdLink="Candidate"
-        fourthLink="Interview"
-        fifthLink="Report"
-        six="Settings"
+        backlink={""}
+        menu={"Menu"}
+        subMenu={""}
+        currentpath={"Recruiter"}
+        activeSubMenu={"Candidates"}
+        activeMenu={"Candidates"}
       />
       <div className="bg-white flex flex-col justify-between px-6 h-screen py-6">
         <div className="flex gap-4 items-center">

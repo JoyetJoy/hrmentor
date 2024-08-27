@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 
 function PrimaryInformation() {
   const {
@@ -41,30 +42,19 @@ function PrimaryInformation() {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-            <div className="flex flex-row justify-between items-center">
-              <h1 className="font-bold text-base  mb-3">Primary Information</h1>
-              <div className="text-white font-semibold flex  items-center gap-2 ">
-                <Link
-                  to={""}
-                  className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 w-48 flex  items-center justify-center gap-1 min-h-10 h-10 "
-                >
-                  <Share2 className="size-4" />
+              <MenuSubHeader
+                heading={"Primary Information"}
+                FirstLink={"Upadate "}
 
-                  Onboarding Form</Link>
-                <Link
-                  to={""}
-                  className="btn bg-btncolor text-white text-xs hover:bg-btncolor w-28 min-h-10 h-10 "
-                >
-                  Update </Link>
-              </div>
-            </div>
+                />
+            
             <div
               onSubmit={handleSubmit(onSubmit)}
               className=" grid grid-cols-2 gap-x-3 py-2"
             >
               <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
                 <h1 className="font-bold text-base px-3">Basic Details</h1>
-                <div className="grid w-full grid-cols-2 gap-y-2 mt-4 ">
+                <div className="grid w-full grid-cols-2 mt-4 ">
                   <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text">
                       Employee ID <span className="text-red-500">*</span>
@@ -332,7 +322,7 @@ function PrimaryInformation() {
 
                 <div
                   onSubmit={handleSubmit(onSubmit)}
-                  className="grid w-full grid-cols-2 gap-x-2 mt-4 "
+                  className="grid w-full grid-cols-2 gap-y-2 mt-4 "
                 >
                   <div className="flex px-3 group flex-col py-2 space-y-1">
                     <label className="label-text flex items-center gap-1">
