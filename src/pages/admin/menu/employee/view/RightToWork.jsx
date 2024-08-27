@@ -9,6 +9,7 @@ import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import AddRightToWork from "@/components/popups/employees/view/AddRightToWork";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 
 
 export const RightToWork = () => {
@@ -76,14 +77,12 @@ export const RightToWork = () => {
   );
   return (
     <div className=" flex flex-col">
-      <EmployeeHeader
-        backLink={""}
-        menu={"Menu"}
-        subMenu={"Employee"}
-        currentPath={" Employee Detail"}
-        pageHeading={"Employees"}
-        nextLink={""}
-        nextHeading={"Settings"}
+      <MenuHeader
+      menu={"Menu"}
+      subMenu={"Employee"}
+      currentpath={"Employee Detail"}
+      icon={<ChevronRight className="size-3" />}
+      activeMenu={'Employees'}
       />
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">

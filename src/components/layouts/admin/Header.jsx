@@ -19,8 +19,8 @@ export const AdminHeader = () => {
 
   return (
     <>
-      <div className="flex flex-row relative justify-between  bg-white  px-5 rounded-md">
-        <div className="flex flex-row gap-3 py-2.5">
+      <div className="flex flex-row relative justify-between  items-center bg-white  px-5 rounded-md">
+        <div className="flex flex-row gap-3 ">
           <div className="w-11">
             <img
               src={"/assets/images/logo-header.svg"}
@@ -30,26 +30,26 @@ export const AdminHeader = () => {
           </div>
           <span className="font-monorope text-base font-normal">
             Welcome,
-            <h1 className="font-semibold mt-0">Tech Butomy Pvt Ltd</h1>
+            <h1 className="font-semibold mt-0 text-base">Tech Butomy Pvt Ltd</h1>
           </span>
         </div>
-        <div className="flex items gap-x-10">
+        <div className="flex items gap-x-3  ">
           {menuitems.map((item) => (
             <NavLink
               to={item.path}
               key={item.id}
-              className={`flex flex-col py-1 items-center justify-end     px-2 border-[#E95D39]   ${
-                isActiveLink(item.active) ? "border-b-4 font-bold text-[#E95D39]" : " text-textcolor-darkblue"
+              className={`flex flex-col py-1  gap-1 items-center justify-end px-2 border-[#E95D39]    ${
+                isActiveLink(item.active) ? " activeLink text-[#E95D39] font-bold " : " text-textcolor-darkblue font-medium"
               }`}
             >
               {item.iconType === "image" ? (
-                <img src={item.iconSrc} alt={item.alt} className="w-5 h-5" />
+                <img src={item.iconSrc} alt={item.alt} className="w-4 h-4" />
               ) : (
                 React.createElement(item.icon, {
-                  size: 20,
+                  size: 16,
                 })
               )}
-              <p>{item?.name}</p>
+              <p className="text-sm">{item?.name}</p>
               {/* <p className={`text-xs  font-semibold ${isActiveLink(item.active) ? " text-[#E95D39]" :"text-textcolor-darkblue"}`}>{item.name}</p> */}
             </NavLink>
           ))}
@@ -100,7 +100,7 @@ export const AdminHeader = () => {
                 </div>
                 <h1 className="text-textcolor-100 text-sm flex font-semibold flex-col text-start text-textcolor-darkblue">
                   Super Admin
-                  <span className="text-textcolor-200 font-semibold text-xs">
+                  <span className="text-textcolor-200 font-medium text-xs">
                     Administrator
                   </span>
                 </h1>
