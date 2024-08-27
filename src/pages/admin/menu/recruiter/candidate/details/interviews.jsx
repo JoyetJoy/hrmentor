@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import MenuHeader from "@/components/common/MenuHeader";
 import { Select } from "@headlessui/react";
 import QueryTable from "@/components/table/QueryTable";
-// import QueryTable from "./QueryTable";
 
-// Update button names here
 const buttonSequence = ["addInterviewer", "considerCandidate", "move"];
 
 function Interviews() {
@@ -31,41 +29,43 @@ function Interviews() {
       ? "bg-[#030E5C] text-white py-1.5 px-5 rounded"
       : "bg-[#ECE9F1] text-white py-1.5 px-5 rounded";
 
-  // Demo data for the table
   const tableData = [
     {
       id: 1,
-      name: "Interview Types",
-      position: "Software Engineer",
-      interviewer: 'Niyas',
-      scheduleddate: '31/05/1998',
-      scheduledtime: '10 AM',
-      screeningstatus: 'Completed',
+      interviewType: "Face to face",
+      interviewer: "Shajin",
+      scheduleddate: "10/10/2023",
+      scheduledtime: "10 AM",
+      screeningstatus: "Completed",
       status: "Failed",
     },
     {
       id: 2,
-      name: "Jane Smith",
-      position: "Product Manager",
-      status: "Interviewed",
+      interviewType: "Face to face",
+      interviewer: "Shajin",
+      scheduleddate: "10/10/2023",
+      scheduledtime: "10 AM",
+      screeningstatus: "Completed",
+      status: "Passed",
     },
-    { id: 3, name: "Alice Johnson", position: "UX Designer", status: "Hired" },
     {
-      id: 4,
-      name: "Bob Brown",
-      position: "Data Scientist",
-      status: "Rejected",
+      id: 3,
+      interviewType: "Face to face",
+      interviewer: "Shajin",
+      scheduleddate: "10/10/2023",
+      scheduledtime: "10 AM",
+      screeningstatus: "Completed",
+      status: "Hired",
     },
   ];
 
-  // Column definitions for the table
   const columns = [
     {
       accessorKey: "id",
       header: "Sl. no",
     },
     {
-      accessorKey: "name",
+      accessorKey: "interviewType",
       header: "Interview Type",
     },
     {
@@ -87,10 +87,24 @@ function Interviews() {
     {
       accessorKey: "status",
       header: "Status",
+      cell: ({ row }) => {
+        const status = row.original.status;
+        let statusClass = "";
+        if (status === "Failed")
+          statusClass =
+            "p-1 bg-[#FFF2F2] px-8 rounded-sm border border-[#E39E9E]";
+        else if (status === "Passed")
+          statusClass =
+            "p-1 bg-[#F0FFF1] px-7 rounded-sm border border-[#8BE691]";
+        else if (status === "Hired")
+          statusClass =
+            "p-1 bg-[#FFEE52]/10 px-9 rounded-sm border border-[#FFEE52]";
+        return <span className={statusClass}>{status}</span>;
+      },
     },
   ];
 
-  const totalPages = 1; 
+  const totalPages = 1;
   const [currentPage, setCurrentPage] = useState(1);
 
   return (
@@ -118,7 +132,7 @@ function Interviews() {
           ))}
         </div>
         <div className="flex justify-between py-6">
-          <h1 className="font-bold text-base pt-3">Basic Details</h1>
+          <h1 className="font-bold text-base pt-3">Interviews</h1>
           <div className="flex gap-3 justify-center items-center">
             <label className="input outline-none border border-[#EBEBF0] pr-28 flex items-center gap-2 min-h-9 h-9">
               <svg
@@ -159,7 +173,6 @@ function Interviews() {
         <div className="flex-grow mt-4">
           {activeButton === "addInterviewer" && (
             <>
-              <p>First Table</p>
               <QueryTable
                 list={tableData}
                 columns={columns}
@@ -170,9 +183,27 @@ function Interviews() {
             </>
           )}
           {activeButton === "considerCandidate" && (
-            <p>This is the content for Consider the Candidate.</p>
+            <>
+              <QueryTable
+                list={tableData}
+                columns={columns}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </>
           )}
-          {activeButton === "move" && <p>This is the content for Move.</p>}
+          {activeButton === "move" && 
+          <>
+          <QueryTable
+            list={tableData}
+            columns={columns}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+        }
         </div>
       </div>
     </>
