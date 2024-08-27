@@ -17,6 +17,7 @@ import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
+import { JobDescription } from "@/pages/admin/menu/recruiter/settings/JobDescription";
 
 export const RecruiterRoutes = [
   {
@@ -57,7 +58,7 @@ export const RecruiterRoutes = [
   },
   {
     path: "settings",
-    element: <Interview />,
+    element: <JobDescription />,
   },
   {
     path: "promote",
