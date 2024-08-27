@@ -6,7 +6,7 @@ import { AdminHeader } from "../../components/layouts/admin/Header";
 export const AdminLayout =()=> {
   return (
     <>
-      <div className="bg-gray-100 px-8 py-3 h-full w-full">
+      <div className="bg-gray-100 px-8 py-3 min-h-full w-full">
         <AdminHeader />
         <Outlet />
       </div>

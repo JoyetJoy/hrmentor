@@ -36,13 +36,13 @@ function PrimaryInformation() {
       activeMenu={'Employees'}
       />
       {/* ----sidebar---- */}
-      <div className="flex gap-x-3 mt-1">
+      <div className="flex gap-x-3 ">
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
               <MenuSubHeader
                 heading={"Primary Information"}
-                FirstLink={"Upadate "}
+                FirstLink={{ label:"Update"}}
 
                 />
             
