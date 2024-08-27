@@ -28,57 +28,27 @@ export default function CreateEmployee() {
 
   return (
     <div>
-
-      {/* <div className='bg-white py-2 px-6 flex flex-row items-center justify-between  rounded-md my-2'>
-        <div className='text-sm font-semibold text-black flex items-center justify-between gap-1'>
-          <ArrowLeft className='size-4' />
-          Menu
-          <ChevronRight className="size-4" />
-          Employees
-          <ChevronRight className="size-4" />
-          <span className='text-red-600 text-sm'>Add Employee</span>
-        </div>
-        <div className='text-sm flex items-center gap-5 font-semibold '>
-          <div className="w-1">
-            <img src={"/assets/icons/employees/line.svg"} alt="line" className="object-contain w-full" />
-          </div>
-          <Link className="text-textcolor-blue font-extrabold text-sm">Employees</Link>
-          <Link className=' text-sm text-[#808080]  '>
-            Settings</Link>
-        </div>
-      </div> */}
       <MenuHeader
-        menu={"Menu"}
-        submenu={"Employee"}
-        currentpath={"Add Employee"}
-        icon={<ChevronRight className="size-3" />}
-        fourthLink={"Employees"}
-        fifthLink={"Settings"}
-        
+      menu={"Menu"}
+      subMenu={"Employee"}
+      currentpath={"Add Employee"}
+      icon={<ChevronRight className="size-3" />}
+      activeMenu={'Employees'}
       />
-      <div className="flex flex-row justify-between items-center">
-        <h1 className="font-bold text-lg mt-4 mb-3">Add New Employees</h1>
-        <div className="text-white font-semibold flex  items-center ">
+      <div className="flex flex-row justify-between items-center my-2">
+        <h1 className="font-bold text-lg ">Add New Employees</h1>
           <Link
             to={"/admin/employees/list"}
-            className="btn bg-[#030E5C] text-white text-sm hover:bg-[#030E5C] font-normal w-24 min-h-10 h-10 "
+            className="btn bg-[#030E5C] text-white text-sm hover:bg-[#030E5C] font-normal flex  items-center  min-w-24 min-h-10 h-10 "
           >
-            <div className="size-4">
-              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain size-4 " /></div>
-            Save          </Link>
-        </div>
+            <div className="w-3">
+              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain w-full " /></div>
+            Save          
+          </Link>
       </div>
-      {/* <MenuSubHeader
-                heading={"Add New Employees"}
-                SecondLink={{ label: " Save " }}
-                Secondicon={  <div className="size-">
-              <img src={'/assets/icons/employees/save.svg'} alt="save icon" className="object-contain w-full" /></div>}
-                /> */}
       <div
         onSubmit={handleSubmit(onSubmit)}
-
         className=" grid grid-cols-2 gap-x-3 py-2" >
-
         <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md bg-white border border-gray-300">
           <h1 className="font-bold text-smpx-3">Basic Details</h1>
           <div className="grid w-full grid-cols-2  mt-4 ">
@@ -116,7 +86,6 @@ export default function CreateEmployee() {
                 </span>
               )}
             </div>
-
             <div className="flex px-3 group flex-col py-2 ">
               <label className="label-text">Surname</label>
               <input

@@ -65,15 +65,15 @@ export default function EmployeeLists() {
               //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
               to={""}
 
-              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
             >
-              <MoveDiagonal />
+              <MoveDiagonal className="size-3" />
             </Link>
             <Link
               to={"/admin/employees/primary"}
-              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-8 rounded-full"
+              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-7 rounded-full"
             >
-              <img src="/assets/icons/admin/marker.svg" />
+              <img src="/assets/icons/admin/marker.svg" className="w-full object-contain" />
             </Link>
             {/* <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
               <Trash2 className="w-5 h-5" />
@@ -114,17 +114,15 @@ export default function EmployeeLists() {
       </div> */}
       <MenuHeader
       menu={"Menu"}
-      currentpath={"Employees"}
+      currentpath={"Employee"}
       centertextmain={"  Number of licence is limited to 8:"}
       centertext={"Add More Licence"}
-      fourthLink={"Employees"}
-      fifthLink={"Settings"}
-      // firstpath={""}
+      activeMenu={'Employees'}
 
       />
-      <div className="flex justify-between items-center mt-2 mb-3">
-        <label className="input outline-none b border rounded-md min-w-96  border-gray-400  flex items-center min-h-10  h-10 gap-2">
-          <Search className="text-gray-200 object-contain size-5" />
+      <div className="flex justify-between items-center mt-2 mb-4">
+        <label className="input outline-none  border  border-[#EBEBF0] rounded-md min-w-96  flex items-center min-h-10  h-10 gap-2">
+          <Search className="text-gray-200 object-contain size-4" />
           <input
             type="text"
             className="grow placeholder:text-sm focus:outline-none placeholder:text-gray-200 "
@@ -139,15 +137,15 @@ export default function EmployeeLists() {
             <ArrowUpFromLine className="size-4" />
             <h1 className="text-xs font-semibold">Export</h1>
           </div>
-          <div className="text-white font-semibold flex  items-center">
+        
             <Link
               to={"/admin/employees/create"}
-              className="btn bg-[#030E5C] text-white text-xs hover:bg-[#030E5C] min-h-10 h-10"
+              className="btn bg-[#030E5C]  font-semibold flex  items-center px-3 text-white text-xs hover:bg-[#030E5C] min-h-10 h-10"
             >
-              <Plus className="size-5" />
+              <Plus className="size-4" />
               Add Employee{" "}
             </Link>
-          </div>
+         
         </div>
       </div>
       <QueryTable

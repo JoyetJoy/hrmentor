@@ -1,5 +1,6 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddExperience from "@/components/popups/employees/view/AddExperience";
 import EditExperience from "@/components/popups/employees/view/EditExperience";
@@ -74,14 +75,12 @@ export const Experience = () => {
   );
   return (
     <div className=" flex flex-col">
-      <EmployeeHeader
-        backLink={""}
-        menu={"Menu"}
-        subMenu={"Employee"}
-        currentPath={" Employee Detail"}
-        pageHeading={"Employees"}
-        nextLink={""}
-        nextHeading={"Settings"}
+      <MenuHeader
+      menu={"Menu"}
+      subMenu={"Employee"}
+      currentpath={"Employee Detail"}
+      icon={<ChevronRight className="size-3" />}
+      activeMenu={'Employees'}
       />
       {/* ----sidebar---- */}
       <div className="flex gap-x-3 ">
