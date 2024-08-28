@@ -6,7 +6,7 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { Plus } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -23,27 +23,40 @@ export const EmergencyContacts = () => {
         header: "Name",
         accessorKey: "name",
       },
-      { header: "ID Number", accessorKey: "addNo" },
+      { header: "Next of Kin", accessorKey: "addNo" },
       {
-        header: "Designation",
+        header: "Phone number",
         accessorKey: "designation",
       },
       {
-        header: "Type",
+        header: "Address",
         accessorKey: "type",
       },
       {
-        header: "Department",
-        accessorKey: "department",
+        header: "Action",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 text-xs   ">
+          <Link
+            to={`/sales/invoices/detail-view/${row?.original?.id}`}
+            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+          >
+            <MoveDiagonal className="size-3" />
+            </Link>
+          <Link
+            to={""}
+            onClick={setEditOpen}
+            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+          >
+            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
+          </Link>
+          <Link className="cursor-pointer flex justify-center items-center text-[#AB2727] bg-[#EBEBF0]  p-2  rounded-full">
+            <Trash2 className="size-3" />
+          </Link>
+        </div>
+        ),
       },
-      {
-        header: "Location",
-        accessorKey: "location",
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
-      },
+      
     ],
 
     []
@@ -78,7 +91,7 @@ export const EmergencyContacts = () => {
                 SecondLink={{ label: "Add Emergency Contact ", onClick: setPopupOpen }}
                 Secondicon={ <Plus className="size-4" />}
                 />
-            <div className="my-2">
+            <div className="mt-2">
               <QueryTable
                 columns={columns}
                 list={list}

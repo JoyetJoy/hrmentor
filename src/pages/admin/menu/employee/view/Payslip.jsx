@@ -5,7 +5,7 @@ import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { Plus } from "lucide-react";
+import { ChevronRight, Plus } from "lucide-react";
 import React, { useState } from "react";
 
 
@@ -55,17 +55,15 @@ export const Payslip = () => {
       activeMenu={'Employees'}
       />
       {/* ----sidebar---- */}
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 ">
         <EmployeesSidebar  />
-        <div className="w-full bg">
+        <div className="w-full mt-2 ">
           <>
-            {/* <h1 className="font-bold text-base my-2   ">Payslip</h1> */}
             <MenuSubHeader
                 heading={"Payslip"}
-                SecondLink={{ label: "Add Payslip", }}
-                Secondicon={ <Plus className="size-4" />}
-                />
-            <div>
+             />
+            <div className=" bg-white rounded-md h-screen mt-6">
+              
               {/* <QueryTable
                 columns={columns}
                 list={list}

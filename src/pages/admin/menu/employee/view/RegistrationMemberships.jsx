@@ -6,7 +6,7 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -21,48 +21,44 @@ export const RegistrationMemberships = () => {
   const columns = React.useMemo(
     () => [
       {
-        header: "Name",
-        accessorKey: "name",
+        header: "Registration/Membership body",
+        accessorKey: "registration",
       },
-      { header: "ID Number", accessorKey: "addNo" },
+      { header: "Professional Registration Number", accessorKey: "number" },
       {
-        header: "Designation",
-        accessorKey: "designation",
-      },
-      {
-        header: "Type",
-        accessorKey: "type",
+        header: "Expiry Date",
+        accessorKey: "expirydate",
       },
       {
-        header: "Department",
-        accessorKey: "department",
+        header: "First Registered Date",
+        accessorKey: "firstregdate",
       },
       {
-        header: "Location",
-        accessorKey: "location",
+        header: "Revalidation/Renewal Date",
+        accessorKey: "revalidationdate",
       },
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex  gap-2 text-xs ">
-            <Link
-              to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8  rounded-full"
-            >
-              <MoveDiagonal className=""/>
+          <div className="flex items-center gap-2 text-xs   ">
+          <Link
+            to={`/sales/invoices/detail-view/${row?.original?.id}`}
+            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+          >
+            <MoveDiagonal className="size-3" />
             </Link>
-            <Link
-              to={""}
-              onClick={setEditOpen}
-              className="cursor-pointer flex items-center bg-gray-500 text-black p-2 size-8   rounded-full "
-            >
-              <img src="/assets/icons/admin/marker.svg"  className=""/>
-            </Link>
-            <Link className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500  p-2 size-8  rounded-full">
-              <Trash2 className="" />
-            </Link>
-          </div>
+          <Link
+            to={""}
+            onClick={setEditOpen}
+            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+          >
+            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
+          </Link>
+          <Link className="cursor-pointer flex justify-center items-center text-[#AB2727] bg-[#EBEBF0]  p-2  rounded-full">
+            <Trash2 className="size-3" />
+          </Link>
+        </div>
         ),
       },
     ],
@@ -103,7 +99,7 @@ export const RegistrationMemberships = () => {
               <AddRegistrationMembership popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
 
               
-            <div className="py-3">
+            <div className="pt-2">
               <QueryTable
                 columns={columns}
                 list={list}
