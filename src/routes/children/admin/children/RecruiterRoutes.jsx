@@ -17,10 +17,18 @@ import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
+import { CandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
+import { EducationQualification } from "@/pages/admin/menu/recruiter/settings/EducationQualification";
+import { Integrations } from "@/pages/admin/menu/recruiter/settings/Integrations";
+import { InterviewType } from "@/pages/admin/menu/recruiter/settings/InterviewType";
+import { JobDescription } from "@/pages/admin/menu/recruiter/settings/JobDescription";
+import { MinimumExperience } from "@/pages/admin/menu/recruiter/settings/MinimumExperience";
+import { ProfileQuestions } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
+import { Sources } from "@/pages/admin/menu/recruiter/settings/Sources";
 
 export const RecruiterRoutes = [
   {
-    index:true,
+    index: true,
     element: <RecruiterDashbaord />,
   },
   {
@@ -57,7 +65,40 @@ export const RecruiterRoutes = [
   },
   {
     path: "settings",
-    element: <Interview />,
+    children: [
+      {
+        path: "job-description",
+        element: <JobDescription />,
+      },
+      {
+        path: "profile-questions",
+        element: <ProfileQuestions />,
+      },
+      {
+        path: "education-qualification",
+        element: <EducationQualification />,
+      },
+      {
+        path: "interview-type",
+        element: <InterviewType />,
+      },
+      {
+        path: "candidate-type",
+        element: <CandidateType />,
+      },
+      {
+        path: "minimum-experience",
+        element: <MinimumExperience />,
+      },
+      {
+        path: "integrations",
+        element: <Integrations />,
+      },
+      {
+        path: "sources",
+        element: <Sources />,
+      },
+    ],
   },
   {
     path: "promote",

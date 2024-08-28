@@ -17,25 +17,9 @@ function MenuHeader(props) {
     icon,
     centertextmain,
     centertext,
-    // candidate Links
-    ProfileLink = "/admin/recruiter/profile",
-    QuestionAnswersPath = "/admin/recruiter/question-answers",
-    InterviewsLink = "/admin/recruiter/interviews",
-    DiscussionsLink = "/admin/recruiter/discussions",
-    EmailsLink = "/admin/recruiter/email",
-    DocumentsLink = "/admin/recruiter/documents",
-    CandidateHistoryLink = "/admin/recruiter/history",
   } = props;
 
-  const candidatePaths = [
-    ProfileLink,
-    QuestionAnswersPath,
-    InterviewsLink,
-    DiscussionsLink,
-    EmailsLink,
-    DocumentsLink,
-    CandidateHistoryLink,
-  ];
+ 
 
   // Determine which menu to display based on the current path
   const currentMenu = location.pathname.includes('/admin/recruiter')
@@ -46,15 +30,14 @@ function MenuHeader(props) {
 
   return (
     <div className="flex flex-col">
-      <div className="bg-white py-2 px-6 flex flex-row items-center justify-between rounded-md my-2">
-        <div className="text-sm font-semibold text-black flex items-center justify-between ">
+      <div className="bg-white h-12 py-2 px-6 flex flex-row items-center justify-between rounded-md my-2">
+        <div className="text-sm font-semibold text-[#030E5C] flex items-center justify-between ">
           <ArrowLeft className="size-4 mr-2" />
           {menu}
           <ChevronRight className="size-3" />
           {subMenu}
           {icon}
           <span className="text-textcolor-lightred text-sm">
-            {" "}
             {currentpath}
           </span>
         </div>

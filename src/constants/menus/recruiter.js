@@ -66,6 +66,6 @@ export const recruiterMenu = [
   {
     id: 6,
     name: "Settings",
-    link: "/admin/recruiter/settings",
+    link: "/admin/recruiter/settings/job-description",
   },
 ];
