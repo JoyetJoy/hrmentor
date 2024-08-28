@@ -1,10 +1,11 @@
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Search } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Search } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -44,14 +45,12 @@ export const EmployeeSettings = () => {
   );
   return (
     <div className=" flex flex-col">
-      <EmployeeHeader
-        backLink={""}
-        menu={"Menu"}
-        subMenu={"Employee"}
-        currentPath={"Settings"}
-        pageHeading={"Employees"}
-        nextLink={""}
-        nextHeading={"Settings"}
+        <MenuHeader
+      menu={"Menu"}
+      subMenu={"Employee"}
+      currentpath={"Settings"}
+      icon={<ChevronRight className="size-3" />}
+      activeMenu={'Settings'}
       />
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">

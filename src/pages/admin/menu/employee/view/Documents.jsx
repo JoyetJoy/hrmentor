@@ -57,15 +57,12 @@ export const Documents = () => {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3">
         <EmployeesSidebar />
-        <div className="  w-full bg">
+        <div className="  w-full mt-2 ">
           <>
-            
             <MenuSubHeader
-                heading={"Emergency Contact"}
-                SecondLink={{ label: "Add Emergency Contact ", onClick: setPopupOpen }}
-                Secondicon={ <Plus className="size-4" />}
-                />
-            <div className="w-full h-full rounded-md bg-white">
+                heading={"Documents"}
+            />
+            <div className="w-full h-screen rounded-md  bg-white mt-6">
               <Disclosure as="div" className="p-5" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
                   <div className="bg-[#F7F7F7] size-5 flex justify-center items-center rounded-full">
@@ -84,11 +81,13 @@ export const Documents = () => {
                           placeholder="Search"
                         />
                       </div>
-                      <div className="flex gap-2 bg-[#030E5C] items-center input-box h-10 w-40 justify-center text-white">
+                      <div className="flex gap-2 bg-[#030E5C] items-center input-box h-10 w-40 justify-center text-white" >
                         + Add Documents
                       </div>
                     </div>
+                    <div className="py-2">
                     <QueryTable columns={columns} list={list} />
+                    </div>
                   </div>
                 </DisclosurePanel>
               </Disclosure>

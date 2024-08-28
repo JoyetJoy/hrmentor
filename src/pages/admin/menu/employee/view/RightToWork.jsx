@@ -5,7 +5,7 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import React, { useState } from "react";
-import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import AddRightToWork from "@/components/popups/employees/view/AddRightToWork";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
@@ -23,52 +23,47 @@ export const RightToWork = () => {
   const columns = React.useMemo(
     () => [
       {
-        header: "Document NO",
-        accessorKey: "documentNo",
+        header: "Reference NO",
+        accessorKey: "referenceNo",
       },
-      { header: "Share/Check Code", accessorKey: "shareCheckCode" },
+      { header: "Expiry Date", accessorKey: "exprirydate" },
+     
       {
-        header: "Share/Check Code expiry",
-        accessorKey: "shareCheckCodeExpiry",
-      },
-      {
-        header: "Review Date",
+        header: "Reviewed by",
         accessorKey: "reviewDate",
       },
-      {
-        header: "Review by",
-        accessorKey: "reviewBy",
-      },
+     
       {
         header: "Document",
         accessorKey: "document",
       },
       {
-        header: "Expiry Date",
-        accessorKey: "expiryDate",
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
       },
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex  gap-2 text-xs ">
-            <Link
-              to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8  rounded-full"
-            >
-              <MoveDiagonal className=""/>
+          <div className="flex items-center gap-2 text-xs   ">
+          <Link
+            to={`/sales/invoices/detail-view/${row?.original?.id}`}
+            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+          >
+            <MoveDiagonal className="size-3" />
             </Link>
-            <Link
-              to={""}
-              onClick={setEditOpen}
-              className="cursor-pointer flex items-center bg-gray-500 text-black p-2 size-8   rounded-full "
-            >
-              <img src="/assets/icons/admin/marker.svg"  className=""/>
-            </Link>
-            <Link className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500  p-2 size-8  rounded-full">
-              <Trash2 className="" />
-            </Link>
-          </div>
+          <Link
+            to={""}
+            onClick={setEditOpen}
+            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+          >
+            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
+          </Link>
+          <Link className="cursor-pointer flex justify-center items-center text-[#AB2727] bg-[#EBEBF0]  p-2  rounded-full">
+            <Trash2 className="size-3" />
+          </Link>
+        </div>
         ),
       },
     ],
@@ -104,13 +99,13 @@ export const RightToWork = () => {
               </div> */}
                <MenuSubHeader
                 heading={"Right to Work"}
-                SecondLink={{ label: "Add Right ", onClick: setPopupOpen }}
+                SecondLink={{ label: "Add Right to work ", onClick: setPopupOpen }}
                 Secondicon={ <Plus className="size-4" />}
                 />
               <AddRightToWork popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
 
               
-            <div className="py-2">
+            <div className="pt-2">
               <QueryTable
                 columns={columns}
                 list={list}

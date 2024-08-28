@@ -57,10 +57,10 @@ export default function EmployeeLists() {
 
 
       {
-        header: "",
+        header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center justify-end gap-3  text-xs ">
+          <div className="flex items-center justify-start gap-3  text-xs ">
             <Link
               //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
               to={""}

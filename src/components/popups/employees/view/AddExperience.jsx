@@ -90,7 +90,7 @@ function AddExperience({popupOpen, setPopupOpen}) {
 
                     />
                   </div>
-                  <Button className="border border-dashed flex flex-row gap-2 items-center justify-center text-sm font-semibold border-[#C2C1C1] h-10 mt-3 rounded-md  bg-[#181C3A80] ">
+                  <Button className="border border-dashed flex flex-row gap-2 items-center justify-center text-sm font-semibold border-[#C2C1C1] h-10 mt-3 rounded-md  bg-[#F7F7F7]  text-[ #2C2C2C]  ">
                   <Upload className="size-4" />
                    Upload Certificates
                   </Button>

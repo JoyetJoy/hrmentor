@@ -57,7 +57,7 @@ export const WorkInformation = () => {
                 />
             <div
               onSubmit={handleSubmit(onSubmit)}
-              className=" grid grid-cols-2 gap-x-3 py-2"
+              className=" grid grid-cols-2 gap-x-3 pt-2"
             >
               <div className="flex flex-col items-baseline  h-screen px-3 py-4 rounded-md h- bg-white border border-gray-300">
                 <h1 className="font-bold text-lg px-3 text-[#2C2C2C]">Reporting to</h1>

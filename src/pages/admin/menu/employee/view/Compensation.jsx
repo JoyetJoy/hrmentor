@@ -1,10 +1,11 @@
 
 import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
+import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -12,52 +13,59 @@ import { Link } from "react-router-dom";
 export const Compensation = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupEditOpen, setEditOpen] = useState(false);
+
 
   const list = React.useMemo(() => TableData,[TableData]);
   const columns = React.useMemo(
     () => [
       {
-        header: "Name",
-        accessorKey: "name",
+        header: "Effective form ",
+        accessorKey: "effective form",
       },
-      { header: "ID Number", accessorKey: "addNo" },
+      { header: "Pay rate", accessorKey: "payrate" },
       {
-        header: "Designation",
-        accessorKey: "designation",
+        header: "Pay schedule",
+        accessorKey: "pay schedule",
       },
       {
-        header: "Type",
+        header: " Pay type",
         accessorKey: "type",
       },
       {
-        header: "Department",
-        accessorKey: "department",
+        header: "Ower time",
+        accessorKey: "owertime",
       },
       {
-        header: "Location",
-        accessorKey: "location",
+        header: "Reason",
+        accessorKey: "reason",
+      },
+      {
+        header: "Comment",
+        accessorKey: "comment",
       },
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex  gap-2 text-xs  ">
-            <Link
-              to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center  bg-gray-500 text-black p-2  size-8 rounded-full"
-            >
-              <MoveDiagonal />
+          <div className="flex items-center gap-2 text-xs   ">
+          <Link
+            to={`/sales/invoices/detail-view/${row?.original?.id}`}
+            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+          >
+            <MoveDiagonal className="size-3" />
             </Link>
-            <Link
-              to={""}
-              className="cursor-pointer flex items-center bg-gray-500 text-black p-2  size-8 rounded-full"
-            >
-              <img src="/assets/icons/admin/marker.svg" />
-            </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-gray-500 size-8 rounded-full">
-              <Trash2 className="w-5 h-5" />
-            </span>
-          </div>
+          <Link
+            to={""}
+            onClick={setEditOpen}
+            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+          >
+            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
+          </Link>
+          <Link className="cursor-pointer flex justify-center items-center text-[#AB2727] bg-[#EBEBF0]  p-2  rounded-full">
+            <Trash2 className="size-3" />
+          </Link>
+        </div>
         ),
       },
     ],
@@ -78,19 +86,14 @@ export const Compensation = () => {
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-          <div className="flex flex-row items-center justify-between mb-4"> 
-            <h1 className="font-bold text-lg  ">Compensation</h1>
-            <div className="text-white font-semibold flex  items-center gap-2 ">
-                <Link
-                  to={""}
-                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  min-h-10 h-10 text-sm flex items-center gap-1"
-                >
-                  <Plus className="size-5" />
-                  Compensation</Link>
-              </div>
-              </div>
+          <MenuSubHeader
+                heading={"Compensation"}
+                SecondLink={{ label: "Compensation " }}
+                Secondicon={ <Plus className="size-4" />}
+                />
+       
 
-            <div>
+            <div className="pt-2">
               <QueryTable
                 columns={columns}
                 list={list}
