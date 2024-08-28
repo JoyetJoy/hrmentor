@@ -4,6 +4,12 @@ import AddCandidates from "@/pages/admin/menu/recruiter/candidate/addcandidates"
 import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
 import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
 import Email from "@/pages/admin/menu/recruiter/candidate/details/email";
+import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
+import CustomMail from "@/pages/admin/menu/recruiter/candidate/details/email/CustomMail";
+import InterviewResult from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewResult";
+import InterviewSchedule from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewSchedule";
+import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/MoveHiring";
+import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
 import History from "@/pages/admin/menu/recruiter/candidate/details/history";
 import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
 import Profile from "@/pages/admin/menu/recruiter/candidate/details/profile";
@@ -142,9 +148,35 @@ export const RecruiterRoutes = [
     path: "documents",
     element: <Documents />,
   },
-  {
+   {
     path: "email",
     element: <Email />,
+    children: [
+      {
+        path: "custom-mail",
+        element: <CustomMail />, 
+      },
+      {
+        path: "welcome-mail",
+        element: <WelcomeMail />, 
+      },
+      {
+        path: "interview-schedule",
+        element: <InterviewSchedule />, 
+      },
+      {
+        Path: "interview-result",
+        element: <InterviewResult/>
+      },
+      {
+        path: "consider",
+        element: <Consider/>
+      },
+      {
+        path: "move-to-hiring",
+        element : < MoveHiring/>
+      }
+    ],
   },
   {
     path: "history",
