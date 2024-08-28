@@ -23,17 +23,18 @@ export default function QueryTable({
   // Access the table state and methods
   const { getHeaderGroups, getRowModel } = tableInstance;
   return (
-    <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
+    <>
+     <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
       <div className="table table-md  mx-auto  w-full">
         <table style={{ borderSpacing: "0", width: "100%" }}>
           <thead className="bg-[#EBEBF0] rounded-md overflow-hidden">
             {getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="text-left">
+              <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((column) => (
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
-                    className=" text-sm font-semibold text-[#525252] capitalize "
+                    className=" text-sm font-semibold  text-[#525252] capitalize "
                   >
                     {flexRender(
                       column.column.columnDef.header,
@@ -77,5 +78,8 @@ export default function QueryTable({
         />
       )}
     </div>
+
+    </>
+   
   );
 }

@@ -8,6 +8,7 @@ import History from "@/pages/admin/menu/recruiter/candidate/details/history";
 import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
 import Profile from "@/pages/admin/menu/recruiter/candidate/details/profile";
 import Question from "@/pages/admin/menu/recruiter/candidate/details/question";
+import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
@@ -17,6 +18,7 @@ import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
+import List from "@/pages/admin/menu/recruiter/report/list";
 import { CandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
 import { EducationQualification } from "@/pages/admin/menu/recruiter/settings/EducationQualification";
 import { Integrations } from "@/pages/admin/menu/recruiter/settings/Integrations";
@@ -150,4 +152,24 @@ export const RecruiterRoutes = [
     path: "history",
     element: <History />,
   },
+  // interview
+  {
+    path:"interview",
+    children: [
+      {
+        path:"interview-list",
+        element:<InterviewMain/>
+      },
+    ]
+  },
+  {
+  path:"reports",
+  children :[
+    {
+      path:"job-reports",
+      element:<List/>
+    }
+  ]
+  },
+
 ];
