@@ -46,7 +46,7 @@ function Post() {
           <div className='flex flex-row items-center justify-between mt-1 mb-3 '>
             <h1 className='text-sm font-bold text-black flex flex-row gap-1 items-center justify-center'>
                <ArrowLeft className='size-4' />
-              Create New Job <span className='text-xs'> <div className=''></div>Post</span></h1>
+              Create New Job <span className='text-xs border-r'>Post</span></h1>
             <Link to="" className=' btn text-white bg-bgColor-100 px-6 hover:bg-bgColor-100 min-h-10 h-10'>Next</Link>
           </div>
            {/* <MenuSubHeader
