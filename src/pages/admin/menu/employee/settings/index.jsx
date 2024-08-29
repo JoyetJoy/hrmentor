@@ -5,7 +5,7 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
 import { TableData } from "@/constants/tableDummy";
-import { ChevronRight, MoveDiagonal, Search } from "lucide-react";
+import { ChevronRight, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -17,26 +17,40 @@ export const EmployeeSettings = () => {
   const columns = React.useMemo(
     () => [
       {
-        header: "Name",
-        accessorKey: "name",
+        header: "Sl No",
+        accessorKey: "sl no",
       },
-      { header: "ID Number", accessorKey: "addNo" },
+      { header: "Work Location", accessorKey: "location" },
       {
-        header: "Designation",
-        accessorKey: "dignation",
-      },
-      {
-        header: "Type",
-        accessorKey: "type",
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
       },
 
+
       {
-        header: "Document",
-        accessorKey: "designation",
+        header: "Action",
+        accessorKey: "action",
         cell: ({ row }) => (
-          <p className="font-medium underline  text-[#1A75FF]">
-            {row?.original?.designation}
-          </p>
+          <div className="flex items-center justify-start gap-3  text-xs ">
+            {/* <Link
+              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              to={""}
+
+              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+            >
+              <MoveDiagonal className="size-3" />
+            </Link> */}
+            <Link
+              to={"/admin/employees/primary"}
+              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-7 rounded-full"
+            >
+              <img src="/assets/icons/admin/marker.svg" className="w-full object-contain" />
+            </Link>
+            <Link className="cursor-pointer flex justify-center items-center  bg-[#EBEBF0]  p-2  rounded-full">
+            <Trash2 className="size-3" />
+          </Link>
+          </div>
         ),
       },
     ],
@@ -57,17 +71,17 @@ export const EmployeeSettings = () => {
         <EmployeesSidebar sidebarList={employeesSettingsSideList} />
         <div className=" w-full bg-white rounded-md px-5 py-4">
           <div className="flex items-center justify-between my-4">
-            <div className="flex gap-2 placeholder:text-black items-center input-box h-10 w-72">
-              <Search />
+            <div className="flex gap-2 placeholder:text-black items-center rounded-md input-box min-h-11 min-w-96 border border-[#EBEBF0]">
+              <Search className="size-4 text-[#7F7F7F]" />
               <input
                 type="text"
-                className=" w-full h-full "
+                className=" w-full h-full placeholder:text-[#7F7F7F]"
                 placeholder="Search"
               />
             </div>
-            <div className="flex gap-2 bg-[#030E5C] items-center input-box h-10 w-40 justify-center text-white">
-              + Add Documents
-            </div>
+            <Link className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
+               <Plus className="size-4"/>Add 
+            </Link>
           </div>
           <div>
             <QueryTable
