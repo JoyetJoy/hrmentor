@@ -11,53 +11,7 @@ const steps = [
 function CreateJobSideBar() {
   const [activeStep, setActiveStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState([0]);
-  return (
-    <div className="w-1/3 bg-white rounded-md p-5 relative">
-      <ul className="steps steps-vertical w-full">
-        <div className=" w-full rounded-md px-3">
-         <li className="step step-primary ">
-          Step
-          </li>
-          <div>
-          <div className=" ml-5  text-sm rounded flex flex-col  gap-3  px-3 ">
-          {/* <div className="size-4 bg-[#ABABAB] rounded-full z-50"/> */}
-          <p>
-            You must complete all required field to save or publish the job.
-          </p>
-          <div className="flex  items-center gap-x-2">
-            <div className="size-5 flex items-center text-sm border border-[#65D43E17] justify-center bg-[#F0FFF1] rounded-full">
-              <Check className="text-[#3FB117] size-3" />
-            </div>
-            <p>Job Details</p>
-          </div>
-          <div className="flex  items-center gap-x-2">
-            <div className="size-5 flex items-center text-sm border border-[#65D43E17] justify-center bg-[#F0FFF1] rounded-full">
-              <Check className="text-[#3FB117] size-3" />
-            </div>
-            <p>Advance Job details</p>
-          </div>
-          <div className="flex  items-center gap-x-2">
-            <div className="size-5 flex items-center text-sm border border-[#65D43E17] justify-center bg-[#F0FFF1] rounded-full">
-              <Check className="text-[#3FB117] size-3" />
-            </div>
-            <p>Sensitive Data</p>
-          </div>
-          <div className="flex  items-center gap-x-2">
-            <div className="size-5 flex items-center text-sm border border-[#65D43E17] justify-center bg-[#F0FFF1] rounded-full">
-              <Check className="text-[#3FB117] size-3" />
-            </div>
-            <p>Exposure</p>
-          </div>
-        </div>
-          </div>
-        </div>
-      
-        <li className="step step-primary">Choose plan</li>
-        <li className="step">Purchase</li>
-        <li className="step">Receive Product</li>
-      </ul>
-    </div>
-  );
+
   return (
     <div className="w-1/3 bg-white rounded-md p-5 relative">
       <div className="border-l-2 border-[#CACACA] absolute    left-10 top-10 bottom-10 z-0" />
