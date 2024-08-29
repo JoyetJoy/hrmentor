@@ -129,8 +129,8 @@ function RecruiterJobs() {
         currentpath={"Recruiter"}
         activeMenu={"Jobs"}
       />
-      <div className="flex justify-between items-center mb-4 mt-4">
-        <div className="text-white font-semibold flex  items-center gap-2">
+      <div className="flex justify-between items-center mb-4 mt-2">
+      <div className="text-white font-semibold flex  items-center gap-2">
           <Link
             to={"/admin/recruiter/post"}
             className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white text-sm  min-h-10 h-10"
