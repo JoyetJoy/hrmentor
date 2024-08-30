@@ -37,17 +37,17 @@ export default function EmployeeLists() {
 
       },
       {
-        header: "Type",
+        header: "Employment Type",
         accessorKey: "type",
-      },
-      {
-        header: "Location",
-        accessorKey: "location",
       },
       {
         header: "Department",
         accessorKey: "designation",
         cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+      },
+      {
+        header: " Work Location",
+        accessorKey: "location",
       },
       {
         header: "Status",
@@ -62,9 +62,7 @@ export default function EmployeeLists() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3  text-xs ">
             <Link
-              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
               to={""}
-
               className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
             >
               <MoveDiagonal className="size-3" />
@@ -75,9 +73,7 @@ export default function EmployeeLists() {
             >
               <img src="/assets/icons/admin/marker.svg" className="w-full object-contain" />
             </Link>
-            {/* <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
-              <Trash2 className="w-5 h-5" />
-            </span> */}
+          
           </div>
         ),
       },
@@ -87,31 +83,6 @@ export default function EmployeeLists() {
   );
   return (
     <div className="">
-      {/* <div className="bg-white py-2.5 px-6 flex flex-row items-center justify-between  rounded-md">
-        <div className="text-sm font-semibold text-black flex items-center justify-between gap-1">
-          <ArrowLeft className="size-4" />
-          Menu
-          <ChevronRight className="size-4" />
-          <span className="text-red-600">Employee</span>
-        </div>
-        <h1 className="text-[0.8rem] font-medium text-black flex items-center justify-between gap-1">
-          Number of licence is limited to 8:{" "}
-          <span className="text-textcolor-lightred font-semibold underline underline-offset-4">Add More Licence</span>{" "}
-        </h1>
-        <div className="text-sm flex items-center gap-5 font-semibold ">
-          <div className="w-1">
-            <img
-              src={"/assets/icons/employees/line.svg"}
-              alt="line"
-              className="object-contain w-full"
-            />
-          </div>
-          <Link className="text-textcolor-blue font-extrabold text-sm">
-            Employees
-          </Link>
-          <Link className=" text-sm text-[#808080]  ">Settings</Link>
-        </div>
-      </div> */}
       <MenuHeader
       menu={"Menu"}
       currentpath={"Employee"}

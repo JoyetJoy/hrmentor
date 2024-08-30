@@ -3,6 +3,7 @@ import { ChevronRight, ArrowLeft } from "lucide-react";
 import { availablePlanData } from "../../../../constants/dummyData";
 import PurchasePlan from "../../../../components/popups/subscription/PurchasePlan";
 import AvailablePlans from "../../../../components/subscription/AvailablePlans";
+import MenuHeader from "@/components/common/MenuHeader";
 
 export const MenuSubscription = () => {
   const [count, setCount] = useState(0);
@@ -15,15 +16,15 @@ export const MenuSubscription = () => {
 
   return (
     <>
-      <div className="bg-white py-1 px-6 flex flex-row items-center justify-between mt-3 rounded-md">
-        <h1 className="text-sm font-semibold text-black flex items-center justify-between gap-1">
-          Menu
-          <ChevronRight className="size-3" />
-          Account Management
-          <ChevronRight className="size-3" />
-          <span className="text-red-600">Subscription</span>
-        </h1>
-      </div>
+      <MenuHeader
+        backlink={""}
+        menu={"Menu"}
+        subMenu={"Account Management"}
+        currentpath={"Subscription"}
+        activeMenu={"Subscription"}
+        icon={  <ChevronRight className="size-3" />}
+
+      />
       <ArrowLeft className="relative top-16 left-7 size-5" />
       <div className="flex flex-col mt-2 px-64 bg-white ">
         <div className="flex flex-col gap-1 my-8 ">

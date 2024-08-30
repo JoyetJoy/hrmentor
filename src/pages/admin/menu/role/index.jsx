@@ -18,6 +18,7 @@ import {
 
 import { Link } from "react-router-dom";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
+import MenuHeader from "@/components/common/MenuHeader";
 export const MenuRoles = () => {
   const [collapseState, setCollapseState] = useState(false);
 
@@ -26,14 +27,17 @@ export const MenuRoles = () => {
   };
   return (
     <div className="flex flex-col ">
-      <EmployeeHeader
-      menu={"Menu"}
-      subMenu={"Account Management"}
-      pageHeading={"Role"}
-      nextHeading={"Subscription"}
-      nextLink={"/admin/subscription"}
+  
+  <MenuHeader
+        backlink={""}
+        menu={"Menu"}
+        subMenu={"Account Management"}
+        currentpath={"Role"}
+        activeMenu={"Role"}
+        icon={  <ChevronRight className="size-3" />}
+
       />
-      <div className="flex flex-row mt-3 gap-7">
+      <div className="flex flex-row mt-2 gap-7">
         <RoleSidebar />
         <div className="w-full bg-white px-10 pt-9 rounded-md">
           <h1 className="text-base text-black font-bold">Add New Role</h1>

@@ -18,7 +18,7 @@ import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
-import Interview from "@/pages/admin/menu/recruiter/jobs/createJob/interview";
+import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import Post from "@/pages/admin/menu/recruiter/jobs/createJob/post";
 import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
@@ -68,9 +68,14 @@ export const RecruiterRoutes = [
     element: <Application />,
   },
   {
-    path: "interview",
-    element: <Interview />,
+    path: "team",
+    element: <Team/>,
   },
+ {
+  path:"interview",
+  element:<JobInterview/>,
+ },
+  
   {
     path: "settings",
     children: [
@@ -200,7 +205,8 @@ export const RecruiterRoutes = [
     {
       path:"job-reports",
       element:<List/>
-    }
+    },
+   
   ]
   },
 
