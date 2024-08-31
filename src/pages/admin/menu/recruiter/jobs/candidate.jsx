@@ -81,24 +81,35 @@ function Candidate() {
           Project manger
         </h1>
         <div className="flex gap-5 ">
-          <Link
-            to="/admin/recruiter/candidate"
-            className="text-sm font-extrabold text-bgColor-100"
-          >
-            Candidate
-          </Link>
-          <Link
-            to="/admin/recruiter/promote"
-            className="text-sm font-medium text-gray-200"
-          >
-            Promote
-          </Link>
-          <Link
-            to="/admin/recruiter/refer"
-            className="text-sm font-medium text-gray-200"
-          >
-            Refer
-          </Link>
+        <Link
+        to="/admin/recruiter/candidate"
+        className={`text-sm ${location.pathname === "/admin/recruiter/candidate"
+          ? "font-extrabold text-[#181C3A] before:bg-[#181C3A] py-1 px-2 active-menu"
+          : "text-[#808080]"
+        }`}
+      >
+        Candidate
+      </Link>
+      
+      <Link
+        to="/admin/recruiter/promote"
+        className={`text-sm ${location.pathname === "/admin/recruiter/promote"
+          ? "font-extrabold text-[#181C3A] before:bg-[#181C3A] py-1 px-2 active-menu"
+          : "text-[#808080]"
+        }`}
+      >
+        Promote
+      </Link>
+
+      <Link
+        to="/admin/recruiter/refer"
+        className={`text-sm ${location.pathname === "/admin/recruiter/refer"
+          ? "font-extrabold text-[#181C3A] before:bg-[#181C3A] py-1 px-2 active-menu"
+          : "text-[#808080]"
+        }`}
+      >
+        Refer
+      </Link>
         </div>
       </div>
       
