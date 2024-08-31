@@ -38,7 +38,7 @@ export const recruiterMenu = [
         {
           id: "3e",
           name: "Emails",
-          link: "/admin/recruiter/email",
+          link: "/admin/recruiter/email/custom-mail",
         },
         {
           id: "3f",

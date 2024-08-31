@@ -157,7 +157,6 @@ export const RecruiterRoutes = [
   },
    {
     path: "email",
-    element: <Email />,
     children: [
       {
         path: "custom-mail",
