@@ -41,7 +41,7 @@ function AddCandidates() {
                 autoComplete="off"
                 type="text"
                 {...register("employeeId", { required: true })}
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.employeeId && (
                 <span className="text-xs font-medium text-red-500">
@@ -55,7 +55,7 @@ function AddCandidates() {
                 autoComplete="off"
                 type="text"
                 {...register("firstName", { required: true })}
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.firstName && (
                 <span className="text-xs font-medium text-red-500">
@@ -70,7 +70,7 @@ function AddCandidates() {
                 {...register("surname")}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.surname && (
                 <span className="text-xs font-medium text-red-500">
@@ -85,7 +85,7 @@ function AddCandidates() {
                 {...register("surname")}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.surname && (
                 <span className="text-xs font-medium text-red-500">
@@ -116,7 +116,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    className="input-box h-10 w-full focus:border-gray-300"
                   />
                 )}
               />
@@ -135,7 +135,7 @@ function AddCandidates() {
                 {...register("dateOBbirth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.dateOfBirth && (
                 <span className="text-xs font-medium text-red-500">
@@ -152,7 +152,7 @@ function AddCandidates() {
                 {...register("homeAddress", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-full mt-0 w-full border-2 focus:border-gray-300"
+                className="input-box h-full mt-0 w-full focus:border-gray-300"
               />
               {errors.homeAddress && (
                 <span className="text-xs font-medium text-red-500">
@@ -181,7 +181,7 @@ function AddCandidates() {
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Gender"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                   )}
                 />
@@ -210,7 +210,7 @@ function AddCandidates() {
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Gender"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                   )}
                 />
@@ -240,7 +240,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    className="input-box h-10 w-full focus:border-gray-300"
                   />
                 )}
               />
@@ -256,7 +256,7 @@ function AddCandidates() {
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -285,7 +285,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    className="input-box h-10 w-full focus:border-gray-300"
                   />
                 )}
               />
@@ -316,7 +316,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    className="input-box h-10 w-full focus:border-gray-300"
                   />
                 )}
               />
@@ -332,7 +332,7 @@ function AddCandidates() {
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -348,7 +348,7 @@ function AddCandidates() {
                 {...register("dateOBbirth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.dateOfBirth && (
                 <span className="text-xs font-medium text-red-500">
@@ -376,7 +376,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full border-2 focus:border-gray-300"
+                    className="input-box h-10 w-full focus:border-gray-300"
                   />
                 )}
               />
@@ -392,7 +392,7 @@ function AddCandidates() {
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full border-2 focus:border-gray-300"
+                className="input-box h-10 w-full focus:border-gray-300"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">

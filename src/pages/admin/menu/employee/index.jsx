@@ -14,6 +14,7 @@ import { MoveDiagonal, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
+import { getRandomPastelColor } from "@/utils/helpers";
 
 
 
@@ -28,6 +29,18 @@ export default function EmployeeLists() {
       {
         header: "Name",
         accessorKey: "name",
+        cell: ({ row }) => (
+          <div className="flex gap-x-2 items-center ">
+            <p
+              style={{ backgroundColor: getRandomPastelColor() }}
+              className="bg-[#F3] font-medium text-[#202020] size-8 rounded-full flex justify-center items-center"
+            >
+              {row?.original?.name?.match(/\b\w/g).join("")}
+            </p>
+            <p>{row?.original?.name}</p>
+          </div>
+        ),
+
       },
       { header: "ID Number", accessorKey: "addNo" },
       {

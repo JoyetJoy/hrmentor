@@ -56,7 +56,7 @@ function Post() {
                       autoComplete="off"
                       type="text"
                       {...register("jobtitle", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.jobtitle && (
                       <span className="text-xs font-medium text-red-500">
@@ -93,7 +93,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Gender"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -128,7 +128,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -160,7 +160,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -192,7 +192,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -265,7 +265,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10  w-full border-2 focus:border-gray-300"
+                          className="input-box h-10  w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -296,7 +296,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10  w-full border-2 focus:border-gray-300"
+                          className="input-box h-10  w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -313,7 +313,7 @@ function Post() {
                     <input
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300
+                      className="input-box h-10 w-full focus:border-gray-300
                       "
                     />
                     {errors.postalcode && (

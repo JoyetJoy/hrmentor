@@ -39,7 +39,7 @@ function PostList() {
                                 autoComplete="off"
                                 type="text"
                                 placeholder='Generate'
-                                className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-right placeholder:text-red-500
+                                className="input-box h-10 w-full focus:border-gray-300 placeholder:text-right placeholder:text-red-500
                       
                       "
                             />
@@ -70,7 +70,7 @@ function PostList() {
                                         isSearchable={false}
                                         styles={customSelectStyles}
                                         placeholder="Not Mention Package"
-                                        className="input-box h-10 w-full border-2 focus:border-gray-300"
+                                        className="input-box h-10 w-full focus:border-gray-300"
                                     />
                                 )}
                             />
@@ -139,7 +139,7 @@ function PostList() {
                                             isSearchable={false}
                                             styles={customSelectStyles}
                                             placeholder="Not Mention Package"
-                                            className="input-box h-10 w-full border-2 focus:border-gray-300"
+                                            className="input-box h-10 w-full focus:border-gray-300"
                                         />
                                     )}
                                 />
@@ -158,7 +158,7 @@ function PostList() {
                                         autoComplete="off"
                                         type="text"
                                         placeholder='Minimum range'
-                                        className="input-box h-10 w-full border-2 focus:border-gray-300   placeholder:text-gray-200
+                                        className="input-box h-10 w-full focus:border-gray-300   placeholder:text-gray-200
                       
                       "
                                     />
@@ -166,7 +166,7 @@ function PostList() {
                                         autoComplete="off"
                                         type="text"
                                         placeholder='Maximum range'
-                                        className="input-box h-10 w-full border-2 focus:border-gray-300  placeholder:text-gray-200
+                                        className="input-box h-10 w-full focus:border-gray-300  placeholder:text-gray-200
                       
                       "
                                     />

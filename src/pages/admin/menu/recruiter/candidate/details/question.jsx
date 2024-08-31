@@ -17,7 +17,7 @@ function Question() {
         <h1 className="font-bold text-base pt-3">Questions & Answers</h1>
         <div className="collapse collapse-arrow rounded-sm  bg-[#F0F8FF]">
           <input type="radio" name="my-accordion-2" defaultChecked />
-          <h1 className="collapse-title  font-bold text-base">
+          <h1 className="collapse-title  font-bold text-base after:bg-white">
             How do you handle constructive criticism?
           </h1>
           <div className="collapse-content">

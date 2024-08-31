@@ -99,7 +99,7 @@ function JobInterview() {
                   placeholder="Search"
                 />
               </div>
-              <Link className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
+              <Link to={'/admin/recruiter/interview-guide'} className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
                 <Plus className="size-4" />Add  interview
               </Link>
             </div>

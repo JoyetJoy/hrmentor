@@ -1,3 +1,4 @@
+
 export const customSelectStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -41,6 +42,11 @@ export const customSelectStyles = {
     ...provided,
     color: "#808080",
 
+  }),
+  
+  indicatorSeparator: (base) => ({
+    ...base,
+    display: "none",
   }),
 
 }

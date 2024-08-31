@@ -60,7 +60,7 @@ function PrimaryInformation() {
                       type="text"
                       placeholder="Enter the Employee id"
                       {...register("employeeId", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                      className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                     />
                     {errors.employeeId && (
                       <span className="text-xs font-medium text-red-500">
@@ -77,7 +77,7 @@ function PrimaryInformation() {
                       type="text"
                       placeholder="Enter First Name"
                       {...register("firstName", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                      className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                     />
                     {errors.firstName && (
                       <span className="text-xs font-medium text-red-500">
@@ -92,7 +92,7 @@ function PrimaryInformation() {
                       autoComplete="off"
                       placeholder="Enter Surname"
                       type="text"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                      className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                     />
                     {errors.surname && (
                       <span className="text-xs font-medium text-red-500">
@@ -110,7 +110,7 @@ function PrimaryInformation() {
                       autoComplete="off"
 
                       type="date"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                      className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                     />
                     {errors.dateOfBirth && (
                       <span className="text-xs font-medium text-red-500">
@@ -143,7 +143,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Enter Gender"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs "
+                          className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs "
                         />
                       )}
                     />
@@ -172,7 +172,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Gender"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -201,7 +201,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Gender"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-black"
+                          className="input-box h-10 w-full focus:border-gray-300 placeholder:text-black"
                         />
                       )}
                     />
@@ -232,7 +232,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Gender"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -261,7 +261,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Gender"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -279,7 +279,7 @@ function PrimaryInformation() {
                       {...register("nationalInsurance", { required: true })}
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.nationalInsurance && (
                       <span className="text-xs font-medium text-red-500">
@@ -294,7 +294,7 @@ function PrimaryInformation() {
                 {...register("homeAddress", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box min-h-28 w-full border-2 focus:border-gray-300"
+                className="input-box min-h-28 w-full focus:border-gray-300"
               />
               {errors.homeAddress && (
                 <span className="text-xs font-medium text-red-500">
@@ -314,7 +314,7 @@ function PrimaryInformation() {
                 {...register("communicationAddress", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box min-h-28 w-full border-2 focus:border-gray-300"
+                className="input-box min-h-28 w-full focus:border-gray-300"
               />
               {errors.communicationAddress && (
                 <span className="text-xs font-medium text-red-500">
@@ -330,7 +330,7 @@ function PrimaryInformation() {
                       autoComplete="off"
                       type="text"
                       {...register("homeAddress", { required: true })}
-                      className="input-box min-h-28 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                      className="input-box min-h-28 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                     />
                     {errors.homeAddress && (
                       <span className="text-xs font-medium text-red-500">
@@ -350,7 +350,7 @@ function PrimaryInformation() {
                       autoComplete="off"
                       type="text"
                       {...register("communicationAddress", { required: true })}
-                      className="input-box min-h-28 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                      className="input-box min-h-28 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                     />
                     {errors.firstName && (
                       <span className="text-xs font-medium text-red-500">
@@ -376,7 +376,7 @@ function PrimaryInformation() {
                       autoComplete="off"
                       type="text"
                       {...register("department", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.department && (
                       <span className="text-xs font-medium text-red-500">
@@ -392,7 +392,7 @@ function PrimaryInformation() {
                       autoComplete="off"
                       type="text"
                       {...register("role", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.role && (
                       <span className="text-xs font-medium text-red-500">
@@ -424,7 +424,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Designation"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -442,7 +442,7 @@ function PrimaryInformation() {
                       {...register("dateOfJoinging", { required: true })}
                       autoComplete="off"
                       type="date"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.dateOfJoinging && (
                       <span className="text-xs font-medium text-red-500">
@@ -476,7 +476,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Work location"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -505,7 +505,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Employement Type"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -522,7 +522,7 @@ function PrimaryInformation() {
                       {...register("mobileNumber", { required: true })}
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.mobileNumber && (
                       <span className="text-xs font-medium text-red-500">
@@ -549,7 +549,7 @@ function PrimaryInformation() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Marital status"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -566,7 +566,7 @@ function PrimaryInformation() {
                       {...register("personalEmailAddress", { required: true })}
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.personalEmailAddress && (
                       <span className="text-xs font-medium text-red-500">
@@ -582,7 +582,7 @@ function PrimaryInformation() {
                       {...register("workEmailAddress", { required: true })}
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.workEmailAddress && (
                       <span className="text-xs font-medium text-red-500">

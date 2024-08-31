@@ -18,8 +18,10 @@ import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
+import { InterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import Post from "@/pages/admin/menu/recruiter/jobs/createJob/post";
+import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
 import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
@@ -74,6 +76,14 @@ export const RecruiterRoutes = [
  {
   path:"interview",
   element:<JobInterview/>,
+ },
+ {
+  path:"interview-guide",
+  element:<InterviewGuide/>,
+ },
+ {
+  path:"request-refferals",
+  element:<RequestRefferal/>,
  },
   
   {
@@ -157,6 +167,7 @@ export const RecruiterRoutes = [
   },
    {
     path: "email",
+    element: <Email />,
     children: [
       {
         path: "custom-mail",

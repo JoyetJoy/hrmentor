@@ -154,7 +154,7 @@ function Application() {
                               type="text"
                               placeholder="Type Here"
                               {...register("employeeId", { required: true })}
-                              className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
+                              className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs"
                             />
                             {errors.employeeId && (
                               <span className="text-xs font-medium text-red-500">
@@ -190,7 +190,7 @@ function Application() {
                                   isSearchable={false}
                                   styles={customSelectStyles}
                                   placeholder="Select"
-                                  className="input-box h-10 w-full border-2 focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs "
+                                  className="input-box h-10 w-full focus:border-gray-300 placeholder:text-[#7F7F7F] placeholder:text-xs "
                                 />
                               )}
                             />

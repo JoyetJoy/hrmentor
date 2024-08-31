@@ -83,7 +83,7 @@ export const WorkInformation = () => {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Designation"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -109,7 +109,7 @@ export const WorkInformation = () => {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Designation"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -144,7 +144,7 @@ export const WorkInformation = () => {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Designation"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -175,7 +175,7 @@ export const WorkInformation = () => {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Designation"
-                          className="input-box h-10 w-full border-2 focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -193,7 +193,7 @@ export const WorkInformation = () => {
                       autoComplete="off"
                       type="text"
                       {...register("department", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.department && (
                       <span className="text-xs font-medium text-red-500">
@@ -209,7 +209,7 @@ export const WorkInformation = () => {
                       autoComplete="off"
                       type="text"
                       {...register("department", { required: true })}
-                      className="input-box h-10 w-full border-2 focus:border-gray-300"
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.department && (
                       <span className="text-xs font-medium text-red-500">
