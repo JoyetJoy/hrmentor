@@ -20,10 +20,19 @@ function History() {
       />
 
       <div className="h-full w-full rounded-md bg-white py-5">
-        <div className="mx-auto w-full max-w-2xl flex flex-col gap-2  relative">
-          <Disclosure as="div"defaultOpen={true} className="rounded-md bg-[#F5F5F5] p-3">  
+        <div className="relative mx-auto flex w-full max-w-2xl flex-col gap-2">
+          <Disclosure
+            as="div"
+            defaultOpen={true}
+            className="rounded-md bg-[#F5F5F5] p-3"
+          >
             <DisclosureButton className="group flex w-full items-center justify-between">
-              <div className="size-4 bg-[#00B448] rounded-full"/>
+              <div className="flex items-center gap-x-5">
+                <div className="size-4 rounded-full bg-[#00B448]" />
+                <p className="text-base font-semibold">
+                  Shajin S Applied Job For UI/UX designer
+                </p>
+              </div>
 
               <ChevronDownIcon className="size-5 fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
             </DisclosureButton>
@@ -62,10 +71,19 @@ function History() {
               </div>
             </DisclosurePanel>
           </Disclosure>
-          <Disclosure as="div"  className="rounded-md bg-[#F5F5F5] p-3" defaultOpen={true}>
-          <DisclosureButton className="group flex w-full items-center justify-between">
-          <div className="size-4 bg-[#00B448] rounded-full"/>
-              <ChevronDownIcon className="size-5 fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-whiteml-5" />
+          <Disclosure
+            as="div"
+            className="rounded-md bg-[#F5F5F5] p-3"
+            defaultOpen={true}
+          >
+            <DisclosureButton className="group flex w-full items-center justify-between">
+              <div className="flex items-center gap-x-5">
+                <div className="size-4 rounded-full bg-[#00B448]" />
+                <p className="text-base font-semibold">
+                Interview Scheduled
+                </p>
+              </div>
+              <ChevronDownIcon className="group-data-[hover]:fill-whiteml-5 size-5 fill-white/60 group-data-[open]:rotate-180" />
             </DisclosureButton>
             <DisclosurePanel className="ml-5 mt-2 text-sm/5">
               <div className="table mx-auto my-4 w-full max-w-2xl">
@@ -101,11 +119,8 @@ function History() {
                 </table>
               </div>
             </DisclosurePanel>
-            
           </Disclosure>
-          <div className=" inset-5 w-0 border-l border-[#00B448] absolute left-5  ">
-
-          </div>
+          <div className="absolute inset-5 left-5 w-0 border-l border-[#00B448]"></div>
         </div>
       </div>
     </div>
