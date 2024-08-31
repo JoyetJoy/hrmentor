@@ -262,3 +262,49 @@ export const activityItems = [
   { icon: '/assets/icons/admin/payroll.svg', label: "Payroll" },
   { icon: '/assets/icons/admin/setup.svg', label: "Setup" },
 ];
+ export const EmailData = [
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  
+
+
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+  {
+    heading: "Final Interview Schedule",
+    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am"
+  },
+];
