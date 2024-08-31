@@ -29,32 +29,18 @@ function Post() {
         backlink={""}
         menu={"Menu"}
         subMenu={""}
-        pageHeading={"Dashbord"}
         currentpath={"Recruiter"}
-        firstLink={"Dashbord"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
-        firstpath={"/admin/recruiter/index"}
-        secondpath={"/admin/recruiter/jobs"}
-        thirdpath={"/admin/recruiter/candidatelist"}
+        activeMenu={"Jobs"} 
       />
       <div className='flex flex-row items-start justify-between gap-3'>
         <div className='w-full '>
-          <div className='flex flex-row items-center justify-between mt-1 mb-3 '>
-            <h1 className='text-sm font-bold text-black flex flex-row gap-1 items-center justify-center'>
-               <ArrowLeft className='size-4' />
-              Create New Job <span className='text-xs border-r'>Post</span></h1>
-            <Link to="" className=' btn text-white bg-bgColor-100 px-6 hover:bg-bgColor-100 min-h-10 h-10'>Next</Link>
+        <div className='flex  items-center justify-between mt-1 mb-3 '>
+            <h1 className='text-lg font-bold text-black flex flex-row gap-2 items-center justify-center'>
+              <ArrowLeft className='size-5' />
+              Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Post</span>
+            </h1>
+          <Link to={"/admin/recruiter/application"} className=' btn text-white rounded-md bg-bgColor-100 px-8 hover:bg-bgColor-100 min-h-11 h-11'>Next</Link>
           </div>
-           {/* <MenuSubHeader
-          heading={"Create New Job"}
-          SecondLink={{label:"Next"}}
-          currentpage={"post"}
-          menuicon={<ArrowLeft className='size-4' />}
-          />  */}
           <div className='w-full bg-white rounded-md  '>
             <div
               onSubmit={handleSubmit(onSubmit)}
@@ -342,15 +328,15 @@ function Post() {
                     Work type
                   </label>
                   <div className='flex flex-row items-start gap-4 '>
-                    <label className="label cursor-pointer flex flex-row items-center justify-start border-2 border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
+                    <label className="label cursor-pointer flex flex-row items-center justify-start border-2  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
                       <input type="checkbox" defaultChecked className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                       <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Remote(work from office)</span>
                     </label>
-                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12 ">
+                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12 ">
                       <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                       <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Work from office</span>
                     </label>
-                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-[#C7C7C7]  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
+                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
                       <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                       <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Hybrid</span>
                     </label>

@@ -58,66 +58,29 @@ function RecruiterJobs() {
       },
 
       {
-        header: "",
+        header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center justify-end gap-3  text-xs ">
-            <Link
-              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              to={"/admin/recruiter/candidate"}
-              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
-            >
-              <MoveDiagonal />
+          <div className="flex items-center gap-2 text-xs   ">
+          <Link
+            to={"/admin/recruiter/candidate"}
+            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+          >
+            <MoveDiagonal className="size-3" />
             </Link>
-            <Link
-              to={"/admin/employees/primary"}
-              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-8 rounded-full"
-            >
-              <img src="/assets/icons/admin/marker.svg" />
-            </Link>
-            <Link className="cursor-pointer flex justify-center items-center text-black bg-[#EBEBF0] size-8 rounded-full">
-              <Trash2 className="size-4" strokeWidth={1} />
-            </Link>
-            {/* <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
-                      <Trash2 className="w-5 h-5" />
-                    </span> */}
-          </div>
+          <Link
+            to={""}
+            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+          >
+            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
+          </Link>
+          <Link className="cursor-pointer flex justify-center items-center  bg-[#EBEBF0]  p-2  rounded-full">
+            <Trash2 className="size-3" />
+          </Link>
+        </div>
         ),
-      },
-      // {
-      //     header: "Status",
-      //     accessorKey: "status",
-      //     cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
-      // },
-
-      // {
-      //     header: "Action",
-      //     accessorKey: "action",
-      //     cell: ({ row }) => (
-      //         <div className="flex items-center justify-start gap-2  text-xs ">
-      //             <Link
-      //                 //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-
-      //                 className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
-      //                 to={"/admin/recruiter/candidate"}
-
-      //             >
-      //                 <MoveDiagonal />
-      //             </Link>
-      //             <Link
-      //                 to={""}
-      //                 className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-8 rounded-full"
-      //             >
-      //                 <img src="/assets/icons/admin/marker.svg" />
-      //             </Link>
-      //             <Link className="cursor-pointer flex justify-center items-center text-black bg-[#EBEBF0] size-8 rounded-full">
-      //                 <Trash2 className="size-4" strokeWidth={1} />
-      //             </Link>
-      //         </div>
-      //     ),
-      // },
+      },    
     ],
-
     []
   );
   return (
@@ -129,6 +92,7 @@ function RecruiterJobs() {
         currentpath={"Recruiter"}
         activeMenu={"Jobs"}
       />
+      
       <div className="flex justify-between items-center mb-4 mt-2">
       <div className="text-white font-semibold flex  items-center gap-2">
           <Link
