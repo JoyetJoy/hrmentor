@@ -22,7 +22,7 @@ function MenuSubHeader(props) {
 
   return (
     <div>
-      <div className="flex flex-row justify-between items-center my-2">
+      <div className="flex flex-row justify-between items-center my-1">
         <h1 className='text-lg font-bold text-[#2C2C2C] flex flex-row gap-1 items-center justify-center'>
           {menuicon}
           {heading} <span className='text-xs'>{currentpage}</span>
@@ -50,7 +50,7 @@ function MenuSubHeader(props) {
       <Link
         to={Secondpath}
         onClick={SecondLink.onClick}
-        className="btn bg-[#030E5C] text-white text-xs rounded-[0.3rem] hover:bg-[#030E5C] min-w-24 min-h-11 h-11 whitespace-nowrap"
+        className="btn bg-[#030E5C] text-white text-xs rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap"
       >
         {Secondicon}
         {SecondLink.label}

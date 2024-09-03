@@ -1,9 +1,7 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import RecruiterHeader from "@/components/common/RecruiterHeader";
-import AddEducation from "@/components/popups/employees/view/AddEducation";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Trash2 } from "lucide-react";
+import { MoveDiagonal, } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 

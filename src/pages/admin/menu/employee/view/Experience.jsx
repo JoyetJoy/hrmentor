@@ -1,5 +1,4 @@
 
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddExperience from "@/components/popups/employees/view/AddExperience";
@@ -50,23 +49,24 @@ export const Experience = () => {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs   ">
-          <Link
-            to={`/sales/invoices/detail-view/${row?.original?.id}`}
-            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
-          >
-            <MoveDiagonal className="size-3" />
+            <Link
+              to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
+            >
+              <MoveDiagonal className="size-3" />
+              </Link>
+            <Link
+              to={""}
+              onClick={setEditOpen}
+              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+            >
+              <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
             </Link>
-          <Link
-            to={""}
-            onClick={setEditOpen}
-            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
-          >
-            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
-          </Link>
-          <Link className="cursor-pointer flex justify-center items-center text-[#AB2727] bg-[#EBEBF0]  p-2  rounded-full">
-            <Trash2 className="size-3" />
-          </Link>
-        </div>
+            <Link className="cursor-pointer flex justify-center items-center text-[#AB2727] bg-[#EBEBF0]  p-2  rounded-full">
+              <Trash2 className="size-3" />
+            </Link>
+          </div>
+          
         ),
       },
     ],

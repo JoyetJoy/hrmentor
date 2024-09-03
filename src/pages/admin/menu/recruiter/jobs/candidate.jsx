@@ -12,8 +12,6 @@ import {
   Search,
   Trash2,
 } from "lucide-react";
-import ProjectManagerHeader from "@/components/common/ProjectManagerHeader";
-import RecruiterHeader from "@/components/common/RecruiterHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 
 function Candidate() {

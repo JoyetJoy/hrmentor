@@ -7,7 +7,7 @@ export const employeeMenu= [
     {
         id:2,
         name:"Settings",
-        link:"/admin/employees/settings/employee-type"
+        link:"/admin/employees/settings/employment-type"
     },
 ]
 

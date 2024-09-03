@@ -40,7 +40,7 @@ export default function Pagination({
   };
   return (
     // mt-10
-    <div className="flex bg-white mt-4 pt-3 h-12 text-zinc-700  justify-end gap-10 items-center">
+    <div className="flex mt-4 pt-3 h-12 text-zinc-700  justify-end gap-10 items-center">
       <div className="flex gap-3 items-center px-5">
         <button
           style={{
@@ -52,7 +52,7 @@ export default function Pagination({
         >
           Previous
         </button>
-        {currentPage > 4 && (
+        {/* {currentPage > 4 && (
           <button
             style={{
               color: currentPage === 1 ? "#545454" : "#2E2E2E",
@@ -63,7 +63,7 @@ export default function Pagination({
           >
             Start ...
           </button>
-        )}
+        )} */}
         {pageNumbers.map((page) => (
           <button
             style={{
@@ -79,7 +79,7 @@ export default function Pagination({
           </button>
         ))}
         {console.log(totalPages - currentPage)}
-        {totalPages > 7 && totalPages - currentPage > 3 && (
+        {/* {totalPages > 7 && totalPages - currentPage > 3 && (
           <button
             style={{
               color: currentPage === totalPages ? "#545454" : "#2E2E2E",
@@ -90,7 +90,7 @@ export default function Pagination({
           >
             ... End
           </button>
-        )}
+        )} */}
         <button
           style={{
             color: currentPage === totalPages ? "#545454" : "#2E2E2E",

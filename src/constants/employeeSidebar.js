@@ -58,7 +58,7 @@ export const employeesSidebarList = [
 export const employeesSettingsSideList = [
   {
     id: 1,
-    link: "/admin/employees/settings/employee-type",
+    link: "/admin/employees/settings/employment-type",
     name: "Employee Type",
   },
   {
@@ -93,7 +93,7 @@ export const employeesSettingsSideList = [
   },
   {
     id: 8,
-    link: "/admin/employees/settings/eeo-job",
+    link: "/admin/employees/settings/eeo-category",
     name: "EEO Job Categorys",
   },
 

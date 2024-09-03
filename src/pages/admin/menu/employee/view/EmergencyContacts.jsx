@@ -1,5 +1,4 @@
 
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -88,7 +87,7 @@ export const EmergencyContacts = () => {
               </div> */}
                <MenuSubHeader
                 heading={"Emergency Contact"}
-                SecondLink={{ label: "Add Emergency Contact ", onClick: setPopupOpen }}
+                SecondLink={{ label: "Add Contact ", onClick: setPopupOpen }}
                 Secondicon={ <Plus className="size-4" />}
                 />
             <div className="mt-2">

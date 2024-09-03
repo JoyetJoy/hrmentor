@@ -6,19 +6,23 @@ export const customSelectStyles = {
     border: "none",
     backgroundColor: "#fff",
     textTransform: "capitalize",
+    padding:"0",
     
   }),
 
   option: (provided) => ({
     ...provided,
     color: "#333",
-    textTransform: "capitalize"
+    textTransform: "capitalize",
+   
   }),
   menuList: (base) => ({
     ...base,
     "::-webkit-scrollbar": {
       width: "1px",
       height: "0px",
+      padding: "0",
+      
     },
     "::-webkit-scrollbar-track": {
       background: "#f1f1f1",
@@ -33,20 +37,28 @@ export const customSelectStyles = {
   singleValue: (provided) => ({
     ...provided,
     color: "#3A3A3A",
+   
   }),
   placeholder: (provided) => ({
     ...provided,
-    color: "#808080",
+    color: "#7F7F7F",
+    fontSize: '0.875rem',
+    lineHeight:' 1.25rem',
+   
+   
   }),
   input: (provided) => ({
     ...provided,
     color: "#808080",
+   
+    
 
   }),
   
   indicatorSeparator: (base) => ({
     ...base,
     display: "none",
+     padding: "0", 
   }),
 
 }
@@ -124,6 +136,7 @@ export const customDropSelectStyles = {
   placeholder: (provided) => ({
     ...provided,
     color: "#808080",
+    padding:"0",
   }),
   input: (provided) => ({
     ...provided,
@@ -132,8 +145,9 @@ export const customDropSelectStyles = {
   }),
   menu: ({ width, ...css }) => ({
     ...css,
-    width: "310px",
+    width: "200px",
     minWidth: "100%",
+    
 }),
 
 }

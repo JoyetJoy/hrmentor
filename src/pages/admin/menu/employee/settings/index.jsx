@@ -1,7 +1,5 @@
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
-// import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
 import { TableData } from "@/constants/tableDummy";
@@ -20,37 +18,28 @@ export const EmployeeSettings = () => {
         header: "Sl No",
         accessorKey: "sl no",
       },
-      { header: "Work Location", accessorKey: "location" },
+      { header: "Employee Type Name", accessorKey: "name" },
       {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
       },
-
-
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center justify-start gap-3  text-xs ">
-            {/* <Link
-              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              to={""}
-
-              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
-            >
-              <MoveDiagonal className="size-3" />
-            </Link> */}
+          <div className="flex items-center gap-2 text-xs   ">
             <Link
-              to={"/admin/employees/primary"}
-              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-7 rounded-full"
+              to={""}
+              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
             >
-              <img src="/assets/icons/admin/marker.svg" className="w-full object-contain" />
+              <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
             </Link>
-            <Link className="cursor-pointer flex justify-center items-center  bg-[#EBEBF0]  p-2  rounded-full">
-            <Trash2 className="size-3" />
-          </Link>
+            <Link className="cursor-pointer flex justify-center items-center text-[#2C2C2C] bg-[#EBEBF0]  p-2  rounded-full">
+              <Trash2 className="size-3" />
+            </Link>
           </div>
+          
         ),
       },
     ],
