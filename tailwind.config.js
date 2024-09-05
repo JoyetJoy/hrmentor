@@ -10,6 +10,7 @@ export default {
     extend: {
       fontFamily: {
         monorope: ['"Manrope"'],
+        poppins:["Poppins"]
       },
       colors: {
         gray: {

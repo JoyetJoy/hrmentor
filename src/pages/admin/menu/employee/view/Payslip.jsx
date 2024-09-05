@@ -1,5 +1,4 @@
 
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";

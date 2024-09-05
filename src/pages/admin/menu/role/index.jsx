@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 export const MenuRoles = () => {
   const [collapseState, setCollapseState] = useState(false);
@@ -37,21 +36,21 @@ export const MenuRoles = () => {
         icon={  <ChevronRight className="size-3" />}
 
       />
-      <div className="flex flex-row mt-2 gap-7">
+      <div className="flex flex-row mt-1 gap-4">
         <RoleSidebar />
         <div className="w-full bg-white px-10 pt-9 rounded-md">
-          <h1 className="text-base text-black font-bold">Add New Role</h1>
+          <h1 className="text-xl text-black font-bold">Add New Role</h1>
           <hr className="border-b-1 border-gray-300 my-1" />
-          <div className="flex flex-row  items-center gap-4 pt-6">
-            <h1 className="flex flex-row whitespace-nowrap  text-sm">
-              Role Name <Asterisk className="size-3 text-red-700" />:
+          <div className="flex flex-row  items-center gap-2 pt-6">
+            <h1 className="flex flex-row whitespace-nowrap  required text-sm">
+              Role Name :
             </h1>
             <input
               type="text"
               placeholder="Enter role name"
-              className="input w-full border border-gray-300 max-w-xs h-10 focus:border-gray-300 focus:outline-none placeholder:text-[#7F7F7F] placeholder:text-xs "
+              className="input w-full border border-black max-w-xs  h-11 min-h-11 focus:border-black focus:outline-none placeholder:text-[#2C2C2C] placeholder:text-xs "
             />
-            <button className="text-white btn px-20 bg-textcolor-blue hover:bg-textcolor-blue h-10 min-h-10">
+            <button className="text-white btn px-20 bg-textcolor-blue hover:bg-textcolor-blue h-11 min-h-11">
               Create
             </button>
           </div>
@@ -67,21 +66,21 @@ export const MenuRoles = () => {
                 className=""
                 defaultOpen={true}
               >
-                <DisclosureButton className="group flex w-full items-center  gap-1 mb-2 ">
-                  <span className="text-sm font-semibold text-black group-data-[hover]:text-black">
+                <DisclosureButton className="group flex w-full items-center  gap-1 mb-1 ">
+                  <span className="text-base font-bold text-black group-data-[hover]:text-black">
                     {items?.roleTypes}
                   </span>
-                  <ChevronDown className="size-4 fill-white/60 group-data-[hover]:fill-white/50 group-data-[open]:rotate-180" />
+                  <ChevronDown className="size-5 fill-white/60 group-data-[hover]:fill-white/50 group-data-[open]:rotate-180" />
                 </DisclosureButton>
 
                 {console.log(items)}
                 <DisclosurePanel className="grid grid-cols-3  gap-3 mb-5  ">
-                  <div className="flex gap-x-1.5 col-span-3">
+                  <div className="flex gap-x-1.5 col-span-3 my-3 items-center">
                     <input
                       type="checkbox"
                       name=""
                       id=""
-                      className="accent-black border border-gray-300"
+                      className="accent-black border border-gray-300  size-4"
                     />
                     <p className="text-sm">Select All</p>
                   </div>
@@ -95,8 +94,8 @@ export const MenuRoles = () => {
                         type="checkbox"
                         className="peer    min-h-1 ps-3 pe-3 overflow-hidden "
                       />
-                      <div className="flex   w-full justify-between items-center text-[0.78rem] collapse-title  min-h-0 p-3 ps-4 pe-12">
-                        <div className="font-bold text-sm text-textcolor-300">
+                      <div className="flex  w-full justify-between items-center text-[0.78rem] collapse-title  min-h-0 p-3 ps-4 pe-12">
+                        <div className="font-semibold font-poppins text-sm text-textcolor-300">
                           {category.guard_name}{" "}
                         </div>
 
@@ -110,12 +109,12 @@ export const MenuRoles = () => {
                         {category?.data?.map((item) => (
                           <div
                             key={item?.name}
-                            className="flex items-center font-medium mt-3 justify-between pr-1 gap-3"
+                            className="flex items-center font-poppins font-medium mt-3 justify-between pr-1 gap-3"
                           >
-                            <p>{item?.name}</p>
+                            <p className="text-[13px] text-[#3A3A3A] font-poppins">{item?.name}</p>
                             <input
                               type="checkbox"
-                              className="accent-black size-3"
+                              className="accent-black size-4 border border-black"
                             />
                           </div>
                         ))}
@@ -125,7 +124,8 @@ export const MenuRoles = () => {
                   {/* <div className="h-10 w-full bg-black"></div>
                 <div className="h-10 w-full bg-black"></div> */}
                 </DisclosurePanel>
-                <hr className="my-1 border border-gray-300" />
+                
+                 <div  className="my-1 border-b border-[#EAEAEA] "></div>
               </Disclosure>
             ))}
             {/* </div> */}

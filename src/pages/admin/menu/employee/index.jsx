@@ -12,7 +12,6 @@ import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal, Trash2 } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import { getRandomPastelColor } from "@/utils/helpers";
 
@@ -104,7 +103,7 @@ export default function EmployeeLists() {
       activeMenu={'Employees'}
 
       />
-      <div className="flex justify-between items-center mt-2 mb-4">
+      <div className="flex justify-between items-center mt-1 mb-4">
         <label className="input outline-none  border  border-[#EBEBF0] rounded-md min-w-96  flex items-center min-h-10  h-10 gap-2">
           <Search className="text-gray-200 object-contain size-4" />
           <input

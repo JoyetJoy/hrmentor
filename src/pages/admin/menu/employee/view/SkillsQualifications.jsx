@@ -1,4 +1,3 @@
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddEducation from "@/components/popups/employees/view/AddEducation";
@@ -15,8 +14,6 @@ export const SkillsQualifications = () => {
   const [totalPages, setTotalPages] = useState(10);
   const [popupEditOpen, setEditOpen] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-
-
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
     () => [
@@ -88,29 +85,15 @@ export const SkillsQualifications = () => {
       {/* ----sidebar---- */}
       <div className="flex gap-x-3 ">
       <EditEducation  popupEditOpen={popupEditOpen} setEditOpen={setEditOpen}/>
-
         <EmployeesSidebar />
         <div className=" w-full bg">
           <>
-        
-            {/* <h1 className="font-bold text-lg   ">Skills/Qualifications</h1> */}
-            {/* <div className="text-white text-sm font-semibold flex  items-center gap-2 ">
-                <Link
-                  to={""}
-                  className="btn bg-btncolor text-white hover:bg-btncolor w-full  text-xs flex items-center gap-1"
-                  onClick={setPopupOpen}
-                >
-                  <Plus className="size-4" />
-                  Add Skills/Qualification</Link>
-              </div> */}
                 <MenuSubHeader
                 heading={"Skills/Qualifications"}
                 SecondLink={{ label: "Add Skills/Qualification", onClick: setPopupOpen }}
                 Secondicon={ <Plus className="size-4" />}
                 />
               <AddEducation popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-            
-            
             <div className="pt-2">
               <QueryTable
                 columns={columns}

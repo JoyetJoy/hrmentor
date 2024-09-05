@@ -1,10 +1,9 @@
 import React from "react";
 import { ArrowLeft, ChevronRight, Plus } from "lucide-react";
-import { Select } from "@headlessui/react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import Select from 'react-select'
 import { customSelectStyles } from "@/utils/customStyles";
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -60,60 +59,89 @@ export const WorkInformation = () => {
               className=" grid grid-cols-2 gap-x-3 pt-2"
             >
               <div className="flex flex-col items-baseline  h-screen px-3 py-4 rounded-md h- bg-white border border-gray-300">
-                <h1 className="font-bold text-lg px-3 text-[#2C2C2C]">Reporting to</h1>
+                <h1 className="font-bold  flex flex-row items-center  w-full justify-between text-lg px-3 text-[#2C2C2C]">Reporting to   
+                   <div className="flex gap-1.5 items-center">
+                  <input
+                    type="checkbox"
+                    // onChange={handleAdressCheckbox}
+                    name=""
+                    id=""
+                    className="text-[#848484]  size-4"
+                  />
+                  <p className="whitespace-nowrap text-[13px] font-normal text-[#848484] ">
+                  Doesn't report to anyone
+                  </p>
+                </div></h1>
                 <div className="grid w-full items-start grid-cols-2 gap-y-2 mt-4 ">
-                  <div className="flex px-3 group flex-col space-y-2 ">
-                    <label className="label-text ">
-                      Reporting Manager <span className="text-red-500">*</span>
-                    </label>
-                    <Controller
-                      name="designation"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Designation"
-                          className="input-box h-10 w-full focus:border-gray-300"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="flex px-3 group flex-col space-y-2">
-                    <label className="label-text">
-                      HR Manager<span className="text-red-500">*</span>
-                    </label>
-                    <Controller
-                      name="designation"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Designation"
-                          className="input-box h-10 w-full focus:border-gray-300"
-                        />
-                      )}
-                    />
-                  </div>
+                <div className="group flex flex-col gap-1 px-2 py-2">
+              <label
+                onClick={() => setPopupOpen(true)}
+                className="required label-text"
+              >
+Reporting Manager              </label>
+              <Controller
+                name="reportingManager"
+                className=""
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    // required
+                    //   selected={''}
+                    // value={''}
+                    //   onChange={(selectedOption) => {
+                    //     handle(selectedOption);
+                    //     field.onChange(selectedOption);
+                    //   }}
+                    //   options={}
+                    isSearchable={false}
+                    styles={customSelectStyles}
+                    placeholder="Select Reporting Manger"
+                    className="input-box h-10 w-full   rounded-md placeholder:text-sm placeholder:text-[#7F7F7F] border-[#A7A7A7] focus:border-[#A7A7A7]"
+                  />
+                )}
+              />
+              {errors.reportingManager && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.reportingManager?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col gap-1 px-2 py-2">
+              <label
+                onClick={() => setPopupOpen(true)}
+                className="required label-text"
+              >
+                HR Manager
+              </label>
+              <Controller
+                name="hrManager"
+                className=""
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    // required
+                    //   selected={''}
+                    // value={''}
+                    //   onChange={(selectedOption) => {
+                    //     handle(selectedOption);
+                    //     field.onChange(selectedOption);
+                    //   }}
+                    //   options={}
+                    isSearchable={false}
+                    styles={customSelectStyles}
+                    placeholder="Select HR Manager"
+                    className="input-box h-10 w-full   rounded-md placeholder:text-sm placeholder:text-[#7F7F7F] border-[#A7A7A7] focus:border-[#A7A7A7]"
+                  />
+                )}
+              />
+              {errors.hrManager && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.hrManager?.message}
+                </span>
+              )}
+            </div>
                 </div>
               </div>
               <div className="flex flex-col  px-5 py-4 rounded-md bg-white border border-[#EBEBF0]">
@@ -123,100 +151,109 @@ export const WorkInformation = () => {
                   onSubmit={handleSubmit(onSubmit)}
                   className="grid w-full grid-cols-2 gap-x-2 mt-4 "
                 >
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text  flex items-center gap-1"> Ethnicity
+                  <div className="group flex flex-col gap-1 px-2 py-2">
+              <label
+                onClick={() => setPopupOpen(true)}
+                className=" label-text"
+              >
+Ethnicity              </label>
+              <Controller
+                name="ethnicity"
+                className=""
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    // required
+                    //   selected={''}
+                    // value={''}
+                    //   onChange={(selectedOption) => {
+                    //     handle(selectedOption);
+                    //     field.onChange(selectedOption);
+                    //   }}
+                    //   options={}
+                    isSearchable={false}
+                    styles={customSelectStyles}
+                    placeholder="Select Name"
+                    className="input-box h-10 w-full   rounded-md placeholder:text-sm placeholder:text-[#7F7F7F] border-[#A7A7A7] focus:border-[#A7A7A7]"
+                  />
+                )}
+              />
+              {errors.ethnicity && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.ethnicity?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col gap-1 px-2 py-2">
+              <label
+                onClick={() => setPopupOpen(true)}
+                className="required label-text"
+              >
+                EEO Job Category
+              </label>
+              <Controller
+                name="jobCategory"
+                className=""
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    // required
+                    //   selected={''}
+                    // value={''}
+                    //   onChange={(selectedOption) => {
+                    //     handle(selectedOption);
+                    //     field.onChange(selectedOption);
+                    //   }}
+                    //   options={}
+                    isSearchable={false}
+                    styles={customSelectStyles}
+                    placeholder="Select Job Catrgory"
+                    className="input-box h-10 w-full   rounded-md placeholder:text-sm placeholder:text-[#7F7F7F] border-[#A7A7A7] focus:border-[#A7A7A7]"
+                  />
+                )}
+              />
+              {errors.jobCategory && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.jobCategory?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col gap-1 px-2 py-2">
+              <label className=" label-text"> Probation Period (In Days)
+              </label>
+              <input
+                autoComplete="off"
+                type="text"
+                placeholder="Enter details"
+                {...register("firstName", { required: true })}
+                className="input-box h-10 w-full   rounded-md placeholder:text-sm placeholder:text-[#7F7F7F] border-[#A7A7A7] focus:border-[#A7A7A7]"
+              />
+              {errors.firstName && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.firstName?.message}
+                </span>
+              )}
+            </div>
+                  <div className="group flex flex-col gap-1 px-2 py-2">
+              <label className=" label-text"> Notice Period(In Days)
+              </label>
+              <input
+                autoComplete="off"
+                type="text"
+                placeholder="Enter details"
+                {...register("firstName", { required: true })}
+                className="input-box h-10 w-full   rounded-md placeholder:text-sm placeholder:text-[#7F7F7F] border-[#A7A7A7] focus:border-[#A7A7A7]"
+              />
+              {errors.firstName && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.firstName?.message}
+                </span>
+              )}
+            </div>
 
-                    </label>
-                    <Controller
-                      name="designation"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Designation"
-                          className="input-box h-10 w-full focus:border-gray-300"
-                        />
-                      )}
-                    />
-                    {errors.designation && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.designation?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text  flex items-center gap-1">EEO Job Category
-                    <span className="text-red-500">*</span>
-                    </label>
-                    <Controller
-                      name="designation"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Designation"
-                          className="input-box h-10 w-full focus:border-gray-300"
-                        />
-                      )}
-                    />
-                    {errors.designation && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.designation?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text flex items-center gap-1">
-                    Probation Period(In Days)
-                    </label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("department", { required: true })}
-                      className="input-box h-10 w-full focus:border-gray-300"
-                    />
-                    {errors.department && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.department?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex px-3 group flex-col py-2">
-                    <label className="label-text flex items-center gap-1">
-                    Notice Period(In Days)
-                    </label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("department", { required: true })}
-                      className="input-box h-10 w-full focus:border-gray-300"
-                    />
-                    {errors.department && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.department?.message}
-                      </span>
-                    )}
-                  </div>
+              
                 </div>
               </div>
             </div>

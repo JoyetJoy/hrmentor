@@ -17,6 +17,7 @@
 
 body {
   font-family: "Manrope", sans-serif;
+  
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   max-width: 100vw !important;
@@ -50,7 +51,10 @@ body::-webkit-scrollbar-thumb {
   content: " *";
   color: red;
 }
-
+input::-webkit-calendar-picker-indicator {
+  color: #8C8989 ;
+  opacity: 1
+}
 .overflow-y-min::-webkit-scrollbar {
   width: 5px;
 }
@@ -169,3 +173,14 @@ select:focus {
   margin-top: calc(0.0rem* calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.0rem* var(--tw-space-y-reverse));
 }
+.css-hlgwow {
+  padding: 0 !important;
+}
+
+.css-tj5bde-Svg{
+  color:#8C8989 !important;
+  stroke-width: 0 !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+

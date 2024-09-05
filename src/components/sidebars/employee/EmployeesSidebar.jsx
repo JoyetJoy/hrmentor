@@ -6,7 +6,7 @@ function EmployeesSidebar({ sidebarList = employeesSidebarList }) {
   const { pathname } = useLocation();
   console.log(pathname);
   return (
-    <div className="bg-white rounded-md px-5 min-h-screen min-w-60 py-4 ">
+    <div className="bg-white rounded-md px-5 min-h-screen min-w-56 py-4 ">
       <ul className="flex flex-col  gap-4 justify-center text-sm text-[#7F7F7F] font-medium">
         {sidebarList?.map((item) => (
           <li

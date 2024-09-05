@@ -1,6 +1,14 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import CreateEmployee from "@/pages/admin/menu/employee/create";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
+import Department from "@/pages/admin/menu/employee/settings/Department";
+import Designation from "@/pages/admin/menu/employee/settings/Designation";
+import DocumentCategory from "@/pages/admin/menu/employee/settings/DocumentCategory";
+import DocumentType from "@/pages/admin/menu/employee/settings/DocumentType";
+import EeeoCategory from "@/pages/admin/menu/employee/settings/EeeoCategory";
+import Ethnicity from "@/pages/admin/menu/employee/settings/Ethnicity";
+import WorkLocation from "@/pages/admin/menu/employee/settings/WorkLocation";
+
 import { BankDetails } from "@/pages/admin/menu/employee/view/BankDetails";
 import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Documents } from "@/pages/admin/menu/employee/view/Documents";
@@ -70,8 +78,36 @@ export const EmployeeRoutes = [
     path: "settings",
     children: [
       {
-        path: ":id",
+        path: "employment-type",
         element: <EmployeeSettings />,
+      },
+      {
+        path: "designation",
+        element: <Designation />,
+      },
+      {
+        path: "department",
+        element: <Department />,
+      },
+      {
+        path: "work-location",
+        element: <WorkLocation />,
+      }, 
+      {
+        path: "document-category",
+        element: <DocumentCategory />,
+      }, 
+      {
+        path: "document-type",
+        element: <DocumentType />,
+      },
+      {
+        path: "ethnicity",
+        element: <Ethnicity />,
+      },
+      {
+        path: "eeo-category",
+        element: <EeeoCategory />,
       },
     ],
   },

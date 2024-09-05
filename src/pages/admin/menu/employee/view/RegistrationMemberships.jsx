@@ -1,4 +1,3 @@
-import EmployeeHeader from "@/components/common/EmployeeHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import AddRegistrationMembership from "@/components/popups/employees/view/AddRegistrationMembership";

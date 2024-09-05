@@ -1,4 +1,3 @@
-import RecruiterHeader from "@/components/common/RecruiterHeader";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";

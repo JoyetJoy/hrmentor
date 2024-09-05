@@ -31,11 +31,11 @@ function MenuHeader(props) {
   const menuItem = currentMenu.find((item) => item.name === activeSubMenu);
 
 
-  const isSpecialPath = ['Employee','Settings', 'Role', 'Subscription'].includes(currentpath);
+  const isSpecialPath = ['Employee','Settings', 'Role', 'Subscription','Add Employee',"Employee Detail"].includes(currentpath);
 
   return (
-    <div className="flex flex-col">
-      <div className={`bg-white h-12 py-2 flex flex-row items-center justify-between rounded-md my-2 ${isSpecialPath ? "pl-6 pr-16" : "pl-6 pr-6"} `}>
+    <>
+      <div className={`bg-white min-h-11 py-2 flex flex-row items-center justify-between rounded-md my-2 ${isSpecialPath ? "pl-6 pr-20" : "pl-6 pr-6"} `}>
         <div className={`text-sm font-semibold  text-[#030E5C] flex items-center justify-between`}>
           <ArrowLeft className="size-4 mr-2" />
           {menu}
@@ -46,7 +46,7 @@ function MenuHeader(props) {
             {currentpath}
           </span>
         </div>
-        <h1 className="text-[0.8rem] font-medium text-black flex items-center justify-between gap-1">
+        <h1 className="text-[0.8rem] font-medium text-black flex items-center cursor-pointer justify-between gap-1">
           {centertextmain}
           <span className="text-textcolor-lightred font-bold underline underline-offset-4">
             {centertext}
@@ -98,7 +98,7 @@ function MenuHeader(props) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

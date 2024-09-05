@@ -22,7 +22,7 @@ function MenuSubHeader(props) {
 
   return (
     <div>
-      <div className="flex flex-row justify-between items-center my-2">
+      <div className="flex flex-row justify-between items-center my-1">
         <h1 className='text-lg font-bold text-[#2C2C2C] flex flex-row gap-1 items-center justify-center'>
           {menuicon}
           {heading} <span className='text-xs'>{currentpage}</span>
@@ -32,9 +32,9 @@ function MenuSubHeader(props) {
     {isPrimaryPath && (
       <Link
         to=""
-        className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 min-w-40 shadow-none flex items-center justify-center gap-1 min-h-11 h-11"
+        className="btn bg-bgColor-300 text-xs font-bold text-[#2C2C2C] hover:bg-bgColor-300 min-w-40 shadow-none flex items-center justify-center gap-1 min-h-11 h-11 px-6"
       >
-        <Share2 className="size-4" />
+        <Share2 className="size-4" color='black' />
         Onboarding Form
       </Link>
     )}
@@ -42,7 +42,7 @@ function MenuSubHeader(props) {
       <Link
         to={Firstpath}
         onClick={FirstLink.onClick}
-        className="btn bg-[#030E5C] text-white text-xs flex flex-row hover:bg-[#030E5C] min-w-24 min-h-11 h-11"
+        className="btn bg-[#030E5C] text-white text-xs flex flex-row  hover:bg-[#030E5C] min-w-28 min-h-11 h-11"
       >
         {FirstLink.label}
       </Link>
@@ -50,7 +50,7 @@ function MenuSubHeader(props) {
       <Link
         to={Secondpath}
         onClick={SecondLink.onClick}
-        className="btn bg-[#030E5C] text-white text-xs rounded-[0.3rem] hover:bg-[#030E5C] min-w-24 min-h-11 h-11 whitespace-nowrap"
+        className="btn bg-[#030E5C] text-white text-xs rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap"
       >
         {Secondicon}
         {SecondLink.label}
