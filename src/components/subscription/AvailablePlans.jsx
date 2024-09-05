@@ -10,13 +10,13 @@ export default function AvailablePlans({ data }) {
   return (
     <>
       <PurchasePlan isOpen={isOpen} closeModal={closeModal} />
-      <div className="flex flex-col border border-gray-300 shadow rounded-2xl pt-16 pb-6">
+      <div className="flex flex-col shadow-lg rounded-2xl pt-16 pb-6 w-11/12">
         <div className="flex flex-col items-center text-center mb-6">
-          <h1 className="text-black text-4xl font-semibold">
+          <h1 className="text-black text-[38px] font-semibold">
             {price}
-            <span className="text-lg">/Month</span>
+            <span className="text-xl font-semibold">/Month</span>
           </h1>
-          <h3 className="text-sm text-black font-semibold">{name}</h3>
+          <h3 className="text-lg text-[#101828] font-semibold">{name}</h3>
         </div>
         {list.map((section, sectionIndex) => (
           <div
@@ -24,7 +24,7 @@ export default function AvailablePlans({ data }) {
             className="flex flex-col gap-1 items-baseline px-6 my-1 "
           >
             <h1
-              className="text-sm font-semibold my-1"
+              className="text-base font-semibold my-1"
               style={{ color: section.textColor }}
             >
               {section.title}
@@ -32,7 +32,7 @@ export default function AvailablePlans({ data }) {
             {section.value.map((item, itemIndex) => (
               <p
                 key={itemIndex}
-                className="flex gap-2 items-center text-xs text-[#667085] py-1"
+                className="flex gap-3 items-center text-sm tracking-wide text-[#667085] py-1"
               >
                 <div
                   style={{ backgroundColor: section.bgColor }}
@@ -49,13 +49,13 @@ export default function AvailablePlans({ data }) {
             ))}
           </div>
         ))}
-        <div className="border-b-2 border-gray-300 mx-6"></div>
+        <div className="border-b-2 border-gray-300 mx-6 mt-4"></div>
         <div className="flex flex-col items-center justify-between  text-center  ">
           <span className="my-5 flex flex-col gap-1">
-            <h1 className="text-xs font-medium text-gray-200 ">
+            <h1 className="text-[15px] font-normal text-[#667085] ">
               Number Of License:10
             </h1>
-            <h2 className="text-xs  font-medium text-red-500">
+            <h2 className="text-sm  font-semibold text-[#E95D39]">
               Valid till 22th July 2024
             </h2>
           </span>

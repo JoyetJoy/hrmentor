@@ -28,7 +28,7 @@ export const MenuSubscription = () => {
         <div className="w-full bg-white px-6 mt-1 rounded-md">
           <ArrowLeft className="relative top-10 left-5 size-7" />
          <div className="flex flex-col  px-56  ">
-        <div className="flex flex-col  my-4 ">
+        <div className="flex flex-col  mt-4  mb-6">
           <p className="text-[#E95D39] text-[15px] font-bold mb-3">Pricing</p>
           <h1 className="text-4xl text-black font-bold ">
             Select Your Plan to Enhance
@@ -65,10 +65,10 @@ export const MenuSubscription = () => {
         </div>
         {/* ----plans----- */}
         <div className="h-[1px] w-full bg-black/10" />
-        <h1 className="font-extrabold text-textcolor-blue my-4 text-lg">
+        <h1 className="font-extrabold text-textcolor-blue  my-7 text-[21px]">
           Available Plans
         </h1>
-        <div className="grid grid-cols-3 gap-4 mb-12">
+        <div className="grid grid-cols-3 mb-12">
           {availablePlanData.map((plan, planIndex) => (
             <AvailablePlans data={plan} key={planIndex} />
           ))}

@@ -83,7 +83,7 @@ function RecruiterJobs() {
     []
   );
   return (
-    <div className="">
+    <>
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -92,33 +92,33 @@ function RecruiterJobs() {
         activeMenu={"Jobs"}
       />
       
-      <div className="flex justify-between items-center mb-4 mt-2">
-      <div className="text-white font-semibold flex  items-center gap-2">
+      <div className="flex justify-between items-centerm pt-3 pb-4">
+      <div className="text-white  flex  items-center gap-2">
           <Link
             to={"/admin/recruiter/post"}
-            className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white text-sm  min-h-10 h-10"
+            className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white font-normal  text-sm  min-h-10 h-10 px-8"
           >
-            <Plus className="size-5" />
+            <Plus className="size-5" strokeWidth={1} />
             Create Job
           </Link>
           <Link
             to={""}
-            className="btn bg-white text-bgColor-100 text-sm hover:bg-white min-h-10 h-10"
+            className="btn bg-white text-[#323232] text-xs border border-[#E6E7EF] hover:border-[#E6E7EF] font-bold rounded-md px-5 hover:bg-white min-h-10 h-10"
           >
             View Current Page
           </Link>
-          <label className="input outline-none border-none pr-28 flex items-center  gap-2 min-h-10 h-10">
-            <Search className="text-gray-200 object-contain size-4" />
+          <label className="input outline-none flex flex-row items-center border border-[#E6E7EF] hover:border-[#E6E7EF] pr-36 rounded-md  gap-2 min-h-10 h-10">
+            <Search className="text-gray-200 object-contain size-4" strokeWidth={2} />
             <input
               type="text"
-              className="grow placeholder:text-sm focus:outline-none text-sm   placeholder:text-gray-200 placeholder:font-normal "
+              className="grow placeholder:text-sm    focus:outline-none text-sm   placeholder:text-gray-200 placeholder:font-medium "
               placeholder="Search"
             />
           </label>
           <div className="bg-white rounded-md p-3 border border-gray-400 min-h-10 h-10">
             <Filter
               className="size-4 text-black font-medium stroke"
-              strokeWidth={2}
+              strokeWidth={1}
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ function RecruiterJobs() {
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       />
-    </div>
+    </>
   );
 }
 

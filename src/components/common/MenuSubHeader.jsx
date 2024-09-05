@@ -32,9 +32,9 @@ function MenuSubHeader(props) {
     {isPrimaryPath && (
       <Link
         to=""
-        className="btn bg-bgColor-300 text-xs text-black hover:bg-bgColor-300 min-w-40 shadow-none flex items-center justify-center gap-1 min-h-11 h-11"
+        className="btn bg-bgColor-300 text-xs font-bold text-[#2C2C2C] hover:bg-bgColor-300 min-w-40 shadow-none flex items-center justify-center gap-1 min-h-11 h-11 px-6"
       >
-        <Share2 className="size-4" />
+        <Share2 className="size-4" color='black' />
         Onboarding Form
       </Link>
     )}
@@ -42,7 +42,7 @@ function MenuSubHeader(props) {
       <Link
         to={Firstpath}
         onClick={FirstLink.onClick}
-        className="btn bg-[#030E5C] text-white text-xs flex flex-row hover:bg-[#030E5C] min-w-24 min-h-11 h-11"
+        className="btn bg-[#030E5C] text-white text-xs flex flex-row  hover:bg-[#030E5C] min-w-28 min-h-11 h-11"
       >
         {FirstLink.label}
       </Link>

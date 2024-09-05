@@ -34,7 +34,7 @@ function MenuHeader(props) {
   const isSpecialPath = ['Employee','Settings', 'Role', 'Subscription','Add Employee',"Employee Detail"].includes(currentpath);
 
   return (
-    <div className="flex flex-col">
+    <>
       <div className={`bg-white min-h-11 py-2 flex flex-row items-center justify-between rounded-md my-2 ${isSpecialPath ? "pl-6 pr-20" : "pl-6 pr-6"} `}>
         <div className={`text-sm font-semibold  text-[#030E5C] flex items-center justify-between`}>
           <ArrowLeft className="size-4 mr-2" />
@@ -57,7 +57,7 @@ function MenuHeader(props) {
             <React.Fragment key={item?.id}>
               <Link
                 to={item?.link}
-                className={`text-base ${activeMenu === item?.name
+                className={`text-sm ${activeMenu === item?.name
                     ? "font-extrabold text-[#181C3A] before:bg-[#181C3A] py-1 px-2 active-menu"
                     : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
                   }`}
@@ -98,7 +98,7 @@ function MenuHeader(props) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
