@@ -1,6 +1,6 @@
 import { customSelectStyles } from "@/utils/customStyles";
 import { Button, Popover, Transition } from "@headlessui/react";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
 import React, { Fragment } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
@@ -21,7 +21,7 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
   return (
     <>
       {popupOpen && (
-        <div className="fixed inset-0 z-[100] flex h-full w-full items-center justify-center bg-black/20">
+        <div className="fixed inset-0 z-[100]   flex h-full w-full items-center justify-center bg-black/20">
           <Popover className="relative">
             <>
               <Transition
@@ -34,21 +34,21 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="w-[50rem] transform rounded-lg bg-white px-9 py-5">
-                  <div className="flex items-center justify-between">
-                    <h1 className="text-sm font-semibold leading-7 text-neutral-700">
+                <Popover.Panel className="w-[48rem] h-full transform rounded-sm bg-white px-9 py-9">
+                  <div className="flex items-center justify-between mb-10">
+                    <h1 className="text-base font-bold leading-7 text-black">
                       Add Right to work
                     </h1>
                     <button
                       onClick={closeModal}
                       className="text-lg font-extrabold text-[#00000080]"
                     >
-                      ✕
+                      <X/>
                     </button>
                   </div>
 
-                  <form className="mt-4 grid grid-cols-1 gap-3">
-                    <div className="flex flex-row items-center gap-2">
+                  <form className="mt-4 grid grid-cols-1 gap-6">
+                    <div className="flex flex-row items-center gap-5">
                       <div className="group flex w-full flex-col space-y-1">
                         <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                           Reference No{" "}
@@ -56,7 +56,7 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
                         <input
                           // {...register("name", { required: true })}
                           type="text"
-                          className="input-box h-10 w-full border border-[#C2C1C1] focus:border-[#C2C1C1]"
+                          className="input-box h-10 w-full border border-[#C2C1C1] focus:border-[#C2C1C1] rounded-md"
                         />
                         {/* {errors.name && (
                       <span className="text-xs font-medium text-red-500">
@@ -65,12 +65,12 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
                     )} */}
                       </div>
                       <div className="group flex w-full flex-col space-y-1">
-                        <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E] ">
                           Expiry Date{" "}
                         </label>
                         <input
                           type="date"
-                          className="input-box h-10 w-full border-[#C2C1C1] focus:border-[#C2C1C1]"
+                          className="input-box h-10 w-full border-[#C2C1C1] focus:border-[#C2C1C1] rounded-md"
                         />
                       </div>
                     </div>
@@ -80,12 +80,12 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
                       </label>
                       <input
                         type="text"
-                        className="input-box h-40 w-full border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        className="input-box h-28 w-full border-[#C2C1C1] focus:border-[#C2C1C1] rounded-md"
                       />
                     </div>
                     <div className="flex flex-row items-center gap-2">
                       <div className="group flex w-full flex-col gap-1 px-2 py-2">
-                        <label className="label-text">Nationality</label>
+                        <label className="label-text">Reviewed by</label>
                         <Controller
                           name="nationality"
                           control={control}
@@ -103,7 +103,7 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
                               isSearchable={false}
                               styles={customSelectStyles}
                               placeholder="Select Nationality"
-                              className="input-box h-10 w-full border-[#C2C1C1] focus:border-[#C2C1C1]"
+                              className="input-box h-10 w-full border-[#C2C1C1] focus:border-[#C2C1C1] rounded-md"
                             />
                           )}
                         />
@@ -118,7 +118,7 @@ function AddRightToWork({ popupOpen, setPopupOpen }) {
                         Upload Certificates
                       </Button>
                     </div>
-                    <div className="mt-2 flex flex-row items-center gap-2">
+                    <div className="mt-2 flex flex-row items-center gap-5">
                       <button className="flex h-10 w-32 cursor-pointer items-center justify-center gap-2 rounded bg-[#030E5C] text-sm font-normal text-white focus:outline-none">
                         Save
                       </button>

@@ -1,6 +1,7 @@
 
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
+import AddEmergency from "@/components/popups/employees/view/AddEmergency";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 // import EmployeesSidebar from "@/components/sidebars/employees/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
@@ -90,6 +91,8 @@ export const EmergencyContacts = () => {
                 SecondLink={{ label: "Add Contact ", onClick: setPopupOpen }}
                 Secondicon={ <Plus className="size-4" />}
                 />
+                              <AddEmergency popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
             <div className="mt-2">
               <QueryTable
                 columns={columns}

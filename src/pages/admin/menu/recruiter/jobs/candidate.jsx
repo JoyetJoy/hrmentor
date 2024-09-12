@@ -20,9 +20,9 @@ function Candidate() {
 
   const list = React.useMemo(() => TableData, [TableData]);
   const linkData = [
-    { name: 'Candidate', path: '/admin/recruiter/candidate' },
-    { name: 'Promote', path: '/admin/recruiter/promote' },
-    { name: 'Refer', path: '/admin/recruiter/refer' },
+    { name: "Candidate", path: "/admin/recruiter/candidate" },
+    { name: "Promote", path: "/admin/recruiter/promote" },
+    { name: "Refer", path: "/admin/recruiter/refer" },
   ];
 
   const columns = React.useMemo(
@@ -79,25 +79,25 @@ function Candidate() {
         activeMenu={"Jobs"}
       />
       <div className="my-4 flex flex-row items-center justify-between">
-        <h1 className="flex items-center gap-1 text-base font-bold">
+        <h1 className="flex items-center gap-1 text-base font-bold text-[#2C2C2C]">
           <ArrowLeft className="size-4" />
           Project manger
         </h1>
-        <div className="flex gap-5 ">
-  {linkData.map((item) => (
-    <Link
-      key={item.name}
-      to={item.path}
-      className={`text-sm relative ${
-        location.pathname === item.path
-          ? "active-menu px-2 py-1 font-extrabold text-[#181C3A] before:bg-[#181C3A]"
-          : "text-[#808080]"
-      }`}
-    >
-      {item.name}
-    </Link>
-  ))}
-</div>
+        <div className="flex gap-5">
+          {linkData.map((item) => (
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`relative text-sm ${
+                location.pathname === item.path
+                  ? "active-menu px-2 font-extrabold text-[#181C3A] before:bg-[#181C3A]"
+                  : "text-[#808080]"
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
       </div>
       <div className="my-3 flex flex-row gap-2">
         <RecruiterSideBar />

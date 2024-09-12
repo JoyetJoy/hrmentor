@@ -10,10 +10,13 @@ import { TableData } from "@/constants/tableDummy";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import MenuHeader from "@/components/common/MenuHeader";
+import { Link } from "react-router-dom";
+import AddPassportVisa from "@/components/popups/employees/view/AddPassportVisa";
+
 export const Documents = () => {
+ 
   const [popupEditOpen, setEditOpen] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
-
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
     () => [
@@ -80,14 +83,18 @@ export const Documents = () => {
                           placeholder="Search"
                         />
                       </div>
-                      <div className="flex gap-2 bg-[#030E5C] items-center input-box h-10 w-40 justify-center text-white" >
+                      <div onClick={()=>setPopupOpen(true)} className="btn bg-[#030E5C] text-white text-xs rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap"
+ >
                         + Add Documents
                       </div>
+                      <AddPassportVisa popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
                     </div>
                     <div className="py-2">
                     <QueryTable columns={columns} list={list} />
                     </div>
                   </div>
+
                 </DisclosurePanel>
               </Disclosure>
             </div>

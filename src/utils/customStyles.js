@@ -47,6 +47,7 @@ export const customSelectStyles = {
    
    
   }),
+ 
   input: (provided) => ({
     ...provided,
     color: "#808080",
@@ -151,3 +152,13 @@ export const customDropSelectStyles = {
 }),
 
 }
+  export const statusDataSelecter={
+    
+      control:(provided,state)=>({
+        ...provided,
+        border: 'none',
+       backgroundColor:' #EBEBF0' ,
+      })
+    
+
+  }

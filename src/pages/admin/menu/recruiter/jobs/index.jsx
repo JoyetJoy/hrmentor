@@ -92,11 +92,11 @@ function RecruiterJobs() {
         activeMenu={"Jobs"}
       />
       
-      <div className="flex justify-between items-centerm pt-3 pb-4">
+      <div className="flex justify-between items-centerm pt-2 pb-3">
       <div className="text-white  flex  items-center gap-2">
           <Link
             to={"/admin/recruiter/post"}
-            className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white font-normal  text-sm  min-h-10 h-10 px-8"
+            className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white font-normal rounded-md  text-sm  min-h-10 h-10 px-8"
           >
             <Plus className="size-5" strokeWidth={1} />
             Create Job

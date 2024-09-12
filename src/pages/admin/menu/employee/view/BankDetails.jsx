@@ -1,6 +1,7 @@
 
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
+import AddBank from "@/components/popups/employees/view/AddBank";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 
 import QueryTable from "@/components/table/QueryTable";
@@ -101,6 +102,8 @@ export const BankDetails = () => {
                 SecondLink={{ label: "Add Account ", onClick: setPopupOpen }}
                 Secondicon={ <Plus className="size-4" />}
                 />
+                              <AddBank popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
             <div className="pt-2 ">
               <QueryTable
                 columns={columns}
