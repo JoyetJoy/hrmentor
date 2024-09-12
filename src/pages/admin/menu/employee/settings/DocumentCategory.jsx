@@ -1,4 +1,5 @@
 import MenuHeader from '@/components/common/MenuHeader';
+import AddDocumentCategory from '@/components/popups/employees/settings/AddDocumentCategory';
 import EmployeesSidebar from '@/components/sidebars/employee/EmployeesSidebar';
 import QueryTable from '@/components/table/QueryTable';
 import { employeesSettingsSideList } from '@/constants/employeeSidebar';
@@ -10,6 +11,7 @@ import { Link } from 'react-router-dom';
 function DocumentCategory() {
     const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
@@ -74,9 +76,11 @@ function DocumentCategory() {
             placeholder="Search"
           />
         </div>
-        <Link className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
-           <Plus className="size-4"/>Add 
-        </Link>
+        <Link onClick={()=>setPopupOpen(true)}  className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
+               <Plus className="size-4"/>Add 
+            </Link>
+            <AddDocumentCategory popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
       </div>
       <div>
         <QueryTable

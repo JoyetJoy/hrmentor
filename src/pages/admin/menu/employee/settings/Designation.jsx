@@ -1,4 +1,5 @@
 import MenuHeader from "@/components/common/MenuHeader";
+import AddDesignation from "@/components/popups/employees/settings/AddDesignation";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
@@ -10,6 +11,8 @@ import { Link } from "react-router-dom";
 function Designation() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupOpen, setPopupOpen] = useState(false);
+
 
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
@@ -74,10 +77,11 @@ function Designation() {
                 placeholder="Search"
               />
             </div>
-            <Link className="btn flex h-11 min-h-11 min-w-28 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-[#030E5C] text-xs text-white hover:bg-[#030E5C]">
-              <Plus className="size-4" />
-              Add
+            <Link onClick={()=>setPopupOpen(true)}  className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
+               <Plus className="size-4"/>Add 
             </Link>
+            <AddDesignation popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+
           </div>
           <div>
             <QueryTable

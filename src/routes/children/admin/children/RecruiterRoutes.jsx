@@ -3,7 +3,6 @@ import CandidatesList from "@/pages/admin/menu/recruiter/candidate";
 import AddCandidates from "@/pages/admin/menu/recruiter/candidate/addcandidates";
 import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
 import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
-import Email from "@/pages/admin/menu/recruiter/candidate/details/email";
 import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
 import CustomMail from "@/pages/admin/menu/recruiter/candidate/details/email/CustomMail";
 import InterviewResult from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewResult";

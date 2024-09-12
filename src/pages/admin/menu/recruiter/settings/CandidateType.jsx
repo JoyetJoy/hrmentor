@@ -1,21 +1,26 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
+import CreateCandidate from "@/components/popups/recruiter/createjob/settings/CreateCandidate";
+import DeleteItem from "@/components/popups/recruiter/createjob/settings/DeleteItem";
+import EditCandidate from "@/components/popups/recruiter/createjob/settings/EditCandidate";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { recruiterSetting } from "@/constants/sidebars/recruiter";
 import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Trash2 } from "lucide-react";
+import { MoveDiagonal, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const CandidateType = () => {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupEditOpen, setPopupEditOpen] = useState(false);
+  const [popupdeleteOpen, setPopupdeleteOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
     () => [
       {
-        header: "Descriptions",
+        header: " Candidate Type",
         accessorKey: "name",
       },
 
@@ -38,7 +43,9 @@ export const CandidateType = () => {
         cell: ({ row }) => (
           <div className="flex items-center justify-center  gap-3  text-xs ">
             <Link
-              to={"/admin/employees/primary"}
+              to={""}
+              onClick={()=>setPopupEditOpen(true)}
+
               className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2  size-7 rounded-full"
             >
               <img
@@ -46,9 +53,12 @@ export const CandidateType = () => {
                 className="w-full object-contain"
               />
             </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
-                  <Trash2 className="w-5 h-5" />
-                </span>
+            <Link
+              onClick={() => setPopupdeleteOpen(true)}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#AB2727]"
+            >
+              <Trash2 className="size-3" />
+            </Link>
           </div>
         ),
       },
@@ -66,7 +76,7 @@ export const CandidateType = () => {
         <div className="flex gap-5 ">
           <Link
             to="#"
-            className="text-sm font-extrabold text-bgColor-100 active-menu before:bg-[#181C3A] px-2 py-0.5"
+            className="text-sm font-extrabold text-bgColor-100 active-menu before:bg-[#181C3A] px-2 "
           >
             General settings
           </Link>
@@ -81,12 +91,17 @@ export const CandidateType = () => {
           active="Candidate Type"
         />
 
-        <div className="w-full bg-white rounded p-5">
-          <div className="flex justify-between w-full mb-4 items-center">
-            <h3 className="text-[#2C2C2C] font-semibold">Candidate type</h3>
-            <div className="h-10 w-fit px-5 text-white bg-[#181C3A] flex items-center font-medium rounded">
-              + Insert Descriptions
-            </div>
+        <div className="w-full bg-white rounded px-9 py-7">
+          <div className="mb-4 flex w-full items-center justify-between">
+            <h3 className="text-base font-bold text-[#2C2C2C]">
+              Candidate Type
+            </h3>
+            <Link
+              onClick={() => setPopupOpen(true)}
+              className="flex h-10 w-fit items-center rounded bg-[#181C3A] px-5 gap-2 text-sm font-normal text-white"
+            >
+              <Plus className="size-5" strokeWidth={1.7} /> Create Candidate Type
+            </Link>
           </div>
           <QueryTable
             columns={columns}
@@ -97,6 +112,17 @@ export const CandidateType = () => {
           />
         </div>
       </div>
+      {popupOpen && (
+        <CreateCandidate popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      )}
+      {popupEditOpen && (
+        <EditCandidate popupEditOpen={popupEditOpen} setPopupEditOpen={setPopupEditOpen} />
+      )}
+      {
+        popupdeleteOpen&&(
+          <DeleteItem popupdeleteOpen={popupdeleteOpen} setPopupdeleteOpen={setPopupdeleteOpen}/>
+        )
+      }
     </div>
   );
 };

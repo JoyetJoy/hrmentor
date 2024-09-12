@@ -1,4 +1,5 @@
 import MenuHeader from '@/components/common/MenuHeader'
+import AddEmail from '@/components/popups/recruiter/candiadate/AddEmail'
 import EmailSideBar from '@/components/sidebars/recruiter/EmailSideBar'
 import Pagination from '@/components/table/Pagination'
 import { EmailData } from '@/constants/dummyData'
@@ -9,6 +10,8 @@ import { Link } from 'react-router-dom'
 const CustomMail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [popupOpen, setPopupOpen] = useState(false);
+
   return (
     <>
     <div>
@@ -27,9 +30,11 @@ const CustomMail = () => {
       <div className='flex items-center justify-between'>
           <h1 className="font-bold text-base pt-3">Custom Mail</h1>
           <div className="flex items-center gap-3 my-4">
-          <Link className="btn bg-bgColor-100 text-white text-xs items-center flex flex-row gap-2 font-semibold rounded-[0.3rem] hover:bg-bgColor-100 min-w-36 min-h-10 h-10 whitespace-nowrap">
+          <Link  onClick={() => setPopupOpen(true)}
+          className="btn bg-bgColor-100 text-white text-xs items-center flex flex-row gap-2 font-semibold rounded-[0.3rem] hover:bg-bgColor-100 min-w-36 min-h-10 h-10 whitespace-nowrap">
                 <Plus className="size-5" />New Mail
               </Link>
+              <AddEmail popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
               <div className="flex gap-2 placeholder:text-black items-center rounded-md input-box min-h-10 h-10 w-full border pr-20 border-[#EBEBF0]">
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input

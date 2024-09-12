@@ -46,9 +46,12 @@ export const Integrations = () => {
                 className="w-full object-contain"
               />
             </Link>
-            <span className="cursor-pointer flex justify-center items-center text-[#A90000] bg-[#F5F5F5]  size-8 rounded-full">
-                  <Trash2 className="w-5 h-5" />
-                </span>
+            <Link
+              onClick={() => setPopupdeleteOpen(true)}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#AB2727]"
+            >
+              <Trash2 className="size-3" />
+            </Link>
           </div>
         ),
       },
@@ -66,7 +69,7 @@ export const Integrations = () => {
         <div className="flex gap-5 ">
           <Link
             to="#"
-            className="text-sm font-extrabold text-bgColor-100 active-menu before:bg-[#181C3A] px-2 py-0.5"
+            className="text-sm font-extrabold text-bgColor-100 active-menu before:bg-[#181C3A] px-2 "
           >
             General settings
           </Link>
@@ -77,10 +80,11 @@ export const Integrations = () => {
       </div>
       <div className="flex gap-x-3 h-screen overflow-y-hidden my-4">
         <SettingsSidebar sidebarList={recruiterSetting} active="Integrations" />
-        <div className="w-full bg-white rounded p-5 h-full ">
+        <div className="w-full bg-white rounded px-9 py-9 h-full ">
           <div className="flex justify-between w-full mb-4 items-center">
-            <h3 className="text-[#2C2C2C] font-semibold">Integrations</h3>
-          </div>
+          <h3 className="text-base font-bold text-[#2C2C2C]">
+            Integration
+            </h3>          </div>
           <div className="w-full h-full b">
             <div className="w-full h-fit py-4 px-5 border border-[#EBEBF0] rounded">
               <p>

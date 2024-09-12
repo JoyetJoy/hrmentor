@@ -183,4 +183,24 @@ select:focus {
   width: 15px !important;
   height: 15px !important;
 }
+/* -----quill----- */
 
+.ql-toolbar.ql-snow{
+  border: none;
+}
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button{
+  height:20px;
+  width: 20px;
+}
+/* -------react select------ */
+/* .css-13cymwt-control{
+  border: none !important;
+  background-color: #EBEBF0 !important;
+}
+.css-1u9des2-indicatorSeparator{
+  display: none !important;
+} */

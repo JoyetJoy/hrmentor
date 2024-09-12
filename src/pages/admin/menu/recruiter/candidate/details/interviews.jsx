@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import MenuHeader from "@/components/common/MenuHeader";
 import { Select } from "@headlessui/react";
 import QueryTable from "@/components/table/QueryTable";
+import ConsiderCandidate from "@/components/popups/recruiter/candiadate/ConsiderCandidate";
+import AddInterview from "@/components/popups/recruiter/candiadate/AddInterview";
+import MoveCandidate from "@/components/popups/recruiter/candiadate/MoveCandidate";
 
 const buttonSequence = ["addInterviewer", "considerCandidate", "move"];
 
 function Interviews() {
+  const [AddInterviewerPopup, setAddInterviewerPopup] = useState(false);
+  const [ConsiderCandidatePopup, setConsiderCandidatePopup] = useState(false);
+  const [MovePopup, setMovePopup] = useState(false);
+
   const [activeButton, setActiveButton] = useState("addInterviewer");
   const [clickedButtons, setClickedButtons] = useState(["addInterviewer"]);
 
   const handleButtonClick = (buttonName) => {
     const currentIndex = buttonSequence.indexOf(activeButton);
     const newIndex = buttonSequence.indexOf(buttonName);
+    
     if (
       newIndex === currentIndex + 1 ||
       newIndex === currentIndex - 1 ||
@@ -20,6 +28,21 @@ function Interviews() {
       setActiveButton(buttonName);
       if (!clickedButtons.includes(buttonName)) {
         setClickedButtons([...clickedButtons, buttonName]);
+      }
+      
+      // Show or hide popups based on button clicked
+      if (buttonName === "addInterviewer") {
+        setAddInterviewerPopup(true);
+        setConsiderCandidatePopup(false);
+        setMovePopup(false);
+      } else if (buttonName === "considerCandidate") {
+        setAddInterviewerPopup(false);
+        setConsiderCandidatePopup(true);
+        setMovePopup(false);
+      } else if (buttonName === "move") {
+        setAddInterviewerPopup(false);
+        setConsiderCandidatePopup(false);
+        setMovePopup(true);
       }
     }
   };
@@ -125,12 +148,34 @@ function Interviews() {
               onClick={() => handleButtonClick(buttonName)}
               className={getButtonClass(buttonName)}
             >
-              {buttonName === "addInterviewer" && "Add Interviewer"}
-              {buttonName === "considerCandidate" && "Consider the Candidate"}
-              {buttonName === "move" && "Move"}
+              {buttonName === 'addInterviewer' && 'Add Interviewer'}
+              {buttonName === 'considerCandidate' && 'Consider the Candidate'}
+              {buttonName === 'move' && 'Move'}
             </button>
           ))}
         </div>
+
+        {AddInterviewerPopup && (
+          <AddInterview
+            AddInterviewerPopup={AddInterviewerPopup}
+            setAddInterviewerPopup={setAddInterviewerPopup}
+          />
+        )}
+
+        {ConsiderCandidatePopup && (
+          <ConsiderCandidate
+            ConsiderCandidatePopup={ConsiderCandidatePopup}
+            setConsiderCandidatePopup={setConsiderCandidatePopup}
+          />
+        )}
+
+        {MovePopup && (
+          <MoveCandidate
+            MovePopup={MovePopup}
+            setMovePopup={setMovePopup}
+          />
+        )}
+        
         <div className="flex justify-between py-6">
           <h1 className="font-bold text-base pt-3">Interviews</h1>
           <div className="flex gap-3 justify-center items-center">
@@ -170,40 +215,35 @@ function Interviews() {
             <p className="whitespace-nowrap text-sm">Entries per page</p>
           </div>
         </div>
+
         <div className="flex-grow mt-4">
           {activeButton === "addInterviewer" && (
-            <>
-              <QueryTable
-                list={tableData}
-                columns={columns}
-                totalPages={totalPages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </>
+            <QueryTable
+              list={tableData}
+              columns={columns}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           )}
           {activeButton === "considerCandidate" && (
-            <>
-              <QueryTable
-                list={tableData}
-                columns={columns}
-                totalPages={totalPages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </>
+            <QueryTable
+              list={tableData}
+              columns={columns}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           )}
-          {activeButton === "move" && 
-          <>
-          <QueryTable
-            list={tableData}
-            columns={columns}
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </>
-        }
+          {activeButton === "move" && (
+            <QueryTable
+              list={tableData}
+              columns={columns}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
         </div>
       </div>
     </>

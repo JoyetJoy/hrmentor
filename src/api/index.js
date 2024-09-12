@@ -1,66 +1,45 @@
 import axios from "axios";
 
-// Axios instances
-const baseConfig = {
+
+export const basicRequest = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-};
-
-export const basicRequest = axios.create(baseConfig);
-
-export const basicXFormRequest = axios.create({
-  ...baseConfig,
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-  },
-});
-
-export const XFormRequest = axios.create({
-  ...baseConfig,
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-  },
 });
 
 export const newRequest = axios.create({
-  ...baseConfig,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
   },
 });
 
-newRequest.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-
-  if (token) {
-    config.headers["Authorization"] = `Bearer ${token}`;
-  }
-  return config;
+export const XFormRequest = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
 });
 
 export const newFormRequest = axios.create({
-  ...baseConfig,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "multipart/form-data",
   },
 });
 
-newFormRequest.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+const addAuthorizationInterceptor = (request) => {
+  request.interceptors.request.use((config) => {
+    const token = localStorage.getItem("secret_itoken");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  });
+};
 
-  if (token) {
-    config.headers["Authorization"] = `Bearer ${token}`;
-  }
-  return config;
-});
+addAuthorizationInterceptor(newRequest);
+addAuthorizationInterceptor(XFormRequest);
+addAuthorizationInterceptor(newFormRequest);
 
-XFormRequest.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
 
-  if (token) {
-    config.headers["Authorization"] = `Bearer ${token}`;
-  }
-  return config;
-});
 
-// ALL THE API CALLS

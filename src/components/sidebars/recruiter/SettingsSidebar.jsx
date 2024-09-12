@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 export const SettingsSidebar = ({ sidebarList, active }) => {
   console.log(active);
   return (
-    <div className="bg-white rounded-md px-6 min-h-full w-fit py-4">
-      <ul className="flex flex-col  gap-5 justify-center text-sm text-[#7F7F7F] font-medium">
+    <div className="bg-white rounded-md px-5 min-h-full  min-w-64 py-6">
+      <ul className="flex flex-col  gap-5 justify-center text-sm text-[#7F7F7F] ">
         {sidebarList?.map((item) => (
           <li
             key={item?.id}
-            className={`font-bold text-base whitespace-nowrap flex items-center gap-x-3
-             ${active === item?.name ? "text-[#E95D39]" : "text-[#7F7F7F] "}`}
+            className={` text-sm whitespace-nowrap flex items-center gap-x-3
+             ${active === item?.name ? "text-[#E95D39] font-bold" : "text-[#7F7F7F] font-medium "}`}
           >
             <Icon
               svg={item?.icon}
