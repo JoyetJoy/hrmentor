@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export const basicRequest = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
@@ -40,6 +39,3 @@ const addAuthorizationInterceptor = (request) => {
 addAuthorizationInterceptor(newRequest);
 addAuthorizationInterceptor(XFormRequest);
 addAuthorizationInterceptor(newFormRequest);
-
-
-

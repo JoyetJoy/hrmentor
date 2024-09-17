@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.8",
     "@headlessui/tailwindcss": "^0.2.1",
+    "@hookform/resolvers": "^3.9.0",
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-query-devtools": "^5.56.2",
     "@tanstack/react-table": "^8.20.5",
@@ -24,6 +25,7 @@
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.26.2",
     "react-select": "^5.8.0",
+    "sonner": "^1.5.0",
     "yup": "^1.4.0",
     "zustand": "^4.5.5"
   },

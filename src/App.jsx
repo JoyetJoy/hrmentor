@@ -1,12 +1,12 @@
 import React from "react";
 import { RouterProvider } from "react-router-dom";
 import { appRoutes } from "./routes/AdminRoutes";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <>
-      <Toaster style={{ zIndex: "999" }} />
+      <Toaster />
       <RouterProvider router={appRoutes} />
     </>
   );
