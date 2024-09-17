@@ -1,7 +1,14 @@
 import { adminItems } from "@/constants/dummyData";
 import { Menu } from "@headlessui/react";
+import { useNavigate } from "react-router-dom";
 
-export default function ProfileDropdown({ handleNavigation, user }) {
+export default function ProfileDropdown({ handleNavigation, user, setUser }) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    setUser({});
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <div className="relative flex flex-col items-center gap-3">
       <Menu>
@@ -21,27 +28,52 @@ export default function ProfileDropdown({ handleNavigation, user }) {
         </Menu.Button>
         <Menu.Items className="absolute top-12 z-20 w-48 rounded-lg bg-white p-4 shadow-lg">
           <ul className="flex flex-col gap-5">
-            {adminItems.map((item, index) => (
-              <Menu.Item key={index}>
-                {({ active }) => (
-                  <li
-                    onClick={() => handleNavigation(item.path)}
-                    className={`flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-semibold ${
-                      active ? "" : ""
-                    }`}
-                  >
-                    <div className="h-4 w-4">
-                      <img
-                        src={item.icon}
-                        alt={`${item.label} icon`}
-                        className="w-full object-contain"
-                      />
-                    </div>
-                    {item.label}
-                  </li>
-                )}
-              </Menu.Item>
-            ))}
+            <>
+              {adminItems.slice(0, 2).map((item, index) => (
+                <Menu.Item key={index}>
+                  {({ active }) => (
+                    <li
+                      onClick={() => handleNavigation(item.path)}
+                      className={`flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-semibold ${
+                        active ? "" : ""
+                      }`}
+                    >
+                      <div className="h-4 w-4">
+                        <img
+                          src={item.icon}
+                          alt={`${item.label} icon`}
+                          className="w-full object-contain"
+                        />
+                      </div>
+                      {item.label}
+                    </li>
+                  )}
+                </Menu.Item>
+              ))}
+            </>
+            <>
+              {adminItems.slice(2).map((item, index) => (
+                <Menu.Item key={index}>
+                  {({ active }) => (
+                    <li
+                      onClick={handleLogout}
+                      className={`flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-semibold ${
+                        active ? "" : ""
+                      }`}
+                    >
+                      <div className="h-4 w-4">
+                        <img
+                          src={item.icon}
+                          alt={`${item.label} icon`}
+                          className="w-full object-contain"
+                        />
+                      </div>
+                      {item.label}
+                    </li>
+                  )}
+                </Menu.Item>
+              ))}
+            </>
           </ul>
         </Menu.Items>
       </Menu>

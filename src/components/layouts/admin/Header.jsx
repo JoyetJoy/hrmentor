@@ -103,7 +103,11 @@ export const AdminHeader = () => {
               </ul>
             </Menu.Items>
           </Menu>
-          <ProfileDropdown handleNavigation={handleNavigation} user={user} />
+          <ProfileDropdown
+            handleNavigation={handleNavigation}
+            user={user}
+            setUser={setUser}
+          />
         </div>
       </div>
     </>
