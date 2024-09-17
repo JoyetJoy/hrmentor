@@ -9,10 +9,6 @@ export const appRoutes = createBrowserRouter([
     path: "login",
     element: <Login />,
   },
-  // {
-  //   path: "forgot-password",
-  //   element: <ForgotPassword />,
-  // },
   {
     path: "admin",
     element: <AdminLayout />,

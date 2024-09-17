@@ -9,8 +9,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        monorope: ['"Manrope"'],
-        poppins:["Poppins"]
+        monorope: ["Manrope"],
+        poppins: ["Poppins"],
       },
       colors: {
         gray: {
@@ -30,16 +30,15 @@ export default {
           green: "#0B8A00",
           300: "#3A3A3A",
           blue: " #030E5C",
-          lightred:"#E95D39",
-          400:"#2C2C2C"
-
+          lightred: "#E95D39",
+          400: "#2C2C2C",
         },
         btncolor: "#283277",
         bgColor: {
           100: "#181C3A",
           200: "#FFFFFF",
-          300:"#E0E2F3",
-          400:"5264EA"
+          300: "#E0E2F3",
+          400: "5264EA",
         },
       },
       backgroundImage: {
