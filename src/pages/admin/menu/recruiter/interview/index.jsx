@@ -32,13 +32,13 @@ function InterviewMain() {
             accessorKey: "action",
             cell: ({ row }) => (
               <div className="flex items-center justify-start gap-3  text-xs ">
-                <Link
-                  //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-                  to={"/admin/recruiter/candidate"}
-                  className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
-                >
-                  <MoveDiagonal />
-                </Link>
+                  <Link
+              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
+              // to={"/admin/recruiter/candidate"}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#F5F5F5] p-2 text-black"
+            >
+              <MoveDiagonal className="h-3 w-3" />
+            </Link>
                
           
               </div>
@@ -73,7 +73,7 @@ function InterviewMain() {
        
        
       </div>
-      <RecruiterTable
+      <QueryTable
         columns={columns}
         list={list}
         currentPage={currentPage}

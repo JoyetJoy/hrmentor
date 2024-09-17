@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { Select } from "@headlessui/react";
+import Select from "react-select";
 import { Controller, useForm } from "react-hook-form";
-import { customSelectStyles } from "@/utils/customStyles";
+import {
+  customSelectResumeStyles,
+  customSelectStyles,
+  customSelectTransferStyles,
+} from "@/utils/customStyles";
 import { Link } from "react-router-dom";
 import MenuHeader from "@/components/common/MenuHeader";
 import { Mail, MapPin, Phone, SquarePen, X } from "lucide-react";
 import Addtransfer from "@/components/popups/recruiter/candiadate/AddTransfer.jsx";
 
 function Profile() {
+  const options = [
+    { value: "active", label: "Transfer to job" },
+    { value: "paused", label: "Paused" },
+    { value: "delayed", label: "Delayed" },
+    { value: "canceled", label: "Canceled" },
+  ];
   const [popupOpen, setPopupOpen] = useState(false);
   const {
     register,
@@ -43,11 +53,13 @@ function Profile() {
             <div className="col-span-2 flex justify-between">
               <h1 className="pt-3 text-base font-bold">Personal information</h1>
               <div className="flex gap-5">
-                <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
+                <div className="mb-3 flex h-10 min-h-10 items-center justify-between text-end text-sm font-medium text-black">
                   <Select
                     name="status"
                     aria-label="Project status "
-                    className="w-full rounded-md border border-[#ECBEBE] bg-[#FFF2F2] px-12 py-2 pl-3 text-xs"
+                    styles={customSelectResumeStyles}
+                    placeholder="Select Status"
+                    className="flex flex-row justify-between rounded-md border border-[#ECBEBE] bg-[#FFF2F2] pl-10 text-end text-xs"
                   >
                     <option value="active">Consider</option>
                     <option value="paused">Paused</option>
@@ -55,22 +67,19 @@ function Profile() {
                     <option value="canceled">Canceled</option>
                   </Select>
                 </div>
-                <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
+                <div className="mb-3 flex items-center text-center justify-between text-sm font-medium text-black">
                   <Select
                     name="status"
                     aria-label="Project status"
-                    className="w-full rounded-md bg-[#000] px-6 py-2 pl-3 text-xs text-white"
-                    onChange={(e) => {
-                      if (e.target.value === "active") {
+                    options={options}
+                    styles={customSelectTransferStyles}
+                    className="flex flex-row justify-between rounded-md border bg-bgColor-100 pl-10  text-xs placeholder:text-white"
+                    onChange={(selectedOption) => {
+                      if (selectedOption.value === "active") {
                         setPopupOpen(true);
                       }
                     }}
-                  >
-                    <option value="active">Transfer to job</option>
-                    <option value="paused">Paused</option>
-                    <option value="delayed">Delayed</option>
-                    <option value="canceled">Canceled</option>
-                  </Select>
+                  />
                   <Addtransfer
                     popupOpen={popupOpen}
                     setPopupOpen={setPopupOpen}
@@ -103,7 +112,7 @@ function Profile() {
                 <SquarePen className="size-4" />
               </div>
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="required label-text">Gender</label>
               <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
                 <Select
@@ -120,7 +129,7 @@ function Profile() {
                 </Select>
               </div>
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">
                 Date of birth <span className="text-red-500">*</span>
               </label>
@@ -137,7 +146,7 @@ function Profile() {
               )}
             </div>
 
-            <div className="group flex flex-col space-y-2">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">
                 Home Address <span className="text-red-500">*</span>
               </label>
@@ -154,7 +163,7 @@ function Profile() {
               )}
             </div>
 
-            <div className="group flex flex-col justify-between space-y-1">
+            <div className="group flex flex-col justify-between gap-1">
               <div className="flex flex-col">
                 <label className="label-text">Country</label>
                 <Controller
@@ -214,7 +223,7 @@ function Profile() {
                 )}
               </div>
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">District</label>
               <Controller
                 name="country"
@@ -243,7 +252,7 @@ function Profile() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="required label-text">Languages spoken</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -257,7 +266,7 @@ function Profile() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="required label-text">
                 Highest education level
               </label>
@@ -288,7 +297,7 @@ function Profile() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="required label-text">
                 Collage or University
               </label>
@@ -319,7 +328,7 @@ function Profile() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">Source</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -333,7 +342,7 @@ function Profile() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">
                 Date Applied<span className="text-red-500">*</span>
               </label>
@@ -350,7 +359,7 @@ function Profile() {
               )}
             </div>
 
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="required label-text">Recruiting job</label>
               <Controller
                 name="bloodGroup"
@@ -379,7 +388,7 @@ function Profile() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col space-y-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">LinkedIn ID</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -397,7 +406,7 @@ function Profile() {
           <div className="flex items-center pt-6 font-semibold text-white">
             <Link
               to={"/admin/recruiter/question-answers"}
-              className="btn h-10 min-h-10 bg-[#181C3A] px-12 text-xs text-white hover:bg-btncolor"
+              className="btn h-10 min-h-10 bg-[#181C3A] px-12 text-xs text-white hover:bg-bgColor-100"
             >
               Submit
             </Link>

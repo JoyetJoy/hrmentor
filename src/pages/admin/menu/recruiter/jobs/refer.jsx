@@ -1,7 +1,8 @@
 import MenuHeader from "@/components/common/MenuHeader";
 import RecruiterSideBar from "@/components/sidebars/recruiter/RecruiterSideBar";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Button, Select } from "@headlessui/react";
+import { Button } from "@headlessui/react";
+import Select from "react-select";
 import { ArrowLeft, Send } from "lucide-react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -75,27 +76,37 @@ function Refer() {
               <label className="label-text">Subject</label>
               <input
                 type="text"
-                className="input-box h-10 w-3/5 border-2 border-[#C2C1C1] focus:border-[#C2C1C1]"
+                className="input-box h-10 w-3/5 focus:border-gray-300"
               />
             </div>
             <div className="flex h-full w-full flex-col gap-1">
               <label className="label-text">Choose Template</label>
               <Select
-                placeholder="Select the item"
-                className="input-box h-9 w-1/3 border-2 border-[#C2C1C1] focus:border-[#C2C1C1]"
-              ></Select>
+                // required
+                //   selected={''}
+                // value={''}
+                //   onChange={(selectedOption) => {
+                //     handle(selectedOption);
+                //     field.onChange(selectedOption);
+                //   }}
+                //   options={}
+                isSearchable={false}
+                styles={customSelectStyles}
+                placeholder="Select"
+                className="input-box h-10 w-3/5 placeholder:text-xs placeholder:text-[#7F7F7F] focus:border-gray-300"
+              />
             </div>
             <div className="flex h-full w-full flex-col gap-1">
               <label className="label-text">Recipient</label>
               <input
                 type="text"
                 placeholder="Enter the email "
-                className="input-box h-12 w-3/5 border-2 border-[#C2C1C1] placeholder:text-[#C2C1C1] focus:border-[#C2C1C1]"
+                className="input-box h-12 w-3/5 placeholder:text-[#C2C1C1] focus:border-[#C2C1C1]"
               ></input>
             </div>
             <div className="flex h-full w-full flex-col gap-1">
               <label className="label-text">Message</label>
-              <textarea className="input-box h-40 w-3/5 border-2 border-[#C2C1C1] focus:border-[#C2C1C1]"></textarea>
+              <textarea className="input-box h-40 w-3/5 focus:border-[#C2C1C1]"></textarea>
             </div>
           </div>
           <Link

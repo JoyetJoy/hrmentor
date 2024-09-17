@@ -19,7 +19,7 @@ function Login() {
     };
 
     return (
-        <div className="flex flex-row row-span-3 items-start gap-52 py-11 px-14">
+        <div className="flex flex-row row-span-3 items-center gap-52 py-11 px-14">
           
             <div className="w-2/5">
                 <img
@@ -30,12 +30,12 @@ function Login() {
             </div>
             
           
-            <div className="flex flex-col col-span-2 items-center gap-8 ">
+            <div className="flex flex-col col-span-2 items-center gap-8 justify-center  ">
                
                 {!isForgotPassword ? (
                   
                     <>
-                        <div className="text-center flex flex-col gap-2">
+                        <div className="text-center flex flex-col gap-2 mt-28">
                             <h1 className="text-3xl font-bold text-black mb-10">
                                 COMPANY LOGO
                             </h1>
@@ -73,9 +73,9 @@ function Login() {
                             >
                                 Forgot password?
                             </button>
-                            <div className="flex flex-col  gap-3 items-center justify-center mt-6">
-                                <p className="text-[#414247] text-base font-semibold">Powered By</p>
-                                <div className="w-32">
+                            <div className="flex flex-col  gap-3 items-center justify-center ">
+                                <p className="text-[#808080B2] m-auto text-center text-base">Powered By</p>
+                                <div className="w-36">
                                     <img
                                         src={hr1logo}
                                         alt="HR menteor logo"
@@ -88,32 +88,35 @@ function Login() {
                 ) : (
                     // Forgot Password form
                     <>
-                        <div className="text-center flex flex-col gap-2">
-                            <h2 className="text-base font-bold text-black">Forgot Password</h2>
-                            <p className="text-gray m-auto w-52 text-sm">
-                                Send mail ID to higher authority to reset password
+                        <div className="text-center flex flex-col gap-2 mt-36">
+                            <h2 className="text-2xl font-bold text-black">Forgot Password</h2>
+                            <p className="text-[#808080B2] m-auto text-center text-lg">
+                                Send mail ID to higher authority to <br /> reset password
                             </p>
                         </div>
-                        <form action="" className="flex flex-col gap-3 w-96">
-                            <label className="font-semibold text-sm">Email</label>
+                        <form action="" className="flex flex-col gap-4 w-[26rem]">
+                            <div className="flex flex-col gap-1 ">
+                            <label className="font-bold text-base text-[#2C2C2C]">Email</label>
                             <input
                                 type="email"
                                 placeholder="Enter email id"
-                                className="border outline-none placeholder:text-sm py-2 px-3 rounded-md"
+                                className="border  border-[#181C3A4D] outline-none placeholder:text-base placeholder:text-[#7F7F7F] py-2 px-6 rounded-md w-full min-h-12 h-12"
                             />
-                            <button className="btn bg-btncolor text-white text-center text-sm hover:bg-btncolor">
+                            </div>
+                          
+                            <button className="btn bg-[#2B2B2B]  text-white text-center text-sm hover:bg-[#2B2B2B] w-full  min-h-12 h-12">
                                 Send
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={handleBackToLogin}
                                 className="text-btncolor text-sm text-center font-semibold my-3"
                             >
                                 Back to Login
-                            </button>
-                            <div className="flex flex-col items-center justify-center mt-2">
-                                <p className="text-gray text-sm font-abold">Powered By</p>
-                                <div className="w-28">
+                            </button> */}
+                            <div className="flex flex-col items-center justify-center mt-20">
+                                <p className="text-[#808080B2] m-auto text-center text-base">Powered By</p>
+                                <div className="w-36">
                                     <img
                                         src={hrlogo}
                                         alt="HR menteor logo"

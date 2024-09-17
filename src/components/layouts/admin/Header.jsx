@@ -33,27 +33,31 @@ export const AdminHeader = () => {
             <h1 className="font-semibold mt-0 text-base">Tech Butomy Pvt Ltd</h1>
           </span>
         </div>
-        <div className="flex items gap-x-3  ">
-          {menuitems.map((item) => (
-            <NavLink
-              to={item.path}
-              key={item.id}
-              className={`flex flex-col py-1  gap-1 items-center justify-end px-2 border-[#E95D39]    ${
-                isActiveLink(item.active) ? " activeLink text-[#E95D39] font-bold " : " text-textcolor-darkblue font-medium"
-              }`}
-            >
-              {item.iconType === "image" ? (
-                <img src={item.iconSrc} alt={item.alt} className="w-4 h-4" />
-              ) : (
-                React.createElement(item.icon, {
-                  size: 16,
-                })
-              )}
-              <p className="text-sm">{item?.name}</p>
-              {/* <p className={`text-xs  font-semibold ${isActiveLink(item.active) ? " text-[#E95D39]" :"text-textcolor-darkblue"}`}>{item.name}</p> */}
-            </NavLink>
-          ))}
-        </div>
+        <div className="flex items gap-x-3">
+  {menuitems.map((item) => (
+    <NavLink
+      to={item.path}
+      key={item.id}
+      className={`flex flex-col py-1 gap-1 items-center justify-end px-2 border-[#E95D39] ${
+        isActiveLink(item.active)
+          ? " activeLink text-[#E95D39] font-bold "
+          : " text-textcolor-darkblue font-medium"
+      }`}
+    >
+      <img
+        src={
+          isActiveLink(item.active)
+            ? item.iconSrcActive
+            : item.iconSrcBlack
+        }
+        alt={item.name}
+        className="w-4 h-4"
+      />
+      <p className="text-sm">{item.name}</p>
+    </NavLink>
+  ))}
+</div>
+
         <div className="flex gap-3 items-center py-2.5">
           <div className="w-10 h-10 p-2 rounded-full bg-gray-100 flex justify-center items-center">
             <MessageSquareText className="size-5 text-textcolor-blue" />

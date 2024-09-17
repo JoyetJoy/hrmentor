@@ -15,36 +15,14 @@ function JobInterview() {
   const columns = React.useMemo(
     () => [
       {
-        header: "Job Title",
+        header: "Interview Guide",
         accessorKey: "name",
       },
-      { header: "  Job ID ", accessorKey: "addNo" },
+      { header: " Interview Type ", accessorKey: "addNo" },
+     
       {
-        header: "Date created",
-        accessorKey: "dignation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
-      },
-      {
-        header: "Type",
+        header: "Interview Mode",
         accessorKey: "type",
-      },
-      {
-        header: "Department",
-        accessorKey: "designation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
-      },
-      {
-        header: "Location",
-        accessorKey: "location",
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
-        cell: ({ row }) => (
-          <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
-            {row?.original?.status}
-          </div>
-        ),
       },
 
       {
@@ -79,16 +57,19 @@ function JobInterview() {
       <div className='flex flex-row items-start justify-between gap-3'>
         <div className='w-full'>
           <div className='flex  items-center justify-between mt-1 mb-3 '>
-            <h1 className='text-lg font-bold text-black flex flex-row gap-2 items-center justify-center'>
-              <ArrowLeft className='size-5' />
-              Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Post</span>
+            <h1 className='text-base font-bold text-black flex flex-row gap-2 items-center justify-center'>
+              <ArrowLeft className='size-4' />
+              Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Interview Guides</span>
             </h1>
-            <Link to={""} className=' btn text-white rounded-md bg-bgColor-100 px-8 hover:bg-bgColor-100 min-h-11 h-11'>Next</Link>
+            <Link to={"/admin/recruiter/request-refferals"}   
+              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100">
+              Next
+            </Link>
           </div>
           <div className='w-full bg-white rounded-md py-4 px-7 '>
             <div className='flex flex-col gap-1 mb-7'>
               <p className='font-medium text-[#2C2C2C] text-base'>Chose the right team for the job.</p>
-              <p className=' text-[#7F7F7F] text-sm text-medium ml-4'>This jobs hiring team can include group or individual people who are helping you fill this position.</p>
+              <p className=' text-[#7F7F7F] text-sm text-medium '>This jobs hiring team can include group or individual people who are helping you fill this position.</p>
             </div>
             <div className="flex items-center justify-between my-4">
               <div className="flex gap-2 placeholder:text-black items-center rounded-md input-box min-h-11 min-w-96 border border-[#EBEBF0]">
@@ -99,8 +80,8 @@ function JobInterview() {
                   placeholder="Search"
                 />
               </div>
-              <Link to={'/admin/recruiter/interview-guide'} className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
-                <Plus className="size-4" />Add  interview
+              <Link to={'/admin/recruiter/interview-guide'} className="btn bg-bgColor-100 text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-bgColor-100 min-w-28 min-h-11 h-11 whitespace-nowrap">
+                <Plus className="size-4" />Add Interview Guides
               </Link>
             </div>
             <QueryTable

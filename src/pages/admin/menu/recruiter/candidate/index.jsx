@@ -76,10 +76,10 @@ function CandidatesList() {
             <Link
               //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
 
-              className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2  size-8 rounded-full"
-              to={"/admin/recruiter/candidate"}
+              className="cursor-pointer flex items-center size-7  bg-[#EBEBF0] p-2   rounded-full"
+              to={""}
             >
-              <MoveDiagonal />
+              <MoveDiagonal className="w-3 h-3" />
             </Link>
           </div>
         ),

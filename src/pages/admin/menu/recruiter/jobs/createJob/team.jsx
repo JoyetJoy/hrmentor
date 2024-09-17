@@ -23,37 +23,29 @@ function Team() {
   const columns = React.useMemo(
     () => [
       {
-        header: "Job Title",
+        header: "Employee name",
         accessorKey: "name",
       },
-      { header: "  Job ID ", accessorKey: "addNo" },
+     
       {
-        header: "Date created",
-        accessorKey: "dignation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
-      },
-      {
-        header: "Type",
+        header: "Recruiting role",
         accessorKey: "type",
       },
       {
-        header: "Department",
+        header: "Designation",
         accessorKey: "designation",
         cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
       },
-      {
-        header: "Location",
-        accessorKey: "location",
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
-        cell: ({ row }) => (
-          <div className="bg-[#473A990D] w-fit text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
-            {row?.original?.status}
-          </div>
-        ),
-      },
+    
+      // {
+      //   header: "Status",
+      //   accessorKey: "status",
+      //   cell: ({ row }) => (
+      //     <div className="bg-[#473A990D] w-fit text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
+      //       {row?.original?.status}
+      //     </div>
+      //   ),
+      // },
       {
         header: "Action",
         accessorKey: "action",
@@ -94,23 +86,24 @@ function Team() {
       <div className="flex flex-row items-start justify-between gap-3">
         <div className="w-full">
           <div className="flex items-center justify-between mt-1 mb-3">
-            <h1 className="text-lg font-bold text-black flex flex-row gap-2 items-center justify-center">
-              <ArrowLeft className="w-5 h-5" />
+            <h1 className="text-base font-bold text-black flex flex-row gap-2 items-center justify-center">
+              <ArrowLeft className="w-4 h-4" />
               Create New Job
               <div className="w-[.07rem] h-4 bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-[#2C2C2C]">Post</span>
+              <span className="text-sm font-medium text-[#2C2C2C]">Team</span>
             </h1>
             <Link
               to={"/admin/recruiter/interview"}
-              className="btn text-white rounded-md bg-bgColor-100 px-8 hover:bg-bgColor-100 min-h-11 h-11"
+              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100"
             >
               Next
             </Link>
+            
           </div>
           <div className="w-full bg-white rounded-md py-4 px-7">
             <div className="flex flex-col gap-1 mb-7">
               <p className="font-medium text-[#2C2C2C] text-base">Choose the right team for the job.</p>
-              <p className="text-[#7F7F7F] text-sm text-medium ml-4">
+              <p className="text-[#7F7F7F] text-sm text-medium ">
                 This job's hiring team can include group or individual people who are helping you fill this position.
               </p>
             </div>
@@ -128,7 +121,7 @@ function Team() {
                   setPopupOpen(true);
                   setPopupDelete('add'); // Open AddHiringTeam popup
                 }}
-                className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap"
+                className="btn bg-bgColor-100 text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-bgColor-100 min-w-44 min-h-11 h-11 whitespace-nowrap"
               >
                 <Plus className="w-4 h-4" />
                 Add hiring team

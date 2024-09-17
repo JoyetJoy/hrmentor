@@ -1,6 +1,5 @@
 import MenuHeader from '@/components/common/MenuHeader'
 import QueryTable from '@/components/table/QueryTable'
-import RecruiterTable from '@/components/table/RecruiterTable'
 import { TableData } from '@/constants/tableDummy'
 import { ArrowLeft, Bookmark, Filter, MoveDiagonal, Plus, Search } from 'lucide-react'
 import React, { useState } from 'react'
@@ -92,7 +91,7 @@ function List() {
         </div>
      
     </div>
-    <RecruiterTable
+    <QueryTable
       columns={columns}
       list={list}
       currentPage={currentPage}

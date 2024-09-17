@@ -42,7 +42,7 @@ export const InterviewGuide = () => {
 
       <div className="my-1 h-screen w-full overflow-hidden rounded-md bg-white p-3">
         <div className="flex items-center gap-2">
-          <ArrowLeft className="size-5" />
+          <ArrowLeft className="size-4" />
           <p className="text-base font-bold text-black">Create New Job </p>
         </div>
         <div className="grid grid-cols-2 gap-x-10">
@@ -226,7 +226,7 @@ export const InterviewGuide = () => {
                 Cancel
               </div>
               <button
-                onClick={() => navigate("/admin/recruiter/request-refferals")}
+                // onClick={() => navigate("/admin/recruiter/request-refferals")}
                 className="flex h-10 w-1/2 cursor-pointer items-center justify-center rounded-md bg-[#181C3A] font-semibold text-white"
               >
                 Save

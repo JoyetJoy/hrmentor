@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { Plus } from "lucide-react";
@@ -6,8 +6,16 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
+import AddDepartment from "@/components/popups/employees/addemployee/AddDepatment.jsx";
+import AddDesignation from "@/components/popups/employees/addemployee/AddDesignation";
+import AddWorkLocation from "@/components/popups/employees/addemployee/AddWorkLocation";
 
 export default function CreateEmployee() {
+  const [popupOpen, setPopupOpen] = useState(false)
+  const handlePopupOpen = (label) => {
+    setPopupOpen(label); 
+  };
+
   const {
     register,
     handleSubmit,
@@ -381,8 +389,12 @@ export default function CreateEmployee() {
                 className=" label-text flex flex-row items-center gap-1"
               >
                 Department 
-                <img src="/assets/icons/employees/blackcircleplus.svg" alt=" blackcircle" className="w-[13px] h-[13px]" />
+                <div className="w-[13px] h-[13px] cursor-pointer" onClick={() => setPopupOpen(true)}>
+                <img src="/assets/icons/employees/blackcircleplus.svg" alt=" blackcircle" className="w-full h-full object-contain" />
+
+                </div>
               </label>
+              <AddDepartment  popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
               <Controller
                 name="department"
                 className=""
@@ -448,8 +460,13 @@ export default function CreateEmployee() {
             <div className="group flex flex-col gap-1 px-3 py-2">
               <label className="label-text flex  flex-row items-center gap-1">
                 Designation
-                <img src="/assets/icons/employees/blackcircleplus.svg" alt=" blackcircle" className="w-[13px] h-[13px]" />
+                <div className="w-[13px] h-[13px] cursor-pointer" onClick={() => setPopupOpen(true)}>
+                <img src="/assets/icons/employees/blackcircleplus.svg" alt=" blackcircle" className="w-full h-full object-contain" />
+
+                </div>
               </label>
+              <AddDesignation  popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+
               <Controller
                 name="designation"
                 control={control}
@@ -494,12 +511,17 @@ export default function CreateEmployee() {
             </div>
             <div className="group flex flex-col gap-1 px-3 py-2">
               <label
-                onClick={() => setPopupOpen(true)}
+                // onClick={() => setPopupOpen(true)}
                 className="label-text flex flex-row items-center gap-1"
               >
                 Work Location
-                <img src="/assets/icons/employees/blackcircleplus.svg" alt=" blackcircle" className="w-[13px] h-[13px]" />
-              </label>
+                <div className="w-[13px] h-[13px] cursor-pointer" onClick={() => setPopupOpen(true)}>
+                <img src="/assets/icons/employees/blackcircleplus.svg" alt=" blackcircle" className="w-full h-full object-contain" />
+
+                </div>              
+                </label>
+                <AddWorkLocation  popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+
               <Controller
                 name="worklocation"
                 control={control}

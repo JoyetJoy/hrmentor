@@ -1,7 +1,7 @@
 import MenuHeader from '@/components/common/MenuHeader'
 import CreateJobSideBar from '@/components/sidebars/recruiter/CreateJobSideBar'
 import { customSelectStyles } from '@/utils/customStyles'
-import { Disclosure, DisclosureButton, DisclosurePanel, Select } from '@headlessui/react'
+import Select from "react-select"
 import { ArrowLeft, ArrowUpFromLine, ChevronRight, Search } from 'lucide-react'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -35,11 +35,16 @@ function Post() {
       <div className='flex flex-row items-start justify-between gap-3'>
         <div className='w-full '>
         <div className='flex  items-center justify-between mt-1 mb-3 '>
-            <h1 className='text-lg font-bold text-black flex flex-row gap-2 items-center justify-center'>
-              <ArrowLeft className='size-5' />
+            <h1 className='text-base font-bold text-black flex flex-row gap-2 items-center justify-center'>
+              <ArrowLeft className='size-4' />
               Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Post</span>
             </h1>
-          <Link to={"/admin/recruiter/application"} className=' btn text-white rounded-md bg-bgColor-100 px-8 hover:bg-bgColor-100 min-h-11 h-11'>Next</Link>
+            <Link
+              to={"/admin/recruiter/application"}
+              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100"
+            >
+              Next
+            </Link>
           </div>
           <div className='w-full bg-white rounded-md  '>
             <div
@@ -225,7 +230,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10  border-2 focus:border-gray-300"
+                          className="input-box h-10  focus:border-gray-300"
                         />
                       )}
                     />
@@ -235,10 +240,8 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1 w-4/12 ">
-                    <label className="label-text">
-                      Upload
-                    </label>
+                  <div className="flex px-3 group flex-col py-2 space-y-1 w-4/12 mt-5 ">
+                    
                     <Link to="" className='bg-[#D9D9D933] h-10 min-h-10 text-center rounded-md text-sm flex flex-row gap-2 items-center justify-center '>     <ArrowUpFromLine className="size-4" strokeWidth={1} />
                       update Job Description</Link>
                   </div>
@@ -295,8 +298,8 @@ function Post() {
                           //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box h-10  w-full focus:border-gray-300"
+                          placeholder="Select minimum experience"
+                          className="input-box h-10   w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -328,15 +331,15 @@ function Post() {
                     Work type
                   </label>
                   <div className='flex flex-row items-start gap-4 '>
-                    <label className="label cursor-pointer flex flex-row items-center justify-start border-2  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
+                    <label className="label cursor-pointer flex flex-row items-center justify-start border  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-[20%]">
                       <input type="checkbox" defaultChecked className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Remote(work from office)</span>
+                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs ">Remote(work from office)</span>
                     </label>
-                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12 ">
+                    <label className="label cursor-pointer flex flex-row items-center   justify-start border  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-[20%] ">
                       <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                       <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Work from office</span>
                     </label>
-                    <label className="label cursor-pointer flex flex-row items-center  border-2 justify-start border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-2/12">
+                    <label className="label cursor-pointer flex flex-row items-center  justify-start border  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-[20%]">
                       <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
                       <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Hybrid</span>
                     </label>
