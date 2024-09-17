@@ -4,6 +4,13 @@ export const basicRequest = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
+export const basicXFormRequest = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+});
+
 export const newRequest = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {

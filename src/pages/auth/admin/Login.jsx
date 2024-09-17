@@ -4,7 +4,7 @@ import loginimg from "/assets/images/login-img.png";
 import hr1logo from "/assets/images/hr1-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "@/schema/auth/login.schema";
-import { basicRequest } from "@/api";
+import { basicRequest, basicXFormRequest } from "@/api";
 import { LOGIN } from "@/api/auth";
 import { toast } from "sonner";
 
@@ -28,12 +28,12 @@ function Login() {
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
-      const res = await basicRequest(LOGIN, formData);
+      const res = await basicXFormRequest.post(LOGIN, formData);
       console.log("Response:", res);
-      if (res.status === 200) {
+      if (res.data.success === true) {
         toast.success("Login successful");
         localStorage.setItem("token", res.data.token);
-        // navigate("/");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -59,7 +59,9 @@ function Login() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-1">
-            <label className="text-base font-bold text-[#2C2C2C]">Email</label>
+            <label className="text-base font-semibold text-[#2C2C2C]">
+              Email
+            </label>
             <input
               type="email"
               placeholder="Enter email id"
@@ -73,7 +75,7 @@ function Login() {
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-base font-bold text-[#2C2C2C]">
+            <label className="text-base font-semibold text-[#2C2C2C]">
               Password
             </label>
             <input
