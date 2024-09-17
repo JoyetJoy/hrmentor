@@ -1,8 +1,8 @@
-import { statusDataSelecter } from "@/utils/customStyles";
+import { customSelectStyles, statusDataSelecter } from "@/utils/customStyles";
 import { Eye } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
-import  Select  from "react-select";
+import Select from "react-select";
 
 function RecruiterSideBar() {
   const statusData = [
@@ -12,6 +12,12 @@ function RecruiterSideBar() {
     { id: 4, count: 28, label: "Hold", bgColor: "#FFF2F2" },
     { id: 5, count: 11, label: "Reject", bgColor: "#FFFCF0" },
     { id: 6, count: 7, label: "Backup", bgColor: "#FBF0FF" },
+  ];
+  const statusOptions = [
+    { value: "active", label: "Active" },
+    { value: "paused", label: "Paused" },
+    { value: "delayed", label: "Delayed" },
+    { value: "canceled", label: "Canceled" },
   ];
 
   return (
@@ -63,43 +69,35 @@ function RecruiterSideBar() {
         Job status
         <Select
           name="status"
-          aria-label="Project status "
+          aria-label="Project status"
+          placeholder="Select status"
+          options={statusOptions}
           styles={statusDataSelecter}
-          className="w-3/6 rounded-md border-none bg-[#EBEBF0] px-3 py-2 pl-3 text-xs"
-        >
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-          <option value="delayed">Delayed</option>
-          <option value="canceled">Canceled</option>
-        </Select>
+          className="w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs min-h-10 h-10"
+        />
       </div>
-      <div className="mb-3 flex justify-between text-sm font-medium text-black">
-        {" "}
+      <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
         Hiring manager
         <Select
           name="status"
           aria-label="Project status"
-          className="w-3/6 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs"
-        >
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-          <option value="delayed">Delayed</option>
-          <option value="canceled">Canceled</option>
-        </Select>
+          placeholder="Select status"
+          options={statusOptions}
+          styles={statusDataSelecter}
+          className="w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs min-h-10 h-10"
+        />
       </div>
-      <div className="flex justify-between text-sm font-medium text-black">
+      <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
         {" "}
         Interviewer
         <Select
           name="status"
           aria-label="Project status"
-          className="w-3/6 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs"
-        >
-          <option value="active">Active</option>
-          <option value="paused">Paused</option>
-          <option value="delayed">Delayed</option>
-          <option value="canceled">Canceled</option>
-        </Select>
+          placeholder="Select status"
+          options={statusOptions}
+          styles={statusDataSelecter}
+          className="w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs min-h-10 h-10"
+        />
       </div>
     </div>
   );

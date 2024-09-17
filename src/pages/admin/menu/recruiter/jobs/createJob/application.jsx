@@ -1,7 +1,8 @@
 import MenuHeader from '@/components/common/MenuHeader'
 import CreateJobSideBar from '@/components/sidebars/recruiter/CreateJobSideBar'
 import { customSelectStyles } from '@/utils/customStyles'
-import { Disclosure, DisclosureButton, DisclosurePanel, Select } from '@headlessui/react'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import Select from "react-select"
 import { ArrowLeft, ChevronRight, Eye, Search, X } from 'lucide-react'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -37,17 +38,20 @@ function Application() {
       <div className='flex flex-row items-start justify-between gap-3'>
         <div className='w-full '>
           <div className='flex  items-center justify-between mt-1 mb-3 '>
-            <h1 className='text-lg font-bold text-black flex flex-row gap-2 items-center justify-center'>
-              <ArrowLeft className='size-5' />
-              Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Post</span>
+            <h1 className='text-md font-bold text-black flex flex-row gap-2 items-center justify-center'>
+              <ArrowLeft className='size-4' />
+              Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Application</span>
             </h1>
-            <Link to={"/admin/recruiter/team"} className=' btn text-white rounded-md bg-bgColor-100 px-8 hover:bg-bgColor-100 min-h-11 h-11'>Next</Link>
+            <Link to={"/admin/recruiter/team"} 
+                          className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100">
+
+              Next</Link>
           </div>
           <div className='w-full bg-white rounded-md py-4 px-7  '>
             <div className='flex flex-row items-center justify-between'>
               <div className='flex flex-col gap-1'>
                 <p className='text-base text-[#2C2C2C] font-medium'>Customize the application that candidate will complete when they apply.</p>
-                <p className=' text-[#7F7F7F] text-sm text-medium ml-4'>All the preset questions and the custom questions for the application to make it easier to screen candidate later.</p>
+                <p className=' text-[#7F7F7F] text-sm text-medium'>All the preset questions and the custom questions for the application to make it easier to screen candidate later.</p>
               </div>
               <Link className="btn text-[#181C3A] flex  bg-white flex-row gap-2 items-center border border-[#181C3A]">
                 <Eye className="size-4 " />
@@ -60,7 +64,7 @@ function Application() {
               </p>
               <div className='flex flex-col gap-1 mb-7'>
                 <p className='font-medium text-[#2C2C2C] text-base'>Select the standard profile questions you want all candidate to answer.</p>
-                <p className=' text-[#7F7F7F] text-sm text-medium ml-4'>Some field are required and cannot be removed from the application, while other field are optional, including the resume.</p>
+                <p className=' text-[#7F7F7F] text-sm text-medium '>Some field are required and cannot be removed from the application, while other field are optional, including the resume.</p>
               </div>
               <div className='flex flex-row gap-4 items-center '>
                 <div className='border border-[#ECE9F1] rounded-md  w-full'>

@@ -233,12 +233,13 @@ export const subcriptionModalData = [
 ];
 // header list
 export const menuitems = [
-  { id: 1, icon: LayoutGrid, name: "Dashboard", path: '/admin/dashboard', active: "dashboard" },
-  { id: 2, icon: Briefcase, name: "Recruiter", path: '/admin/recruiter', active: "recruiter" },
-  { id: 3, icon: UserPlus, name: "Hiring", path: '/admin/hiring', active: "hiring" },
-  { id: 4, icon: Users, name: "Employee", path: '/admin/employees/list', active: "employees" },
-  { id: 5, iconType: 'image', iconSrc: '/assets/icons/admin/attendance-black.svg', name: "Attendance", path: '/attendance', active: "attendance" }
+  { id: 1, iconType: 'image', iconSrcBlack: '/assets/icons/admin/dashbordBlack.svg', iconSrcActive: '/assets/icons/admin/dashbordcolor.svg', name: "Dashboard", path: '/admin/dashboard', active: "dashboard" },
+  { id: 2, iconType: 'image', iconSrcBlack: '/assets/icons/admin/recruiter-black.svg', iconSrcActive: '/assets/icons/admin/recruterColor.svg', name: "Recruiter", path: '/admin/recruiter', active: "recruiter" },
+  { id: 3, iconType: 'image', iconSrcBlack: '/assets/icons/admin/hiring-black.svg', iconSrcActive: '/assets/icons/admin/hiringColor.svg', name: "Hiring", path: '/admin/hiring', active: "hiring" },
+  { id: 4, iconType: 'image', iconSrcBlack: '/assets/icons/admin/employee-black.svg', iconSrcActive: '/assets/icons/admin/employeeColor.svg', name: "Employee", path: '/admin/employees/list', active: "employees" },
+  { id: 5, iconType: 'image', iconSrcBlack: '/assets/icons/admin/attendance-black.svg', iconSrcActive: '/assets/icons/admin/attendance-black.svg', name: "Attendance", path: '/attendance', active: "attendance" }
 ];
+
 
 export const adminItems = [
   {

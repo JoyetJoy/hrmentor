@@ -126,10 +126,10 @@ export const RecruiterRoutes = [
     path: "create-job-promote",
     element: <Promote />,
   },
-  {
-    path: "create-job-refer",
-    element: <Refer />,
-  },
+  // {
+  //   path: "create-job-refer",
+  //   element: <Refer />,
+  // },
   {
     path: "create-job-team",
     element: <Team />,

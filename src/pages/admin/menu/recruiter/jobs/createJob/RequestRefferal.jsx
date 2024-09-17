@@ -108,14 +108,14 @@ export const RequestRefferal = () => {
       <div className="flex flex-row items-start justify-between gap-3">
         <div className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
-            <h1 className="flex flex-row items-center justify-center gap-2 text-lg font-bold text-black">
-              <ArrowLeft className="size-5" />
+            <h1 className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
+              <ArrowLeft className="size-4" />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-[#2C2C2C]">Post</span>
+              <span className="text-sm font-medium text-[#2C2C2C]">Refer</span>
             </h1>
             <Link
               to={""}
-              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-8 text-white hover:bg-bgColor-100"
+              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100"
             >
               Next
             </Link>
@@ -126,12 +126,12 @@ export const RequestRefferal = () => {
               <p className="text-base font-medium text-[#2C2C2C]">
                 Invite you college for refer candidates for the job.
               </p>
-              <p className="text-medium ml-4 text-sm text-[#7F7F7F]">
+              <p className="text-medium text-sm text-[#7F7F7F]">
                 Edit the email text to include the specific details of your
                 referral program or highlight your incentive
               </p>
             </div>
-            <div className="my-4 grid grid-cols-2 gap-4">
+            <div className="my-4 grid grid-cols-2 gap-4  ">
               <div className="input-box h-10 w-full">
                 <input
                   type="text"
@@ -146,10 +146,10 @@ export const RequestRefferal = () => {
                   placeholder="Search"
                 />
               </div>
-              <div className="text-editor col-span-2 my-4 w-full">
+              <div className="text-editor col-span-2 my-4 w-full  rounded-md  ">
                 <div
                   id="toolbar"
-                  className="mb-2 flex items-center rounded border bg-gray-50 p-2"
+                  className="mb-2 flex items-center rounded  bg-gray-50 p-2 border border-[#ECE9F1]"
                 >
                   <button className="ql-bold"></button>
                   <button className="ql-italic"></button>
@@ -184,7 +184,7 @@ export const RequestRefferal = () => {
                   theme="snow"
                   modules={modules}
                   placeholder={"Write something awesome..."}
-                  className="h-36 w-full"
+                  className="h-36 w-full border border-[#ECE9F1] rounded-md"
                 />
               </div>
               <button
@@ -193,7 +193,6 @@ export const RequestRefferal = () => {
               >
                 Save
               </button>
-              <div></div>
             </div>
             <QueryTable columns={columns} list={list} />
             <div className="my-10 flex flex-col gap-1">

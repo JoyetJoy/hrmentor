@@ -54,13 +54,13 @@ function Candidate() {
             <Link
               //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
               to={"/admin/recruiter/candidate"}
-              className="flex size-8 cursor-pointer items-center rounded-full bg-[#F5F5F5] p-2 text-black"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#F5F5F5] p-2 text-black"
             >
-              <MoveDiagonal className="h-4 w-4" />
+              <MoveDiagonal className="h-3 w-3" />
             </Link>
 
-            <span className="flex size-8 cursor-pointer items-center justify-center rounded-full bg-[#F5F5F5] text-red-700">
-              <Trash2 className="h-4 w-4" />
+            <span className="flex size-7 cursor-pointer items-center justify-center rounded-full bg-[#F5F5F5] text-red-700">
+              <Trash2 className="h-3 w-3" />
             </span>
           </div>
         ),

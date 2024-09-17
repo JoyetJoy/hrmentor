@@ -1,9 +1,10 @@
 import React from "react";
-import { Select } from "@headlessui/react";
+import  Select  from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Link } from "react-router-dom";
 import MenuHeader from "@/components/common/MenuHeader";
+import { ArrowUpFromLine } from "lucide-react";
 
 function AddCandidates() {
   const {
@@ -31,11 +32,11 @@ function AddCandidates() {
         currentpath={"Recruiter"}
         activeMenu={"Candidates"}
       />
-      <div className="bg-white p-2 mt-2 pb-12 rounded-md grid gap-5 grid-cols-2 px-5">
+      <div className="bg-white py-4 mt-2 pb-12 rounded-md grid gap-5 grid-cols-2 px-6">
         <div className="">
-          <h1 className="font-bold text-base pt-3">Basic Details</h1>
+          <h1 className="font-bold text-base pt-3">Add Candidate</h1>
           <div className="grid w-full grid-cols-2 gap-5 mt-4 ">
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="required label-text">First name</label>
               <input
                 autoComplete="off"
@@ -49,7 +50,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col  space-y-1 ">
+            <div className="flex group flex-col  gap-1 ">
               <label className="label-text">Last name</label>
               <input
                 autoComplete="off"
@@ -64,7 +65,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text required">Phone</label>
               <input
                 {...register("surname")}
@@ -79,7 +80,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text required">Email</label>
               <input
                 {...register("surname")}
@@ -93,7 +94,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1 ">
+            <div className="flex group flex-col gap-1 ">
               <label onClick={() => setPopupOpen(true)} className="label-text">
                 Gender
                 <span className="text-red-500">*</span>
@@ -127,7 +128,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text">
                 Date of birth <span className="text-red-500">*</span>
               </label>
@@ -144,7 +145,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col space-y-2">
+            <div className="flex group flex-col gap-1">
               <label className="label-text">
                 Home Address <span className="text-red-500">*</span>
               </label>
@@ -161,8 +162,8 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col space-y-1 justify-between">
-              <div className="flex flex-col">
+            <div className="flex group flex-col gap-1 justify-between">
+              <div className="flex flex-col gap-1">
                 <label className="label-text">Country</label>
                 <Controller
                   name="nationality"
@@ -191,7 +192,7 @@ function AddCandidates() {
                   </span>
                 )}
               </div>
-              <div>
+              <div className="flex flex-col gap-1">
                 <label className="label-text">State</label>
                 <Controller
                   name="nationality"
@@ -221,7 +222,7 @@ function AddCandidates() {
                 )}
               </div>
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text">District</label>
               <Controller
                 name="country"
@@ -250,7 +251,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text required">Languages spoken</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -264,7 +265,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text required">
                 Highest education level
               </label>
@@ -295,7 +296,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text required">
                 Collage or University
               </label>
@@ -326,7 +327,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text">Source</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -340,7 +341,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text">
                 Date Applied<span className="text-red-500">*</span>
               </label>
@@ -357,7 +358,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text required">Recruiting job</label>
               <Controller
                 name="bloodGroup"
@@ -386,7 +387,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col space-y-1">
+            <div className="flex group flex-col gap-1">
               <label className="label-text">LinkedIn ID</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -403,38 +404,24 @@ function AddCandidates() {
           </div>
         </div>
         <div className=" flex flex-col justify-center">
-          <h1 className="font-bold text-sm pt-14 pb-1">Basic Details</h1>
+          <h1 className="font-bold text-xs pt-14 pb-1">Resume Upload</h1>
           <div className="h-full gap-2 border rounded-lg py-2 justify-center items-center flex flex-col border-[#E6E3EB]">
             <p className="text-sm">Upload or drag and drop</p>
             <p className="text-sm text-[#7F7F7F]">
               (Preferred), DOCX, DOC, PDF up to 1 MB
             </p>
 
-            <div class="bg-white flex flex-row items-center justify-center min-h-10 h-10 rounded-md py-1 px-4 border border-gray-400 gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-arrow-up-from-line size-4"
-              >
-                <path d="m18 9-6-6-6 6"></path>
-                <path d="M12 3v14"></path>
-                <path d="M5 21h14"></path>
-              </svg>
-              <h1 className="text-xs font-semibold">Upload</h1>
-            </div>
+            <button class="bg-white flex flex-row items-center justify-center min-h-10 h-10 rounded-md py-1 px-7 border border-gray-400 gap-2">
+            <ArrowUpFromLine className="size-4"  strokeWidth={2}/>
+
+              <h1 className="text-xs font-bold">Upload</h1>
+            </button>
           </div>
         </div>
         <div className="text-white font-semibold flex  items-center">
           <Link
             to={"/admin/recruiter/profile"}
-            className="btn bg-btncolor px-12 text-white text-xs hover:bg-btncolor min-h-10 h-10"
+            className="btn bg-bgColor-100 px-12 text-white text-xs font-medium hover:bg-bgColor-100 min-h-10 h-10"
           >
             Submit
           </Link>
