@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { AdminHeader } from "../../components/layouts/admin/Header";
 import { useQuery } from "@tanstack/react-query";
 import { GET_USER } from "@/api/auth";
