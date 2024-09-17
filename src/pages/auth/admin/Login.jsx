@@ -4,7 +4,7 @@ import loginimg from "/assets/images/login-img.png";
 import hr1logo from "/assets/images/hr1-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "@/schema/auth/login.schema";
-import { basicRequest, basicXFormRequest } from "@/api";
+import { basicXFormRequest } from "@/api";
 import { LOGIN } from "@/api/auth";
 import { toast } from "sonner";
 
@@ -29,10 +29,9 @@ function Login() {
       formData.append("email", data.email);
       formData.append("password", data.password);
       const res = await basicXFormRequest.post(LOGIN, formData);
-      console.log("Response:", res);
-      if (res.data.success === true) {
+      if (res?.data?.success === true) {
         toast.success("Login successful");
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("token", res?.data?.data?.token);
         navigate("/");
       }
     } catch (error) {
