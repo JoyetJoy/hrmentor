@@ -79,7 +79,6 @@ export const MenuRoles = () => {
       ),
     }));
 
-  // Local state to manage form data
   const [formData, setFormData] = useState({
     permissions: [],
   });
@@ -138,7 +137,6 @@ export const MenuRoles = () => {
     }
   }, [roleDetail, setValue]);
 
-  // Function to handle select/deselect all permissions in a subcategory
   const handleSelectAll = (subcategoryItems, isSelected) => {
     setFormData((prevData) => {
       let updatedPermissions = [...prevData.permissions];
