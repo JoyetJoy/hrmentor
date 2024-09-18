@@ -2,7 +2,6 @@ import trendingup from "/assets/icons/admin/trending-up.svg";
 import trendingdown from "/assets/icons/admin/trending-down.svg";
 import tickgreen from "/assets/icons/admin/tick-green.svg";
 import tickgray from "/assets/icons/admin/tick-gray.svg";
-import { LayoutGrid, Users, UserPlus, Briefcase } from "lucide-react";
 
 export const employeeDetails = [
   {

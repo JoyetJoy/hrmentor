@@ -46,3 +46,9 @@ const addAuthorizationInterceptor = (request) => {
 addAuthorizationInterceptor(newRequest);
 addAuthorizationInterceptor(XFormRequest);
 addAuthorizationInterceptor(newFormRequest);
+
+// ROLES AND PERMISSIONS
+
+export const ROLES = "roles";
+export const PAGINATED_ROLES = "paginated-roles";
+export const GET_PERMISSIONS = "permissions";
