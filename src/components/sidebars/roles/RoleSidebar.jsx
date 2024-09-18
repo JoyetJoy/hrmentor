@@ -58,7 +58,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
           />
         </div>
         <div className="rounded-md border border-[#EBEBF0]">
-          <h1 className="flex items-center justify-between rounded-t-md border border-gray-300 bg-gray-500 px-6 py-4 text-base font-semibold text-black">
+          <h1 className="flex items-center justify-between rounded-t-md border border-gray-300 bg-gray-500 px-6 py-3.5 text-[0.94rem] font-semibold text-black">
             Role Name
             <span>Action</span>
           </h1>
