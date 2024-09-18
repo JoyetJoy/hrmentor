@@ -222,7 +222,7 @@ export const MenuRoles = () => {
             <div className="mt-5 flex flex-col gap-3">
               {permissionList?.map((parentCategory) => (
                 <div key={parentCategory.parentCategory} className="mt-3">
-                  <div className="collapse w-full rounded-md border-y border-[#EAEAEA] bg-white text-[#3A3A3A]">
+                  <div className="collapse w-full rounded-none border-y border-[#EAEAEA] bg-white pb-2 text-[#3A3A3A]">
                     <div
                       className="collapse-title flex w-full cursor-pointer items-center justify-between px-0 text-[0.94rem] font-semibold"
                       onClick={() =>
