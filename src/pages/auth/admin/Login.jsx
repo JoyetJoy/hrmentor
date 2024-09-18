@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "@/schema/auth/login.schema";
 import { basicXFormRequest } from "@/api";
 import { LOGIN } from "@/api/auth";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 
 function Login() {
   const {
@@ -36,7 +36,7 @@ function Login() {
       }
     } catch (error) {
       console.log(error);
-      // toast.error(error?.response?.data?.error);
+      toast.error(error?.response?.data?.error);
       toast.error("Failed to login");
     }
   };

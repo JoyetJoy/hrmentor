@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 
 // Validation schema
 const schema = yup.object().shape({
@@ -243,8 +243,8 @@ export const MenuRoles = () => {
                           </div>
 
                           {collapseState[subcategory.subcategory] && (
-                            <div className="mt-2 flex flex-col gap-0.5 px-4 pb-3">
-                              <div className="flex items-center gap-2 pb-3 text-sm font-semibold">
+                            <div className="flex flex-col gap-0.5 border-t border-t-black/10 pb-3">
+                              <div className="flex items-center gap-2 bg-black/5 p-3 text-sm font-semibold">
                                 <input
                                   className="h-4 w-4"
                                   type="checkbox"
@@ -265,7 +265,7 @@ export const MenuRoles = () => {
                               {subcategory.items?.map((item) => (
                                 <div
                                   key={item.id}
-                                  className="mt-2 flex items-center justify-between text-sm font-semibold capitalize text-black/70"
+                                  className="mt-2 flex items-center justify-between px-4 text-sm font-semibold capitalize text-black/70"
                                 >
                                   <p>{item.name}</p>
                                   <input
