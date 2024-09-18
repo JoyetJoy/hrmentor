@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { RoleSidebar } from "../../../../components/sidebars/roles/RoleSidebar";
-import { Minus, Plus, ChevronRight, ArrowDown, ArrowUp } from "lucide-react";
+import {
+  Minus,
+  Plus,
+  ChevronRight,
+  ArrowDown,
+  ArrowUp,
+  Rotate3D,
+  ListRestart,
+} from "lucide-react";
 import MenuHeader from "@/components/common/MenuHeader";
 import { GET_PERMISSIONS, newRequest, ROLES } from "@/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -197,6 +205,14 @@ export const MenuRoles = () => {
                 <span>{selectedRole ? "Update" : "Create"}</span>
               )}
             </button>
+            {selectedRole ? (
+              <ListRestart
+                onClick={() => {
+                  setSelectedRole(0);
+                }}
+                className="ml-3 cursor-pointer text-textcolor-darkblue"
+              />
+            ) : null}
           </div>
           <div className="mt-5 flex flex-col gap-3">
             {permissionList?.map((parentCategory) => (
