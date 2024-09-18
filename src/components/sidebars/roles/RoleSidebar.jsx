@@ -14,7 +14,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
   const [deletePopup, setDeletePopup] = useState(false);
 
   // Fetch roles List
-  const { data: rolesList, isLoading } = useQuery({
+  const { data: rolesList } = useQuery({
     queryKey: ["rolesList", keyword],
     queryFn: () =>
       newRequest
