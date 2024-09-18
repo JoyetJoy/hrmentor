@@ -47,7 +47,7 @@ export const MenuRoles = () => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
+    formState: {},
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -174,142 +174,150 @@ export const MenuRoles = () => {
         activeMenu={"Role"}
         icon={<ChevronRight className="size-3" />}
       />
-      <div className="mt-1 grid grid-cols-11 gap-4">
-        <RoleSidebar
-          selectedRole={selectedRole}
-          setSelectedRole={setSelectedRole}
-        />
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="col-span-8 w-full rounded-md bg-white px-10 py-7"
-        >
-          <h1 className="text-xl font-bold text-black">
-            {selectedRole ? "Update/View" : "Add New"} Role
-          </h1>
-          <div className="mt-1 flex flex-row items-center gap-2 border-y border-y-black/10 py-3">
-            <div className="flex items-center gap-0.5">
-              <h1 className="required flex flex-row whitespace-nowrap text-sm">
-                Role Name
-              </h1>
-              <span>:</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Enter role name"
-              className="input h-11 min-h-11 w-full max-w-xs border border-black placeholder:text-sm placeholder:text-[#2C2C2C] focus:border-black focus:outline-none"
-              {...register("name")}
-            />
-            <button className="flex h-11 w-fit items-center justify-center rounded bg-textcolor-blue px-7 text-[0.8rem] font-medium tracking-[0.1px] text-white">
-              {loader ? (
-                <div className="flex items-center gap-3">
-                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                  {selectedRole ? "Updating role" : "Creating"}
-                </div>
-              ) : (
-                <span>{selectedRole ? "Update" : "Create"}</span>
-              )}
-            </button>
-            {selectedRole ? (
-              <ListRestart
-                onClick={handleClear}
-                className="ml-3 cursor-pointer text-textcolor-darkblue"
+      {isLoading || roleLoading ? (
+        <div className="my-20 flex h-screen items-center justify-center">
+          <div className="border-yipred h-9 w-9 animate-spin rounded-full border-b-2 border-t-2"></div>
+        </div>
+      ) : (
+        <div className="mt-1 grid grid-cols-11 gap-4">
+          <RoleSidebar
+            selectedRole={selectedRole}
+            setSelectedRole={setSelectedRole}
+          />
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="col-span-8 w-full rounded-md bg-white px-10 py-7"
+          >
+            <h1 className="text-xl font-bold text-black">
+              {selectedRole ? "Update/View" : "Add New"} Role
+            </h1>
+            <div className="mt-1 flex flex-row items-center gap-2 border-y border-y-black/10 py-3">
+              <div className="flex items-center gap-0.5">
+                <h1 className="required flex flex-row whitespace-nowrap text-sm">
+                  Role Name
+                </h1>
+                <span>:</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Enter role name"
+                className="input h-11 min-h-11 w-full max-w-xs border border-black placeholder:text-sm placeholder:text-[#2C2C2C] focus:border-black focus:outline-none"
+                {...register("name")}
               />
-            ) : null}
-          </div>
-          <div className="mt-5 flex flex-col gap-3">
-            {permissionList?.map((parentCategory) => (
-              <div key={parentCategory.parentCategory} className="mt-3">
-                <div
-                  className={`collapse w-full rounded-md border-y bg-white ${
-                    areAllItemsChecked(parentCategory.subcategories, formData)
-                      ? "border-[#009320] text-[#009320]"
-                      : "border-[#EAEAEA] text-[#3A3A3A]"
-                  }`}
-                >
-                  <div
-                    className="collapse-title flex w-full cursor-pointer items-center justify-between px-0 text-[0.94rem] font-semibold"
-                    onClick={() =>
-                      toggleCollapse(parentCategory.parentCategory)
-                    }
-                  >
-                    {parentCategory.parentCategory}
-                    {collapseState[parentCategory.parentCategory] ? (
-                      <ArrowUp className="w-4" />
-                    ) : (
-                      <ArrowDown className="w-4" />
-                    )}
+              <button className="flex h-11 w-fit items-center justify-center rounded bg-textcolor-blue px-7 text-[0.8rem] font-medium tracking-[0.1px] text-white">
+                {loader ? (
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                    {selectedRole ? "Updating role" : "Creating"}
                   </div>
-                  {collapseState[parentCategory.parentCategory] && (
-                    <div className="grid grid-cols-3 gap-4">
-                      {parentCategory.subcategories?.map((subcategory) => (
-                        <div
-                          className="rounded-md border border-black/10"
-                          key={subcategory.subcategory}
-                        >
+                ) : (
+                  <span>{selectedRole ? "Update" : "Create"}</span>
+                )}
+              </button>
+              {selectedRole ? (
+                <ListRestart
+                  onClick={handleClear}
+                  className="ml-3 cursor-pointer text-textcolor-darkblue"
+                />
+              ) : null}
+            </div>
+            <div className="mt-5 flex flex-col gap-3">
+              {permissionList?.map((parentCategory) => (
+                <div key={parentCategory.parentCategory} className="mt-3">
+                  <div
+                    className={`collapse w-full rounded-md border-y bg-white ${
+                      areAllItemsChecked(parentCategory.subcategories, formData)
+                        ? "border-[#009320] text-[#009320]"
+                        : "border-[#EAEAEA] text-[#3A3A3A]"
+                    }`}
+                  >
+                    <div
+                      className="collapse-title flex w-full cursor-pointer items-center justify-between px-0 text-[0.94rem] font-semibold"
+                      onClick={() =>
+                        toggleCollapse(parentCategory.parentCategory)
+                      }
+                    >
+                      {parentCategory.parentCategory}
+                      {collapseState[parentCategory.parentCategory] ? (
+                        <ArrowUp className="w-4" />
+                      ) : (
+                        <ArrowDown className="w-4" />
+                      )}
+                    </div>
+                    {collapseState[parentCategory.parentCategory] && (
+                      <div className="grid grid-cols-3 gap-4">
+                        {parentCategory.subcategories?.map((subcategory) => (
                           <div
-                            className="collapse-title flex w-full cursor-pointer items-center justify-between !p-0 !px-4 text-sm font-semibold"
-                            onClick={() =>
-                              toggleCollapse(subcategory.subcategory)
-                            }
+                            className="rounded-md border border-black/10"
+                            key={subcategory.subcategory}
                           >
-                            {subcategory.subcategory}
-                            {collapseState[subcategory.subcategory] ? (
-                              <Minus className="w-4" />
-                            ) : (
-                              <Plus className="w-4" />
-                            )}
-                          </div>
+                            <div
+                              className="collapse-title flex w-full cursor-pointer items-center justify-between !p-0 !px-4 text-sm font-semibold"
+                              onClick={() =>
+                                toggleCollapse(subcategory.subcategory)
+                              }
+                            >
+                              {subcategory.subcategory}
+                              {collapseState[subcategory.subcategory] ? (
+                                <Minus className="w-4" />
+                              ) : (
+                                <Plus className="w-4" />
+                              )}
+                            </div>
 
-                          {collapseState[subcategory.subcategory] && (
-                            <div className="flex flex-col gap-0.5 border-t border-t-black/10 pb-3">
-                              <div className="flex items-center gap-2 bg-black/5 p-3 text-sm font-semibold">
-                                <input
-                                  className="h-4 w-4"
-                                  type="checkbox"
-                                  checked={subcategory.items.every((item) =>
-                                    formData.permissions.some(
-                                      (permission) => permission.id === item.id,
-                                    ),
-                                  )}
-                                  onChange={(e) =>
-                                    handleSelectAll(
-                                      subcategory.items,
-                                      e.target.checked,
-                                    )
-                                  }
-                                />
-                                <span>Select All</span>
-                              </div>
-                              {subcategory.items?.map((item) => (
-                                <div
-                                  key={item.id}
-                                  className="mt-2 flex items-center justify-between px-4 text-sm font-semibold capitalize text-black/70"
-                                >
-                                  <p>{item.name}</p>
+                            {collapseState[subcategory.subcategory] && (
+                              <div className="flex flex-col gap-0.5 border-t border-t-black/10 pb-3">
+                                <div className="flex items-center gap-2 bg-black/5 p-3 text-sm font-semibold">
                                   <input
-                                    type="checkbox"
                                     className="h-4 w-4"
-                                    checked={formData.permissions.some(
-                                      (permission) => permission.id === item.id,
+                                    type="checkbox"
+                                    checked={subcategory.items.every((item) =>
+                                      formData.permissions.some(
+                                        (permission) =>
+                                          permission.id === item.id,
+                                      ),
                                     )}
-                                    onChange={() =>
-                                      handleCheckboxChange(item.id)
+                                    onChange={(e) =>
+                                      handleSelectAll(
+                                        subcategory.items,
+                                        e.target.checked,
+                                      )
                                     }
                                   />
+                                  <span>Select All</span>
                                 </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                                {subcategory.items?.map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className="mt-2 flex items-center justify-between px-4 text-sm font-semibold capitalize text-black/70"
+                                  >
+                                    <p>{item.name}</p>
+                                    <input
+                                      type="checkbox"
+                                      className="h-4 w-4"
+                                      checked={formData.permissions.some(
+                                        (permission) =>
+                                          permission.id === item.id,
+                                      )}
+                                      onChange={() =>
+                                        handleCheckboxChange(item.id)
+                                      }
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </form>
-      </div>
+              ))}
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
