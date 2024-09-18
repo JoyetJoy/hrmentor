@@ -165,7 +165,7 @@ export const MenuRoles = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -175,7 +175,7 @@ export const MenuRoles = () => {
         icon={<ChevronRight className="size-3" />}
       />
       {isLoading || roleLoading ? (
-        <div className="my-20 flex h-screen items-center justify-center">
+        <div className="flex h-[70vh] items-center justify-center">
           <div className="border-yipred h-9 w-9 animate-spin rounded-full border-b-2 border-t-2"></div>
         </div>
       ) : (
