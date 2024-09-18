@@ -22,9 +22,9 @@ const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
 });
 
-const areAllItemsChecked = (subcategory, formData) => {
-  return subcategory?.every((item) =>
-    formData.permissions.some((permission) => permission.id === item?.id),
+const areAllSubcategoryItemsChecked = (subcategoryItems, formData) => {
+  return subcategoryItems.every((item) =>
+    formData.permissions.some((permission) => permission.id === item.id),
   );
 };
 
@@ -224,13 +224,7 @@ export const MenuRoles = () => {
             <div className="mt-5 flex flex-col gap-3">
               {permissionList?.map((parentCategory) => (
                 <div key={parentCategory.parentCategory} className="mt-3">
-                  <div
-                    className={`collapse w-full rounded-md border-y bg-white ${
-                      areAllItemsChecked(parentCategory.subcategories, formData)
-                        ? "border-[#009320] text-[#009320]"
-                        : "border-[#EAEAEA] text-[#3A3A3A]"
-                    }`}
-                  >
+                  <div className="collapse w-full rounded-md border-y border-[#EAEAEA] bg-white text-[#3A3A3A]">
                     <div
                       className="collapse-title flex w-full cursor-pointer items-center justify-between px-0 text-[0.94rem] font-semibold"
                       onClick={() =>
@@ -248,16 +242,23 @@ export const MenuRoles = () => {
                       <div className="grid grid-cols-3 gap-4">
                         {parentCategory.subcategories?.map((subcategory) => (
                           <div
-                            className="rounded-md border border-black/10"
-                            key={subcategory.subcategory}
+                            className={`rounded-md border ${
+                              areAllSubcategoryItemsChecked(
+                                subcategory?.items,
+                                formData,
+                              )
+                                ? "border-textcolor-darkblue"
+                                : "border-black/10"
+                            }`}
+                            key={subcategory?.subcategory}
                           >
                             <div
                               className="collapse-title flex w-full cursor-pointer items-center justify-between !p-0 !px-4 text-sm font-semibold"
                               onClick={() =>
-                                toggleCollapse(subcategory.subcategory)
+                                toggleCollapse(subcategory?.subcategory)
                               }
                             >
-                              {subcategory.subcategory}
+                              {subcategory?.subcategory}
                               {collapseState[subcategory.subcategory] ? (
                                 <Minus className="w-4" />
                               ) : (
