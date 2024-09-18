@@ -287,7 +287,7 @@ export const adminItems = [
   },
   {
     icon: "/assets/icons/admin/ac.svg",
-    label: "Role Management",
+    label: "Account Management",
     path: "/admin/role",
   },
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
