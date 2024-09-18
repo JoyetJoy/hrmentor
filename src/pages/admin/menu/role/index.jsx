@@ -160,6 +160,12 @@ export const MenuRoles = () => {
     });
   };
 
+  const handleClear = () => {
+    setSelectedRole(0);
+    reset();
+    setFormData({ permissions: [] });
+  };
+
   return (
     <div className="flex flex-col">
       <MenuHeader
@@ -207,9 +213,7 @@ export const MenuRoles = () => {
             </button>
             {selectedRole ? (
               <ListRestart
-                onClick={() => {
-                  setSelectedRole(0);
-                }}
+                onClick={handleClear}
                 className="ml-3 cursor-pointer text-textcolor-darkblue"
               />
             ) : null}
