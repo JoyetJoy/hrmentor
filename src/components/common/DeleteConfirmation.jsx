@@ -16,9 +16,9 @@ export default function DeleteConfirmation({
       setLoader(true);
       const res = await newRequest.delete(`${ROLES}/${selectedId}`);
       if (res?.data?.success === true) {
+        queryClient.invalidateQueries([qrkey]);
         setLoader(false);
         toast.success(res?.data?.message);
-        queryClient.invalidateQueries([qrkey]);
         onCancel(false);
       }
     } catch (error) {
