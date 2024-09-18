@@ -1,8 +1,8 @@
-import trendingup from '/assets/icons/admin/trending-up.svg'
-import trendingdown from '/assets/icons/admin/trending-down.svg'
-import tickgreen from '/assets/icons/admin/tick-green.svg';
-import tickgray from '/assets/icons/admin/tick-gray.svg';
-import { LayoutGrid, Users, UserPlus, Briefcase } from "lucide-react"
+import trendingup from "/assets/icons/admin/trending-up.svg";
+import trendingdown from "/assets/icons/admin/trending-down.svg";
+import tickgreen from "/assets/icons/admin/tick-green.svg";
+import tickgray from "/assets/icons/admin/tick-gray.svg";
+import { LayoutGrid, Users, UserPlus, Briefcase } from "lucide-react";
 
 export const employeeDetails = [
   {
@@ -73,7 +73,6 @@ export const roleSidebarData = [
   { id: "9", name: "Frontend Developer", no: "2" },
 ];
 
-
 export const availablePlanData = [
   {
     price: "$10",
@@ -81,9 +80,8 @@ export const availablePlanData = [
 
     list: [
       {
-
         title: "Recruiter",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
 
@@ -91,13 +89,12 @@ export const availablePlanData = [
           "Audit log and data history",
           "Unlimited individual users",
           "Unlimited individual users",
-
         ],
       },
       {
         title: "Hiring",
-        bgColor: '#F1F1F1',
-        textColor: '#667085',
+        bgColor: "#F1F1F1",
+        textColor: "#667085",
         imgSrc: tickgray,
         value: [
           "Audit log and data history",
@@ -107,8 +104,8 @@ export const availablePlanData = [
       },
       {
         title: "Employees",
-        bgColor: '#F1F1F1',
-        textColor: '#667085',
+        bgColor: "#F1F1F1",
+        textColor: "#667085",
         imgSrc: tickgray,
         value: [
           "Audit log and data history",
@@ -125,7 +122,7 @@ export const availablePlanData = [
     list: [
       {
         title: "Recruiter",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -136,7 +133,7 @@ export const availablePlanData = [
       },
       {
         title: "Hiring",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -147,8 +144,8 @@ export const availablePlanData = [
       },
       {
         title: "Employee",
-        bgColor: '#F1F1F1',
-        textColor: '#667085',
+        bgColor: "#F1F1F1",
+        textColor: "#667085",
         imgSrc: tickgray,
         value: [
           "Audit log and data history",
@@ -157,7 +154,6 @@ export const availablePlanData = [
         ],
       },
     ],
-
   },
   {
     price: "$10",
@@ -166,7 +162,7 @@ export const availablePlanData = [
     list: [
       {
         title: "Recruiter",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -177,7 +173,7 @@ export const availablePlanData = [
       },
       {
         title: "Hiring",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -188,7 +184,7 @@ export const availablePlanData = [
       },
       {
         title: "Employee",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -198,7 +194,6 @@ export const availablePlanData = [
         ],
       },
     ],
-
   },
 ];
 
@@ -208,7 +203,7 @@ export const subcriptionModalData = [
     list: [
       {
         title: "Recruiter",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -219,7 +214,7 @@ export const subcriptionModalData = [
       },
       {
         title: "Hiring",
-        bgColor: '#D1FADF',
+        bgColor: "#D1FADF",
         textColor: "#000000",
         imgSrc: tickgreen,
         value: [
@@ -233,79 +228,128 @@ export const subcriptionModalData = [
 ];
 // header list
 export const menuitems = [
-  { id: 1, iconType: 'image', iconSrcBlack: '/assets/icons/admin/dashbordBlack.svg', iconSrcActive: '/assets/icons/admin/dashbordcolor.svg', name: "Dashboard", path: '/admin/dashboard', active: "dashboard" },
-  { id: 2, iconType: 'image', iconSrcBlack: '/assets/icons/admin/recruiter-black.svg', iconSrcActive: '/assets/icons/admin/recruterColor.svg', name: "Recruiter", path: '/admin/recruiter', active: "recruiter" },
-  { id: 3, iconType: 'image', iconSrcBlack: '/assets/icons/admin/hiring-black.svg', iconSrcActive: '/assets/icons/admin/hiringColor.svg', name: "Hiring", path: '/admin/hiring', active: "hiring" },
-  { id: 4, iconType: 'image', iconSrcBlack: '/assets/icons/admin/employee-black.svg', iconSrcActive: '/assets/icons/admin/employeeColor.svg', name: "Employee", path: '/admin/employees/list', active: "employees" },
-  { id: 5, iconType: 'image', iconSrcBlack: '/assets/icons/admin/attendance-black.svg', iconSrcActive: '/assets/icons/admin/attendance-black.svg', name: "Attendance", path: '/attendance', active: "attendance" }
+  {
+    id: 1,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/dashbordBlack.svg",
+    iconSrcActive: "/assets/icons/admin/dashbordcolor.svg",
+    name: "Dashboard",
+    path: "/admin/dashboard",
+    active: "dashboard",
+  },
+  {
+    id: 2,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/recruiter-black.svg",
+    iconSrcActive: "/assets/icons/admin/recruterColor.svg",
+    name: "Recruiter",
+    path: "/admin/recruiter",
+    active: "recruiter",
+  },
+  {
+    id: 3,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/hiring-black.svg",
+    iconSrcActive: "/assets/icons/admin/hiringColor.svg",
+    name: "Hiring",
+    path: "/admin/hiring",
+    active: "hiring",
+  },
+  {
+    id: 4,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/employee-black.svg",
+    iconSrcActive: "/assets/icons/admin/employeeColor.svg",
+    name: "Employee",
+    path: "/admin/employees/list",
+    active: "employees",
+  },
+  {
+    id: 5,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/attendance-black.svg",
+    iconSrcActive: "/assets/icons/admin/attendance-black.svg",
+    name: "Attendance",
+    path: "/attendance",
+    active: "attendance",
+  },
 ];
-
 
 export const adminItems = [
   {
-    icon: '/assets/icons/admin/profilemang.svg',
+    icon: "/assets/icons/admin/profilemang.svg",
     label: "Profile Management",
     path: "/profile-management",
   },
-  { icon: '/assets/icons/admin/company.svg', label: "Company Settings", path: "/company-settings" },
   {
-    icon: '/assets/icons/admin/ac.svg',
-    label: "Account Management",
+    icon: "/assets/icons/admin/company.svg",
+    label: "Company Settings",
+    path: "/company-settings",
+  },
+  {
+    icon: "/assets/icons/admin/ac.svg",
+    label: "Role Management",
     path: "/admin/role",
   },
-  { icon: '/assets/icons/admin/logout.svg', label: "Log Out", path: "/logout" },
+  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
 ];
 
 export const activityItems = [
-  { icon: '/assets/icons/admin/project.svg', label: "Project" },
-  { icon: '/assets/icons/admin/task.svg', label: "Task" },
-  { icon: '/assets/icons/admin/roster.svg', label: "Roster" },
-  { icon: '/assets/icons/admin/payroll.svg', label: "Payroll" },
-  { icon: '/assets/icons/admin/setup.svg', label: "Setup" },
+  { icon: "/assets/icons/admin/project.svg", label: "Project" },
+  { icon: "/assets/icons/admin/task.svg", label: "Task" },
+  { icon: "/assets/icons/admin/roster.svg", label: "Roster" },
+  { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
+  { icon: "/assets/icons/admin/setup.svg", label: "Setup" },
 ];
- export const EmailData = [
+export const EmailData = [
   {
     heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
   },
-  
-  {
-    heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
-  },
-  {
-    heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
-  },
-  {
-    heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
-  },
-  {
-    heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
-  },
-  {
-    heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
-  },
-  
-
 
   {
     heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
   },
   {
     heading: "Final Interview Schedule",
-    content: "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
-    time: "8.45am"
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
+  },
+  {
+    heading: "Final Interview Schedule",
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
+  },
+  {
+    heading: "Final Interview Schedule",
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
+  },
+  {
+    heading: "Final Interview Schedule",
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
+  },
+
+  {
+    heading: "Final Interview Schedule",
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
+  },
+  {
+    heading: "Final Interview Schedule",
+    content:
+      "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
+    time: "8.45am",
   },
 ];

@@ -7,16 +7,7 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 
-import {
-  ChevronDown,
-  Minus,
-  Plus,
-  ArrowLeft,
-  ChevronRight,
-  Asterisk,
-} from "lucide-react";
-
-import { Link } from "react-router-dom";
+import { ChevronDown, Minus, Plus, ChevronRight } from "lucide-react";
 import MenuHeader from "@/components/common/MenuHeader";
 export const MenuRoles = () => {
   const [collapseState, setCollapseState] = useState(false);
@@ -25,40 +16,39 @@ export const MenuRoles = () => {
     setCollapseState(!collapseState);
   };
   return (
-    <div className="flex flex-col ">
-  
-  <MenuHeader
+    <div className="flex flex-col">
+      <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={"Account Management"}
         currentpath={"Role"}
         activeMenu={"Role"}
-        icon={  <ChevronRight className="size-3" />}
-
+        icon={<ChevronRight className="size-3" />}
       />
-      <div className="flex flex-row mt-1 gap-4">
+      <div className="mt-1 flex flex-row gap-4">
         <RoleSidebar />
-        <div className="w-full bg-white px-10 pt-9 rounded-md">
-          <h1 className="text-xl text-black font-bold">Add New Role</h1>
-          <hr className="border-b-1 border-gray-300 my-1" />
-          <div className="flex flex-row  items-center gap-2 pt-6">
-            <h1 className="flex flex-row whitespace-nowrap  required text-sm">
-              Role Name :
-            </h1>
+        <div className="w-full rounded-md bg-white px-10 pt-9">
+          <h1 className="text-xl font-bold text-black">Add New Role</h1>
+          <hr className="border-b-1 my-1 border-gray-300" />
+          <div className="flex flex-row items-center gap-2 pt-6">
+            <div className="flex items-center gap-0.5">
+              <h1 className="required flex flex-row whitespace-nowrap text-sm">
+                Role Name
+              </h1>
+              <span>:</span>
+            </div>
+
             <input
               type="text"
               placeholder="Enter role name"
-              className="input w-full border border-black max-w-xs  h-11 min-h-11 focus:border-black focus:outline-none placeholder:text-[#2C2C2C] placeholder:text-xs "
+              className="input h-11 min-h-11 w-full max-w-xs border border-black placeholder:text-sm placeholder:text-[#2C2C2C] focus:border-black focus:outline-none"
             />
-            <button className="text-white btn px-20 bg-textcolor-blue hover:bg-textcolor-blue h-11 min-h-11">
+            <button className="btn h-11 min-h-11 bg-textcolor-blue px-20 text-white hover:bg-textcolor-blue">
               Create
             </button>
           </div>
-          <hr className="border-b-1 border-gray-500 my-1 mt-3 " />
-          <form
-            className="flex flex-col mt-3 gap-3"
-            //   onSubmit={handleSubmit(onSubmit)}
-          >
+          <hr className="border-b-1 my-1 mt-3 border-gray-500" />
+          <form className="mt-3 flex flex-col gap-3">
             {rolesDummydata?.map((items) => (
               <Disclosure
                 key={items?.id}
@@ -66,69 +56,67 @@ export const MenuRoles = () => {
                 className=""
                 defaultOpen={true}
               >
-                <DisclosureButton className="group flex w-full items-center  gap-1 mb-1 ">
+                <DisclosureButton className="group mb-1 flex w-full items-center gap-1">
                   <span className="text-base font-bold text-black group-data-[hover]:text-black">
                     {items?.roleTypes}
                   </span>
-                  <ChevronDown className="size-5 fill-white/60 group-data-[hover]:fill-white/50 group-data-[open]:rotate-180" />
+                  <ChevronDown className="size-5 fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
                 </DisclosureButton>
 
                 {console.log(items)}
-                <DisclosurePanel className="grid grid-cols-3  gap-3 mb-5  ">
-                  <div className="flex gap-x-1.5 col-span-3 my-3 items-center">
+                <DisclosurePanel className="mb-5 grid grid-cols-3 gap-3">
+                  <div className="col-span-3 my-3 flex items-center gap-x-1.5">
                     <input
                       type="checkbox"
                       name=""
                       id=""
-                      className="accent-black border border-gray-300  size-4"
+                      className="size-4 border border-gray-300 accent-black"
                     />
                     <p className="text-sm">Select All</p>
                   </div>
                   {items?.data?.map((category) => (
                     <div
                       key={category.name}
-                      className={`collapse bg-white border border-gray-300 w-full  rounded-md `}
+                      className={`collapse w-full rounded-md border border-gray-300 bg-white`}
                     >
                       <input
                         onClick={handleToggle}
                         type="checkbox"
-                        className="peer    min-h-1 ps-3 pe-3 overflow-hidden "
+                        className="peer min-h-1 overflow-hidden pe-3 ps-3"
                       />
-                      <div className="flex  w-full justify-between items-center text-[0.78rem] collapse-title  min-h-0 p-3 ps-4 pe-12">
-                        <div className="font-semibold font-poppins text-sm text-textcolor-300">
+                      <div className="collapse-title flex min-h-0 w-full items-center justify-between p-3 pe-12 ps-4 text-[0.78rem]">
+                        <div className="font-poppins text-sm font-semibold text-textcolor-300">
                           {category.guard_name}{" "}
                         </div>
 
                         {collapseState ? (
-                          <Minus className="size-5 -mr-9 text-gray-600  stroke-[3px]" />
+                          <Minus className="-mr-9 size-5 stroke-[3px] text-gray-600" />
                         ) : (
-                          <Plus className="size-5  -mr-9 text-gray-600  stroke-[3px]" />
+                          <Plus className="-mr-9 size-5 stroke-[3px] text-gray-600" />
                         )}
                       </div>
-                      <div className="collapse-content border-t border-t-[#EAEAEA] flex flex-col gap-1 !text-[#3A3A3A] text-[0.78rem]">
+                      <div className="collapse-content flex flex-col gap-1 border-t border-t-[#EAEAEA] text-[0.78rem] !text-[#3A3A3A]">
                         {category?.data?.map((item) => (
                           <div
                             key={item?.name}
-                            className="flex items-center font-poppins font-medium mt-3 justify-between pr-1 gap-3"
+                            className="mt-3 flex items-center justify-between gap-3 pr-1 font-poppins font-medium"
                           >
-                            <p className="text-[13px] text-[#3A3A3A] font-poppins">{item?.name}</p>
+                            <p className="font-poppins text-[13px] text-[#3A3A3A]">
+                              {item?.name}
+                            </p>
                             <input
                               type="checkbox"
-                              className="accent-black size-4 border border-black"
+                              className="size-4 border border-black accent-black"
                             />
                           </div>
                         ))}
                       </div>
                     </div>
                   ))}
-                  {/* <div className="h-10 w-full bg-black"></div>
-                <div className="h-10 w-full bg-black"></div> */}
                 </DisclosurePanel>
-                
-                 <div  className="my-1 border-b border-[#EAEAEA] "></div>
+                <div className="my-1 border-b border-[#EAEAEA]"></div>
               </Disclosure>
             ))}
-            {/* </div> */}
           </form>
         </div>
       </div>

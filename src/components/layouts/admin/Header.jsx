@@ -13,15 +13,15 @@ export const AdminHeader = () => {
     user: state.user,
   }));
 
-  console.log(user);
-
-  const [visibleSection, setVisibleSection] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const handleClick = (section) => {
-    setVisibleSection(visibleSection === section ? null : section);
-  };
+
   const handleNavigation = (path) => {
+    if (path === "/logout") {
+      setUser({});
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
@@ -103,11 +103,7 @@ export const AdminHeader = () => {
               </ul>
             </Menu.Items>
           </Menu>
-          <ProfileDropdown
-            handleNavigation={handleNavigation}
-            user={user}
-            setUser={setUser}
-          />
+          <ProfileDropdown handleNavigation={handleNavigation} user={user} />
         </div>
       </div>
     </>

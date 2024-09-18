@@ -19,8 +19,6 @@ export const AdminLayout = () => {
       newRequest.get(GET_USER).then((res) => {
         return res.data;
       }),
-    cacheTime: 5000000,
-    staleTime: 5000000,
     enabled: !!token,
   });
 
