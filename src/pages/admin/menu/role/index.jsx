@@ -6,7 +6,6 @@ import {
   ChevronRight,
   ArrowDown,
   ArrowUp,
-  Rotate3D,
   ListRestart,
 } from "lucide-react";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -140,7 +139,6 @@ export const MenuRoles = () => {
   const handleSelectAll = (subcategoryItems, isSelected) => {
     setFormData((prevData) => {
       let updatedPermissions = [...prevData.permissions];
-
       subcategoryItems.forEach((item) => {
         const permissionExists = updatedPermissions.some(
           (p) => p.id === item.id,
