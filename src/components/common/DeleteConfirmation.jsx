@@ -1,4 +1,4 @@
-import { newRequest, ROLES } from "@/api";
+import { newRequest } from "@/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -8,13 +8,14 @@ export default function DeleteConfirmation({
   selectedId,
   onCancel,
   qrkey,
+  api,
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
   const handleDelete = async () => {
     try {
       setLoader(true);
-      const res = await newRequest.delete(`${ROLES}/${selectedId}`);
+      const res = await newRequest.delete(`${api}/${selectedId}`);
       if (res?.data?.success === true) {
         queryClient.invalidateQueries([qrkey]);
         setLoader(false);

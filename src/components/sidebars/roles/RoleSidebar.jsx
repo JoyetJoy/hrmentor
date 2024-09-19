@@ -43,6 +43,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
         onCancel={setDeletePopup}
         selectedId={selectedId}
         qrkey={"rolesList"}
+        api={ROLES}
       />
       <div className="col-span-3 flex w-full flex-col">
         <h1 className="text-bold mb-2 text-start text-lg font-semibold">

@@ -1,38 +1,70 @@
-import { newFormRequest } from "@/api";
+import { newFormRequest, newRequest } from "@/api";
 import { EMPLOYEE_TYPE } from "@/api/master";
 import { employeeMasterOptions } from "@/constants/data";
 import { EmployeeTypeSchema } from "@/schema/dashboard/employee/masters/employeeType.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 
-export default function AddEmployementType({ popupOpen, setPopupOpen }) {
+export default function AddEmployementType({
+  popupOpen,
+  setPopupOpen,
+  selectedField,
+  setSelectedField,
+}) {
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+
+  // Get selected data
+  const { data: employeeTypeDetail, isLoading: employeeTypeLoading } = useQuery(
+    {
+      queryKey: ["employeeTypeDetail", selectedField],
+      queryFn: () =>
+        newRequest
+          .get(`${EMPLOYEE_TYPE}/${selectedField}`)
+          .then((res) => res.data),
+      enabled: !!selectedField != 0,
+    },
+  );
+  console.log(employeeTypeDetail);
+
   const {
     register,
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(EmployeeTypeSchema),
   });
 
-  // Close the popup
+  useEffect(() => {
+    if (employeeTypeDetail) {
+      setValue(
+        "employment_type_name",
+        employeeTypeDetail?.employment_type_name,
+      );
+      setValue(
+        "employment_type_status",
+        employeeTypeDetail?.employment_type_status,
+      );
+    }
+  }, [employeeTypeDetail, setValue]);
+
   function close() {
     setPopupOpen(false);
+    setSelectedField(0);
     reset();
   }
 
-  // Handle form submission
   const onSubmit = async (data) => {
     setLoader(true);
     try {
@@ -70,7 +102,7 @@ export default function AddEmployementType({ popupOpen, setPopupOpen }) {
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-                Add Employee Type
+                {selectedField ? "Update" : "Add"} Employee Type
               </h1>
               <button
                 onClick={close}
