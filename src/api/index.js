@@ -47,7 +47,7 @@ addAuthorizationInterceptor(newRequest);
 addAuthorizationInterceptor(XFormRequest);
 addAuthorizationInterceptor(newFormRequest);
 
-// ROLES AND PERMISSIONS
+// ROLES AND PERMISSIONS ENDPOINTS
 
 export const ROLES = "roles";
 export const PAGINATED_ROLES = "paginated-roles";

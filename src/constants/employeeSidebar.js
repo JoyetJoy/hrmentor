@@ -96,6 +96,4 @@ export const employeesSettingsSideList = [
     link: "/admin/employees/settings/eeo-category",
     name: "EEO Job Categorys",
   },
-
-
 ];
