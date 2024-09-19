@@ -76,20 +76,20 @@ export default function AddEmployementType({
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.patch(
-          `${EMPLOYEE_TYPE}/${selectedRole}`,
+          `${EMPLOYEE_TYPE}/${selectedField}`,
           formData,
         );
       } else {
         res = await newFormRequest.post(EMPLOYEE_TYPE, formData);
       }
-
       if (res?.data?.success === true) {
         toast.success("Employee Type added successfully!");
         queryClient.invalidateQueries(["employeeTypes"]);
         close();
       }
     } catch (error) {
-      toast.error("Failed to add Employee Type!");
+      console.log(error);
+      toast.error(error?.response?.data?.error);
     } finally {
       setLoader(false);
     }
@@ -172,7 +172,7 @@ export default function AddEmployementType({
                   {loader ? (
                     <div className="flex items-center gap-3">
                       <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      {selectedField ? "Updating" : "Saving"} Saving
+                      {selectedField ? "Updating" : "Saving"}
                     </div>
                   ) : (
                     <span>{selectedField ? "Update" : "Save"}</span>
