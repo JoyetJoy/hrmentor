@@ -101,7 +101,7 @@ function Login() {
           >
             Forgot password?
           </Link>
-          <div className="mt-7 flex flex-col items-center justify-center gap-1">
+          <div className="mt-7 flex flex-col items-center justify-center">
             <p className="text-center text-base font-medium text-[#808080B2]">
               Powered By
             </p>
