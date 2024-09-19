@@ -23,7 +23,6 @@ function Login() {
   };
 
   const saveForm = async (data) => {
-    console.log("Form data:", data);
     try {
       const formData = new FormData();
       formData.append("email", data.email);
@@ -65,7 +64,7 @@ function Login() {
             <input
               type="email"
               placeholder="Enter email id"
-              className={`h-12 min-h-12 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-base placeholder:text-[#7F7F7F] ${
+              className={`h-12 min-h-12 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
                 errors.email ? "border-red-500" : "border-[#181C3A4D]"
               }`}
               {...register("email")}
@@ -81,7 +80,7 @@ function Login() {
             <input
               type="password"
               placeholder="Enter Password"
-              className={`h-12 min-h-12 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-base placeholder:text-[#7F7F7F] ${
+              className={`h-12 min-h-12 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
                 errors.password ? "border-red-500" : "border-[#181C3A4D]"
               }`}
               {...register("password")}
@@ -92,7 +91,7 @@ function Login() {
           </div>
           <button
             type="submit"
-            className="h-14 w-full rounded-md bg-[#2B2B2B] text-center text-base text-white hover:bg-[#2B2B2B]"
+            className="h-14 w-full rounded-md bg-[#2B2B2B] text-center text-base font-medium text-white hover:bg-[#2B2B2B]"
           >
             Log In
           </button>
