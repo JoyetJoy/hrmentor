@@ -64,7 +64,6 @@ export const EmployeeSettings = () => {
         icon={<ChevronRight className="size-3" />}
         activeMenu={"Settings"}
       />
-
       <div className="flex gap-x-3">
         <EmployeesSidebar sidebarList={employeesSettingsSideList} />
         <div className="w-full rounded-md bg-white px-5 py-4">

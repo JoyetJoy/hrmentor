@@ -4,19 +4,20 @@ import { Link, useLocation } from "react-router-dom";
 
 function EmployeesSidebar({ sidebarList = employeesSidebarList }) {
   const { pathname } = useLocation();
-  console.log(pathname);
   return (
-    <div className="bg-white rounded-md px-5 min-h-full min-w-56 py-4 ">
-      <ul className="flex flex-col  gap-5 justify-center text-sm text-[#7F7F7F] font-medium">
+    <div className="min-h-full min-w-56 rounded-md bg-white px-5 py-4">
+      <ul className="flex flex-col justify-center gap-5 text-[0.9rem] font-medium text-[#7F7F7F]">
         {sidebarList?.map((item) => (
           <li
             key={item?.id}
             className={
-              pathname.includes(item?.link) && "text-[#E95D39] font-bold text-sm whitespace-nowrap"
-
+              pathname.includes(item?.link) &&
+              "whitespace-nowrap text-sm font-bold text-[#E95D39]"
             }
           >
-            <Link to={item?.link} className="whitespace-nowrap">{item?.name}</Link>
+            <Link to={item?.link} className="whitespace-nowrap">
+              {item?.name}
+            </Link>
           </li>
         ))}
       </ul>
