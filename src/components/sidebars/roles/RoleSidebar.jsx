@@ -3,7 +3,7 @@ import { Search, Trash2 } from "lucide-react";
 import edit from "/public/assets/icons/admin/marker.svg";
 import Pagination from "@/components/table/Pagination";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest, PAGINATED_ROLES } from "@/api";
+import { newRequest, PAGINATED_ROLES, ROLES } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
