@@ -6,12 +6,10 @@ import AddEmployementType from "@/components/popups/employees/settings/AddEmploy
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
-import { TableData } from "@/constants/tableDummy";
 import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 export const EmployeeSettings = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -137,6 +135,7 @@ export const EmployeeSettings = () => {
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input
                   type="text"
+                  onChange={(e) => setKeyword(e.target.value)}
                   className="h-full w-full placeholder:text-[#7F7F7F]"
                   placeholder="Search"
                 />

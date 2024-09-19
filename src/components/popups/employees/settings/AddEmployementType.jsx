@@ -164,10 +164,10 @@ export default function AddEmployementType({
                   {loader ? (
                     <div className="flex items-center gap-3">
                       <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      Saving
+                      {selectedField ? "Updating" : "Saving"} Saving
                     </div>
                   ) : (
-                    "Save"
+                    <span>{selectedField ? "Update" : "Save"}</span>
                   )}
                 </button>
                 <button
