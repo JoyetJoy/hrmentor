@@ -32,7 +32,6 @@ export default function AddEmployementType({
       enabled: !!selectedField != 0,
     },
   );
-  console.log(employeeTypeDetail);
 
   const {
     register,

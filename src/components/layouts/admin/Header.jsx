@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
 import { menuitems, activityItems } from "@/constants/dummyData";
@@ -28,7 +28,7 @@ export const AdminHeader = () => {
   return (
     <>
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white px-5">
-        <div className="flex flex-row gap-3">
+        <Link to="/" className="flex flex-row gap-3">
           <div className="w-11">
             <img
               src={"/assets/images/logo-header.svg"}
@@ -42,7 +42,7 @@ export const AdminHeader = () => {
               Tech Butomy Pvt Ltd
             </h1>
           </span>
-        </div>
+        </Link>
         <div className="items flex gap-x-3">
           {menuitems.map((item) => (
             <NavLink
