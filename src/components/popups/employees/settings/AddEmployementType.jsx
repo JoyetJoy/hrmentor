@@ -108,7 +108,7 @@ export default function AddEmployementType({
             transition
             className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
-            <div className="mb-5 flex items-center justify-between">
+            <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
                 {selectedField ? "Update" : "Add"} Employee Type
               </h1>
@@ -120,7 +120,7 @@ export default function AddEmployementType({
               </button>
             </div>
             <form
-              className="mt-4 grid grid-cols-1 gap-3"
+              className="grid grid-cols-1 gap-3"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="group flex flex-col space-y-1">
