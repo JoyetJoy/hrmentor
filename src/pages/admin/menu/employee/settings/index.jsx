@@ -4,7 +4,8 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { employeesSettingsSideList } from "@/constants/employeeSidebar";
 import { TableData } from "@/constants/tableDummy";
-import { ChevronRight, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
+import { Button } from "@headlessui/react";
+import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -12,7 +13,6 @@ export const EmployeeSettings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [popupOpen, setPopupOpen] = useState(false);
-
 
   const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
@@ -25,57 +25,71 @@ export const EmployeeSettings = () => {
       {
         header: "Status",
         accessorKey: "status",
-        cell: ({ row }) => <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">{row?.original?.status}</div>
+        cell: ({ row }) => (
+          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]">
+            {row?.original?.status}
+          </div>
+        ),
       },
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs   ">
+          <div className="flex items-center gap-2 text-xs">
             <Link
               to={""}
-              className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
             </Link>
-            <Link className="cursor-pointer flex justify-center items-center text-[#2C2C2C] bg-[#EBEBF0]  p-2  rounded-full">
+            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]">
               <Trash2 className="size-3" />
             </Link>
           </div>
-          
         ),
       },
     ],
 
-    []
+    [],
   );
   return (
-    <div className=" flex flex-col">
-        <MenuHeader
-      menu={"Menu"}
-      subMenu={"Employee"}
-      currentpath={"Settings"}
-      icon={<ChevronRight className="size-3" />}
-      activeMenu={'Settings'}
+    <div className="flex flex-col">
+      <MenuHeader
+        menu={"Menu"}
+        subMenu={"Employee"}
+        currentpath={"Settings"}
+        icon={<ChevronRight className="size-3" />}
+        activeMenu={"Settings"}
       />
-      {/* ----sidebar---- */}
+
       <div className="flex gap-x-3">
         <EmployeesSidebar sidebarList={employeesSettingsSideList} />
-        <div className=" w-full bg-white rounded-md px-5 py-4">
-          <div className="flex items-center justify-between my-4">
-            <div className="flex gap-2 placeholder:text-black items-center rounded-md input-box min-h-11 min-w-96 border border-[#EBEBF0]">
+        <div className="w-full rounded-md bg-white px-5 py-4">
+          <div className="my-4 flex items-center justify-between">
+            <div className="input-box flex min-h-11 min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] placeholder:text-black">
               <Search className="size-4 text-[#7F7F7F]" />
               <input
                 type="text"
-                className=" w-full h-full placeholder:text-[#7F7F7F]"
+                className="h-full w-full placeholder:text-[#7F7F7F]"
                 placeholder="Search"
               />
             </div>
-            <Link onClick={()=>setPopupOpen(true)}  className="btn bg-[#030E5C] text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-[#030E5C] min-w-28 min-h-11 h-11 whitespace-nowrap">
-               <Plus className="size-4"/>Add 
-            </Link>
-            <AddEmployementType popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-
+            <Button
+              onClick={() => {
+                setPopupOpen(true);
+              }}
+              className="flex w-fit items-center justify-center gap-2 rounded-md bg-[#030E5C] px-5 py-2 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+            >
+              <Plus className="size-4" />
+              Add
+            </Button>
+            <AddEmployementType
+              popupOpen={popupOpen}
+              setPopupOpen={setPopupOpen}
+            />
           </div>
           <div>
             <QueryTable
