@@ -73,7 +73,16 @@ export default function AddEmployementType({
         "employment_type_status",
         data?.employment_type_status?.value,
       );
-      const res = await newFormRequest.post(EMPLOYEE_TYPE, formData);
+      let res;
+      if (selectedField !== 0) {
+        res = await newFormRequest.patch(
+          `${EMPLOYEE_TYPE}/${selectedRole}`,
+          formData,
+        );
+      } else {
+        res = await newFormRequest.post(EMPLOYEE_TYPE, formData);
+      }
+
       if (res?.data?.success === true) {
         toast.success("Employee Type added successfully!");
         queryClient.invalidateQueries(["employeeTypes"]);
