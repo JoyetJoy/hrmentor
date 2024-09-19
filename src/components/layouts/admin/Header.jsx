@@ -25,6 +25,7 @@ export const AdminHeader = () => {
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
+
   return (
     <>
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white px-5">
@@ -38,9 +39,7 @@ export const AdminHeader = () => {
           </div>
           <span className="font-monorope text-base font-normal">
             Welcome,
-            <h1 className="mt-0 text-base font-semibold">
-              Tech Butomy Pvt Ltd
-            </h1>
+            <h1 className="-mt-0.5 text-base font-semibold">{user?.name}</h1>
           </span>
         </Link>
         <div className="items flex gap-x-3">
