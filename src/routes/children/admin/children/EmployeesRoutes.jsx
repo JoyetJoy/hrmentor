@@ -3,7 +3,7 @@ import CreateEmployee from "@/pages/admin/menu/employee/create";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
 import { EmployeeDepartment } from "@/pages/admin/menu/employee/settings/Department";
 import { EmployeeDesignation } from "@/pages/admin/menu/employee/settings/Designation";
-import DocumentCategory from "@/pages/admin/menu/employee/settings/DocumentCategory";
+import { EmployeeDocumentCategory } from "@/pages/admin/menu/employee/settings/DocumentCategory";
 import { EmployeeDocumentType } from "@/pages/admin/menu/employee/settings/DocumentType";
 import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCategory";
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
@@ -94,7 +94,7 @@ export const EmployeeRoutes = [
       },
       {
         path: "document-category",
-        element: <DocumentCategory />,
+        element: <EmployeeDocumentCategory />,
       },
       {
         path: "document-type",

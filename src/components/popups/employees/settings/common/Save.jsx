@@ -61,8 +61,15 @@ export default function SaveEmployeeMasterForm({
   }
 
   const onSubmit = async (data) => {
-    if (type === "Work Location" && data?.address == null) {
-      setError("address", "Work Location requires an address");
+    if (
+      (type === "Work Location" && data?.address == null) ||
+      (type === "Work Location" && data?.address == undefined) ||
+      (type === "Work Location" && data?.address == "")
+    ) {
+      setError("address", {
+        type: "manual",
+        message: "Work Location requires an address",
+      });
       return;
     }
     setLoader(true);

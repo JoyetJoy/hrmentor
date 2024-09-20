@@ -50,64 +50,67 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
   }, [data]);
 
   const columns = React.useMemo(
-    () => [
-      {
-        header: "Sl No",
-        accessorKey: "id",
-        Cell: ({ row }) => {
-          return (
-            <div className="flex px-2">
-              {row.index + 1 + (currentPage - 1) * pageLimit}
-            </div>
-          );
+    () =>
+      [
+        {
+          header: "Sl No",
+          accessorKey: "id",
+          Cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.index + 1 + (currentPage - 1) * pageLimit}
+              </div>
+            );
+          },
         },
-      },
-      { header: colKeys.field1.label, accessorKey: colKeys.field1.key },
-      // colKeys?.field3 && {
-      //   header: colKeys?.field3?.label,
-      //   accessorKey: colKeys?.field3?.key,
-      // },
-      {
-        header: colKeys.field2.label,
-        accessorKey: colKeys.field2.key,
-        cell: ({ row }) => (
-          <div
-            className={`flex h-8 w-20 items-center justify-center rounded-md px-3 font-semibold ${row?.original?.[colKeys.field2.key] == 1 ? "bg-active/15 text-active" : "bg-inactive/15 text-inactive"}`}
-          >
-            {row?.original?.[colKeys.field2.key] == 1 ? "Active" : "Inactive"}
-          </div>
-        ),
-      },
-      {
-        header: "Action",
-        accessorKey: "action",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <button
-              type="button"
-              onClick={() => setSelectedField(row.original.id)}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+        { header: colKeys.field1.label, accessorKey: colKeys.field1.key },
+
+        colKeys.field3 && {
+          header: colKeys?.field3?.label,
+          accessorKey: colKeys?.field3?.key,
+        },
+
+        {
+          header: colKeys.field2.label,
+          accessorKey: colKeys.field2.key,
+          cell: ({ row }) => (
+            <div
+              className={`flex h-8 w-20 items-center justify-center rounded-md px-3 font-semibold ${row?.original?.[colKeys.field2.key] == 1 ? "bg-active/15 text-active" : "bg-inactive/15 text-inactive"}`}
             >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedId(row.original.id);
-              }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
-            >
-              <Trash2 className="size-3" />
-            </button>
-          </div>
-        ),
-      },
-    ],
-    [data, qrkey, type, colKeys],
+              {row?.original?.[colKeys.field2.key] == 1 ? "Active" : "Inactive"}
+            </div>
+          ),
+        },
+        {
+          header: "Action",
+          accessorKey: "action",
+          cell: ({ row }) => (
+            <div className="flex items-center gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => setSelectedField(row.original.id)}
+                className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              >
+                <img
+                  src="/assets/icons/admin/marker.svg"
+                  className="w-full object-contain"
+                />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedId(row.original.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+              >
+                <Trash2 className="size-3" />
+              </button>
+            </div>
+          ),
+        },
+      ].filter(Boolean),
+    [(data, qrkey, type, colKeys)],
   );
   return (
     <>
@@ -145,7 +148,7 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
           ) : (
             <div className="w-full rounded-md bg-white px-5 py-4">
               <div className="my-4 flex items-center justify-between">
-                <div className="input-box flex min-h-11 min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] placeholder:text-black">
+                <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
                   <Search className="size-4 text-[#7F7F7F]" />
                   <input
                     type="text"

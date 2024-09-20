@@ -199,7 +199,7 @@ export const MenuRoles = () => {
               <input
                 type="text"
                 placeholder="Enter role name"
-                className="input h-11 min-h-11 w-full max-w-xs border border-black placeholder:text-sm placeholder:text-[#2C2C2C] focus:border-black focus:outline-none"
+                className="input-box h-11 min-h-11 w-full max-w-xs placeholder:text-[#2C2C2C] focus:outline-none"
                 {...register("name")}
               />
               <button className="flex h-11 w-fit items-center justify-center rounded bg-textcolor-blue px-7 text-[0.8rem] font-medium tracking-[0.1px] text-white">
