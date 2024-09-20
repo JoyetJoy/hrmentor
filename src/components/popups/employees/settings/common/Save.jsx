@@ -26,7 +26,7 @@ export default function SaveEmployeeMasterForm({
 
   // Get selected data
   const { data: employeeMastersDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeMastersDetailByid", selectedField],
+    queryKey: ["employeeMastersDetailByid", colKeys, type, api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
     enabled: !!selectedField != 0,
@@ -106,74 +106,80 @@ export default function SaveEmployeeMasterForm({
                 <X />
               </button>
             </div>
-            <form
-              className="grid grid-cols-1 gap-3"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="group flex flex-col space-y-1">
-                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  {type} Name
-                </label>
-                <input
-                  {...register("name", { required: true })}
-                  type="text"
-                  className="input-box h-10 w-full"
-                />
-                {errors.name && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.name?.message}
-                  </span>
-                )}
+            {isLoading ? (
+              <div className="flex min-h-72 w-full items-center justify-center">
+                <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>
               </div>
-
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Status</label>
-                <Controller
-                  name="status"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={employeeMasterOptions}
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select Status"
-                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                    />
+            ) : (
+              <form
+                className="grid grid-cols-1 gap-3"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="group flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    {type} Name
+                  </label>
+                  <input
+                    {...register("name", { required: true })}
+                    type="text"
+                    className="input-box h-10 w-full"
+                  />
+                  {errors.name && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.name?.message}
+                    </span>
                   )}
-                />
-                {errors.status && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.status?.message}
-                  </span>
-                )}
-              </div>
+                </div>
 
-              <div className="mt-2 flex flex-row items-center justify-center gap-3">
-                <button
-                  type="submit"
-                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-[#030E5C] text-sm font-normal text-white focus:outline-none"
-                  disabled={loader}
-                >
-                  {loader ? (
-                    <div className="flex items-center gap-3">
-                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      {selectedField ? "Updating" : "Saving"}
-                    </div>
-                  ) : (
-                    <span>{selectedField ? "Update" : "Save"}</span>
+                <div className="group flex w-full flex-col gap-1">
+                  <label className="label-text">Status</label>
+                  <Controller
+                    name="status"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={employeeMasterOptions}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Status"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
                   )}
-                </button>
-                <button
-                  type="button"
-                  onClick={close}
-                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+                </div>
+
+                <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                  <button
+                    type="submit"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-[#030E5C] text-sm font-normal text-white focus:outline-none"
+                    disabled={loader}
+                  >
+                    {loader ? (
+                      <div className="flex items-center gap-3">
+                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                        {selectedField ? "Updating" : "Saving"}
+                      </div>
+                    ) : (
+                      <span>{selectedField ? "Update" : "Save"}</span>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </DialogPanel>
         </div>
       </div>
