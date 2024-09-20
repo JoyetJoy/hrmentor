@@ -161,7 +161,7 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Country</label>
                 <Controller
-                  name="country"
+                  name="country_id"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -173,16 +173,16 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.country && (
+                {errors.country_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.country?.message}
+                    {errors.country_id?.message}
                   </span>
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="required label-text">City</label>
                 <Controller
-                  name="city"
+                  name="city_id"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -194,16 +194,16 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.city && (
+                {errors.city_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.city?.message}
+                    {errors.city_id?.message}
                   </span>
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Blood Group</label>
                 <Controller
-                  name="bloodGroup"
+                  name="blood_group"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -215,9 +215,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.bloodGroup && (
+                {errors.blood_group && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.bloodGroup?.message}
+                    {errors.blood_group?.message}
                   </span>
                 )}
               </div>
@@ -244,9 +244,9 @@ export default function SaveEmployee() {
                   {...register("homeAddress", { required: true })}
                   className="input-box min-h-28"
                 />
-                {errors.homeAddress && (
+                {errors.home_address && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.homeAddress?.message}
+                    {errors.home_address?.message}
                   </span>
                 )}
               </div>
@@ -263,12 +263,12 @@ export default function SaveEmployee() {
                 <input
                   autoComplete="off"
                   type="text"
-                  {...register("communicationAddress", { required: true })}
+                  {...register("communication_address", { required: true })}
                   className="input-box min-h-28"
                 />
-                {errors.firstName && (
+                {errors.communication_address && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.firstName?.message}
+                    {errors.communication_address?.message}
                   </span>
                 )}
               </div>
@@ -285,7 +285,7 @@ export default function SaveEmployee() {
                   </div>
                 </label>
                 <Controller
-                  name="department"
+                  name="department_id"
                   className=""
                   control={control}
                   rules={{ required: true }}
@@ -298,9 +298,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.department && (
+                {errors.department_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.department?.message}
+                    {errors.department_id?.message}
                   </span>
                 )}
               </div>
@@ -334,7 +334,7 @@ export default function SaveEmployee() {
                   </div>
                 </label>
                 <Controller
-                  name="designation"
+                  name="designation_id"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -346,9 +346,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.designation && (
+                {errors.designation_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.designation?.message}
+                    {errors.designation_id?.message}
                   </span>
                 )}
               </div>
@@ -356,14 +356,14 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Date of Joinging</label>
                 <input
-                  {...register("dateOfJoinging", { required: true })}
+                  {...register("date_of_joining", { required: true })}
                   autoComplete="off"
                   type="date"
                   className="input-box"
                 />
-                {errors.dateOfJoinging && (
+                {errors.date_of_joining && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.dateOfJoinging?.message}
+                    {errors.date_of_joining?.message}
                   </span>
                 )}
               </div>
@@ -375,7 +375,7 @@ export default function SaveEmployee() {
                   </div>
                 </label>
                 <Controller
-                  name="worklocation"
+                  name="worklocation_id"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -387,9 +387,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.worklocation && (
+                {errors.worklocation_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.worklocation?.message}
+                    {errors.worklocation_id?.message}
                   </span>
                 )}
               </div>
@@ -437,7 +437,7 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Marital status</label>
                 <Controller
-                  name="maritalstatus"
+                  name="marital_status"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -449,9 +449,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.maritalstatus && (
+                {errors.marital_status && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.maritalstatus?.message}
+                    {errors.marital_status?.message}
                   </span>
                 )}
               </div>
