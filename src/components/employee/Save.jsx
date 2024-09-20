@@ -111,10 +111,10 @@ export default function SaveEmployee() {
             Save
           </button>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 py-2">
+        <div className="grid gap-x-3 py-2 lg:grid-cols-2">
           <div className="flex flex-col rounded-md border border-gray-300 bg-white px-5 py-4">
             <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
-            <div className="mt-4 grid w-full grid-cols-2">
+            <div className="mt-4 grid w-full lg:grid-cols-2">
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="required label-text">Employee ID</label>
                 <input
@@ -336,7 +336,7 @@ export default function SaveEmployee() {
           </div>
           <div className="flex flex-col rounded-md border border-gray-300 bg-white px-5 py-4">
             <h1 className="px-3 text-[1.1rem] font-bold">Work Details</h1>
-            <div className="mt-4 grid w-full grid-cols-2">
+            <div className="mt-4 grid w-full lg:grid-cols-2">
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Department
