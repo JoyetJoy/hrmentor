@@ -63,6 +63,11 @@ export default function SaveEmployee() {
       setType("Employee Type");
       setColKeys(employeeColumnKeysForEmployeeType);
       setPopupOpen(true);
+    } else {
+      setMasterApi(null);
+      setQrkey(null);
+      setType(null);
+      setColKeys(null);
     }
   }, [openMasterModalType, setPopupOpen]);
 
