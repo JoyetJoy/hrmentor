@@ -135,7 +135,7 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
         <div className="flex gap-x-3">
           <EmployeesSidebar sidebarList={employeesSettingsSideList} />
           {isLoading ? (
-            <div className="flex min-h-96 w-full items-center justify-center">
+            <div className="flex min-h-96 w-full items-center justify-center bg-white">
               <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>
             </div>
           ) : (
