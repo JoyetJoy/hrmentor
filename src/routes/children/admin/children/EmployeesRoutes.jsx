@@ -7,8 +7,7 @@ import DocumentCategory from "@/pages/admin/menu/employee/settings/DocumentCateg
 import { EmployeeDocumentType } from "@/pages/admin/menu/employee/settings/DocumentType";
 import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCategory";
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
-import WorkLocation from "@/pages/admin/menu/employee/settings/WorkLocation";
-
+import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
 import { BankDetails } from "@/pages/admin/menu/employee/view/BankDetails";
 import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Documents } from "@/pages/admin/menu/employee/view/Documents";
@@ -91,7 +90,7 @@ export const EmployeeRoutes = [
       },
       {
         path: "work-location",
-        element: <WorkLocation />,
+        element: <EmployeeWorkLocation />,
       },
       {
         path: "document-category",

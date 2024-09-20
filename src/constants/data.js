@@ -23,8 +23,9 @@ export const employeeColumnKeysForDepartment = {
 
 // work location
 export const employeeColumnKeysForWorkLocation = {
-  field1: { key: "location_name", label: "Location Name" },
+  field1: { key: "work_location_name", label: "Work Location Name" },
   field2: { key: "location_status", label: "Status" },
+  field3: { key: "work_location_address", label: "Address" },
 };
 
 // ethnicity

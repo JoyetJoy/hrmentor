@@ -17,3 +17,6 @@ export const EMPLOYEE_ETHNICITY = "ethnicity";
 
 // employee EeoJobCategoryType
 export const EMPLOYEE_EEO_CATEGORY = "EeoJobCategoryType";
+
+// employee work location
+export const EMPLOYEE_WORK_LOCATION = "worklocations";

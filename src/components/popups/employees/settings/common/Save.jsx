@@ -38,6 +38,7 @@ export default function SaveEmployeeMasterForm({
     control,
     reset,
     setValue,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
@@ -58,11 +59,18 @@ export default function SaveEmployeeMasterForm({
   }
 
   const onSubmit = async (data) => {
+    if (type === "Work Location" && data?.address == null) {
+      setError("address", "Work Location requires an address");
+      return;
+    }
     setLoader(true);
     try {
       const formData = new URLSearchParams();
       formData.append(colKeys.field1.key, data?.name);
       formData.append(colKeys.field2.key, data?.status?.value);
+      type === "Work Location" &&
+        formData.append("work_location_address", data?.address);
+
       let res;
       if (selectedField !== 0) {
         res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
@@ -116,7 +124,7 @@ export default function SaveEmployeeMasterForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     {type} Name
                   </label>
                   <input
@@ -130,9 +138,25 @@ export default function SaveEmployeeMasterForm({
                     </span>
                   )}
                 </div>
-
+                {type === "Work Location" ? (
+                  <div className="group flex flex-col space-y-1">
+                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      {type} Address
+                    </label>
+                    <input
+                      {...register("address")}
+                      type="text"
+                      className="input-box h-10 w-full"
+                    />
+                    {errors.address && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.address?.message}
+                      </span>
+                    )}
+                  </div>
+                ) : null}
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="label-text">Status</label>
+                  <label className="required label-text">Status</label>
                   <Controller
                     name="status"
                     control={control}
