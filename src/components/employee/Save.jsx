@@ -79,7 +79,7 @@ export default function SaveEmployee() {
       <SaveEmployeeMasterForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        selectedField={""}
+        selectedField={0}
         setSelectedField={""}
         qrkey={qrkey}
         type={type}
