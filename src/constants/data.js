@@ -75,11 +75,3 @@ export const maritalStatuses = [
   { id: 3, label: "Divorced", value: "divorced" },
   { id: 4, label: "Widowed", value: "widowed" },
 ];
-
-// nationality
-export const nationalities = [
-  { id: 1, label: "Indian", value: "Indian" },
-  { id: 2, label: "American", value: "American" },
-  { id: 3, label: "British", value: "British" },
-  { id: 4, label: "Other", value: "Other" },
-];
