@@ -280,7 +280,7 @@ export default function CreateEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Department
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-black text-white">
                     <Plus className="h-3" />
                   </div>
                 </label>
@@ -329,7 +329,7 @@ export default function CreateEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Designation
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-black text-white">
                     <Plus className="h-3" />
                   </div>
                 </label>
@@ -370,7 +370,7 @@ export default function CreateEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Work Location
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-black text-white">
                     <Plus className="h-3" />
                   </div>
                 </label>
