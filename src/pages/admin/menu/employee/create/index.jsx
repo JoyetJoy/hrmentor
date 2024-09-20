@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Plus } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
-import AddDepartment from "@/components/popups/employees/addemployee/AddDepatment.jsx";
-import AddDesignation from "@/components/popups/employees/addemployee/AddDesignation";
-import AddWorkLocation from "@/components/popups/employees/addemployee/AddWorkLocation";
+import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function CreateEmployee() {
-  const [popupOpen, setPopupOpen] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -18,7 +15,7 @@ export default function CreateEmployee() {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(EmployeeSchema),
   });
   const onSubmit = (data) => {
     setLoader(true);
@@ -119,12 +116,7 @@ export default function CreateEmployee() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label
-                  onClick={() => setPopupOpen(true)}
-                  className="required label-text"
-                >
-                  Gender
-                </label>
+                <label className="required label-text">Gender</label>
                 <Controller
                   name="gender"
                   className=""
@@ -132,14 +124,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      // value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Enter Gender"
@@ -161,14 +145,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Nationality"
@@ -190,14 +166,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Country"
@@ -219,14 +187,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select City"
@@ -248,14 +208,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Blood Group"
@@ -328,21 +280,10 @@ export default function CreateEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Department
-                  <div
-                    className="h-[13px] w-[13px] cursor-pointer"
-                    onClick={() => setPopupOpen(true)}
-                  >
-                    <img
-                      src="/assets/icons/employees/blackcircleplus.svg"
-                      alt=" blackcircle"
-                      className="h-full w-full object-contain"
-                    />
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                    <Plus className="h-3" />
                   </div>
                 </label>
-                <AddDepartment
-                  popupOpen={popupOpen}
-                  setPopupOpen={setPopupOpen}
-                />
                 <Controller
                   name="department"
                   className=""
@@ -350,14 +291,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      // value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Department"
@@ -380,14 +313,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      // value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Role"
@@ -404,36 +329,16 @@ export default function CreateEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Designation
-                  <div
-                    className="h-[13px] w-[13px] cursor-pointer"
-                    onClick={() => setPopupOpen(true)}
-                  >
-                    <img
-                      src="/assets/icons/employees/blackcircleplus.svg"
-                      alt=" blackcircle"
-                      className="h-full w-full object-contain"
-                    />
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                    <Plus className="h-3" />
                   </div>
                 </label>
-                <AddDesignation
-                  popupOpen={popupOpen}
-                  setPopupOpen={setPopupOpen}
-                />
-
                 <Controller
                   name="designation"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Designation"
@@ -465,36 +370,16 @@ export default function CreateEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Work Location
-                  <div
-                    className="h-[13px] w-[13px] cursor-pointer"
-                    onClick={() => setPopupOpen(true)}
-                  >
-                    <img
-                      src="/assets/icons/employees/blackcircleplus.svg"
-                      alt=" blackcircle"
-                      className="h-full w-full object-contain"
-                    />
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                    <Plus className="h-3" />
                   </div>
                 </label>
-                <AddWorkLocation
-                  popupOpen={popupOpen}
-                  setPopupOpen={setPopupOpen}
-                />
-
                 <Controller
                   name="worklocation"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Work location"
@@ -516,14 +401,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Employement Type"
@@ -560,14 +437,6 @@ export default function CreateEmployee() {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Marital status"
