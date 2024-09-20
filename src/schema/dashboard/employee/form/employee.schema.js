@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 
 export const EmployeeSchema = Yup.object({
+  first_name: Yup.string().required("First is required"),
   sur_name: Yup.string().required("Surname is required"),
   blood_group: Yup.string()
     .oneOf(["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"])
@@ -38,9 +39,4 @@ export const EmployeeSchema = Yup.object({
   marital_status: Yup.string()
     .oneOf(["single", "married", "divorced", "widowed"])
     .required("Marital status is required"),
-  status: Yup.object().shape({
-    id: Yup.string().required("Status ID is required"),
-    value: Yup.string().required("Status value is required"),
-    label: Yup.string().required("Status label is required"),
-  }),
 });

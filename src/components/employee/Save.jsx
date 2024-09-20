@@ -76,27 +76,27 @@ export default function SaveEmployee() {
                   autoComplete="off"
                   type="text"
                   placeholder="Enter First Name"
-                  {...register("firstName", { required: true })}
+                  {...register("first_name", { required: true })}
                   className="input-box"
                 />
-                {errors.firstName && (
+                {errors.first_name && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.firstName?.message}
+                    {errors.first_name?.message}
                   </span>
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Surname</label>
                 <input
-                  {...register("surname")}
+                  {...register("sur_name")}
                   autoComplete="off"
                   placeholder="Enter Surname"
                   type="text"
                   className="input-box"
                 />
-                {errors.surname && (
+                {errors.sur_name && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.surname?.message}
+                    {errors.sur_name?.message}
                   </span>
                 )}
               </div>
@@ -104,14 +104,14 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="required label-text">Date of birth</label>
                 <input
-                  {...register("dateOBbirth", { required: true })}
+                  {...register("dob", { required: true })}
                   autoComplete="off"
                   type="date"
                   className="input-box"
                 />
-                {errors.dateOfBirth && (
+                {errors.dob && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.dateOBbirth?.message}
+                    {errors.dob?.message}
                   </span>
                 )}
               </div>
