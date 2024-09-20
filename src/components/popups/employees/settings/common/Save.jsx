@@ -23,7 +23,6 @@ export default function SaveEmployeeMasterForm({
 }) {
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-
   // Get selected data
   const { data: employeeMastersDetailByid, isLoading } = useQuery({
     queryKey: ["employeeMastersDetailByid", colKeys, type, api, selectedField],
@@ -60,12 +59,10 @@ export default function SaveEmployeeMasterForm({
     reset();
   }
 
+  const isWorkLocation = type === "Work Location";
+
   const onSubmit = async (data) => {
-    if (
-      (type === "Work Location" && data?.address == null) ||
-      (type === "Work Location" && data?.address == undefined) ||
-      (type === "Work Location" && data?.address == "")
-    ) {
+    if (isWorkLocation && (!data?.address || data?.address.trim() === "")) {
       setError("address", {
         type: "manual",
         message: "Work Location requires an address",
