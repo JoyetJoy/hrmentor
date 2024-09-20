@@ -354,7 +354,7 @@ export default function SaveEmployee() {
               </div>
 
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className="label-text">Date of Joinging</label>
+                <label className="label-text">Date of Joining</label>
                 <input
                   {...register("date_of_joining", { required: true })}
                   autoComplete="off"
@@ -395,7 +395,7 @@ export default function SaveEmployee() {
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
-                  Employenment Type
+                  Employment Type
                   <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white">
                     <Plus className="h-3" />
                   </div>
@@ -422,20 +422,20 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Mobile Number </label>
                 <input
-                  {...register("mobileNumber", { required: true })}
+                  {...register("mobile_number", { required: true })}
                   autoComplete="off"
                   type="text"
                   placeholder="Enter Moblie Number"
                   className="input-box"
                 />
-                {errors.mobileNumber && (
+                {errors.mobile_number && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.mobileNumber?.message}
+                    {errors.mobile_number?.message}
                   </span>
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className="label-text">Marital status</label>
+                <label className="label-text">Marital Status</label>
                 <Controller
                   name="marital_status"
                   control={control}
