@@ -335,7 +335,7 @@ export default function SaveEmployee() {
             </div>
           </div>
           <div className="flex flex-col rounded-md border border-gray-300 bg-white px-5 py-4">
-            <h1 className="px-3 text-base font-bold">Work Details</h1>
+            <h1 className="px-3 text-[1.1rem] font-bold">Work Details</h1>
             <div className="mt-4 grid w-full grid-cols-2">
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
