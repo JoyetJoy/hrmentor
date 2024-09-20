@@ -140,7 +140,7 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Nationality</label>
                 <Controller
-                  name="nationality"
+                  name="nationality_id"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -152,9 +152,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.nationality && (
+                {errors.nationality_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.nationality?.message}
+                    {errors.nationality_id?.message}
                   </span>
                 )}
               </div>
@@ -224,15 +224,15 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">National Insurance Number</label>
                 <input
-                  {...register("nationalInsurance", { required: true })}
+                  {...register("national_insurance", { required: true })}
                   autoComplete="off"
                   type="text"
                   placeholder="Enter National Insurance Number"
                   className="input-box"
                 />
-                {errors.nationalInsurance && (
+                {errors.national_insurance && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.nationalInsurance?.message}
+                    {errors.national_insurance?.message}
                   </span>
                 )}
               </div>
@@ -241,7 +241,7 @@ export default function SaveEmployee() {
                 <input
                   autoComplete="off"
                   type="text"
-                  {...register("homeAddress", { required: true })}
+                  {...register("home_address", { required: true })}
                   className="input-box min-h-28"
                 />
                 {errors.home_address && (
@@ -401,7 +401,7 @@ export default function SaveEmployee() {
                   </div>
                 </label>
                 <Controller
-                  name="employementype"
+                  name="employemen_typeid"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -413,9 +413,9 @@ export default function SaveEmployee() {
                     />
                   )}
                 />
-                {errors.employementype && (
+                {errors.employement_typeid && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.employementype?.message}
+                    {errors.employemen_typeid?.message}
                   </span>
                 )}
               </div>
@@ -458,30 +458,30 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Personal Email Address </label>
                 <input
-                  {...register("personalEmailAddress", { required: true })}
+                  {...register("personal_email", { required: true })}
                   autoComplete="off"
                   type="text"
                   placeholder="Enter Personal Email Address  "
                   className="input-box"
                 />
-                {errors.personalEmailAddress && (
+                {errors.personal_email && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.personalEmailAddress?.message}
+                    {errors.personal_email?.message}
                   </span>
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Work Email Address</label>
                 <input
-                  {...register("workEmailAddress", { required: true })}
+                  {...register("work_email", { required: true })}
                   autoComplete="off"
                   type="text"
                   placeholder="Enter Work Email Address"
                   className="input-box"
                 />
-                {errors.workEmailAddress && (
+                {errors.work_email && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.workEmailAddress?.message}
+                    {errors.work_email?.message}
                   </span>
                 )}
               </div>
