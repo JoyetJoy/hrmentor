@@ -1,7 +1,6 @@
-import { newFormRequest, newRequest, XFormRequest } from "@/api";
-import { EMPLOYEE_TYPE } from "@/api/master";
+import { newRequest, XFormRequest } from "@/api";
 import { employeeMasterOptions } from "@/constants/data";
-import { EmployeeTypeSchema } from "@/schema/dashboard/employee/masters/employeeType.schema";
+import { EmployeeMasterCommanFormSchema } from "@/schema/dashboard/employee/masters/employeeType.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,26 +11,26 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 
-export default function AddEmployementType({
+export default function SaveEmployeeMasterForm({
   popupOpen,
   setPopupOpen,
   selectedField,
   setSelectedField,
+  qrKey,
+  type,
+  colKeys,
+  api,
 }) {
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
 
   // Get selected data
-  const { data: employeeTypeDetail, isLoading: employeeTypeLoading } = useQuery(
-    {
-      queryKey: ["employeeTypeDetail", selectedField],
-      queryFn: () =>
-        newRequest
-          .get(`${EMPLOYEE_TYPE}/${selectedField}`)
-          .then((res) => res.data),
-      enabled: !!selectedField != 0,
-    },
-  );
+  const { data: employeeMastersDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeMastersDetailByid", selectedField],
+    queryFn: () =>
+      newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
+    enabled: !!selectedField != 0,
+  });
 
   const {
     register,
@@ -42,21 +41,15 @@ export default function AddEmployementType({
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(EmployeeTypeSchema),
+    resolver: yupResolver(EmployeeMasterCommanFormSchema),
   });
 
   useEffect(() => {
-    if (employeeTypeDetail) {
-      setValue(
-        "employment_type_name",
-        employeeTypeDetail?.employment_type_name,
-      );
-      setValue(
-        "employment_type_status",
-        employeeTypeDetail?.employment_type_status,
-      );
+    if (employeeMastersDetailByid) {
+      setValue("name", employeeMastersDetailByid?.[colKeys.field1.key]);
+      setValue("status", employeeMastersDetailByid?.[colKeys.field2.key]);
     }
-  }, [employeeTypeDetail, setValue]);
+  }, [employeeMastersDetailByid, type, setValue]);
 
   function close() {
     setPopupOpen(false);
@@ -68,23 +61,17 @@ export default function AddEmployementType({
     setLoader(true);
     try {
       const formData = new URLSearchParams();
-      formData.append("employment_type_name", data?.employment_type_name);
-      formData.append(
-        "employment_type_status",
-        data?.employment_type_status?.value,
-      );
+      formData.append(colKeys.field1.key, data?.name);
+      formData.append(colKeys.field2.key, data?.status?.value);
       let res;
       if (selectedField !== 0) {
-        res = await XFormRequest.patch(
-          `${EMPLOYEE_TYPE}/${selectedField}`,
-          formData,
-        );
+        res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
       } else {
-        res = await newFormRequest.post(EMPLOYEE_TYPE, formData);
+        res = await XFormRequest.post(api, formData);
       }
       if (res?.data?.success === true) {
-        toast.success("Employee Type added successfully!");
-        queryClient.invalidateQueries(["employeeTypes"]);
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries([qrKey]);
         close();
       }
     } catch (error) {
@@ -110,7 +97,7 @@ export default function AddEmployementType({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-                {selectedField ? "Update" : "Add"} Employee Type
+                {selectedField ? "Update" : "Add"} {type}
               </h1>
               <button
                 onClick={close}
@@ -125,16 +112,16 @@ export default function AddEmployementType({
             >
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Employee Type Name
+                  {type} Name
                 </label>
                 <input
-                  {...register("employment_type_name", { required: true })}
+                  {...register("name", { required: true })}
                   type="text"
                   className="input-box h-10 w-full"
                 />
-                {errors.employment_type_name && (
+                {errors.name && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.employment_type_name?.message}
+                    {errors.name?.message}
                   </span>
                 )}
               </div>
@@ -142,7 +129,7 @@ export default function AddEmployementType({
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Status</label>
                 <Controller
-                  name="employment_type_status"
+                  name="status"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -156,9 +143,9 @@ export default function AddEmployementType({
                     />
                   )}
                 />
-                {errors.employment_type_status && (
+                {errors.status && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.employment_type_status?.message}
+                    {errors.status?.message}
                   </span>
                 )}
               </div>

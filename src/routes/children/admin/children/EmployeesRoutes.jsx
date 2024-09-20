@@ -1,12 +1,12 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import CreateEmployee from "@/pages/admin/menu/employee/create";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
-import Department from "@/pages/admin/menu/employee/settings/Department";
-import Designation from "@/pages/admin/menu/employee/settings/Designation";
+import { EmployeeDepartment } from "@/pages/admin/menu/employee/settings/Department";
+import { EmployeeDesignation } from "@/pages/admin/menu/employee/settings/Designation";
 import DocumentCategory from "@/pages/admin/menu/employee/settings/DocumentCategory";
-import DocumentType from "@/pages/admin/menu/employee/settings/DocumentType";
-import EeeoCategory from "@/pages/admin/menu/employee/settings/EeeoCategory";
-import Ethnicity from "@/pages/admin/menu/employee/settings/Ethnicity";
+import { EmployeeDocumentType } from "@/pages/admin/menu/employee/settings/DocumentType";
+import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCategory";
+import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
 import WorkLocation from "@/pages/admin/menu/employee/settings/WorkLocation";
 
 import { BankDetails } from "@/pages/admin/menu/employee/view/BankDetails";
@@ -83,31 +83,31 @@ export const EmployeeRoutes = [
       },
       {
         path: "designation",
-        element: <Designation />,
+        element: <EmployeeDesignation />,
       },
       {
         path: "department",
-        element: <Department />,
+        element: <EmployeeDepartment />,
       },
       {
         path: "work-location",
         element: <WorkLocation />,
-      }, 
+      },
       {
         path: "document-category",
         element: <DocumentCategory />,
-      }, 
+      },
       {
         path: "document-type",
-        element: <DocumentType />,
+        element: <EmployeeDocumentType />,
       },
       {
         path: "ethnicity",
-        element: <Ethnicity />,
+        element: <EmployeeEthncity />,
       },
       {
         path: "eeo-category",
-        element: <EeeoCategory />,
+        element: <EmployeeEeoCategory />,
       },
     ],
   },
