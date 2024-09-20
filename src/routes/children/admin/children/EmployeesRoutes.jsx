@@ -1,5 +1,5 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
-import CreateEmployee from "@/pages/admin/menu/employee/create";
+import EmployeeCreation from "@/pages/admin/menu/employee/create";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
 import { EmployeeDepartment } from "@/pages/admin/menu/employee/settings/Department";
 import { EmployeeDesignation } from "@/pages/admin/menu/employee/settings/Designation";
@@ -27,7 +27,7 @@ export const EmployeeRoutes = [
   },
   {
     path: "create",
-    element: <CreateEmployee />,
+    element: <EmployeeCreation />,
   },
   {
     path: "primary",
