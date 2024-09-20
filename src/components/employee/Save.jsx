@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { ChevronRight, Plus } from "lucide-react";
@@ -6,6 +6,19 @@ import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import SaveEmployeeMasterForm from "../popups/employees/settings/common/Save";
+import {
+  employeeColumnKeysForDepartment,
+  employeeColumnKeysForDesignation,
+  employeeColumnKeysForEmployeeType,
+  employeeColumnKeysForWorkLocation,
+} from "@/constants/data";
+import {
+  EMPLOYEE_DEPARTMENT,
+  EMPLOYEE_DESIGNATION,
+  EMPLOYEE_TYPE,
+  EMPLOYEE_WORK_LOCATION,
+} from "@/api/master";
 
 export default function SaveEmployee() {
   const {
@@ -17,6 +30,42 @@ export default function SaveEmployee() {
     mode: "onSubmit",
     resolver: yupResolver(EmployeeSchema),
   });
+
+  const [masterApi, setMasterApi] = useState(null);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [qrkey, setQrkey] = useState(null);
+  const [type, setType] = useState(null);
+  const [colKeys, setColKeys] = useState(null);
+  const [openMasterModalType, setOpenMasterModalType] = useState(null);
+
+  useEffect(() => {
+    if (openMasterModalType === "department") {
+      setMasterApi(EMPLOYEE_DEPARTMENT);
+      setQrkey("employeeDepartmentList");
+      setType("Department");
+      setColKeys(employeeColumnKeysForDepartment);
+      setPopupOpen(true);
+    } else if (openMasterModalType === "work_location") {
+      setMasterApi(EMPLOYEE_WORK_LOCATION);
+      setQrkey("employeeWorkLocationList");
+      setType("Work Location");
+      setColKeys(employeeColumnKeysForWorkLocation);
+      setPopupOpen(true);
+    } else if (openMasterModalType === "designation") {
+      setMasterApi(EMPLOYEE_DESIGNATION);
+      setQrkey("employeeDesignationList");
+      setType("Designation");
+      setColKeys(employeeColumnKeysForDesignation);
+      setPopupOpen(true);
+    } else if (openMasterModalType === "employment_type") {
+      setMasterApi(EMPLOYEE_TYPE);
+      setQrkey("employeeTypeList");
+      setType("Employee Type");
+      setColKeys(employeeColumnKeysForEmployeeType);
+      setPopupOpen(true);
+    }
+  }, [openMasterModalType, setPopupOpen]);
+
   const onSubmit = (data) => {
     setLoader(true);
     handleEmployee(data);
@@ -27,6 +76,17 @@ export default function SaveEmployee() {
 
   return (
     <>
+      <SaveEmployeeMasterForm
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={""}
+        setSelectedField={""}
+        qrkey={qrkey}
+        type={type}
+        colKeys={colKeys}
+        api={masterApi}
+      />
+
       <MenuHeader
         menu={"Menu"}
         subMenu={"Employee"}
@@ -280,7 +340,12 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Department
-                  <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white">
+                  <div
+                    onClick={() => {
+                      setOpenMasterModalType("department");
+                    }}
+                    className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
+                  >
                     <Plus className="h-3" />
                   </div>
                 </label>
@@ -329,7 +394,12 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Designation
-                  <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white">
+                  <div
+                    onClick={() => {
+                      setOpenMasterModalType("designation");
+                    }}
+                    className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
+                  >
                     <Plus className="h-3" />
                   </div>
                 </label>
@@ -370,7 +440,12 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Work Location
-                  <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white">
+                  <div
+                    onClick={() => {
+                      setOpenMasterModalType("work_location");
+                    }}
+                    className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
+                  >
                     <Plus className="h-3" />
                   </div>
                 </label>
@@ -396,7 +471,12 @@ export default function SaveEmployee() {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text flex flex-row items-center gap-1">
                   Employment Type
-                  <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white">
+                  <div
+                    onClick={() => {
+                      setOpenMasterModalType("employment_type");
+                    }}
+                    className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
+                  >
                     <Plus className="h-3" />
                   </div>
                 </label>
