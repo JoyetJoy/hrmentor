@@ -49,6 +49,8 @@ export default function SaveEmployeeMasterForm({
     if (employeeMastersDetailByid) {
       setValue("name", employeeMastersDetailByid?.[colKeys.field1.key]);
       setValue("status", employeeMastersDetailByid?.[colKeys.field2.key]);
+      type === "Work Location" &&
+        setValue("address", employeeMastersDetailByid?.[colKeys.field3.key]);
     }
   }, [employeeMastersDetailByid, type, setValue]);
 
@@ -143,10 +145,10 @@ export default function SaveEmployeeMasterForm({
                     <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       {type} Address
                     </label>
-                    <input
+                    <textarea
                       {...register("address")}
                       type="text"
-                      className="input-box h-10 w-full"
+                      className="input-box h-20 w-full"
                     />
                     {errors.address && (
                       <span className="text-xs font-medium text-red-500">
