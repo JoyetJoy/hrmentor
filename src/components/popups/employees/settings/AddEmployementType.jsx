@@ -1,4 +1,4 @@
-import { newFormRequest, newRequest } from "@/api";
+import { newFormRequest, newRequest, XFormRequest } from "@/api";
 import { EMPLOYEE_TYPE } from "@/api/master";
 import { employeeMasterOptions } from "@/constants/data";
 import { EmployeeTypeSchema } from "@/schema/dashboard/employee/masters/employeeType.schema";
@@ -67,7 +67,7 @@ export default function AddEmployementType({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append("employment_type_name", data?.employment_type_name);
       formData.append(
         "employment_type_status",
@@ -75,7 +75,7 @@ export default function AddEmployementType({
       );
       let res;
       if (selectedField !== 0) {
-        res = await newFormRequest.patch(
+        res = await XFormRequest.patch(
           `${EMPLOYEE_TYPE}/${selectedField}`,
           formData,
         );

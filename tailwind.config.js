@@ -24,6 +24,8 @@ export default {
           700: "#667085",
           800: "#808080",
         },
+        active: "#00B448",
+        inactive: "#DB0000",
         textcolor: {
           darkblue: "#181C3A",
           200: "#646464",

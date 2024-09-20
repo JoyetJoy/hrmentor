@@ -69,11 +69,9 @@ export const EmployeeSettings = () => {
         accessorKey: "employment_type_name",
         cell: ({ row }) => (
           <div
-            className={`flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold ${row?.original?.employment_type_status === 1 ? "bg-green-500 text-white" : "bg-[#473A990D] text-[#7D067F]"}`}
+            className={`flex h-8 w-20 items-center justify-center rounded-md px-3 font-semibold ${row?.original?.employment_type_status == 1 ? "bg-active/15 text-active" : "bg-inactive/15 text-inactive"}`}
           >
-            {row?.original?.employment_type_status === 1
-              ? "Active"
-              : "Inactive"}
+            {row?.original?.employment_type_status == 1 ? "Active" : "Inactive"}
           </div>
         ),
       },
