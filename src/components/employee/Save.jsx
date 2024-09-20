@@ -80,7 +80,7 @@ export default function SaveEmployee() {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={0}
-        setSelectedField={""}
+        setSelectedField={() => {}}
         qrkey={qrkey}
         type={type}
         colKeys={colKeys}
