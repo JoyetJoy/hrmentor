@@ -49,6 +49,12 @@ export const employeeColumnKeysForDocumentType = {
   field2: { key: "employee_document_type_status", label: "Status" },
 };
 
+// document categories
+export const employeeColumnKeysForDocumentCategory = {
+  field1: { key: "document_category_name", label: "Document Category Name" },
+  field2: { key: "document_category_status", label: "Status" },
+};
+
 // blood grops
 export const bloodGroups = [
   { id: 1, label: "O+", value: "O+" },

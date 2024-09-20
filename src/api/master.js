@@ -20,3 +20,6 @@ export const EMPLOYEE_EEO_CATEGORY = "EeoJobCategoryType";
 
 // employee work location
 export const EMPLOYEE_WORK_LOCATION = "worklocations";
+
+// employee category
+export const EMPLOYEE_DOCUMENT_CATEGORY = "document-categories";

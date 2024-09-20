@@ -1,15 +1,15 @@
-import { EMPLOYEE_DESIGNATION } from "@/api/master";
+import { EMPLOYEE_DOCUMENT_CATEGORY } from "@/api/master";
 import { EmployeeMasters } from "@/components/popups/employees/settings/common/Listing";
-import { employeeColumnKeysForDocumentType } from "@/constants/data";
+import { employeeColumnKeysForDocumentCategory } from "@/constants/data";
 
 export const EmployeeDocumentCategory = () => {
   return (
     <>
       <EmployeeMasters
-        api={EMPLOYEE_DESIGNATION}
+        api={EMPLOYEE_DOCUMENT_CATEGORY}
         qryKey={"employeeDesignationList"}
-        colKeys={employeeColumnKeysForDocumentType}
-        type={"Designation"}
+        colKeys={employeeColumnKeysForDocumentCategory}
+        type={"Document Category"}
       />
     </>
   );
