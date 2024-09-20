@@ -20,6 +20,33 @@ import {
   EMPLOYEE_WORK_LOCATION,
 } from "@/api/master";
 
+const masterConfig = {
+  department: {
+    api: EMPLOYEE_DEPARTMENT,
+    qrkey: "employeeDepartmentList",
+    type: "Department",
+    colKeys: employeeColumnKeysForDepartment,
+  },
+  work_location: {
+    api: EMPLOYEE_WORK_LOCATION,
+    qrkey: "employeeWorkLocationList",
+    type: "Work Location",
+    colKeys: employeeColumnKeysForWorkLocation,
+  },
+  designation: {
+    api: EMPLOYEE_DESIGNATION,
+    qrkey: "employeeDesignationList",
+    type: "Designation",
+    colKeys: employeeColumnKeysForDesignation,
+  },
+  employment_type: {
+    api: EMPLOYEE_TYPE,
+    qrkey: "employeeTypeList",
+    type: "Employee Type",
+    colKeys: employeeColumnKeysForEmployeeType,
+  },
+};
+
 export default function SaveEmployee() {
   const {
     register,
@@ -39,37 +66,21 @@ export default function SaveEmployee() {
   const [openMasterModalType, setOpenMasterModalType] = useState(null);
 
   useEffect(() => {
-    if (openMasterModalType === "department") {
-      setMasterApi(EMPLOYEE_DEPARTMENT);
-      setQrkey("employeeDepartmentList");
-      setType("Department");
-      setColKeys(employeeColumnKeysForDepartment);
-      setPopupOpen(true);
-    } else if (openMasterModalType === "work_location") {
-      setMasterApi(EMPLOYEE_WORK_LOCATION);
-      setQrkey("employeeWorkLocationList");
-      setType("Work Location");
-      setColKeys(employeeColumnKeysForWorkLocation);
-      setPopupOpen(true);
-    } else if (openMasterModalType === "designation") {
-      setMasterApi(EMPLOYEE_DESIGNATION);
-      setQrkey("employeeDesignationList");
-      setType("Designation");
-      setColKeys(employeeColumnKeysForDesignation);
-      setPopupOpen(true);
-    } else if (openMasterModalType === "employment_type") {
-      setMasterApi(EMPLOYEE_TYPE);
-      setQrkey("employeeTypeList");
-      setType("Employee Type");
-      setColKeys(employeeColumnKeysForEmployeeType);
+    const config = masterConfig[openMasterModalType];
+    if (config) {
+      setMasterApi(config.api);
+      setQrkey(config.qrkey);
+      setType(config.type);
+      setColKeys(config.colKeys);
       setPopupOpen(true);
     } else {
       setMasterApi(null);
       setQrkey(null);
       setType(null);
       setColKeys(null);
+      setPopupOpen(false);
     }
-  }, [openMasterModalType, setPopupOpen]);
+  }, [openMasterModalType]);
 
   const onSubmit = (data) => {
     setLoader(true);
