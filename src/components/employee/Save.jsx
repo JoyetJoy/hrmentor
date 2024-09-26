@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { ChevronRight, Plus } from "lucide-react";
+import { ChevronRight, Plus, UploadCloud } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
@@ -129,23 +129,16 @@ export default function SaveEmployee() {
         </div>
         <div className="grid gap-x-3 py-2 lg:grid-cols-2">
           <div className="flex flex-col rounded-md border border-gray-300 bg-white px-5 py-4">
-            <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
-            <div className="mt-4 grid w-full lg:grid-cols-2">
-              <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className="required label-text">Employee ID</label>
-                <input
-                  autoComplete="off"
-                  type="text"
-                  placeholder="Enter the Employee id"
-                  {...register("employeeId", { required: true })}
-                  className="input-box"
-                />
-                {errors.employeeId && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.employeeId?.message}
-                  </span>
-                )}
+            <div className="flex items-center justify-between">
+              <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
+              <div className="bg-hrmdarkblue flex h-11 w-72 items-center justify-between gap-5 rounded-xl pl-7 pr-3 text-[0.94rem] text-white">
+                Employee ID{" "}
+                <span className="flex h-9 items-center rounded-md bg-white px-3 text-sm font-semibold text-black/70">
+                  435353544
+                </span>
               </div>
+            </div>
+            <div className="mt-4 grid w-full lg:grid-cols-2">
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="required label-text">First Name</label>
                 <input
@@ -309,6 +302,30 @@ export default function SaveEmployee() {
                 {errors.national_insurance && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.national_insurance?.message}
+                  </span>
+                )}
+              </div>
+              <div className="group flex flex-col gap-1.5 px-3 py-2">
+                <label className="required label-text">Profile picture </label>
+                <label
+                  htmlFor="employee-profile-pic"
+                  className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                >
+                  <div className="flex items-center gap-2">
+                    <UploadCloud />
+                    <span className="font-semibold text-[#2C2C2C]">
+                      Upload Image
+                    </span>
+                  </div>
+                  <input
+                    id="employee-profile-pic"
+                    type="file"
+                    className="hidden"
+                  />
+                </label>
+                {errors.employeeId && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.employeeId?.message}
                   </span>
                 )}
               </div>

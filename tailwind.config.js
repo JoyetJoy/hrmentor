@@ -25,6 +25,7 @@ export default {
           800: "#808080",
         },
         active: "#00B448",
+        hrmdarkblue: "#181C3A",
         inactive: "#DB0000",
         textcolor: {
           darkblue: "#181C3A",
@@ -51,7 +52,7 @@ export default {
 
   plugins: [require("daisyui")],
   daisyui: {
-    darkTheme: "white", // name of one of the included themes for dark mode
+    darkTheme: "white",
     base: false,
   },
 };
