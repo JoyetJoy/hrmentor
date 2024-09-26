@@ -28,7 +28,7 @@ export const AdminHeader = () => {
 
   return (
     <>
-      <div className="relative flex flex-row items-center justify-between rounded-md bg-white px-5">
+      <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link to="/" className="flex flex-row">
           <div className="h-12">
             <img
