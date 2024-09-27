@@ -65,7 +65,7 @@ export default function EmployeeLists() {
         header: "ID Number",
         accessorKey: "id",
         cell: ({ row }) => (
-          <p className="">#{row?.original?.employee?.unique_id}</p>
+          <p className="">#EMP{row?.original?.employee?.unique_id}</p>
         ),
       },
       {
