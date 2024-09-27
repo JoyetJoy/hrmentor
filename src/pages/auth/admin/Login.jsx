@@ -48,7 +48,7 @@ function Login() {
           className="h-full w-full"
         />
       </div>
-      <div className="col-span-4 -mb-10 flex flex-col lg:px-12">
+      <div className="col-span-4 -mb-10 flex flex-col lg:px-14">
         <div className="flex flex-col items-start">
           <h1 className="text-hrmprimaryorange mb-4 text-xl font-bold">
             <span className="text-black">Welcome,</span>
