@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
-import { Plus, RotateCw, UploadCloud, X } from "lucide-react";
+import { Plus, RotateCw, Share2, UploadCloud, X } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -277,28 +277,39 @@ export default function SaveEmployeeForm({ formtype }) {
               ? "Primary Information"
               : "Add New Employees"}
           </h1>
-          <button
-            type="submit"
-            className="bg-hrmprimaryorange btn flex h-10 min-h-10 min-w-24 items-center text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
-          >
-            {loader ? (
-              <div className="flex items-center gap-3">
-                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                {formtype === "update" ? "Updating" : "Saving"}
-              </div>
-            ) : (
-              <>
-                <div className="w-3.5">
-                  <img
-                    src={"/assets/icons/employees/save.svg"}
-                    alt="save icon"
-                    className="w-full object-contain"
-                  />
-                </div>
-                {formtype === "update" ? "Update" : "Save"}
-              </>
+          <div className="flex items-center gap-3">
+            {formtype === "update" && (
+              <button
+                type="button"
+                className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-[#E0E2F3] px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-bgColor-300"
+              >
+                <Share2 className="size-4" color="black" />
+                Onboarding Form
+              </button>
             )}
-          </button>
+            <button
+              type="submit"
+              className="bg-hrmprimaryorange btn flex h-10 min-h-10 min-w-24 items-center text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+            >
+              {loader ? (
+                <div className="flex items-center gap-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                  {formtype === "update" ? "Updating" : "Saving"}
+                </div>
+              ) : (
+                <>
+                  <div className="w-3.5">
+                    <img
+                      src={"/assets/icons/employees/save.svg"}
+                      alt="save icon"
+                      className="w-full object-contain"
+                    />
+                  </div>
+                  {formtype === "update" ? "Update" : "Save"}
+                </>
+              )}
+            </button>
+          </div>
         </div>
         <div className="grid w-full gap-x-3 py-2 lg:grid-cols-2">
           <div
@@ -308,9 +319,10 @@ export default function SaveEmployeeForm({ formtype }) {
               <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  <div className="flex h-11 w-72 items-center justify-between gap-5 rounded-xl bg-hrmdarkblue pl-7 pr-3 text-[0.94rem] text-white">
+                  <div className="flex h-11 w-64 items-center justify-between gap-5 rounded-xl bg-hrmdarkblue pl-7 pr-3 text-[0.94rem] text-white">
                     Employee ID{" "}
                     <input
+                      disabled={type === "update"}
                       {...register("unique_id", { required: true })}
                       onChange={(e) => {
                         if (e.target.value.length > 0) {
@@ -320,16 +332,18 @@ export default function SaveEmployeeForm({ formtype }) {
                       className="flex h-9 w-24 items-center rounded-md bg-white px-4 text-sm font-semibold text-black/70"
                     ></input>
                   </div>
-                  <RotateCw
-                    onClick={() => {
-                      setValue("unique_id", uniqueId?.unique_id);
-                      setError("unique_id", {
-                        type: "manual",
-                        message: "",
-                      });
-                    }}
-                    className="h-5"
-                  />
+                  {type === "save" && (
+                    <RotateCw
+                      onClick={() => {
+                        setValue("unique_id", uniqueId?.unique_id);
+                        setError("unique_id", {
+                          type: "manual",
+                          message: "",
+                        });
+                      }}
+                      className="h-5"
+                    />
+                  )}
                 </div>
                 {errors.unique_id && (
                   <span className="text-xs font-medium text-red-500">

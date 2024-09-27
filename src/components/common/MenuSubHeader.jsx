@@ -1,4 +1,3 @@
-import { Share2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 function MenuSubHeader(props) {
@@ -28,15 +27,6 @@ function MenuSubHeader(props) {
         </h1>
         {heading !== "Documents" && heading !== "Payslip" && (
           <div className="flex items-center gap-2 font-semibold text-white">
-            {isPrimaryPath && (
-              <Link
-                to=""
-                className="btn flex h-11 min-h-11 min-w-40 items-center justify-center gap-1 bg-bgColor-300 px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-bgColor-300"
-              >
-                <Share2 className="size-4" color="black" />
-                Onboarding Form
-              </Link>
-            )}
             {isPrimaryPath || isWorkInformationPath ? (
               <Link
                 to={Firstpath}
