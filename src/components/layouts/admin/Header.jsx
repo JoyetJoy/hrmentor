@@ -68,7 +68,7 @@ export const AdminHeader = () => {
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 p-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
             <MessageSquareText className="size-5 text-textcolor-blue" />
           </div>
           <Menu as="div" className="relative inline-block text-left">
