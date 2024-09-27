@@ -14,7 +14,6 @@ export const basicXFormRequest = axios.create({
 export const newRequest = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
-    "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
   },
 });
@@ -51,3 +50,9 @@ addAuthorizationInterceptor(newFormRequest);
 export const ROLES = "roles";
 export const PAGINATED_ROLES = "paginated-roles";
 export const GET_PERMISSIONS = "permissions";
+
+// EMPLOYEE UNIQUE ID
+export const EMPLOYEE_UNIQUE_ID = "employee-unique-id";
+
+// EMPLOYEE
+export const EMPLOYEE = "employee";

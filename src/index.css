@@ -184,9 +184,6 @@ select:focus {
 }
 /* -----quill----- */
 
-/* .ql-toolbar.ql-snow{
-  border: none;
-} */
 .ql-container.ql-snow {
   border: none;
 }
@@ -197,10 +194,22 @@ select:focus {
   width: 20px;
 }
 /* -------react select------ */
-/* .css-13cymwt-control{
+.css-13cymwt-control {
   border: none !important;
-  background-color: #EBEBF0 !important;
 }
-.css-1u9des2-indicatorSeparator{
+
+.css-1u9des2-indicatorSeparator {
   display: none !important;
-} */
+}
+
+.css-13cymwt-control:hover {
+  border-color: #fff !important;
+}
+.css-t3ipsp-control:hover {
+  border: none !important;
+}
+
+.css-t3ipsp-control {
+  border: none !important;
+  box-shadow: none !important;
+}
