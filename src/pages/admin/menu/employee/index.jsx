@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Filter, ArrowUpFromLine, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
@@ -7,12 +7,40 @@ import { MoveDiagonal, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import { getRandomPastelColor } from "@/utils/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { EMPLOYEE, newRequest } from "@/api";
 
 export default function EmployeeLists() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
   const list = React.useMemo(() => TableData, [TableData]);
 
+  // Fetch List
+  const { data: employeeListing, isLoading } = useQuery({
+    queryKey: ["employeeListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(EMPLOYEE, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (employeeListing) {
+      setTotalPages(employeeListing?.last_page);
+    }
+  }, [employeeListing]);
+
+  // employee;
   const columns = React.useMemo(
     () => [
       {
@@ -24,37 +52,60 @@ export default function EmployeeLists() {
               style={{ backgroundColor: getRandomPastelColor() }}
               className="flex size-8 items-center justify-center rounded-full bg-[#F3] font-medium text-[#202020]"
             >
-              {row?.original?.name?.match(/\b\w/g).join("")}
+              {row?.original?.first_name?.match(/\b\w/g).join("")}
             </p>
-            <p>{row?.original?.name}</p>
+            <p>
+              {row?.original?.first_name} {row?.original?.sur_name}
+            </p>
           </div>
         ),
       },
-      { header: "ID Number", accessorKey: "addNo" },
+      { header: "ID Number", accessorKey: "id" },
       {
         header: "Designation",
-        accessorKey: "dignation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+        accessorKey: "designation",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employee?.designation?.designation_name}
+          </p>
+        ),
       },
       {
         header: "Employment Type",
-        accessorKey: "type",
+        accessorKey: "employment_type",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employee?.designation?.designation_name}
+          </p>
+        ),
       },
       {
         header: "Department",
-        accessorKey: "designation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+        accessorKey: "department",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employee?.department?.department_name ?? "Nill"}
+          </p>
+        ),
       },
       {
-        header: " Work Location",
+        header: "Work Location",
         accessorKey: "location",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employee?.work_location?.work_location_name ??
+              "Nill"}
+          </p>
+        ),
       },
       {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
           <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]">
-            {row?.original?.status}
+            {row?.original?.employee?.status === "OnboardingPending"
+              ? "Onboarding Pending"
+              : "Hr Verification"}
           </div>
         ),
       },
@@ -100,6 +151,9 @@ export default function EmployeeLists() {
           <Search className="size-4 object-contain text-gray-200" />
           <input
             type="text"
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
             className="grow placeholder:text-sm placeholder:text-gray-200 focus:outline-none"
             placeholder="Search"
           />
@@ -122,13 +176,19 @@ export default function EmployeeLists() {
           </Link>
         </div>
       </div>
-      <QueryTable
-        columns={columns}
-        list={list}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-      />
+      {isLoading ? (
+        <div className="flex min-h-96 w-full items-center justify-center bg-white">
+          <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>
+        </div>
+      ) : (
+        <QueryTable
+          columns={columns}
+          list={employeeListing?.listing}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
     </div>
   );
 }
