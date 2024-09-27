@@ -31,8 +31,8 @@ export const AdminDashboard = () => {
       <aside className="flex w-[30%] flex-col">
         <ProfileCompletionCount />
         <LeaveAvailability />
-        <div className="mt-4 rounded-md bg-white p-6">
-          <h1 className="mb-5 text-lg font-semibold text-black">
+        <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
+          <h1 className="mb-4 text-lg font-semibold text-black">
             News & Events
           </h1>
           <div className="flex flex-col gap-3">
