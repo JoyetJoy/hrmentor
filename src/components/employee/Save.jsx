@@ -185,7 +185,8 @@ export default function SaveEmployee() {
       const res = await newRequest(EMPLOYEE_UNIQUE_ID, {
         params: { unique_id: parseInt(uniqueId) },
       });
-      if (res.data?.status === 200) {
+      console.log(res);
+      if (res?.status === 200) {
         setError("unique_id", {
           type: "manual",
           message: "",

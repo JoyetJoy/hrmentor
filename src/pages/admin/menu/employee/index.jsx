@@ -15,7 +15,6 @@ export default function EmployeeLists() {
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
-  const list = React.useMemo(() => TableData, [TableData]);
 
   // Fetch List
   const { data: employeeListing, isLoading } = useQuery({
@@ -33,6 +32,8 @@ export default function EmployeeLists() {
           return res.data;
         }),
   });
+
+  console.log(employeeListing);
 
   useEffect(() => {
     if (employeeListing) {
@@ -102,10 +103,15 @@ export default function EmployeeLists() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]">
-            {row?.original?.employee?.status === "OnboardingPending"
-              ? "Onboarding Pending"
-              : "Hr Verification"}
+          <div
+            style={{
+              backgroundColor:
+                row?.original?.employee?.employment_status?.background_color,
+              color: row?.original?.employee?.employment_status?.text_color,
+            }}
+            className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]"
+          >
+            {row?.original?.employee?.employment_status?.status_name}
           </div>
         ),
       },
