@@ -9,7 +9,7 @@ export default function LeaveAvailability() {
     labels: ["Available", "Consumed", "Annual", "Accrued"],
     datasets: [
       {
-        data: [6, 2, 12, 8], // Example data
+        data: [6, 2, 12, 8],
         backgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
         hoverBackgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
       },
@@ -17,7 +17,7 @@ export default function LeaveAvailability() {
   };
 
   const options = {
-    cutout: "70%", // To create a donut chart
+    cutout: "70%",
     plugins: {
       legend: {
         position: "right",
@@ -26,15 +26,23 @@ export default function LeaveAvailability() {
   };
 
   return (
-    <div className="rounded-md bg-white px-6 py-3">
-      <h1 className="mb-5 text-base font-semibold">
-        Leave availability
-        <br />
-        <span className="text-xs font-normal text-gray-500">
-          Total Employee: 800
-        </span>
-      </h1>
-      <div className="m-auto w-48">
+    <div className="w-full rounded-md bg-white px-5 py-3">
+      <div className="flex w-full gap-2 text-[0.78rem]">
+        <div className="bg-hrmprimaryorange flex h-8 w-fit items-center justify-center rounded px-2 font-semibold text-white">
+          Casual Leave
+        </div>
+        <div className="flex h-8 w-fit items-center justify-center rounded bg-black/10 px-2 font-semibold text-black/80">
+          Sick leave
+        </div>
+        <div className="flex h-8 w-fit items-center justify-center rounded bg-black/10 px-2 font-semibold text-black/80">
+          Comp off
+        </div>
+        <div className="flex h-8 w-fit items-center justify-center rounded bg-black/10 px-2 font-semibold text-black/80">
+          Loss of pay
+        </div>
+      </div>
+
+      <div className="w-[84%]">
         <Doughnut data={data} options={options} />
       </div>
     </div>
