@@ -12,18 +12,18 @@ export const employeeDetails = [
     description: "Employees",
   },
   {
-    title: "Job Views",
-    value: "856",
+    title: "Job Open",
+    value: "27",
     percentage: "10.0%",
     icon: trendingup,
-    description: "Viewers",
+    description: "Jobs",
   },
   {
-    title: "Application",
+    title: "Job Applied",
     value: "856",
     percentage: "10.0%",
     icon: trendingdown,
-    description: "Employees",
+    description: "Applicants",
   },
   {
     title: "Resigned Employees",
