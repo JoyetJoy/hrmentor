@@ -3,11 +3,11 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 
 export default function StatsCard() {
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid w-full grid-cols-4 gap-3">
       {employeeDetails.map((stat, index) => (
         <div
           key={index}
-          className="rounded-md border border-black/10 bg-white px-5 py-4"
+          className="flex w-full flex-col items-start rounded-md border border-black/10 bg-white px-5 py-4"
         >
           <div className="mb-4 flex items-center gap-2">
             <h2 className="min-w-fit text-sm font-semibold text-black">

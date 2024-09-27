@@ -8,7 +8,7 @@ import LeaveAvailability from "@/components/dashboard/LeaveAvailability";
 export const AdminDashboard = () => {
   return (
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
-      <aside className="flex min-w-[70%] flex-col gap-3">
+      <aside className="flex min-w-[73%] flex-col gap-3">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-black">Dashbord</h1>
           <div className="flex items-center gap-3">
@@ -28,7 +28,7 @@ export const AdminDashboard = () => {
         </div>
         <StatsCard />
       </aside>
-      <aside className="flex w-[30%] flex-col">
+      <aside className="flex w-[27%] flex-col">
         <ProfileCompletionCount />
         <LeaveAvailability />
         <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
