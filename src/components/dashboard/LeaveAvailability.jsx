@@ -21,6 +21,11 @@ export default function LeaveAvailability() {
     plugins: {
       legend: {
         position: "right",
+        labels: {
+          boxWidth: 10,
+          padding: 14,
+          usePointStyle: true,
+        },
       },
     },
   };
@@ -42,7 +47,7 @@ export default function LeaveAvailability() {
         </div>
       </div>
 
-      <div className="w-[84%]">
+      <div className="w-[80%]">
         <Doughnut data={data} options={options} />
       </div>
     </div>
