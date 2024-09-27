@@ -26,8 +26,8 @@ export const employeeDetails = [
     description: "Employees",
   },
   {
-    title: "On leave",
-    value: "856",
+    title: "Resigned Employees",
+    value: "85",
     percentage: "10.0%",
     icon: trendingdown,
     description: "Employees",
