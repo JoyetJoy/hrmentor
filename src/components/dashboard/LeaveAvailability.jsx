@@ -31,7 +31,7 @@ export default function LeaveAvailability() {
   };
 
   return (
-    <div className="w-full rounded-md bg-white px-5 py-3">
+    <div className="w-full rounded-md bg-white px-5 py-3 shadow-sm">
       <div className="flex w-full gap-2 text-[0.78rem]">
         <div className="bg-hrmprimaryorange flex h-8 w-fit cursor-pointer items-center justify-center rounded px-2 font-semibold text-white">
           Casual Leave
