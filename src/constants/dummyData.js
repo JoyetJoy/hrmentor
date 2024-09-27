@@ -6,7 +6,7 @@ import tickgray from "/assets/icons/admin/tick-gray.svg";
 export const employeeDetails = [
   {
     title: "Total Employees",
-    value: "856",
+    value: "750",
     percentage: "10.0%",
     icon: trendingup,
     description: "Employees",
@@ -20,7 +20,7 @@ export const employeeDetails = [
   },
   {
     title: "Job Applied",
-    value: "856",
+    value: "1270",
     percentage: "10.0%",
     icon: trendingdown,
     description: "Applicants",
