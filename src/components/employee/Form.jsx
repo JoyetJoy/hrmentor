@@ -322,7 +322,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   <div className="flex h-11 w-64 items-center justify-between gap-5 rounded-xl bg-hrmdarkblue pl-7 pr-3 text-[0.94rem] text-white">
                     Employee ID{" "}
                     <input
-                      disabled={type === "update"}
+                      disabled={formtype === "update"}
                       {...register("unique_id", { required: true })}
                       onChange={(e) => {
                         if (e.target.value.length > 0) {
@@ -332,7 +332,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       className="flex h-9 w-24 items-center rounded-md bg-white px-4 text-sm font-semibold text-black/70"
                     ></input>
                   </div>
-                  {type === "save" && (
+                  {formtype === "save" && (
                     <RotateCw
                       onClick={() => {
                         setValue("unique_id", uniqueId?.unique_id);
