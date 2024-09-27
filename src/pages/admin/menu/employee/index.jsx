@@ -109,7 +109,7 @@ export default function EmployeeLists() {
                 row?.original?.employee?.employment_status?.background_color,
               color: row?.original?.employee?.employment_status?.text_color,
             }}
-            className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]"
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
           >
             {row?.original?.employee?.employment_status?.status_name}
           </div>
