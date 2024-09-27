@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import loginimg from "/assets/images/login-img.png";
 import hr1logo from "/assets/images/hr1-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "@/schema/auth/login.schema";
@@ -41,20 +40,28 @@ function Login() {
   };
 
   return (
-    <div className="mx-auto grid px-5 2xl:container lg:grid-cols-5 lg:p-10">
-      <div className="hidden w-full lg:col-span-2 lg:block">
-        <img src={loginimg} alt="auth banner" className="h-full w-full" />
+    <div className="mx-auto grid h-screen w-full items-center px-5 2xl:container lg:grid-cols-7 lg:px-12">
+      <div className="hidden h-full w-full lg:col-span-3 lg:flex">
+        <img
+          src={"/assets/images/auth/banner.svg"}
+          alt="auth banner"
+          className="h-full w-full"
+        />
       </div>
-      <div className="col-span-3 flex flex-col items-center gap-8 py-20 lg:-ml-7">
-        <div className="flex flex-col gap-2 text-center">
-          <h1 className="mb-7 text-3xl font-bold text-black">COMPANY LOGO</h1>
-          <h2 className="text-2xl font-bold text-black">Log In</h2>
-          <p className="mt-2 text-center text-lg text-[#808080B2]">
+      <div className="col-span-4 -mb-10 flex flex-col px-12">
+        <div className="flex flex-col items-start">
+          <h1 className="text-hrmprimaryorange mb-4 text-xl font-bold">
+            <span className="text-black">Welcome,</span>
+            <br />
+            Techbutomy Private Limited
+          </h1>
+          <h2 className="text-xl font-bold text-black">Log In</h2>
+          <p className="mt-1 text-[#808080B2]">
             Access is granted only to <br /> company employees.
           </p>
         </div>
         <form
-          className="flex w-full flex-col gap-4 text-sm lg:w-1/2"
+          className="mt-8 flex w-full flex-col gap-4 text-sm lg:w-1/2"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-1">
@@ -64,7 +71,7 @@ function Login() {
             <input
               type="email"
               placeholder="Enter email id"
-              className={`h-12 min-h-12 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
+              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
                 errors.email ? "border-red-500" : "border-[#181C3A4D]"
               }`}
               {...register("email")}
@@ -80,7 +87,7 @@ function Login() {
             <input
               type="password"
               placeholder="Enter Password"
-              className={`h-12 min-h-12 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
+              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
                 errors.password ? "border-red-500" : "border-[#181C3A4D]"
               }`}
               {...register("password")}
@@ -91,17 +98,17 @@ function Login() {
           </div>
           <button
             type="submit"
-            className="h-14 w-full rounded-md bg-[#2B2B2B] text-center text-base font-medium text-white hover:bg-[#2B2B2B]"
+            className="h-12 w-full rounded-md bg-[#2B2B2B] text-center text-base font-medium text-white hover:bg-[#2B2B2B]"
           >
             Log In
           </button>
           <Link
             to="/forgot-password"
-            className="mt-3 text-center text-base font-semibold text-[#E95D39]"
+            className="mt-2.5 text-center text-base font-semibold text-[#E95D39]"
           >
             Forgot password?
           </Link>
-          <div className="mt-7 flex flex-col items-center justify-center">
+          <div className="mt-5 flex flex-col items-center justify-center">
             <p className="text-center text-base font-medium text-[#808080B2]">
               Powered By
             </p>
