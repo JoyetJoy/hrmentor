@@ -32,17 +32,17 @@ export default function LeaveAvailability() {
 
   return (
     <div className="w-full rounded-md bg-white px-5 py-3 shadow-sm">
-      <div className="flex w-full flex-wrap gap-2 text-[0.78rem]">
-        <div className="bg-hrmprimaryorange flex h-8 w-fit cursor-pointer items-center justify-center rounded px-2 font-semibold text-white">
+      <div className="flex w-full flex-wrap gap-2 text-[0.77rem] font-semibold">
+        <div className="bg-hrmprimaryorange flex h-8 w-fit cursor-pointer items-center justify-center rounded px-2 text-white">
           Casual Leave
         </div>
-        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded bg-black/10 px-2 font-semibold text-black/80">
+        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border border-black/15 bg-black/5 px-2 text-black/80">
           Sick leave
         </div>
-        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded bg-black/10 px-2 font-semibold text-black/80">
+        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border border-black/15 bg-black/5 px-2 text-black/80">
           Comp off
         </div>
-        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded bg-black/10 px-2 font-semibold text-black/80">
+        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border border-black/15 bg-black/5 px-2 text-black/80">
           Loss of pay
         </div>
       </div>
