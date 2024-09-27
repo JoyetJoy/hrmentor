@@ -9,7 +9,7 @@ export default function StatsCard() {
           key={index}
           className="rounded-md border border-black/10 bg-white px-5 py-4"
         >
-          <div className="mb-5 flex items-center gap-2">
+          <div className="mb-4 flex items-center gap-2">
             <h2 className="min-w-fit text-sm font-semibold text-black">
               {stat.title}
             </h2>
