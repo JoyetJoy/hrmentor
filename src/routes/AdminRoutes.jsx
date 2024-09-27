@@ -18,6 +18,6 @@ export const appRoutes = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/admin/dashboard" replace />,
+    element: <Navigate to="/admin" replace />,
   },
 ]);
