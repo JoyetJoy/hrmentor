@@ -61,7 +61,13 @@ export default function EmployeeLists() {
           </div>
         ),
       },
-      { header: "ID Number", accessorKey: "id" },
+      {
+        header: "ID Number",
+        accessorKey: "id",
+        cell: ({ row }) => (
+          <p className="">#{row?.original?.employee?.unique_id}</p>
+        ),
+      },
       {
         header: "Designation",
         accessorKey: "designation",
