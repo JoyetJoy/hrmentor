@@ -26,6 +26,7 @@ export default {
         },
         active: "#00B448",
         hrmdarkblue: "#181C3A",
+        hrmprimaryorange: "#E95D39",
         inactive: "#DB0000",
         textcolor: {
           darkblue: "#181C3A",

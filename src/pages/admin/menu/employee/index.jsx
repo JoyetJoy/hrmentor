@@ -134,7 +134,7 @@ export default function EmployeeLists() {
               <MoveDiagonal className="size-3" />
             </Link>
             <Link
-              to={"/admin/employees/primary"}
+              to={`/admin/employees/primary/?empid=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <img
