@@ -1,12 +1,12 @@
 import React from "react";
-import { Clock4, Search, Calendar, CircleAlert } from "lucide-react";
+import { Clock4, Search, Calendar, CircleAlert, MoveRight } from "lucide-react";
 import { employeeDetails, meetings } from "@/constants/dummyData";
 import StatsCard from "@/components/dashboard/StatsCard";
 
 export const AdminDashboard = () => {
   return (
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
-      <aside className="min-w-9/12 flex flex-col gap-3">
+      <aside className="flex min-w-[70%] flex-col gap-3">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-black">Dashbord</h1>
           <div className="flex items-center gap-3">
@@ -55,7 +55,21 @@ export const AdminDashboard = () => {
         </div>
       </aside>
       {/* -------right------- */}
-      <aside className="flex w-3/12 flex-col">
+      <aside className="flex w-[30%] flex-col">
+        <div className="relative mb-4 flex h-28 flex-col justify-between rounded-xl bg-white px-5 py-4">
+          <div className="flex gap-3 font-medium">
+            Complete profile details
+            <MoveRight />
+          </div>
+          <div className="bg-hrmprimaryorange flex h-7 w-fit items-center justify-center rounded-lg px-5 text-sm font-semibold text-white">
+            43%
+          </div>
+          <img
+            className="absolute right-0 top-0"
+            src="/assets/images/dashboard/group.svg"
+            alt="svg"
+          />
+        </div>
         <div className="rounded-md bg-white px-6 py-3">
           <h1 className="mb-5 text-base font-semibold">
             Employee Composition

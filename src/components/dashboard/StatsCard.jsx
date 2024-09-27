@@ -2,9 +2,12 @@ import { employeeDetails } from "@/constants/dummyData";
 
 export default function StatsCard() {
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-3">
       {employeeDetails.map((stat, index) => (
-        <div key={index} className="rounded-md bg-white p-6">
+        <div
+          key={index}
+          className="rounded-md border border-black/10 bg-white px-5 py-4"
+        >
           <div className="mb-5 flex items-center gap-2">
             <h2 className="text-sm font-semibold text-black">{stat.title}</h2>
             <span className="flex h-7 items-center justify-center gap-1 rounded-full bg-[#23C10A26] px-2 text-[0.78rem] font-semibold text-[#0B8A00]">
