@@ -178,10 +178,9 @@ export default function EmployeeLists() {
             <ArrowUpFromLine className="size-4" />
             <h1 className="text-xs font-semibold">Export</h1>
           </div>
-
           <Link
             to={"/admin/employees/create"}
-            className="btn flex h-10 min-h-10 items-center bg-[#030E5C] px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="bg-hrmprimaryorange btn flex h-10 min-h-10 items-center px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             <Plus className="size-4" />
             Add Employee{" "}
