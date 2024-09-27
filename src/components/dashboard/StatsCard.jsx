@@ -26,10 +26,10 @@ export default function StatsCard() {
               {stat.percentage}
             </span>
           </div>
-          <h1 className="flex items-end gap-3 text-3xl font-semibold text-black">
+          <h1 className="flex items-end gap-3 text-2xl font-bold text-black">
             {stat.value}
           </h1>
-          <p className="mt-1 text-xs text-gray-200">{stat.description}</p>
+          <p className="mt-1 text-xs text-[#949494]">{stat.description}</p>
         </div>
       ))}
     </div>
