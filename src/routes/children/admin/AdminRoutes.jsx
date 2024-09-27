@@ -6,7 +6,7 @@ import { RecruiterRoutes } from "./children/RecruiterRoutes";
 
 export const AdminRoutes = [
   {
-    path: "/admin",
+    path: "",
     element: <AdminDashboard />,
   },
   {
