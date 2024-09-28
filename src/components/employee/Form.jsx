@@ -175,12 +175,13 @@ export default function SaveEmployeeForm({ formtype }) {
     if (sameAsHome) {
       setValue("communication_address", home_address);
     } else if (
-      (communication_address.trim() !== "") ===
-      (home_address.trim() !== "")
+      communication_address?.trim() !== "" &&
+      home_address?.trim() !== "" &&
+      communication_address === home_address
     ) {
       setSameAsHome(true);
     }
-  }, [sameAsHome]);
+  }, [employeeDetails, setSameAsHome]);
 
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
