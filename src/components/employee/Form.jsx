@@ -41,7 +41,7 @@ import {
 } from "@/api";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const masterConfig = {
   department: {
@@ -71,6 +71,7 @@ const masterConfig = {
 };
 
 export default function SaveEmployeeForm({ formtype }) {
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -101,8 +102,6 @@ export default function SaveEmployeeForm({ formtype }) {
       }),
     enabled: formtype == "update",
   });
-
-  console.log(employeeDetails);
 
   const navigate = useNavigate();
   const [masterApi, setMasterApi] = useState(null);
@@ -311,6 +310,8 @@ export default function SaveEmployeeForm({ formtype }) {
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
+        queryClient.invalidateQueries(["employeeDetails"]);
+        queryClient.invalidateQueries(["employeeListing"]);
         navigate("/admin/employees/list");
         clearImage();
         reset();

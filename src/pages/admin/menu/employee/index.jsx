@@ -33,8 +33,6 @@ export default function EmployeeLists() {
         }),
   });
 
-  console.log(employeeListing);
-
   useEffect(() => {
     if (employeeListing) {
       setTotalPages(employeeListing?.last_page);
@@ -180,7 +178,7 @@ export default function EmployeeLists() {
           </div>
           <Link
             to={"/admin/employees/create"}
-            className="bg-hrmprimaryorange btn flex h-10 min-h-10 items-center px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             <Plus className="size-4" />
             Add Employee{" "}
