@@ -174,6 +174,11 @@ export default function SaveEmployeeForm({ formtype }) {
   useEffect(() => {
     if (sameAsHome) {
       setValue("communication_address", home_address);
+    } else if (
+      (communication_address.trim() !== "") ===
+      (home_address.trim() !== "")
+    ) {
+      setSameAsHome(true);
     }
   }, [sameAsHome]);
 
