@@ -5,7 +5,6 @@ export const EmployeeSchema = Yup.object({
   first_name: Yup.string().required("First name is required"),
   sur_name: Yup.string().required("Surname is required"),
   blood_group: Yup.object({
-    id: Yup.string().required("Blood group ID is required"),
     value: Yup.string()
       .oneOf(["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"])
       .required("Blood group value is required"),
@@ -14,7 +13,6 @@ export const EmployeeSchema = Yup.object({
 
   dob: Yup.string().required("Date of birth is required"),
   gender: Yup.object({
-    id: Yup.string().required("Gender ID is required"),
     value: Yup.string().required("Gender value is required"),
     label: Yup.string().required("Gender label is required"),
   }).required("Gender is required"),
@@ -28,7 +26,9 @@ export const EmployeeSchema = Yup.object({
   communication_address: Yup.string().required(
     "Communication address is required",
   ),
-
+  national_insurance_number: Yup.string().required(
+    "National Insurance is required",
+  ),
   department_id: Yup.object({
     id: Yup.string().required("Department ID is required"),
     value: Yup.string().required("Department value is required"),
@@ -83,7 +83,6 @@ export const EmployeeSchema = Yup.object({
   }).required("City is required"),
 
   marital_status: Yup.object({
-    id: Yup.string().required("Marital status ID is required"),
     value: Yup.string()
       .oneOf(["single", "married", "divorced", "widowed"])
       .required("Marital status value is required"),

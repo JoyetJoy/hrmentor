@@ -1,5 +1,6 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import EmployeeCreation from "@/pages/admin/menu/employee/create";
+import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
 import { EmployeeDepartment } from "@/pages/admin/menu/employee/settings/Department";
 import { EmployeeDesignation } from "@/pages/admin/menu/employee/settings/Designation";
@@ -14,7 +15,6 @@ import { Documents } from "@/pages/admin/menu/employee/view/Documents";
 import { EmergencyContacts } from "@/pages/admin/menu/employee/view/EmergencyContacts";
 import { Experience } from "@/pages/admin/menu/employee/view/Experience";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
-import PrimaryInformation from "@/pages/admin/menu/employee/view/PrimaryInformation";
 import { RegistrationMemberships } from "@/pages/admin/menu/employee/view/RegistrationMemberships";
 import { RightToWork } from "@/pages/admin/menu/employee/view/RightToWork";
 import { SkillsQualifications } from "@/pages/admin/menu/employee/view/SkillsQualifications";

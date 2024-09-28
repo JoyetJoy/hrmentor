@@ -23,5 +23,6 @@ export default function useImageUpload() {
     imageFile,
     handleImageChange,
     clearImage,
+    setImage,
   };
 }

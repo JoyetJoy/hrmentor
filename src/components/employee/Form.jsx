@@ -39,7 +39,8 @@ import {
   newRequest,
 } from "@/api";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 const masterConfig = {
   department: {
@@ -69,6 +70,37 @@ const masterConfig = {
 };
 
 export default function SaveEmployeeForm({ formtype }) {
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    setError,
+    reset,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(EmployeeSchema),
+  });
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const empid = searchParams.get("empid");
+
+  const { image, imageFile, handleImageChange, clearImage, setImage } =
+    useImageUpload();
+
+  // GET DETAILS IN CASE OF UPDATE
+  const { data: employeeDetails, isLoading } = useQuery({
+    queryKey: ["employeeDetails", empid, formtype],
+    queryFn: () =>
+      newRequest.get(`${EMPLOYEE}/${empid}`).then((res) => {
+        return res.data;
+      }),
+    enabled: formtype == "update",
+  });
+
   const navigate = useNavigate();
   const [masterApi, setMasterApi] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -79,6 +111,45 @@ export default function SaveEmployeeForm({ formtype }) {
   const [sameAsHome, setSameAsHome] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(0);
   const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    if (employeeDetails) {
+      setValue("employee_id", employeeDetails.employee_id);
+      setValue("first_name", employeeDetails.first_name);
+      setValue("sur_name", employeeDetails.sur_name);
+      setValue("gender", employeeDetails.gender);
+      setValue("dob", employeeDetails.dob);
+      setValue("marital_status", employeeDetails.marital_status);
+      setValue("blood_group", employeeDetails.blood_group);
+      setValue("nationality_id", employeeDetails.nationality_id);
+      setValue("communication_address", employeeDetails.communication_address);
+      setValue("home_address", employeeDetails.home_address);
+      setValue("email", employeeDetails.email);
+      setValue("mobile_number", employeeDetails.mobile_number);
+      setValue("employee_type", employeeDetails.employee_type);
+      setValue("department", employeeDetails.department);
+      setValue("worklocation_id", employeeDetails.worklocation_id);
+      setValue("designation_id", employeeDetails.designation_id);
+      setValue("date_of_joining", employeeDetails.date_of_joining);
+      setValue("role_id", employeeDetails.role_id);
+      setValue("work_email", employeeDetails.work_email);
+      setValue("personal_email", employeeDetails.personal_email);
+      setValue(
+        "national_insurance_number",
+        employeeDetails.national_insurance_number,
+      );
+      setValue("country_id", employeeDetails.country_id);
+      setValue("city_id", employeeDetails.city_id);
+      setValue("department_id", employeeDetails.department_id);
+      setValue("employment_type", employeeDetails.employment_type);
+    }
+  }, [employeeDetails, setValue]);
+
+  useEffect(() => {
+    if (employeeDetails) {
+      setImage(employeeDetails?.profile_image);
+    }
+  }, [employeeDetails, setImage]);
 
   useEffect(() => {
     const config = masterConfig[openMasterModalType];
@@ -97,28 +168,12 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [openMasterModalType]);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    setError,
-    reset,
-    getValues,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(EmployeeSchema),
-  });
-
   const { communication_address, home_address } = getValues();
 
   // SAME AS HOME
   useEffect(() => {
     if (sameAsHome) {
       setValue("communication_address", home_address);
-    } else if (communication_address === home_address) {
-      setValue("communication_address", "");
     }
   }, [sameAsHome]);
 
@@ -173,10 +228,13 @@ export default function SaveEmployeeForm({ formtype }) {
   );
 
   useEffect(() => {
-    if (uniqueId) {
+    if (employeeDetails?.unique_id) {
+      setValue("unique_id", employeeDetails?.unique_id);
+    } else if (uniqueId && formtype === "save") {
       setValue("unique_id", uniqueId?.unique_id);
+    } else {
     }
-  }, [uniqueId, setValue]);
+  }, [uniqueId, employeeDetails, setValue]);
 
   // CHECK IF UNIQUE ID IS AVAILABLE
   const handleUniqueIdChange = async (uniqueId) => {
@@ -201,7 +259,7 @@ export default function SaveEmployeeForm({ formtype }) {
 
   // ROLES LIST
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
-  const { image, imageFile, handleImageChange, clearImage } = useImageUpload();
+
   const onSubmit = (data) => {
     setLoader(true);
     handleEmployee(data);
@@ -231,8 +289,8 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("employment_type", data.employment_type?.id);
     formData.append("designation_id", data.designation_id?.id);
     formData.append("date_of_joining", data.date_of_joining);
-    data.role.forEach((role) => {
-      formData.append("role_id[]", role.id);
+    data.role_id.forEach((role) => {
+      formData.append("role[]", role.id);
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
@@ -240,9 +298,14 @@ export default function SaveEmployeeForm({ formtype }) {
       formData.append("profile_image", imageFile);
     }
     try {
-      const res = await newFormRequest.post(EMPLOYEE, formData);
+      let res;
+      if (formtype === "save") {
+        res = await newFormRequest.post(EMPLOYEE, formData);
+      } else {
+        res = await newFormRequest.patch(`${EMPLOYEE}/${empid}`, formData);
+      }
       if (res.data?.status === 201) {
-        toast.success("Employee saved successfully.");
+        toast.success(res?.data?.message);
         navigate("/admin/employees");
         clearImage();
         reset();
@@ -289,7 +352,7 @@ export default function SaveEmployeeForm({ formtype }) {
             )}
             <button
               type="submit"
-              className="bg-hrmprimaryorange btn flex h-10 min-h-10 min-w-24 items-center text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+              className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
             >
               {loader ? (
                 <div className="flex items-center gap-3">
@@ -523,15 +586,15 @@ export default function SaveEmployeeForm({ formtype }) {
                   National Insurance Number
                 </label>
                 <input
-                  {...register("national_insurance", { required: true })}
+                  {...register("national_insurance_number", { required: true })}
                   autoComplete="off"
                   type="text"
                   placeholder="Enter National Insurance Number"
                   className="input-box"
                 />
-                {errors.national_insurance && (
+                {errors.national_insurance_number && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.national_insurance?.message}
+                    {errors.national_insurance_number?.message}
                   </span>
                 )}
               </div>
@@ -542,7 +605,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <img
                       src={image}
                       alt="Uploaded"
-                      className="max-h-24 w-full rounded-md"
+                      className="max-h-24 w-full rounded-md border border-black/20"
                     />
                     <X
                       onClick={clearImage}
@@ -604,6 +667,10 @@ export default function SaveEmployeeForm({ formtype }) {
                       checked={sameAsHome}
                       onChange={() => {
                         setSameAsHome(!sameAsHome);
+                        setValue(
+                          "communication_address",
+                          !sameAsHome ? "" : "",
+                        );
                       }}
                     />
                     <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-[#696969] md:text-xs">
@@ -612,6 +679,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   </div>
                 </label>
                 <textarea
+                  disabled={sameAsHome}
                   autoComplete="off"
                   {...register("communication_address", { required: true })}
                   className="input-box min-h-28 py-1"
@@ -666,7 +734,7 @@ export default function SaveEmployeeForm({ formtype }) {
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="required label-text">Role</label>
                 <Controller
-                  name="role"
+                  name="role_id"
                   className=""
                   control={control}
                   rules={{ required: true }}
