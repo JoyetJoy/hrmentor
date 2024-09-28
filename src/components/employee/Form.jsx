@@ -297,7 +297,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("designation_id", data.designation_id?.id);
     formData.append("date_of_joining", data.date_of_joining);
     data.role_id.forEach((role) => {
-      formData.append("role[]", role.id);
+      formData.append("role_id[]", role.id);
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
