@@ -37,6 +37,7 @@ import {
   EMPLOYEE_UNIQUE_ID,
   newFormRequest,
   newRequest,
+  UPDATE_EMPLOYEE,
 } from "@/api";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -181,7 +182,7 @@ export default function SaveEmployeeForm({ formtype }) {
     ) {
       setSameAsHome(true);
     }
-  }, [employeeDetails, setSameAsHome]);
+  }, [employeeDetails, home_address, setSameAsHome]);
 
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
@@ -308,7 +309,10 @@ export default function SaveEmployeeForm({ formtype }) {
       if (formtype === "save") {
         res = await newFormRequest.post(EMPLOYEE, formData);
       } else {
-        res = await newFormRequest.patch(`${EMPLOYEE}/${empid}`, formData);
+        res = await newFormRequest.post(
+          `${UPDATE_EMPLOYEE}/${empid}`,
+          formData,
+        );
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);

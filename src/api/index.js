@@ -56,3 +56,5 @@ export const EMPLOYEE_UNIQUE_ID = "employee-unique-id";
 
 // EMPLOYEE
 export const EMPLOYEE = "employee";
+// UPDATE EMPLOYEE
+export const UPDATE_EMPLOYEE = "employee-update";
