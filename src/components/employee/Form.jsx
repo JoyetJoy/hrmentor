@@ -102,6 +102,8 @@ export default function SaveEmployeeForm({ formtype }) {
     enabled: formtype == "update",
   });
 
+  console.log(employeeDetails);
+
   const navigate = useNavigate();
   const [masterApi, setMasterApi] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -175,14 +177,8 @@ export default function SaveEmployeeForm({ formtype }) {
   useEffect(() => {
     if (sameAsHome) {
       setValue("communication_address", home_address);
-    } else if (
-      communication_address?.trim() !== "" &&
-      home_address?.trim() !== "" &&
-      communication_address === home_address
-    ) {
-      setSameAsHome(true);
     }
-  }, [employeeDetails, home_address, setSameAsHome]);
+  }, [employeeDetails, home_address, communication_address, setSameAsHome]);
 
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
@@ -301,9 +297,8 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    if (imageFile) {
-      formData.append("profile_image", imageFile);
-    }
+    imageFile && formData.append("profile_image", imageFile);
+
     try {
       let res;
       if (formtype === "save") {
@@ -615,7 +610,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <img
                       src={image}
                       alt="Uploaded"
-                      className="max-h-24 w-full rounded-md border border-black/20"
+                      className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                     />
                     <X
                       onClick={clearImage}
