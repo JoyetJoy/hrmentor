@@ -311,7 +311,7 @@ export default function SaveEmployeeForm({ formtype }) {
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
-        navigate("/admin/employees");
+        navigate("/admin/employees/list");
         clearImage();
         reset();
         setLoader(false);
