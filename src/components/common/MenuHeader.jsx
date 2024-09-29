@@ -20,61 +20,79 @@ function MenuHeader(props) {
     centertext,
   } = props;
 
-  const currentMenu = location.pathname.includes('/admin/recruiter')
+  const currentMenu = location.pathname.includes("/admin/recruiter")
     ? recruiterMenu
-    : location.pathname.includes('/admin/employee')
+    : location.pathname.includes("/admin/employee")
       ? employeeMenu
-      : ['/admin/role', '/admin/subscription'].some(path => location.pathname.includes(path))
+      : ["/admin/role", "/admin/subscription"].some((path) =>
+            location.pathname.includes(path),
+          )
         ? AccountManngerMenu
         : [];
 
   const menuItem = currentMenu.find((item) => item.name === activeSubMenu);
 
-  const isSpecialPath = ['Employee', 'Settings', 'Role', 'Subscription', 'Add Employee', "Employee Detail"].includes(currentpath);
+  const isSpecialPath = [
+    "Employee",
+    "Settings",
+    "Role",
+    "Subscription",
+    "Add Employee",
+    "Employee Detail",
+  ].includes(currentpath);
 
   return (
     <>
-      <div className={`bg-white min-h-11 py-2 flex flex-row items-center justify-between rounded-md my-2 ${isSpecialPath ? "pl-6 pr-20" : "pl-6 pr-6"}`}>
-        <div className={`text-sm font-semibold  text-[#030E5C] flex items-center justify-between`}>
-          {!location.pathname.includes('/admin/recruiter') && (
-            <ArrowLeft className="size-4 mr-2" />
+      <div
+        className={`my-2 flex min-h-11 flex-row items-center justify-between rounded-md bg-white py-2 ${isSpecialPath ? "pl-6 pr-20" : "pl-6 pr-6"}`}
+      >
+        <div
+          className={`flex items-center justify-between text-sm font-semibold text-[#030E5C]`}
+        >
+          {!location.pathname.includes("/admin/recruiter") && (
+            <ArrowLeft
+              onClick={() => {
+                history.back();
+              }}
+              className="mr-2 size-4 cursor-pointer"
+            />
           )}
           {menu}
           <ChevronRight className="size-3" />
           {subMenu}
           {icon}
-          <span className="text-textcolor-lightred text-sm">
-            {currentpath}
-          </span>
+          <span className="text-sm text-textcolor-lightred">{currentpath}</span>
         </div>
-        <h1 className="text-[0.8rem] font-medium text-black flex items-center cursor-pointer justify-between gap-1">
+        <h1 className="flex cursor-pointer items-center justify-between gap-1 text-[0.8rem] font-medium text-black">
           {centertextmain}
-          <span className="text-textcolor-lightred font-bold underline underline-offset-4">
+          <span className="font-bold text-textcolor-lightred underline underline-offset-4">
             {centertext}
           </span>
         </h1>
-        <div className={`text-sm flex items-center   ${isSpecialPath ? " gap-7  " : "gap-8"}`}>
+        <div
+          className={`flex items-center text-sm ${isSpecialPath ? "gap-7" : "gap-8"}`}
+        >
           {currentMenu?.map((item) => (
             <React.Fragment key={item?.id}>
               <Link
                 to={item?.link}
-                className={`text-sm ${activeMenu === item?.name
-                  ? "font-extrabold text-[#181C3A] before:bg-[#181C3A] py-1 px-2 active-menu"
-                  : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
+                className={`text-sm ${
+                  activeMenu === item?.name
+                    ? "active-menu px-2 py-1 font-extrabold text-[#181C3A] before:bg-[#181C3A]"
+                    : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
                 }`}
               >
                 {item?.name}
               </Link>
-
             </React.Fragment>
           ))}
         </div>
       </div>
       {menuItem?.subMenu && menuItem.subMenu.list && (
-        <div className="flex mb-3 flex-row items-center justify-between rounded-md">
-          <div className="flex justify-center items-center gap-2">
-            <div className="rounded-full border size-7 flex justify-center items-center">
-              <User className="fill-black size-4" />
+        <div className="mb-3 flex flex-row items-center justify-between rounded-md">
+          <div className="flex items-center justify-center gap-2">
+            <div className="flex size-7 items-center justify-center rounded-full border">
+              <User className="size-4 fill-black" />
             </div>
             <div className="flex flex-col">
               <div className="text-sm font-semibold">Sandeep Biju</div>
@@ -83,14 +101,15 @@ function MenuHeader(props) {
               </div>
             </div>
           </div>
-          <div className="text-sm flex items-center gap-10 font-semibold">
+          <div className="flex items-center gap-10 text-sm font-semibold">
             {menuItem.subMenu.list?.map((item) => (
               <Link
                 key={item?.id}
                 to={item?.link}
-                className={`text-sm px-2 py-1 ${isActive([item?.link])
-                  ? "font-extrabold active-menu before:bg-[#181C3A]  text-bgColor-100"
-                  : "font-normal text-[#808080]"
+                className={`px-2 py-1 text-sm ${
+                  isActive([item?.link])
+                    ? "active-menu font-extrabold text-bgColor-100 before:bg-[#181C3A]"
+                    : "font-normal text-[#808080]"
                 }`}
               >
                 {item?.name}
