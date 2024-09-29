@@ -79,7 +79,7 @@ export default function EmployeeLists() {
         accessorKey: "employment_type",
         cell: ({ row }) => (
           <p className="">
-            {row?.original?.employee?.designation?.designation_name}
+            {row?.original?.employee?.employment_type?.employment_type_name}
           </p>
         ),
       },

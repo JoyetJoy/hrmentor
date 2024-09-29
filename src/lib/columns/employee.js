@@ -56,6 +56,11 @@ export const employeeColumnKeysForDocumentCategory = {
 
 // skills
 export const employeeColumnKeysForSkills = {
-  field1: { key: "document_category_name", label: "Document Category Name" },
-  field2: { key: "document_category_status", label: "Status" },
+  field1: { key: "type", label: "Type" },
+  field2: { key: "field_of_study", label: "Field of study" },
+  field3: { key: "institution", label: "Institution" },
+  field4: { key: "date_of_completion", label: "Date of completion" },
+  field5: { key: "percentage", label: "CGPA/Percentage" },
+  field6: { key: "status", label: "Status" },
+  field7: { key: "document", label: "Document" },
 };
