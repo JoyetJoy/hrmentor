@@ -48,7 +48,7 @@ body::-webkit-scrollbar-thumb {
 }
 input[type="checkbox"],
 input[type="radio"] {
-  accent-color: #030e5c !important;
+  accent-color: #e95d39 !important;
 }
 
 input::-webkit-calendar-picker-indicator {
