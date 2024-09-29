@@ -42,7 +42,7 @@ export default function Pagination({
         {pageNumbers.map((page) => (
           <button
             style={{
-              backgroundColor: currentPage === page ? "#030E5C" : "",
+              backgroundColor: currentPage === page ? "#E95D39" : "",
               color: currentPage === page ? "#fff" : "",
             }}
             className="left flex h-7 w-7 items-center justify-center rounded-full text-sm text-[#2E2E2E]"
