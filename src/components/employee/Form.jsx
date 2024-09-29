@@ -172,12 +172,23 @@ export default function SaveEmployeeForm({ formtype }) {
 
   const { country_id, home_address } = getValues();
 
-  // SAME AS HOME
   useEffect(() => {
-    if (sameAsHome) {
-      setValue("communication_address", home_address);
+    if (employeeDetails) {
+      setSameAsHome(employeeDetails?.same_as_home === 1 ? true : false);
     }
   }, [employeeDetails, setSameAsHome]);
+
+  // SAME AS HOME
+  useEffect(() => {
+    if (sameAsHome === true) {
+      setValue("communication_address", home_address);
+    } else if (sameAsHome === false) {
+      setValue(
+        "communication_address",
+        employeeDetails.communication_address ?? "",
+      );
+    }
+  }, [employeeDetails, sameAsHome]);
 
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
@@ -297,6 +308,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
     imageFile && formData.append("profile_image", imageFile);
+    formData.append("same_as_home", sameAsHome ? 1 : 0);
 
     try {
       let res;
@@ -312,7 +324,7 @@ export default function SaveEmployeeForm({ formtype }) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["employeeDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
-        navigate("/admin/employees/list");
+        navigate("/admin/employee");
         clearImage();
         reset();
         setLoader(false);
@@ -530,10 +542,6 @@ export default function SaveEmployeeForm({ formtype }) {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        // onChange={(event) => {
-                        //   setValue("country_id", event);
-                        //   setSelectedCountry(event?.id);
-                        // }}
                         options={countryList}
                         placeholder="Select Country"
                         className="input-box"
@@ -680,10 +688,6 @@ export default function SaveEmployeeForm({ formtype }) {
                         checked={sameAsHome}
                         onChange={() => {
                           setSameAsHome(!sameAsHome);
-                          setValue(
-                            "communication_address",
-                            !sameAsHome ? "" : "",
-                          );
                         }}
                       />
                       <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-[#696969] md:text-xs">
