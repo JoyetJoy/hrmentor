@@ -202,7 +202,7 @@ export const MenuRoles = () => {
                 className="input-box h-11 min-h-11 w-full max-w-xs placeholder:text-[#2C2C2C] focus:outline-none"
                 {...register("name")}
               />
-              <button className="flex h-11 w-fit items-center justify-center rounded bg-hrmprimaryorange px-14 text-[0.8rem] font-medium tracking-[0.1px] text-white">
+              <button className="flex h-11 w-fit items-center justify-center rounded-md bg-hrmprimaryorange px-14 text-[0.8rem] font-medium tracking-[0.1px] text-white">
                 {loader ? (
                   <div className="flex items-center gap-3">
                     <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
