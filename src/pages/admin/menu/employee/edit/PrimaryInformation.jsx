@@ -8,10 +8,10 @@ function PrimaryInformation() {
     <div className="flex flex-col">
       <MenuHeader
         menu={"Menu"}
-        subMenu={"Employee"}
+        subMenu={"employee"}
         currentpath={"Employee Detail"}
         icon={<ChevronRight className="size-3" />}
-        activeMenu={"Employees"}
+        activeMenu={"Employee"}
       />
       <div className="flex gap-x-3">
         <EmployeesSidebar />

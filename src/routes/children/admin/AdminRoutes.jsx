@@ -18,7 +18,7 @@ export const AdminRoutes = [
     element: <MenuSubscription />,
   },
   {
-    path: "employees",
+    path: "employee",
     children: EmployeeRoutes,
   },
   {

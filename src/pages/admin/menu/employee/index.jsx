@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, Filter, ArrowUpFromLine, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { TableData } from "@/constants/tableDummy";
-import { MoveDiagonal, Trash2 } from "lucide-react";
+import { MoveDiagonal } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -132,7 +131,7 @@ export default function EmployeeLists() {
               <MoveDiagonal className="size-3" />
             </Link>
             <Link
-              to={`/admin/employees/primary/?empid=${row.original.id}`}
+              to={`/admin/employee/primary/?empid=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <img
@@ -152,9 +151,9 @@ export default function EmployeeLists() {
       <MenuHeader
         menu={"Menu"}
         currentpath={"Employee"}
-        centertextmain={"  Number of licence is limited to 8:"}
+        centertextmain={"Number of licence is limited to 8:"}
         centertext={"Add More Licence"}
-        activeMenu={"Employees"}
+        activeMenu={"Employee"}
       />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] outline-none">
@@ -177,7 +176,7 @@ export default function EmployeeLists() {
             <h1 className="text-xs font-semibold">Export</h1>
           </div>
           <Link
-            to={"/admin/employees/create"}
+            to={"/admin/employee/create"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             <Plus className="size-4" />

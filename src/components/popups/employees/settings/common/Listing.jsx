@@ -3,7 +3,7 @@ import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
-import { employeesSettingsSideList } from "@/constants/employeeSidebar";
+import { employeeSettingSideList } from "@/constants/employeeSidebar";
 import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
@@ -140,7 +140,7 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
           activeMenu={"Settings"}
         />
         <div className="flex gap-x-3">
-          <EmployeesSidebar sidebarList={employeesSettingsSideList} />
+          <EmployeesSidebar sidebarList={employeeSettingSideList} />
           {isLoading ? (
             <div className="flex min-h-96 w-full items-center justify-center bg-white">
               <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>

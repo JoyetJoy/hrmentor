@@ -59,7 +59,9 @@ function MenuHeader(props) {
           )}
           {menu}
           <ChevronRight className="size-3" />
-          {subMenu}
+          <Link className="capitalize" to={`/admin/${subMenu}`}>
+            {subMenu}
+          </Link>
           {icon}
           <span className="text-sm text-textcolor-lightred">{currentpath}</span>
         </div>
@@ -74,11 +76,12 @@ function MenuHeader(props) {
         >
           {currentMenu?.map((item) => (
             <React.Fragment key={item?.id}>
+              {console.log(item?.link)}
               <Link
                 to={item?.link}
                 className={`text-sm ${
                   activeMenu === item?.name
-                    ? "active-menu px-2 py-1 font-extrabold text-[#181C3A] before:bg-[#181C3A]"
+                    ? "active-menu px-2 py-1 font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
                     : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
                 }`}
               >

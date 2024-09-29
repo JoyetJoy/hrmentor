@@ -1,99 +1,99 @@
-export const employeesSidebarList = [
+export const employeeSidebarList = [
   {
     id: 1,
-    link: "/admin/employees/primary",
+    link: "/admin/employee/primary",
     name: "Primary Information",
   },
   {
     id: 2,
-    link: "/admin/employees/work-information",
+    link: "/admin/employee/work-information",
     name: "Work Information",
   },
   {
     id: 3,
-    link: "/admin/employees/skill-qulification",
+    link: "/admin/employee/skill-qulification",
     name: "Skills/Qualifications",
   },
   {
     id: 4,
-    link: "/admin/employees/experience",
+    link: "/admin/employee/experience",
     name: "Experience",
   },
   {
     id: 5,
-    link: "/admin/employees/registration-membership",
+    link: "/admin/employee/registration-membership",
     name: "Registration & Memberships",
   },
   {
     id: 6,
-    link: "/admin/employees/right-to-work",
+    link: "/admin/employee/right-to-work",
     name: "Right to work",
   },
   {
     id: 7,
-    link: "/admin/employees/emergency-contact",
+    link: "/admin/employee/emergency-contact",
     name: "Emergency Contacts",
   },
   {
     id: 8,
-    link: "/admin/employees/bank-details",
+    link: "/admin/employee/bank-details",
     name: "Bank Details",
   },
   {
     id: 9,
-    link: "/admin/employees/compensation",
+    link: "/admin/employee/compensation",
     name: "Compensation",
   },
   {
     id: 10,
-    link: "/admin/employees/documents",
+    link: "/admin/employee/documents",
     name: "Documents",
   },
   {
     id: 11,
-    link: "/admin/employees/payslip",
+    link: "/admin/employee/payslip",
     name: "Payslip",
   },
 ];
-export const employeesSettingsSideList = [
+export const employeeSettingSideList = [
   {
     id: 1,
-    link: "/admin/employees/settings/employment-type",
+    link: "/admin/employee/settings/employment-type",
     name: "Employee Type",
   },
   {
     id: 2,
-    link: "/admin/employees/settings/designation",
+    link: "/admin/employee/settings/designation",
     name: "Designation",
   },
   {
     id: 3,
-    link: "/admin/employees/settings/department",
+    link: "/admin/employee/settings/department",
     name: "Department",
   },
   {
     id: 4,
-    link: "/admin/employees/settings/work-location",
+    link: "/admin/employee/settings/work-location",
     name: "Work Location",
   },
   {
     id: 5,
-    link: "/admin/employees/settings/document-category",
+    link: "/admin/employee/settings/document-category",
     name: "Document Category",
   },
   {
     id: 6,
-    link: "/admin/employees/settings/document-type",
+    link: "/admin/employee/settings/document-type",
     name: "Document Type",
   },
   {
     id: 7,
-    link: "/admin/employees/settings/ethnicity",
+    link: "/admin/employee/settings/ethnicity",
     name: "Ethnicity",
   },
   {
     id: 8,
-    link: "/admin/employees/settings/eeo-category",
+    link: "/admin/employee/settings/eeo-category",
     name: "EEO Job Categories",
   },
 ];

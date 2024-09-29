@@ -260,7 +260,7 @@ export const menuitems = [
     iconSrcBlack: "/assets/icons/admin/employee-black.svg",
     iconSrcActive: "/assets/icons/admin/employeeColor.svg",
     name: "Employee",
-    path: "/admin/employees/list",
+    path: "/admin/employee",
     active: "employees",
   },
   {

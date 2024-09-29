@@ -10,7 +10,7 @@ export default function SaveEmployee() {
         subMenu={"Employee"}
         currentpath={"Add Employee"}
         icon={<ChevronRight className="size-3" />}
-        activeMenu={"Employees"}
+        activeMenu={"Employee"}
       />
       <SaveEmployeeForm formtype="save" />
     </>

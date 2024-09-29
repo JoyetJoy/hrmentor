@@ -22,7 +22,7 @@ import { WorkInformation } from "@/pages/admin/menu/employee/view/WorkInformatio
 
 export const EmployeeRoutes = [
   {
-    path: "list",
+    path: "",
     element: <EmployeeLists />,
   },
   {

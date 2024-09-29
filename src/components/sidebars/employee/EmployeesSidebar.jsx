@@ -1,8 +1,8 @@
-import { employeesSidebarList } from "@/constants/employeeSidebar";
+import { employeeSidebarList } from "@/constants/employeeSidebar";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function EmployeesSidebar({ sidebarList = employeesSidebarList }) {
+function EmployeesSidebar({ sidebarList = employeeSidebarList }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const empid = searchParams.get("empid");
