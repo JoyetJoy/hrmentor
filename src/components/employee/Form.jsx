@@ -87,8 +87,6 @@ export default function SaveEmployeeForm({ formtype }) {
     resolver: yupResolver(EmployeeSchema),
   });
 
-  console.log(errors);
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const empid = searchParams.get("empid");
