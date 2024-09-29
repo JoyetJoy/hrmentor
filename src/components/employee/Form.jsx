@@ -754,7 +754,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       options={rolesList}
                       isMulti
                       placeholder="Select Role"
-                      className="input-box"
+                      className="input-box h-fit"
                     />
                   )}
                 />
