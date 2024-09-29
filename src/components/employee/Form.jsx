@@ -83,6 +83,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
+    reValidateMode: "onChange",
     resolver: yupResolver(EmployeeSchema),
   });
 
@@ -113,7 +114,6 @@ export default function SaveEmployeeForm({ formtype }) {
   const [colKeys, setColKeys] = useState(null);
   const [openMasterModalType, setOpenMasterModalType] = useState(null);
   const [sameAsHome, setSameAsHome] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(0);
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
@@ -172,14 +172,14 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [openMasterModalType]);
 
-  const { communication_address, home_address } = getValues();
+  const { country_id, home_address } = getValues();
 
   // SAME AS HOME
   useEffect(() => {
     if (sameAsHome) {
       setValue("communication_address", home_address);
     }
-  }, [employeeDetails, home_address, communication_address, setSameAsHome]);
+  }, [employeeDetails, setSameAsHome]);
 
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
@@ -202,7 +202,7 @@ export default function SaveEmployeeForm({ formtype }) {
       return [];
     }
     const response = await newRequest.get(COUNTRY_CITY, {
-      params: { country_id: parseInt(selectedCountry), search: inputValue },
+      params: { country_id: parseInt(country_id?.id), search: inputValue },
     });
     return response?.data;
   };
@@ -527,10 +527,10 @@ export default function SaveEmployeeForm({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      onChange={(event) => {
-                        setValue("country_id", event);
-                        setSelectedCountry(event?.id);
-                      }}
+                      // onChange={(event) => {
+                      //   setValue("country_id", event);
+                      //   setSelectedCountry(event?.id);
+                      // }}
                       options={countryList}
                       placeholder="Select Country"
                       className="input-box"
