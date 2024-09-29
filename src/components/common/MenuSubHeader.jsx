@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 
 function MenuSubHeader(props) {
   const location = useLocation();
-
   const {
     heading,
     FirstLink,
@@ -14,9 +13,9 @@ function MenuSubHeader(props) {
     Secondicon,
   } = props;
 
-  const isPrimaryPath = location.pathname === "/admin/employees/primary";
+  const isPrimaryPath = location.pathname === "/admin/employee/primary";
   const isWorkInformationPath =
-    location.pathname === "/admin/employees/work-information";
+    location.pathname === "/admin/employee/work-information";
 
   return (
     <div>
