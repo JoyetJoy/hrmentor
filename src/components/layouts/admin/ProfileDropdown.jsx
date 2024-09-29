@@ -20,13 +20,13 @@ export default function ProfileDropdown({ handleNavigation, user }) {
           </h1>
         </Menu.Button>
         <Menu.Items className="absolute top-12 z-20 w-48 rounded-lg bg-white p-4 shadow-lg">
-          <ul className="flex flex-col gap-5">
+          <ul className="flex flex-col gap-4">
             {adminItems.map((item, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
                   <button
                     onClick={() => handleNavigation(item.path)}
-                    className={`flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-semibold ${
+                    className={`flex cursor-pointer items-center gap-2 whitespace-nowrap text-[0.8rem] font-semibold ${
                       active ? "" : ""
                     }`}
                   >
