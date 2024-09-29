@@ -1,6 +1,6 @@
 import { EMPLOYEE_DESIGNATION } from "@/api/master";
 import { EmployeeMasters } from "@/components/popups/employees/settings/common/Listing";
-import { employeeColumnKeysForDesignation } from "@/constants/data";
+import { employeeColumnKeysForDesignation } from "@/lib/columns/employee";
 
 export const EmployeeDesignation = () => {
   return (

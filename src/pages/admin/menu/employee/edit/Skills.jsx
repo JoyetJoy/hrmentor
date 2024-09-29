@@ -1,7 +1,7 @@
 import MenuHeader from "@/components/common/MenuHeader";
 import { EmployeeEditCommonListing } from "@/components/employee/edit/Listing";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
-import { employeeColumnKeysForEmployeeType } from "@/constants/data";
+import { employeeColumnKeysForSkills } from "@/lib/columns/employee";
 import { ChevronRight } from "lucide-react";
 
 export default function SkillsQualifications() {
@@ -18,8 +18,8 @@ export default function SkillsQualifications() {
         <EmployeesSidebar />
         <EmployeeEditCommonListing
           qryKey={"employeeTypeList"}
-          colKeys={employeeColumnKeysForEmployeeType}
-          type={"Employee Type"}
+          colKeys={employeeColumnKeysForSkills}
+          type={"Skills/Qualifications"}
         />
       </div>
     </div>

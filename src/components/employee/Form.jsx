@@ -7,15 +7,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SaveEmployeeMasterForm from "../popups/employees/settings/common/Save";
-import {
-  bloodGroups,
-  employeeColumnKeysForDepartment,
-  employeeColumnKeysForDesignation,
-  employeeColumnKeysForEmployeeType,
-  employeeColumnKeysForWorkLocation,
-  genders,
-  maritalStatuses,
-} from "@/constants/data";
+import { bloodGroups, genders, maritalStatuses } from "@/constants/data";
 import {
   COUNTRY,
   COUNTRY_CITY,
@@ -42,6 +34,12 @@ import {
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  employeeColumnKeysForDepartment,
+  employeeColumnKeysForDesignation,
+  employeeColumnKeysForEmployeeType,
+  employeeColumnKeysForWorkLocation,
+} from "@/lib/columns/employee";
 
 const masterConfig = {
   department: {

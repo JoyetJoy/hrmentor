@@ -1,6 +1,6 @@
 import { EMPLOYEE_DOCUMENT_TYPE } from "@/api/master";
 import { EmployeeMasters } from "@/components/popups/employees/settings/common/Listing";
-import { employeeColumnKeysForDocumentType } from "@/constants/data";
+import { employeeColumnKeysForDocumentType } from "@/lib/columns/employee";
 
 export const EmployeeDocumentType = () => {
   return (

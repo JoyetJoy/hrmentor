@@ -1,6 +1,6 @@
 import { EMPLOYEE_EEO_CATEGORY } from "@/api/master";
 import { EmployeeMasters } from "@/components/popups/employees/settings/common/Listing";
-import { employeeColumnKeysForEeoJobCategory } from "@/constants/data";
+import { employeeColumnKeysForEeoJobCategory } from "@/lib/columns/employee";
 
 export const EmployeeEeoCategory = () => {
   return (

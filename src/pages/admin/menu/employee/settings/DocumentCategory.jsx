@@ -1,6 +1,6 @@
 import { EMPLOYEE_DOCUMENT_CATEGORY } from "@/api/master";
 import { EmployeeMasters } from "@/components/popups/employees/settings/common/Listing";
-import { employeeColumnKeysForDocumentCategory } from "@/constants/data";
+import { employeeColumnKeysForDocumentCategory } from "@/lib/columns/employee";
 
 export const EmployeeDocumentCategory = () => {
   return (

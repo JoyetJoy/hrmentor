@@ -1,12 +1,9 @@
 import { newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import MenuHeader from "@/components/common/MenuHeader";
-import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
-import { employeeSettingSideList } from "@/constants/employeeSidebar";
 import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SaveEmployeeMasterForm from "../../popups/employees/settings/common/Save";
 
@@ -140,15 +137,19 @@ export const EmployeeEditCommonListing = ({ api, qrkey, colKeys, type }) => {
           <div className="flex w-full flex-col">
             <div className="w-full rounded-md bg-white px-5 py-4">
               <div className="my-4 flex items-center justify-between">
-                <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
-                  <Search className="size-4 text-[#7F7F7F]" />
-                  <input
-                    type="text"
-                    onChange={(e) => setKeyword(e.target.value)}
-                    className="h-full w-full placeholder:text-[#7F7F7F]"
-                    placeholder="Search"
-                  />
+                <div className="flex items-center gap-7">
+                  <h5 className="text-lg font-bold">{type}</h5>
+                  <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
+                    <Search className="size-4 text-[#7F7F7F]" />
+                    <input
+                      type="text"
+                      onChange={(e) => setKeyword(e.target.value)}
+                      className="h-full w-full placeholder:text-[#7F7F7F]"
+                      placeholder="Search"
+                    />
+                  </div>
                 </div>
+
                 <Button
                   onClick={() => {
                     setPopupOpen(true);
@@ -156,7 +157,7 @@ export const EmployeeEditCommonListing = ({ api, qrkey, colKeys, type }) => {
                   className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <Plus className="size-4" />
-                  Add
+                  Add {type}
                 </Button>
               </div>
               <div>
