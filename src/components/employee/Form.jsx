@@ -185,7 +185,7 @@ export default function SaveEmployeeForm({ formtype }) {
     } else if (sameAsHome === false) {
       setValue(
         "communication_address",
-        employeeDetails.communication_address ?? "",
+        employeeDetails?.communication_address ?? "",
       );
     }
   }, [employeeDetails, sameAsHome]);
