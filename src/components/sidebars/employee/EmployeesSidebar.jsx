@@ -5,13 +5,13 @@ import { Link, useLocation } from "react-router-dom";
 function EmployeesSidebar({ sidebarList = employeeSidebarList }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const empid = searchParams.get("empid");
+  const uid = searchParams.get("uid");
 
   return (
     <div className="min-h-full min-w-56 rounded-md bg-white px-5 py-4">
       <ul className="flex flex-col justify-center gap-5 text-[0.9rem] font-medium text-[#7F7F7F]">
         {sidebarList?.map((item) => {
-          const linkTo = empid ? `${item?.link}?empid=${empid}` : item?.link;
+          const linkTo = uid ? `${item?.link}?uid=${uid}` : item?.link;
           return (
             <li
               key={item?.id}

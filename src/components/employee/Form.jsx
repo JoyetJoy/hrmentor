@@ -89,16 +89,16 @@ export default function SaveEmployeeForm({ formtype }) {
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const empid = searchParams.get("empid");
+  const uid = searchParams.get("uid");
 
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
 
   // GET DETAILS IN CASE OF UPDATE
   const { data: employeeDetails, isLoading } = useQuery({
-    queryKey: ["employeeDetails", empid, formtype],
+    queryKey: ["employeeDetails", uid, formtype],
     queryFn: () =>
-      newRequest.get(`${EMPLOYEE}/${empid}`).then((res) => {
+      newRequest.get(`${EMPLOYEE}/${uid}`).then((res) => {
         return res.data;
       }),
     enabled: formtype == "update",
@@ -315,10 +315,7 @@ export default function SaveEmployeeForm({ formtype }) {
       if (formtype === "save") {
         res = await newFormRequest.post(EMPLOYEE, formData);
       } else {
-        res = await newFormRequest.post(
-          `${UPDATE_EMPLOYEE}/${empid}`,
-          formData,
-        );
+        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);

@@ -27,15 +27,16 @@ export const WorkInformation = () => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const empid = searchParams.get("empid");
+  const uid = searchParams.get("uid");
+
   // GET DETAILS IN CASE OF UPDATE
   const { data: empWorkInfoDetail, isLoading } = useQuery({
-    queryKey: ["empWorkInfoDetail", empid],
+    queryKey: ["empWorkInfoDetail", uid],
     queryFn: () =>
-      newRequest.get(`${EMPLOYEE_WORK_INFO}/${empid}`).then((res) => {
+      newRequest.get(`${EMPLOYEE_WORK_INFO}/${uid}`).then((res) => {
         return res.data;
       }),
-    enabled: !!empid,
+    enabled: !!uid,
   });
   console.log(empWorkInfoDetail);
   const [reportToRequired, setReportToRequired] = useState(false);
@@ -57,7 +58,7 @@ export const WorkInformation = () => {
 
   const handleSave = async (data) => {
     const formData = new FormData();
-    formData.append("employee_id", empid);
+    formData.append("user_id", uid);
     data?.hiring_manager_id &&
       formData.append("hiring_manager_id", data.hiring_manager_id?.id);
     data?.reporting_manager_id &&

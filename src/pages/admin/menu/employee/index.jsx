@@ -131,7 +131,7 @@ export default function EmployeeLists() {
               <MoveDiagonal className="size-3" />
             </Link>
             <Link
-              to={`/admin/employee/primary/?empid=${row.original.id}`}
+              to={`/admin/employee/primary/?uid=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <img
@@ -143,9 +143,9 @@ export default function EmployeeLists() {
         ),
       },
     ],
-
     [],
   );
+
   return (
     <div className="">
       <MenuHeader
