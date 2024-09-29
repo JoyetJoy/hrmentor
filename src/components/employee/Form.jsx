@@ -86,6 +86,8 @@ export default function SaveEmployeeForm({ formtype }) {
     resolver: yupResolver(EmployeeSchema),
   });
 
+  console.log(errors);
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const empid = searchParams.get("empid");
@@ -487,7 +489,7 @@ export default function SaveEmployeeForm({ formtype }) {
                 />
                 {errors.gender && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.gender?.message}
+                    {errors.gender.message}
                   </span>
                 )}
               </div>
@@ -605,7 +607,7 @@ export default function SaveEmployeeForm({ formtype }) {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className="required label-text">Upload Image </label>
+                <label className="label-text">Upload Image </label>
                 {image ? (
                   <div className="relative">
                     <img
@@ -756,9 +758,9 @@ export default function SaveEmployeeForm({ formtype }) {
                     />
                   )}
                 />
-                {errors.role && (
+                {errors.role_id && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.role?.message}
+                    {errors.role_id.message}
                   </span>
                 )}
               </div>

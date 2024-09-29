@@ -4,23 +4,34 @@ export const EmployeeSchema = Yup.object({
   unique_id: Yup.string().required("Employee unique ID is required"),
   first_name: Yup.string().required("First name is required"),
   sur_name: Yup.string().required("Surname is required"),
-  blood_group: Yup.object({
-    value: Yup.string()
-      .oneOf(["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"])
-      .required("Blood group value is required"),
-    label: Yup.string().required("Blood group label is required"),
-  }).required("Blood group is required"),
 
+  blood_group: Yup.object({
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Blood group is required", function (value) {
+    return value?.value && value?.label;
+  }),
   dob: Yup.string().required("Date of birth is required"),
+  nationality_id: Yup.object({
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Nationality is required", function (value) {
+    return value?.value && value?.label;
+  }),
   gender: Yup.object({
-    value: Yup.string().required("Gender value is required"),
-    label: Yup.string().required("Gender label is required"),
-  }).required("Gender is required"),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Gender is required", function (value) {
+    return value?.value && value?.label;
+  }),
+
   employment_type: Yup.object({
-    id: Yup.string().required("Employment Type ID is required"),
-    value: Yup.string().required("Employment Type value is required"),
-    label: Yup.string().required("Employment Type is required"),
-  }).required("Employeement type is required"),
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Employment type is required", function (value) {
+    return value?.value && value?.label;
+  }),
 
   home_address: Yup.string().required("Home address is required"),
   communication_address: Yup.string().required(
@@ -29,11 +40,14 @@ export const EmployeeSchema = Yup.object({
   national_insurance_number: Yup.string().required(
     "National Insurance is required",
   ),
+
   department_id: Yup.object({
-    id: Yup.string().required("Department ID is required"),
-    value: Yup.string().required("Department value is required"),
-    label: Yup.string().required("Department label is required"),
-  }).required("Department is required"),
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Department is required", function (value) {
+    return value?.value && value?.label;
+  }),
 
   role_id: Yup.array()
     .of(
@@ -43,25 +57,30 @@ export const EmployeeSchema = Yup.object({
         label: Yup.string(),
       }),
     )
-    .min(1, "At least one role ID is required"),
+    .min(1, "At least one role is required")
+    .required("Role is required"),
 
   designation_id: Yup.object({
-    id: Yup.string().required("Designation ID is required"),
-    value: Yup.string().required("Designation value is required"),
-    label: Yup.string().required("Designation label is required"),
-  }).required("Designation is required"),
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Designation is required", function (value) {
+    return value?.value && value?.label;
+  }),
 
   worklocation_id: Yup.object({
-    id: Yup.string().required("Work location ID is required"),
-    value: Yup.string().required("Work location value is required"),
-    label: Yup.string().required("Work location label is required"),
-  }).required("Work location is required"),
-
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Work location is required", function (value) {
+    return value?.value && value?.label;
+  }),
   date_of_joining: Yup.string().required("Date of joining is required"),
 
   mobile_number: Yup.string()
     .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
     .required("Mobile number is required"),
+
   personal_email: Yup.string()
     .email("Invalid email format")
     .required("Personal email is required"),
@@ -71,21 +90,25 @@ export const EmployeeSchema = Yup.object({
     .required("Work email is required"),
 
   country_id: Yup.object({
-    id: Yup.string().required("Country ID is required"),
+    id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).required("Country is required"),
+  }).test("both-required", "Country is required", function (value) {
+    return value?.value && value?.label;
+  }),
 
   city_id: Yup.object({
-    id: Yup.string().required("City ID is required"),
+    id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).required("City is required"),
+  }).test("both-required", "City is required", function (value) {
+    return value?.value && value?.label;
+  }),
 
   marital_status: Yup.object({
-    value: Yup.string()
-      .oneOf(["single", "married", "divorced", "widowed"])
-      .required("Marital status value is required"),
-    label: Yup.string().required("Marital status label is required"),
-  }).required("Marital status is required"),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Martial status is required", function (value) {
+    return value?.value && value?.label;
+  }),
 });
