@@ -7,14 +7,37 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import MenuHeader from "@/components/common/MenuHeader";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import { ACTIVE_EMPLOYEE, EMPLOYEE_WORK_INFO, newFormRequest } from "@/api";
+import {
+  ACTIVE_EMPLOYEE,
+  EMPLOYEE_WORK_INFO,
+  newFormRequest,
+  newRequest,
+} from "@/api";
 import { useLocation } from "react-router-dom";
+import {
+  EMPLOYEE_EEO_CATEGORY_LIST,
+  EMPLOYEE_ETHNICITY_LIST,
+} from "@/api/master";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { WorkInfoSchema } from "@/schema/dashboard/employee/form/workinfo.schema";
 
 export const WorkInformation = () => {
   const [loader, setLoader] = useState(false);
+  const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const empid = searchParams.get("empid");
+  // GET DETAILS IN CASE OF UPDATE
+  const { data: empWorkInfoDetail, isLoading } = useQuery({
+    queryKey: ["empWorkInfoDetail", empid],
+    queryFn: () =>
+      newRequest.get(`${EMPLOYEE_WORK_INFO}/${empid}`).then((res) => {
+        return res.data;
+      }),
+    enabled: !!empid,
+  });
+  console.log(empWorkInfoDetail);
   const [reportToRequired, setReportToRequired] = useState(false);
   const {
     register,
@@ -24,8 +47,9 @@ export const WorkInformation = () => {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(WorkInformation),
+    resolver: yupResolver(WorkInfoSchema),
   });
+  console.log(errors);
   const onSubmit = (data) => {
     setLoader(true);
     handleSave(data);
@@ -33,42 +57,47 @@ export const WorkInformation = () => {
 
   const handleSave = async (data) => {
     const formData = new FormData();
-    formData.append("hiring_manager_id", data.hiring_manager_id);
-    formData.append("reporting_manager_id", data.reporting_manager_id);
-    formData.append("ethinicity_id", data.ethinicity_id);
-    formData.append("eeo_job_category_id", data.eeo_job_category_id);
+    formData.append("employee_id", empid);
+    data?.hiring_manager_id &&
+      formData.append("hiring_manager_id", data.hiring_manager_id?.id);
+    data?.reporting_manager_id &&
+      formData.append("reporting_manager_id", data.reporting_manager_id?.id);
+    formData.append("ethinicity_id", data.ethinicity_id?.id);
+    formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
     formData.append("probation_period", data.probation_period);
     formData.append("notice_period", data.notice_period);
-    formData.append("same_as_home", reportToRequired ? 1 : 0);
+    formData.append("dosent_reporting", reportToRequired ? 1 : 0);
     try {
-      let res;
-      if (formtype === "save") {
-        res = await newFormRequest.post(EMPLOYEE, formData);
-      } else {
-        res = await newFormRequest.post(
-          `${EMPLOYEE_WORK_INFO}/${empid}`,
-          formData,
-        );
-      }
+      const res = await newFormRequest.post(EMPLOYEE_WORK_INFO, formData);
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
-        queryClient.invalidateQueries(["employeeDetails"]);
+        queryClient.invalidateQueries(["empWorkInfoDetail"]);
         setLoader(false);
       } else {
-        toast.error("Failed to save employee.");
+        toast.error("Failed to update work information");
         setLoader(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to save employee.");
+      toast.error("Failed to update");
       setLoader(false);
     }
   };
 
-  // EMOPLOYEE TYPE LIST
+  // EMOPLOYEE LIST
   const { data: activeEmployeeList } = useEmployeeMaster(
     ACTIVE_EMPLOYEE,
     "activeEmployeeList",
+  );
+  // Active ethinicity list
+  const { data: ethinicityList } = useEmployeeMaster(
+    EMPLOYEE_ETHNICITY_LIST,
+    "ethnicityList",
+  );
+  // EEO job category list
+  const { data: eeoJobCategoryList } = useEmployeeMaster(
+    EMPLOYEE_EEO_CATEGORY_LIST,
+    "eeoJobCategoryList",
   );
 
   return (
@@ -184,7 +213,7 @@ export const WorkInformation = () => {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        options={activeEmployeeList}
+                        options={ethinicityList}
                         placeholder="Select ethinicity"
                         className="input-box"
                       />
@@ -209,7 +238,7 @@ export const WorkInformation = () => {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        options={activeEmployeeList}
+                        options={eeoJobCategoryList}
                         placeholder="Select EEO Job Category"
                         className="input-box"
                       />

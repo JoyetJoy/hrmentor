@@ -20,9 +20,13 @@ export const EMPLOYEE_DOCUMENT_TYPE = "employee-document-types";
 
 // employee ethnicity
 export const EMPLOYEE_ETHNICITY = "ethnicity";
+// listing
+export const EMPLOYEE_ETHNICITY_LIST = "active-ethnicity";
 
 // employee EeoJobCategoryType
 export const EMPLOYEE_EEO_CATEGORY = "EeoJobCategoryType";
+// listing
+export const EMPLOYEE_EEO_CATEGORY_LIST = "active-EeoJobCategoryType";
 
 // employee work location
 export const EMPLOYEE_WORK_LOCATION = "worklocations";
