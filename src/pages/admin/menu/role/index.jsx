@@ -219,19 +219,19 @@ export const MenuRoles = () => {
                 />
               ) : null}
             </div>
-            <div className="my-1 flex h-28 w-full items-start gap-20 border border-black/5 bg-[#F9F9FA]">
-              <div className="flex flex-col gap-0.5 px-4 py-2">
+            <div className="my-1 flex h-28 w-full items-start gap-20 bg-[#F9F9FA]">
+              <div className="flex flex-col gap-0.5 px-4 py-5">
                 <h5 className="font-semibold">Role Menu Managment</h5>
                 <p className="text-[0.8rem]">
                   Select any 5 sections from the list <br /> to display in tab
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3 py-4">
+              <div className="flex flex-wrap gap-3 py-5">
                 <div className="flex items-center justify-between gap-2 px-4 text-sm font-semibold capitalize text-black/70">
                   <p>Recruiter</p>
                   <input
                     type="checkbox"
-                    className="h-4 w-4"
+                    className="h-5 w-5"
                     onChange={() => {}}
                   />
                 </div>
