@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
@@ -23,7 +23,19 @@ import toast from "react-hot-toast";
 import { WorkInfoSchema } from "@/schema/dashboard/employee/form/workinfo.schema";
 
 export const WorkInformation = () => {
+  const [reportNotRequired, setReportNotRequired] = useState(false);
   const [loader, setLoader] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(WorkInfoSchema(reportNotRequired)),
+  });
+
   const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -38,19 +50,26 @@ export const WorkInformation = () => {
       }),
     enabled: !!uid,
   });
-  console.log(empWorkInfoDetail);
-  const [reportToRequired, setReportToRequired] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(WorkInfoSchema),
-  });
-  console.log(errors);
+
+  useEffect(() => {
+    if (empWorkInfoDetail) {
+      setValue("hiring_manager_id", empWorkInfoDetail?.hiringManager);
+      setValue("reporting_manager_id", empWorkInfoDetail?.reportingManager);
+      setValue("ethinicity_id", empWorkInfoDetail?.ethnicity);
+      setValue("eeo_job_category_id", empWorkInfoDetail?.eeoJobCategory);
+      setValue("notice_period", empWorkInfoDetail?.notice_period);
+      setValue("probation_period", empWorkInfoDetail?.probation_period);
+    }
+  }, [empWorkInfoDetail, setValue]);
+
+  useEffect(() => {
+    if (empWorkInfoDetail) {
+      setReportNotRequired(
+        empWorkInfoDetail?.dosent_reporting === 1 ? true : false,
+      );
+    }
+  }, [empWorkInfoDetail, setReportNotRequired]);
+
   const onSubmit = (data) => {
     setLoader(true);
     handleSave(data);
@@ -59,18 +78,16 @@ export const WorkInformation = () => {
   const handleSave = async (data) => {
     const formData = new FormData();
     formData.append("user_id", uid);
-    data?.hiring_manager_id &&
-      formData.append("hiring_manager_id", data.hiring_manager_id?.id);
-    data?.reporting_manager_id &&
-      formData.append("reporting_manager_id", data.reporting_manager_id?.id);
+    formData.append("hiring_manager_id", data.hiring_manager_id?.id ?? 0);
+    formData.append("reporting_manager_id", data.reporting_manager_id?.id ?? 0);
     formData.append("ethinicity_id", data.ethinicity_id?.id);
     formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
     formData.append("probation_period", data.probation_period);
     formData.append("notice_period", data.notice_period);
-    formData.append("dosent_reporting", reportToRequired ? 1 : 0);
+    formData.append("dosent_reporting", reportNotRequired ? 1 : 0);
     try {
       const res = await newFormRequest.post(EMPLOYEE_WORK_INFO, formData);
-      if (res.data?.status === 201) {
+      if (res?.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["empWorkInfoDetail"]);
         setLoader(false);
@@ -135,9 +152,9 @@ export const WorkInformation = () => {
                 Reporting to
                 <div className="flex items-center gap-1.5">
                   <input
-                    checked={reportToRequired}
+                    checked={reportNotRequired}
                     onChange={(e) => {
-                      setReportToRequired(e.target.checked);
+                      setReportNotRequired(e.target.checked);
                     }}
                     type="checkbox"
                     className="size-4"
@@ -147,7 +164,7 @@ export const WorkInformation = () => {
                   </p>
                 </div>
               </h1>
-              {!reportToRequired ? (
+              {!reportNotRequired ? (
                 <div className="mt-4 grid w-full grid-cols-2 items-start gap-y-2">
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="required label-text">

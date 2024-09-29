@@ -1,6 +1,7 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import EmployeeCreation from "@/pages/admin/menu/employee/create";
 import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
+import SkillsQualifications from "@/pages/admin/menu/employee/edit/Skills";
 import { WorkInformation } from "@/pages/admin/menu/employee/edit/WorkInformation";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
 import { EmployeeDepartment } from "@/pages/admin/menu/employee/settings/Department";
@@ -18,7 +19,6 @@ import { Experience } from "@/pages/admin/menu/employee/view/Experience";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 import { RegistrationMemberships } from "@/pages/admin/menu/employee/view/RegistrationMemberships";
 import { RightToWork } from "@/pages/admin/menu/employee/view/RightToWork";
-import { SkillsQualifications } from "@/pages/admin/menu/employee/view/SkillsQualifications";
 
 export const EmployeeRoutes = [
   {
