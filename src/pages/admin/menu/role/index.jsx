@@ -202,7 +202,7 @@ export const MenuRoles = () => {
                 className="input-box h-11 min-h-11 w-full max-w-xs placeholder:text-[#2C2C2C] focus:outline-none"
                 {...register("name")}
               />
-              <button className="flex h-11 w-fit items-center justify-center rounded bg-textcolor-blue px-7 text-[0.8rem] font-medium tracking-[0.1px] text-white">
+              <button className="flex h-11 w-fit items-center justify-center rounded bg-hrmprimaryorange px-9 text-[0.8rem] font-medium tracking-[0.1px] text-white">
                 {loader ? (
                   <div className="flex items-center gap-3">
                     <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
@@ -219,9 +219,27 @@ export const MenuRoles = () => {
                 />
               ) : null}
             </div>
-            <div className="mt-5 flex flex-col gap-3">
+            <div className="my-1 flex h-28 w-full items-start gap-20 border border-black/5 bg-[#F9F9FA]">
+              <div className="flex flex-col gap-0.5 px-4 py-2">
+                <h5 className="font-semibold">Role Menu Managment</h5>
+                <p className="text-[0.8rem]">
+                  Select any 5 sections from the list <br /> to display in tab
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3 py-4">
+                <div className="flex items-center justify-between gap-2 px-4 text-sm font-semibold capitalize text-black/70">
+                  <p>Recruiter</p>
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    onChange={() => {}}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-3">
               {permissionList?.map((parentCategory) => (
-                <div key={parentCategory.parentCategory} className="mt-3">
+                <div key={parentCategory.parentCategory} className="mb-3">
                   <div className="collapse w-full rounded-none border-y border-[#EAEAEA] bg-white pb-2 text-[#3A3A3A]">
                     <div
                       className="collapse-title flex w-full cursor-pointer items-center justify-between px-0 text-[0.94rem] font-semibold"
