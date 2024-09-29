@@ -112,7 +112,7 @@ export const WorkInformation = () => {
                     type="checkbox"
                     className="size-4"
                   />
-                  <p className="whitespace-nowrap text-[13px] font-normal text-[#848484]">
+                  <p className="mt-[1px] whitespace-nowrap text-[13px] font-normal text-[#848484]">
                     Doesn't report to anyone
                   </p>
                 </div>
