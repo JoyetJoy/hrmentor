@@ -174,7 +174,7 @@ export const MenuRoles = () => {
       />
       {isLoading || roleLoading ? (
         <div className="flex h-[70vh] items-center justify-center">
-          <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
         <div className="mt-1 grid grid-cols-11 gap-4">

@@ -31,7 +31,7 @@ export const AdminLayout = () => {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
       </div>
     );
   }

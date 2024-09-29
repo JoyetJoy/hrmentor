@@ -348,7 +348,7 @@ export default function SaveEmployeeForm({ formtype }) {
       />
       {isLoading ? (
         <div className="flex min-h-72 w-full items-center justify-center">
-          <div className="border-yipred h-8 w-8 animate-spin rounded-full border-b-2 border-t-2"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
