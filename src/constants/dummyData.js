@@ -1,5 +1,3 @@
-import trendingup from "/assets/icons/admin/trending-up.svg";
-import trendingdown from "/assets/icons/admin/trending-down.svg";
 import tickgreen from "/assets/icons/admin/tick-green.svg";
 import tickgray from "/assets/icons/admin/tick-gray.svg";
 
@@ -261,7 +259,7 @@ export const menuitems = [
     iconSrcActive: "/assets/icons/admin/employeeColor.svg",
     name: "Employee",
     path: "/admin/employee",
-    active: "employees",
+    active: "employee",
   },
   {
     id: 5,
