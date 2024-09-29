@@ -15,7 +15,7 @@ function EmployeesSidebar({ sidebarList = employeeSidebarList }) {
             key={item?.id}
             className={
               location.pathname.includes(item?.link) &&
-              "whitespace-nowrap text-sm font-bold text-[#E95D39]"
+              "whitespace-nowrap font-bold text-[#E95D39]"
             }
           >
             <Link
