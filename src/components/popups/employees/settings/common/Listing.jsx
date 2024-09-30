@@ -69,7 +69,6 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
           header: colKeys?.field3?.label,
           accessorKey: colKeys?.field3?.key,
         },
-
         {
           header: colKeys.field2.label,
           accessorKey: colKeys.field2.key,
