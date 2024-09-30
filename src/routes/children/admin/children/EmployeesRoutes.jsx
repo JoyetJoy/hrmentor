@@ -1,5 +1,6 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import EmployeeCreation from "@/pages/admin/menu/employee/create";
+import EmployeeExperienceEdit from "@/pages/admin/menu/employee/edit/Experience";
 import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
 import SkillsQualifications from "@/pages/admin/menu/employee/edit/Skills";
 import { WorkInformation } from "@/pages/admin/menu/employee/edit/WorkInformation";
@@ -15,7 +16,6 @@ import { BankDetails } from "@/pages/admin/menu/employee/view/BankDetails";
 import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Documents } from "@/pages/admin/menu/employee/view/Documents";
 import { EmergencyContacts } from "@/pages/admin/menu/employee/view/EmergencyContacts";
-import { Experience } from "@/pages/admin/menu/employee/view/Experience";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 import { RegistrationMemberships } from "@/pages/admin/menu/employee/view/RegistrationMemberships";
 import { RightToWork } from "@/pages/admin/menu/employee/view/RightToWork";
@@ -43,7 +43,7 @@ export const EmployeeRoutes = [
   },
   {
     path: "experience",
-    element: <Experience />,
+    element: <EmployeeExperienceEdit />,
   },
   {
     path: "registration-membership",

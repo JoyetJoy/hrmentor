@@ -192,7 +192,7 @@ export default function SkillsQualifications() {
                       <h5 className="text-lg font-bold">
                         Skills/Qualifications
                       </h5>
-                      <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
+                      <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
                         <Search className="size-4 text-[#7F7F7F]" />
                         <input
                           type="text"
