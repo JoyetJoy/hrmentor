@@ -1,3 +1,4 @@
+import { EMPLOYEE_SKILLS } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
 import { EmployeeEditCommonListing } from "@/components/employee/edit/Listing";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -17,6 +18,7 @@ export default function SkillsQualifications() {
       <div className="flex gap-x-3">
         <EmployeesSidebar />
         <EmployeeEditCommonListing
+          api={EMPLOYEE_SKILLS}
           qryKey={"employeeTypeList"}
           colKeys={employeeColumnKeysForSkills}
           type={"Skills/Qualifications"}

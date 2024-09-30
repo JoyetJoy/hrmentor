@@ -319,10 +319,10 @@ export default function SaveEmployeeForm({ formtype }) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["employeeDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
-        navigate("/admin/employee");
         clearImage();
         reset();
         setLoader(false);
+        formtype === "save" && navigate("/admin/employee");
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);

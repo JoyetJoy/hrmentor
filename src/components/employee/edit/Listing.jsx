@@ -6,8 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SaveEmployeeMasterForm from "../../popups/employees/settings/common/Save";
+import { useLocation } from "react-router-dom";
 
 export const EmployeeEditCommonListing = ({ api, qrkey, colKeys, type }) => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
@@ -28,7 +32,7 @@ export const EmployeeEditCommonListing = ({ api, qrkey, colKeys, type }) => {
     queryKey: [qrkey, currentPage, type, qrkey, keyword],
     queryFn: () =>
       newRequest
-        .get(api, {
+        .get(`${api}/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -39,6 +43,8 @@ export const EmployeeEditCommonListing = ({ api, qrkey, colKeys, type }) => {
           return res.data;
         }),
   });
+
+  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -61,22 +67,25 @@ export const EmployeeEditCommonListing = ({ api, qrkey, colKeys, type }) => {
           },
         },
         { header: colKeys.field1.label, accessorKey: colKeys.field1.key },
-
+        colKeys.field2 && {
+          header: colKeys?.field2?.label,
+          accessorKey: colKeys?.field2?.key,
+        },
         colKeys.field3 && {
           header: colKeys?.field3?.label,
           accessorKey: colKeys?.field3?.key,
         },
-
-        {
-          header: colKeys.field2.label,
-          accessorKey: colKeys.field2.key,
-          cell: ({ row }) => (
-            <div
-              className={`flex h-8 w-20 items-center justify-center rounded-md px-3 font-semibold ${row?.original?.[colKeys.field2.key] == 1 ? "bg-active/15 text-active" : "bg-inactive/15 text-inactive"}`}
-            >
-              {row?.original?.[colKeys.field2.key] == 1 ? "Active" : "Inactive"}
-            </div>
-          ),
+        colKeys.field4 && {
+          header: colKeys?.field4?.label,
+          accessorKey: colKeys?.field4?.key,
+        },
+        colKeys.field5 && {
+          header: colKeys?.field5?.label,
+          accessorKey: colKeys?.field5?.key,
+        },
+        colKeys.field5 && {
+          header: colKeys?.field5?.label,
+          accessorKey: colKeys?.field5?.key,
         },
         {
           header: "Action",
