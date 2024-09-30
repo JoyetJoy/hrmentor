@@ -6,6 +6,11 @@ export const employeeMasterOptions = [
   { value: 0, label: "In Active" },
 ];
 
+export const completionStatus = [
+  { value: "completed", label: "Completed" },
+  { value: "ongoing", label: "Ongoing" },
+];
+
 // blood grops
 export const bloodGroups = [
   { id: 1, label: "O+", value: "O+" },

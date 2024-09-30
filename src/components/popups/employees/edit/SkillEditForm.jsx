@@ -1,7 +1,9 @@
-import { newRequest, XFormRequest } from "@/api";
-import { employeeMasterOptions } from "@/constants/data";
+import { newFormRequest, newRequest } from "@/api";
+import { SKILL_FIELD_TYPE } from "@/api/master";
+import { completionStatus } from "@/constants/data";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import useImageUpload from "@/hooks/useImageUpload";
-import { EmployeeMasterCommanFormSchema } from "@/schema/dashboard/employee/masters/employeeType.schema";
+import { empSkillSchema } from "@/schema/dashboard/employee/form/skill.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,9 +21,30 @@ export default function SkillEditForm({
   setSelectedField,
   qrKey,
   api,
+  uid,
 }) {
+  const { image, imageFile, handleImageChange, clearImage, setImage } =
+    useImageUpload();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(empSkillSchema),
+  });
+
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  //   SKILL FIELD TYPE
+  const { data: skillTypeList } = useEmployeeMaster(
+    SKILL_FIELD_TYPE,
+    "skillTypeList",
+  );
+
   // Get selected data
   const { data: employeeSkillDetailByid, isLoading } = useQuery({
     queryKey: ["employeeSkillDetailByid", api, selectedField],
@@ -30,21 +53,21 @@ export default function SkillEditForm({
     enabled: !!selectedField != 0,
   });
 
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
-    useImageUpload();
+  useEffect(() => {
+    if (employeeSkillDetailByid) {
+      setValue("type", employeeSkillDetailByid.type);
+      setValue("institution", employeeSkillDetailByid.institution);
+      setValue("field_of_study", employeeSkillDetailByid.field_of_study);
+      setValue("start_date", employeeSkillDetailByid.start_date);
+      setValue("end_date", employeeSkillDetailByid.end_date);
+    }
+  }, [employeeSkillDetailByid]);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    setValue,
-    setError,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(EmployeeMasterCommanFormSchema),
-  });
+  useEffect(() => {
+    if (employeeSkillDetailByid) {
+      setImage(employeeSkillDetailByid?.document);
+    }
+  }, [employeeSkillDetailByid, setImage]);
 
   function close() {
     setPopupOpen(false);
@@ -53,23 +76,28 @@ export default function SkillEditForm({
   }
 
   const onSubmit = async (data) => {
-    if (isWorkLocation && (!data?.address || data?.address.trim() === "")) {
-      setError("address", {
-        type: "manual",
-        message: "Work Location requires an address",
-      });
-      return;
-    }
     setLoader(true);
     try {
-      const formData = new URLSearchParams();
+      const formData = new FormData();
+      formData.append("type", data.type?.id);
+      formData.append("user_id", uid);
+      formData.append("institution", data.institution);
+      formData.append("field_of_study", data.field_of_study);
+      formData.append("start_date", data.start_date);
+      formData.append("end_date", data.end_date);
+      imageFile && formData.append("document", imageFile);
+      formData.append("status", data.status?.value);
+      formData.append("cgpa_percentage", data.cgpa_percentage);
       let res;
       if (selectedField !== 0) {
-        res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
+        res = await newFormRequest.post(
+          `${api}/update-employee-skills//${selectedField}`,
+          formData,
+        );
       } else {
-        res = await XFormRequest.post(api, formData);
+        res = await newFormRequest.post(api, formData);
       }
-      if (res?.data?.success === true) {
+      if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
@@ -100,6 +128,7 @@ export default function SkillEditForm({
                 {selectedField ? "Update" : "Add"} Skills/Qualifications
               </h1>
               <button
+                type="button"
                 onClick={close}
                 className="text-lg font-extrabold text-[#00000080]"
               >
@@ -118,23 +147,23 @@ export default function SkillEditForm({
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Type</label>
                   <Controller
-                    name="status"
+                    name="type"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
-                        options={employeeMasterOptions}
+                        options={skillTypeList}
                         isSearchable={false}
                         styles={customSelectStyles}
-                        placeholder="Select Status"
+                        placeholder="Select Type"
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     )}
                   />
-                  {errors.status && (
+                  {errors.type && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.status?.message}
+                      {errors.type?.message}
                     </span>
                   )}
                 </div>
@@ -144,13 +173,13 @@ export default function SkillEditForm({
                     Field of study
                   </label>
                   <input
-                    {...register("name", { required: true })}
+                    {...register("field_of_study", { required: true })}
                     type="text"
                     className="input-box h-10 w-full"
                   />
-                  {errors.name && (
+                  {errors.field_of_study && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.field_of_study?.message}
                     </span>
                   )}
                 </div>
@@ -160,13 +189,14 @@ export default function SkillEditForm({
                     Name of the institution
                   </label>
                   <input
-                    {...register("name", { required: true })}
+                    {...register("institution", { required: true })}
                     type="text"
-                    className="input-box h-10 w-full"
+                    placeholder="Enter name of the institution"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.name && (
+                  {errors.institution && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.institution?.message}
                     </span>
                   )}
                 </div>
@@ -176,28 +206,44 @@ export default function SkillEditForm({
                     CGPA/Percentage
                   </label>
                   <input
-                    {...register("name", { required: true })}
+                    {...register("cgpa_percentage", { required: true })}
                     type="text"
-                    className="input-box h-10 w-full"
+                    placeholder="Enter CGPA/Percentage"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.name && (
+                  {errors.cgpa_percentage && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.cgpa_percentage?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Date of completion
+                    Start Date
                   </label>
                   <input
-                    {...register("name", { required: true })}
-                    type="text"
+                    {...register("start_date", { required: true })}
+                    type="date"
                     className="input-box h-10 w-full"
                   />
-                  {errors.name && (
+                  {errors.start_date && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.start_date?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    End Date
+                  </label>
+                  <input
+                    {...register("end_date", { required: true })}
+                    type="date"
+                    className="input-box h-10 w-full"
+                  />
+                  {errors.end_date && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.end_date?.message}
                     </span>
                   )}
                 </div>
@@ -212,7 +258,7 @@ export default function SkillEditForm({
                     render={({ field }) => (
                       <Select
                         {...field}
-                        options={employeeMasterOptions}
+                        options={completionStatus}
                         isSearchable={false}
                         styles={customSelectStyles}
                         placeholder="Select Status"
@@ -220,9 +266,9 @@ export default function SkillEditForm({
                       />
                     )}
                   />
-                  {errors.name && (
+                  {errors.status && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.status?.message}
                     </span>
                   )}
                 </div>
@@ -258,12 +304,6 @@ export default function SkillEditForm({
                         className="hidden"
                       />
                     </label>
-                  )}
-
-                  {errors.employeeId && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.employeeId?.message}
-                    </span>
                   )}
                 </div>
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">

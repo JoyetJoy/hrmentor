@@ -32,7 +32,7 @@ export default function SkillsQualifications() {
     queryKey: ["employeeSkills", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_SKILLS}/${uid}`, {
+        .get(`${EMPLOYEE_SKILLS}/list/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -76,11 +76,22 @@ export default function SkillsQualifications() {
           ),
         },
         {
+          header: "Field of study",
+          accessorKey: "field_of_study",
+        },
+        {
           header: "Institution",
           accessorKey: "institution",
         },
         {
-          header: "Date of completion",
+          header: "Start Date",
+          accessorKey: "end_date",
+          Cell: ({ row }) => {
+            return <div className="flex px-2">{row.original?.start_date}</div>;
+          },
+        },
+        {
+          header: "End Date",
           accessorKey: "end_date",
           Cell: ({ row }) => {
             return <div className="flex px-2">{row.original?.end_date}</div>;
@@ -88,30 +99,31 @@ export default function SkillsQualifications() {
         },
         {
           header: "CGPA/Percentage",
-          accessorKey: "cgpa",
-          cell: ({ row }) => (
-            <div className="flex">
-              {row.original?.type?.qualification_type_name}
-            </div>
-          ),
+          accessorKey: "cgpa_percentage",
         },
-        {
-          header: "CGPA/Percentage",
-          accessorKey: "cgpa",
-          cell: ({ row }) => (
-            <div className="flex">
-              {row.original?.type?.qualification_type_name}
-            </div>
-          ),
-        },
+
         {
           header: "Status",
           accessorKey: "status",
           cell: ({ row }) => (
-            <div
-              className={`flex h-8 w-20 items-center justify-center rounded-md px-5 font-semibold ${row?.original?.status === "ongoing" ? "bg-active/5 text-active" : "bg-inactive/5 text-inactive"}`}
-            >
+            <div className="ufont-semibold flex h-8 w-fit items-center justify-center text-black">
               {row.original?.status === "ongoing" ? "Ongoing" : "Completed"}
+            </div>
+          ),
+        },
+        {
+          header: "Document",
+          accessorKey: "document",
+          cell: ({ row }) => (
+            <div className="flex">
+              <a
+                href={row.original?.document}
+                target="_blank"
+                className="text-[#1A75FF] underline underline-offset-2"
+                rel="noopener noreferrer"
+              >
+                document
+              </a>
             </div>
           ),
         },
@@ -155,6 +167,7 @@ export default function SkillsQualifications() {
         setSelectedField={setSelectedField}
         qrKey={"employeeSkills"}
         api={EMPLOYEE_SKILLS}
+        uid={uid}
       />
       <div className="flex min-h-screen flex-col">
         <MenuHeader

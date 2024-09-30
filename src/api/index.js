@@ -63,4 +63,4 @@ export const UPDATE_EMPLOYEE = "employee-update";
 // WORK INFORMATION
 export const EMPLOYEE_WORK_INFO = "employee-work-informations";
 // SKILLS
-export const EMPLOYEE_SKILLS = "employee-skill-qualifications/list";
+export const EMPLOYEE_SKILLS = "employee-skill-qualifications";

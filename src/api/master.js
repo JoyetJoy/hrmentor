@@ -47,3 +47,6 @@ export const COUNTRY_CITY = "cities";
 
 // roles list
 export const ROLES_LIST = "roles-lists";
+
+// SKILL field type
+export const SKILL_FIELD_TYPE = "active-qualifications-types";

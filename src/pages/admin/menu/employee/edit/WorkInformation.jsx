@@ -107,6 +107,7 @@ export const WorkInformation = () => {
     ACTIVE_EMPLOYEE,
     "activeEmployeeList",
   );
+
   // Active ethinicity list
   const { data: ethinicityList } = useEmployeeMaster(
     EMPLOYEE_ETHNICITY_LIST,
