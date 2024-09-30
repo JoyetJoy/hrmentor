@@ -7,6 +7,7 @@ import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_SKILLS, newRequest } from "@/api";
 import SkillEditForm from "@/components/popups/employees/edit/SkillEditForm";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 export default function SkillsQualifications() {
   const location = useLocation();
@@ -49,8 +50,6 @@ export default function SkillsQualifications() {
       setTotalPages(employeeSkills?.last_page);
     }
   }, [employeeSkills]);
-
-  console.log(employeeSkills);
 
   const columns = React.useMemo(
     () =>
@@ -160,6 +159,14 @@ export default function SkillsQualifications() {
   );
   return (
     <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedId}
+        qrKey={"employeeSkills"}
+        api={EMPLOYEE_SKILLS}
+      />
+
       <SkillEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}

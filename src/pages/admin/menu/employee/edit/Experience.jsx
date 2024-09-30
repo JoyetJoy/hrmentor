@@ -5,8 +5,8 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { EMPLOYEE_SKILLS, newRequest } from "@/api";
-import SkillEditForm from "@/components/popups/employees/edit/SkillEditForm";
+import { EMPLOYEE_EXPERIENCE, newRequest } from "@/api";
+import EmployeeExperienceEditForm from "@/components/popups/employees/edit/ExperienceEditForm";
 
 export default function EmployeeExperienceEdit() {
   const location = useLocation();
@@ -32,7 +32,7 @@ export default function EmployeeExperienceEdit() {
     queryKey: ["employeeSkills", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_SKILLS}/list/${uid}`, {
+        .get(`${EMPLOYEE_EXPERIENCE}/list/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -50,8 +50,6 @@ export default function EmployeeExperienceEdit() {
     }
   }, [employeeSkills]);
 
-  console.log(employeeSkills);
-
   const columns = React.useMemo(
     () =>
       [
@@ -67,7 +65,7 @@ export default function EmployeeExperienceEdit() {
           },
         },
         {
-          header: "Type",
+          header: "Job role",
           accessorKey: "type",
           cell: ({ row }) => (
             <div className="flex">
@@ -76,11 +74,11 @@ export default function EmployeeExperienceEdit() {
           ),
         },
         {
-          header: "Field of study",
+          header: "Employer",
           accessorKey: "field_of_study",
         },
         {
-          header: "Institution",
+          header: "Employer details",
           accessorKey: "institution",
         },
         {
@@ -96,20 +94,6 @@ export default function EmployeeExperienceEdit() {
           Cell: ({ row }) => {
             return <div className="flex px-2">{row.original?.end_date}</div>;
           },
-        },
-        {
-          header: "CGPA/Percentage",
-          accessorKey: "cgpa_percentage",
-        },
-
-        {
-          header: "Status",
-          accessorKey: "status",
-          cell: ({ row }) => (
-            <div className="ufont-semibold flex h-8 w-fit items-center justify-center text-black">
-              {row.original?.status === "ongoing" ? "Ongoing" : "Completed"}
-            </div>
-          ),
         },
         {
           header: "Document",
@@ -160,13 +144,13 @@ export default function EmployeeExperienceEdit() {
   );
   return (
     <>
-      <SkillEditForm
+      <EmployeeExperienceEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
         qrKey={"employeeSkills"}
-        api={EMPLOYEE_SKILLS}
+        api={EMPLOYEE_EXPERIENCE}
         uid={uid}
       />
       <div className="flex min-h-screen flex-col">

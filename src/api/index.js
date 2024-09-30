@@ -64,3 +64,5 @@ export const UPDATE_EMPLOYEE = "employee-update";
 export const EMPLOYEE_WORK_INFO = "employee-work-informations";
 // SKILLS
 export const EMPLOYEE_SKILLS = "employee-skill-qualifications";
+// EXPERIENCE
+export const EMPLOYEE_EXPERIENCE = "employee-experiences";
