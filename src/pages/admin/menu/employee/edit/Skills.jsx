@@ -4,7 +4,7 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_SKILLS, newRequest } from "@/api";
 import SkillEditForm from "@/components/popups/employees/edit/SkillEditForm";
 
@@ -116,14 +116,14 @@ export default function SkillsQualifications() {
           accessorKey: "document",
           cell: ({ row }) => (
             <div className="flex">
-              <a
+              <Link
                 href={row.original?.document}
                 target="_blank"
                 className="text-[#1A75FF] underline underline-offset-2"
                 rel="noopener noreferrer"
               >
                 document
-              </a>
+              </Link>
             </div>
           ),
         },
