@@ -55,37 +55,26 @@ export default function EmployeeSalaryEdit() {
     () =>
       [
         {
-          header: "Reference No",
+          header: "Effective from",
           accessorKey: "reference_no",
         },
         {
-          header: "Condition",
+          header: "Pay rate",
           accessorKey: "condtion",
         },
         {
-          header: "Expiry Date",
+          header: "Per",
           accessorKey: "expiry_date",
         },
         {
-          header: "Reviewed by",
+          header: "Pay schedule",
           accessorKey: "reviewedBy",
         },
         {
-          header: "Document",
-          accessorKey: "document",
-          cell: ({ row }) => (
-            <div className="flex">
-              <Link
-                href={row.original?.document}
-                target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
-                rel="noopener noreferrer"
-              >
-                document
-              </Link>
-            </div>
-          ),
+          header: "Pay Type",
+          accessorKey: "paytype",
         },
+        { header: "Over time", accessorKey: "overtime" },
         {
           header: "Action",
           accessorKey: "action",
