@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Disclosure, DisclosureButton } from "@headlessui/react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
-import MenuSubHeader from "@/components/common/MenuSubHeader";
 import MenuHeader from "@/components/common/MenuHeader";
 import { EMPLOYEE_DOCUMENT_CATEGORY } from "@/api/master";
 import { useLocation } from "react-router-dom";
@@ -15,18 +14,20 @@ export const EmployeeDocuments = () => {
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
   const [currentPage, setCurrentPage] = useState(1);
+  const [keyword, setKeyword] = useState("");
   const [totalPages, setTotalPages] = useState();
   const pageLimit = 10;
 
   // Fetch List
   const { data: employeeDocumentsCategory, isLoading } = useQuery({
-    queryKey: ["employeeDocumentsCategory", currentPage, uid],
+    queryKey: ["employeeDocumentsCategory", keyword, currentPage, uid],
     queryFn: () =>
       newRequest
         .get(EMPLOYEE_DOCUMENT_CATEGORY, {
           params: {
             page: currentPage,
             per_limit: pageLimit,
+            search: keyword,
           },
         })
         .then((res) => {
@@ -47,8 +48,19 @@ export const EmployeeDocuments = () => {
         <EmployeesSidebar />
         <div className="mt-2 w-full">
           <>
-            <MenuSubHeader heading={"Documents"} />
-            <div className="overflow-y-min mt-6 w-full overflow-y-auto rounded-md bg-white">
+            <div className="flex items-center gap-7">
+              <h5 className="text-lg font-bold">Documents</h5>
+              <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+                <Search className="size-4 text-[#7F7F7F]" />
+                <input
+                  type="text"
+                  onChange={(e) => setKeyword(e.target.value)}
+                  className="h-full w-full placeholder:text-[#7F7F7F]"
+                  placeholder="Search"
+                />
+              </div>
+            </div>
+            <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white">
               {employeeDocumentsCategory?.listing?.map((item) => (
                 <Disclosure
                   key={item?.id}
