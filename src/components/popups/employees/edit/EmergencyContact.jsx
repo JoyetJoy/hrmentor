@@ -47,8 +47,6 @@ export default function EmployeeEmergencyContactEditForm({
     enabled: !!selectedField != 0,
   });
 
-  console.log(employeeEmergencyContactDetailByid);
-
   useEffect(() => {
     if (employeeEmergencyContactDetailByid) {
       setValue("name", employeeEmergencyContactDetailByid?.data?.name);
