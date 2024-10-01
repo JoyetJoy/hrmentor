@@ -45,8 +45,7 @@ export default function QueryTable({
                 </tr>
               ))}
             </thead>
-
-            <tbody className=" ">
+            <tbody className="">
               {getRowModel().rows.map((row) => {
                 return (
                   <tr
