@@ -247,7 +247,7 @@ export default function EmployeeExperienceEditForm({
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange text-sm font-normal text-white focus:outline-none"
+                    className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
                     disabled={loader}
                   >
                     {loader ? (
