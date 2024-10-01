@@ -1,7 +1,7 @@
 import { DisclosurePanel } from "@headlessui/react";
 import QueryTable from "@/components/table/QueryTable";
 import { Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EMPLOYEE_DOCUMENTS, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import EmployeeDocumentEditForm from "@/components/popups/employees/edit/DocumentsEdit";
@@ -35,6 +35,12 @@ export default function UnderListing({ cid, uid, documentName }) {
         }),
     enabled: !!cid,
   });
+
+  useEffect(() => {
+    if (employeeDocumentsListing) {
+      setTotalPages(employeeDocumentsListing?.last_page);
+    }
+  }, [employeeDocumentsListing]);
 
   const columns = React.useMemo(
     () => [
@@ -131,7 +137,7 @@ export default function UnderListing({ cid, uid, documentName }) {
         <div>
           <div className="my-4 flex items-center justify-between">
             <div className="input-box flex h-10 w-72 items-center gap-2 placeholder:text-black">
-              <Search />
+              <Search className="size-4 text-[#7F7F7F]" />
               <input
                 onChange={(e) => setKeyword(e.target.value)}
                 type="text"
