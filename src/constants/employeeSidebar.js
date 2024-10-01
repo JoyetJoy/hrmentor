@@ -42,7 +42,7 @@ export const employeeSidebarList = [
   {
     id: 9,
     link: "/admin/employee/compensation",
-    name: "Compensation",
+    name: "Salary Details",
   },
   {
     id: 10,
