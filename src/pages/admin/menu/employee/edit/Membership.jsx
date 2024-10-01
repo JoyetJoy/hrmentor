@@ -50,22 +50,10 @@ export default function EmployeeMembershipEdit() {
       setTotalPages(employeeMemberships?.last_page);
     }
   }, [employeeMemberships]);
-  console.log(employeeMemberships);
 
   const columns = React.useMemo(
     () =>
       [
-        {
-          header: "Sl No",
-          accessorKey: "id",
-          Cell: ({ row }) => {
-            return (
-              <div className="flex px-2">
-                {row.index + 1 + (currentPage - 1) * pageLimit}
-              </div>
-            );
-          },
-        },
         {
           header: "Membership Body",
           accessorKey: "reg_memb_body",
@@ -145,52 +133,50 @@ export default function EmployeeMembershipEdit() {
         />
         <div className="flex gap-x-3">
           <EmployeesSidebar />
-          <>
-            {isLoading ? (
-              <div className="flex min-h-96 w-full items-center justify-center bg-white">
-                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
-              </div>
-            ) : (
-              <div className="flex w-full flex-col">
-                <div className="w-full rounded-md bg-white px-5 py-4">
-                  <div className="my-4 flex items-center justify-between">
-                    <div className="flex items-center gap-7">
-                      <h5 className="text-lg font-bold">
-                        Registration & Memberships
-                      </h5>
-                      <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
-                        <Search className="size-4 text-[#7F7F7F]" />
-                        <input
-                          type="text"
-                          onChange={(e) => setKeyword(e.target.value)}
-                          className="h-full w-full placeholder:text-[#7F7F7F]"
-                          placeholder="Search"
-                        />
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setPopupOpen(true);
-                      }}
-                      className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
-                    >
-                      <Plus className="size-4" />
-                      Add
-                    </button>
-                  </div>
-                  <div>
-                    <QueryTable
-                      columns={columns}
-                      list={employeeMemberships?.listing ?? []}
-                      currentPage={currentPage}
-                      setCurrentPage={setCurrentPage}
-                      totalPages={totalPages}
+          <div className="flex w-full flex-col">
+            <div className="w-full rounded-md bg-white px-5 py-4">
+              <div className="my-4 flex items-center justify-between">
+                <div className="flex items-center gap-7">
+                  <h5 className="text-lg font-bold">
+                    Registration & Memberships
+                  </h5>
+                  <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+                    <Search className="size-4 text-[#7F7F7F]" />
+                    <input
+                      type="text"
+                      onChange={(e) => setKeyword(e.target.value)}
+                      className="h-full w-full placeholder:text-[#7F7F7F]"
+                      placeholder="Search"
                     />
                   </div>
                 </div>
+                <button
+                  onClick={() => {
+                    setPopupOpen(true);
+                  }}
+                  className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  <Plus className="size-4" />
+                  Add
+                </button>
               </div>
-            )}
-          </>
+              <div>
+                {isLoading ? (
+                  <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                    <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+                  </div>
+                ) : (
+                  <QueryTable
+                    columns={columns}
+                    list={employeeMemberships?.listing ?? []}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

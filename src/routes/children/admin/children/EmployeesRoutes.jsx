@@ -3,6 +3,7 @@ import EmployeeCreation from "@/pages/admin/menu/employee/create";
 import EmployeeExperienceEdit from "@/pages/admin/menu/employee/edit/Experience";
 import EmployeeMembershipEdit from "@/pages/admin/menu/employee/edit/Membership";
 import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
+import EmployeeRightToWorkEdit from "@/pages/admin/menu/employee/edit/RightToWork";
 import SkillsQualifications from "@/pages/admin/menu/employee/edit/Skills";
 import { WorkInformation } from "@/pages/admin/menu/employee/edit/WorkInformation";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
@@ -18,7 +19,6 @@ import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Documents } from "@/pages/admin/menu/employee/view/Documents";
 import { EmergencyContacts } from "@/pages/admin/menu/employee/view/EmergencyContacts";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
-import { RightToWork } from "@/pages/admin/menu/employee/view/RightToWork";
 
 export const EmployeeRoutes = [
   {
@@ -51,7 +51,7 @@ export const EmployeeRoutes = [
   },
   {
     path: "right-to-work",
-    element: <RightToWork />,
+    element: <EmployeeRightToWorkEdit />,
   },
   {
     path: "emergency-contact",
