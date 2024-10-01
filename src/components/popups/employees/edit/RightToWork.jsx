@@ -1,5 +1,4 @@
 import {
-  EMPLOYEE_MEMBERSHIP_UPDATE,
   EMPLOYEE_RIGHT_TO_WORK_UPDATE,
   newFormRequest,
   newRequest,

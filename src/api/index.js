@@ -75,3 +75,10 @@ export const EMPLOYEE_MEMBERSHIP_UPDATE =
 export const EMPLOYEE_RIGHT_TO_WORK = "employee-rightToWork";
 // RIGHT TO WORK UPDATE
 export const EMPLOYEE_RIGHT_TO_WORK_UPDATE = "update-employee-rightToWork";
+// EMERGENCY CONTACTS
+export const EMPLOYEE_EMERGENCY_CONTACTS = "employee-emergency-contacts";
+// UPDATE EMERGENCY CONTACTS
+export const UPDATE_EMPLOYEE_EMERGENCY_CONTACTS =
+  "update-employee-emergency-contacts";
+// BANK DETAILS
+export const EMPLOYEE_BANK_DETAILS = "employee-bank-details";

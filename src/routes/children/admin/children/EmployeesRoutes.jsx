@@ -1,5 +1,7 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import EmployeeCreation from "@/pages/admin/menu/employee/create";
+import EmployeeBankDetails from "@/pages/admin/menu/employee/edit/BankDetails";
+import EmployeeEmergencyContact from "@/pages/admin/menu/employee/edit/EmergencyContact";
 import EmployeeExperienceEdit from "@/pages/admin/menu/employee/edit/Experience";
 import EmployeeMembershipEdit from "@/pages/admin/menu/employee/edit/Membership";
 import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
@@ -14,10 +16,8 @@ import { EmployeeDocumentType } from "@/pages/admin/menu/employee/settings/Docum
 import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCategory";
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
 import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
-import { BankDetails } from "@/pages/admin/menu/employee/view/BankDetails";
 import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Documents } from "@/pages/admin/menu/employee/view/Documents";
-import { EmergencyContacts } from "@/pages/admin/menu/employee/view/EmergencyContacts";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 
 export const EmployeeRoutes = [
@@ -55,11 +55,11 @@ export const EmployeeRoutes = [
   },
   {
     path: "emergency-contact",
-    element: <EmergencyContacts />,
+    element: <EmployeeEmergencyContact />,
   },
   {
     path: "bank-details",
-    element: <BankDetails />,
+    element: <EmployeeBankDetails />,
   },
   {
     path: "compensation",
