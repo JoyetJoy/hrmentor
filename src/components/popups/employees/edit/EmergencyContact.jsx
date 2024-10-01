@@ -3,15 +3,17 @@ import {
   newRequest,
   UPDATE_EMPLOYEE_EMERGENCY_CONTACTS,
 } from "@/api";
-import useImageUpload from "@/hooks/useImageUpload";
+import { relationshipList } from "@/constants/data";
 import { empEmergencyContactSchema } from "@/schema/dashboard/employee/form/emergencyContact.schema";
+import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Select from "react-select";
 
 export default function EmployeeEmergencyContactEditForm({
   popupOpen,
@@ -38,21 +40,29 @@ export default function EmployeeEmergencyContactEditForm({
   const [loader, setLoader] = useState(false);
 
   // Get selected data
-  const { data: employeeSkillDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeSkillDetailByid", api, selectedField],
+  const { data: employeeEmergencyContactDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeEmergencyContactDetailByid", api, selectedField],
     queryFn: () =>
-      newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
+  console.log(employeeEmergencyContactDetailByid);
+
   useEffect(() => {
-    if (employeeSkillDetailByid) {
-      setValue("name", employeeSkillDetailByid?.name);
-      setValue("relationship", employeeSkillDetailByid?.relationship);
-      setValue("address", employeeSkillDetailByid?.address);
-      setValue("contact_number", employeeSkillDetailByid?.contact_number);
+    if (employeeEmergencyContactDetailByid) {
+      setValue("name", employeeEmergencyContactDetailByid?.data?.name);
+      setValue(
+        "relationship",
+        employeeEmergencyContactDetailByid?.data?.relationship,
+      );
+      setValue("address", employeeEmergencyContactDetailByid?.data?.address);
+      setValue(
+        "contact_number",
+        employeeEmergencyContactDetailByid?.data?.contact_number,
+      );
     }
-  }, [employeeSkillDetailByid]);
+  }, [employeeEmergencyContactDetailByid]);
 
   function close() {
     setPopupOpen(false);
@@ -66,7 +76,7 @@ export default function EmployeeEmergencyContactEditForm({
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("user_id", uid);
-      formData.append("relationship", data.relationship);
+      formData.append("relationship", data.relationship?.value);
       formData.append("address", data.address);
       formData.append("contact_number", data.contact_number);
       let res;
@@ -146,11 +156,20 @@ export default function EmployeeEmergencyContactEditForm({
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Relationship
                   </label>
-                  <input
-                    {...register("relationship", { required: true })}
-                    type="text"
-                    placeholder="Enter relationship"
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                  <Controller
+                    name="relationship"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={relationshipList}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select relationship"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
                   {errors.relationship && (
                     <span className="text-xs font-medium text-red-500">

@@ -11,6 +11,18 @@ export const completionStatus = [
   { value: "ongoing", label: "Ongoing" },
 ];
 
+export const relationshipList = [
+  { value: "Mother", label: "Mother" },
+  { value: "Father", label: "Father" },
+  { value: "Brother", label: "Brother" },
+  { value: "Sister", label: "Sister" },
+  { value: "Husband", label: "Husband" },
+  { value: "Wife", label: "Wife" },
+  { value: "Son", label: "Son" },
+  { value: "Daughter", label: "Daughter" },
+  { value: "Others", label: "Others" },
+];
+
 // blood grops
 export const bloodGroups = [
   { id: 1, label: "O+", value: "O+" },
