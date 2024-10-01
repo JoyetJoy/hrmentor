@@ -72,7 +72,7 @@ export const EmployeeDocuments = () => {
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
               </div>
             ) : (
-              <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white">
+              <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white pb-5">
                 {employeeDocumentsCategory?.listing?.map((item) => (
                   <Disclosure
                     key={item?.id}
