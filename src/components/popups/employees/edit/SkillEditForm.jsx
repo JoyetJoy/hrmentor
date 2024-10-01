@@ -65,8 +65,6 @@ export default function SkillEditForm({
     }
   }, [employeeSkillDetailByid]);
 
-  console.log(employeeSkillDetailByid);
-
   useEffect(() => {
     if (employeeSkillDetailByid) {
       setImage(employeeSkillDetailByid?.document);

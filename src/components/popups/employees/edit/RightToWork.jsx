@@ -56,6 +56,12 @@ export default function EmployeeRightToWorkEditForm({
     }
   }, [employeeRightToWorkDetailByid]);
 
+  useEffect(() => {
+    if (employeeRightToWorkDetailByid) {
+      setImage(employeeRightToWorkDetailByid?.document);
+    }
+  }, [employeeRightToWorkDetailByid, setImage]);
+
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
