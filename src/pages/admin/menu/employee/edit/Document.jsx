@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Disclosure, DisclosureButton } from "@headlessui/react";
 import { ChevronRight, Search } from "lucide-react";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import UnderListing from "@/components/employee/edit-documents/UnderListing";
+import Pagination from "@/components/table/Pagination";
 
 export const EmployeeDocuments = () => {
   const location = useLocation();
@@ -34,6 +35,12 @@ export const EmployeeDocuments = () => {
           return res.data;
         }),
   });
+
+  useEffect(() => {
+    if (employeeDocumentsCategory) {
+      setTotalPages(employeeDocumentsCategory?.last_page);
+    }
+  }, [employeeDocumentsCategory]);
 
   return (
     <div className="flex flex-col">
@@ -81,6 +88,11 @@ export const EmployeeDocuments = () => {
                   />
                 </Disclosure>
               ))}
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
             </div>
           </>
         </div>
