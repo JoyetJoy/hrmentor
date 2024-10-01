@@ -1,0 +1,160 @@
+import { DisclosurePanel } from "@headlessui/react";
+import QueryTable from "@/components/table/QueryTable";
+import { Plus, Search, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { EMPLOYEE_DOCUMENTS, newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import EmployeeDocumentEditForm from "@/components/popups/employees/edit/DocumentsEdit";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+
+export default function UnderListing({ cid, uid, documentName }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: employeeDocumentsListing, isLoading } = useQuery({
+    queryKey: ["employeeDocumentsListing", currentPage, uid, cid],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_DOCUMENTS}/${parseInt(uid)}`, {
+          params: {
+            page: currentPage,
+            per_limit: pageLimit,
+            search: "",
+            document_category_id: parseInt(cid),
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+    enabled: !!cid,
+  });
+
+  const columns = React.useMemo(
+    () => [
+      {
+        header: "Document Name",
+        accessorKey: "document_name",
+      },
+      {
+        header: "Document Type",
+        accessorKey: "addNo",
+        cell: ({ row }) => (
+          <>{row?.original?.document_type?.employee_document_type_name}</>
+        ),
+      },
+      {
+        header: "Issued Authority",
+        accessorKey: "issued_authority",
+      },
+      {
+        header: "Issued Date",
+        accessorKey: "issued_date",
+      },
+      {
+        header: "Expiry Date",
+        accessorKey: "expiry_date",
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ row }) => (
+          <div
+            className={`flex h-8 w-20 items-center justify-center rounded-md px-3 font-semibold ${row?.original?.status == 1 ? "bg-active/15 text-active" : "bg-inactive/15 text-inactive"}`}
+          >
+            {row?.original?.status == 1 ? "Active" : "Inactive"}
+          </div>
+        ),
+      },
+      {
+        header: "Action",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              type="button"
+              onClick={() => setSelectedField(row.original.id)}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedId(row.original.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+            >
+              <Trash2 className="size-3" />
+            </button>
+          </div>
+        ),
+      },
+    ],
+    [employeeDocumentsListing, cid],
+  );
+  return (
+    <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedId}
+        qrKey={"employeeDocumentsListing"}
+        api={EMPLOYEE_DOCUMENTS}
+      />
+      <EmployeeDocumentEditForm
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeDocumentsListing"}
+        api={EMPLOYEE_DOCUMENTS}
+        uid={uid}
+        documentName={documentName}
+        cid={cid}
+      />
+      <DisclosurePanel className="my-4 ml-10 text-sm/5 text-black/50">
+        <div>
+          <div className="my-4 flex items-center justify-between">
+            <div className="input-box flex h-10 w-72 items-center gap-2 placeholder:text-black">
+              <Search />
+              <input
+                type="text"
+                className="h-full w-full"
+                placeholder="Search"
+              />
+            </div>
+            <button
+              onClick={() => {
+                setPopupOpen(true);
+              }}
+              className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+            >
+              <Plus className="size-4" />
+              Add Documents
+            </button>
+          </div>
+          <div className="py-2">
+            <QueryTable
+              columns={columns}
+              list={employeeDocumentsListing?.listing ?? []}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={totalPages}
+            />
+          </div>
+        </div>
+      </DisclosurePanel>
+    </>
+  );
+}

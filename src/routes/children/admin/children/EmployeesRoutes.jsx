@@ -1,6 +1,7 @@
 import EmployeeLists from "@/pages/admin/menu/employee";
 import EmployeeCreation from "@/pages/admin/menu/employee/create";
 import EmployeeBankDetails from "@/pages/admin/menu/employee/edit/BankDetails";
+import { EmployeeDocuments } from "@/pages/admin/menu/employee/edit/Document";
 import EmployeeEmergencyContact from "@/pages/admin/menu/employee/edit/EmergencyContact";
 import EmployeeExperienceEdit from "@/pages/admin/menu/employee/edit/Experience";
 import EmployeeMembershipEdit from "@/pages/admin/menu/employee/edit/Membership";
@@ -17,7 +18,6 @@ import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCat
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
 import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
 import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
-import { Documents } from "@/pages/admin/menu/employee/view/Documents";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 
 export const EmployeeRoutes = [
@@ -67,7 +67,7 @@ export const EmployeeRoutes = [
   },
   {
     path: "documents",
-    element: <Documents />,
+    element: <EmployeeDocuments />,
   },
   {
     path: "payslip",

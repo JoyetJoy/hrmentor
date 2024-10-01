@@ -17,6 +17,8 @@ export const EMPLOYEE_DESIGNATION_LIST = "active-designations";
 
 // employee document type
 export const EMPLOYEE_DOCUMENT_TYPE = "employee-document-types";
+// listing
+export const EMPLOYEE_DOCUMENT_TYPE_LIST = "active-employee-document-types";
 
 // employee ethnicity
 export const EMPLOYEE_ETHNICITY = "ethnicity";
