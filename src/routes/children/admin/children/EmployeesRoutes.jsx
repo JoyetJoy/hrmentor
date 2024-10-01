@@ -7,6 +7,7 @@ import EmployeeExperienceEdit from "@/pages/admin/menu/employee/edit/Experience"
 import EmployeeMembershipEdit from "@/pages/admin/menu/employee/edit/Membership";
 import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
 import EmployeeRightToWorkEdit from "@/pages/admin/menu/employee/edit/RightToWork";
+import EmployeeSalaryEdit from "@/pages/admin/menu/employee/edit/SalaryDetails";
 import SkillsQualifications from "@/pages/admin/menu/employee/edit/Skills";
 import { WorkInformation } from "@/pages/admin/menu/employee/edit/WorkInformation";
 import { EmployeeSettings } from "@/pages/admin/menu/employee/settings";
@@ -17,7 +18,6 @@ import { EmployeeDocumentType } from "@/pages/admin/menu/employee/settings/Docum
 import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCategory";
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
 import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
-import { Compensation } from "@/pages/admin/menu/employee/view/Compensation";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 
 export const EmployeeRoutes = [
@@ -63,7 +63,7 @@ export const EmployeeRoutes = [
   },
   {
     path: "compensation",
-    element: <Compensation />,
+    element: <EmployeeSalaryEdit />,
   },
   {
     path: "documents",
