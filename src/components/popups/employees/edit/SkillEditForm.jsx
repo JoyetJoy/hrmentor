@@ -55,13 +55,17 @@ export default function SkillEditForm({
 
   useEffect(() => {
     if (employeeSkillDetailByid) {
-      setValue("type", employeeSkillDetailByid.type);
-      setValue("institution", employeeSkillDetailByid.institution);
-      setValue("field_of_study", employeeSkillDetailByid.field_of_study);
-      setValue("start_date", employeeSkillDetailByid.start_date);
-      setValue("end_date", employeeSkillDetailByid.end_date);
+      setValue("type", employeeSkillDetailByid?.type);
+      setValue("institution", employeeSkillDetailByid?.institution);
+      setValue("field_of_study", employeeSkillDetailByid?.field_of_study);
+      setValue("cgpa_percentage", employeeSkillDetailByid?.cgpa_percentage);
+      setValue("start_date", employeeSkillDetailByid?.start_date);
+      setValue("end_date", employeeSkillDetailByid?.end_date);
+      setValue("status", employeeSkillDetailByid?.status);
     }
   }, [employeeSkillDetailByid]);
+
+  console.log(employeeSkillDetailByid);
 
   useEffect(() => {
     if (employeeSkillDetailByid) {
@@ -91,7 +95,7 @@ export default function SkillEditForm({
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
-          `${api}/update-employee-skills//${selectedField}`,
+          `${api}/update-employee-skills/${selectedField}`,
           formData,
         );
       } else {

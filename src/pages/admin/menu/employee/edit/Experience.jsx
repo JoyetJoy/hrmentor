@@ -7,6 +7,7 @@ import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_EXPERIENCE, newRequest } from "@/api";
 import EmployeeExperienceEditForm from "@/components/popups/employees/edit/ExperienceEditForm";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 export default function EmployeeExperienceEdit() {
   const location = useLocation();
@@ -28,11 +29,11 @@ export default function EmployeeExperienceEdit() {
   }, [selectedField]);
 
   // Fetch List
-  const { data: employeeSkills, isLoading } = useQuery({
-    queryKey: ["employeeSkills", currentPage, uid, keyword],
+  const { data: employeeExperience, isLoading } = useQuery({
+    queryKey: ["employeeExperience", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_EXPERIENCE}/list/${uid}`, {
+        .get(`${EMPLOYEE_EXPERIENCE}/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -45,10 +46,10 @@ export default function EmployeeExperienceEdit() {
   });
 
   useEffect(() => {
-    if (employeeSkills) {
-      setTotalPages(employeeSkills?.last_page);
+    if (employeeExperience) {
+      setTotalPages(employeeExperience?.last_page);
     }
-  }, [employeeSkills]);
+  }, [employeeExperience]);
 
   const columns = React.useMemo(
     () =>
@@ -66,20 +67,15 @@ export default function EmployeeExperienceEdit() {
         },
         {
           header: "Job role",
-          accessorKey: "type",
-          cell: ({ row }) => (
-            <div className="flex">
-              {row.original?.type?.qualification_type_name}
-            </div>
-          ),
+          accessorKey: "job_role",
         },
         {
           header: "Employer",
-          accessorKey: "field_of_study",
+          accessorKey: "employer",
         },
         {
           header: "Employer details",
-          accessorKey: "institution",
+          accessorKey: "employer_details",
         },
         {
           header: "Start Date",
@@ -140,10 +136,17 @@ export default function EmployeeExperienceEdit() {
           ),
         },
       ].filter(Boolean),
-    [employeeSkills],
+    [employeeExperience],
   );
   return (
     <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedId}
+        qrKey={"employeeExperience"}
+        api={EMPLOYEE_EXPERIENCE}
+      />
       <EmployeeExperienceEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
@@ -197,7 +200,7 @@ export default function EmployeeExperienceEdit() {
                   <div>
                     <QueryTable
                       columns={columns}
-                      list={employeeSkills?.listing ?? []}
+                      list={employeeExperience?.listing ?? []}
                       currentPage={currentPage}
                       setCurrentPage={setCurrentPage}
                       totalPages={totalPages}

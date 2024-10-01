@@ -51,6 +51,8 @@ export default function SkillsQualifications() {
     }
   }, [employeeSkills]);
 
+  console.log(employeeSkills);
+
   const columns = React.useMemo(
     () =>
       [
@@ -70,7 +72,7 @@ export default function SkillsQualifications() {
           accessorKey: "type",
           cell: ({ row }) => (
             <div className="flex">
-              {row.original?.type?.qualification_type_name}
+              {row.original?.qulification_type?.qualification_type_name}
             </div>
           ),
         },
@@ -166,7 +168,6 @@ export default function SkillsQualifications() {
         qrKey={"employeeSkills"}
         api={EMPLOYEE_SKILLS}
       />
-
       <SkillEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}

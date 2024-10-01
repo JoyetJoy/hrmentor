@@ -1,6 +1,4 @@
 import { newFormRequest, newRequest } from "@/api";
-import { SKILL_FIELD_TYPE } from "@/api/master";
-import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import useImageUpload from "@/hooks/useImageUpload";
 import { empExperienceSchema } from "@/schema/dashboard/employee/form/experience.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
@@ -35,35 +33,33 @@ export default function EmployeeExperienceEditForm({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  //   SKILL FIELD TYPE
-  const { data: skillTypeList } = useEmployeeMaster(
-    SKILL_FIELD_TYPE,
-    "skillTypeList",
-  );
 
   // Get selected data
-  const { data: employeeSkillDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeSkillDetailByid", api, selectedField],
+  const { data: employeeExperienceDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeExperienceDetailByid", api, selectedField],
     queryFn: () =>
-      newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
   useEffect(() => {
-    if (employeeSkillDetailByid) {
-      setValue("job_role", employeeSkillDetailByid.type);
-      setValue("institution", employeeSkillDetailByid.institution);
-      setValue("field_of_study", employeeSkillDetailByid.field_of_study);
-      setValue("start_date", employeeSkillDetailByid.start_date);
-      setValue("end_date", employeeSkillDetailByid.end_date);
+    if (employeeExperienceDetailByid) {
+      setValue("job_role", employeeExperienceDetailByid.job_role);
+      setValue("employer", employeeExperienceDetailByid.employer);
+      setValue(
+        "employer_details",
+        employeeExperienceDetailByid.employer_details,
+      );
+      setValue("start_date", employeeExperienceDetailByid.start_date);
+      setValue("end_date", employeeExperienceDetailByid.end_date);
     }
-  }, [employeeSkillDetailByid]);
+  }, [employeeExperienceDetailByid]);
 
   useEffect(() => {
-    if (employeeSkillDetailByid) {
-      setImage(employeeSkillDetailByid?.certificate);
+    if (employeeExperienceDetailByid) {
+      setImage(employeeExperienceDetailByid?.certificate);
     }
-  }, [employeeSkillDetailByid, setImage]);
+  }, [employeeExperienceDetailByid, setImage]);
 
   function close() {
     setPopupOpen(false);
@@ -85,7 +81,7 @@ export default function EmployeeExperienceEditForm({
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
-          `${api}/update-employee-skills//${selectedField}`,
+          `update-employee-experience/${selectedField}`,
           formData,
         );
       } else {

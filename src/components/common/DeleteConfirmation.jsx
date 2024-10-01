@@ -16,7 +16,7 @@ export default function DeleteConfirmation({
     try {
       setLoader(true);
       const res = await newRequest.delete(`${api}/${selectedId}`);
-      if (res?.data?.success === true) {
+      if (res?.data?.status === 200) {
         queryClient.invalidateQueries([qrkey]);
         setLoader(false);
         toast.success(res?.data?.message);
