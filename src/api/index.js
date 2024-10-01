@@ -71,3 +71,5 @@ export const EMPLOYEE_MEMBERSHIP = "employee-registraion-membership";
 // MEMBERSHIP UPDATE
 export const EMPLOYEE_MEMBERSHIP_UPDATE =
   "update-employee-registration-membership";
+// RIGHT TO WORK
+export const EMPLOYEE_RIGHT_TO_WORK = "employee-rightToWork";

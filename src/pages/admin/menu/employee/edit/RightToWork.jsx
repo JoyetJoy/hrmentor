@@ -5,9 +5,9 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { EMPLOYEE_MEMBERSHIP, newRequest } from "@/api";
+import { EMPLOYEE_MEMBERSHIP, EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import EmployeeMembershipEditForm from "@/components/popups/employees/edit/MembershipEditForm";
+import EmployeeRightToWorkEditForm from "@/components/popups/employees/edit/RightToWork";
 
 export default function EmployeeRightToWorkEdit() {
   const location = useLocation();
@@ -29,11 +29,11 @@ export default function EmployeeRightToWorkEdit() {
   }, [selectedField]);
 
   // Fetch List
-  const { data: employeeMemberships, isLoading } = useQuery({
-    queryKey: ["employeeMemberships", currentPage, uid, keyword],
+  const { data: employeeRightToWorks, isLoading } = useQuery({
+    queryKey: ["employeeRightToWorks", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_MEMBERSHIP}/${uid}`, {
+        .get(`${EMPLOYEE_RIGHT_TO_WORK}/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -45,18 +45,24 @@ export default function EmployeeRightToWorkEdit() {
         }),
   });
 
+  console.log(employeeRightToWorks);
+
   useEffect(() => {
-    if (employeeMemberships) {
-      setTotalPages(employeeMemberships?.last_page);
+    if (employeeRightToWorks) {
+      setTotalPages(employeeRightToWorks?.last_page);
     }
-  }, [employeeMemberships]);
+  }, [employeeRightToWorks]);
 
   const columns = React.useMemo(
     () =>
       [
         {
           header: "Reference No",
-          accessorKey: "reg_memb_body",
+          accessorKey: "reference_no",
+        },
+        {
+          header: "Condition",
+          accessorKey: "condtion",
         },
         {
           header: "Expiry Date",
@@ -64,7 +70,7 @@ export default function EmployeeRightToWorkEdit() {
         },
         {
           header: "Reviewed by",
-          accessorKey: "first_registered_date",
+          accessorKey: "reviewedBy",
         },
         {
           header: "Document",
@@ -79,15 +85,6 @@ export default function EmployeeRightToWorkEdit() {
               >
                 document
               </Link>
-            </div>
-          ),
-        },
-        {
-          header: "Status",
-          accessorKey: "status",
-          cell: ({ row }) => (
-            <div className="ufont-semibold flex h-8 w-fit items-center justify-center text-black">
-              {row.original?.status === "ongoing" ? "Ongoing" : "Completed"}
             </div>
           ),
         },
@@ -120,7 +117,7 @@ export default function EmployeeRightToWorkEdit() {
           ),
         },
       ].filter(Boolean),
-    [employeeMemberships],
+    [employeeRightToWorks],
   );
   return (
     <>
@@ -128,10 +125,10 @@ export default function EmployeeRightToWorkEdit() {
         open={deletePopup}
         onCancel={setDeletePopup}
         selectedId={selectedId}
-        qrKey={"employeeMemberships"}
+        qrKey={"employeeRightToWorks"}
         api={EMPLOYEE_MEMBERSHIP}
       />
-      <EmployeeMembershipEditForm
+      <EmployeeRightToWorkEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
@@ -183,7 +180,7 @@ export default function EmployeeRightToWorkEdit() {
                 ) : (
                   <QueryTable
                     columns={columns}
-                    list={employeeMemberships?.listing ?? []}
+                    list={employeeRightToWorks?.listing ?? []}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     totalPages={totalPages}
