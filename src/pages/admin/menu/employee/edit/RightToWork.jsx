@@ -60,7 +60,7 @@ export default function EmployeeRightToWorkEdit() {
         },
         {
           header: "Condition",
-          accessorKey: "condition",
+          accessorKey: "condtion",
         },
         {
           header: "Expiry Date",

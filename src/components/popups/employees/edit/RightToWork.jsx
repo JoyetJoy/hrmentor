@@ -50,7 +50,7 @@ export default function EmployeeRightToWorkEditForm({
   useEffect(() => {
     if (employeeRightToWorkDetailByid) {
       setValue("reference_no", employeeRightToWorkDetailByid.reference_no);
-      setValue("condtion", employeeRightToWorkDetailByid.condition);
+      setValue("condtion", employeeRightToWorkDetailByid.condtion);
       setValue("expiry_date", employeeRightToWorkDetailByid.expiry_date);
       setValue("reviewedBy", employeeRightToWorkDetailByid.reviewedBy);
     }
@@ -74,7 +74,7 @@ export default function EmployeeRightToWorkEditForm({
       const formData = new FormData();
       formData.append("reference_no", data?.reference_no);
       formData.append("user_id", uid);
-      formData.append("condition", data.condition);
+      formData.append("condtion", data.condtion);
       formData.append("expiry_date", data.expiry_date);
       formData.append("reviewedBy", data.reviewedBy);
       imageFile && formData.append("document", imageFile);
@@ -232,7 +232,7 @@ export default function EmployeeRightToWorkEditForm({
                 <div className="mt-7 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
-                    className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
                     disabled={loader}
                   >
                     {loader ? (
