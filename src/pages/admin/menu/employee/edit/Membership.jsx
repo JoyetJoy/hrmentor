@@ -119,7 +119,7 @@ export default function EmployeeMembershipEdit() {
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        qrKey={"employeeSkills"}
+        qrKey={"employeeMemberships"}
         api={EMPLOYEE_MEMBERSHIP}
         uid={uid}
       />

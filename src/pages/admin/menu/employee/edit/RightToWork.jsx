@@ -45,8 +45,6 @@ export default function EmployeeRightToWorkEdit() {
         }),
   });
 
-  console.log(employeeRightToWorks);
-
   useEffect(() => {
     if (employeeRightToWorks) {
       setTotalPages(employeeRightToWorks?.last_page);
@@ -133,8 +131,8 @@ export default function EmployeeRightToWorkEdit() {
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        qrKey={"employeeSkills"}
-        api={EMPLOYEE_MEMBERSHIP}
+        qrKey={"employeeRightToWorks"}
+        api={EMPLOYEE_RIGHT_TO_WORK}
         uid={uid}
       />
       <div className="flex min-h-screen flex-col">

@@ -1,6 +1,11 @@
-import { EMPLOYEE_MEMBERSHIP_UPDATE, newFormRequest, newRequest } from "@/api";
+import {
+  EMPLOYEE_MEMBERSHIP_UPDATE,
+  EMPLOYEE_RIGHT_TO_WORK_UPDATE,
+  newFormRequest,
+  newRequest,
+} from "@/api";
 import useImageUpload from "@/hooks/useImageUpload";
-import { empMembershipSchema } from "@/schema/dashboard/employee/form/membership.schema";
+import { empRightToWorkSchema } from "@/schema/dashboard/employee/form/rightToWork.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,37 +33,28 @@ export default function EmployeeRightToWorkEditForm({
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(empMembershipSchema),
+    resolver: yupResolver(empRightToWorkSchema),
   });
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
 
   // Get selected data
-  const { data: employeeExperienceDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeExperienceDetailByid", api, selectedField],
+  const { data: employeeRightToWorkDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeRightToWorkDetailByid", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
-  console.log(employeeExperienceDetailByid);
-
   useEffect(() => {
-    if (employeeExperienceDetailByid) {
-      setValue("reg_memb_body", employeeExperienceDetailByid.reg_memb_body);
-      setValue(
-        "professional_reg_number",
-        employeeExperienceDetailByid.professional_reg_number,
-      );
-      setValue("expiry_date", employeeExperienceDetailByid.expiry_date);
-      setValue(
-        "first_registered_date",
-        employeeExperienceDetailByid.first_registered_date,
-      );
-      setValue("renewal_date", employeeExperienceDetailByid.renewal_date);
+    if (employeeRightToWorkDetailByid) {
+      setValue("reference_no", employeeRightToWorkDetailByid.reference_no);
+      setValue("condtion", employeeRightToWorkDetailByid.condition);
+      setValue("expiry_date", employeeRightToWorkDetailByid.expiry_date);
+      setValue("reviewedBy", employeeRightToWorkDetailByid.reviewedBy);
     }
-  }, [employeeExperienceDetailByid]);
+  }, [employeeRightToWorkDetailByid]);
 
   function close() {
     setPopupOpen(false);
@@ -70,16 +66,16 @@ export default function EmployeeRightToWorkEditForm({
     setLoader(true);
     try {
       const formData = new FormData();
-      formData.append("reg_memb_body", data?.reg_memb_body);
+      formData.append("reference_no", data?.reference_no);
       formData.append("user_id", uid);
-      formData.append("professional_reg_number", data.professional_reg_number);
+      formData.append("condition", data.condition);
       formData.append("expiry_date", data.expiry_date);
-      formData.append("first_registered_date", data.first_registered_date);
-      formData.append("renewal_date", data.renewal_date);
+      formData.append("reviewedBy", data.reviewedBy);
+      imageFile && formData.append("document", imageFile);
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
-          `${EMPLOYEE_MEMBERSHIP_UPDATE}/${selectedField}`,
+          `${EMPLOYEE_RIGHT_TO_WORK_UPDATE}/${selectedField}`,
           formData,
         );
       } else {
@@ -135,14 +131,14 @@ export default function EmployeeRightToWorkEditForm({
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Reference No</label>
                   <input
-                    {...register("reg_memb_body", { required: true })}
+                    {...register("reference_no", { required: true })}
                     type="text"
-                    placeholder="Enter job role"
+                    placeholder="Enter Reference No"
                     className="input-box h-10 w-full"
                   />
-                  {errors.reg_memb_body && (
+                  {errors.reference_no && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reg_memb_body?.message}
+                      {errors.reference_no?.message}
                     </span>
                   )}
                 </div>
@@ -166,12 +162,12 @@ export default function EmployeeRightToWorkEditForm({
                     Condition
                   </label>
                   <textarea
-                    {...register("first_registered_date", { required: true })}
+                    {...register("condtion", { required: true })}
                     className="input-box h-20 w-full"
                   />
-                  {errors.first_registered_date && (
+                  {errors.condtion && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.first_registered_date?.message}
+                      {errors.condtion?.message}
                     </span>
                   )}
                 </div>
@@ -180,12 +176,12 @@ export default function EmployeeRightToWorkEditForm({
                     Reviewed by
                   </label>
                   <input
-                    {...register("first_registered_date", { required: true })}
+                    {...register("reviewedBy", { required: true })}
                     className="input-box h-10 w-full"
                   />
-                  {errors.first_registered_date && (
+                  {errors.reviewedBy && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.first_registered_date?.message}
+                      {errors.reviewedBy?.message}
                     </span>
                   )}
                 </div>
