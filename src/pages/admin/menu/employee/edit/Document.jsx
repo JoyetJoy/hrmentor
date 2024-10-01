@@ -67,33 +67,39 @@ export const EmployeeDocuments = () => {
                 />
               </div>
             </div>
-            <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white">
-              {employeeDocumentsCategory?.listing?.map((item) => (
-                <Disclosure
-                  key={item?.id}
-                  as="div"
-                  className="p-5"
-                  defaultOpen={false}
-                >
-                  <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
-                    <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
-                      <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                    </div>
-                    <p className="text-sm">{item?.document_category_name}</p>
-                  </DisclosureButton>
-                  <UnderListing
-                    cid={item?.id}
-                    uid={uid}
-                    documentName={item?.document_category_name}
-                  />
-                </Disclosure>
-              ))}
-              <Pagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                totalPages={totalPages}
-              />
-            </div>
+            {isLoading ? (
+              <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+              </div>
+            ) : (
+              <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white">
+                {employeeDocumentsCategory?.listing?.map((item) => (
+                  <Disclosure
+                    key={item?.id}
+                    as="div"
+                    className="p-5"
+                    defaultOpen={false}
+                  >
+                    <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
+                      <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
+                        <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                      </div>
+                      <p className="text-sm">{item?.document_category_name}</p>
+                    </DisclosureButton>
+                    <UnderListing
+                      cid={item?.id}
+                      uid={uid}
+                      documentName={item?.document_category_name}
+                    />
+                  </Disclosure>
+                ))}
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              </div>
+            )}
           </>
         </div>
       </div>
