@@ -1,4 +1,4 @@
-import { newFormRequest, newRequest } from "@/api";
+import { newFormRequest, newRequest, UPDATE_EMPLOYEE_DOCUMENTS } from "@/api";
 import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
 import { completionStatus } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
@@ -91,7 +91,7 @@ export default function EmployeeDocumentEditForm({
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
-          `${api}/update-employee-skills/${selectedField}`,
+          `${UPDATE_EMPLOYEE_DOCUMENTS}/${selectedField}`,
           formData,
         );
       } else {

@@ -48,7 +48,7 @@ export const EmployeeDocuments = () => {
         <div className="mt-2 w-full">
           <>
             <MenuSubHeader heading={"Documents"} />
-            <div className="overflow-y-min mt-6 h-screen w-full overflow-y-auto rounded-md bg-white">
+            <div className="overflow-y-min mt-6 w-full overflow-y-auto rounded-md bg-white">
               {employeeDocumentsCategory?.listing?.map((item) => (
                 <Disclosure
                   key={item?.id}

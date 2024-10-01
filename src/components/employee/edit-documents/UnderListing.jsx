@@ -19,14 +19,14 @@ export default function UnderListing({ cid, uid, documentName }) {
 
   // Fetch List
   const { data: employeeDocumentsListing, isLoading } = useQuery({
-    queryKey: ["employeeDocumentsListing", currentPage, uid, cid],
+    queryKey: ["employeeDocumentsListing", currentPage, keyword, uid, cid],
     queryFn: () =>
       newRequest
         .get(`${EMPLOYEE_DOCUMENTS}/${parseInt(uid)}`, {
           params: {
             page: currentPage,
             per_limit: pageLimit,
-            search: "",
+            search: keyword,
             document_category_id: parseInt(cid),
           },
         })
@@ -79,7 +79,10 @@ export default function UnderListing({ cid, uid, documentName }) {
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => setSelectedField(row.original.id)}
+              onClick={() => {
+                setSelectedField(row.original.id);
+                setPopupOpen(true);
+              }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <img
@@ -103,6 +106,7 @@ export default function UnderListing({ cid, uid, documentName }) {
     ],
     [employeeDocumentsListing, cid],
   );
+
   return (
     <>
       <DeleteConfirmation
@@ -129,6 +133,7 @@ export default function UnderListing({ cid, uid, documentName }) {
             <div className="input-box flex h-10 w-72 items-center gap-2 placeholder:text-black">
               <Search />
               <input
+                onChange={(e) => setKeyword(e.target.value)}
                 type="text"
                 className="h-full w-full"
                 placeholder="Search"
@@ -144,14 +149,21 @@ export default function UnderListing({ cid, uid, documentName }) {
               Add Documents
             </button>
           </div>
+
           <div className="py-2">
-            <QueryTable
-              columns={columns}
-              list={employeeDocumentsListing?.listing ?? []}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+            {isLoading ? (
+              <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+              </div>
+            ) : (
+              <QueryTable
+                columns={columns}
+                list={employeeDocumentsListing?.listing ?? []}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
           </div>
         </div>
       </DisclosurePanel>
