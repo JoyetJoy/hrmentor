@@ -265,7 +265,7 @@ export const menuitems = [
     id: 5,
     iconType: "image",
     iconSrcBlack: "/assets/icons/admin/attendance-black.svg",
-    iconSrcActive: "/assets/icons/admin/attendance-black.svg",
+    iconSrcActive: "/assets/icons/admin/attendance-color.svg",
     name: "Attendance",
     path: "/admin/attendance",
     active: "attendance",

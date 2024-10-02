@@ -274,3 +274,17 @@ select:focus {
   bottom: 0;
   background-color: #00b448;
 }
+
+.react-calendar__tile.today {
+  background-color: #d1e7dd; /* Light green color for today's date */
+  border-radius: 50%; /* Optional: to make the background circular */
+}
+
+.react-calendar__tile.today:hover,
+.react-calendar__tile.today:focus {
+  background-color: #badbcc; /* Change background on hover */
+}
+
+.react-calendar__tile.today:active {
+  background-color: #82c2b3; /* Change background on click */
+}
