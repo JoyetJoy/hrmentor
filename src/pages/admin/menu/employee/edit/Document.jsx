@@ -57,7 +57,7 @@ export const EmployeeDocuments = () => {
           <>
             <div className="flex items-center gap-7">
               <h5 className="text-lg font-bold">Documents</h5>
-              <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+              <div className="input-box flex min-h-10 w-80 items-center gap-2 bg-white placeholder:text-black">
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input
                   type="text"
