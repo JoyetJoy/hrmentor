@@ -266,9 +266,9 @@ select:focus {
 .c-af::before {
   content: "";
   position: absolute;
-  top: 1px;
+  top: 2px;
   left: 4px;
-  height: 92%;
+  height: 87%;
   width: 3px;
   border-radius: 50px;
   bottom: 0;
