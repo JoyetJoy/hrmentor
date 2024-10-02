@@ -267,7 +267,7 @@ export const menuitems = [
     iconSrcBlack: "/assets/icons/admin/attendance-black.svg",
     iconSrcActive: "/assets/icons/admin/attendance-black.svg",
     name: "Attendance",
-    path: "/attendance",
+    path: "/admin/attendance",
     active: "attendance",
   },
 ];

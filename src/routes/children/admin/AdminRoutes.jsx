@@ -3,6 +3,7 @@ import { MenuRoles } from "@/pages/admin/menu/role";
 import { MenuSubscription } from "@/pages/admin/menu/subscription";
 import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
+import { AttendanceRoutes } from "./children/AttendanceRoute";
 
 export const AdminRoutes = [
   {
@@ -20,6 +21,10 @@ export const AdminRoutes = [
   {
     path: "employee",
     children: EmployeeRoutes,
+  },
+  {
+    path: "attendance",
+    children: AttendanceRoutes,
   },
   {
     path: "recruiter",

@@ -213,3 +213,64 @@ select:focus {
   border: none !important;
   box-shadow: none !important;
 }
+
+/* calender */
+.react-calendar {
+  border: 1px solid #0000001a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.react-calendar__month-view__weekdays {
+  background-color: #f2f3f7;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 14px;
+  color: #2c2c2c;
+  font-weight: bold;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+
+.react-calendar__tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 170px;
+  min-width: 170px;
+  min-height: 100px !important;
+  width: 100px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #0000001a !important;
+}
+
+.holiday {
+  background-color: red;
+  color: white;
+}
+
+.present {
+  background-color: green;
+  color: white;
+}
+
+.c-af {
+  position: relative;
+}
+
+.c-af::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  height: 92%;
+  width: 3px;
+  border-radius: 50px;
+  bottom: 0;
+  background-color: #00b448;
+}
