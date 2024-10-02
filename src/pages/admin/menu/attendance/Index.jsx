@@ -147,25 +147,31 @@ const EmployeeAttendanceCalendar = () => {
         icon={<ChevronRight className="size-3" />}
         activeMenu={""}
       />
-      <div className="flex items-center gap-4 bg-white px-4 py-2">
-        <h5 className="text-lg font-bold">My Attendance</h5>
-        <Select
-          options={years}
-          isSearchable={true}
-          onChange={handleYearChange}
-          styles={customSelectStyles}
-          placeholder={dayjs(date).format("YYYY")}
-          className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-        />
-        <Select
-          options={months}
-          isSearchable={true}
-          onChange={handleMonthChange}
-          styles={customSelectStyles}
-          placeholder={dayjs(date).format("MMMM")}
-          className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-        />
+      <div className="flex items-center justify-between bg-white px-4 py-2">
+        <div className="flex items-center gap-4">
+          <h5 className="text-lg font-bold">My Attendance</h5>
+          <Select
+            options={years}
+            isSearchable={true}
+            onChange={handleYearChange}
+            styles={customSelectStyles}
+            placeholder={dayjs(date).format("YYYY")}
+            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+          />
+          <Select
+            options={months}
+            isSearchable={true}
+            onChange={handleMonthChange}
+            styles={customSelectStyles}
+            placeholder={dayjs(date).format("MMMM")}
+            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+          />
+        </div>
+        <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white">
+          Team Attendance
+        </button>
       </div>
+
       <div className="my-10 w-full max-w-7xl">
         <Calendar
           onChange={handleDateChange}
