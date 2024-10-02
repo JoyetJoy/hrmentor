@@ -4,6 +4,15 @@ export const empExperienceSchema = Yup.object({
   job_role: Yup.string().required("Job role is required"),
   employer: Yup.string().required("Employer is required"),
   start_date: Yup.string().required("Start date is required"),
-  end_date: Yup.string().required("End date is required"),
+  end_date: Yup.string()
+    .required("End date is required")
+    .test(
+      "end-date-after-start-date",
+      "End date should be after start date",
+      function (end_date) {
+        const { start_date } = this.parent;
+        return new Date(end_date) > new Date(start_date);
+      },
+    ),
   employer_details: Yup.string().required("Employer details is required"),
 });

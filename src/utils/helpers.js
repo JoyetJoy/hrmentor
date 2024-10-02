@@ -1,6 +1,4 @@
 export const getRandomPastelColor = () => {
-  const base = 255; // Use a high base value for pastel colors
-
   const getRandomComponent = () => Math.floor(Math.random() * 127 + 128);
 
   const r = getRandomComponent();
@@ -12,4 +10,8 @@ export const getRandomPastelColor = () => {
     .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 
   return randomColor;
+};
+
+export const parseDateString = (value) => {
+  return value ? new Date(value) : null;
 };

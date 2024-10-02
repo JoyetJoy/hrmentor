@@ -52,8 +52,6 @@ export default function EmployeeDocumentEditForm({
     enabled: !!selectedField != 0,
   });
 
-  console.log(employeeDocumentDetailByid);
-
   useEffect(() => {
     if (employeeDocumentDetailByid) {
       setValue("status", employeeDocumentDetailByid?.data?.status);
