@@ -400,8 +400,8 @@ export default function SaveEmployeeForm({ formtype }) {
                 <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1">
-                    <div className="flex h-11 w-64 items-center justify-between gap-5 rounded-xl bg-hrmdarkblue pl-7 pr-3 text-[0.94rem] text-white">
-                      Employee ID{" "}
+                    <div className="flex h-11 w-fit items-center justify-between gap-3 font-semibold text-black">
+                      <label className="label-text text-sm">Employee ID</label>
                       <input
                         disabled={formtype === "update"}
                         {...register("unique_id", { required: true })}
@@ -410,7 +410,7 @@ export default function SaveEmployeeForm({ formtype }) {
                             handleUniqueIdChange(e.target.value);
                           }
                         }}
-                        className="flex h-9 w-24 items-center rounded-md bg-white px-4 text-sm font-semibold text-black/70"
+                        className="flex h-9 w-24 items-center rounded-md border bg-white px-3 text-sm font-semibold text-black/70"
                       ></input>
                     </div>
                     {formtype === "save" && (
