@@ -33,7 +33,12 @@ export default function EmployeeDetails() {
           </Link>
         </div>
       </div>
-      <div className="mt-2 flex min-h-[520px] w-full bg-white"></div>
+      <div className="mt-2 flex min-h-[520px] w-full bg-white">
+        <div className="flex">
+          {/* profile */}
+          {/* log */}
+        </div>
+      </div>
     </>
   );
 }

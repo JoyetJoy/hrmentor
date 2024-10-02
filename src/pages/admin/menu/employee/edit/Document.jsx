@@ -49,7 +49,7 @@ export const EmployeeDocuments = () => {
         subMenu={"Employee"}
         currentpath={"Employee Edit"}
         icon={<ChevronRight className="size-3" />}
-        activeMenu={"Employees"}
+        activeMenu={"Employee"}
       />
       <div className="flex gap-x-3">
         <EmployeesSidebar />
