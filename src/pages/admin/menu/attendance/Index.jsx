@@ -134,7 +134,6 @@ const EmployeeAttendanceCalendar = () => {
     setDate(updatedDate);
   };
 
-  // Use dayjs to find events
   const findEvent = (date) => {
     return events.find((event) => dayjs(event.date).isSame(date, "day"));
   };
@@ -179,7 +178,7 @@ const EmployeeAttendanceCalendar = () => {
               const event = findEvent(date);
               return event ? (
                 <div className="flex w-full flex-col gap-2">
-                  <div className="flex justify-between p-1">
+                  <div className="relative flex justify-between p-1">
                     {event.status === "L" ? (
                       <img
                         className="h-5 object-contain"
@@ -188,12 +187,12 @@ const EmployeeAttendanceCalendar = () => {
                       />
                     ) : null}
                     <div
-                      className={`float-right flex h-7 w-7 items-center justify-center rounded-full font-extrabold ${event.status === "P" ? "bg-[#00B448] text-white" : "hidden"}`}
+                      className={`absolute -top-4 right-1 flex h-7 w-7 items-center justify-center rounded-full font-extrabold ${event.status === "P" ? "bg-[#00B448] text-white" : "hidden"}`}
                     >
                       {event.status}
                     </div>
                   </div>
-                  <div className="c-af flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
+                  <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
                     <span className="font-semibold">Clock In</span>{" "}
                     <span>{event.clockIn}</span>
                   </div>
