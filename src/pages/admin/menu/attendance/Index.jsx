@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
-import { ChevronRight } from "lucide-react";
 
 const events = [
   {
@@ -144,7 +143,7 @@ const EmployeeAttendanceCalendar = () => {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Attendance"}
-        icon={<ChevronRight className="size-3" />}
+        icon={""}
         activeMenu={""}
       />
       <div className="flex items-center justify-between bg-white px-4 py-2">
