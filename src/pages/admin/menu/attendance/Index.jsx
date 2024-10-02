@@ -193,16 +193,20 @@ const EmployeeAttendanceCalendar = () => {
                     </div>
                   </div>
                   <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
-                    <span className="font-semibold">Clock In</span>{" "}
+                    <span className="font-bold">Clock In</span>{" "}
                     <span>{event.clockIn}</span>
                   </div>
                   <div className="c-af flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
-                    <span className="font-semibold">Clock Out</span>{" "}
+                    <span className="font-bold">Clock Out</span>{" "}
                     <span>{event.clockIn}</span>
                   </div>
                   <div className="flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
-                    <span className="font-semibold">Time In</span>{" "}
-                    <span>{event.totalTime}</span>
+                    <span className="font-bold">Time In</span>{" "}
+                    <span
+                      className={`font-semibold ${event.status === "L" ? "text-red-500" : ""}`}
+                    >
+                      {event.totalTime}
+                    </span>
                   </div>
                 </div>
               ) : null;
