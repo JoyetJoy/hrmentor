@@ -145,7 +145,7 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
               <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
             </div>
           ) : (
-            <div className="min-h-screen w-full rounded-md bg-white px-5 py-4">
+            <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
               <div className="my-4 flex items-center justify-between">
                 <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
                   <Search className="size-4 text-[#7F7F7F]" />
