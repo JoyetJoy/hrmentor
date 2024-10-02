@@ -1,17 +1,17 @@
-import {
-  EMPLOYEE_RIGHT_TO_WORK_UPDATE,
-  newFormRequest,
-  newRequest,
-} from "@/api";
-import useImageUpload from "@/hooks/useImageUpload";
-import { empRightToWorkSchema } from "@/schema/dashboard/employee/form/rightToWork.schema";
+import { newRequest } from "@/api";
+import { SALARY_DEFAULT_MASTERS } from "@/api/master";
+import { employeeMasterOptions, overTimeList } from "@/constants/data";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { empSalaryDetailsSchema } from "@/schema/dashboard/employee/form/salarydetails.schema";
+import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { UploadCloud, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Select from "react-select";
 
 export default function EmployeeSalaryDetailsEditForm({
   popupOpen,
@@ -22,44 +22,54 @@ export default function EmployeeSalaryDetailsEditForm({
   api,
   uid,
 }) {
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
-    useImageUpload();
   const {
     register,
     handleSubmit,
     reset,
     setValue,
+    control,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(empRightToWorkSchema),
+    resolver: yupResolver(empSalaryDetailsSchema),
   });
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  //  EMPLOYEE SALARY MASTERS
+  const { data: empSalaryMasterList } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "empSalaryMasterList",
+  );
 
   // Get selected data
-  const { data: employeeRightToWorkDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeRightToWorkDetailByid", api, selectedField],
+  const { data: employeeSalaryDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeSalaryDetailByid", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
+  console.log(employeeSalaryDetailByid);
 
   useEffect(() => {
-    if (employeeRightToWorkDetailByid) {
-      setValue("reference_no", employeeRightToWorkDetailByid.reference_no);
-      setValue("condtion", employeeRightToWorkDetailByid.condtion);
-      setValue("expiry_date", employeeRightToWorkDetailByid.expiry_date);
-      setValue("reviewedBy", employeeRightToWorkDetailByid.reviewedBy);
+    if (employeeSalaryDetailByid) {
+      setValue("user_id", employeeSalaryDetailByid.user_id);
+      setValue("effective_from", employeeSalaryDetailByid.effective_from);
+      setValue("currency", employeeSalaryDetailByid.currency);
+      setValue("pay_rate", employeeSalaryDetailByid.pay_rate);
+      setValue("per", employeeSalaryDetailByid.per);
+      setValue("pay_schedule", employeeSalaryDetailByid.pay_schedule);
+      setValue("pay_type", employeeSalaryDetailByid.pay_type);
+      setValue("over_time", employeeSalaryDetailByid.over_time);
+      setValue(
+        "weekly_contract_hours",
+        employeeSalaryDetailByid.weekly_contract_hours,
+      );
+      setValue("weekly_pay", employeeSalaryDetailByid.weekly_pay);
+      setValue("annual_pay", employeeSalaryDetailByid.annual_pay);
+      setValue("status", employeeSalaryDetailByid.status);
     }
-  }, [employeeRightToWorkDetailByid]);
-
-  useEffect(() => {
-    if (employeeRightToWorkDetailByid) {
-      setImage(employeeRightToWorkDetailByid?.document);
-    }
-  }, [employeeRightToWorkDetailByid, setImage]);
+  }, [employeeSalaryDetailByid]);
 
   function close() {
     setPopupOpen(false);
@@ -71,20 +81,24 @@ export default function EmployeeSalaryDetailsEditForm({
     setLoader(true);
     try {
       const formData = new FormData();
-      formData.append("reference_no", data?.reference_no);
       formData.append("user_id", uid);
-      formData.append("condtion", data.condtion);
-      formData.append("expiry_date", data.expiry_date);
-      formData.append("reviewedBy", data.reviewedBy);
-      imageFile && formData.append("document", imageFile);
+      formData.append("effective_from", data.effective_from);
+      formData.append("currency", data.currency?.id);
+      formData.append("pay_rate", data.pay_rate);
+      formData.append("per", data.per?.id);
+      formData.append("pay_schedule", data.pay_schedule?.id);
+      formData.append("pay_type", data.pay_type?.id);
+      formData.append("over_time", data.over_time?.value);
+      formData.append("weekly_contract_hours", data.weekly_contract_hours);
+      formData.append("weekly_pay", data.weekly_pay);
+      formData.append("annual_pay", data.annual_pay);
+      formData.append("status", data.status?.value);
+
       let res;
       if (selectedField !== 0) {
-        res = await newFormRequest.post(
-          `${EMPLOYEE_RIGHT_TO_WORK_UPDATE}/${selectedField}`,
-          formData,
-        );
+        res = await newRequest.patch(`${api}/${selectedField}`, formData);
       } else {
-        res = await newFormRequest.post(api, formData);
+        res = await newRequest.post(api, formData);
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
@@ -138,97 +152,146 @@ export default function EmployeeSalaryDetailsEditForm({
                     Effective from
                   </label>
                   <input
-                    {...register("expiry_date", { required: true })}
+                    {...register("effective_from", { required: true })}
                     type="date"
-                    className="input-box h-10 w-full"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.expiry_date && (
+                  {errors.effective_from && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.expiry_date?.message}
+                      {errors.effective_from?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Currency</label>
-                  <input
-                    {...register("reference_no", { required: true })}
-                    type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                  <Controller
+                    name="currency"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={empSalaryMasterList?.currencies}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select currency"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
-                  {errors.reference_no && (
+                  {errors.currency && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.currency?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Pay Rate</label>
                   <input
-                    {...register("reference_no", { required: true })}
-                    type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                    {...register("pay_rate", { required: true })}
+                    onKeyPress={(event) => {
+                      if (!/^[0-9]$/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    placeholder="Enter Pay Rate"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.reference_no && (
+                  {errors.pay_rate && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.pay_rate?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Per</label>
-                  <input
-                    {...register("reference_no", { required: true })}
-                    type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                  <Controller
+                    name="per"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={empSalaryMasterList?.pers}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Pay rate"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
-                  {errors.reference_no && (
+                  {errors.per && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.per?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Pay Schedule</label>
-                  <input
-                    {...register("reference_no", { required: true })}
-                    type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                  <Controller
+                    name="pay_schedule"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={empSalaryMasterList?.paySchedules}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Pay schedule"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
-                  {errors.reference_no && (
+                  {errors.pay_schedule && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.pay_schedule?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Pay Type</label>
-                  <input
-                    {...register("reference_no", { required: true })}
-                    type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                  <Controller
+                    name="pay_type"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={empSalaryMasterList?.payTypes}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Pay schedule"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
-                  {errors.reference_no && (
+                  {errors.pay_type && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.pay_type?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Over Time</label>
-                  <input
-                    {...register("reference_no", { required: true })}
-                    type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                  <Controller
+                    name="over_time"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={overTimeList}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Over Time"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
-                  {errors.reference_no && (
+                  {errors.over_time && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.over_time?.message}
                     </span>
                   )}
                 </div>
@@ -237,14 +300,19 @@ export default function EmployeeSalaryDetailsEditForm({
                     Weekly Contract Hours
                   </label>
                   <input
-                    {...register("reference_no", { required: true })}
+                    {...register("weekly_contract_hours", { required: true })}
                     type="text"
-                    placeholder="Enter Reference No"
-                    className="input-box h-10 w-full"
+                    onKeyPress={(event) => {
+                      if (!/^[0-9]$/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    placeholder="Enter weekly contract hours"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.reference_no && (
+                  {errors.weekly_contract_hours && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference_no?.message}
+                      {errors.weekly_contract_hours?.message}
                     </span>
                   )}
                 </div>
@@ -254,12 +322,18 @@ export default function EmployeeSalaryDetailsEditForm({
                     Weekly Pay
                   </label>
                   <input
-                    {...register("reviewedBy", { required: true })}
-                    className="input-box h-10 w-full"
+                    {...register("weekly_pay", { required: true })}
+                    placeholder="Enter weekly pay"
+                    onKeyPress={(event) => {
+                      if (!/^[0-9]$/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.reviewedBy && (
+                  {errors.weekly_pay && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reviewedBy?.message}
+                      {errors.weekly_pay?.message}
                     </span>
                   )}
                 </div>
@@ -268,15 +342,47 @@ export default function EmployeeSalaryDetailsEditForm({
                     Annual Pay
                   </label>
                   <input
-                    {...register("reviewedBy", { required: true })}
-                    className="input-box h-10 w-full"
+                    {...register("annual_pay", { required: true })}
+                    onKeyPress={(event) => {
+                      if (!/^[0-9]$/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    placeholder="Enter Annual Pay"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
                   />
-                  {errors.reviewedBy && (
+                  {errors.annual_pay && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reviewedBy?.message}
+                      {errors.annual_pay?.message}
                     </span>
                   )}
                 </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Status
+                  </label>
+                  <Controller
+                    name="status"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={employeeMasterOptions}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Status"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
+                  )}
+                </div>
+                <div />
                 <div className="mt-7 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"

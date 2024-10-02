@@ -11,6 +11,11 @@ export const completionStatus = [
   { value: "ongoing", label: "Ongoing" },
 ];
 
+export const overTimeList = [
+  { value: "exempt", label: "Exempt" },
+  { value: "nonExempt", label: "Non Exempt" },
+];
+
 export const relationshipList = [
   { value: "Mother", label: "Mother" },
   { value: "Father", label: "Father" },

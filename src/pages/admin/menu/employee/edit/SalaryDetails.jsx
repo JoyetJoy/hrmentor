@@ -5,7 +5,7 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
+import { EMPLOYEE_SALARY_DETAILS, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EmployeeSalaryDetailsEditForm from "@/components/popups/employees/edit/SalaryDetails";
 
@@ -29,11 +29,11 @@ export default function EmployeeSalaryEdit() {
   }, [selectedField]);
 
   // Fetch List
-  const { data: employeeRightToWorks, isLoading } = useQuery({
-    queryKey: ["employeeRightToWorks", currentPage, uid, keyword],
+  const { data: employeeSalaryDetails, isLoading } = useQuery({
+    queryKey: ["employeeSalaryDetails", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_RIGHT_TO_WORK}/${uid}`, {
+        .get(`${EMPLOYEE_SALARY_DETAILS}/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -46,35 +46,38 @@ export default function EmployeeSalaryEdit() {
   });
 
   useEffect(() => {
-    if (employeeRightToWorks) {
-      setTotalPages(employeeRightToWorks?.last_page);
+    if (employeeSalaryDetails) {
+      setTotalPages(employeeSalaryDetails?.last_page);
     }
-  }, [employeeRightToWorks]);
+  }, [employeeSalaryDetails]);
 
   const columns = React.useMemo(
     () =>
       [
         {
           header: "Effective from",
-          accessorKey: "reference_no",
+          accessorKey: "effective_from",
         },
         {
           header: "Pay rate",
-          accessorKey: "condtion",
+          accessorKey: "pay_rate",
         },
         {
           header: "Per",
-          accessorKey: "expiry_date",
+          accessorKey: "per",
+          cell: ({ row }) => <>{row.original?.per_value?.name}</>,
         },
         {
           header: "Pay schedule",
-          accessorKey: "reviewedBy",
+          accessorKey: "pay_schedule",
+          cell: ({ row }) => <>{row.original?.pay_schedule?.name}</>,
         },
         {
           header: "Pay Type",
-          accessorKey: "paytype",
+          accessorKey: "pay_type",
+          cell: ({ row }) => <>{row.original?.pay_type?.name}</>,
         },
-        { header: "Over time", accessorKey: "overtime" },
+        { header: "Over time", accessorKey: "over_time" },
         {
           header: "Action",
           accessorKey: "action",
@@ -104,7 +107,7 @@ export default function EmployeeSalaryEdit() {
           ),
         },
       ].filter(Boolean),
-    [employeeRightToWorks],
+    [employeeSalaryDetails],
   );
   return (
     <>
@@ -112,16 +115,16 @@ export default function EmployeeSalaryEdit() {
         open={deletePopup}
         onCancel={setDeletePopup}
         selectedId={selectedId}
-        qrKey={"employeeRightToWorks"}
-        api={EMPLOYEE_RIGHT_TO_WORK}
+        qrKey={"employeeSalaryDetails"}
+        api={EMPLOYEE_SALARY_DETAILS}
       />
       <EmployeeSalaryDetailsEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        qrKey={"employeeRightToWorks"}
-        api={EMPLOYEE_RIGHT_TO_WORK}
+        qrKey={"employeeSalaryDetails"}
+        api={EMPLOYEE_SALARY_DETAILS}
         uid={uid}
       />
       <div className="flex min-h-screen flex-col">
@@ -167,7 +170,7 @@ export default function EmployeeSalaryEdit() {
                 ) : (
                   <QueryTable
                     columns={columns}
-                    list={employeeRightToWorks?.listing ?? []}
+                    list={employeeSalaryDetails?.listing ?? []}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     totalPages={totalPages}

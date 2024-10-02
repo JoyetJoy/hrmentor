@@ -52,3 +52,6 @@ export const ROLES_LIST = "roles-lists";
 
 // SKILL field type
 export const SKILL_FIELD_TYPE = "active-qualifications-types";
+
+// DEFAULT MASTERS
+export const SALARY_DEFAULT_MASTERS = "default-masters";

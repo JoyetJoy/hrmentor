@@ -86,3 +86,5 @@ export const EMPLOYEE_BANK_DETAILS = "employee-bank-details";
 export const EMPLOYEE_DOCUMENTS = "employee-documents";
 // UPDATE EMPLOYEE DOCUMENTS
 export const UPDATE_EMPLOYEE_DOCUMENTS = "update-employee-document";
+// EMPLOYEE SALARY DETAILS
+export const EMPLOYEE_SALARY_DETAILS = "employee-salary-details";
