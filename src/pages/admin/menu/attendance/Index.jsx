@@ -171,7 +171,7 @@ const EmployeeAttendanceCalendar = () => {
         </button>
       </div>
 
-      <div className="my-10 w-full max-w-7xl">
+      <div className="mb-10 mt-7 w-full max-w-7xl">
         <Calendar
           onChange={handleDateChange}
           value={date}
