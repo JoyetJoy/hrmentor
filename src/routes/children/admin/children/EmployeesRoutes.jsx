@@ -18,12 +18,17 @@ import { EmployeeDocumentType } from "@/pages/admin/menu/employee/settings/Docum
 import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCategory";
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
 import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
+import EmployeeDetails from "@/pages/admin/menu/employee/view/Detail";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 
 export const EmployeeRoutes = [
   {
     path: "",
     element: <EmployeeLists />,
+  },
+  {
+    path: "details",
+    element: <EmployeeDetails />,
   },
   {
     path: "create",

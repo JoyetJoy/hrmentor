@@ -1,4 +1,3 @@
-
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuSubHeader from "@/components/common/MenuSubHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
@@ -7,12 +6,11 @@ import { TableData } from "@/constants/tableDummy";
 import { ChevronRight, Plus } from "lucide-react";
 import React, { useState } from "react";
 
-
 export const Payslip = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
 
-  const list = React.useMemo(() => TableData,[TableData]);
+  const list = React.useMemo(() => TableData, [TableData]);
   const columns = React.useMemo(
     () => [
       {
@@ -42,27 +40,24 @@ export const Payslip = () => {
       },
     ],
 
-    []
+    [],
   );
   return (
-    <div className=" flex flex-col">
-    <MenuHeader
-      menu={"Menu"}
-      subMenu={"Employee"}
-      currentpath={"Employee Detail"}
-      icon={<ChevronRight className="size-3" />}
-      activeMenu={'Employees'}
+    <div className="flex flex-col">
+      <MenuHeader
+        menu={"Menu"}
+        subMenu={"Employee"}
+        currentpath={"Employee Detail"}
+        icon={<ChevronRight className="size-3" />}
+        activeMenu={"Employees"}
       />
       {/* ----sidebar---- */}
-      <div className="flex gap-x-3 ">
-        <EmployeesSidebar  />
-        <div className="w-full mt-2 ">
+      <div className="flex gap-x-3">
+        <EmployeesSidebar />
+        <div className="mt-2 w-full">
           <>
-            <MenuSubHeader
-                heading={"Payslip"}
-             />
-            <div className=" bg-white rounded-md h-screen mt-6">
-              
+            <MenuSubHeader heading={"Payslip"} />
+            <div className="mt-6 h-screen rounded-md bg-white">
               {/* <QueryTable
                 columns={columns}
                 list={list}

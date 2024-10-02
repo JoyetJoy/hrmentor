@@ -125,7 +125,7 @@ export default function EmployeeLists() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
-              to={""}
+              to={`/admin/employee/details/?uid=${row.original.id}`}
               className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <MoveDiagonal className="size-3" />
