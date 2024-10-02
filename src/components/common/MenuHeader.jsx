@@ -58,7 +58,8 @@ function MenuHeader(props) {
             />
           )}
           {menu}
-          {subMenu && <ChevronRight className="size-3" />}
+          {/* {subMenu && <ChevronRight className="size-3" />} */}
+          <ChevronRight className="size-3" />
           <Link className="capitalize" to={`/admin/${subMenu}`}>
             {subMenu}
           </Link>
