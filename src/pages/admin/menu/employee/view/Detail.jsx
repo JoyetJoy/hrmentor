@@ -11,7 +11,7 @@ export default function EmployeeDetails() {
       <MenuHeader
         menu={"Menu"}
         subMenu={"Employee"}
-        currentpath={"Employee View"}
+        currentpath={"Employee Details"}
         icon={<ChevronRight className="size-3" />}
         activeMenu={"Employee"}
       />

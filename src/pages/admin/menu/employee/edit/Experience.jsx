@@ -149,7 +149,7 @@ export default function EmployeeExperienceEdit() {
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}
-          currentpath={"Employee Detail"}
+          currentpath={"Employee Edit"}
           icon={<ChevronRight className="size-3" />}
           activeMenu={"Employee"}
         />

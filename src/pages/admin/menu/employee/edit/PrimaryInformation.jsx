@@ -9,7 +9,7 @@ function PrimaryInformation() {
       <MenuHeader
         menu={"Menu"}
         subMenu={"employee"}
-        currentpath={"Employee Detail"}
+        currentpath={"Employee Edit"}
         icon={<ChevronRight className="size-3" />}
         activeMenu={"Employee"}
       />

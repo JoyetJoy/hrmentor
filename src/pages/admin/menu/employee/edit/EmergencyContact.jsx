@@ -125,7 +125,7 @@ export default function EmployeeEmergencyContact() {
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}
-          currentpath={"Employee Detail"}
+          currentpath={"Employee Edit"}
           icon={<ChevronRight className="size-3" />}
           activeMenu={"Employee"}
         />
