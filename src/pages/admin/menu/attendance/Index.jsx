@@ -139,7 +139,7 @@ const EmployeeAttendanceCalendar = () => {
   };
 
   return (
-    <div className="flex flex-col gap-7 py-4">
+    <div className="flex flex-col py-4">
       <MenuHeader
         menu={"Menu"}
         subMenu={""}
@@ -147,7 +147,7 @@ const EmployeeAttendanceCalendar = () => {
         icon={<ChevronRight className="size-3" />}
         activeMenu={""}
       />
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 bg-white px-4 py-2">
         <h5 className="text-lg font-bold">My Attendance</h5>
         <Select
           options={years}
@@ -166,7 +166,7 @@ const EmployeeAttendanceCalendar = () => {
           className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
         />
       </div>
-      <div className="mb-10 w-full max-w-7xl">
+      <div className="my-10 w-full max-w-7xl">
         <Calendar
           onChange={handleDateChange}
           value={date}
