@@ -4,10 +4,10 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import EmployeeRightToWorkEditForm from "@/components/popups/employees/edit/RightToWork";
+import EmployeeSalaryDetailsEditForm from "@/components/popups/employees/edit/SalaryDetails";
 
 export default function EmployeeSalaryEdit() {
   const location = useLocation();
@@ -115,7 +115,7 @@ export default function EmployeeSalaryEdit() {
         qrKey={"employeeRightToWorks"}
         api={EMPLOYEE_RIGHT_TO_WORK}
       />
-      <EmployeeRightToWorkEditForm
+      <EmployeeSalaryDetailsEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
