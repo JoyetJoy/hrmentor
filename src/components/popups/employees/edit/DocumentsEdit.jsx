@@ -1,6 +1,6 @@
 import { newFormRequest, newRequest, UPDATE_EMPLOYEE_DOCUMENTS } from "@/api";
 import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
-import { completionStatus } from "@/constants/data";
+import { employeeMasterOptions } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { empDocumentTypeSchema } from "@/schema/dashboard/employee/form/documentType.schema";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -48,23 +48,28 @@ export default function EmployeeDocumentEditForm({
   const { data: employeeDocumentDetailByid, isLoading } = useQuery({
     queryKey: ["employeeDocumentDetailByid", api, selectedField],
     queryFn: () =>
-      newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
+  console.log(employeeDocumentDetailByid);
+
   useEffect(() => {
     if (employeeDocumentDetailByid) {
-      setValue("status", employeeDocumentDetailByid?.status);
-      setValue("document_name", employeeDocumentDetailByid?.document_name);
+      setValue("status", employeeDocumentDetailByid?.data?.status);
+      setValue(
+        "document_name",
+        employeeDocumentDetailByid?.data?.document_name,
+      );
       setValue(
         "document_type_id",
-        employeeDocumentDetailByid?.document_type_id,
+        employeeDocumentDetailByid?.data?.document_type_id,
       );
-      setValue("issued_date", employeeDocumentDetailByid?.issued_date);
-      setValue("expiry_date", employeeDocumentDetailByid?.expiry_date);
+      setValue("issued_date", employeeDocumentDetailByid?.data?.issued_date);
+      setValue("expiry_date", employeeDocumentDetailByid?.data?.expiry_date);
       setValue(
         "issued_authority",
-        employeeDocumentDetailByid?.issued_authority,
+        employeeDocumentDetailByid?.data?.issued_authority,
       );
     }
   }, [employeeDocumentDetailByid]);
@@ -244,7 +249,7 @@ export default function EmployeeDocumentEditForm({
                     render={({ field }) => (
                       <Select
                         {...field}
-                        options={completionStatus}
+                        options={employeeMasterOptions}
                         isSearchable={false}
                         styles={customSelectStyles}
                         placeholder="Select Status"
