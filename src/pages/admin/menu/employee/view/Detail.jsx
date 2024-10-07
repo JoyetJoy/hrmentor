@@ -68,7 +68,7 @@ export default function EmployeeDetails() {
                 {employeeViewDetails?.basic_details?.first_name}{" "}
                 {employeeViewDetails?.basic_details?.sur_name}
               </h5>
-              <p className="-mt-[1px] text-[0.9rem] text-black/50">
+              <p className="text-[0.9rem] text-black/50">
                 {employeeViewDetails?.basic_details?.designation}{" "}
               </p>
             </div>
