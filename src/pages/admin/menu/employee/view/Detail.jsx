@@ -70,10 +70,10 @@ export default function EmployeeDetails() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-[#E0E2F3] px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-[#030E5C]/70">
+            <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-[#E0E2F3] px-6 text-xs font-bold text-[#2C2C2C] shadow-none transition-all duration-500 hover:scale-[1.01]">
               Activity Log
             </Link>
-            <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none hover:bg-[#030E5C]/70">
+            <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
               Exit Process
             </Link>
           </div>
