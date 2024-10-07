@@ -8,8 +8,8 @@ export default function EmployeeDetails() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
-  // EMPLOYEE_DETAILS;
-  // Fetch List
+
+  // EMPLOYEE DETAILS;
   const { data: employeeViewDetails, isLoading } = useQuery({
     queryKey: ["employeeViewDetails", uid],
     queryFn: () =>
