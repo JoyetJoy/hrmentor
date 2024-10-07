@@ -60,9 +60,9 @@ export default function EmployeeBankDetails() {
           header: "Bank Name",
           accessorKey: "bank_name",
           cell: ({ row }) => (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               {row.original?.account_details?.default === 1 ? (
-                <div className="flex h-5 w-14 items-center justify-center rounded-md bg-hrmprimaryorange text-xs text-white">
+                <div className="flex h-5 w-14 items-center justify-center rounded bg-hrmprimaryorange text-xs text-white">
                   Default
                 </div>
               ) : (
