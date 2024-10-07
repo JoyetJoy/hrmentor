@@ -82,6 +82,8 @@ export const UPDATE_EMPLOYEE_EMERGENCY_CONTACTS =
   "update-employee-emergency-contacts";
 // BANK DETAILS
 export const EMPLOYEE_BANK_DETAILS = "employee-bank-details";
+// UPDATE BANK DETAILS
+export const UPDATE_BANK_DETAILS = "update-bank-account";
 // EMPLOYEE DOCUMENTS
 export const EMPLOYEE_DOCUMENTS = "employee-documents";
 // UPDATE EMPLOYEE DOCUMENTS

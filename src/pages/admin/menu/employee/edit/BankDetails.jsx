@@ -51,8 +51,6 @@ export default function EmployeeBankDetails() {
     }
   }, [employeeBankDetails]);
 
-  console.log(employeeBankDetails);
-
   const columns = React.useMemo(
     () =>
       [
@@ -95,11 +93,6 @@ export default function EmployeeBankDetails() {
           header: "Swift Code",
           accessorKey: "swift_code",
           cell: ({ row }) => <>{row.original?.account_details?.swift_code}</>,
-        },
-        {
-          header: "As of date",
-          accessorKey: "created_at",
-          cell: ({ row }) => <>{row.original?.account_details?.created_at}</>,
         },
         {
           header: "Action",

@@ -1,4 +1,9 @@
-import { EMPLOYEE_BANK_DETAILS, newFormRequest, newRequest } from "@/api";
+import {
+  EMPLOYEE_BANK_DETAILS,
+  newFormRequest,
+  newRequest,
+  UPDATE_BANK_DETAILS,
+} from "@/api";
 import { ACCOUNT_TYPE_LIST, SKILL_FIELD_TYPE } from "@/api/master";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { empBankDetailsSchema } from "@/schema/dashboard/employee/form/bankdetails.schema";
@@ -77,6 +82,7 @@ export default function EmployeeBankDetailsEditForm({
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
+    setIsDefault(false);
     reset();
   }
 
@@ -97,8 +103,8 @@ export default function EmployeeBankDetailsEditForm({
 
       let res;
       if (selectedField !== 0) {
-        res = await newFormRequest.put(
-          `${EMPLOYEE_BANK_DETAILS}/${selectedField}`,
+        res = await newFormRequest.post(
+          `${UPDATE_BANK_DETAILS}/${selectedField}`,
           formData,
         );
       } else {
