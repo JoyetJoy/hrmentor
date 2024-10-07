@@ -1,7 +1,15 @@
 import * as Yup from "yup";
 
 export const empBankDetailsSchema = Yup.object({
-  account_type: Yup.string().required("Account type is required"),
+  account_type: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  })
+    .test("both-required", "Account type is required", function (value) {
+      return value?.value && value?.label;
+    })
+    .required("Type is required"),
   bank_name: Yup.string().required("Bank name is required"),
   branch: Yup.string().required("Branch is required"),
   iban: Yup.string().required("IBAN number is required"),

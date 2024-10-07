@@ -55,3 +55,9 @@ export const SKILL_FIELD_TYPE = "active-qualifications-types";
 
 // DEFAULT MASTERS
 export const SALARY_DEFAULT_MASTERS = "default-masters";
+
+// Account type
+export const ACCOUNT_TYPE = "employee-bank-account-type";
+
+// Account type list
+export const ACCOUNT_TYPE_LIST = "active-bank-account-type";

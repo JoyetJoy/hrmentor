@@ -1,5 +1,5 @@
 import { EMPLOYEE_BANK_DETAILS, newFormRequest, newRequest } from "@/api";
-import { SKILL_FIELD_TYPE } from "@/api/master";
+import { ACCOUNT_TYPE_LIST, SKILL_FIELD_TYPE } from "@/api/master";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { empBankDetailsSchema } from "@/schema/dashboard/employee/form/bankdetails.schema";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -34,6 +34,7 @@ export default function EmployeeBankDetailsEditForm({
   });
 
   const queryClient = useQueryClient();
+  const [isDefault, setIsDefault] = useState(false);
   const [loader, setLoader] = useState(false);
 
   // Get selected data
@@ -44,26 +45,34 @@ export default function EmployeeBankDetailsEditForm({
     enabled: !!selectedField != 0,
   });
 
+  console.log(employeeBankDetailByid);
+
   const { data: bankAccountTypeList } = useEmployeeMaster(
-    SKILL_FIELD_TYPE,
+    ACCOUNT_TYPE_LIST,
     "bankAccountTypeList",
   );
 
   useEffect(() => {
     if (employeeBankDetailByid) {
-      setValue("account_type", employeeBankDetailByid.account_type);
-      setValue("bank_name", employeeBankDetailByid.bank_name);
-      setValue("branch", employeeBankDetailByid.branch);
-      setValue("iban", employeeBankDetailByid.iban);
-      setValue("account_number", employeeBankDetailByid.account_number);
+      setValue("account_type", employeeBankDetailByid?.data?.account_type);
+      setValue("bank_name", employeeBankDetailByid?.data?.bank_name);
+      setValue("branch", employeeBankDetailByid?.data?.branch);
+      setValue("iban", employeeBankDetailByid?.data?.iban);
+      setValue("account_number", employeeBankDetailByid?.data?.account_number);
       setValue(
         "account_holder_name",
-        employeeBankDetailByid.account_holder_name,
+        employeeBankDetailByid?.data?.account_holder_name,
       );
-      setValue("swift_code", employeeBankDetailByid.swift_code);
-      setValue("sort_code", employeeBankDetailByid.sort_code);
+      setValue("swift_code", employeeBankDetailByid?.data?.swift_code);
+      setValue("sort_code", employeeBankDetailByid?.data?.sort_code);
     }
   }, [employeeBankDetailByid, setValue]);
+
+  useEffect(() => {
+    if (employeeBankDetailByid) {
+      setIsDefault(employeeBankDetailByid?.data?.default === 1 ? true : false);
+    }
+  }, [employeeBankDetailByid, setIsDefault]);
 
   function close() {
     setPopupOpen(false);
@@ -76,7 +85,7 @@ export default function EmployeeBankDetailsEditForm({
     try {
       const formData = new FormData();
       formData.append("user_id", uid);
-      formData.append("account_type", data.account_type);
+      formData.append("account_type", data.account_type?.id);
       formData.append("bank_name", data.bank_name);
       formData.append("branch", data.branch);
       formData.append("iban", data.iban);
@@ -84,6 +93,7 @@ export default function EmployeeBankDetailsEditForm({
       formData.append("account_holder_name", data.account_holder_name);
       formData.append("swift_code", data.swift_code);
       formData.append("sort_code", data.sort_code);
+      formData.append("default", isDefault ? 1 : 0);
 
       let res;
       if (selectedField !== 0) {
@@ -124,13 +134,27 @@ export default function EmployeeBankDetailsEditForm({
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
                 {selectedField ? "Update" : "Add"} Bank Details
               </h1>
-              <button
-                type="button"
-                onClick={close}
-                className="text-lg font-extrabold text-[#00000080]"
-              >
-                <X />
-              </button>
+              <div className="flex items-center gap-7">
+                <div className="group flex gap-2">
+                  <input
+                    onChange={(e) => {
+                      setIsDefault(e.target.checked);
+                    }}
+                    className="input-box h-5 w-5"
+                    type="checkbox"
+                  />
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Set as default
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={close}
+                  className="text-lg font-extrabold text-[#00000080]"
+                >
+                  <X />
+                </button>
+              </div>
             </div>
             {isLoading ? (
               <div className="flex min-h-72 w-full items-center justify-center">

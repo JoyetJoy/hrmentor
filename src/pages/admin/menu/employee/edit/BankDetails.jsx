@@ -47,7 +47,7 @@ export default function EmployeeBankDetails() {
 
   useEffect(() => {
     if (employeeBankDetails) {
-      setTotalPages(employeeBankDetails?.last_page);
+      setTotalPages(employeeBankDetails?.data?.last_page);
     }
   }, [employeeBankDetails]);
 
@@ -58,19 +58,48 @@ export default function EmployeeBankDetails() {
       [
         {
           header: "Bank Name",
-          accessorKey: "name",
+          accessorKey: "bank_name",
+          cell: ({ row }) => (
+            <div className="flex items-center gap-2">
+              {row.original?.account_details?.default === 1 ? (
+                <div className="flex h-5 w-14 items-center justify-center rounded-md bg-hrmprimaryorange text-xs text-white">
+                  Default
+                </div>
+              ) : (
+                <div className="h-5 w-14" />
+              )}
+              <div className="flex">
+                {row.original?.account_details?.bank_name}
+              </div>
+            </div>
+          ),
         },
         {
-          header: "Next of Kin",
-          accessorKey: "relationship",
+          header: "Branch Name",
+          accessorKey: "branch",
+          cell: ({ row }) => <>{row.original?.account_details?.branch}</>,
         },
         {
-          header: "Phone number",
-          accessorKey: "contact_number",
+          header: "IBAN Number",
+          accessorKey: "iban",
+          cell: ({ row }) => <>{row.original?.account_details?.iban}</>,
         },
         {
-          header: "Address",
-          accessorKey: "address",
+          header: "Acc. Holders Name",
+          accessorKey: "account_holder_name",
+          cell: ({ row }) => (
+            <>{row.original?.account_details?.account_holder_name}</>
+          ),
+        },
+        {
+          header: "Swift Code",
+          accessorKey: "swift_code",
+          cell: ({ row }) => <>{row.original?.account_details?.swift_code}</>,
+        },
+        {
+          header: "As of date",
+          accessorKey: "created_at",
+          cell: ({ row }) => <>{row.original?.account_details?.created_at}</>,
         },
         {
           header: "Action",
@@ -79,7 +108,9 @@ export default function EmployeeBankDetails() {
             <div className="flex items-center gap-2 text-xs">
               <button
                 type="button"
-                onClick={() => setSelectedField(row.original.id)}
+                onClick={() =>
+                  setSelectedField(row.original?.account_details?.id)
+                }
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
                 <img
@@ -91,7 +122,7 @@ export default function EmployeeBankDetails() {
                 type="button"
                 onClick={() => {
                   setDeletePopup(true);
-                  setSelectedId(row.original.id);
+                  setSelectedId(row.original?.account_details?.id);
                 }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
               >
@@ -164,7 +195,7 @@ export default function EmployeeBankDetails() {
                 ) : (
                   <QueryTable
                     columns={columns}
-                    list={employeeBankDetails?.listing ?? []}
+                    list={employeeBankDetails?.data?.listing ?? []}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     totalPages={totalPages}
