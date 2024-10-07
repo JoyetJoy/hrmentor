@@ -54,7 +54,7 @@ export default function EmployeeDetails() {
                 src={employeeViewDetails?.basic_details?.profile_image}
                 alt={employeeViewDetails?.basic_details?.first_name}
               />
-              <div className="absolute -bottom-2 right-0 h-4 w-4 rounded-full bg-green-500"></div>
+              <div className="absolute -bottom-1 right-0 h-5 w-5 rounded-full bg-green-500"></div>
             </div>
             <div className="ml-2.5 flex flex-col">
               <h5 className="text-lg font-bold">
