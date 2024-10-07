@@ -140,6 +140,7 @@ export default function EmployeeBankDetailsEditForm({
                     onChange={(e) => {
                       setIsDefault(e.target.checked);
                     }}
+                    checked={isDefault}
                     className="input-box h-5 w-5"
                     type="checkbox"
                   />
