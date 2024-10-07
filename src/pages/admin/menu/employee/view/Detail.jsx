@@ -48,12 +48,14 @@ export default function EmployeeDetails() {
       <div className="mt-2 flex min-h-[520px] w-full items-start bg-white px-10 py-5">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center">
-            <div className="relative h-16 w-16 rounded-full border-2 border-hrmprimaryorange">
-              <img
-                className="h-full w-full object-cover"
-                src={employeeViewDetails?.basic_details?.profile_image}
-                alt={employeeViewDetails?.basic_details?.first_name}
-              />
+            <div className="relative">
+              <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-hrmprimaryorange">
+                <img
+                  className="h-full w-full object-cover"
+                  src={employeeViewDetails?.basic_details?.profile_image}
+                  alt={employeeViewDetails?.basic_details?.first_name}
+                />
+              </div>
               <div className="absolute -bottom-1 right-0 h-5 w-5 rounded-full bg-green-500"></div>
             </div>
             <div className="ml-2.5 flex flex-col">
