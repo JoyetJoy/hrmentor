@@ -1,5 +1,10 @@
 import { EMPLOYEE_DETAILS, newRequest } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Share2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -45,7 +50,7 @@ export default function EmployeeDetails() {
           </Link>
         </div>
       </div>
-      <div className="mt-2 flex min-h-[520px] w-full items-start bg-white px-10 py-5">
+      <div className="mt-2 flex min-h-[520px] w-full flex-col items-start bg-white px-10 py-5">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center">
             <div className="relative">
@@ -81,8 +86,68 @@ export default function EmployeeDetails() {
           </div>
           {/* akak */}
         </div>
-        <div className="flex">
-          {/* profile */}
+        <div className="grid w-full grid-cols-12">
+          <div className="col-span-5 py-7">
+            {/* basic details */}
+            <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
+              <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
+                <p className="w-fit">Basic Details</p>
+                <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                </div>
+              </DisclosureButton>
+              <DisclosurePanel className="my-4 w-full text-sm/5 text-black/80">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">First Name:</p>
+                    <p>{employeeViewDetails?.basic_details?.first_name}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">Last Name:</p>
+                    <p>{employeeViewDetails?.basic_details?.sur_name}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">Email:</p>
+                    <p>{employeeViewDetails?.basic_details?.email}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">Phone:</p>
+                    <p>{employeeViewDetails?.basic_details?.phone}</p>
+                  </div>
+                </div>
+              </DisclosurePanel>
+            </Disclosure>
+            {/* work info */}
+            <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
+              <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
+                <p className="w-fit">Work Information</p>
+                <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                </div>
+              </DisclosureButton>
+              <DisclosurePanel className="my-4 w-full text-sm/5 text-black/80">
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">First Name:</p>
+                    <p>{employeeViewDetails?.basic_details?.first_name}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">Last Name:</p>
+                    <p>{employeeViewDetails?.basic_details?.sur_name}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">Email:</p>
+                    <p>{employeeViewDetails?.basic_details?.email}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold">Phone:</p>
+                    <p>{employeeViewDetails?.basic_details?.phone}</p>
+                  </div>
+                </div>
+              </DisclosurePanel>
+            </Disclosure>
+          </div>
+
           {/* log */}
         </div>
       </div>
