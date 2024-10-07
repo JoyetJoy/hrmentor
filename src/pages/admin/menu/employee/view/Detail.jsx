@@ -78,7 +78,7 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                <div className="ml-3 flex h-7 items-center rounded bg-[#CF1212]/5 px-3 text-[0.8rem] font-bold text-[#CF1212]">
+                <div className="ml-5 flex h-7 items-center rounded bg-[#CF1212]/5 px-3 text-[0.8rem] font-bold text-[#CF1212]">
                   On Leave
                 </div>
               </div>
@@ -93,12 +93,11 @@ export default function EmployeeDetails() {
             </div>
             <div className="grid w-full grid-cols-12">
               <div className="col-span-5 py-7">
-                {/* basic details */}
                 <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
                   <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
                     <p className="w-fit">Basic Details</p>
-                    <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
-                      <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                    <div className="flex size-7 items-center justify-center rounded-full bg-[#F7F7F7]">
+                      <ChevronRight className="size-5 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                     </div>
                   </DisclosureButton>
                   <DisclosurePanel className="my-4 w-full text-sm/5 text-black/80">
@@ -125,8 +124,8 @@ export default function EmployeeDetails() {
                 <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
                   <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
                     <p className="w-fit">Work Information</p>
-                    <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
-                      <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                    <div className="flex size-7 items-center justify-center rounded-full bg-[#F7F7F7]">
+                      <ChevronRight className="size-5 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                     </div>
                   </DisclosureButton>
                   <DisclosurePanel className="my-4 w-full text-sm/5 text-black/80">
