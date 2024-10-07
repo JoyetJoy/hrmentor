@@ -287,7 +287,7 @@ export default function EmployeeBankDetailsEditForm({
                     </span>
                   )}
                 </div>
-                <div className="mt-7 flex flex-row items-center justify-center gap-3">
+                <div className="mb-4 mt-7 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
                     className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
