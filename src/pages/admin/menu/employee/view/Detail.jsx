@@ -61,11 +61,11 @@ export default function EmployeeDetails() {
                 {employeeViewDetails?.basic_details?.first_name}{" "}
                 {employeeViewDetails?.basic_details?.sur_name}
               </h5>
-              <p className="-mt-[1px] text-[0.9rem] text-black/70">
+              <p className="-mt-[1px] text-[0.9rem] text-black/50">
                 {employeeViewDetails?.basic_details?.designation}{" "}
               </p>
             </div>
-            <div className="ml-3 flex h-7 items-center rounded bg-[#CF1212]/5 px-3 text-[0.8rem] font-semibold text-[#CF1212]">
+            <div className="ml-3 flex h-7 items-center rounded bg-[#CF1212]/5 px-3 text-[0.8rem] font-bold text-[#CF1212]">
               On Leave
             </div>
           </div>
