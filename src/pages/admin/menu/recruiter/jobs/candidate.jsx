@@ -117,10 +117,10 @@ function Candidate() {
                 <Filter className="size-4 text-black" />
               </div>
               <Link
-                to={""}
-                className="btn h-10 min-h-10 bg-bgColor-100 text-sm text-white hover:bg-bgColor-100"
+                to=""
+                className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
               >
-                <Plus className="size-5" />
+                <Plus className="size-5" strokeWidth={2} />
                 Add Candidate
               </Link>
               <Link

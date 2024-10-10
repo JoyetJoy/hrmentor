@@ -58,7 +58,7 @@ function CandidatesList() {
         header: "Workflow status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="bg-[#F0F8FF] border border-[#92BEE4]  w-fit text-xs	 text-black h-8 px-3 font-medium flex items-center justify-center rounded-md ">
+          <div className="flex h-8 w-fit items-center justify-center rounded-md border border-[#92BEE4] bg-[#F0F8FF] px-3 text-xs font-medium text-black">
             {row?.original?.status}
           </div>
         ),
@@ -72,30 +72,30 @@ function CandidatesList() {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center justify-start gap-2  text-xs ">
+          <div className="flex items-center justify-start gap-2 text-xs">
             <Link
               //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
 
-              className="cursor-pointer flex items-center size-7  bg-[#EBEBF0] p-2   rounded-full"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               to={""}
             >
-              <MoveDiagonal className="w-3 h-3" />
+              <MoveDiagonal className="h-3 w-3" />
             </Link>
           </div>
         ),
       },
     ],
 
-    []
+    [],
   );
   return (
     <div className="">
-          <MenuHeader
+      <MenuHeader
         backlink={""}
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        activeMenu={'Candidates'}
+        activeMenu={"Candidates"}
       />
       {/* <MenuHeader
         backlink={""}
@@ -112,24 +112,24 @@ function CandidatesList() {
         secondpath={"/admin/recruiter/jobs"}
         thirdpath={"/admin/recruiter/candidate"}
       /> */}
-      <div className="flex justify-between items-center my-3 mx-3">
-        <div className="text-white font-semibold flex  items-center gap-2">
-          <div className="text-sm pr-2 font-semibold text text-black flex items-center justify-between gap-1">
+      <div className="mx-3 my-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-semibold text-white">
+          <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
             <ArrowLeft className="size-4" />
             All candidates
           </div>
-          <label className="input outline-none border-none pr-28 flex items-center  gap-2 min-h-9 h-9">
-            <Search className="text-gray-200 object-contain size-4" />
+          <label className="input flex h-9 min-h-9 items-center gap-2 border-none pr-28 outline-none">
+            <Search className="size-4 object-contain text-gray-200" />
             <input
               type="text"
-              className="grow placeholder:text-sm focus:outline-none text-sm   placeholder:text-gray-200 placeholder:font-normal "
+              className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
               placeholder="Search"
             />
           </label>
           <div className="relative">
-            <div className="bg-white rounded-md p-[0.58rem] border border-gray-400 min-h-9 h-9">
+            <div className="h-9 min-h-9 rounded-md border border-gray-400 bg-white p-[0.58rem]">
               <Filter
-                className="size-4 text-black font-medium stroke"
+                className="stroke size-4 font-medium text-black"
                 strokeWidth={2}
                 onClick={() => setPopupOpen(true)}
               />
@@ -140,9 +140,9 @@ function CandidatesList() {
               setPopupOpen={setPopupOpen}
             />
           </div>
-          <div className="bg-white rounded-md p-[0.58rem] border border-gray-400 min-h-9 h-9">
+          <div className="h-9 min-h-9 rounded-md border border-gray-400 bg-white p-[0.58rem]">
             <Trash2
-              className="size-4 text-black font-medium stroke"
+              className="stroke size-4 font-medium text-black"
               strokeWidth={2}
             />
           </div>
@@ -150,10 +150,10 @@ function CandidatesList() {
         <div className="flex items-center gap-7">
           <Link
             to={"/admin/recruiter/add-candidate"}
-            className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white text-sm  min-h-10 h-10"
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
-            <Plus className="size-5" />
-            Add candidate
+            <Plus className="size-5" strokeWidth={2} />
+            Add Candidate
           </Link>
         </div>
       </div>
