@@ -26,14 +26,14 @@ import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
 import List from "@/pages/admin/menu/recruiter/report/list";
-import { CandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
-import { EducationQualification } from "@/pages/admin/menu/recruiter/settings/EducationQualification";
+import { RecruiterSettingCandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
+import { RecruiterSettingQualification } from "@/pages/admin/menu/recruiter/settings/EducationQualification";
+import { RecruiterSettingJobDescription } from "@/pages/admin/menu/recruiter/settings/Index";
 import { Integrations } from "@/pages/admin/menu/recruiter/settings/Integrations";
-import { InterviewType } from "@/pages/admin/menu/recruiter/settings/InterviewType";
-import { JobDescription } from "@/pages/admin/menu/recruiter/settings/JobDescription";
-import { MinimumExperience } from "@/pages/admin/menu/recruiter/settings/MinimumExperience";
-import { ProfileQuestions } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
-import { Sources } from "@/pages/admin/menu/recruiter/settings/Sources";
+import { RecruiterSettingInterviewType } from "@/pages/admin/menu/recruiter/settings/InterviewType";
+import { RecruiterSettingMinimumExperience } from "@/pages/admin/menu/recruiter/settings/MinimumExperience";
+import { RecruiterSettingProfileQuestion } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
+import { RecruiterSettingSources } from "@/pages/admin/menu/recruiter/settings/Sources";
 
 export const RecruiterRoutes = [
   {
@@ -70,47 +70,47 @@ export const RecruiterRoutes = [
   },
   {
     path: "team",
-    element: <Team/>,
+    element: <Team />,
   },
- {
-  path:"interview",
-  element:<JobInterview/>,
- },
- {
-  path:"interview-guide",
-  element:<InterviewGuide/>,
- },
- {
-  path:"request-refferals",
-  element:<RequestRefferal/>,
- },
-  
+  {
+    path: "interview",
+    element: <JobInterview />,
+  },
+  {
+    path: "interview-guide",
+    element: <InterviewGuide />,
+  },
+  {
+    path: "request-refferals",
+    element: <RequestRefferal />,
+  },
+
   {
     path: "settings",
     children: [
       {
         path: "job-description",
-        element: <JobDescription />,
+        element: <RecruiterSettingJobDescription />,
       },
       {
         path: "profile-questions",
-        element: <ProfileQuestions />,
+        element: <RecruiterSettingProfileQuestion />,
       },
       {
         path: "education-qualification",
-        element: <EducationQualification />,
+        element: <RecruiterSettingQualification />,
       },
       {
         path: "interview-type",
-        element: <InterviewType />,
+        element: <RecruiterSettingInterviewType />,
       },
       {
         path: "candidate-type",
-        element: <CandidateType />,
+        element: <RecruiterSettingCandidateType />,
       },
       {
         path: "minimum-experience",
-        element: <MinimumExperience />,
+        element: <RecruiterSettingMinimumExperience />,
       },
       {
         path: "integrations",
@@ -118,7 +118,7 @@ export const RecruiterRoutes = [
       },
       {
         path: "sources",
-        element: <Sources />,
+        element: <RecruiterSettingSources />,
       },
     ],
   },
@@ -164,34 +164,34 @@ export const RecruiterRoutes = [
     path: "documents",
     element: <Documents />,
   },
-   {
+  {
     path: "email",
     // element: <Email />,
     children: [
       {
         path: "custom-mail",
-        element: <CustomMail />, 
+        element: <CustomMail />,
       },
       {
         path: "welcome-mail",
-        element: <WelcomeMail />, 
+        element: <WelcomeMail />,
       },
       {
         path: "interview-schedule",
-        element: <InterviewSchedule />, 
+        element: <InterviewSchedule />,
       },
       {
         Path: "interview-result",
-        element: <InterviewResult/>
+        element: <InterviewResult />,
       },
       {
         path: "consider",
-        element: <Consider/>
+        element: <Consider />,
       },
       {
         path: "move-to-hiring",
-        element : < MoveHiring/>
-      }
+        element: <MoveHiring />,
+      },
     ],
   },
   {
@@ -200,23 +200,21 @@ export const RecruiterRoutes = [
   },
   // interview
   {
-    path:"interview",
+    path: "interview",
     children: [
       {
-        path:"interview-list",
-        element:<InterviewMain/>
+        path: "interview-list",
+        element: <InterviewMain />,
       },
-    ]
+    ],
   },
   {
-  path:"reports",
-  children :[
-    {
-      path:"job-reports",
-      element:<List/>
-    },
-   
-  ]
+    path: "reports",
+    children: [
+      {
+        path: "job-reports",
+        element: <List />,
+      },
+    ],
   },
-
 ];

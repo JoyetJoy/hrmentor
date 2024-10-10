@@ -93,7 +93,7 @@ export const JobDescription = () => {
             </h3>
             <Link
               onClick={() => setPopupOpen(true)}
-              className="flex h-10 w-fit items-center rounded bg-[#181C3A] px-5 gap-2 text-sm font-normal text-white"
+              className="flex h-10 w-fit items-center gap-2 rounded bg-[#181C3A] px-5 text-sm font-normal text-white"
             >
               <Plus className="size-5" strokeWidth={1.7} /> Insert Descriptions
             </Link>

@@ -1,5 +1,7 @@
 // MASTER APIS ENDPOINTS
 
+// ---- EMPLOYEE MASTER APIS ----
+
 // empolyee type
 export const EMPLOYEE_TYPE = "employment-types";
 // listing
@@ -61,3 +63,20 @@ export const ACCOUNT_TYPE = "employee-bank-account-type";
 
 // Account type list
 export const ACCOUNT_TYPE_LIST = "active-bank-account-type";
+
+// ---- RECRUITER MASTER APIS ----
+
+// Job Description
+export const JOB_DESCRIPTION = "JobDescriptions";
+// PROFILE QUESTION
+export const PROFILE_QUESTION = "ProfileQuestions";
+// QUALIFICATION
+export const QUALIFICATION = "EducationQualifications";
+// INTERVIEW TYPE
+export const INTERVIEW_TYPE = "InterviewTypes";
+// CANDIDATE TYPE
+export const CANDIDATE_TYPE = "CandidateTypes";
+// Experience
+export const MINIMUM_Experience = "MinimumExperience";
+// SOURCES
+export const SOURCES = "Source";

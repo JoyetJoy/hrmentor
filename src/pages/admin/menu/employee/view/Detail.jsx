@@ -22,7 +22,7 @@ export default function EmployeeDetails() {
         return res.data;
       }),
   });
-  console.log(employeeViewDetails);
+
   return (
     <>
       <MenuHeader

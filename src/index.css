@@ -285,3 +285,20 @@ select:focus {
 .react-calendar__tile--now {
   background: rgba(233, 93, 57, 0.1) !important;
 }
+
+.ql-toolbar.ql-snow {
+  border-color: #e3e3e3 !important;
+  border-top-right-radius: 3px !important;
+  border-top-left-radius: 3px !important ;
+}
+.ql-container.ql-snow {
+  border-color: #e3e3e3 !important;
+  border-bottom-right-radius: 3px !important;
+  border-bottom-left-radius: 3px !important ;
+  min-height: 134px;
+}
+
+.ql-container.ql-snow,
+.idea {
+  min-height: 92px !important;
+}
