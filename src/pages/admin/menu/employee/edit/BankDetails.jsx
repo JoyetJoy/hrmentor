@@ -70,14 +70,12 @@ export default function EmployeeBankDetails() {
           accessorKey: "bank_name",
           cell: ({ row }) => {
             return (
-              <div className="flex items-center gap-4">
+              <div className="relative flex items-center gap-4">
                 {row.original?.account_details?.default === 1 ? (
-                  <div className="flex h-5 w-14 items-center justify-center rounded bg-hrmprimaryorange text-xs text-white">
+                  <div className="absolute -left-16 flex h-5 w-14 items-center justify-center rounded bg-hrmprimaryorange text-xs text-white">
                     Default
                   </div>
-                ) : (
-                  <div className="h-5 w-14" />
-                )}
+                ) : null}
                 <div className="flex">
                   {row.original?.account_details?.bank_name}
                 </div>
