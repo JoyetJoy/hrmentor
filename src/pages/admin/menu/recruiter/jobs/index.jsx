@@ -91,9 +91,9 @@ function RecruiterJobs() {
         <div className="flex items-center gap-2 text-white">
           <Link
             to={"/admin/recruiter/post"}
-            className="btn h-10 min-h-10 rounded-md bg-hrmprimaryorange px-8 text-sm font-normal text-white hover:bg-black/70"
+            className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
-            <Plus className="size-5" strokeWidth={1} />
+            <Plus className="size-5" strokeWidth={2} />
             Create Job
           </Link>
           <Link
@@ -116,7 +116,7 @@ function RecruiterJobs() {
           <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
             <Filter
               className="stroke size-4 font-medium text-black"
-              strokeWidth={1}
+              strokeWidth={2}
             />
           </div>
         </div>
