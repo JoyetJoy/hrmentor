@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
 import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 
@@ -9,10 +9,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 function RecruiterJobs() {
   const [totalPages, setTotalPages] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-
   const list = React.useMemo(() => TableData, [TableData]);
-  const location = useLocation();
-  const isActive = (path) => path.includes(location.pathname);
 
   const columns = React.useMemo(
     () => [
@@ -90,17 +87,14 @@ function RecruiterJobs() {
       <div className="items-centerm flex justify-between pb-3 pt-2">
         <div className="flex items-center gap-2 text-white">
           <Link
-            to={"/admin/recruiter/post"}
+            to="/admin/recruiter/post"
             className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             <Plus className="size-5" strokeWidth={2} />
             Create Job
           </Link>
-          <Link
-            to={""}
-            className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white"
-          >
-            View Current Page
+          <Link className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white">
+            View Career Page
           </Link>
           <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] outline-none hover:border-[#E6E7EF]">
             <Search
@@ -121,36 +115,9 @@ function RecruiterJobs() {
           </div>
         </div>
         <div className="flex items-center gap-7">
-          <Link
-            to={""}
-            className={`text-sm ${
-              isActive(["/admin/recruiter/jobs"])
-                ? "font-bold text-bgColor-100"
-                : "font-normal text-[#808080]"
-            }`}
-          >
-            All Jobs{" "}
-          </Link>
-          <Link
-            to={""}
-            className={`text-sm ${
-              isActive([""])
-                ? "font-bold text-bgColor-100"
-                : "font-normal text-[#808080]"
-            }`}
-          >
-            Open Jobs
-          </Link>
-          <Link
-            to={""}
-            className={`text-sm ${
-              isActive([""])
-                ? "font-bold text-bgColor-100"
-                : "font-normal text-[#808080]"
-            }`}
-          >
-            Draft
-          </Link>
+          <div className="text-sm font-bold text-black/70">All Jobs </div>
+          <div className="text-sm font-bold text-black/40">Open Jobs</div>
+          <div className="text-sm font-bold text-black/40"> Draft</div>
         </div>
       </div>
       <QueryTable
