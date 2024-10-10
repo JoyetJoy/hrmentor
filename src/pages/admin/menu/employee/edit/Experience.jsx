@@ -55,6 +55,17 @@ export default function EmployeeExperienceEdit() {
     () =>
       [
         {
+          header: "Sl No",
+          accessorKey: "sno",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.index + 1 + (currentPage - 1) * pageLimit}
+              </div>
+            );
+          },
+        },
+        {
           header: "Job role",
           accessorKey: "job_role",
         },

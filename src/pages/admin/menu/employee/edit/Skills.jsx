@@ -55,6 +55,17 @@ export default function SkillsQualifications() {
     () =>
       [
         {
+          header: "Sl No",
+          accessorKey: "sno",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.index + 1 + (currentPage - 1) * pageLimit}
+              </div>
+            );
+          },
+        },
+        {
           header: "Type",
           accessorKey: "type",
           cell: ({ row }) => (
