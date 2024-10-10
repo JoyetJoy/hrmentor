@@ -54,9 +54,8 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
       [
         {
           header: "Sl No",
-          accessorKey: "id",
-          Cell: ({ row, getValue }) => {
-            console.log(row);
+          accessorKey: "sno",
+          cell: ({ row }) => {
             return (
               <div className="flex px-2">
                 {row.index + 1 + (currentPage - 1) * pageLimit}
