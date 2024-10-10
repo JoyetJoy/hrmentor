@@ -55,6 +55,17 @@ export default function EmployeeRightToWorkEdit() {
     () =>
       [
         {
+          header: "Sl No",
+          accessorKey: "sno",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.index + 1 + (currentPage - 1) * pageLimit}
+              </div>
+            );
+          },
+        },
+        {
           header: "Reference No",
           accessorKey: "reference_no",
         },
