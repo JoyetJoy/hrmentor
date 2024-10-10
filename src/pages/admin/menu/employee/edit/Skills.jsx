@@ -51,8 +51,6 @@ export default function SkillsQualifications() {
     }
   }, [employeeSkills]);
 
-  console.log(employeeSkills);
-
   const columns = React.useMemo(
     () =>
       [
