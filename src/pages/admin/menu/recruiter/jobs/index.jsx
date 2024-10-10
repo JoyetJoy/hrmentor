@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
-import {
-  ArrowUpFromLine,
-  Filter,
-  MoveDiagonal,
-  Plus,
-  Search,
-  Trash2,
-} from "lucide-react";
+import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -27,7 +20,7 @@ function RecruiterJobs() {
         header: "Job Title",
         accessorKey: "name",
       },
-      { header: "  Job ID ", accessorKey: "addNo" },
+      { header: "Job ID", accessorKey: "addNo" },
       {
         header: "Date created",
         accessorKey: "dignation",
@@ -50,7 +43,7 @@ function RecruiterJobs() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="bg-[#473A990D]  w-fit	 text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
+          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]">
             {row?.original?.status}
           </div>
         ),
@@ -60,27 +53,30 @@ function RecruiterJobs() {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs   ">
-          <Link
-            to={"/admin/recruiter/candidate"}
-            className="cursor-pointer flex items-center  bg-[#EBEBF0] p-2 rounded-full"
-          >
-            <MoveDiagonal className="size-3" />
+          <div className="flex items-center gap-2 text-xs">
+            <Link
+              to={"/admin/recruiter/candidate"}
+              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <MoveDiagonal className="size-3" />
             </Link>
-          <Link
-            to={""}
-            className="cursor-pointer flex items-center bg-[#EBEBF0]  p-2 size-7   rounded-full "
-          >
-            <img src="/assets/icons/admin/marker.svg"   className="w-full   object-contain"/>
-          </Link>
-          <Link className="cursor-pointer flex justify-center items-center  bg-[#EBEBF0]  p-2  rounded-full">
-            <Trash2 className="size-3" />
-          </Link>
-        </div>
+            <Link
+              to={""}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </Link>
+            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2">
+              <Trash2 className="size-3" />
+            </Link>
+          </div>
         ),
-      },    
+      },
     ],
-    []
+    [],
   );
   return (
     <>
@@ -91,33 +87,35 @@ function RecruiterJobs() {
         currentpath={"Recruiter"}
         activeMenu={"Jobs"}
       />
-      
-      <div className="flex justify-between items-centerm pt-2 pb-3">
-      <div className="text-white  flex  items-center gap-2">
+      <div className="items-centerm flex justify-between pb-3 pt-2">
+        <div className="flex items-center gap-2 text-white">
           <Link
             to={"/admin/recruiter/post"}
-            className="btn hover:bg-bgColor-100 bg-bgColor-100 text-white font-normal rounded-md  text-sm  min-h-10 h-10 px-8"
+            className="btn h-10 min-h-10 rounded-md bg-hrmprimaryorange px-8 text-sm font-normal text-white hover:bg-black/70"
           >
             <Plus className="size-5" strokeWidth={1} />
             Create Job
           </Link>
           <Link
             to={""}
-            className="btn bg-white text-[#323232] text-xs border border-[#E6E7EF] hover:border-[#E6E7EF] font-bold rounded-md px-5 hover:bg-white min-h-10 h-10"
+            className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white"
           >
             View Current Page
           </Link>
-          <label className="input outline-none flex flex-row items-center border border-[#E6E7EF] hover:border-[#E6E7EF] pr-36 rounded-md  gap-2 min-h-10 h-10">
-            <Search className="text-gray-200 object-contain size-4" strokeWidth={2} />
+          <label className="input flex h-10 min-h-10 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] pr-36 outline-none hover:border-[#E6E7EF]">
+            <Search
+              className="size-4 object-contain text-gray-200"
+              strokeWidth={2}
+            />
             <input
               type="text"
-              className="grow placeholder:text-sm    focus:outline-none text-sm   placeholder:text-gray-200 placeholder:font-medium "
+              className="grow text-sm placeholder:text-sm placeholder:font-medium placeholder:text-gray-200 focus:outline-none"
               placeholder="Search"
             />
           </label>
-          <div className="bg-white rounded-md p-3 border border-gray-400 min-h-10 h-10">
+          <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
             <Filter
-              className="size-4 text-black font-medium stroke"
+              className="stroke size-4 font-medium text-black"
               strokeWidth={1}
             />
           </div>
@@ -125,9 +123,9 @@ function RecruiterJobs() {
         <div className="flex items-center gap-7">
           <Link
             to={""}
-            className={` text-sm ${
+            className={`text-sm ${
               isActive(["/admin/recruiter/jobs"])
-                ? "text-bgColor-100 font-bold "
+                ? "font-bold text-bgColor-100"
                 : "font-normal text-[#808080]"
             }`}
           >
@@ -135,9 +133,9 @@ function RecruiterJobs() {
           </Link>
           <Link
             to={""}
-            className={` text-sm ${
+            className={`text-sm ${
               isActive([""])
-                ? "text-bgColor-100 font-bold "
+                ? "font-bold text-bgColor-100"
                 : "font-normal text-[#808080]"
             }`}
           >
@@ -145,9 +143,9 @@ function RecruiterJobs() {
           </Link>
           <Link
             to={""}
-            className={` text-sm ${
+            className={`text-sm ${
               isActive([""])
-                ? "text-bgColor-100 font-bold "
+                ? "font-bold text-bgColor-100"
                 : "font-normal text-[#808080]"
             }`}
           >
