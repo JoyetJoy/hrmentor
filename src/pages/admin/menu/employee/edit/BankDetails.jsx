@@ -55,22 +55,35 @@ export default function EmployeeBankDetails() {
     () =>
       [
         {
+          header: "Sl No",
+          accessorKey: "sno",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.index + 1 + (currentPage - 1) * pageLimit}
+              </div>
+            );
+          },
+        },
+        {
           header: "Bank Name",
           accessorKey: "bank_name",
-          cell: ({ row }) => (
-            <div className="flex items-center gap-4">
-              {row.original?.account_details?.default === 1 ? (
-                <div className="flex h-5 w-14 items-center justify-center rounded bg-hrmprimaryorange text-xs text-white">
-                  Default
+          cell: ({ row }) => {
+            return (
+              <div className="flex items-center gap-4">
+                {row.original?.account_details?.default === 1 ? (
+                  <div className="flex h-5 w-14 items-center justify-center rounded bg-hrmprimaryorange text-xs text-white">
+                    Default
+                  </div>
+                ) : (
+                  <div className="h-5 w-14" />
+                )}
+                <div className="flex">
+                  {row.original?.account_details?.bank_name}
                 </div>
-              ) : (
-                <div className="h-5 w-14" />
-              )}
-              <div className="flex">
-                {row.original?.account_details?.bank_name}
               </div>
-            </div>
-          ),
+            );
+          },
         },
         {
           header: "Branch Name",
