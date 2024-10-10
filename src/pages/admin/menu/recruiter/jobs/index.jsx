@@ -102,7 +102,7 @@ function RecruiterJobs() {
           >
             View Current Page
           </Link>
-          <label className="input flex h-10 min-h-10 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] pr-36 outline-none hover:border-[#E6E7EF]">
+          <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] outline-none hover:border-[#E6E7EF]">
             <Search
               className="size-4 object-contain text-gray-200"
               strokeWidth={2}
