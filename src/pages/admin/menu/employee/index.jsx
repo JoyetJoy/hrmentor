@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Search, Filter, ArrowUpFromLine, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MoveDiagonal } from "lucide-react";
-
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import { getRandomPastelColor } from "@/utils/helpers";

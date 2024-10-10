@@ -54,11 +54,6 @@ export const recruiterMenu = [
     },
   },
   {
-    id: 4,
-    name: "Interview",
-    link: "/admin/recruiter/interview/interview-list",
-  },
-  {
     id: 5,
     name: "Reports",
     link: "/admin/recruiter/reports/job-reports",
