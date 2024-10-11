@@ -49,7 +49,7 @@ function RecruiterReports() {
             <p>Saved reports</p>
           </div>
         </div>
-        <p className="max-w-5xl text-sm font-medium text-black/50">
+        <p className="max-w-5xl text-[0.9rem] font-medium text-black/50">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
