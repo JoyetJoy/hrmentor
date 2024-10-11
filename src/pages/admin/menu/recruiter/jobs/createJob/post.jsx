@@ -526,9 +526,7 @@ function RecruiterJobPost() {
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>
                     <div className="group flex w-full flex-col space-y-1 py-2">
-                      <label className="label-text text-sm font-normal text-textcolor-400">
-                        Meta Title
-                      </label>
+                      <label className="label-text">Meta Title</label>
                       <input
                         autoComplete="off"
                         type="text"
@@ -541,7 +539,7 @@ function RecruiterJobPost() {
                       )}
                     </div>
                     <div className="group mb-4 flex w-full flex-col space-y-1 py-2">
-                      <label className="label-text text-sm font-normal text-textcolor-400">
+                      <label className="label-text">
                         Search Engine Description
                       </label>
                       <input
@@ -556,9 +554,7 @@ function RecruiterJobPost() {
                       )}
                     </div>
                     <div className="form-control">
-                      <h1 className="my-2 text-sm font-normal text-textcolor-400">
-                        Career page
-                      </h1>
+                      <h1 className="label-text mb-2">Career page</h1>
                       <label className="label cursor-pointer justify-normal gap-4">
                         <input
                           type="checkbox"
