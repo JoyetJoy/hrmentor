@@ -1,51 +1,97 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
 import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
+import { GET_JOBS } from "@/api/recruiter";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
 
 function RecruiterJobs() {
-  const [totalPages, setTotalPages] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const list = React.useMemo(() => TableData, [TableData]);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: jobListing, isLoading } = useQuery({
+    queryKey: ["jobListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(GET_JOBS, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+            by_status: "",
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (jobListing) {
+      setTotalPages(jobListing?.last_page);
+    }
+  }, [jobListing]);
 
   const columns = React.useMemo(
     () => [
       {
         header: "Job Title",
-        accessorKey: "name",
+        accessorKey: "job_title",
       },
-      { header: "Job ID", accessorKey: "addNo" },
-      {
-        header: "Date created",
-        accessorKey: "dignation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
-      },
+      { header: "Job ID", accessorKey: "id" },
       {
         header: "Type",
         accessorKey: "type",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employment_type?.employment_type_name}
+          </p>
+        ),
+      },
+      {
+        header: "Designation",
+        accessorKey: "designation",
+        cell: ({ row }) => (
+          <p className="">{row?.original?.designation?.designation_name}</p>
+        ),
       },
       {
         header: "Department",
-        accessorKey: "designation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+        accessorKey: "department",
+        cell: ({ row }) => (
+          <p className="">{row?.original?.department?.department_name}</p>
+        ),
       },
       {
         header: "Location",
         accessorKey: "location",
+        cell: ({ row }) => (
+          <p className="">{row?.original?.country?.country_name}</p>
+        ),
       },
       {
         header: "Status",
         accessorKey: "status",
+
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#473A990D] px-3 font-medium text-[#7D067F]">
-            {row?.original?.status}
+          <div
+            style={{
+              backgroundColor: row?.original?.job_status?.background_color,
+              color: row?.original?.job_status?.text_color,
+            }}
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+          >
+            {row?.original?.job_status?.status_name}
           </div>
         ),
       },
-
       {
         header: "Action",
         accessorKey: "action",
@@ -122,7 +168,7 @@ function RecruiterJobs() {
       </div>
       <QueryTable
         columns={columns}
-        list={list}
+        list={jobListing?.listing ?? []}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
