@@ -10,6 +10,8 @@ function SaveCandidates() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     control,
     formState: { errors },
   } = useForm({
@@ -33,16 +35,16 @@ function SaveCandidates() {
         activeMenu={"Candidates"}
       />
       <div className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12">
-        <div className="">
+        <div className="flex flex-col">
           <h1 className="pt-3 text-base font-bold">Add Candidate</h1>
-          <div className="mt-4 grid w-full grid-cols-2 gap-5">
+          <div className="mt-5 grid w-full grid-cols-2 gap-5">
             <div className="group flex flex-col gap-1">
               <label className="required label-text">First name</label>
               <input
                 autoComplete="off"
                 type="text"
                 {...register("employeeId", { required: true })}
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.employeeId && (
                 <span className="text-xs font-medium text-red-500">
@@ -56,7 +58,7 @@ function SaveCandidates() {
                 autoComplete="off"
                 type="text"
                 {...register("firstName", { required: true })}
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.firstName && (
                 <span className="text-xs font-medium text-red-500">
@@ -71,7 +73,7 @@ function SaveCandidates() {
                 {...register("surname")}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.surname && (
                 <span className="text-xs font-medium text-red-500">
@@ -86,7 +88,7 @@ function SaveCandidates() {
                 {...register("surname")}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.surname && (
                 <span className="text-xs font-medium text-red-500">
@@ -117,7 +119,7 @@ function SaveCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -136,7 +138,7 @@ function SaveCandidates() {
                 {...register("dateOBbirth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.dateOfBirth && (
                 <span className="text-xs font-medium text-red-500">
@@ -182,7 +184,7 @@ function SaveCandidates() {
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Gender"
-                      className="input-box h-10 w-full focus:border-gray-300"
+                      className="input-box"
                     />
                   )}
                 />
@@ -211,7 +213,7 @@ function SaveCandidates() {
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Gender"
-                      className="input-box h-10 w-full focus:border-gray-300"
+                      className="input-box"
                     />
                   )}
                 />
@@ -241,7 +243,7 @@ function SaveCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -257,7 +259,7 @@ function SaveCandidates() {
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -286,7 +288,7 @@ function SaveCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -317,7 +319,7 @@ function SaveCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -333,7 +335,7 @@ function SaveCandidates() {
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -349,7 +351,7 @@ function SaveCandidates() {
                 {...register("dateOBbirth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.dateOfBirth && (
                 <span className="text-xs font-medium text-red-500">
@@ -377,7 +379,7 @@ function SaveCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -393,7 +395,7 @@ function SaveCandidates() {
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -406,25 +408,23 @@ function SaveCandidates() {
         <div className="flex flex-col justify-center">
           <h1 className="pb-1 pt-14 text-xs font-bold">Resume Upload</h1>
           <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-[#E6E3EB] py-2">
-            <p className="text-sm">Upload or drag and drop</p>
+            <p className="text-sm font-semibold">Upload or drag and drop</p>
             <p className="text-sm text-[#7F7F7F]">
               (Preferred), DOCX, DOC, PDF up to 1 MB
             </p>
-
             <button class="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-400 bg-white px-7 py-1">
               <ArrowUpFromLine className="size-4" strokeWidth={2} />
-
-              <h1 className="text-xs font-bold">Upload</h1>
+              <h5 className="text-[0.8rem] font-bold">Upload</h5>
             </button>
           </div>
         </div>
         <div className="flex items-center font-semibold text-white">
-          <Link
-            to={"/admin/recruiter/profile"}
-            className="btn h-10 min-h-10 bg-bgColor-100 px-12 text-xs font-medium text-white hover:bg-bgColor-100"
+          <button
+            type="submit"
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-7 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             Submit
-          </Link>
+          </button>
         </div>
       </div>
     </>

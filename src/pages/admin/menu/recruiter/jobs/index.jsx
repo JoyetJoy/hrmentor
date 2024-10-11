@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { TableData } from "@/constants/tableDummy";
 import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
-
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import { GET_JOBS } from "@/api/recruiter";

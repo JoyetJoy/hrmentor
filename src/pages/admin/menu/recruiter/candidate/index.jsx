@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
 import {
@@ -13,15 +13,41 @@ import {
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import FilterCandidate from "@/components/popups/recruiter/FilterCandidate";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import { GET_CANDIDATES } from "@/api/recruiter";
 
 function CandidatesList() {
-  const [totalPages, setTotalPages] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
 
-  const list = React.useMemo(() => TableData, [TableData]);
-  const location = useLocation();
-  const isActive = (path) => path.includes(location.pathname);
+  // Fetch List
+  const { data: candidateListing, isLoading } = useQuery({
+    queryKey: ["candidateListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(GET_CANDIDATES, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(candidateListing);
+
+  useEffect(() => {
+    if (candidateListing) {
+      setTotalPages(candidateListing?.last_page);
+    }
+  }, [candidateListing]);
 
   const columns = React.useMemo(
     () => [
@@ -112,10 +138,8 @@ function CandidatesList() {
               <Filter
                 className="stroke size-4 font-medium text-black"
                 strokeWidth={2}
-                onClick={() => setPopupOpen(true)}
               />
             </div>
-
             <FilterCandidate
               popupOpen={popupOpen}
               setPopupOpen={setPopupOpen}
@@ -138,13 +162,13 @@ function CandidatesList() {
           </Link>
         </div>
       </div>
-      <QueryTable
+      {/* <QueryTable
         columns={columns}
-        list={list}
+        list={candidateListing?.listing ?? []}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
-      />
+      /> */}
     </div>
   );
 }
