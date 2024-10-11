@@ -249,9 +249,9 @@ function RecruiterJobPost() {
                       </span>
                     )}
                   </div>
-                  <Link className="mt-[1.57rem] flex h-10 min-h-10 w-fit flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-medium text-black/70">
+                  <div className="mt-[1.57rem] flex h-10 min-h-10 w-fit flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-semibold text-black/55">
                     <PenLineIcon className="h-4" /> Update Job Description
-                  </Link>
+                  </div>
                   <div />
                 </div>
                 <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
