@@ -45,6 +45,8 @@ export const NATIONALITY = "nationalities";
 
 // countries
 export const COUNTRY = "countries";
+// state from country
+export const STATE_COUNTRY = "states";
 
 // CITIES
 export const COUNTRY_CITY = "cities";
