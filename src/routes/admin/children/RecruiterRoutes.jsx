@@ -20,13 +20,12 @@ import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application
 import { InterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/post";
-import Post from "@/pages/admin/menu/recruiter/jobs/createJob/post";
 import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
 import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
-import List from "@/pages/admin/menu/recruiter/report/list";
+import RecruiterReports from "@/pages/admin/menu/recruiter/report";
 import { RecruiterSettingCandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
 import { RecruiterSettingQualification } from "@/pages/admin/menu/recruiter/settings/EducationQualification";
 import { RecruiterSettingJobDescription } from "@/pages/admin/menu/recruiter/settings/Index";
@@ -218,7 +217,7 @@ export const RecruiterRoutes = [
     children: [
       {
         path: "job-reports",
-        element: <List />,
+        element: <RecruiterReports />,
       },
     ],
   },
