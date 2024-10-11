@@ -7,8 +7,9 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import PostList from "@/pages/admin/menu/recruiter/jobs/createJob/list";
+import useImageUpload from "@/hooks/useImageUpload";
 
-function Post() {
+function RecruiterJobPost() {
   const {
     register,
     handleSubmit,
@@ -17,6 +18,8 @@ function Post() {
   } = useForm({
     mode: "onSubmit",
   });
+  const { image, imageFile, handleImageChange, clearImage, setImage } =
+    useImageUpload();
   const onSubmit = (data) => {
     setLoader(true);
     handleEmployee(data);
@@ -69,17 +72,6 @@ function Post() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text">Image</label>
-                    <Link
-                      to=""
-                      className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md bg-[#D9D9D933] text-center text-sm"
-                    >
-                      {" "}
-                      <ArrowUpFromLine className="size-4" strokeWidth={1} />
-                      Upload Image
-                    </Link>
-                  </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       Employement type <span className="text-red-500">*</span>
                       <h6 className="font-bold text-blue-700">(Create)</h6>
@@ -108,6 +100,39 @@ function Post() {
                     {errors.employementye && (
                       <span className="text-xs font-medium text-red-500">
                         {errors.employementye?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
+                    <label className="label-text flex flex-row items-center gap-1">
+                      Employee Designation{" "}
+                      <span className="text-red-500">*</span>
+                      <h6 className="font-bold text-blue-700">(Create)</h6>
+                    </label>
+                    <Controller
+                      name="employeedesignation"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          // required
+                          //   selected={''}
+                          //   value={''}
+                          //   onChange={(selectedOption) => {
+                          //     handle(selectedOption);
+                          //     field.onChange(selectedOption);
+                          //   }}
+                          //   options={}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select minimum experience+"
+                          className="input-box h-10 w-full focus:border-gray-300"
+                        />
+                      )}
+                    />
+                    {errors.employeedesignation && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.employeedesignation?.message}
                       </span>
                     )}
                   </div>
@@ -145,39 +170,7 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      Employee Designation{" "}
-                      <span className="text-red-500">*</span>
-                      <h6 className="font-bold text-blue-700">(Create)</h6>
-                    </label>
-                    <Controller
-                      name="employeedesignation"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full focus:border-gray-300"
-                        />
-                      )}
-                    />
-                    {errors.employeedesignation && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.employeedesignation?.message}
-                      </span>
-                    )}
-                  </div>
+
                   <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       Department or Business Unit
@@ -381,4 +374,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default RecruiterJobPost;

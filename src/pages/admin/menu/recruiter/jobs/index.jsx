@@ -149,7 +149,7 @@ function RecruiterJobs() {
       <div className="items-centerm flex justify-between pb-3 pt-2">
         <div className="flex items-center gap-2 text-white">
           <Link
-            to="/admin/recruiter/post"
+            to="/admin/recruiter/jobs/post"
             className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             <Plus className="size-5" strokeWidth={2} />
