@@ -2,12 +2,21 @@ import MenuHeader from "@/components/common/MenuHeader";
 import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
-import { ArrowLeft, ArrowUpFromLine } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpFromLine,
+  ChevronRight,
+  UploadCloud,
+} from "lucide-react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import PostList from "@/pages/admin/menu/recruiter/jobs/createJob/list";
 import useImageUpload from "@/hooks/useImageUpload";
+import {
+  Disclosure,
+  DisclosurePanel,
+  DisclosureButton,
+} from "@headlessui/react";
 
 function RecruiterJobPost() {
   const {
@@ -18,8 +27,10 @@ function RecruiterJobPost() {
   } = useForm({
     mode: "onSubmit",
   });
+
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
+
   const onSubmit = (data) => {
     setLoader(true);
     handleEmployee(data);
@@ -63,7 +74,7 @@ function RecruiterJobPost() {
                       autoComplete="off"
                       type="text"
                       {...register("jobtitle", { required: true })}
-                      className="input-box h-10 w-full focus:border-gray-300"
+                      className="input-box"
                     />
                     {errors.jobtitle && (
                       <span className="text-xs font-medium text-red-500">
@@ -82,18 +93,10 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select Gender"
-                          className="input-box h-10 w-full focus:border-gray-300"
+                          className="input-box"
                         />
                       )}
                     />
@@ -115,18 +118,10 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full focus:border-gray-300"
+                          className="input-box"
                         />
                       )}
                     />
@@ -149,18 +144,10 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full focus:border-gray-300"
+                          className="input-box"
                         />
                       )}
                     />
@@ -182,18 +169,10 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full focus:border-gray-300"
+                          className="input-box"
                         />
                       )}
                     />
@@ -203,11 +182,51 @@ function RecruiterJobPost() {
                       </span>
                     )}
                   </div>
+                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                    <label className="label-text">Upload Image </label>
+                    {image ? (
+                      <div className="relative">
+                        <img
+                          src={image}
+                          alt="Uploaded"
+                          className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                        />
+                        <X
+                          onClick={clearImage}
+                          className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                        />
+                      </div>
+                    ) : (
+                      <label
+                        htmlFor="employee-profile-pic"
+                        className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                      >
+                        <div className="flex items-center gap-2">
+                          <UploadCloud />
+                          <span className="font-semibold text-[#2C2C2C]">
+                            Upload Image
+                          </span>
+                        </div>
+                        <input
+                          id="employee-profile-pic"
+                          onChange={handleImageChange}
+                          type="file"
+                          className="hidden"
+                        />
+                      </label>
+                    )}
+
+                    {errors.employeeId && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.employeeId?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="mt-4 flex w-full flex-row items-center gap-y-2">
-                  <div className="group flex w-8/12 flex-col space-y-1 px-3 py-2">
+                <div className="mt-4 grid w-full grid-cols-3 items-center gap-y-2">
+                  <div className="group col-span-1 flex w-full flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
-                      Job description{" "}
+                      Job description
                       <h6 className="font-bold text-blue-700">(Create)</h6>
                     </label>
                     <Controller
@@ -216,14 +235,6 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
@@ -237,16 +248,11 @@ function RecruiterJobPost() {
                       </span>
                     )}
                   </div>
-                  <div className="group mt-5 flex w-4/12 flex-col space-y-1 px-3 py-2">
-                    <Link
-                      to=""
-                      className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md bg-[#D9D9D933] text-center text-sm"
-                    >
-                      {" "}
-                      <ArrowUpFromLine className="size-4" strokeWidth={1} />
-                      update Job Description
-                    </Link>
-                  </div>
+                  <Link className="mt-[1.57rem] flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] text-center text-sm font-medium text-black/70">
+                    <ArrowUpFromLine className="size-4" strokeWidth={1} />
+                    Update Job Description
+                  </Link>
+                  <div />
                 </div>
                 <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
                   <div className="group flex flex-col space-y-1 px-3 py-2">
@@ -259,18 +265,10 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10 w-full focus:border-gray-300"
+                          className="input-box"
                         />
                       )}
                     />
@@ -290,18 +288,10 @@ function RecruiterJobPost() {
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          // required
-                          //   selected={''}
-                          //   value={''}
-                          //   onChange={(selectedOption) => {
-                          //     handle(selectedOption);
-                          //     field.onChange(selectedOption);
-                          //   }}
-                          //   options={}
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience"
-                          className="input-box h-10 w-full focus:border-gray-300"
+                          className="input-box"
                         />
                       )}
                     />
@@ -316,7 +306,7 @@ function RecruiterJobPost() {
                     <input
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full focus:border-gray-300"
+                      className="input-box"
                     />
                     {errors.postalcode && (
                       <span className="text-xs font-medium text-red-500">
@@ -334,7 +324,7 @@ function RecruiterJobPost() {
                         defaultChecked
                         className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
-                      <span className="label-text whitespace-nowrap text-xs text-gray-200">
+                      <span className="label-text">
                         Remote(work from office)
                       </span>
                     </label>
@@ -343,18 +333,14 @@ function RecruiterJobPost() {
                         type="checkbox"
                         className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
-                      <span className="label-text whitespace-nowrap text-xs text-gray-200">
-                        Work from office
-                      </span>
+                      <span className="label-text">Work from office</span>
                     </label>
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="checkbox"
                         className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
-                      <span className="label-text whitespace-nowrap text-xs text-gray-200">
-                        Hybrid
-                      </span>
+                      <span className="label-text">Hybrid</span>
                     </label>
                   </div>
                   {errors.jobtitle && (
@@ -365,10 +351,221 @@ function RecruiterJobPost() {
                 </div>
               </div>
             </div>
-            <PostList />
+            <div className="flex flex-col gap-2.5 pb-7">
+              <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
+                <DisclosureButton className="group flex w-full items-center gap-x-2">
+                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                    <ChevronRight className="size-4 group-data-[open]:rotate-90" />
+                  </div>
+                  <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
+                    Advanced job details{" "}
+                  </p>
+                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                </DisclosureButton>
+                <DisclosurePanel className="my-4 text-sm/5 text-black/50">
+                  <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
+                    <div className="group flex flex-col space-y-1 px-3 py-2">
+                      <label className="label-text">Job code</label>
+                      <div className="input-box flex">
+                        <input
+                          autoComplete="off"
+                          type="text"
+                          placeholder=""
+                          className="w-full"
+                        />
+                        <button
+                          type="button"
+                          className="text-[0.8rem] font-medium text-red-500"
+                        >
+                          Generate
+                        </button>
+                      </div>
+                      {errors.jobcode && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.jobcode?.message}
+                        </span>
+                      )}
+                    </div>
+                    <div className="group flex flex-col space-y-1 px-3 py-2">
+                      <label className="label-text">Salary Package</label>
+                      <Controller
+                        name="salarypackage"
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <Select
+                            isSearchable={false}
+                            styles={customSelectStyles}
+                            placeholder="Not Mention Package"
+                            className="input-box"
+                          />
+                        )}
+                      />
+                      {errors.salarypackage && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.salarypackage?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="group flex w-8/12 flex-col space-y-1 px-3 py-2">
+                    <label className="label-text">Reason</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      placeholder="Enter the reason"
+                      className="input-box h-20 w-full text-justify placeholder:text-start focus:border-gray-300"
+                    />
+                    {errors.reason && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.reason?.message}
+                      </span>
+                    )}
+                  </div>
+                </DisclosurePanel>
+              </Disclosure>
+              <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
+                <DisclosureButton className="group flex w-full items-center gap-x-2">
+                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                    <ChevronRight className="size-4 group-data-[open]:rotate-90" />
+                  </div>
+                  <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
+                    Sensitive data
+                  </p>
+                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                </DisclosureButton>
+                <DisclosurePanel className="my-4 text-sm/5 text-black/50">
+                  <div>
+                    <p className="my-8 px-3 text-sm">
+                      This section is visible to Admins, Hiring Managers, And
+                      User with sensitive data privilege.
+                    </p>
+                    <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
+                      <div className="group flex flex-col space-y-1 px-3 py-2">
+                        <label className="label-text">Salary Type</label>
+                        <Controller
+                          name="salarypackage"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Select
+                              isSearchable={false}
+                              styles={customSelectStyles}
+                              placeholder="Not Mention Package"
+                              className="input-box"
+                            />
+                          )}
+                        />
+                        {errors.salarypackage && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.salarypackage?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="group flex flex-col space-y-1 px-3 py-2">
+                        <label className="label-text">
+                          Salary Range(Internal Only )
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input
+                            autoComplete="off"
+                            type="text"
+                            placeholder="Minimum range"
+                            className="input-box"
+                          />
+                          <input
+                            autoComplete="off"
+                            type="text"
+                            placeholder="Maximum range"
+                            className="input-box"
+                          />
+                        </div>
+
+                        {errors.jobcode && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.jobcode?.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="group flex w-full flex-col space-y-1 px-3 py-2">
+                      <label className="label-text">Internal Note</label>
+                      <textarea
+                        autoComplete="off"
+                        className="input-box h-20 w-full"
+                      />
+                      {errors.note && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.note?.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </DisclosurePanel>
+              </Disclosure>
+              <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
+                <DisclosureButton className="group flex w-full items-center gap-x-2">
+                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                    <ChevronRight className="size-4 group-data-[open]:rotate-90" />
+                  </div>
+                  <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
+                    Exposure
+                  </p>
+                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                </DisclosureButton>
+                <DisclosurePanel className="my-4 text-sm/5 text-black/50">
+                  <div>
+                    <div className="group flex w-full flex-col space-y-1 py-2">
+                      <label className="label-text text-sm font-normal text-textcolor-400">
+                        Meta Title
+                      </label>
+                      <input
+                        autoComplete="off"
+                        type="text"
+                        className="input-box"
+                      />
+                      {errors.note && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.note?.message}
+                        </span>
+                      )}
+                    </div>
+                    <div className="group mb-4 flex w-full flex-col space-y-1 py-2">
+                      <label className="label-text text-sm font-normal text-textcolor-400">
+                        Search Engine Description
+                      </label>
+                      <input
+                        autoComplete="off"
+                        type="text"
+                        className="input-box h-20"
+                      />
+                      {errors.note && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.note?.message}
+                        </span>
+                      )}
+                    </div>
+                    <div className="form-control">
+                      <h1 className="my-2 text-sm font-normal text-textcolor-400">
+                        Career page
+                      </h1>
+                      <label className="label cursor-pointer justify-normal gap-4">
+                        <input
+                          type="checkbox"
+                          className="checkbox size-4 rounded-sm"
+                        />
+                        <span className="text-gary-200 label-text text-sm">
+                          Show these in career page?
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </DisclosurePanel>
+              </Disclosure>
+            </div>
           </div>
         </div>
-        <CreateJobSideBar />
+        <CreateJobSideBar stepCounter={1} />
       </div>
     </div>
   );
