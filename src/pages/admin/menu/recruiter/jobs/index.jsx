@@ -169,7 +169,7 @@ function RecruiterJobs() {
                 setKeyword(e.target.value);
               }}
               value={keyword}
-              className="grow text-sm text-black placeholder:text-sm placeholder:font-medium focus:outline-none"
+              className="grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
               placeholder="Search"
             />
           </label>
