@@ -291,12 +291,38 @@ export const adminItems = [
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
 ];
 
+export const setupItems = [
+  {
+    name: "Attendace",
+    active:"attendace",
+  },
+  {
+    name: "Shift",
+    active:"shift",
+  },
+  {
+    name: "Roster",
+    active:"roster",
+    
+  },
+  {  
+    name: "Email",
+    active:"email",
+  },
+  {  
+    name: "Basic Settings",
+    active:"basic settings",
+  },
+];
+
+
+
 export const activityItems = [
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
-  { icon: "/assets/icons/admin/roster.svg", label: "Roster" },
+  // { icon: "/assets/icons/admin/roster.svg", label: "Roster" },
   { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
-  { icon: "/assets/icons/admin/setup.svg", label: "Setup" },
+  { icon: "/assets/icons/admin/setup.svg", label: "Setup", path:"/admin/setup/shift" },
 ];
 export const EmailData = [
   {

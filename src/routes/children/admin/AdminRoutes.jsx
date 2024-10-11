@@ -4,6 +4,7 @@ import { MenuSubscription } from "@/pages/admin/menu/subscription";
 import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
 import { AttendanceRoutes } from "./children/AttendanceRoute";
+import ShiftList from "@/pages/admin/masters/setup/shift";
 
 export const AdminRoutes = [
   {
@@ -30,4 +31,14 @@ export const AdminRoutes = [
     path: "recruiter",
     children: RecruiterRoutes,
   },
+  {
+    path:"setup",
+    children:[
+      {
+        path:"shift",
+        element:<ShiftList/>
+      }
+    ]
+
+  }
 ];
