@@ -8,6 +8,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import { GET_JOBS } from "@/api/recruiter";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "@/components/ui/Loader";
 
 function RecruiterJobs() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,8 +60,7 @@ function RecruiterJobs() {
       },
       {
         header: "Job ID",
-        accessorKey: "id",
-        cell: ({ row }) => <p className="">#JB{row?.original?.id}</p>,
+        accessorKey: "unique_job_id",
       },
       {
         header: "Type",
@@ -165,6 +165,9 @@ function RecruiterJobs() {
             />
             <input
               type="text"
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
               className="grow text-sm placeholder:text-sm placeholder:font-medium placeholder:text-gray-200 focus:outline-none"
               placeholder="Search"
             />
@@ -203,13 +206,17 @@ function RecruiterJobs() {
           </div>
         </div>
       </div>
-      <QueryTable
-        columns={columns}
-        list={jobListing?.listing ?? []}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <QueryTable
+          columns={columns}
+          list={jobListing?.listing ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
     </>
   );
 }
