@@ -12,12 +12,13 @@ import { useQuery } from "@tanstack/react-query";
 function RecruiterJobs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [byStatus, setByStatus] = useState(null);
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
   // Fetch List
   const { data: jobListing, isLoading } = useQuery({
-    queryKey: ["jobListing", currentPage, keyword],
+    queryKey: ["jobListing", currentPage, byStatus, keyword],
     queryFn: () =>
       newRequest
         .get(GET_JOBS, {
@@ -25,7 +26,7 @@ function RecruiterJobs() {
             search: keyword,
             page: currentPage,
             per_limit: pageLimit,
-            by_status: "",
+            by_status: byStatus,
           },
         })
         .then((res) => {
@@ -42,10 +43,25 @@ function RecruiterJobs() {
   const columns = React.useMemo(
     () => [
       {
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
+      {
         header: "Job Title",
         accessorKey: "job_title",
       },
-      { header: "Job ID", accessorKey: "id" },
+      {
+        header: "Job ID",
+        accessorKey: "id",
+        cell: ({ row }) => <p className="">#JB{row?.original?.id}</p>,
+      },
       {
         header: "Type",
         accessorKey: "type",
@@ -161,9 +177,30 @@ function RecruiterJobs() {
           </div>
         </div>
         <div className="flex items-center gap-7">
-          <div className="text-sm font-bold text-black/70">All Jobs </div>
-          <div className="text-sm font-bold text-black/40">Open Jobs</div>
-          <div className="text-sm font-bold text-black/40"> Draft</div>
+          <div
+            onClick={() => {
+              setByStatus(null);
+            }}
+            className={`cursor-pointer text-sm font-bold ${byStatus === null ? "text-black/70" : "text-black/40"}`}
+          >
+            All Jobs
+          </div>
+          <div
+            onClick={() => {
+              setByStatus(2);
+            }}
+            className={`cursor-pointer text-sm font-bold ${byStatus === 2 ? "text-black/70" : "text-black/40"}`}
+          >
+            Open Jobs
+          </div>
+          <div
+            onClick={() => {
+              setByStatus(1);
+            }}
+            className={`cursor-pointer text-sm font-bold ${byStatus === 1 ? "text-black/70" : "text-black/40"}`}
+          >
+            Draft
+          </div>
         </div>
       </div>
       <QueryTable
