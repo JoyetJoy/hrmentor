@@ -375,7 +375,7 @@ function RecruiterJobPost() {
                         />
                         <button
                           type="button"
-                          className="text-[0.8rem] font-medium text-red-500"
+                          className="text-[0.8rem] font-medium text-hrmprimaryorange"
                         >
                           Generate
                         </button>
