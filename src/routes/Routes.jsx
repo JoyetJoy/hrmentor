@@ -2,7 +2,7 @@ import { AdminLayout } from "@/layouts/admin/AdminLayouts";
 import Login from "@/pages/auth/admin/Login";
 import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { AdminRoutes } from "./children/admin/AdminRoutes";
+import { AdminRoutes } from "./admin/AdminRoutes";
 import ErrorPage from "@/pages/Error";
 
 export const appRoutes = createBrowserRouter([
