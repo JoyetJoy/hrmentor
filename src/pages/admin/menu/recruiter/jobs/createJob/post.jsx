@@ -1,14 +1,12 @@
-import MenuHeader from '@/components/common/MenuHeader'
-import CreateJobSideBar from '@/components/sidebars/recruiter/CreateJobSideBar'
-import { customSelectStyles } from '@/utils/customStyles'
-import Select from "react-select"
-import { ArrowLeft, ArrowUpFromLine, ChevronRight, Search } from 'lucide-react'
-import React from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import MenuHeader from "@/components/common/MenuHeader";
+import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
+import { customSelectStyles } from "@/utils/customStyles";
+import Select from "react-select";
+import { ArrowLeft, ArrowUpFromLine } from "lucide-react";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import PostList from "@/pages/admin/menu/recruiter/jobs/createJob/list";
-import MenuSubHeader from '@/components/common/MenuSubHeader'
-
 
 function Post() {
   const {
@@ -30,30 +28,31 @@ function Post() {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        activeMenu={"Jobs"} 
+        activeMenu={"Jobs"}
       />
-      <div className='flex flex-row items-start justify-between gap-3'>
-        <div className='w-full '>
-        <div className='flex  items-center justify-between mt-1 mb-3 '>
-            <h1 className='text-base font-bold text-black flex flex-row gap-2 items-center justify-center'>
-              <ArrowLeft className='size-4' />
-              Create New Job  <div className=' w-[.07rem] h-4 bg-[#B0B0B0]'></div><span className='text-sm font-medium text-[#2C2C2C]'>Post</span>
+      <div className="flex flex-row items-start justify-between gap-3">
+        <div className="w-full">
+          <div className="mb-3 mt-1 flex items-center justify-between">
+            <h1 className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
+              <ArrowLeft className="size-4" />
+              Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
+              <span className="text-sm font-medium text-[#2C2C2C]">Post</span>
             </h1>
             <Link
-              to={"/admin/recruiter/application"}
-              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100"
+              to="/admin/recruiter/application"
+              className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-7 text-xs font-semibold text-white hover:bg-[#030E5C]"
             >
               Next
             </Link>
           </div>
-          <div className='w-full bg-white rounded-md  '>
+          <div className="w-full rounded-md bg-white">
             <div
               onSubmit={handleSubmit(onSubmit)}
-              className=" grid grid-cols-1 gap-x-3 py-2 mb-9"
+              className="mb-9 grid grid-cols-1 gap-x-3 py-2"
             >
-              <div className="flex flex-col items-baseline justify-center st px-5 py-4 rounded-md ">
-                <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
-                  <div className="flex px-3 group flex-col py-2 space-y-1">
+              <div className="st flex flex-col items-baseline justify-center rounded-md px-5 py-4">
+                <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text">
                       Job title <span className="text-red-500">*</span>
                     </label>
@@ -69,17 +68,21 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1 ">
-                    <label className="label-text">
-                      Image
-                    </label>
-                    <Link to="" className='bg-[#D9D9D933] h-10 min-h-10 text-center rounded-md text-sm flex flex-row gap-2 items-center justify-center '>     <ArrowUpFromLine className="size-4" strokeWidth={1} />
-                      Upload Image</Link>
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
+                    <label className="label-text">Image</label>
+                    <Link
+                      to=""
+                      className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md bg-[#D9D9D933] text-center text-sm"
+                    >
+                      {" "}
+                      <ArrowUpFromLine className="size-4" strokeWidth={1} />
+                      Upload Image
+                    </Link>
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       Employement type <span className="text-red-500">*</span>
-                      <h6 className='text-blue-700 font-bold'>(Create)</h6>
+                      <h6 className="font-bold text-blue-700">(Create)</h6>
                     </label>
                     <Controller
                       name="employementye"
@@ -108,13 +111,12 @@ function Post() {
                       </span>
                     )}
                   </div>
-
                 </div>
-                <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
-                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       Minimum Experience <span className="text-red-500">*</span>
-                      <h6 className='text-blue-700 font-bold'>(Create)</h6>
+                      <h6 className="font-bold text-blue-700">(Create)</h6>
                     </label>
                     <Controller
                       name="miniexperience"
@@ -143,10 +145,11 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
-                      Employee Designation <span className="text-red-500">*</span>
-                      <h6 className='text-blue-700 font-bold'>(Create)</h6>
+                      Employee Designation{" "}
+                      <span className="text-red-500">*</span>
+                      <h6 className="font-bold text-blue-700">(Create)</h6>
                     </label>
                     <Controller
                       name="employeedesignation"
@@ -175,10 +178,10 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       Department or Business Unit
-                      <h6 className='text-blue-700 font-bold'>(Create)</h6>
+                      <h6 className="font-bold text-blue-700">(Create)</h6>
                     </label>
                     <Controller
                       name="departmentbusiness"
@@ -208,10 +211,11 @@ function Post() {
                     )}
                   </div>
                 </div>
-                <div className='flex flex-row items-center gap-y-2 mt-4  w-full'>
-                  <div className="flex px-3 group flex-col py-2 space-y-1 w-8/12 ">
+                <div className="mt-4 flex w-full flex-row items-center gap-y-2">
+                  <div className="group flex w-8/12 flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
-                      Job description <h6 className='text-blue-700 font-bold'>(Create)</h6>
+                      Job description{" "}
+                      <h6 className="font-bold text-blue-700">(Create)</h6>
                     </label>
                     <Controller
                       name="jobdiscription"
@@ -230,7 +234,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10  focus:border-gray-300"
+                          className="input-box h-10 focus:border-gray-300"
                         />
                       )}
                     />
@@ -240,14 +244,19 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1 w-4/12 mt-5 ">
-                    
-                    <Link to="" className='bg-[#D9D9D933] h-10 min-h-10 text-center rounded-md text-sm flex flex-row gap-2 items-center justify-center '>     <ArrowUpFromLine className="size-4" strokeWidth={1} />
-                      update Job Description</Link>
+                  <div className="group mt-5 flex w-4/12 flex-col space-y-1 px-3 py-2">
+                    <Link
+                      to=""
+                      className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md bg-[#D9D9D933] text-center text-sm"
+                    >
+                      {" "}
+                      <ArrowUpFromLine className="size-4" strokeWidth={1} />
+                      update Job Description
+                    </Link>
                   </div>
                 </div>
-                <div className='grid w-full grid-cols-3 items-center justify-center gap-y-2 mt-4'>
-                  <div className="flex px-3 group flex-col py-2 space-y-1  ">
+                <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       State,Province or territory
                     </label>
@@ -268,7 +277,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience+"
-                          className="input-box h-10  w-full focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -278,7 +287,7 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1 ">
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
                     <label className="label-text flex flex-row items-center gap-1">
                       City or Town
                     </label>
@@ -299,7 +308,7 @@ function Post() {
                           isSearchable={false}
                           styles={customSelectStyles}
                           placeholder="Select minimum experience"
-                          className="input-box h-10   w-full focus:border-gray-300"
+                          className="input-box h-10 w-full focus:border-gray-300"
                         />
                       )}
                     />
@@ -309,15 +318,12 @@ function Post() {
                       </span>
                     )}
                   </div>
-                  <div className="flex px-3 group flex-col py-2 space-y-1">
-                    <label className="label-text">
-                      Postal Code
-                    </label>
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
+                    <label className="label-text">Postal Code</label>
                     <input
                       autoComplete="off"
                       type="text"
-                      className="input-box h-10 w-full focus:border-gray-300
-                      "
+                      className="input-box h-10 w-full focus:border-gray-300"
                     />
                     {errors.postalcode && (
                       <span className="text-xs font-medium text-red-500">
@@ -326,22 +332,36 @@ function Post() {
                     )}
                   </div>
                 </div>
-                <div className="flex px-3 group flex-col py-2 space-y-1 w-full">
-                  <label className="label-text">
-                    Work type
-                  </label>
-                  <div className='flex flex-row items-start gap-4 '>
-                    <label className="label cursor-pointer flex flex-row items-center justify-start border  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-[20%]">
-                      <input type="checkbox" defaultChecked className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs ">Remote(work from office)</span>
+                <div className="group flex w-full flex-col space-y-1 px-3 py-2">
+                  <label className="label-text">Work type</label>
+                  <div className="flex flex-row items-start gap-4">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                      <input
+                        type="checkbox"
+                        defaultChecked
+                        className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                      />
+                      <span className="label-text whitespace-nowrap text-xs text-gray-200">
+                        Remote(work from office)
+                      </span>
                     </label>
-                    <label className="label cursor-pointer flex flex-row items-center   justify-start border  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-[20%] ">
-                      <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Work from office</span>
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                      <input
+                        type="checkbox"
+                        className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                      />
+                      <span className="label-text whitespace-nowrap text-xs text-gray-200">
+                        Work from office
+                      </span>
                     </label>
-                    <label className="label cursor-pointer flex flex-row items-center  justify-start border  border-gray-300  focus:border-[#C7C7C7] rounded-md gap-3  w-[20%]">
-                      <input type="checkbox" className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100" />
-                      <span className="label-text  whitespace-nowrap text-gray-200 text-xs">Hybrid</span>
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                      <input
+                        type="checkbox"
+                        className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                      />
+                      <span className="label-text whitespace-nowrap text-xs text-gray-200">
+                        Hybrid
+                      </span>
                     </label>
                   </div>
                   {errors.jobtitle && (
@@ -352,15 +372,13 @@ function Post() {
                 </div>
               </div>
             </div>
-            <PostList />    
-            </div>
+            <PostList />
+          </div>
         </div>
         <CreateJobSideBar />
-
       </div>
     </div>
-
-  )
+  );
 }
 
-export default Post
+export default Post;
