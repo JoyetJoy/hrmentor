@@ -65,171 +65,165 @@ function RecruiterJobPost() {
               onSubmit={handleSubmit(onSubmit)}
               className="mb-9 grid grid-cols-1 gap-x-3 py-2"
             >
-              <div className="st flex flex-col items-baseline justify-center rounded-md px-5 py-4">
-                <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text">
-                      Job title <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("jobtitle", { required: true })}
-                      className="input-box"
-                    />
-                    {errors.jobtitle && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.jobtitle?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      Employement type <span className="text-red-500">*</span>
-                      <h6 className="font-bold text-blue-700">(Create)</h6>
-                    </label>
-                    <Controller
-                      name="employementye"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select Gender"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                    {errors.employementye && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.employementye?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      Employee Designation{" "}
-                      <span className="text-red-500">*</span>
-                      <h6 className="font-bold text-blue-700">(Create)</h6>
-                    </label>
-                    <Controller
-                      name="employeedesignation"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                    {errors.employeedesignation && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.employeedesignation?.message}
-                      </span>
-                    )}
-                  </div>
+              <div className="grid grid-cols-3 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text">
+                    Job title <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    autoComplete="off"
+                    type="text"
+                    {...register("jobtitle", { required: true })}
+                    className="input-box"
+                  />
+                  {errors.jobtitle && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.jobtitle?.message}
+                    </span>
+                  )}
                 </div>
-                <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      Minimum Experience <span className="text-red-500">*</span>
-                      <h6 className="font-bold text-blue-700">(Create)</h6>
-                    </label>
-                    <Controller
-                      name="miniexperience"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                    {errors.miniexperience && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.miniexperience?.message}
-                      </span>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    Employement type <span className="text-red-500">*</span>
+                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                  </label>
+                  <Controller
+                    name="employementye"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Gender"
+                        className="input-box"
+                      />
                     )}
-                  </div>
-
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      Department or Business Unit
-                      <h6 className="font-bold text-blue-700">(Create)</h6>
-                    </label>
-                    <Controller
-                      name="departmentbusiness"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                    {errors.departmentbusiness && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.departmentbusiness?.message}
-                      </span>
+                  />
+                  {errors.employementye && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employementye?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    Employee Designation <span className="text-red-500">*</span>
+                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                  </label>
+                  <Controller
+                    name="employeedesignation"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select minimum experience+"
+                        className="input-box"
+                      />
                     )}
-                  </div>
-                  <div className="group flex flex-col gap-1.5 px-3 py-2">
-                    <label className="label-text">Upload Image </label>
-                    {image ? (
-                      <div className="relative">
-                        <img
-                          src={image}
-                          alt="Uploaded"
-                          className="max-h-24 w-full rounded-md border border-black/20 object-contain"
-                        />
-                        <X
-                          onClick={clearImage}
-                          className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                        />
+                  />
+                  {errors.employeedesignation && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employeedesignation?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    Minimum Experience <span className="text-red-500">*</span>
+                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                  </label>
+                  <Controller
+                    name="miniexperience"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select minimum experience+"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.miniexperience && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.miniexperience?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    Department or Business Unit
+                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                  </label>
+                  <Controller
+                    name="departmentbusiness"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select minimum experience+"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.departmentbusiness && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.departmentbusiness?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">Upload Image </label>
+                  {image ? (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload Image
+                        </span>
                       </div>
-                    ) : (
-                      <label
-                        htmlFor="employee-profile-pic"
-                        className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
-                      >
-                        <div className="flex items-center gap-2">
-                          <UploadCloud />
-                          <span className="font-semibold text-[#2C2C2C]">
-                            Upload Image
-                          </span>
-                        </div>
-                        <input
-                          id="employee-profile-pic"
-                          onChange={handleImageChange}
-                          type="file"
-                          className="hidden"
-                        />
-                      </label>
-                    )}
-
-                    {errors.employeeId && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.employeeId?.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-4 grid w-full grid-cols-3 items-center gap-y-2">
-                  <div className="group col-span-1 flex w-full flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      Job description
-                      <h6 className="font-bold text-blue-700">(Create)</h6>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
                     </label>
+                  )}
+
+                  {errors.employeeId && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employeeId?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group col-span-2 flex w-full flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    Job description
+                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                  </label>
+                  <div className="flex items-center gap-5">
                     <Controller
                       name="jobdiscription"
                       control={control}
@@ -243,79 +237,96 @@ function RecruiterJobPost() {
                         />
                       )}
                     />
-                    {errors.jobdiscription && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.jobdiscription?.message}
-                      </span>
-                    )}
+                    <div className="flex h-10 min-h-10 w-fit min-w-64 cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-semibold text-black/55">
+                      <PenLineIcon className="h-4" /> Update Job Description
+                    </div>
                   </div>
-                  <div className="mt-[1.57rem] flex h-10 min-h-10 w-fit flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-semibold text-black/55">
-                    <PenLineIcon className="h-4" /> Update Job Description
-                  </div>
-                  <div />
+
+                  {errors.jobdiscription && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.jobdiscription?.message}
+                    </span>
+                  )}
                 </div>
-                <div className="mt-4 grid w-full grid-cols-3 items-center justify-center gap-y-2">
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      State,Province or territory
-                    </label>
-                    <Controller
-                      name="territory"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                    {errors.territory && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.territory?.message}
-                      </span>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    Country
+                  </label>
+                  <Controller
+                    name="territory"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select minimum experience+"
+                        className="input-box"
+                      />
                     )}
-                  </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text flex flex-row items-center gap-1">
-                      City or Town
-                    </label>
-                    <Controller
-                      name="city"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={false}
-                          styles={customSelectStyles}
-                          placeholder="Select minimum experience"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                    {errors.city && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.city?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text">Postal Code</label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      className="input-box"
-                    />
-                    {errors.postalcode && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.postalcode?.message}
-                      </span>
-                    )}
-                  </div>
+                  />
+                  {errors.territory && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.territory?.message}
+                    </span>
+                  )}
                 </div>
-                <div className="group flex w-full flex-col space-y-1 px-3 py-2">
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    State,Province or territory
+                  </label>
+                  <Controller
+                    name="territory"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select minimum experience+"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.territory && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.territory?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text flex flex-row items-center gap-1">
+                    City or Town
+                  </label>
+                  <Controller
+                    name="city"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select minimum experience"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.city && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.city?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text">Postal Code</label>
+                  <input autoComplete="off" type="text" className="input-box" />
+                  {errors.postalcode && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.postalcode?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group col-span-3 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Work type</label>
                   <div className="flex flex-row items-start gap-4">
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
