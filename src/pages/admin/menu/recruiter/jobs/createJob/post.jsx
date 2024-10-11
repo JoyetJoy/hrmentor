@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   ArrowUpFromLine,
   ChevronRight,
+  PenLineIcon,
   UploadCloud,
 } from "lucide-react";
 import React from "react";
@@ -248,9 +249,8 @@ function RecruiterJobPost() {
                       </span>
                     )}
                   </div>
-                  <Link className="mt-[1.57rem] flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] text-center text-sm font-medium text-black/70">
-                    <ArrowUpFromLine className="size-4" strokeWidth={1} />
-                    Update Job Description
+                  <Link className="mt-[1.57rem] flex h-10 min-h-10 w-fit flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-medium text-black/70">
+                    <PenLineIcon className="h-4" /> Update Job Description
                   </Link>
                   <div />
                 </div>
@@ -320,8 +320,7 @@ function RecruiterJobPost() {
                   <div className="flex flex-row items-start gap-4">
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
-                        type="checkbox"
-                        defaultChecked
+                        type="radio"
                         className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">
@@ -330,14 +329,14 @@ function RecruiterJobPost() {
                     </label>
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
-                        type="checkbox"
+                        type="radio"
                         className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Work from office</span>
                     </label>
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
-                        type="checkbox"
+                        type="radio"
                         className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Hybrid</span>
