@@ -1,6 +1,5 @@
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
-import CandidatesList from "@/pages/admin/menu/recruiter/candidate";
-import AddCandidates from "@/pages/admin/menu/recruiter/candidate/addcandidates";
+import CandidatesList from "@/pages/admin/menu/recruiter/candidate/Index";
 import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
 import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
 import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
@@ -11,7 +10,6 @@ import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/Mov
 import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
 import History from "@/pages/admin/menu/recruiter/candidate/details/history";
 import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
-import Profile from "@/pages/admin/menu/recruiter/candidate/details/profile";
 import Question from "@/pages/admin/menu/recruiter/candidate/details/question";
 import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
@@ -19,7 +17,7 @@ import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
 import { InterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
-import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/post";
+import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Post";
 import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
 import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
@@ -34,6 +32,8 @@ import { RecruiterSettingInterviewType } from "@/pages/admin/menu/recruiter/sett
 import { RecruiterSettingMinimumExperience } from "@/pages/admin/menu/recruiter/settings/MinimumExperience";
 import { RecruiterSettingProfileQuestion } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
 import { RecruiterSettingSources } from "@/pages/admin/menu/recruiter/settings/Sources";
+import SaveCandidates from "@/pages/admin/menu/recruiter/candidate/Save";
+import CandidateProfile from "@/pages/admin/menu/recruiter/candidate/details/profile";
 
 export const RecruiterRoutes = [
   {
@@ -92,7 +92,6 @@ export const RecruiterRoutes = [
     path: "request-refferals",
     element: <RequestRefferal />,
   },
-
   {
     path: "settings",
     children: [
@@ -141,67 +140,72 @@ export const RecruiterRoutes = [
 
   //  ----candidate----
   {
-    path: "candidatelist",
-    element: <CandidatesList />,
-  },
-  {
-    path: "add-candidate",
-    element: <AddCandidates />,
-  },
-  {
-    path: "profile",
-    element: <Profile />,
-  },
-  {
-    path: "interviews",
-    element: <Interviews />,
-  },
-  {
-    path: "question-answers",
-    element: <Question />,
-  },
-  {
-    path: "discussions",
-    element: <Discussions />,
-  },
-  {
-    path: "documents",
-    element: <Documents />,
-  },
-  {
-    path: "email",
-    // element: <Email />,
+    path: "candidate",
     children: [
       {
-        path: "custom-mail",
-        element: <CustomMail />,
+        path: "",
+        element: <CandidatesList />,
       },
       {
-        path: "welcome-mail",
-        element: <WelcomeMail />,
+        path: "save",
+        element: <SaveCandidates />,
       },
       {
-        path: "interview-schedule",
-        element: <InterviewSchedule />,
+        path: "profile",
+        element: <CandidateProfile />,
       },
       {
-        Path: "interview-result",
-        element: <InterviewResult />,
+        path: "interviews",
+        element: <Interviews />,
       },
       {
-        path: "consider",
-        element: <Consider />,
+        path: "question-answers",
+        element: <Question />,
       },
       {
-        path: "move-to-hiring",
-        element: <MoveHiring />,
+        path: "discussions",
+        element: <Discussions />,
+      },
+      {
+        path: "documents",
+        element: <Documents />,
+      },
+      {
+        path: "email",
+        children: [
+          {
+            path: "custom-mail",
+            element: <CustomMail />,
+          },
+          {
+            path: "welcome-mail",
+            element: <WelcomeMail />,
+          },
+          {
+            path: "interview-schedule",
+            element: <InterviewSchedule />,
+          },
+          {
+            Path: "interview-result",
+            element: <InterviewResult />,
+          },
+          {
+            path: "consider",
+            element: <Consider />,
+          },
+          {
+            path: "move-to-hiring",
+            element: <MoveHiring />,
+          },
+        ],
+      },
+      {
+        path: "history",
+        element: <History />,
       },
     ],
   },
-  {
-    path: "history",
-    element: <History />,
-  },
+
   // interview
   {
     path: "interview",
