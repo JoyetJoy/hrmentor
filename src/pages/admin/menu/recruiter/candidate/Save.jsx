@@ -406,7 +406,7 @@ function SaveCandidates() {
           </div>
         </div>
         <div className="flex flex-col justify-center">
-          <h1 className="pb-1 pt-14 text-xs font-bold">Resume Upload</h1>
+          <h1 className="pb-1 pt-14 text-[0.84rem] font-bold">Resume Upload</h1>
           <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-[#E6E3EB] py-2">
             <p className="text-sm font-semibold">Upload or drag and drop</p>
             <p className="text-sm text-[#7F7F7F]">
