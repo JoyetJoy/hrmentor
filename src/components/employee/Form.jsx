@@ -78,10 +78,10 @@ export default function SaveEmployeeForm({ formtype }) {
     setValue,
     setError,
     reset,
-    getValues,
+    watch,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit",
+    mode: "on",
     reValidateMode: "onChange",
     resolver: yupResolver(EmployeeSchema),
   });
@@ -170,8 +170,6 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [openMasterModalType]);
 
-  const { country_id, state_id, home_address } = getValues();
-
   useEffect(() => {
     if (employeeDetails) {
       setSameAsHome(employeeDetails?.same_as_home === 1 ? true : false);
@@ -190,6 +188,9 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [employeeDetails, sameAsHome]);
 
+  // COUNTRY LISTING
+  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
+
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
     EMPLOYEE_DESIGNATION_LIST,
@@ -202,8 +203,7 @@ export default function SaveEmployeeForm({ formtype }) {
     "nationalityList",
   );
 
-  // COUNTRY LISTING
-  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
+  const { country_id, state_id, home_address } = watch();
 
   // GET STATTE BY COUNTRY ID AND SEARCH KEY
   const loadStatesOptions = async (inputValue) => {
@@ -582,7 +582,6 @@ export default function SaveEmployeeForm({ formtype }) {
                       />
                     )}
                   />
-
                   {errors.state_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.state_id?.message}
