@@ -109,7 +109,6 @@ export default function SaveEmployeeForm({ formtype }) {
   const [qrkey, setQrkey] = useState(null);
   const [type, setType] = useState(null);
   const [colKeys, setColKeys] = useState(null);
-  const [openMasterModalType, setOpenMasterModalType] = useState(null);
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
 
@@ -153,22 +152,14 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [employeeDetails, setImage]);
 
-  useEffect(() => {
-    const config = masterConfig[openMasterModalType];
-    if (config) {
-      setMasterApi(config.api);
-      setQrkey(config.qrkey);
-      setType(config.type);
-      setColKeys(config.colKeys);
-      setPopupOpen(true);
-    } else {
-      setMasterApi(null);
-      setQrkey(null);
-      setType(null);
-      setColKeys(null);
-      setPopupOpen(false);
-    }
-  }, [openMasterModalType]);
+  const handleOpenSaveMaster = (toOpen) => {
+    const config = masterConfig[toOpen];
+    setMasterApi(config.api);
+    setQrkey(config.qrkey);
+    setType(config.type);
+    setColKeys(config.colKeys);
+    setPopupOpen(true);
+  };
 
   useEffect(() => {
     if (employeeDetails) {
@@ -753,7 +744,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Department</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("department");
+                        handleOpenSaveMaster("department");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
@@ -812,7 +803,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Designation</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("designation");
+                        handleOpenSaveMaster("designation");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
@@ -860,7 +851,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Work Location</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("work_location");
+                        handleOpenSaveMaster("work_location");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
@@ -893,7 +884,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Employment Type</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("employment_type");
+                        handleOpenSaveMaster("employment_type");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
