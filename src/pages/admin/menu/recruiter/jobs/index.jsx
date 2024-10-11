@@ -168,7 +168,8 @@ function RecruiterJobs() {
               onChange={(e) => {
                 setKeyword(e.target.value);
               }}
-              className="grow text-sm placeholder:text-sm placeholder:font-medium placeholder:text-gray-200 focus:outline-none"
+              value={keyword}
+              className="grow text-sm text-black placeholder:text-sm placeholder:font-medium focus:outline-none"
               placeholder="Search"
             />
           </label>
