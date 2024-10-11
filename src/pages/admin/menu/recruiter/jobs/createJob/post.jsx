@@ -4,7 +4,6 @@ import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
 import {
   ArrowLeft,
-  ArrowUpFromLine,
   ChevronRight,
   PenLineIcon,
   UploadCloud,
@@ -85,7 +84,12 @@ function RecruiterJobPost() {
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Employement type <span className="text-red-500">*</span>
-                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                    <button
+                      type="button"
+                      className="cursor-pointer font-bold text-blue-700"
+                    >
+                      (Create)
+                    </button>
                   </label>
                   <Controller
                     name="employementye"
@@ -109,7 +113,9 @@ function RecruiterJobPost() {
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Employee Designation <span className="text-red-500">*</span>
-                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                    <button type="button" className="font-bold text-blue-700">
+                      (Create)
+                    </button>
                   </label>
                   <Controller
                     name="employeedesignation"
@@ -133,7 +139,9 @@ function RecruiterJobPost() {
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Minimum Experience <span className="text-red-500">*</span>
-                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                    <button type="button" className="font-bold text-blue-700">
+                      (Create)
+                    </button>
                   </label>
                   <Controller
                     name="miniexperience"
@@ -157,7 +165,9 @@ function RecruiterJobPost() {
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Department or Business Unit
-                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                    <button type="button" className="font-bold text-blue-700">
+                      (Create)
+                    </button>
                   </label>
                   <Controller
                     name="departmentbusiness"
@@ -221,7 +231,9 @@ function RecruiterJobPost() {
                 <div className="group col-span-2 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Job description
-                    <h6 className="font-bold text-blue-700">(Create)</h6>
+                    <button type="button" className="font-bold text-blue-700">
+                      (Create)
+                    </button>
                   </label>
                   <div className="flex items-center gap-5">
                     <Controller
