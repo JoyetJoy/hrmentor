@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SaveEmployeeMasterForm from "./Save";
+import Loader from "@/components/ui/Loader";
 
 export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -141,9 +142,7 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
         <div className="flex gap-x-3">
           <EmployeesSidebar sidebarList={employeeSettingSideList} />
           {isLoading ? (
-            <div className="flex min-h-96 w-full items-center justify-center bg-white">
-              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
-            </div>
+            <Loader />
           ) : (
             <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
               <div className="my-4 flex items-center justify-between">

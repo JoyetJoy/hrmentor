@@ -19,6 +19,7 @@ import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
 import { InterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
+import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/post";
 import Post from "@/pages/admin/menu/recruiter/jobs/createJob/post";
 import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
 import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
@@ -41,10 +42,6 @@ export const RecruiterRoutes = [
     element: <RecruiterDashbaord />,
   },
   {
-    path: "jobs",
-    element: <RecruiterJobs />,
-  },
-  {
     path: "candidate",
     element: <Candidate />,
   },
@@ -60,10 +57,22 @@ export const RecruiterRoutes = [
     path: "job-details",
     element: <JobDetails />,
   },
+
+  // ---- JOB ----
   {
-    path: "post",
-    element: <Post />,
+    path: "jobs",
+    children: [
+      {
+        path: "",
+        element: <RecruiterJobs />,
+      },
+      {
+        path: "post",
+        element: <RecruiterJobPost />,
+      },
+    ],
   },
+
   {
     path: "application",
     element: <Application />,
@@ -126,16 +135,12 @@ export const RecruiterRoutes = [
     path: "create-job-promote",
     element: <Promote />,
   },
-  // {
-  //   path: "create-job-refer",
-  //   element: <Refer />,
-  // },
   {
     path: "create-job-team",
     element: <Team />,
   },
 
-  //  ------candidate----------
+  //  ----candidate----
   {
     path: "candidatelist",
     element: <CandidatesList />,

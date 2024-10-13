@@ -1,6 +1,6 @@
 import React from "react";
 import { RouterProvider } from "react-router-dom";
-import { appRoutes } from "./routes/AdminRoutes";
+import { appRoutes } from "./routes/Routes";
 import QueryProvider from "./lib/providers/QueryProvider";
 import { Toaster } from "react-hot-toast";
 
