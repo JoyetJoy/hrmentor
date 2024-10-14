@@ -18,7 +18,7 @@ import {
   DisclosurePanel,
   DisclosureButton,
 } from "@headlessui/react";
-import { newRequest } from "@/api";
+import { newFormRequest, newRequest } from "@/api";
 import { GENERATE_JOB_CODE } from "@/api/recruiter";
 import toast from "react-hot-toast";
 import {
@@ -92,6 +92,8 @@ function RecruiterJobPost() {
   const [colKeys, setColKeys] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
   const [editDescription, setEditDescription] = useState(false);
+  const [workType, setWorkType] = useState(1);
+  const [showToCareerPage, setShowToCareerPage] = useState(false);
   const [loader, setLoader] = useState(false);
 
   // LISTINGS
@@ -142,7 +144,7 @@ function RecruiterJobPost() {
   });
 
   const { country_id, state_id, job_description_id } = watch();
-  console.log(country_id);
+
   const getJobDescriptionDetails = async () => {
     const response = await newRequest.get(
       `${JOB_DESCRIPTION}/${job_description_id?.id}`,
@@ -219,7 +221,69 @@ function RecruiterJobPost() {
 
   const onSubmit = (data) => {
     setLoader(true);
-    handleEmployee(data);
+    handleSaveJob(data);
+  };
+
+  const handleSaveJob = async (data) => {
+    const formData = new FormData();
+    formData.append("job_title", data.job_title);
+    formData.append("job_code", data.job_code);
+    formData.append("min_exp_id", data.min_exp_id?.id);
+    formData.append("job_description", jobDescription);
+    formData.append("salary_package", data.salary_package?.value);
+    formData.append("salary_type", data.salary_type?.value);
+    formData.append("minimum_range", data.minimum_range?.id);
+    formData.append("maximum_range", data?.maximum_range);
+    formData.append(
+      "sensitive_data_salary_minimum_range",
+      data.sensitive_data_salary_minimum_range,
+    );
+    formData.append(
+      "sensitive_data_salary_maximum_range",
+      data.sensitive_data_salary_maximum_range,
+    );
+    formData.append("currency_type", data.currency_type);
+    formData.append(
+      "search_engine_description",
+      data.search_engine_description,
+    );
+    formData.append("job_description_id", data.job_description_id);
+    formData.append("postal_code", data.postal_code);
+    formData.append("department_id", data.department_id?.id);
+    formData.append("work_type", workType);
+    formData.append("employment_type", data.employment_type?.id);
+    formData.append("designation_id", data.designation_id?.id);
+    formData.append("date_of_joining", data.date_of_joining);
+    formData.append("country_id", data.country_id?.id);
+    formData.append("city_id", data.city_id?.id);
+    formData.append("state_id", data.state_id?.id);
+    formData.append("career_page", showToCareerPage ? 1 : 0);
+    postFile && formData.append("image", postFile);
+
+    try {
+      let res;
+      if (formtype === "save") {
+        res = await newFormRequest.post(EMPLOYEE, formData);
+      } else {
+        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
+      }
+      if (res.data?.status === 201) {
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries(["employeeDetails"]);
+        queryClient.invalidateQueries(["employeeListing"]);
+        clearImage();
+        reset();
+        setLoader(false);
+        formtype === "save" && navigate("/admin/employee");
+      } else {
+        toast.error("Failed to save employee.");
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to save employee.");
+      setLoader(false);
+    }
   };
   return (
     <>
@@ -363,7 +427,7 @@ function RecruiterJobPost() {
                     </button>
                   </label>
                   <Controller
-                    name="miniexperience"
+                    name="min_exp_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
@@ -376,9 +440,9 @@ function RecruiterJobPost() {
                       />
                     )}
                   />
-                  {errors.miniexperience && (
+                  {errors.min_exp_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.miniexperience?.message}
+                      {errors.min_exp_id?.message}
                     </span>
                   )}
                 </div>
@@ -494,7 +558,6 @@ function RecruiterJobPost() {
                       <PenLineIcon className="h-4" /> Update Job Description
                     </button>
                   </div>
-
                   {errors.job_description_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.job_description_id?.message}
@@ -615,10 +678,15 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Postal Code</label>
-                  <input autoComplete="off" type="text" className="input-box" />
-                  {errors.postalcode && (
+                  <input
+                    {...register("postal_code")}
+                    autoComplete="off"
+                    type="text"
+                    className="input-box"
+                  />
+                  {errors.postal_code && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.postalcode?.message}
+                      {errors.postal_code?.message}
                     </span>
                   )}
                 </div>
@@ -629,6 +697,10 @@ function RecruiterJobPost() {
                       <input
                         type="radio"
                         name="workOption"
+                        onChange={() => {
+                          setWorkType(1);
+                        }}
+                        checked={workType === 1}
                         className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">
@@ -639,6 +711,10 @@ function RecruiterJobPost() {
                       <input
                         type="radio"
                         name="workOption"
+                        onChange={() => {
+                          setWorkType(1);
+                        }}
+                        checked={workType === 1}
                         className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Work from office</span>
@@ -648,17 +724,15 @@ function RecruiterJobPost() {
                       <input
                         type="radio"
                         name="workOption"
+                        onChange={() => {
+                          setWorkType(1);
+                        }}
+                        checked={workType === 1}
                         className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Hybrid</span>
                     </label>
                   </div>
-
-                  {errors.jobtitle && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.jobtitle?.message}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
@@ -693,16 +767,16 @@ function RecruiterJobPost() {
                           Generate
                         </button>
                       </div>
-                      {errors.jobcode && (
+                      {errors.unique_job_id && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.jobcode?.message}
+                          {errors.unique_job_id?.message}
                         </span>
                       )}
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-2">
                       <label className="label-text">Salary Package</label>
                       <Controller
-                        name="salarypackage"
+                        name="salary_package"
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
@@ -714,9 +788,9 @@ function RecruiterJobPost() {
                           />
                         )}
                       />
-                      {errors.salarypackage && (
+                      {errors.salary_package && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.salarypackage?.message}
+                          {errors.salary_package?.message}
                         </span>
                       )}
                     </div>
@@ -726,50 +800,75 @@ function RecruiterJobPost() {
                       Salary Range(Internal Only)
                     </label>
                     <div className="flex items-center gap-3">
-                      <input
-                        autoComplete="off"
-                        type="text"
-                        placeholder="Minimum range"
-                        className="input-box"
-                      />
-                      <input
-                        autoComplete="off"
-                        type="text"
-                        placeholder="Maximum range"
-                        className="input-box"
-                      />
-                      <Controller
-                        name="salarypackage"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                          <Select
-                            isSearchable={false}
-                            styles={customSelectStyles}
-                            placeholder="Currency"
-                            className="input-box"
-                          />
+                      <div className="flex flex-col gap-1">
+                        <input
+                          autoComplete="off"
+                          type="text"
+                          {...register("minimum_range")}
+                          placeholder="Minimum range"
+                          className="input-box"
+                        />
+                        {errors.minimum_range && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.minimum_range?.message}
+                          </span>
                         )}
-                      />
-                      <Controller
-                        name="salarypackage"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                          <Select
-                            isSearchable={false}
-                            styles={customSelectStyles}
-                            placeholder="Pay type"
-                            className="input-box"
-                          />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <input
+                          autoComplete="off"
+                          type="text"
+                          {...register("maximum_range")}
+                          placeholder="Minimum range"
+                          className="input-box"
+                        />
+                        {errors.maximum_range && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.maximum_range?.message}
+                          </span>
                         )}
-                      />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Controller
+                          name="currency_type"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Select
+                              isSearchable={false}
+                              styles={customSelectStyles}
+                              placeholder="Currency"
+                              className="input-box"
+                            />
+                          )}
+                        />
+                        {errors.currency_type && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.currency_type?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <Controller
+                          name="salary_package_type"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Select
+                              isSearchable={false}
+                              styles={customSelectStyles}
+                              placeholder="Pay type"
+                              className="input-box"
+                            />
+                          )}
+                        />
+                        {errors.salary_package_type && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.salary_package_type?.message}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    {errors.jobcode && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.jobcode?.message}
-                      </span>
-                    )}
                   </div>
                 </DisclosurePanel>
               </Disclosure>
@@ -789,11 +888,11 @@ function RecruiterJobPost() {
                       This section is visible to Admins, Hiring Managers, And
                       User with sensitive data privilege.
                     </p>
-                    <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
+                    <div className="mt-4 grid w-full grid-cols-2 items-center justify-center gap-y-2">
                       <div className="group flex flex-col space-y-1 px-3 py-2">
                         <label className="label-text">Salary Type</label>
                         <Controller
-                          name="salarypackage"
+                          name="salary_type"
                           control={control}
                           rules={{ required: true }}
                           render={({ field }) => (
@@ -805,9 +904,9 @@ function RecruiterJobPost() {
                             />
                           )}
                         />
-                        {errors.salarypackage && (
+                        {errors.salary_type && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.salarypackage?.message}
+                            {errors.salary_type?.message}
                           </span>
                         )}
                       </div>
@@ -816,36 +915,57 @@ function RecruiterJobPost() {
                           Salary Range(Internal Only)
                         </label>
                         <div className="flex items-center gap-3">
-                          <input
-                            autoComplete="off"
-                            type="text"
-                            placeholder="Minimum range"
-                            className="input-box"
-                          />
-                          <input
-                            autoComplete="off"
-                            type="text"
-                            placeholder="Maximum range"
-                            className="input-box"
-                          />
+                          <div className="flex flex-col gap-1">
+                            <input
+                              autoComplete="off"
+                              type="text"
+                              {...register(
+                                "sensitive_data_salary_minimum_range",
+                              )}
+                              placeholder="Minimum range"
+                              className="input-box"
+                            />
+                            {errors.sensitive_data_salary_minimum_range && (
+                              <span className="text-xs font-medium text-red-500">
+                                {
+                                  errors.sensitive_data_salary_minimum_range
+                                    ?.message
+                                }
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <input
+                              autoComplete="off"
+                              type="text"
+                              {...register(
+                                "sensitive_data_salary_maximum_range",
+                              )}
+                              placeholder="Minimum range"
+                              className="input-box"
+                            />
+                            {errors.sensitive_data_salary_maximum_range && (
+                              <span className="text-xs font-medium text-red-500">
+                                {
+                                  errors.sensitive_data_salary_maximum_range
+                                    ?.message
+                                }
+                              </span>
+                            )}
+                          </div>
                         </div>
-
-                        {errors.jobcode && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.jobcode?.message}
-                          </span>
-                        )}
                       </div>
                     </div>
                     <div className="group flex w-full flex-col space-y-1 px-3 py-2">
                       <label className="label-text">Internal Note</label>
                       <textarea
                         autoComplete="off"
+                        {...register("sensitive_data_internal_note")}
                         className="input-box h-20 w-full"
                       />
-                      {errors.note && (
+                      {errors.sensitive_data_internal_note && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.note?.message}
+                          {errors.sensitive_data_internal_note?.message}
                         </span>
                       )}
                     </div>
@@ -869,11 +989,12 @@ function RecruiterJobPost() {
                       <input
                         autoComplete="off"
                         type="text"
+                        {...register("meta_title")}
                         className="input-box"
                       />
-                      {errors.note && (
+                      {errors.meta_title && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.note?.message}
+                          {errors.meta_title?.message}
                         </span>
                       )}
                     </div>
@@ -884,11 +1005,12 @@ function RecruiterJobPost() {
                       <input
                         autoComplete="off"
                         type="text"
+                        {...register("search_engine_description")}
                         className="input-box h-20"
                       />
-                      {errors.note && (
+                      {errors.search_engine_description && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.note?.message}
+                          {errors.search_engine_description?.message}
                         </span>
                       )}
                     </div>
@@ -897,6 +1019,10 @@ function RecruiterJobPost() {
                       <label className="label cursor-pointer justify-normal gap-4">
                         <input
                           type="checkbox"
+                          onChange={(e) => {
+                            setShowToCareerPage(e.target.checked);
+                          }}
+                          checked={showToCareerPage}
                           className="checkbox size-4 rounded-sm"
                         />
                         <span className="text-gary-200 label-text text-sm">
