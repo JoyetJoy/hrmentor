@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import useImageUpload from "@/hooks/useImageUpload";
 import AsyncSelect from "react-select/async";
 import {
@@ -145,8 +144,6 @@ function RecruiterJobPost() {
     SALARY_DEFAULT_MASTERS,
     "recruiterMasters",
   );
-
-  console.log(recruiterMasters);
 
   const {
     register,
@@ -729,6 +726,14 @@ function RecruiterJobPost() {
                   <input
                     {...register("postal_code")}
                     autoComplete="off"
+                    onKeyPress={(event) => {
+                      if (
+                        !/^[0-9]$/.test(event.key) ||
+                        event.target.value.length >= 6
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
                     type="text"
                     className="input-box"
                   />
@@ -857,6 +862,11 @@ function RecruiterJobPost() {
                             type="text"
                             {...register("minimum_range")}
                             placeholder="Minimum range"
+                            onKeyPress={(event) => {
+                              if (!/^[0-9]$/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            }}
                             className="input-box"
                           />
                           {errors.minimum_range && (
@@ -871,6 +881,11 @@ function RecruiterJobPost() {
                             type="text"
                             {...register("maximum_range")}
                             placeholder="Minimum range"
+                            onKeyPress={(event) => {
+                              if (!/^[0-9]$/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            }}
                             className="input-box"
                           />
                           {errors.maximum_range && (
@@ -996,6 +1011,11 @@ function RecruiterJobPost() {
                                 "sensitive_data_salary_minimum_range",
                               )}
                               placeholder="Minimum range"
+                              onKeyPress={(event) => {
+                                if (!/^[0-9]$/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }}
                               className="input-box"
                             />
                             {errors.sensitive_data_salary_minimum_range && (
@@ -1015,6 +1035,11 @@ function RecruiterJobPost() {
                                 "sensitive_data_salary_maximum_range",
                               )}
                               placeholder="Minimum range"
+                              onKeyPress={(event) => {
+                                if (!/^[0-9]$/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }}
                               className="input-box"
                             />
                             {errors.sensitive_data_salary_maximum_range && (

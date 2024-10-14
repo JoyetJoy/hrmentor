@@ -1,10 +1,18 @@
 import React from "react";
 import Select from "react-select";
+import AsyncSelect from "react-select/async";
 import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Link } from "react-router-dom";
 import MenuHeader from "@/components/common/MenuHeader";
 import ResumeDragzone from "@/components/recruiter/candidate/ResumeDragzone";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import {
+  COUNTRY,
+  COUNTRY_CITY,
+  SALARY_DEFAULT_MASTERS,
+  STATE_COUNTRY,
+} from "@/api/master";
+import { genders } from "@/constants/data";
 
 function SaveCandidates() {
   const {
@@ -18,6 +26,41 @@ function SaveCandidates() {
     mode: "onSubmit",
     // resolver: yupResolver(schema),
   });
+
+  const { country_id, state_id } = watch();
+
+  // RECRUITER MASTERS LISTING
+  const { data: recruiterMasters } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "recruiterMasters",
+  );
+
+  console.log(recruiterMasters);
+
+  // COUNTRY LISTING
+  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
+  // GET STATTE BY COUNTRY ID AND SEARCH KEY
+  const loadStatesOptions = async (inputValue) => {
+    if (inputValue?.length < 3) {
+      return [];
+    }
+    const response = await newRequest.get(STATE_COUNTRY, {
+      params: { country_id: parseInt(country_id?.id), search: inputValue },
+    });
+    return response?.data;
+  };
+
+  // GET CITY BY STATE ID AND SEARCH KEY
+  const loadCitiesOptions = async (inputValue) => {
+    if (inputValue?.length < 3) {
+      return [];
+    }
+    const response = await newRequest.get(COUNTRY_CITY, {
+      params: { state_id: parseInt(state_id?.id), search: inputValue },
+    });
+    return response?.data;
+  };
+
   const onSubmit = (data) => {
     setLoader(true);
     handleEmployee(data);
@@ -37,8 +80,8 @@ function SaveCandidates() {
       <div className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12">
         <div className="flex flex-col">
           <h1 className="pt-3 text-base font-bold">Add Candidate</h1>
-          <div className="mt-5 grid w-full grid-cols-2 gap-5">
-            <div className="group flex flex-col gap-1">
+          <div className="mt-5 grid w-full grid-cols-2 gap-x-5">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">First name</label>
               <input
                 autoComplete="off"
@@ -52,7 +95,7 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="label-text">Last name</label>
               <input
                 autoComplete="off"
@@ -67,7 +110,7 @@ function SaveCandidates() {
               )}
             </div>
 
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">Phone</label>
               <input
                 {...register("surname")}
@@ -82,7 +125,7 @@ function SaveCandidates() {
               )}
             </div>
 
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">Email</label>
               <input
                 {...register("surname")}
@@ -96,28 +139,19 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
-              <label onClick={() => setPopupOpen(true)} className="label-text">
-                Gender
-                <span className="text-red-500">*</span>
-              </label>
-
+            <div className="group flex flex-col space-y-1 py-2">
+              <label className="required label-text">Gender</label>
               <Controller
                 name="gender"
+                className=""
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
+                    {...field}
+                    isSearchable={true}
                     styles={customSelectStyles}
+                    options={genders}
                     placeholder="Select Gender"
                     className="input-box"
                   />
@@ -125,12 +159,12 @@ function SaveCandidates() {
               />
               {errors.gender && (
                 <span className="text-xs font-medium text-red-500">
-                  {errors.gender?.message}
+                  {errors.gender.message}
                 </span>
               )}
             </div>
 
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="label-text">
                 Date of birth <span className="text-red-500">*</span>
               </label>
@@ -147,113 +181,80 @@ function SaveCandidates() {
               )}
             </div>
 
-            <div className="group flex flex-col gap-1">
-              <label className="label-text">
-                Home Address <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                {...register("homeAddress", { required: true })}
-                autoComplete="off"
-                type="text"
-                className="input-box mt-0 h-full w-full focus:border-gray-300"
-              />
-              {errors.homeAddress && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.homeAddress?.message}
-                </span>
-              )}
-            </div>
-
-            <div className="group flex flex-col justify-between gap-1">
-              <div className="flex flex-col gap-1">
-                <label className="label-text">Country</label>
-                <Controller
-                  name="nationality"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select Gender"
-                      className="input-box"
-                    />
-                  )}
-                />
-                {errors.nationality && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.nationality?.message}
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="label-text">State</label>
-                <Controller
-                  name="nationality"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      // required
-                      //   selected={''}
-                      //   value={''}
-                      //   onChange={(selectedOption) => {
-                      //     handle(selectedOption);
-                      //     field.onChange(selectedOption);
-                      //   }}
-                      //   options={}
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select Gender"
-                      className="input-box"
-                    />
-                  )}
-                />
-                {errors.nationality && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.nationality?.message}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="group flex flex-col gap-1">
-              <label className="label-text">District</label>
+            <div className="group flex flex-col space-y-1 py-2">
+              <label className="required label-text">Country</label>
               <Controller
-                name="country"
+                name="country_id"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
+                    {...field}
+                    isSearchable={true}
                     styles={customSelectStyles}
-                    placeholder="Select Gender"
+                    options={countryList}
+                    placeholder="Select Country"
                     className="input-box"
                   />
                 )}
               />
-              {errors.country && (
+              {errors.country_id && (
                 <span className="text-xs font-medium text-red-500">
-                  {errors.country?.message}
+                  {errors.country_id?.message}
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
+              <label className="required label-text flex flex-row items-center gap-1">
+                State,Province or territory
+              </label>
+              <Controller
+                name="state_id"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <AsyncSelect
+                    {...field}
+                    placeholder="Search ..."
+                    loadOptions={loadStatesOptions}
+                    isSearchable={true}
+                    noOptionsMessage={() => "type state name"}
+                    className="input-box"
+                  />
+                )}
+              />
+              {errors.state_id && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.state_id?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col space-y-1 py-2">
+              <label className="required label-text flex flex-row items-center gap-1">
+                City or Town
+              </label>
+              <Controller
+                name="city_id"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <AsyncSelect
+                    {...field}
+                    placeholder="Search ..."
+                    loadOptions={loadCitiesOptions}
+                    isSearchable={true}
+                    noOptionsMessage={() => "type city name"}
+                    className="input-box"
+                  />
+                )}
+              />
+              {errors.city_id && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.city_id?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">Languages spoken</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -267,7 +268,23 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group col-span-2 flex flex-col gap-1">
+              <label className="label-text">
+                Home Address <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                {...register("homeAddress", { required: true })}
+                autoComplete="off"
+                type="text"
+                className="input-box h-full min-h-20 w-full focus:border-gray-300"
+              />
+              {errors.homeAddress && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.homeAddress?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">
                 Highest education level
               </label>
@@ -298,7 +315,7 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">
                 Collage or University
               </label>
@@ -329,13 +346,22 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="label-text">Source</label>
-              <input
-                {...register("nationalInsurance", { required: true })}
-                autoComplete="off"
-                type="text"
-                className="input-box"
+              <Controller
+                name="country_id"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    isSearchable={true}
+                    styles={customSelectStyles}
+                    options={countryList}
+                    placeholder="Select Country"
+                    className="input-box"
+                  />
+                )}
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -343,7 +369,7 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="label-text">
                 Date Applied<span className="text-red-500">*</span>
               </label>
@@ -360,7 +386,7 @@ function SaveCandidates() {
               )}
             </div>
 
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">Recruiting job</label>
               <Controller
                 name="bloodGroup"
@@ -389,7 +415,7 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1">
+            <div className="group flex flex-col space-y-1 py-2">
               <label className="label-text">LinkedIn ID</label>
               <input
                 {...register("nationalInsurance", { required: true })}
@@ -409,7 +435,7 @@ function SaveCandidates() {
         <div className="flex items-center font-semibold text-white">
           <button
             type="submit"
-            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-7 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="btn flex h-10 min-h-10 items-center rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             Submit
           </button>
