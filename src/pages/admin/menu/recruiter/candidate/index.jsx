@@ -45,7 +45,7 @@ function CandidatesList() {
 
   useEffect(() => {
     if (candidateListing) {
-      setTotalPages(candidateListing?.last_page);
+      setTotalPages(candidateListing?.data?.last_page);
     }
   }, [candidateListing]);
 
@@ -53,30 +53,28 @@ function CandidatesList() {
     () => [
       {
         header: "Date applied",
-        accessorKey: "name",
+        accessorKey: "date_applied",
       },
-      { header: "Job ID", accessorKey: "addNo" },
+      { header: "Job ID", accessorKey: "job_id" },
       {
         header: "Candidate name",
-        accessorKey: "dignation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+        accessorKey: "candidate_name",
       },
       {
         header: "Contact",
-        accessorKey: "type",
+        accessorKey: "phone_number",
       },
       {
         header: "Job title",
-        accessorKey: "designation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+        accessorKey: "job_title",
       },
       {
         header: "Email",
-        accessorKey: "location",
+        accessorKey: "email",
       },
       {
         header: "Designation",
-        accessorKey: "location",
+        accessorKey: "designation",
       },
       {
         header: "Workflow status",
@@ -89,7 +87,7 @@ function CandidatesList() {
       },
       {
         header: "Source",
-        accessorKey: "location",
+        accessorKey: "source",
       },
 
       {
@@ -111,7 +109,7 @@ function CandidatesList() {
     [],
   );
   return (
-    <div className="">
+    <>
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -119,7 +117,7 @@ function CandidatesList() {
         currentpath={"Recruiter"}
         activeMenu={"Candidates"}
       />
-      <div className="mx-3 my-3 flex items-center justify-between">
+      <div className="mx-3 mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2 font-semibold text-white">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
             <ArrowLeft className="size-4" />
@@ -162,14 +160,14 @@ function CandidatesList() {
           </Link>
         </div>
       </div>
-      {/* <QueryTable
+      <QueryTable
         columns={columns}
-        list={candidateListing?.listing ?? []}
+        list={candidateListing?.data?.listing ?? []}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
-      /> */}
-    </div>
+      />
+    </>
   );
 }
 

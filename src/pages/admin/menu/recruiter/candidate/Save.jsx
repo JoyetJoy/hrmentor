@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Link } from "react-router-dom";
 import MenuHeader from "@/components/common/MenuHeader";
-import { ArrowUpFromLine } from "lucide-react";
+import ResumeDragzone from "@/components/recruiter/candidate/ResumeDragzone";
 
 function SaveCandidates() {
   const {
@@ -405,19 +405,7 @@ function SaveCandidates() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center">
-          <h1 className="pb-1 pt-14 text-[0.84rem] font-bold">Resume Upload</h1>
-          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-[#E6E3EB] py-2">
-            <p className="text-sm font-semibold">Upload or drag and drop</p>
-            <p className="text-sm text-[#7F7F7F]">
-              (Preferred), DOCX, DOC, PDF up to 1 MB
-            </p>
-            <button class="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-400 bg-white px-7 py-1">
-              <ArrowUpFromLine className="size-4" strokeWidth={2} />
-              <h5 className="text-[0.8rem] font-bold">Upload</h5>
-            </button>
-          </div>
-        </div>
+        <ResumeDragzone />
         <div className="flex items-center font-semibold text-white">
           <button
             type="submit"

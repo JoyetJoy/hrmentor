@@ -8,20 +8,129 @@ import {
   PenLineIcon,
   UploadCloud,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import useImageUpload from "@/hooks/useImageUpload";
+import AsyncSelect from "react-select/async";
 import {
   Disclosure,
   DisclosurePanel,
   DisclosureButton,
 } from "@headlessui/react";
-import { newRequest } from "@/api";
+import { newFormRequest, newRequest } from "@/api";
 import { GENERATE_JOB_CODE } from "@/api/recruiter";
 import toast from "react-hot-toast";
+import {
+  COUNTRY,
+  COUNTRY_CITY,
+  EMPLOYEE_DEPARTMENT,
+  EMPLOYEE_DEPARTMENT_LIST,
+  EMPLOYEE_DESIGNATION,
+  EMPLOYEE_DESIGNATION_LIST,
+  EMPLOYEE_TYPE,
+  EMPLOYEE_TYPE_LIST,
+  JOB_DESCRIPTION,
+  JOB_DESCRIPTION_LIST,
+  MINIMUM_Experience,
+  MINIMUM_EXPERIENCE_LIST,
+  STATE_COUNTRY,
+} from "@/api/master";
+import {
+  recColumnKeysForJobDescription,
+  recColumnKeysForMinimumExperience,
+} from "@/lib/columns/recruiter";
+import {
+  employeeColumnKeysForDepartment,
+  employeeColumnKeysForDesignation,
+  employeeColumnKeysForEmployeeType,
+} from "@/lib/columns/employee";
+import SaveRecruiterMasterForm from "@/components/popups/recruiter/settings/common/Save";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { recruiterJobPostSchema } from "@/schema/dashboard/recruiter/job/post.schema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import EditJobDescriptionRecruiterJobForm from "@/components/popups/recruiter/createjob/EditJobDescription";
+
+const masterConfig = {
+  department: {
+    api: EMPLOYEE_DEPARTMENT,
+    qrkey: "employeeDepartmentList",
+    type: "Department",
+    colKeys: employeeColumnKeysForDepartment,
+  },
+  job_description: {
+    api: JOB_DESCRIPTION,
+    qrkey: "recJobDescriptionList",
+    type: "Job Description",
+    colKeys: recColumnKeysForJobDescription,
+  },
+  designation: {
+    api: EMPLOYEE_DESIGNATION,
+    qrkey: "employeeDesignationList",
+    type: "Designation",
+    colKeys: employeeColumnKeysForDesignation,
+  },
+  employment_type: {
+    api: EMPLOYEE_TYPE,
+    qrkey: "employeeTypeList",
+    type: "Employee Type",
+    colKeys: employeeColumnKeysForEmployeeType,
+  },
+  minimum_experience: {
+    api: MINIMUM_Experience,
+    qrkey: "recMinimumExperienceList",
+    type: "Minimum Experience",
+    colKeys: recColumnKeysForMinimumExperience,
+  },
+};
 
 function RecruiterJobPost() {
+  const [masterApi, setMasterApi] = useState(null);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [qrkey, setQrkey] = useState(null);
+  const [type, setType] = useState(null);
+  const [colKeys, setColKeys] = useState(null);
+  const [jobDescription, setJobDescription] = useState("");
+  const [editDescription, setEditDescription] = useState(false);
+  const [workType, setWorkType] = useState(1);
+  const [showToCareerPage, setShowToCareerPage] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  // LISTINGS
+
+  // COUNTRY LISTING
+  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
+
+  // EMOPLOYEE TYPE LIST
+  const { data: employeeTypeList } = useEmployeeMaster(
+    EMPLOYEE_TYPE_LIST,
+    "employeeTypeList",
+  );
+
+  // DESIGNATION LISTING
+  const { data: designationListing } = useEmployeeMaster(
+    EMPLOYEE_DESIGNATION_LIST,
+    "employeeDesignationList",
+  );
+
+  // MINIMUM EXPERIENCE LIST
+  const { data: minimumExperienceList } = useEmployeeMaster(
+    MINIMUM_EXPERIENCE_LIST,
+    "recMinimumExperienceList",
+  );
+
+  // JOB DESCRIPTION LIST
+  const { data: jobDescriptionList } = useEmployeeMaster(
+    JOB_DESCRIPTION_LIST,
+    "recJobDescriptionList",
+  );
+
+  // DEPARTMENT LISTING
+  const { data: departmentListing } = useEmployeeMaster(
+    EMPLOYEE_DEPARTMENT_LIST,
+    "employeeDepartmentList",
+  );
+
   const {
     register,
     handleSubmit,
@@ -31,12 +140,58 @@ function RecruiterJobPost() {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
+    resolver: yupResolver(recruiterJobPostSchema),
   });
+
+  const { country_id, state_id, job_description_id } = watch();
+
+  const getJobDescriptionDetails = async () => {
+    const response = await newRequest.get(
+      `${JOB_DESCRIPTION}/${job_description_id?.id}`,
+    );
+    setJobDescription(response?.data?.job_description);
+  };
+
+  useEffect(() => {
+    if (job_description_id) {
+      getJobDescriptionDetails();
+    }
+  }, [job_description_id]);
+
+  // GET STATTE BY COUNTRY ID AND SEARCH KEY
+  const loadStatesOptions = async (inputValue) => {
+    if (inputValue?.length < 3) {
+      return [];
+    }
+    const response = await newRequest.get(STATE_COUNTRY, {
+      params: { country_id: parseInt(country_id?.id), search: inputValue },
+    });
+    return response?.data;
+  };
+
+  // GET CITY BY STATE ID AND SEARCH KEY
+  const loadCitiesOptions = async (inputValue) => {
+    if (inputValue?.length < 3) {
+      return [];
+    }
+    const response = await newRequest.get(COUNTRY_CITY, {
+      params: { state_id: parseInt(state_id?.id), search: inputValue },
+    });
+    return response?.data;
+  };
+
+  const handleOpenSaveMaster = (toOpen) => {
+    const config = masterConfig[toOpen];
+    setMasterApi(config.api);
+    setQrkey(config.qrkey);
+    setType(config.type);
+    setColKeys(config.colKeys);
+    setPopupOpen(true);
+  };
 
   const { unique_job_id } = watch();
   // GENERATE JOB CODE
   const generateJobCode = async () => {
-    console.log("kakaak");
     try {
       const res = await newRequest.get(GENERATE_JOB_CODE);
       if (res?.status === 200) {
@@ -48,15 +203,106 @@ function RecruiterJobPost() {
     }
   };
 
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
-    useImageUpload();
+  const {
+    image: post,
+    imageFile: postFile,
+    handleImageChange: handlePostChange,
+    clearImage: clearPost,
+    setImage: setPost,
+  } = useImageUpload();
+
+  const {
+    image: guideline,
+    imageFile: guidelinefile,
+    handleImageChange: handleGuidelineChange,
+    clearImage: clearGuideline,
+    setImage: setGuideline,
+  } = useImageUpload();
 
   const onSubmit = (data) => {
     setLoader(true);
-    handleEmployee(data);
+    handleSaveJob(data);
+  };
+
+  const handleSaveJob = async (data) => {
+    const formData = new FormData();
+    formData.append("job_title", data.job_title);
+    formData.append("job_code", data.job_code);
+    formData.append("min_exp_id", data.min_exp_id?.id);
+    formData.append("job_description", jobDescription);
+    formData.append("salary_package", data.salary_package?.value);
+    formData.append("salary_type", data.salary_type?.value);
+    formData.append("minimum_range", data.minimum_range?.id);
+    formData.append("maximum_range", data?.maximum_range);
+    formData.append(
+      "sensitive_data_salary_minimum_range",
+      data.sensitive_data_salary_minimum_range,
+    );
+    formData.append(
+      "sensitive_data_salary_maximum_range",
+      data.sensitive_data_salary_maximum_range,
+    );
+    formData.append("currency_type", data.currency_type);
+    formData.append(
+      "search_engine_description",
+      data.search_engine_description,
+    );
+    formData.append("job_description_id", data.job_description_id);
+    formData.append("postal_code", data.postal_code);
+    formData.append("department_id", data.department_id?.id);
+    formData.append("work_type", workType);
+    formData.append("employment_type", data.employment_type?.id);
+    formData.append("designation_id", data.designation_id?.id);
+    formData.append("date_of_joining", data.date_of_joining);
+    formData.append("country_id", data.country_id?.id);
+    formData.append("city_id", data.city_id?.id);
+    formData.append("state_id", data.state_id?.id);
+    formData.append("career_page", showToCareerPage ? 1 : 0);
+    postFile && formData.append("image", postFile);
+
+    try {
+      let res;
+      if (formtype === "save") {
+        res = await newFormRequest.post(EMPLOYEE, formData);
+      } else {
+        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
+      }
+      if (res.data?.status === 201) {
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries(["employeeDetails"]);
+        queryClient.invalidateQueries(["employeeListing"]);
+        clearImage();
+        reset();
+        setLoader(false);
+        formtype === "save" && navigate("/admin/employee");
+      } else {
+        toast.error("Failed to save employee.");
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to save employee.");
+      setLoader(false);
+    }
   };
   return (
-    <div>
+    <>
+      <EditJobDescriptionRecruiterJobForm
+        popupOpen={editDescription}
+        setPopupOpen={setEditDescription}
+        jobDescription={jobDescription}
+        setJobDescription={setJobDescription}
+      />
+      <SaveRecruiterMasterForm
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={0}
+        setSelectedField={() => {}}
+        qrkey={qrkey}
+        type={type}
+        colKeys={colKeys}
+        api={masterApi}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -92,12 +338,12 @@ function RecruiterJobPost() {
                   <input
                     autoComplete="off"
                     type="text"
-                    {...register("jobtitle", { required: true })}
+                    {...register("job_title", { required: true })}
                     className="input-box"
                   />
-                  {errors.jobtitle && (
+                  {errors.job_title && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.jobtitle?.message}
+                      {errors.job_title?.message}
                     </span>
                   )}
                 </div>
@@ -106,119 +352,144 @@ function RecruiterJobPost() {
                     Employement type <span className="text-red-500">*</span>
                     <button
                       type="button"
+                      onClick={() => {
+                        handleOpenSaveMaster("employment_type");
+                      }}
                       className="cursor-pointer font-bold text-blue-700"
                     >
                       (Create)
                     </button>
                   </label>
                   <Controller
-                    name="employementye"
+                    name="employment_type"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         isSearchable={false}
                         styles={customSelectStyles}
-                        placeholder="Select Gender"
+                        options={employeeTypeList}
+                        placeholder="Select employee type"
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.employementye && (
+                  {errors.employment_type && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.employementye?.message}
+                      {errors.employment_type?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Employee Designation <span className="text-red-500">*</span>
-                    <button type="button" className="font-bold text-blue-700">
+                    <button
+                      onClick={() => {
+                        handleOpenSaveMaster("designation");
+                      }}
+                      type="button"
+                      className="font-bold text-blue-700"
+                    >
                       (Create)
                     </button>
                   </label>
                   <Controller
-                    name="employeedesignation"
+                    name="designation_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         isSearchable={false}
                         styles={customSelectStyles}
-                        placeholder="Select minimum experience+"
+                        options={designationListing}
+                        placeholder="Select Designation"
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.employeedesignation && (
+                  {errors.designation_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.employeedesignation?.message}
+                      {errors.designation_id?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Minimum Experience <span className="text-red-500">*</span>
-                    <button type="button" className="font-bold text-blue-700">
+                    <button
+                      onClick={() => {
+                        handleOpenSaveMaster("minimum_experience");
+                      }}
+                      type="button"
+                      className="font-bold text-blue-700"
+                    >
                       (Create)
                     </button>
                   </label>
                   <Controller
-                    name="miniexperience"
+                    name="min_exp_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         isSearchable={false}
                         styles={customSelectStyles}
-                        placeholder="Select minimum experience+"
+                        options={minimumExperienceList}
+                        placeholder="Select minimum experience"
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.miniexperience && (
+                  {errors.min_exp_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.miniexperience?.message}
+                      {errors.min_exp_id?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Department or Business Unit
-                    <button type="button" className="font-bold text-blue-700">
+                    <button
+                      onClick={() => {
+                        handleOpenSaveMaster("department");
+                      }}
+                      type="button"
+                      className="font-bold text-blue-700"
+                    >
                       (Create)
                     </button>
                   </label>
                   <Controller
-                    name="departmentbusiness"
+                    name="department_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         isSearchable={false}
                         styles={customSelectStyles}
-                        placeholder="Select minimum experience+"
+                        options={departmentListing}
+                        placeholder="Select Department"
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.departmentbusiness && (
+                  {errors.department_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.departmentbusiness?.message}
+                      {errors.department_id?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image </label>
-                  {image ? (
+                  <label className="label-text">Post Image </label>
+                  {post ? (
                     <div className="relative">
                       <img
-                        src={image}
+                        src={post}
                         alt="Uploaded"
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                       />
                       <X
-                        onClick={clearImage}
+                        onClick={clearPost}
                         className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
                       />
                     </div>
@@ -230,18 +501,17 @@ function RecruiterJobPost() {
                       <div className="flex items-center gap-2">
                         <UploadCloud />
                         <span className="font-semibold text-[#2C2C2C]">
-                          Upload Image
+                          Upload File
                         </span>
                       </div>
                       <input
                         id="employee-profile-pic"
-                        onChange={handleImageChange}
+                        onChange={handlePostChange}
                         type="file"
                         className="hidden"
                       />
                     </label>
                   )}
-
                   {errors.employeeId && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.employeeId?.message}
@@ -251,55 +521,108 @@ function RecruiterJobPost() {
                 <div className="group col-span-2 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
                     Job description
-                    <button type="button" className="font-bold text-blue-700">
+                    <button
+                      onClick={() => {
+                        handleOpenSaveMaster("job_description");
+                      }}
+                      type="button"
+                      className="font-bold text-blue-700"
+                    >
                       (Create)
                     </button>
                   </label>
                   <div className="flex items-center gap-5">
                     <Controller
-                      name="jobdiscription"
+                      name="job_description_id"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
+                          {...field}
                           isSearchable={false}
                           styles={customSelectStyles}
-                          placeholder="Select minimum experience+"
-                          className="input-box h-10 focus:border-gray-300"
+                          options={jobDescriptionList}
+                          placeholder="Select Description"
+                          className="input-box"
                         />
                       )}
                     />
-                    <div className="flex h-10 min-h-10 w-fit min-w-64 cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-semibold text-black/55">
+                    <button
+                      type="button"
+                      disabled={!job_description_id}
+                      onClick={() => {
+                        setEditDescription(true);
+                      }}
+                      className="flex h-10 min-h-10 w-fit min-w-64 cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-semibold text-black/55"
+                    >
                       <PenLineIcon className="h-4" /> Update Job Description
-                    </div>
+                    </button>
                   </div>
-
-                  {errors.jobdiscription && (
+                  {errors.job_description_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.jobdiscription?.message}
+                      {errors.job_description_id?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">Interview Guidelines </label>
+                  {guideline ? (
+                    <div className="relative">
+                      <img
+                        src={guideline}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearGuideline}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload File
+                        </span>
+                      </div>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleGuidelineChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                  {errors.employeeId && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employeeId?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="label-text flex flex-row items-center gap-1">
-                    Country
-                  </label>
+                  <label className="required label-text">Country</label>
                   <Controller
-                    name="territory"
+                    name="country_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
-                        isSearchable={false}
+                        {...field}
+                        isSearchable={true}
                         styles={customSelectStyles}
-                        placeholder="Select minimum experience+"
+                        options={countryList}
+                        placeholder="Select Country"
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.territory && (
+                  {errors.country_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.territory?.message}
+                      {errors.country_id?.message}
                     </span>
                   )}
                 </div>
@@ -308,21 +631,23 @@ function RecruiterJobPost() {
                     State,Province or territory
                   </label>
                   <Controller
-                    name="territory"
+                    name="state_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
-                      <Select
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select minimum experience+"
+                      <AsyncSelect
+                        {...field}
+                        placeholder="Search ..."
+                        loadOptions={loadStatesOptions}
+                        isSearchable={true}
+                        noOptionsMessage={() => "type state name"}
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.territory && (
+                  {errors.state_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.territory?.message}
+                      {errors.state_id?.message}
                     </span>
                   )}
                 </div>
@@ -331,30 +656,37 @@ function RecruiterJobPost() {
                     City or Town
                   </label>
                   <Controller
-                    name="city"
+                    name="city_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
-                      <Select
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select minimum experience"
+                      <AsyncSelect
+                        {...field}
+                        placeholder="Search ..."
+                        loadOptions={loadCitiesOptions}
+                        isSearchable={true}
+                        noOptionsMessage={() => "type city name"}
                         className="input-box"
                       />
                     )}
                   />
-                  {errors.city && (
+                  {errors.city_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.city?.message}
+                      {errors.city_id?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Postal Code</label>
-                  <input autoComplete="off" type="text" className="input-box" />
-                  {errors.postalcode && (
+                  <input
+                    {...register("postal_code")}
+                    autoComplete="off"
+                    type="text"
+                    className="input-box"
+                  />
+                  {errors.postal_code && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.postalcode?.message}
+                      {errors.postal_code?.message}
                     </span>
                   )}
                 </div>
@@ -364,32 +696,43 @@ function RecruiterJobPost() {
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
-                        className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        name="workOption"
+                        onChange={() => {
+                          setWorkType(1);
+                        }}
+                        checked={workType === 1}
+                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">
-                        Remote(work from office)
+                        Remote (Work from home)
                       </span>
                     </label>
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
-                        className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        name="workOption"
+                        onChange={() => {
+                          setWorkType(1);
+                        }}
+                        checked={workType === 1}
+                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Work from office</span>
                     </label>
+
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
-                        className="checkbox h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        name="workOption"
+                        onChange={() => {
+                          setWorkType(1);
+                        }}
+                        checked={workType === 1}
+                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Hybrid</span>
                     </label>
                   </div>
-                  {errors.jobtitle && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.jobtitle?.message}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
@@ -424,16 +767,16 @@ function RecruiterJobPost() {
                           Generate
                         </button>
                       </div>
-                      {errors.jobcode && (
+                      {errors.unique_job_id && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.jobcode?.message}
+                          {errors.unique_job_id?.message}
                         </span>
                       )}
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-2">
                       <label className="label-text">Salary Package</label>
                       <Controller
-                        name="salarypackage"
+                        name="salary_package"
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
@@ -445,26 +788,87 @@ function RecruiterJobPost() {
                           />
                         )}
                       />
-                      {errors.salarypackage && (
+                      {errors.salary_package && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.salarypackage?.message}
+                          {errors.salary_package?.message}
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="group flex w-8/12 flex-col space-y-1 px-3 py-2">
-                    <label className="label-text">Reason</label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      placeholder="Enter the reason"
-                      className="input-box h-20 w-full text-justify placeholder:text-start focus:border-gray-300"
-                    />
-                    {errors.reason && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.reason?.message}
-                      </span>
-                    )}
+                  <div className="group flex flex-col space-y-1 px-3 py-2">
+                    <label className="label-text">
+                      Salary Range(Internal Only)
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <div className="flex flex-col gap-1">
+                        <input
+                          autoComplete="off"
+                          type="text"
+                          {...register("minimum_range")}
+                          placeholder="Minimum range"
+                          className="input-box"
+                        />
+                        {errors.minimum_range && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.minimum_range?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <input
+                          autoComplete="off"
+                          type="text"
+                          {...register("maximum_range")}
+                          placeholder="Minimum range"
+                          className="input-box"
+                        />
+                        {errors.maximum_range && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.maximum_range?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Controller
+                          name="currency_type"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Select
+                              isSearchable={false}
+                              styles={customSelectStyles}
+                              placeholder="Currency"
+                              className="input-box"
+                            />
+                          )}
+                        />
+                        {errors.currency_type && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.currency_type?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <Controller
+                          name="salary_package_type"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Select
+                              isSearchable={false}
+                              styles={customSelectStyles}
+                              placeholder="Pay type"
+                              className="input-box"
+                            />
+                          )}
+                        />
+                        {errors.salary_package_type && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.salary_package_type?.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </DisclosurePanel>
               </Disclosure>
@@ -484,11 +888,11 @@ function RecruiterJobPost() {
                       This section is visible to Admins, Hiring Managers, And
                       User with sensitive data privilege.
                     </p>
-                    <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
+                    <div className="mt-4 grid w-full grid-cols-2 items-center justify-center gap-y-2">
                       <div className="group flex flex-col space-y-1 px-3 py-2">
                         <label className="label-text">Salary Type</label>
                         <Controller
-                          name="salarypackage"
+                          name="salary_type"
                           control={control}
                           rules={{ required: true }}
                           render={({ field }) => (
@@ -500,47 +904,68 @@ function RecruiterJobPost() {
                             />
                           )}
                         />
-                        {errors.salarypackage && (
+                        {errors.salary_type && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.salarypackage?.message}
+                            {errors.salary_type?.message}
                           </span>
                         )}
                       </div>
                       <div className="group flex flex-col space-y-1 px-3 py-2">
                         <label className="label-text">
-                          Salary Range(Internal Only )
+                          Salary Range(Internal Only)
                         </label>
                         <div className="flex items-center gap-3">
-                          <input
-                            autoComplete="off"
-                            type="text"
-                            placeholder="Minimum range"
-                            className="input-box"
-                          />
-                          <input
-                            autoComplete="off"
-                            type="text"
-                            placeholder="Maximum range"
-                            className="input-box"
-                          />
+                          <div className="flex flex-col gap-1">
+                            <input
+                              autoComplete="off"
+                              type="text"
+                              {...register(
+                                "sensitive_data_salary_minimum_range",
+                              )}
+                              placeholder="Minimum range"
+                              className="input-box"
+                            />
+                            {errors.sensitive_data_salary_minimum_range && (
+                              <span className="text-xs font-medium text-red-500">
+                                {
+                                  errors.sensitive_data_salary_minimum_range
+                                    ?.message
+                                }
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <input
+                              autoComplete="off"
+                              type="text"
+                              {...register(
+                                "sensitive_data_salary_maximum_range",
+                              )}
+                              placeholder="Minimum range"
+                              className="input-box"
+                            />
+                            {errors.sensitive_data_salary_maximum_range && (
+                              <span className="text-xs font-medium text-red-500">
+                                {
+                                  errors.sensitive_data_salary_maximum_range
+                                    ?.message
+                                }
+                              </span>
+                            )}
+                          </div>
                         </div>
-
-                        {errors.jobcode && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.jobcode?.message}
-                          </span>
-                        )}
                       </div>
                     </div>
                     <div className="group flex w-full flex-col space-y-1 px-3 py-2">
                       <label className="label-text">Internal Note</label>
                       <textarea
                         autoComplete="off"
+                        {...register("sensitive_data_internal_note")}
                         className="input-box h-20 w-full"
                       />
-                      {errors.note && (
+                      {errors.sensitive_data_internal_note && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.note?.message}
+                          {errors.sensitive_data_internal_note?.message}
                         </span>
                       )}
                     </div>
@@ -564,11 +989,12 @@ function RecruiterJobPost() {
                       <input
                         autoComplete="off"
                         type="text"
+                        {...register("meta_title")}
                         className="input-box"
                       />
-                      {errors.note && (
+                      {errors.meta_title && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.note?.message}
+                          {errors.meta_title?.message}
                         </span>
                       )}
                     </div>
@@ -579,11 +1005,12 @@ function RecruiterJobPost() {
                       <input
                         autoComplete="off"
                         type="text"
+                        {...register("search_engine_description")}
                         className="input-box h-20"
                       />
-                      {errors.note && (
+                      {errors.search_engine_description && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.note?.message}
+                          {errors.search_engine_description?.message}
                         </span>
                       )}
                     </div>
@@ -592,6 +1019,10 @@ function RecruiterJobPost() {
                       <label className="label cursor-pointer justify-normal gap-4">
                         <input
                           type="checkbox"
+                          onChange={(e) => {
+                            setShowToCareerPage(e.target.checked);
+                          }}
+                          checked={showToCareerPage}
                           className="checkbox size-4 rounded-sm"
                         />
                         <span className="text-gary-200 label-text text-sm">
@@ -607,7 +1038,7 @@ function RecruiterJobPost() {
         </div>
         <CreateJobSideBar stepCounter={1} />
       </div>
-    </div>
+    </>
   );
 }
 
