@@ -7,6 +7,7 @@ import {
   ChevronRight,
   PenLineIcon,
   UploadCloud,
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -330,6 +331,10 @@ function RecruiterJobPost() {
       setLoader(false);
     }
   };
+
+  const handleImageError = (event) => {
+    event.target.src = "/assets/icons/tort.svg";
+  };
   return (
     <>
       <EditJobDescriptionRecruiterJobForm
@@ -613,6 +618,7 @@ function RecruiterJobPost() {
                       <img
                         src={guideline}
                         alt="Uploaded"
+                        onError={handleImageError}
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                       />
                       <X
@@ -838,7 +844,7 @@ function RecruiterJobPost() {
                       )}
                     </div>
                   </div>
-                  {console.log(salary_package)}
+
                   {salary_package?.value === 1 ? (
                     <div className="group flex flex-col space-y-1 px-3 py-2">
                       <label className="label-text">
