@@ -70,6 +70,8 @@ export const ACCOUNT_TYPE_LIST = "active-bank-account-type";
 
 // Job Description
 export const JOB_DESCRIPTION = "JobDescriptions";
+// LIST
+export const JOB_DESCRIPTION_LIST = "Active-JobDescriptions";
 // PROFILE QUESTION
 export const PROFILE_QUESTION = "ProfileQuestions";
 // QUALIFICATION
@@ -80,5 +82,8 @@ export const INTERVIEW_TYPE = "InterviewTypes";
 export const CANDIDATE_TYPE = "CandidateTypes";
 // Experience
 export const MINIMUM_Experience = "MinimumExperience";
+// LIST
+// Experience
+export const MINIMUM_EXPERIENCE_LIST = "Active-MinimumExperience";
 // SOURCES
 export const SOURCES = "Source";

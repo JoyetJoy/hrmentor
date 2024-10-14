@@ -6,7 +6,7 @@ function CreateJobSideBar() {
       <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-[#CACACA]" />
       <div className="flex flex-col gap-y-4">
         <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
-          <div className="z-50 size-4 rounded-full border border-[#46A724] bg-[#65D43E]" />
+          <div className="z-10 size-4 rounded-full border border-[#46A724] bg-[#65D43E]" />
           <p>Post</p>
         </div>
         <div className="ml-5 flex flex-col gap-3 rounded px-3 text-sm">
@@ -40,23 +40,23 @@ function CreateJobSideBar() {
         </div>
 
         <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
-          <div className="z-50 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
+          <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Application</p>
         </div>
         <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
-          <div className="z-50 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
+          <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Team</p>
         </div>
         <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
-          <div className="z-50 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
+          <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Interview Guides</p>
         </div>
         <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
-          <div className="z-50 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
+          <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Refer</p>
         </div>
         <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
-          <div className="z-50 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
+          <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Promote</p>
         </div>
       </div>

@@ -119,7 +119,7 @@ function CandidatesList() {
         currentpath={"Recruiter"}
         activeMenu={"Candidates"}
       />
-      <div className="mx-3 my-3 flex items-center justify-between">
+      <div className="mx-3 flex items-center justify-between">
         <div className="flex items-center gap-2 font-semibold text-white">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
             <ArrowLeft className="size-4" />
