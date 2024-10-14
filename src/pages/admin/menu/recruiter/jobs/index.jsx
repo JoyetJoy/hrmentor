@@ -93,7 +93,6 @@ function RecruiterJobs() {
       {
         header: "Status",
         accessorKey: "status",
-
         cell: ({ row }) => (
           <div
             style={{

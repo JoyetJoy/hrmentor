@@ -41,8 +41,6 @@ function CandidatesList() {
         }),
   });
 
-  console.log(candidateListing);
-
   useEffect(() => {
     if (candidateListing) {
       setTotalPages(candidateListing?.data?.last_page);
@@ -80,8 +78,14 @@ function CandidatesList() {
         header: "Workflow status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center rounded-md border border-[#92BEE4] bg-[#F0F8FF] px-3 text-xs font-medium text-black">
-            {row?.original?.status}
+          <div
+            style={{
+              backgroundColor: row?.original?.status?.background_color,
+              color: row?.original?.status?.text_color,
+            }}
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+          >
+            {row?.original?.status?.status_name}
           </div>
         ),
       },
