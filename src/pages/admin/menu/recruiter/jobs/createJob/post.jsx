@@ -51,6 +51,7 @@ import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { recruiterJobPostSchema } from "@/schema/dashboard/recruiter/job/post.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditJobDescriptionRecruiterJobForm from "@/components/popups/recruiter/createjob/EditJobDescription";
+import { salaryPackageType } from "@/constants/data";
 
 const masterConfig = {
   department: {
@@ -167,6 +168,7 @@ function RecruiterJobPost() {
     city_id,
     state_id,
     job_description_id,
+    salary_package,
   } = watch();
 
   useEffect(() => {
@@ -778,7 +780,7 @@ function RecruiterJobPost() {
             <div className="flex flex-col gap-2.5 pb-7">
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
@@ -820,9 +822,11 @@ function RecruiterJobPost() {
                         rules={{ required: true }}
                         render={({ field }) => (
                           <Select
+                            {...field}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Not Mention Package"
+                            options={salaryPackageType}
+                            placeholder="Select package"
                             className="input-box"
                           />
                         )}
@@ -834,96 +838,114 @@ function RecruiterJobPost() {
                       )}
                     </div>
                   </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text">
-                      Salary Range(Internal Only)
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <div className="flex flex-col gap-1">
-                        <input
-                          autoComplete="off"
-                          type="text"
-                          {...register("minimum_range")}
-                          placeholder="Minimum range"
-                          className="input-box"
-                        />
-                        {errors.minimum_range && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.minimum_range?.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <input
-                          autoComplete="off"
-                          type="text"
-                          {...register("maximum_range")}
-                          placeholder="Minimum range"
-                          className="input-box"
-                        />
-                        {errors.maximum_range && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.maximum_range?.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <Controller
-                          name="currency_type"
-                          control={control}
-                          rules={{ required: true }}
-                          render={({ field }) => (
-                            <Select
-                              {...field}
-                              options={recruiterMasters?.currencies}
-                              isSearchable={false}
-                              styles={customSelectStyles}
-                              placeholder="Currency"
-                              className="input-box"
-                            />
+                  {console.log(salary_package)}
+                  {salary_package?.value === 1 ? (
+                    <div className="group flex flex-col space-y-1 px-3 py-2">
+                      <label className="label-text">
+                        Salary Range(Internal Only)
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <div className="flex flex-col gap-1">
+                          <input
+                            autoComplete="off"
+                            type="text"
+                            {...register("minimum_range")}
+                            placeholder="Minimum range"
+                            className="input-box"
+                          />
+                          {errors.minimum_range && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.minimum_range?.message}
+                            </span>
                           )}
-                        />
-                        {errors.currency_type && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.currency_type?.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col">
-                        <Controller
-                          name="salary_package_type"
-                          control={control}
-                          rules={{ required: true }}
-                          render={({ field }) => (
-                            <Select
-                              {...field}
-                              isSearchable={false}
-                              options={recruiterMasters?.paySchedules}
-                              styles={customSelectStyles}
-                              placeholder="Pay type"
-                              className="input-box"
-                            />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <input
+                            autoComplete="off"
+                            type="text"
+                            {...register("maximum_range")}
+                            placeholder="Minimum range"
+                            className="input-box"
+                          />
+                          {errors.maximum_range && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.maximum_range?.message}
+                            </span>
                           )}
-                        />
-                        {errors.salary_package_type && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.salary_package_type?.message}
-                          </span>
-                        )}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <Controller
+                            name="currency_type"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                options={recruiterMasters?.currencies}
+                                isSearchable={false}
+                                styles={customSelectStyles}
+                                placeholder="Currency"
+                                className="input-box"
+                              />
+                            )}
+                          />
+                          {errors.currency_type && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.currency_type?.message}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex flex-col">
+                          <Controller
+                            name="salary_package_type"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                isSearchable={false}
+                                options={recruiterMasters?.paySchedules}
+                                styles={customSelectStyles}
+                                placeholder="Pay type"
+                                className="input-box"
+                              />
+                            )}
+                          />
+                          {errors.salary_package_type && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.salary_package_type?.message}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="flex flex-col gap-1 px-3">
+                      <textarea
+                        autoComplete="off"
+                        type="text"
+                        {...register("reason")}
+                        placeholder="Reason "
+                        className="input-box min-h-24 py-1"
+                      />
+                      {errors.reason && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.reason?.message}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </DisclosurePanel>
               </Disclosure>
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Sensitive data
                   </p>
-                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                  <div className="h-[0.5px] w-full bg-[#ECE9F1]"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>
@@ -940,9 +962,11 @@ function RecruiterJobPost() {
                           rules={{ required: true }}
                           render={({ field }) => (
                             <Select
+                              {...field}
                               isSearchable={false}
+                              options={salaryPackageType}
                               styles={customSelectStyles}
-                              placeholder="Not Mention Package"
+                              placeholder="Select salary type"
                               className="input-box"
                             />
                           )}
@@ -1017,7 +1041,7 @@ function RecruiterJobPost() {
               </Disclosure>
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
