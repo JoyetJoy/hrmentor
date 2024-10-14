@@ -39,6 +39,7 @@ function MenuHeader(props) {
     "Subscription",
     "Add Employee",
     "Employee Detail",
+    "Roster List"
   ].includes(currentpath);
 
   return (

@@ -5,6 +5,11 @@ import { AttendanceRoutes } from "./children/AttendanceRoute";
 import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
 import ShiftList from "@/pages/admin/masters/setup/shift";
+import AddShift from "@/pages/admin/masters/setup/shift/Save";
+import SaveMasterShift from "@/pages/admin/masters/setup/shift/Save";
+import RosterList from "@/pages/admin/masters/roster/Index";
+import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
+import Claim from "@/pages/admin/masters/roster/Claim";
 
 export const AdminRoutes = [
   {
@@ -31,13 +36,40 @@ export const AdminRoutes = [
     path: "recruiter",
     children: RecruiterRoutes,
   },
+  
   {
     path:"setup",
     children:[
       {
+        path:"calender",
+        element:<RosterDepartment/>
+      },
+      {
         path:"shift",
         element:<ShiftList/>
-      }
+      },
+      {
+        path:"save-shift",
+        element:<SaveMasterShift/>
+      },
+      {
+        path:"calender",
+        element:<RosterDepartment/>
+      },
+      {
+        path:"roster",
+        children:[
+          {
+            path:"",
+            element:<RosterList/>,
+          },
+            {
+              path:"claim",
+              element:<Claim/>
+            }
+          
+        ]
+      },
     ]
 
   },

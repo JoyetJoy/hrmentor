@@ -293,28 +293,53 @@ export const adminItems = [
 
 export const setupItems = [
   {
-    name: "Attendace",
-    active:"attendace",
+    id: 1, 
+    name: "Attendance",
+    active: "attendance",
+    path: "/admin/setup/calender"
   },
   {
+    id: 2, 
     name: "Shift",
-    active:"shift",
+    active: "shift",
+    path: "/admin/setup/shift"
   },
   {
+    id: 3, 
     name: "Roster",
-    active:"roster",
-    
+    active: "roster",
+    path: "/admin/setup/roster"
   },
   {  
+    id: 4, 
     name: "Email",
-    active:"email",
+    active: "email",
+    path: "/admin/setup/email", 
   },
   {  
+    id: 5, 
     name: "Basic Settings",
-    active:"basic settings",
+    active: "basic settings",
+    path: "/admin/setup/basic-settings",
   },
 ];
-
+export const rosterItems = [
+  {
+    id: 1,
+    name: "Department",
+    active: "Department", 
+  },
+  {
+    id: 2,
+    name: "Location",
+    active: "Location",  
+  },
+  {
+    id: 3,
+    name: "WorkArea",
+    active: "WorkArea",   
+  },
+];
 
 
 export const activityItems = [
@@ -375,4 +400,17 @@ export const EmailData = [
       "Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum",
     time: "8.45am",
   },
+];
+ export const calimList=[
+  { title: "Total Required", value: 18, description: "Employee" },
+  { title: "Available", value: 12, description: "Employee" },
+  { title: "On Leave", value: 4, description: "Employee" },
+  { title: "Pending Approval", value: 2, description: "Employee" },
+ ]
+ export const shiftHistoryData = [
+  { date: '30/04/2024 9:20 PM', user: 'Mammutty P S', action: 'Added to shift', role: 'Administrator' },
+  { date: '27/04/2024 9:20 PM', user: 'Vaisakh T G', action: 'New leave requested' },
+  { date: '26/04/2024 9:20 PM', user: 'Shehna Shaji', action: 'Claimed shift' },
+  { date: '25/04/2024 9:20 PM', user: 'Mammutty P S', action: 'Opened shift claim' },
+  { date: '25/04/2024 9:20 PM', action: 'Shift Created', additional: 'with 15 Employees' },
 ];

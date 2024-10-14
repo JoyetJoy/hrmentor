@@ -82,3 +82,5 @@ export const CANDIDATE_TYPE = "CandidateTypes";
 export const MINIMUM_Experience = "MinimumExperience";
 // SOURCES
 export const SOURCES = "Source";
+// SETUP SHIFT
+export const SHIFT ="employee-shift-area";
