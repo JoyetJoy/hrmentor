@@ -76,7 +76,6 @@ function MenuHeader(props) {
         >
           {currentMenu?.map((item) => (
             <React.Fragment key={item?.id}>
-              {console.log(item?.link)}
               <Link
                 to={item?.link}
                 className={`text-sm ${
@@ -111,7 +110,7 @@ function MenuHeader(props) {
                 to={item?.link}
                 className={`px-2 py-1 text-sm ${
                   isActive([item?.link])
-                    ? "active-menu font-extrabold text-bgColor-100 before:bg-[#181C3A]"
+                    ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
                     : "font-normal text-[#808080]"
                 }`}
               >

@@ -21,6 +21,7 @@ import {
   EMPLOYEE_WORK_LOCATION_LIST,
   NATIONALITY,
   ROLES_LIST,
+  STATE_COUNTRY,
 } from "@/api/master";
 import useImageUpload from "@/hooks/useImageUpload";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
@@ -77,10 +78,10 @@ export default function SaveEmployeeForm({ formtype }) {
     setValue,
     setError,
     reset,
-    getValues,
+    watch,
     formState: { errors },
   } = useForm({
-    mode: "onSubmit",
+    mode: "on",
     reValidateMode: "onChange",
     resolver: yupResolver(EmployeeSchema),
   });
@@ -108,7 +109,6 @@ export default function SaveEmployeeForm({ formtype }) {
   const [qrkey, setQrkey] = useState(null);
   const [type, setType] = useState(null);
   const [colKeys, setColKeys] = useState(null);
-  const [openMasterModalType, setOpenMasterModalType] = useState(null);
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
 
@@ -139,6 +139,7 @@ export default function SaveEmployeeForm({ formtype }) {
         employeeDetails.national_insurance_number,
       );
       setValue("country_id", employeeDetails.country_id);
+      setValue("state_id", employeeDetails.state_id);
       setValue("city_id", employeeDetails.city_id);
       setValue("department_id", employeeDetails.department_id);
       setValue("employment_type", employeeDetails.employment_type);
@@ -151,24 +152,14 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [employeeDetails, setImage]);
 
-  useEffect(() => {
-    const config = masterConfig[openMasterModalType];
-    if (config) {
-      setMasterApi(config.api);
-      setQrkey(config.qrkey);
-      setType(config.type);
-      setColKeys(config.colKeys);
-      setPopupOpen(true);
-    } else {
-      setMasterApi(null);
-      setQrkey(null);
-      setType(null);
-      setColKeys(null);
-      setPopupOpen(false);
-    }
-  }, [openMasterModalType]);
-
-  const { country_id, home_address } = getValues();
+  const handleOpenSaveMaster = (toOpen) => {
+    const config = masterConfig[toOpen];
+    setMasterApi(config.api);
+    setQrkey(config.qrkey);
+    setType(config.type);
+    setColKeys(config.colKeys);
+    setPopupOpen(true);
+  };
 
   useEffect(() => {
     if (employeeDetails) {
@@ -188,6 +179,9 @@ export default function SaveEmployeeForm({ formtype }) {
     }
   }, [employeeDetails, sameAsHome]);
 
+  // COUNTRY LISTING
+  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
+
   // DESIGNATION LISTING
   const { data: designationListing } = useEmployeeMaster(
     EMPLOYEE_DESIGNATION_LIST,
@@ -200,16 +194,26 @@ export default function SaveEmployeeForm({ formtype }) {
     "nationalityList",
   );
 
-  // COUNTRY LISTING
-  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
+  const { country_id, state_id, home_address } = watch();
 
-  // GET CITY BY COUNTRY ID AND SEARCH KEY
+  // GET STATTE BY COUNTRY ID AND SEARCH KEY
+  const loadStatesOptions = async (inputValue) => {
+    if (inputValue?.length < 3) {
+      return [];
+    }
+    const response = await newRequest.get(STATE_COUNTRY, {
+      params: { country_id: parseInt(country_id?.id), search: inputValue },
+    });
+    return response?.data;
+  };
+
+  // GET CITY BY STATE ID AND SEARCH KEY
   const loadCitiesOptions = async (inputValue) => {
     if (inputValue?.length < 3) {
       return [];
     }
     const response = await newRequest.get(COUNTRY_CITY, {
-      params: { country_id: parseInt(country_id?.id), search: inputValue },
+      params: { state_id: parseInt(state_id?.id), search: inputValue },
     });
     return response?.data;
   };
@@ -305,6 +309,7 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
+    formData.append("state_id", data.state_id?.id);
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
 
@@ -550,6 +555,31 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="required label-text">
+                    State,Province or territory
+                  </label>
+                  <Controller
+                    name="state_id"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <AsyncSelect
+                        {...field}
+                        placeholder="Search ..."
+                        loadOptions={loadStatesOptions}
+                        isSearchable={true}
+                        noOptionsMessage={() => "type state name"}
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.state_id && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.state_id?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">City</label>
                   <Controller
                     name="city_id"
@@ -615,46 +645,6 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image </label>
-                  {image ? (
-                    <div className="relative">
-                      <img
-                        src={image}
-                        alt="Uploaded"
-                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
-                      />
-                      <X
-                        onClick={clearImage}
-                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                      />
-                    </div>
-                  ) : (
-                    <label
-                      htmlFor="employee-profile-pic"
-                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
-                    >
-                      <div className="flex items-center gap-2">
-                        <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
-                          Upload Image
-                        </span>
-                      </div>
-                      <input
-                        id="employee-profile-pic"
-                        onChange={handleImageChange}
-                        type="file"
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-
-                  {errors.employeeId && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.employeeId?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label
                     className={`required label-text ${formtype === "update" ? "h-9" : ""}`}
                   >
@@ -702,6 +692,46 @@ export default function SaveEmployeeForm({ formtype }) {
                     </span>
                   )}
                 </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">Upload Image </label>
+                  {image ? (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload Image
+                        </span>
+                      </div>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+
+                  {errors.employeeId && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employeeId?.message}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
             <div
@@ -714,7 +744,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Department</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("department");
+                        handleOpenSaveMaster("department");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
@@ -773,7 +803,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Designation</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("designation");
+                        handleOpenSaveMaster("designation");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
@@ -821,7 +851,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Work Location</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("work_location");
+                        handleOpenSaveMaster("work_location");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >
@@ -854,7 +884,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="required">Employment Type</span>
                     <div
                       onClick={() => {
-                        setOpenMasterModalType("employment_type");
+                        handleOpenSaveMaster("employment_type");
                       }}
                       className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                     >

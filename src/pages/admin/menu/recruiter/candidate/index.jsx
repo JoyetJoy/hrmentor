@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TableData } from "@/constants/tableDummy";
 import {
   ArrowLeft,
-  ArrowUpFromLine,
-  ChevronRight,
   Filter,
   MoveDiagonal,
   Plus,
@@ -15,15 +13,41 @@ import {
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import FilterCandidate from "@/components/popups/recruiter/FilterCandidate";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import { GET_CANDIDATES } from "@/api/recruiter";
 
 function CandidatesList() {
-  const [totalPages, setTotalPages] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
 
-  const list = React.useMemo(() => TableData, [TableData]);
-  const location = useLocation();
-  const isActive = (path) => path.includes(location.pathname);
+  // Fetch List
+  const { data: candidateListing, isLoading } = useQuery({
+    queryKey: ["candidateListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(GET_CANDIDATES, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(candidateListing);
+
+  useEffect(() => {
+    if (candidateListing) {
+      setTotalPages(candidateListing?.last_page);
+    }
+  }, [candidateListing]);
 
   const columns = React.useMemo(
     () => [
@@ -31,7 +55,7 @@ function CandidatesList() {
         header: "Date applied",
         accessorKey: "name",
       },
-      { header: "  Job ID ", accessorKey: "addNo" },
+      { header: "Job ID", accessorKey: "addNo" },
       {
         header: "Candidate name",
         accessorKey: "dignation",
@@ -74,10 +98,8 @@ function CandidatesList() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-2 text-xs">
             <Link
-              //   to={`/sales/invoices/detail-view/${row?.original?.id}`}
-
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              to={""}
+              to="/admin/recruiter/candidate/profile"
             >
               <MoveDiagonal className="h-3 w-3" />
             </Link>
@@ -97,21 +119,6 @@ function CandidatesList() {
         currentpath={"Recruiter"}
         activeMenu={"Candidates"}
       />
-      {/* <MenuHeader
-        backlink={""}
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Recruiter"}
-        firstLink={"Dashboard"}
-        secondLink={"Jobs"}
-        thirdLink={"Candidate"}
-        fourthLink={"Interview"}
-        fifthLink={"Report"}
-        six={"Setttings"}
-        firstpath={"/admin/recruiter/index"}
-        secondpath={"/admin/recruiter/jobs"}
-        thirdpath={"/admin/recruiter/candidate"}
-      /> */}
       <div className="mx-3 my-3 flex items-center justify-between">
         <div className="flex items-center gap-2 font-semibold text-white">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
@@ -131,10 +138,8 @@ function CandidatesList() {
               <Filter
                 className="stroke size-4 font-medium text-black"
                 strokeWidth={2}
-                onClick={() => setPopupOpen(true)}
               />
             </div>
-
             <FilterCandidate
               popupOpen={popupOpen}
               setPopupOpen={setPopupOpen}
@@ -149,7 +154,7 @@ function CandidatesList() {
         </div>
         <div className="flex items-center gap-7">
           <Link
-            to={"/admin/recruiter/add-candidate"}
+            to={"/admin/recruiter/candidate/save"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             <Plus className="size-5" strokeWidth={2} />
@@ -157,13 +162,13 @@ function CandidatesList() {
           </Link>
         </div>
       </div>
-      <QueryTable
+      {/* <QueryTable
         columns={columns}
-        list={list}
+        list={candidateListing?.listing ?? []}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
-      />
+      /> */}
     </div>
   );
 }

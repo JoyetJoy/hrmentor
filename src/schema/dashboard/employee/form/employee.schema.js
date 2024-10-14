@@ -97,6 +97,14 @@ export const EmployeeSchema = Yup.object({
     return value?.value && value?.label;
   }),
 
+  state_id: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Province is required", function (value) {
+    return value?.value && value?.label;
+  }),
+
   city_id: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

@@ -17,16 +17,36 @@ import {
   DisclosurePanel,
   DisclosureButton,
 } from "@headlessui/react";
+import { newRequest } from "@/api";
+import { GENERATE_JOB_CODE } from "@/api/recruiter";
+import toast from "react-hot-toast";
 
 function RecruiterJobPost() {
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
   });
+
+  const { unique_job_id } = watch();
+  // GENERATE JOB CODE
+  const generateJobCode = async () => {
+    console.log("kakaak");
+    try {
+      const res = await newRequest.get(GENERATE_JOB_CODE);
+      if (res?.status === 200) {
+        setValue("unique_job_id", res?.data?.unique_id);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to generate job code.");
+    }
+  };
 
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
@@ -390,14 +410,16 @@ function RecruiterJobPost() {
                       <label className="label-text">Job code</label>
                       <div className="input-box flex">
                         <input
+                          {...register("unique_job_id")}
                           autoComplete="off"
-                          type="text"
-                          placeholder=""
+                          disabled
                           className="w-full"
                         />
                         <button
                           type="button"
-                          className="text-[0.8rem] font-medium text-hrmprimaryorange"
+                          disabled={unique_job_id}
+                          onClick={generateJobCode}
+                          className="w-fit text-[0.8rem] font-medium text-hrmprimaryorange"
                         >
                           Generate
                         </button>

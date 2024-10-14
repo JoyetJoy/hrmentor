@@ -1,15 +1,17 @@
 import React from "react";
-import  Select  from "react-select";
+import Select from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Link } from "react-router-dom";
 import MenuHeader from "@/components/common/MenuHeader";
 import { ArrowUpFromLine } from "lucide-react";
 
-function AddCandidates() {
+function SaveCandidates() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     control,
     formState: { errors },
   } = useForm({
@@ -32,17 +34,17 @@ function AddCandidates() {
         currentpath={"Recruiter"}
         activeMenu={"Candidates"}
       />
-      <div className="bg-white py-4 mt-2 pb-12 rounded-md grid gap-5 grid-cols-2 px-6">
-        <div className="">
-          <h1 className="font-bold text-base pt-3">Add Candidate</h1>
-          <div className="grid w-full grid-cols-2 gap-5 mt-4 ">
-            <div className="flex group flex-col gap-1">
+      <div className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12">
+        <div className="flex flex-col">
+          <h1 className="pt-3 text-base font-bold">Add Candidate</h1>
+          <div className="mt-5 grid w-full grid-cols-2 gap-5">
+            <div className="group flex flex-col gap-1">
               <label className="required label-text">First name</label>
               <input
                 autoComplete="off"
                 type="text"
                 {...register("employeeId", { required: true })}
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.employeeId && (
                 <span className="text-xs font-medium text-red-500">
@@ -50,13 +52,13 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col  gap-1 ">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">Last name</label>
               <input
                 autoComplete="off"
                 type="text"
                 {...register("firstName", { required: true })}
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.firstName && (
                 <span className="text-xs font-medium text-red-500">
@@ -65,13 +67,13 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col gap-1">
-              <label className="label-text required">Phone</label>
+            <div className="group flex flex-col gap-1">
+              <label className="required label-text">Phone</label>
               <input
                 {...register("surname")}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.surname && (
                 <span className="text-xs font-medium text-red-500">
@@ -80,13 +82,13 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col gap-1">
-              <label className="label-text required">Email</label>
+            <div className="group flex flex-col gap-1">
+              <label className="required label-text">Email</label>
               <input
                 {...register("surname")}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.surname && (
                 <span className="text-xs font-medium text-red-500">
@@ -94,7 +96,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1 ">
+            <div className="group flex flex-col gap-1">
               <label onClick={() => setPopupOpen(true)} className="label-text">
                 Gender
                 <span className="text-red-500">*</span>
@@ -117,7 +119,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -128,7 +130,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col gap-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">
                 Date of birth <span className="text-red-500">*</span>
               </label>
@@ -136,7 +138,7 @@ function AddCandidates() {
                 {...register("dateOBbirth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.dateOfBirth && (
                 <span className="text-xs font-medium text-red-500">
@@ -145,7 +147,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col gap-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">
                 Home Address <span className="text-red-500">*</span>
               </label>
@@ -153,7 +155,7 @@ function AddCandidates() {
                 {...register("homeAddress", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-full mt-0 w-full focus:border-gray-300"
+                className="input-box mt-0 h-full w-full focus:border-gray-300"
               />
               {errors.homeAddress && (
                 <span className="text-xs font-medium text-red-500">
@@ -162,7 +164,7 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col gap-1 justify-between">
+            <div className="group flex flex-col justify-between gap-1">
               <div className="flex flex-col gap-1">
                 <label className="label-text">Country</label>
                 <Controller
@@ -182,7 +184,7 @@ function AddCandidates() {
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Gender"
-                      className="input-box h-10 w-full focus:border-gray-300"
+                      className="input-box"
                     />
                   )}
                 />
@@ -211,7 +213,7 @@ function AddCandidates() {
                       isSearchable={false}
                       styles={customSelectStyles}
                       placeholder="Select Gender"
-                      className="input-box h-10 w-full focus:border-gray-300"
+                      className="input-box"
                     />
                   )}
                 />
@@ -222,7 +224,7 @@ function AddCandidates() {
                 )}
               </div>
             </div>
-            <div className="flex group flex-col gap-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">District</label>
               <Controller
                 name="country"
@@ -241,7 +243,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -251,13 +253,13 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1">
-              <label className="label-text required">Languages spoken</label>
+            <div className="group flex flex-col gap-1">
+              <label className="required label-text">Languages spoken</label>
               <input
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -265,8 +267,8 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1">
-              <label className="label-text required">
+            <div className="group flex flex-col gap-1">
+              <label className="required label-text">
                 Highest education level
               </label>
               <Controller
@@ -286,7 +288,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -296,8 +298,8 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1">
-              <label className="label-text required">
+            <div className="group flex flex-col gap-1">
+              <label className="required label-text">
                 Collage or University
               </label>
               <Controller
@@ -317,7 +319,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -327,13 +329,13 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">Source</label>
               <input
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -341,7 +343,7 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">
                 Date Applied<span className="text-red-500">*</span>
               </label>
@@ -349,7 +351,7 @@ function AddCandidates() {
                 {...register("dateOBbirth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.dateOfBirth && (
                 <span className="text-xs font-medium text-red-500">
@@ -358,8 +360,8 @@ function AddCandidates() {
               )}
             </div>
 
-            <div className="flex group flex-col gap-1">
-              <label className="label-text required">Recruiting job</label>
+            <div className="group flex flex-col gap-1">
+              <label className="required label-text">Recruiting job</label>
               <Controller
                 name="bloodGroup"
                 control={control}
@@ -377,7 +379,7 @@ function AddCandidates() {
                     isSearchable={false}
                     styles={customSelectStyles}
                     placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
+                    className="input-box"
                   />
                 )}
               />
@@ -387,13 +389,13 @@ function AddCandidates() {
                 </span>
               )}
             </div>
-            <div className="flex group flex-col gap-1">
+            <div className="group flex flex-col gap-1">
               <label className="label-text">LinkedIn ID</label>
               <input
                 {...register("nationalInsurance", { required: true })}
                 autoComplete="off"
                 type="text"
-                className="input-box h-10 w-full focus:border-gray-300"
+                className="input-box"
               />
               {errors.nationalInsurance && (
                 <span className="text-xs font-medium text-red-500">
@@ -403,32 +405,30 @@ function AddCandidates() {
             </div>
           </div>
         </div>
-        <div className=" flex flex-col justify-center">
-          <h1 className="font-bold text-xs pt-14 pb-1">Resume Upload</h1>
-          <div className="h-full gap-2 border rounded-lg py-2 justify-center items-center flex flex-col border-[#E6E3EB]">
-            <p className="text-sm">Upload or drag and drop</p>
+        <div className="flex flex-col justify-center">
+          <h1 className="pb-1 pt-14 text-[0.84rem] font-bold">Resume Upload</h1>
+          <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-[#E6E3EB] py-2">
+            <p className="text-sm font-semibold">Upload or drag and drop</p>
             <p className="text-sm text-[#7F7F7F]">
               (Preferred), DOCX, DOC, PDF up to 1 MB
             </p>
-
-            <button class="bg-white flex flex-row items-center justify-center min-h-10 h-10 rounded-md py-1 px-7 border border-gray-400 gap-2">
-            <ArrowUpFromLine className="size-4"  strokeWidth={2}/>
-
-              <h1 className="text-xs font-bold">Upload</h1>
+            <button class="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-400 bg-white px-7 py-1">
+              <ArrowUpFromLine className="size-4" strokeWidth={2} />
+              <h5 className="text-[0.8rem] font-bold">Upload</h5>
             </button>
           </div>
         </div>
-        <div className="text-white font-semibold flex  items-center">
-          <Link
-            to={"/admin/recruiter/profile"}
-            className="btn bg-bgColor-100 px-12 text-white text-xs font-medium hover:bg-bgColor-100 min-h-10 h-10"
+        <div className="flex items-center font-semibold text-white">
+          <button
+            type="submit"
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-7 text-xs font-semibold text-white hover:bg-[#030E5C]"
           >
             Submit
-          </Link>
+          </button>
         </div>
       </div>
     </>
   );
 }
 
-export default AddCandidates;
+export default SaveCandidates;

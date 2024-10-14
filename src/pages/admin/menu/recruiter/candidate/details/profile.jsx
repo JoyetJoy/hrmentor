@@ -11,7 +11,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import { Mail, MapPin, Phone, SquarePen, X } from "lucide-react";
 import Addtransfer from "@/components/popups/recruiter/candiadate/AddTransfer.jsx";
 
-function Profile() {
+function CandidateProfile() {
   const options = [
     { value: "active", label: "Transfer to job" },
     { value: "paused", label: "Paused" },
@@ -67,13 +67,13 @@ function Profile() {
                     <option value="canceled">Canceled</option>
                   </Select>
                 </div>
-                <div className="mb-3 flex items-center text-center justify-between text-sm font-medium text-black">
+                <div className="mb-3 flex items-center justify-between text-center text-sm font-medium text-black">
                   <Select
                     name="status"
                     aria-label="Project status"
                     options={options}
                     styles={customSelectTransferStyles}
-                    className="flex flex-row justify-between rounded-md border bg-bgColor-100 pl-10  text-xs placeholder:text-white"
+                    className="flex flex-row justify-between rounded-md border bg-bgColor-100 pl-10 text-xs placeholder:text-white"
                     onChange={(selectedOption) => {
                       if (selectedOption.value === "active") {
                         setPopupOpen(true);
@@ -432,4 +432,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default CandidateProfile;
