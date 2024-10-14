@@ -5,7 +5,7 @@ function CreateJobSideBar() {
     <div className="relative w-1/3 rounded-md bg-white p-5">
       <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-[#CACACA]" />
       <div className="flex flex-col gap-y-4">
-        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
+        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
           <div className="z-10 size-4 rounded-full border border-[#46A724] bg-[#65D43E]" />
           <p>Post</p>
         </div>
@@ -39,23 +39,23 @@ function CreateJobSideBar() {
           </div>
         </div>
 
-        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
+        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
           <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Application</p>
         </div>
-        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
+        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
           <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Team</p>
         </div>
-        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
+        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
           <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Interview Guides</p>
         </div>
-        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
+        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
           <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Refer</p>
         </div>
-        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3">
+        <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
           <div className="z-10 size-4 rounded-full border border-[#ABABAB] bg-[#ABABAB]" />
           <p className="text-[#7F7F7F]">Promote</p>
         </div>
