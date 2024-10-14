@@ -306,7 +306,7 @@ export default function SaveMasterShift({ formtype }) {
                   )}
                 </div>
               </div>
-              <hr className="my-4" />
+              <hr className="my-4 border-[#A7A7A7]" />
               <div className="my-1 flex w-full items-center justify-between ">
                 <h1 className="text-lg font-bold">Break Time</h1>
                 <div className="flex items-center gap-3">

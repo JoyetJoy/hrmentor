@@ -14,14 +14,14 @@ function Setup() {
       {setupItems?.map((item) => (
         <li
           key={item.id} 
-          className={`flex items-center gap-x-3 whitespace-nowrap text-sm`}
+          className={`flex items-center gap-x-3 whitespace-nowrap text-sm ${
+            activeItem === item.name ? "font-bold text-[#E95D39]" : "font-medium text-[#7F7F7F]"
+          }`}
         >
          <Link 
-              to={item.path} // Navigate to the item's path
-              onClick={() => handleItemClick(item.name)} // Update active state
-              className={`whitespace-nowrap ${
-                activeItem === item.name ? "font-bold text-[#E95D39]" : "font-medium text-[#7F7F7F]"
-              }`}
+              to={item.path} 
+              onClick={() => handleItemClick(item.name)} 
+              className={`whitespace-nowrap `}
             >
               {item.name}
             </Link>

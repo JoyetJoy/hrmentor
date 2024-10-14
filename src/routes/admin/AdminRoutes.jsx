@@ -10,6 +10,7 @@ import SaveMasterShift from "@/pages/admin/masters/setup/shift/Save";
 import RosterList from "@/pages/admin/masters/roster/Index";
 import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
 import Claim from "@/pages/admin/masters/roster/Claim";
+import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
 
 export const AdminRoutes = [
   {
@@ -42,7 +43,7 @@ export const AdminRoutes = [
     children:[
       {
         path:"calender",
-        element:<RosterDepartment/>
+        element:<EmployeeAttendanceCalendar/>
       },
       {
         path:"shift",
@@ -53,7 +54,7 @@ export const AdminRoutes = [
         element:<SaveMasterShift/>
       },
       {
-        path:"calender",
+        path:"calender-department",
         element:<RosterDepartment/>
       },
       {

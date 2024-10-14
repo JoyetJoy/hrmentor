@@ -146,7 +146,7 @@ const EmployeeAttendanceCalendar = () => {
         icon={""}
         activeMenu={""}
       />
-      <div className="flex items-center justify-between bg-white px-4 py-2">
+      <div className="flex items-center justify-between bg-white px-4 py-2 w-full">
         <div className="flex items-center gap-4">
           <h5 className="text-lg font-bold">My Attendance</h5>
           <Select
@@ -171,7 +171,7 @@ const EmployeeAttendanceCalendar = () => {
         </button>
       </div>
 
-      <div className="mb-10 mt-7 w-full max-w-7xl">
+      <div className="mb-10 mt-7 w-full max-w-8xl">
         <Calendar
           onChange={handleDateChange}
           value={date}
