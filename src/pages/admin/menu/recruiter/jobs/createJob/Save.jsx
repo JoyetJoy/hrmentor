@@ -722,7 +722,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="label-text">Postal Code</label>
+                  <label className="label-text">Post Code</label>
                   <input
                     {...register("postal_code")}
                     autoComplete="off"
