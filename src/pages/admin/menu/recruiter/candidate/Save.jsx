@@ -108,7 +108,7 @@ function SaveCandidates() {
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("sur_name", data.sur_name);
-    formData.append("gender", data.gender?.value);
+    formData.append("gender", data.gender?.id);
     formData.append("date_of_birth", data.date_of_birth);
     formData.append("source", data.source.id);
     formData.append("job_id", data.job_id.id);

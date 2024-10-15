@@ -746,7 +746,7 @@ function RecruiterJobPost() {
                 <div className="group col-span-3 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Work type</label>
                   <div className="flex flex-row items-start gap-4">
-                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -754,11 +754,11 @@ function RecruiterJobPost() {
                           setWorkType(1);
                         }}
                         checked={workType === 1}
-                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Work from office</span>
                     </label>
-                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -766,13 +766,13 @@ function RecruiterJobPost() {
                           setWorkType(2);
                         }}
                         checked={workType === 2}
-                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">
                         Remote (Work from home)
                       </span>
                     </label>
-                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -780,7 +780,7 @@ function RecruiterJobPost() {
                           setWorkType(3);
                         }}
                         checked={workType === 3}
-                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Hybrid</span>
                     </label>

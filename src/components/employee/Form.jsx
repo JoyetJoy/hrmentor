@@ -291,7 +291,7 @@ export default function SaveEmployeeForm({ formtype }) {
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("sur_name", data.sur_name);
-    formData.append("gender", data.gender?.value);
+    formData.append("gender", data.gender?.id);
     formData.append("dob", data.dob);
     formData.append("blood_group", data.blood_group?.value);
     formData.append("marital_status", data.marital_status?.value);
