@@ -7,7 +7,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SaveEmployeeMasterForm from "../popups/employees/settings/common/Save";
-import { bloodGroups, genders, maritalStatuses } from "@/constants/data";
+import { bloodGroups, maritalStatuses } from "@/constants/data";
 import {
   COUNTRY,
   COUNTRY_CITY,
@@ -21,6 +21,7 @@ import {
   EMPLOYEE_WORK_LOCATION_LIST,
   NATIONALITY,
   ROLES_LIST,
+  SALARY_DEFAULT_MASTERS,
   STATE_COUNTRY,
 } from "@/api/master";
 import useImageUpload from "@/hooks/useImageUpload";
@@ -89,6 +90,12 @@ export default function SaveEmployeeForm({ formtype }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
+
+  // MASTERS LISTING
+  const { data: employeeMasters } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "employeeMasters",
+  );
 
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
@@ -496,7 +503,7 @@ export default function SaveEmployeeForm({ formtype }) {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        options={genders}
+                        options={employeeMasters?.genders}
                         placeholder="Select Gender"
                         className="input-box"
                       />

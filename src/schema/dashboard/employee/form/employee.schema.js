@@ -19,6 +19,7 @@ export const EmployeeSchema = Yup.object({
     return value?.value && value?.label;
   }),
   gender: Yup.object({
+    id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
   }).test("both-required", "Gender is required", function (value) {
