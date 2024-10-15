@@ -7,14 +7,12 @@ import MenuHeader from "@/components/common/MenuHeader";
 import ResumeDragzone from "@/components/recruiter/candidate/ResumeDragzone";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import {
-  CANDIDATE_TYPE,
   COUNTRY,
   COUNTRY_CITY,
   SALARY_DEFAULT_MASTERS,
   SOURCES_LIST,
   STATE_COUNTRY,
 } from "@/api/master";
-import { genders } from "@/constants/data";
 import { newFormRequest, newRequest } from "@/api";
 import { recCandidateSchema } from "@/schema/dashboard/recruiter/candidate/form/save.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -41,10 +39,9 @@ function SaveCandidates() {
     mode: "onSubmit",
     resolver: yupResolver(recCandidateSchema),
   });
-  console.log(errors);
+
   const [sameAsHome, setSameAsHome] = useState(false);
   const { country_id, state_or_province, home_address } = watch();
-  console.log(state_or_province);
 
   // RECRUITER MASTERS LISTING
   const { data: recruiterMasters } = useEmployeeMaster(
@@ -257,7 +254,7 @@ function SaveCandidates() {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    options={genders}
+                    options={recruiterMasters?.genders}
                     placeholder="Select Gender"
                     className="input-box"
                   />
