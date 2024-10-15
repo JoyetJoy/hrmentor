@@ -2,8 +2,7 @@ import { ArrowUpFromLine } from "lucide-react";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
 
-export default function ResumeDragzone() {
-  const [file, setFile] = useState(null);
+export default function ResumeDragzone({ file, setFile }) {
   const [filePreview, setFilePreview] = useState(null); // For file preview
 
   const onDrop = (acceptedFiles) => {
@@ -35,14 +34,13 @@ export default function ResumeDragzone() {
               Change File
             </div>
           </div>
-
           <div className="h-full overflow-hidden rounded-lg border border-[#E6E3EB] py-2">
             {filePreview ? (
               file.type.includes("image") ? (
                 <img
                   src={filePreview}
                   alt="file preview"
-                  className="mt-2 h-auto max-w-full"
+                  className="mt-2 h-auto w-full max-w-full"
                 />
               ) : (
                 <iframe
@@ -72,7 +70,10 @@ export default function ResumeDragzone() {
                 <p className="text-sm text-[#7F7F7F]">
                   (Preferred), DOCX, DOC, PDF up to 1 MB
                 </p>
-                <button className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-400 bg-white px-7 py-1">
+                <button
+                  type="button"
+                  className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-400 bg-white px-7 py-1"
+                >
                   <ArrowUpFromLine className="size-4" strokeWidth={2} />
                   <h5 className="text-[0.8rem] font-bold">Upload</h5>
                 </button>

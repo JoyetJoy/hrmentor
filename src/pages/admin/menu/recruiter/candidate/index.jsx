@@ -50,6 +50,17 @@ function CandidatesList() {
   const columns = React.useMemo(
     () => [
       {
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
+      {
         header: "Date applied",
         accessorKey: "date_applied",
       },
