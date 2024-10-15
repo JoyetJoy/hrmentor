@@ -124,6 +124,7 @@ export default function SaveEmployeeForm({ formtype }) {
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
       setValue("middle_name", employeeDetails.middle_name);
+      setValue("post_code", employeeDetails.post_code);
       setValue("sur_name", employeeDetails.sur_name);
       setValue("gender", employeeDetails.gender);
       setValue("dob", employeeDetails.dob);
@@ -294,6 +295,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("middle_name", data.middle_name);
     formData.append("sur_name", data.sur_name);
     formData.append("gender", data.gender?.id);
+    formData.append("post_code", data.post_code);
     formData.append("dob", data.dob);
     formData.append("blood_group", data.blood_group?.value);
     formData.append("marital_status", data.marital_status?.value);
@@ -493,7 +495,6 @@ export default function SaveEmployeeForm({ formtype }) {
                     </span>
                   )}
                 </div>
-
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Date of birth</label>
                   <input
@@ -627,6 +628,29 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="required label-text">Post Code</label>
+                  <input
+                    {...register("post_code", { required: true })}
+                    autoComplete="off"
+                    type="text"
+                    placeholder="Enter Post Code"
+                    onKeyPress={(event) => {
+                      if (
+                        !/^[0-9]$/.test(event.key) ||
+                        event.target.value.length >= 6
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
+                    className="input-box"
+                  />
+                  {errors.post_code && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.post_code?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Blood Group</label>
                   <Controller
                     name="blood_group"
@@ -665,46 +689,6 @@ export default function SaveEmployeeForm({ formtype }) {
                   {errors.national_insurance_number && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.national_insurance_number?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image </label>
-                  {image ? (
-                    <div className="relative">
-                      <img
-                        src={image}
-                        alt="Uploaded"
-                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
-                      />
-                      <X
-                        onClick={clearImage}
-                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                      />
-                    </div>
-                  ) : (
-                    <label
-                      htmlFor="employee-profile-pic"
-                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
-                    >
-                      <div className="flex items-center gap-2">
-                        <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
-                          Upload Image
-                        </span>
-                      </div>
-                      <input
-                        id="employee-profile-pic"
-                        onChange={handleImageChange}
-                        type="file"
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-
-                  {errors.employeeId && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.employeeId?.message}
                     </span>
                   )}
                 </div>
@@ -754,6 +738,40 @@ export default function SaveEmployeeForm({ formtype }) {
                     <span className="text-xs font-medium text-red-500">
                       {errors.communication_address?.message}
                     </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">Upload Image</label>
+                  {image ? (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload Image
+                        </span>
+                      </div>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </label>
                   )}
                 </div>
               </div>

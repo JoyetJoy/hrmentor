@@ -16,6 +16,7 @@ export const recCandidateSchema = Yup.object({
   communication_address: Yup.string().required(
     "Communication address is required",
   ),
+  post_code: Yup.string().required("Post code is required"),
   language_spoken: Yup.array()
     .of(
       Yup.object({

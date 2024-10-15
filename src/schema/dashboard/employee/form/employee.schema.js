@@ -12,6 +12,7 @@ export const EmployeeSchema = Yup.object({
   }).test("both-required", "Blood group is required", function (value) {
     return value?.value && value?.label;
   }),
+  post_code: Yup.string().required("Postal code is required"),
   dob: Yup.string().required("Date of birth is required"),
   nationality_id: Yup.object({
     value: Yup.string(),
