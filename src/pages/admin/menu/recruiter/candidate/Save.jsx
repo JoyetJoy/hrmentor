@@ -371,7 +371,7 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
-            <div className="group flex flex-col gap-1.5 px-3 py-2">
+            <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">Post Code</label>
               <input
                 {...register("post_code", { required: true })}
