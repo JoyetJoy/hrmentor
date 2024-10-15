@@ -395,6 +395,31 @@ function SaveCandidates() {
                 </span>
               )}
             </div>
+            <div className="group flex flex-col space-y-1 py-2">
+              <label className="required label-text">
+                Highest education level
+              </label>
+              <Controller
+                name="highest_education_level"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    isSearchable={true}
+                    styles={customSelectStyles}
+                    options={recruiterMasters?.educationlevels}
+                    placeholder="Select collage or University"
+                    className="input-box"
+                  />
+                )}
+              />
+              {errors?.highest_education_level && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.highest_education_level?.message}
+                </span>
+              )}
+            </div>
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text h-5">Home Address</label>
               <textarea
@@ -434,31 +459,6 @@ function SaveCandidates() {
               {errors.communication_address && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.communication_address?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col space-y-1 py-2">
-              <label className="required label-text">
-                Highest education level
-              </label>
-              <Controller
-                name="highest_education_level"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    isSearchable={true}
-                    styles={customSelectStyles}
-                    options={recruiterMasters?.educationlevels}
-                    placeholder="Select collage or University"
-                    className="input-box"
-                  />
-                )}
-              />
-              {errors?.highest_education_level && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.highest_education_level?.message}
                 </span>
               )}
             </div>
