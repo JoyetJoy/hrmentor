@@ -107,6 +107,7 @@ function SaveCandidates() {
     }
     const formData = new FormData();
     formData.append("first_name", data.first_name);
+    formData.append("middle_name", data.middle_name);
     formData.append("sur_name", data.sur_name);
     formData.append("gender", data.gender?.id);
     formData.append("date_of_birth", data.date_of_birth);
@@ -142,7 +143,6 @@ function SaveCandidates() {
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["candidateListing"]);
-        clearImage();
         reset();
         setLoader(false);
         navigate("/admin/recruiter/candidate");
@@ -184,6 +184,21 @@ function SaveCandidates() {
               {errors.first_name && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.first_name?.message}
+                </span>
+              )}
+            </div>
+            <div className="group flex flex-col gap-1.5 py-2">
+              <label className="required label-text">Middle Name</label>
+              <input
+                autoComplete="off"
+                type="text"
+                placeholder="Enter Middle Name"
+                {...register("middle_name", { required: true })}
+                className="input-box"
+              />
+              {errors.middle_name && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.middle_name?.message}
                 </span>
               )}
             </div>

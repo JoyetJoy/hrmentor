@@ -2,6 +2,7 @@ import * as Yup from "yup";
 
 export const recCandidateSchema = Yup.object({
   first_name: Yup.string().required("First name is required"),
+  middle_name: Yup.string().required("Middle name is required"),
   sur_name: Yup.string().required("Surname is required"),
   date_of_birth: Yup.string().required("Date of birth is required"),
   gender: Yup.object({

@@ -123,6 +123,7 @@ export default function SaveEmployeeForm({ formtype }) {
     if (employeeDetails) {
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
+      setValue("middle_name", employeeDetails.middle_name);
       setValue("sur_name", employeeDetails.sur_name);
       setValue("gender", employeeDetails.gender);
       setValue("dob", employeeDetails.dob);
@@ -290,6 +291,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const handleEmployee = async (data) => {
     const formData = new FormData();
     formData.append("first_name", data.first_name);
+    formData.append("middle_name", data.middle_name);
     formData.append("sur_name", data.sur_name);
     formData.append("gender", data.gender?.id);
     formData.append("dob", data.dob);
@@ -458,6 +460,21 @@ export default function SaveEmployeeForm({ formtype }) {
                   {errors.first_name && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.first_name?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="required label-text">Middle Name</label>
+                  <input
+                    {...register("middle_name")}
+                    autoComplete="off"
+                    placeholder="Enter Surname"
+                    type="text"
+                    className="input-box"
+                  />
+                  {errors.middle_name && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.middle_name?.message}
                     </span>
                   )}
                 </div>
@@ -652,6 +669,46 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">Upload Image </label>
+                  {image ? (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload Image
+                        </span>
+                      </div>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+
+                  {errors.employeeId && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employeeId?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label
                     className={`required label-text ${formtype === "update" ? "h-9" : ""}`}
                   >
@@ -696,46 +753,6 @@ export default function SaveEmployeeForm({ formtype }) {
                   {errors.communication_address && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.communication_address?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image </label>
-                  {image ? (
-                    <div className="relative">
-                      <img
-                        src={image}
-                        alt="Uploaded"
-                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
-                      />
-                      <X
-                        onClick={clearImage}
-                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                      />
-                    </div>
-                  ) : (
-                    <label
-                      htmlFor="employee-profile-pic"
-                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
-                    >
-                      <div className="flex items-center gap-2">
-                        <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
-                          Upload Image
-                        </span>
-                      </div>
-                      <input
-                        id="employee-profile-pic"
-                        onChange={handleImageChange}
-                        type="file"
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-
-                  {errors.employeeId && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.employeeId?.message}
                     </span>
                   )}
                 </div>
