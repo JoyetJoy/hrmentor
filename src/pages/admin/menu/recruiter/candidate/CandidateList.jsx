@@ -136,9 +136,9 @@ function CandidatesList() {
         ),
       },
     ],
-
     [],
   );
+
   return (
     <>
       <DeleteConfirmation

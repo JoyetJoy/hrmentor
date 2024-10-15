@@ -57,7 +57,7 @@ export const RecruiterRoutes = [
     element: <JobDetails />,
   },
 
-  // ---- JOB ----
+  // ---- Job ----
   {
     path: "jobs",
     children: [
@@ -71,7 +71,6 @@ export const RecruiterRoutes = [
       },
     ],
   },
-
   {
     path: "application",
     element: <Application />,
@@ -137,8 +136,7 @@ export const RecruiterRoutes = [
     path: "create-job-team",
     element: <Team />,
   },
-
-  //  ----candidate----
+  //  ----Candidate----
   {
     path: "candidate",
     children: [
@@ -205,8 +203,7 @@ export const RecruiterRoutes = [
       },
     ],
   },
-
-  // interview
+  // ----Interview----
   {
     path: "interview",
     children: [
