@@ -150,3 +150,11 @@ export const TableData = [
     status: "Onboarding Pending",
   },
 ];
+export const tableRosterData = [
+  { label: "Pay type", value: "Per day" },
+  { label: "Clock In time", value: "09:00 AM" },
+  { label: "Clock Out time", value: "05:30 PM" },
+  { label: "Department", value: "General Medicine" },
+  { label: "Work Location", value: "Thiruvananthapuram" },
+  { label: "Work Area", value: "HRD" },
+];

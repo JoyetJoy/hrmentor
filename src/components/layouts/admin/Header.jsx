@@ -82,7 +82,8 @@ export const AdminHeader = () => {
                 {activityItems.map((item, index) => (
                   <Menu.Item key={index}>
                     {({ active }) => (
-                      <li
+                      <button
+                        onClick={() => handleNavigation(item.path)}
                         className={`flex cursor-pointer items-center gap-3 whitespace-nowrap text-xs font-semibold ${
                           active ? "" : ""
                         }`}
@@ -95,7 +96,7 @@ export const AdminHeader = () => {
                           />
                         </div>
                         {item.label}
-                      </li>
+                      </button>
                     )}
                   </Menu.Item>
                 ))}
