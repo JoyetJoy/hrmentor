@@ -1,5 +1,5 @@
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
-import CandidatesList from "@/pages/admin/menu/recruiter/candidate/Index";
+import CandidatesList from "@/pages/admin/menu/recruiter/candidate/CandidateList";
 import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
 import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
 import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
