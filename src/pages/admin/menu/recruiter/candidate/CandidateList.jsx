@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import { GET_CANDIDATES } from "@/api/recruiter";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import Loader from "@/components/ui/Loader";
 
 function CandidatesList() {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -136,7 +137,7 @@ function CandidatesList() {
         ),
       },
     ],
-    [],
+    [candidateListing, currentPage],
   );
 
   return (
@@ -161,11 +162,14 @@ function CandidatesList() {
             <ArrowLeft className="size-4" />
             All candidates
           </div>
-          <label className="input flex h-9 min-h-9 items-center gap-2 border-none pr-28 outline-none">
+          <label className="input flex h-9 min-h-9 min-w-72 items-center gap-2 border-none outline-none">
             <Search className="size-4 object-contain text-gray-200" />
             <input
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
               type="text"
-              className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
+              className="w-full grow text-sm text-black/70 placeholder:text-sm placeholder:font-normal focus:outline-none"
               placeholder="Search"
             />
           </label>
@@ -198,13 +202,17 @@ function CandidatesList() {
           </Link>
         </div>
       </div>
-      <QueryTable
-        columns={columns}
-        list={candidateListing?.data?.listing ?? []}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <QueryTable
+          columns={columns}
+          list={candidateListing?.data?.listing ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
     </>
   );
 }
