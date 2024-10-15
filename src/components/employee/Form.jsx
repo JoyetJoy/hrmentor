@@ -338,7 +338,9 @@ export default function SaveEmployeeForm({ formtype }) {
         clearImage();
         reset();
         setLoader(false);
-        formtype === "save" && navigate("/admin/employee");
+        formtype === "save"
+          ? navigate("/admin/employee")
+          : window.location.reload();
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
