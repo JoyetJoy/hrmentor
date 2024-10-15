@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { TableData } from "@/constants/tableDummy";
+import { Link } from "react-router-dom";
 import {
   ArrowLeft,
   Filter,
@@ -9,7 +8,6 @@ import {
   Search,
   Trash2,
 } from "lucide-react";
-
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import FilterCandidate from "@/components/popups/recruiter/FilterCandidate";
@@ -110,6 +108,15 @@ function CandidatesList() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-2 text-xs">
+            <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+              <MoveDiagonal className="size-3" />
+            </Link>
+            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </Link>
             <Link
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               to="/admin/recruiter/candidate/profile"
