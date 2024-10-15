@@ -468,7 +468,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   <input
                     {...register("middle_name")}
                     autoComplete="off"
-                    placeholder="Enter Surname"
+                    placeholder="Enter Middle Name"
                     type="text"
                     className="input-box"
                   />
