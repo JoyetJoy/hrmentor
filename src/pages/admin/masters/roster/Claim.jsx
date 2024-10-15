@@ -185,7 +185,6 @@ export default function Claim() {
                   </div>
                   <div className="pl-4">
                     <p className="font-medium">{item.user}</p>
-                    {/* <div className="w-2 border"></div> */}
                     <p className="text-sm">{item.action}</p>
                     {item.additional && (
                       <p className="text-sm text-gray-500">{item.additional}</p>

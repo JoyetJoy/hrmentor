@@ -1,5 +1,5 @@
-import { Dialog, DialogPanel } from '@headlessui/react'
-import React from 'react'
+import { Dialog, DialogPanel } from "@headlessui/react";
+import React from "react";
 
 export default function BreakTime() {
   return (
@@ -121,5 +121,5 @@ export default function BreakTime() {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

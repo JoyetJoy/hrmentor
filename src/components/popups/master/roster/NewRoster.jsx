@@ -83,9 +83,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                 <X />
               </button>
             </div>
-
             <div className="grid grid-cols-2 gap-6">
-              {/* Left Column: Form Fields */}
               <div>
                 <div className="flex flex-col gap-4">
                   <div>
@@ -110,7 +108,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                       </span>
                     )}
                   </div>
-
                   <div>
                     <label className="text-sm font-medium">Start Date</label>
                     <input
@@ -124,7 +121,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                       </span>
                     )}
                   </div>
-
                   <div>
                     <label className="text-sm font-medium">End Date</label>
                     <input
@@ -138,7 +134,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                       </span>
                     )}
                   </div>
-
                   <table className="mt-4 w-full table-auto border bg-[#9E9E9E] bg-opacity-20">
                     <tbody>
                       {tableRosterData.map((item, index) => (
@@ -153,47 +148,44 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                       ))}
                     </tbody>
                   </table>
-
                   <div className="mt-4 flex gap-3">
                     <button
                       type="submit"
-                      className="rounded bg-hrmprimaryorange px-7 w-full py-3 text-white"
+                      className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
                     >
                       Save
                     </button>
                     <button
                       type="button"
                       onClick={close}
-                      className="rounded border border-black px-4  w-full py-3"
+                      className="w-full rounded border border-black px-4 py-3"
                     >
                       Cancel
                     </button>
                   </div>
                 </div>
               </div>
-              <div className="flex h-full flex-col gap-4 mt-1">
-                <div className="flex flex-col" >
-                <label className="text-sm font-medium">Add Employee</label>
-
-                  <div className="flex  gap-2">
+              <div className="mt-1 flex h-full flex-col gap-4">
+                <div className="flex flex-col">
+                  <label className="text-sm font-medium">Add Employee</label>
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       placeholder="Search and Select Employee"
                       className="input-box w-full placeholder:text-sm"
                     />
-                     <button className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white">
+                    <button className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white">
                       <Plus className="size-4" /> Add
                     </button>
                   </div>
-                 
                 </div>
                 <QueryTable
-                    columns={columns} 
-                    list={data}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalPages={totalPages}
-                  />
+                  columns={columns}
+                  list={data}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
               </div>
             </div>
           </DialogPanel>
@@ -202,4 +194,3 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     </Dialog>
   );
 }
- 

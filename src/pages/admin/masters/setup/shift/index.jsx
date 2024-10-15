@@ -6,52 +6,50 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 function ShiftList() {
-  
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10); 
+  const [totalPages, setTotalPages] = useState(10);
 
- 
   const columns = React.useMemo(
     () => [
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => row.index + 1, 
+        cell: ({ row }) => row.index + 1,
       },
       {
         header: "Shift Name",
         accessorKey: "shift-name",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "Department",
         accessorKey: "department",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "Location",
         accessorKey: "location",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "Start Time",
         accessorKey: "starttime",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "End Time",
         accessorKey: "endtime",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "Duration",
         accessorKey: "duration",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "Status",
         accessorKey: "status",
-        cell: ({ row }) => row.original.details || "N/A", 
+        cell: ({ row }) => row.original.details || "N/A",
       },
       {
         header: "Action",
@@ -91,8 +89,8 @@ function ShiftList() {
       <MenuHeader menu="Menu" currentpath="Setup" />
       <div className="flex gap-x-3">
         <Setup />
-        <div className="w-full flex flex-col gap-3">
-          <div className=" rounded-md bg-white px-5 py-2">
+        <div className="flex w-full flex-col gap-3">
+          <div className="rounded-md bg-white px-5 py-2">
             <ul className="flex flex-col items-end justify-center gap-5 text-sm text-[#7F7F7F]">
               <li className="flex items-center gap-x-3 whitespace-nowrap text-sm font-bold text-[#E95D39]">
                 <NavLink
@@ -123,26 +121,24 @@ function ShiftList() {
               </li>
             </ul>
           </div>
-          <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4 flex flex-col gap-4">
-            <div className="flex justify-between items-center ">
-                <h1 className="text-lg font-bold">Shift</h1>
-            <Link
-            to="/admin/setup/save-shift"
-              className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70"
-            >
-              <Plus className="size-4" />
-              Add Shift
-            </Link>
-
+          <div className="flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-lg font-bold">Shift</h1>
+              <Link
+                to="/admin/setup/save-shift"
+                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70"
+              >
+                <Plus className="size-4" />
+                Add Shift
+              </Link>
             </div>
-              <QueryTable
-                columns={columns}
-                list={data} 
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                totalPages={totalPages}
-              />
-            
+            <QueryTable
+              columns={columns}
+              list={data}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={totalPages}
+            />
           </div>
         </div>
       </div>

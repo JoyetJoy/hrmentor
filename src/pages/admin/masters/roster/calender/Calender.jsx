@@ -198,7 +198,6 @@ const events = [
               placeholder={'All employee'}
               className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
             />
-         
           <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-[#2B2B2B] px-5 py-2.5 text-sm font-medium text-white focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white">
           Claimed Request
           </button>
@@ -206,9 +205,7 @@ const events = [
             <Plus className="size-4" />Add Roster
           </button>
           </div>
-          
         </div>
-  
         <div className="mb-10 mt-7 w-full max-w-7xl">
           <Calendar
             onChange={handleDateChange}
