@@ -14,11 +14,14 @@ import FilterCandidate from "@/components/popups/recruiter/FilterCandidate";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import { GET_CANDIDATES } from "@/api/recruiter";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 function CandidatesList() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
@@ -108,8 +111,11 @@ function CandidatesList() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-2 text-xs">
-            <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
-              <MoveDiagonal className="size-3" />
+            <Link
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              to="/admin/recruiter/candidate/profile"
+            >
+              <MoveDiagonal className="h-3 w-3" />
             </Link>
             <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
               <img
@@ -117,12 +123,15 @@ function CandidatesList() {
                 className="w-full object-contain"
               />
             </Link>
-            <Link
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              to="/admin/recruiter/candidate/profile"
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <MoveDiagonal className="h-3 w-3" />
-            </Link>
+              <Trash2 className="size-3" />
+            </button>
           </div>
         ),
       },
@@ -132,6 +141,13 @@ function CandidatesList() {
   );
   return (
     <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"candidateListing"}
+        api={GET_CANDIDATES}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
