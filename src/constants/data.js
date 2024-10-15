@@ -28,6 +28,11 @@ export const relationshipList = [
   { value: "Others", label: "Others" },
 ];
 
+export const salaryPackageType = [
+  { value: 1, label: "Mentioned Package" },
+  { value: 0, label: "Not Mentioned Package" },
+];
+
 // blood grops
 export const bloodGroups = [
   { id: 1, label: "O+", value: "O+" },

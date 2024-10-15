@@ -7,12 +7,15 @@ import { GET_JOBS } from "@/api/recruiter";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/ui/Loader";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 function RecruiterJobs() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [byStatus, setByStatus] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
   // Fetch List
@@ -93,7 +96,6 @@ function RecruiterJobs() {
       {
         header: "Status",
         accessorKey: "status",
-
         cell: ({ row }) => (
           <div
             style={{
@@ -111,24 +113,24 @@ function RecruiterJobs() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link
-              to={"/admin/recruiter/candidate"}
-              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-            >
+            <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
               <MoveDiagonal className="size-3" />
             </Link>
-            <Link
-              to={""}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-            >
+            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
               <img
                 src="/assets/icons/admin/marker.svg"
                 className="w-full object-contain"
               />
             </Link>
-            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2">
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+            >
               <Trash2 className="size-3" />
-            </Link>
+            </button>
           </div>
         ),
       },
@@ -137,6 +139,13 @@ function RecruiterJobs() {
   );
   return (
     <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"jobListing"}
+        api={jobListing}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}

@@ -7,10 +7,10 @@ import {
   ChevronRight,
   PenLineIcon,
   UploadCloud,
+  X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import useImageUpload from "@/hooks/useImageUpload";
 import AsyncSelect from "react-select/async";
 import {
@@ -34,6 +34,7 @@ import {
   JOB_DESCRIPTION_LIST,
   MINIMUM_Experience,
   MINIMUM_EXPERIENCE_LIST,
+  SALARY_DEFAULT_MASTERS,
   STATE_COUNTRY,
 } from "@/api/master";
 import {
@@ -50,6 +51,7 @@ import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { recruiterJobPostSchema } from "@/schema/dashboard/recruiter/job/post.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditJobDescriptionRecruiterJobForm from "@/components/popups/recruiter/createjob/EditJobDescription";
+import { salaryPackageType } from "@/constants/data";
 
 const masterConfig = {
   department: {
@@ -95,6 +97,12 @@ function RecruiterJobPost() {
   const [workType, setWorkType] = useState(1);
   const [showToCareerPage, setShowToCareerPage] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [postStepStatus, setPostStepStatus] = useState({
+    jobDetails: false,
+    advanceJobDetails: false,
+    sensitiveData: false,
+    exposure: false,
+  });
 
   // LISTINGS
 
@@ -131,6 +139,12 @@ function RecruiterJobPost() {
     "employeeDepartmentList",
   );
 
+  // RECRUITER MASTERS LISTING
+  const { data: recruiterMasters } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "recruiterMasters",
+  );
+
   const {
     register,
     handleSubmit,
@@ -143,7 +157,36 @@ function RecruiterJobPost() {
     resolver: yupResolver(recruiterJobPostSchema),
   });
 
-  const { country_id, state_id, job_description_id } = watch();
+  const {
+    country_id,
+    job_title,
+    employment_type,
+    designation_id,
+    department_id,
+    city_id,
+    state_id,
+    job_description_id,
+    salary_package,
+  } = watch();
+
+  useEffect(() => {
+    setPostStepStatus({
+      jobDetails: !!country_id && !!job_title && !!employment_type,
+      advanceJobDetails:
+        !!designation_id && !!department_id && !!city_id && !!state_id,
+      sensitiveData: !!job_description_id,
+      exposure: !!workType,
+    });
+  }, [
+    country_id,
+    job_title,
+    employment_type,
+    designation_id,
+    department_id,
+    city_id,
+    state_id,
+    job_description_id,
+  ]);
 
   const getJobDescriptionDetails = async () => {
     const response = await newRequest.get(
@@ -285,6 +328,10 @@ function RecruiterJobPost() {
       setLoader(false);
     }
   };
+
+  const handleImageError = (event) => {
+    event.target.src = "/assets/icons/tort.svg";
+  };
   return (
     <>
       <EditJobDescriptionRecruiterJobForm
@@ -311,25 +358,22 @@ function RecruiterJobPost() {
         activeMenu={"Jobs"}
       />
       <div className="flex flex-row items-start justify-between gap-3">
-        <div className="w-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
-            <h1 className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
+            <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
               <ArrowLeft className="size-4" />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-[#2C2C2C]">Post</span>
-            </h1>
-            <Link
-              to="/admin/recruiter/application"
+            </div>
+            <button
+              type="submit"
               className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-7 text-xs font-semibold text-white hover:bg-[#030E5C]"
             >
               Next
-            </Link>
+            </button>
           </div>
           <div className="w-full rounded-md bg-white">
-            <div
-              onSubmit={handleSubmit(onSubmit)}
-              className="mb-9 grid grid-cols-1 gap-x-3 py-2"
-            >
+            <div className="mb-9 grid grid-cols-1 gap-x-3 py-2">
               <div className="grid grid-cols-3 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text">
@@ -447,7 +491,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="label-text flex flex-row items-center gap-1">
+                  <label className="required label-text flex flex-row items-center gap-1">
                     Department or Business Unit
                     <button
                       onClick={() => {
@@ -519,7 +563,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group col-span-2 flex w-full flex-col space-y-1 px-3 py-2">
-                  <label className="label-text flex flex-row items-center gap-1">
+                  <label className="required label-text flex flex-row items-center gap-1">
                     Job description
                     <button
                       onClick={() => {
@@ -553,7 +597,7 @@ function RecruiterJobPost() {
                       onClick={() => {
                         setEditDescription(true);
                       }}
-                      className="flex h-10 min-h-10 w-fit min-w-64 cursor-pointer flex-row items-center justify-center gap-2 rounded-md bg-[#FCA7A733] px-7 text-center text-sm font-semibold text-black/55"
+                      className={`flex h-10 min-h-10 w-fit min-w-64 cursor-pointer flex-row items-center justify-center gap-2 rounded-md px-7 text-center text-sm font-semibold ${job_description_id ? "bg-hrmprimaryorange/80 text-white" : "bg-hrmprimaryorange/10 text-black/55"}`}
                     >
                       <PenLineIcon className="h-4" /> Update Job Description
                     </button>
@@ -571,6 +615,7 @@ function RecruiterJobPost() {
                       <img
                         src={guideline}
                         alt="Uploaded"
+                        onError={handleImageError}
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                       />
                       <X
@@ -627,7 +672,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="label-text flex flex-row items-center gap-1">
+                  <label className="required label-text flex flex-row items-center gap-1">
                     State,Province or territory
                   </label>
                   <Controller
@@ -652,7 +697,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="label-text flex flex-row items-center gap-1">
+                  <label className="required label-text flex flex-row items-center gap-1">
                     City or Town
                   </label>
                   <Controller
@@ -681,6 +726,14 @@ function RecruiterJobPost() {
                   <input
                     {...register("postal_code")}
                     autoComplete="off"
+                    onKeyPress={(event) => {
+                      if (
+                        !/^[0-9]$/.test(event.key) ||
+                        event.target.value.length >= 6
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
                     type="text"
                     className="input-box"
                   />
@@ -693,7 +746,7 @@ function RecruiterJobPost() {
                 <div className="group col-span-3 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Work type</label>
                   <div className="flex flex-row items-start gap-4">
-                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -701,34 +754,33 @@ function RecruiterJobPost() {
                           setWorkType(1);
                         }}
                         checked={workType === 1}
-                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                      />
+                      <span className="label-text">Work from office</span>
+                    </label>
+                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                      <input
+                        type="radio"
+                        name="workOption"
+                        onChange={() => {
+                          setWorkType(2);
+                        }}
+                        checked={workType === 2}
+                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">
                         Remote (Work from home)
                       </span>
                     </label>
-                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
                         onChange={() => {
-                          setWorkType(1);
+                          setWorkType(3);
                         }}
-                        checked={workType === 1}
-                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
-                      />
-                      <span className="label-text">Work from office</span>
-                    </label>
-
-                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
-                      <input
-                        type="radio"
-                        name="workOption"
-                        onChange={() => {
-                          setWorkType(1);
-                        }}
-                        checked={workType === 1}
-                        className="h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        checked={workType === 3}
+                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Hybrid</span>
                     </label>
@@ -739,7 +791,7 @@ function RecruiterJobPost() {
             <div className="flex flex-col gap-2.5 pb-7">
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
@@ -781,9 +833,11 @@ function RecruiterJobPost() {
                         rules={{ required: true }}
                         render={({ field }) => (
                           <Select
+                            {...field}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Not Mention Package"
+                            options={salaryPackageType}
+                            placeholder="Select package"
                             className="input-box"
                           />
                         )}
@@ -795,92 +849,124 @@ function RecruiterJobPost() {
                       )}
                     </div>
                   </div>
-                  <div className="group flex flex-col space-y-1 px-3 py-2">
-                    <label className="label-text">
-                      Salary Range(Internal Only)
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <div className="flex flex-col gap-1">
-                        <input
-                          autoComplete="off"
-                          type="text"
-                          {...register("minimum_range")}
-                          placeholder="Minimum range"
-                          className="input-box"
-                        />
-                        {errors.minimum_range && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.minimum_range?.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <input
-                          autoComplete="off"
-                          type="text"
-                          {...register("maximum_range")}
-                          placeholder="Minimum range"
-                          className="input-box"
-                        />
-                        {errors.maximum_range && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.maximum_range?.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <Controller
-                          name="currency_type"
-                          control={control}
-                          rules={{ required: true }}
-                          render={({ field }) => (
-                            <Select
-                              isSearchable={false}
-                              styles={customSelectStyles}
-                              placeholder="Currency"
-                              className="input-box"
-                            />
+
+                  {salary_package?.value === 1 ? (
+                    <div className="group flex flex-col space-y-1 px-3 py-2">
+                      <label className="label-text">
+                        Salary Range(Internal Only)
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <div className="flex flex-col gap-1">
+                          <input
+                            autoComplete="off"
+                            type="text"
+                            {...register("minimum_range")}
+                            placeholder="Minimum range"
+                            onKeyPress={(event) => {
+                              if (!/^[0-9]$/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            }}
+                            className="input-box"
+                          />
+                          {errors.minimum_range && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.minimum_range?.message}
+                            </span>
                           )}
-                        />
-                        {errors.currency_type && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.currency_type?.message}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-col">
-                        <Controller
-                          name="salary_package_type"
-                          control={control}
-                          rules={{ required: true }}
-                          render={({ field }) => (
-                            <Select
-                              isSearchable={false}
-                              styles={customSelectStyles}
-                              placeholder="Pay type"
-                              className="input-box"
-                            />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <input
+                            autoComplete="off"
+                            type="text"
+                            {...register("maximum_range")}
+                            placeholder="Minimum range"
+                            onKeyPress={(event) => {
+                              if (!/^[0-9]$/.test(event.key)) {
+                                event.preventDefault();
+                              }
+                            }}
+                            className="input-box"
+                          />
+                          {errors.maximum_range && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.maximum_range?.message}
+                            </span>
                           )}
-                        />
-                        {errors.salary_package_type && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors.salary_package_type?.message}
-                          </span>
-                        )}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <Controller
+                            name="currency_type"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                options={recruiterMasters?.currencies}
+                                isSearchable={false}
+                                styles={customSelectStyles}
+                                placeholder="Currency"
+                                className="input-box"
+                              />
+                            )}
+                          />
+                          {errors.currency_type && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.currency_type?.message}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex flex-col">
+                          <Controller
+                            name="salary_package_type"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                              <Select
+                                {...field}
+                                isSearchable={false}
+                                options={recruiterMasters?.paySchedules}
+                                styles={customSelectStyles}
+                                placeholder="Pay type"
+                                className="input-box"
+                              />
+                            )}
+                          />
+                          {errors.salary_package_type && (
+                            <span className="text-xs font-medium text-red-500">
+                              {errors.salary_package_type?.message}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="flex flex-col gap-1 px-3">
+                      <textarea
+                        autoComplete="off"
+                        type="text"
+                        {...register("reason")}
+                        placeholder="Reason "
+                        className="input-box min-h-24 py-1"
+                      />
+                      {errors.reason && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.reason?.message}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </DisclosurePanel>
               </Disclosure>
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Sensitive data
                   </p>
-                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                  <div className="h-[0.5px] w-full bg-[#ECE9F1]"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>
@@ -897,9 +983,11 @@ function RecruiterJobPost() {
                           rules={{ required: true }}
                           render={({ field }) => (
                             <Select
+                              {...field}
                               isSearchable={false}
+                              options={salaryPackageType}
                               styles={customSelectStyles}
-                              placeholder="Not Mention Package"
+                              placeholder="Select salary type"
                               className="input-box"
                             />
                           )}
@@ -923,6 +1011,11 @@ function RecruiterJobPost() {
                                 "sensitive_data_salary_minimum_range",
                               )}
                               placeholder="Minimum range"
+                              onKeyPress={(event) => {
+                                if (!/^[0-9]$/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }}
                               className="input-box"
                             />
                             {errors.sensitive_data_salary_minimum_range && (
@@ -942,6 +1035,11 @@ function RecruiterJobPost() {
                                 "sensitive_data_salary_maximum_range",
                               )}
                               placeholder="Minimum range"
+                              onKeyPress={(event) => {
+                                if (!/^[0-9]$/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }}
                               className="input-box"
                             />
                             {errors.sensitive_data_salary_maximum_range && (
@@ -974,7 +1072,7 @@ function RecruiterJobPost() {
               </Disclosure>
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
@@ -1035,7 +1133,7 @@ function RecruiterJobPost() {
               </Disclosure>
             </div>
           </div>
-        </div>
+        </form>
         <CreateJobSideBar stepCounter={1} />
       </div>
     </>

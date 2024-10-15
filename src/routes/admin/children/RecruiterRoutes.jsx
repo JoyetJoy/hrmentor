@@ -1,5 +1,5 @@
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
-import CandidatesList from "@/pages/admin/menu/recruiter/candidate/Index";
+import CandidatesList from "@/pages/admin/menu/recruiter/candidate/CandidateList";
 import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
 import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
 import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
@@ -17,7 +17,7 @@ import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import Application from "@/pages/admin/menu/recruiter/jobs/createJob/application";
 import { InterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
-import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Post";
+import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Save";
 import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
 import Team from "@/pages/admin/menu/recruiter/jobs/createJob/team";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
@@ -57,7 +57,7 @@ export const RecruiterRoutes = [
     element: <JobDetails />,
   },
 
-  // ---- JOB ----
+  // ---- Job ----
   {
     path: "jobs",
     children: [
@@ -71,7 +71,6 @@ export const RecruiterRoutes = [
       },
     ],
   },
-
   {
     path: "application",
     element: <Application />,
@@ -137,8 +136,7 @@ export const RecruiterRoutes = [
     path: "create-job-team",
     element: <Team />,
   },
-
-  //  ----candidate----
+  //  ----Candidate----
   {
     path: "candidate",
     children: [
@@ -205,8 +203,7 @@ export const RecruiterRoutes = [
       },
     ],
   },
-
-  // interview
+  // ----Interview----
   {
     path: "interview",
     children: [

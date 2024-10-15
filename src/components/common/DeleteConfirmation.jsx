@@ -24,6 +24,7 @@ export default function DeleteConfirmation({
       }
     } catch (error) {
       setLoader(false);
+      onCancel(false);
       toast.error(error?.response?.data?.message);
       console.error(error);
     }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { TableData } from "@/constants/tableDummy";
+import { Link } from "react-router-dom";
 import {
   ArrowLeft,
   Filter,
@@ -9,18 +8,21 @@ import {
   Search,
   Trash2,
 } from "lucide-react";
-
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import FilterCandidate from "@/components/popups/recruiter/FilterCandidate";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import { GET_CANDIDATES } from "@/api/recruiter";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import Loader from "@/components/ui/Loader";
 
 function CandidatesList() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
@@ -41,8 +43,6 @@ function CandidatesList() {
         }),
   });
 
-  console.log(candidateListing);
-
   useEffect(() => {
     if (candidateListing) {
       setTotalPages(candidateListing?.data?.last_page);
@@ -51,6 +51,17 @@ function CandidatesList() {
 
   const columns = React.useMemo(
     () => [
+      {
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
       {
         header: "Date applied",
         accessorKey: "date_applied",
@@ -80,8 +91,14 @@ function CandidatesList() {
         header: "Workflow status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center rounded-md border border-[#92BEE4] bg-[#F0F8FF] px-3 text-xs font-medium text-black">
-            {row?.original?.status}
+          <div
+            style={{
+              backgroundColor: row?.original?.status?.background_color,
+              color: row?.original?.status?.text_color,
+            }}
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+          >
+            {row?.original?.status?.status_name}
           </div>
         ),
       },
@@ -101,15 +118,37 @@ function CandidatesList() {
             >
               <MoveDiagonal className="h-3 w-3" />
             </Link>
+            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </Link>
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <Trash2 className="size-3" />
+            </button>
           </div>
         ),
       },
     ],
-
-    [],
+    [candidateListing, currentPage],
   );
+
   return (
     <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"candidateListing"}
+        api={GET_CANDIDATES}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -123,11 +162,14 @@ function CandidatesList() {
             <ArrowLeft className="size-4" />
             All candidates
           </div>
-          <label className="input flex h-9 min-h-9 items-center gap-2 border-none pr-28 outline-none">
+          <label className="input flex h-9 min-h-9 min-w-72 items-center gap-2 border-none outline-none">
             <Search className="size-4 object-contain text-gray-200" />
             <input
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
               type="text"
-              className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
+              className="w-full grow text-sm text-black/70 placeholder:text-sm placeholder:font-normal focus:outline-none"
               placeholder="Search"
             />
           </label>
@@ -160,13 +202,17 @@ function CandidatesList() {
           </Link>
         </div>
       </div>
-      <QueryTable
-        columns={columns}
-        list={candidateListing?.data?.listing ?? []}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <QueryTable
+          columns={columns}
+          list={candidateListing?.data?.listing ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
     </>
   );
 }

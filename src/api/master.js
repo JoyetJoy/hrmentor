@@ -87,5 +87,5 @@ export const MINIMUM_Experience = "MinimumExperience";
 export const MINIMUM_EXPERIENCE_LIST = "Active-MinimumExperience";
 // SOURCES
 export const SOURCES = "Source";
-// SETUP SHIFT
-export const SHIFT ="employee-shift-area";
+// LIST
+export const SOURCES_LIST = "Active-Source";

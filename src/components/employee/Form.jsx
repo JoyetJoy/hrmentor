@@ -7,7 +7,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SaveEmployeeMasterForm from "../popups/employees/settings/common/Save";
-import { bloodGroups, genders, maritalStatuses } from "@/constants/data";
+import { bloodGroups, maritalStatuses } from "@/constants/data";
 import {
   COUNTRY,
   COUNTRY_CITY,
@@ -21,6 +21,7 @@ import {
   EMPLOYEE_WORK_LOCATION_LIST,
   NATIONALITY,
   ROLES_LIST,
+  SALARY_DEFAULT_MASTERS,
   STATE_COUNTRY,
 } from "@/api/master";
 import useImageUpload from "@/hooks/useImageUpload";
@@ -90,6 +91,12 @@ export default function SaveEmployeeForm({ formtype }) {
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
 
+  // MASTERS LISTING
+  const { data: employeeMasters } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "employeeMasters",
+  );
+
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
 
@@ -116,6 +123,8 @@ export default function SaveEmployeeForm({ formtype }) {
     if (employeeDetails) {
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
+      setValue("middle_name", employeeDetails.middle_name);
+      setValue("post_code", employeeDetails.post_code);
       setValue("sur_name", employeeDetails.sur_name);
       setValue("gender", employeeDetails.gender);
       setValue("dob", employeeDetails.dob);
@@ -283,8 +292,10 @@ export default function SaveEmployeeForm({ formtype }) {
   const handleEmployee = async (data) => {
     const formData = new FormData();
     formData.append("first_name", data.first_name);
+    formData.append("middle_name", data.middle_name);
     formData.append("sur_name", data.sur_name);
-    formData.append("gender", data.gender?.value);
+    formData.append("gender", data.gender?.id);
+    formData.append("post_code", data.post_code);
     formData.append("dob", data.dob);
     formData.append("blood_group", data.blood_group?.value);
     formData.append("marital_status", data.marital_status?.value);
@@ -455,6 +466,21 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="required label-text">Middle Name</label>
+                  <input
+                    {...register("middle_name")}
+                    autoComplete="off"
+                    placeholder="Enter Middle Name"
+                    type="text"
+                    className="input-box"
+                  />
+                  {errors.middle_name && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.middle_name?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Surname</label>
                   <input
                     {...register("sur_name")}
@@ -469,7 +495,6 @@ export default function SaveEmployeeForm({ formtype }) {
                     </span>
                   )}
                 </div>
-
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Date of birth</label>
                   <input
@@ -496,7 +521,7 @@ export default function SaveEmployeeForm({ formtype }) {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        options={genders}
+                        options={employeeMasters?.genders}
                         placeholder="Select Gender"
                         className="input-box"
                       />
@@ -603,6 +628,29 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="required label-text">Post Code</label>
+                  <input
+                    {...register("post_code", { required: true })}
+                    autoComplete="off"
+                    type="text"
+                    placeholder="Enter Post Code"
+                    onKeyPress={(event) => {
+                      if (
+                        !/^[0-9]$/.test(event.key) ||
+                        event.target.value.length >= 6
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
+                    className="input-box"
+                  />
+                  {errors.post_code && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.post_code?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Blood Group</label>
                   <Controller
                     name="blood_group"
@@ -693,7 +741,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image </label>
+                  <label className="label-text">Upload Image</label>
                   {image ? (
                     <div className="relative">
                       <img
@@ -724,12 +772,6 @@ export default function SaveEmployeeForm({ formtype }) {
                         className="hidden"
                       />
                     </label>
-                  )}
-
-                  {errors.employeeId && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.employeeId?.message}
-                    </span>
                   )}
                 </div>
               </div>
