@@ -122,15 +122,17 @@ function RecruiterJobs() {
                 className="w-full object-contain"
               />
             </Link>
-            <button
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedField(row?.original?.id);
-              }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <Trash2 className="size-3" />
-            </button>
+            {byStatus === 1 ? (
+              <button
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedField(row?.original?.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+              >
+                <Trash2 className="size-3" />
+              </button>
+            ) : null}
           </div>
         ),
       },
