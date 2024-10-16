@@ -51,6 +51,8 @@ export default function EmployeeBankDetails() {
     }
   }, [employeeBankDetails]);
 
+  console.log(employeeBankDetails?.data?.listing);
+
   const columns = React.useMemo(
     () =>
       [
@@ -87,6 +89,13 @@ export default function EmployeeBankDetails() {
           header: "Branch Name",
           accessorKey: "branch",
           cell: ({ row }) => <>{row.original?.account_details?.branch}</>,
+        },
+        {
+          header: "Acc. Number",
+          accessorKey: "account_number",
+          cell: ({ row }) => (
+            <>{row.original?.account_details?.account_number}</>
+          ),
         },
         {
           header: "Acc. Holders Name",
