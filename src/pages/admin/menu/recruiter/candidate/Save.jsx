@@ -194,7 +194,7 @@ function SaveCandidates() {
                 autoComplete="off"
                 type="text"
                 placeholder="Enter Middle Name"
-                {...register("middle_name", { required: true })}
+                {...register("middle_name")}
                 className="input-box"
               />
               {errors.middle_name && (
