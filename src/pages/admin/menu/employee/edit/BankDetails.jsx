@@ -89,11 +89,6 @@ export default function EmployeeBankDetails() {
           cell: ({ row }) => <>{row.original?.account_details?.branch}</>,
         },
         {
-          header: "IBAN Number",
-          accessorKey: "iban",
-          cell: ({ row }) => <>{row.original?.account_details?.iban}</>,
-        },
-        {
           header: "Acc. Holders Name",
           accessorKey: "account_holder_name",
           cell: ({ row }) => (
@@ -101,9 +96,9 @@ export default function EmployeeBankDetails() {
           ),
         },
         {
-          header: "Swift Code",
-          accessorKey: "swift_code",
-          cell: ({ row }) => <>{row.original?.account_details?.swift_code}</>,
+          header: "Sort Code",
+          accessorKey: "sort_code",
+          cell: ({ row }) => <>{row.original?.account_details?.sort_code}</>,
         },
         {
           header: "Action",

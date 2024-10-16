@@ -137,9 +137,7 @@ export default function EmployeeMembershipEdit() {
             <div className="w-full rounded-md bg-white px-5 py-4">
               <div className="my-4 flex items-center justify-between">
                 <div className="flex items-center gap-7">
-                  <h5 className="text-lg font-bold">
-                    Registration & Memberships
-                  </h5>
+                  <h5 className="text-lg font-bold">Registration/Training</h5>
                   <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
                     <Search className="size-4 text-[#7F7F7F]" />
                     <input
