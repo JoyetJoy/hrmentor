@@ -122,7 +122,7 @@ function RecruiterJobs() {
                 className="w-full object-contain"
               />
             </Link>
-            {byStatus === 1 ? (
+            {row?.original?.job_status?.status_name === "Draft" ? (
               <button
                 onClick={() => {
                   setDeletePopup(true);
@@ -137,7 +137,7 @@ function RecruiterJobs() {
         ),
       },
     ],
-    [],
+    [jobListing, byStatus],
   );
   return (
     <>
@@ -146,7 +146,7 @@ function RecruiterJobs() {
         onCancel={setDeletePopup}
         selectedId={selectedField}
         qrkey={"jobListing"}
-        api={jobListing}
+        api={GET_JOBS}
       />
       <MenuHeader
         backlink={""}

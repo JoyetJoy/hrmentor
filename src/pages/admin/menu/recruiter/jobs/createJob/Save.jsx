@@ -756,7 +756,7 @@ function RecruiterJobPost() {
                 <div className="group col-span-3 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Work type</label>
                   <div className="flex flex-row items-start gap-4">
-                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -768,7 +768,7 @@ function RecruiterJobPost() {
                       />
                       <span className="label-text">Onsite</span>
                     </label>
-                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -780,7 +780,7 @@ function RecruiterJobPost() {
                       />
                       <span className="label-text">Remote</span>
                     </label>
-                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
