@@ -323,7 +323,7 @@ function RecruiterJobPost() {
         clearPost();
         reset();
         setLoader(false);
-        formtype === "save" && navigate("/admin/employee");
+        navigate("/admin/recruiter/jobs");
       } else {
         toast.error("Failed to save job.");
         setLoader(false);
