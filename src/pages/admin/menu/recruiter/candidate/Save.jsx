@@ -323,7 +323,7 @@ function SaveCandidates() {
             </div>
             <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text flex flex-row items-center gap-1">
-                State,Province or territory
+                County
               </label>
               <Controller
                 name="state_or_province"

@@ -582,9 +582,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">
-                    State,Province or territory
-                  </label>
+                  <label className="required label-text">County</label>
                   <Controller
                     name="state_id"
                     control={control}
