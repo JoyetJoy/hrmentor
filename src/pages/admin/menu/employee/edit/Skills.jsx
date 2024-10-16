@@ -97,10 +97,6 @@ export default function SkillsQualifications() {
           },
         },
         {
-          header: "CGPA/Percentage",
-          accessorKey: "cgpa_percentage",
-        },
-        {
           header: "Status",
           accessorKey: "status",
           cell: ({ row }) => (

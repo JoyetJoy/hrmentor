@@ -208,7 +208,7 @@ export default function SkillEditForm({
                     CGPA/Percentage
                   </label>
                   <input
-                    {...register("cgpa_percentage", { required: true })}
+                    {...register("cgpa_percentage")}
                     type="text"
                     placeholder="Enter CGPA/Percentage"
                     className="input-box h-10 w-full placeholder:text-[0.8rem]"
@@ -311,7 +311,7 @@ export default function SkillEditForm({
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
-                    className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
                     disabled={loader}
                   >
                     {loader ? (
