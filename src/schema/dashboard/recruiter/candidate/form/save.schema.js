@@ -82,7 +82,7 @@ export const recCandidateSchema = Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "Province is required", function (value) {
+  }).test("both-required", "County is required", function (value) {
     return value?.value && value?.label;
   }),
 
