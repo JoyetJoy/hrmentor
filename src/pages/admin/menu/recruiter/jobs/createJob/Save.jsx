@@ -53,6 +53,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import EditJobDescriptionRecruiterJobForm from "@/components/popups/recruiter/createjob/EditJobDescription";
 import { salaryPackageType } from "@/constants/data";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const masterConfig = {
   department: {
@@ -88,6 +89,7 @@ const masterConfig = {
 };
 
 function RecruiterJobPost() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [masterApi, setMasterApi] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -271,7 +273,6 @@ function RecruiterJobPost() {
     setLoader(true);
     handleSaveJob(data);
   };
-  console.log(salary_package);
   const handleSaveJob = async (data) => {
     const formData = new FormData();
     formData.append("job_title", data.job_title);
