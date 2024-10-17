@@ -51,6 +51,8 @@ export default function EmployeeBankDetails() {
     }
   }, [employeeBankDetails]);
 
+  console.log(employeeBankDetails?.data?.listing);
+
   const columns = React.useMemo(
     () =>
       [
@@ -89,9 +91,11 @@ export default function EmployeeBankDetails() {
           cell: ({ row }) => <>{row.original?.account_details?.branch}</>,
         },
         {
-          header: "IBAN Number",
-          accessorKey: "iban",
-          cell: ({ row }) => <>{row.original?.account_details?.iban}</>,
+          header: "Acc. Number",
+          accessorKey: "account_number",
+          cell: ({ row }) => (
+            <>{row.original?.account_details?.account_number}</>
+          ),
         },
         {
           header: "Acc. Holders Name",
@@ -101,9 +105,9 @@ export default function EmployeeBankDetails() {
           ),
         },
         {
-          header: "Swift Code",
-          accessorKey: "swift_code",
-          cell: ({ row }) => <>{row.original?.account_details?.swift_code}</>,
+          header: "Sort Code",
+          accessorKey: "sort_code",
+          cell: ({ row }) => <>{row.original?.account_details?.sort_code}</>,
         },
         {
           header: "Action",

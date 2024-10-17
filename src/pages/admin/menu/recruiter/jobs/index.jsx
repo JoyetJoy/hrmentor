@@ -122,20 +122,22 @@ function RecruiterJobs() {
                 className="w-full object-contain"
               />
             </Link>
-            <button
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedField(row?.original?.id);
-              }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <Trash2 className="size-3" />
-            </button>
+            {row?.original?.job_status?.status_name === "Draft" ? (
+              <button
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedField(row?.original?.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+              >
+                <Trash2 className="size-3" />
+              </button>
+            ) : null}
           </div>
         ),
       },
     ],
-    [],
+    [jobListing, byStatus],
   );
   return (
     <>
@@ -144,7 +146,7 @@ function RecruiterJobs() {
         onCancel={setDeletePopup}
         selectedId={selectedField}
         qrkey={"jobListing"}
-        api={jobListing}
+        api={GET_JOBS}
       />
       <MenuHeader
         backlink={""}

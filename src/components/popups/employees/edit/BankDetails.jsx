@@ -50,8 +50,6 @@ export default function EmployeeBankDetailsEditForm({
     enabled: !!selectedField != 0,
   });
 
-  console.log(employeeBankDetailByid);
-
   const { data: bankAccountTypeList } = useEmployeeMaster(
     ACCOUNT_TYPE_LIST,
     "bankAccountTypeList",
@@ -224,11 +222,11 @@ export default function EmployeeBankDetailsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     IBAN Number
                   </label>
                   <input
-                    {...register("iban", { required: true })}
+                    {...register("iban")}
                     className="input-box h-10 w-full"
                   />
                   {errors.iban && (
@@ -267,20 +265,6 @@ export default function EmployeeBankDetailsEditForm({
                 </div>
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Swift Code
-                  </label>
-                  <input
-                    {...register("swift_code", { required: true })}
-                    className="input-box h-10 w-full"
-                  />
-                  {errors.swift_code && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.swift_code?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Sort Code
                   </label>
                   <input
@@ -293,6 +277,21 @@ export default function EmployeeBankDetailsEditForm({
                     </span>
                   )}
                 </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Swift Code
+                  </label>
+                  <input
+                    {...register("swift_code")}
+                    className="input-box h-10 w-full"
+                  />
+                  {errors.swift_code && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.swift_code?.message}
+                    </span>
+                  )}
+                </div>
+
                 <div className="mb-4 mt-7 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"

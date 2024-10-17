@@ -338,7 +338,9 @@ export default function SaveEmployeeForm({ formtype }) {
         clearImage();
         reset();
         setLoader(false);
-        formtype === "save" && navigate("/admin/employee");
+        formtype === "save"
+          ? navigate("/admin/employee")
+          : window.location.reload();
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
@@ -466,7 +468,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">Middle Name</label>
+                  <label className="label-text">Middle Name</label>
                   <input
                     {...register("middle_name")}
                     autoComplete="off"
@@ -580,9 +582,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">
-                    State,Province or territory
-                  </label>
+                  <label className="required label-text">County</label>
                   <Controller
                     name="state_id"
                     control={control}

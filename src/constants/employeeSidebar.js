@@ -22,7 +22,7 @@ export const employeeSidebarList = [
   {
     id: 5,
     link: "/admin/employee/registration-membership",
-    name: "Registration & Memberships",
+    name: "Registration/Training",
   },
   {
     id: 6,

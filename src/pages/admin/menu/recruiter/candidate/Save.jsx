@@ -189,12 +189,12 @@ function SaveCandidates() {
               )}
             </div>
             <div className="group flex flex-col gap-1.5 py-2">
-              <label className="required label-text">Middle Name</label>
+              <label className="label-text">Middle Name</label>
               <input
                 autoComplete="off"
                 type="text"
                 placeholder="Enter Middle Name"
-                {...register("middle_name", { required: true })}
+                {...register("middle_name")}
                 className="input-box"
               />
               {errors.middle_name && (
@@ -323,7 +323,7 @@ function SaveCandidates() {
             </div>
             <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text flex flex-row items-center gap-1">
-                State,Province or territory
+                County
               </label>
               <Controller
                 name="state_or_province"

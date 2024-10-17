@@ -30,6 +30,6 @@ export const empSkillSchema = Yup.object({
       },
     ),
   field_of_study: Yup.string().required("Field of study is required"),
-  cgpa_percentage: Yup.string().required("CGPA/Percentage is required"),
+  cgpa_percentage: Yup.string(),
   institution: Yup.string().required("Institution name is required"),
 });

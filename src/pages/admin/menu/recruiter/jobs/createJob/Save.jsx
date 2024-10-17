@@ -19,7 +19,7 @@ import {
   DisclosureButton,
 } from "@headlessui/react";
 import { newFormRequest, newRequest } from "@/api";
-import { GENERATE_JOB_CODE } from "@/api/recruiter";
+import { GENERATE_JOB_CODE, GET_JOBS } from "@/api/recruiter";
 import toast from "react-hot-toast";
 import {
   COUNTRY,
@@ -52,6 +52,7 @@ import { recruiterJobPostSchema } from "@/schema/dashboard/recruiter/job/post.sc
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditJobDescriptionRecruiterJobForm from "@/components/popups/recruiter/createjob/EditJobDescription";
 import { salaryPackageType } from "@/constants/data";
+import { useQueryClient } from "@tanstack/react-query";
 
 const masterConfig = {
   department: {
@@ -87,6 +88,7 @@ const masterConfig = {
 };
 
 function RecruiterJobPost() {
+  const queryClient = useQueryClient();
   const [masterApi, setMasterApi] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [qrkey, setQrkey] = useState(null);
@@ -151,13 +153,17 @@ function RecruiterJobPost() {
     control,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(recruiterJobPostSchema),
   });
 
+  console.log(errors);
+
   const {
+    job_code,
     country_id,
     job_title,
     employment_type,
@@ -232,13 +238,12 @@ function RecruiterJobPost() {
     setPopupOpen(true);
   };
 
-  const { unique_job_id } = watch();
   // GENERATE JOB CODE
   const generateJobCode = async () => {
     try {
       const res = await newRequest.get(GENERATE_JOB_CODE);
       if (res?.status === 200) {
-        setValue("unique_job_id", res?.data?.unique_id);
+        setValue("job_code", res?.data?.unique_id);
       }
     } catch (error) {
       console.error(error);
@@ -266,7 +271,7 @@ function RecruiterJobPost() {
     setLoader(true);
     handleSaveJob(data);
   };
-
+  console.log(salary_package);
   const handleSaveJob = async (data) => {
     const formData = new FormData();
     formData.append("job_title", data.job_title);
@@ -274,57 +279,58 @@ function RecruiterJobPost() {
     formData.append("min_exp_id", data.min_exp_id?.id);
     formData.append("job_description", jobDescription);
     formData.append("salary_package", data.salary_package?.value);
-    formData.append("salary_type", data.salary_type?.value);
-    formData.append("minimum_range", data.minimum_range?.id);
+    formData.append("sensitive_salary_type", data.salary_type?.id);
+    formData.append("minimum_range", data.minimum_range);
     formData.append("maximum_range", data?.maximum_range);
+    formData.append("salary_package_type", data.salary_package_type?.id);
     formData.append(
-      "sensitive_data_salary_minimum_range",
-      data.sensitive_data_salary_minimum_range,
+      "sensitive_salary_minimum_range",
+      data.sensitive_salary_minimum_range,
     );
     formData.append(
-      "sensitive_data_salary_maximum_range",
-      data.sensitive_data_salary_maximum_range,
+      "sensitive_salary_maximum_range",
+      data.sensitive_salary_maximum_range,
     );
-    formData.append("currency_type", data.currency_type);
+    formData.append("currency_type", data.currency_type?.id);
     formData.append(
       "search_engine_description",
       data.search_engine_description,
     );
-    formData.append("job_description_id", data.job_description_id);
+    formData.append(
+      "sensitive_data_internal_note",
+      data.sensitive_data_internal_note,
+    );
+    formData.append("job_description_id", data.job_description_id?.id);
     formData.append("postal_code", data.postal_code);
     formData.append("department_id", data.department_id?.id);
     formData.append("work_type", workType);
     formData.append("employment_type", data.employment_type?.id);
     formData.append("designation_id", data.designation_id?.id);
-    formData.append("date_of_joining", data.date_of_joining);
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
+    formData.append("meta_title", data.meta_title);
     formData.append("state_id", data.state_id?.id);
     formData.append("career_page", showToCareerPage ? 1 : 0);
     postFile && formData.append("image", postFile);
+    guidelinefile && formData.append("interview_guideline_file", guidelinefile);
 
     try {
-      let res;
-      if (formtype === "save") {
-        res = await newFormRequest.post(EMPLOYEE, formData);
-      } else {
-        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
-      }
+      let res = await newFormRequest.post(GET_JOBS, formData);
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["employeeDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
-        clearImage();
+        clearPost();
         reset();
         setLoader(false);
-        formtype === "save" && navigate("/admin/employee");
+        navigate("/admin/recruiter/jobs");
       } else {
-        toast.error("Failed to save employee.");
+        toast.error("Failed to save job.");
         setLoader(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to save employee.");
+      toast.error("Failed to save job.");
       setLoader(false);
     }
   };
@@ -393,7 +399,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
-                    Employement type <span className="text-red-500">*</span>
+                    Employment type <span className="text-red-500">*</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -410,6 +416,7 @@ function RecruiterJobPost() {
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
+                        {...field}
                         isSearchable={false}
                         styles={customSelectStyles}
                         options={employeeTypeList}
@@ -426,7 +433,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
-                    Employee Designation <span className="text-red-500">*</span>
+                    Designation <span className="text-red-500">*</span>
                     <button
                       onClick={() => {
                         handleOpenSaveMaster("designation");
@@ -443,6 +450,7 @@ function RecruiterJobPost() {
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
+                        {...field}
                         isSearchable={false}
                         styles={customSelectStyles}
                         options={designationListing}
@@ -476,6 +484,7 @@ function RecruiterJobPost() {
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
+                        {...field}
                         isSearchable={false}
                         styles={customSelectStyles}
                         options={minimumExperienceList}
@@ -492,7 +501,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="required label-text flex flex-row items-center gap-1">
-                    Department or Business Unit
+                    Department
                     <button
                       onClick={() => {
                         handleOpenSaveMaster("department");
@@ -509,6 +518,7 @@ function RecruiterJobPost() {
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
+                        {...field}
                         isSearchable={false}
                         styles={customSelectStyles}
                         options={departmentListing}
@@ -599,7 +609,7 @@ function RecruiterJobPost() {
                       }}
                       className={`flex h-10 min-h-10 w-fit min-w-64 cursor-pointer flex-row items-center justify-center gap-2 rounded-md px-7 text-center text-sm font-semibold ${job_description_id ? "bg-hrmprimaryorange/80 text-white" : "bg-hrmprimaryorange/10 text-black/55"}`}
                     >
-                      <PenLineIcon className="h-4" /> Update Job Description
+                      <PenLineIcon className="h-4" /> Edit Job Description
                     </button>
                   </div>
                   {errors.job_description_id && (
@@ -673,7 +683,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="required label-text flex flex-row items-center gap-1">
-                    State,Province or territory
+                    County
                   </label>
                   <Controller
                     name="state_id"
@@ -746,7 +756,7 @@ function RecruiterJobPost() {
                 <div className="group col-span-3 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="label-text">Work type</label>
                   <div className="flex flex-row items-start gap-4">
-                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -756,9 +766,9 @@ function RecruiterJobPost() {
                         checked={workType === 1}
                         className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
-                      <span className="label-text">Work from office</span>
+                      <span className="label-text">Onsite</span>
                     </label>
-                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -768,11 +778,9 @@ function RecruiterJobPost() {
                         checked={workType === 2}
                         className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
-                      <span className="label-text">
-                        Remote (Work from home)
-                      </span>
+                      <span className="label-text">Remote</span>
                     </label>
-                    <label className="label flex w-[23%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
+                    <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
                         type="radio"
                         name="workOption"
@@ -805,23 +813,23 @@ function RecruiterJobPost() {
                       <label className="label-text">Job code</label>
                       <div className="input-box flex">
                         <input
-                          {...register("unique_job_id")}
+                          {...register("job_code")}
                           autoComplete="off"
                           disabled
                           className="w-full"
                         />
                         <button
                           type="button"
-                          disabled={unique_job_id}
+                          disabled={job_code}
                           onClick={generateJobCode}
                           className="w-fit text-[0.8rem] font-medium text-hrmprimaryorange"
                         >
                           Generate
                         </button>
                       </div>
-                      {errors.unique_job_id && (
+                      {errors.job_code && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.unique_job_id?.message}
+                          {errors.job_code?.message}
                         </span>
                       )}
                     </div>
@@ -985,7 +993,7 @@ function RecruiterJobPost() {
                             <Select
                               {...field}
                               isSearchable={false}
-                              options={salaryPackageType}
+                              options={recruiterMasters?.paySchedules}
                               styles={customSelectStyles}
                               placeholder="Select salary type"
                               className="input-box"
@@ -1007,9 +1015,7 @@ function RecruiterJobPost() {
                             <input
                               autoComplete="off"
                               type="text"
-                              {...register(
-                                "sensitive_data_salary_minimum_range",
-                              )}
+                              {...register("sensitive_salary_minimum_range")}
                               placeholder="Minimum range"
                               onKeyPress={(event) => {
                                 if (!/^[0-9]$/.test(event.key)) {
@@ -1018,12 +1024,9 @@ function RecruiterJobPost() {
                               }}
                               className="input-box"
                             />
-                            {errors.sensitive_data_salary_minimum_range && (
+                            {errors.sensitive_salary_minimum_range && (
                               <span className="text-xs font-medium text-red-500">
-                                {
-                                  errors.sensitive_data_salary_minimum_range
-                                    ?.message
-                                }
+                                {errors.sensitive_salary_minimum_range?.message}
                               </span>
                             )}
                           </div>
@@ -1031,9 +1034,7 @@ function RecruiterJobPost() {
                             <input
                               autoComplete="off"
                               type="text"
-                              {...register(
-                                "sensitive_data_salary_maximum_range",
-                              )}
+                              {...register("sensitive_salary_maximum_range")}
                               placeholder="Minimum range"
                               onKeyPress={(event) => {
                                 if (!/^[0-9]$/.test(event.key)) {
@@ -1042,12 +1043,9 @@ function RecruiterJobPost() {
                               }}
                               className="input-box"
                             />
-                            {errors.sensitive_data_salary_maximum_range && (
+                            {errors.sensitive_salary_maximum_range && (
                               <span className="text-xs font-medium text-red-500">
-                                {
-                                  errors.sensitive_data_salary_maximum_range
-                                    ?.message
-                                }
+                                {errors.sensitive_salary_maximum_range?.message}
                               </span>
                             )}
                           </div>

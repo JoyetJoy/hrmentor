@@ -10,20 +10,34 @@ export const recruiterJobPostSchema = Yup.object({
   }).test("both-required", "Minimum experience is required", function (value) {
     return value?.value && value?.label;
   }),
-  job_description: Yup.string().required("Job description is required"),
-  salary_package: Yup.string().required("Salary package is required"),
-  salary_type: Yup.string().required("Salary type is required"),
+  salary_package: Yup.object({
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Salary package is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  salary_type: Yup.object({
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Salary type is required", function (value) {
+    return value?.value && value?.label;
+  }),
   minimum_range: Yup.string().required("Minimum range is required"),
   maximum_range: Yup.string().required("Maximum range is required"),
-  sensitive_data_salary_minimum_range: Yup.string().required(
+  sensitive_salary_minimum_range: Yup.string().required(
     "Minimum range is required",
   ),
-  sensitive_data_salary_maximum_range: Yup.string().required(
+  sensitive_salary_maximum_range: Yup.string().required(
     "Maximum range is required",
   ),
-  currency_type: Yup.string().required("Currency type is required"),
-  search_engine_description: Yup.string().required("SearchEngine"),
-  meta_title: Yup.string().required("Meta title is required"),
+  currency_type: Yup.object({
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Currency is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  search_engine_description: Yup.string(),
+  meta_title: Yup.string(),
   sensitive_data_internal_note: Yup.string().required(
     "Internal note is required",
   ),
@@ -45,7 +59,6 @@ export const recruiterJobPostSchema = Yup.object({
   }).test("both-required", "Employment type is required", function (value) {
     return value?.value && value?.label;
   }),
-  work_type: Yup.string().required("Work type is required"),
   department_id: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

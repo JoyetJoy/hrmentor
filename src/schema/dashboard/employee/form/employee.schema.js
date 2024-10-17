@@ -3,7 +3,7 @@ import * as Yup from "yup";
 export const EmployeeSchema = Yup.object({
   unique_id: Yup.string().required("Employee unique ID is required"),
   first_name: Yup.string().required("First name is required"),
-  middle_name: Yup.string().required("Middle name is required"),
+  middle_name: Yup.string(),
   sur_name: Yup.string().required("Surname is required"),
 
   blood_group: Yup.object({
@@ -104,7 +104,7 @@ export const EmployeeSchema = Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "Province is required", function (value) {
+  }).test("both-required", "County is required", function (value) {
     return value?.value && value?.label;
   }),
 
