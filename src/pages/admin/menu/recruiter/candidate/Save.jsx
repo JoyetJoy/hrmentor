@@ -189,7 +189,7 @@ function SaveCandidates() {
               )}
             </div>
             <div className="group flex flex-col gap-1.5 py-2">
-              <label className="required label-text">Middle Name</label>
+              <label className="label-text">Middle Name</label>
               <input
                 autoComplete="off"
                 type="text"
