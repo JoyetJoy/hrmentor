@@ -19,7 +19,7 @@ import {
   DisclosureButton,
 } from "@headlessui/react";
 import { newFormRequest, newRequest } from "@/api";
-import { GENERATE_JOB_CODE, GET_JOBS } from "@/api/recruiter";
+import { GENERATE_JOB_CODE, GET_JOBS, UPDATE_JOB } from "@/api/recruiter";
 import toast from "react-hot-toast";
 import {
   COUNTRY,
@@ -52,8 +52,8 @@ import { recruiterJobPostSchema } from "@/schema/dashboard/recruiter/job/post.sc
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditJobDescriptionRecruiterJobForm from "@/components/popups/recruiter/createjob/EditJobDescription";
 import { salaryPackageType } from "@/constants/data";
-import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const masterConfig = {
   department: {
@@ -90,6 +90,49 @@ const masterConfig = {
 
 function RecruiterJobPost() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(recruiterJobPostSchema),
+  });
+  const {
+    image: post,
+    imageFile: postFile,
+    handleImageChange: handlePostChange,
+    clearImage: clearPost,
+    setImage: setPost,
+  } = useImageUpload();
+
+  const {
+    image: guideline,
+    imageFile: guidelinefile,
+    handleImageChange: handleGuidelineChange,
+    clearImage: clearGuideline,
+    setImage: setGuideline,
+  } = useImageUpload();
+
+  // GET DETAILS IN CASE OF UPDATE
+  const { data: jobDetails, isLoading } = useQuery({
+    queryKey: ["jobDetails", jid],
+    queryFn: () =>
+      newRequest.get(`${GET_JOBS}/${jid}`).then((res) => {
+        return res.data;
+      }),
+    enabled: !!jid,
+  });
+
+  console.log(jobDetails);
+
   const queryClient = useQueryClient();
   const [masterApi, setMasterApi] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -107,6 +150,78 @@ function RecruiterJobPost() {
     sensitiveData: false,
     exposure: false,
   });
+
+  useEffect(() => {
+    if (jobDetails) {
+      setValue("job_title", jobDetails.job_title);
+      setValue("employment_type", jobDetails.employment_type);
+      setValue("min_exp_id", jobDetails.min_exp_id);
+      setValue("designation_id", jobDetails.designation_id);
+      setValue("department_id", jobDetails.department_id);
+      setValue("country_id", jobDetails.country_id);
+      setValue("job_description_id", jobDetails.jobDescription);
+      setValue("code", jobDetails.code);
+      setValue("currency_type", jobDetails.currencyName);
+      setValue("state_id", jobDetails?.state_id);
+      setValue("city_id", jobDetails?.city_id);
+      setValue("postal_code", jobDetails.postal_code);
+      setValue("work_type", jobDetails.work_type);
+      setValue("job_code", jobDetails.job_code);
+      setValue("salary_package_type", jobDetails.salaryTypeName);
+      setValue("salary_package", jobDetails.salary_package_type);
+      setValue("salary_type", jobDetails.sensitiveSalaryTypeName);
+      setValue("minimum_range", jobDetails.minimum_range);
+      setValue("maximum_range", jobDetails.maximum_range);
+      setValue(
+        "sensitive_salary_minimum_range",
+        jobDetails.sensitive_salary_minimum_range,
+      );
+      setValue(
+        "sensitive_salary_maximum_range",
+        jobDetails.sensitive_salary_maximum_range,
+      );
+      setValue(
+        "sensitive_data_internal_note",
+        jobDetails.sensitive_data_internal_note,
+      );
+      setValue("meta_title", jobDetails.meta_title);
+      setValue(
+        "search_engine_description",
+        jobDetails.search_engine_description,
+      );
+      setValue("career_page", jobDetails.career_page);
+    }
+  }, [jobDetails, setValue]);
+
+  useEffect(() => {
+    if (jobDetails) {
+      setShowToCareerPage(jobDetails?.career_page == 1 ? true : false);
+    }
+  }, [jobDetails, setShowToCareerPage]);
+
+  useEffect(() => {
+    if (jobDetails) {
+      setPost(jobDetails?.image);
+    }
+  }, [jobDetails, setPost]);
+
+  useEffect(() => {
+    if (jobDetails) {
+      setWorkType(jobDetails?.work_type);
+    }
+  }, [jobDetails, setWorkType]);
+
+  useEffect(() => {
+    if (jobDetails) {
+      setGuideline(jobDetails?.interview_guidline_file);
+    }
+  }, [jobDetails, setGuideline]);
+
+  useEffect(() => {
+    if (jobDetails) {
+      setJobDescription(jobDetails?.job_description);
+    }
+  }, [jobDetails, setJobDescription]);
 
   // LISTINGS
 
@@ -148,22 +263,6 @@ function RecruiterJobPost() {
     SALARY_DEFAULT_MASTERS,
     "recruiterMasters",
   );
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(recruiterJobPostSchema),
-  });
-
-  console.log(errors);
-
   const {
     job_code,
     country_id,
@@ -253,22 +352,6 @@ function RecruiterJobPost() {
     }
   };
 
-  const {
-    image: post,
-    imageFile: postFile,
-    handleImageChange: handlePostChange,
-    clearImage: clearPost,
-    setImage: setPost,
-  } = useImageUpload();
-
-  const {
-    image: guideline,
-    imageFile: guidelinefile,
-    handleImageChange: handleGuidelineChange,
-    clearImage: clearGuideline,
-    setImage: setGuideline,
-  } = useImageUpload();
-
   const onSubmit = (data) => {
     setLoader(true);
     handleSaveJob(data);
@@ -316,10 +399,16 @@ function RecruiterJobPost() {
     guidelinefile && formData.append("interview_guideline_file", guidelinefile);
 
     try {
-      let res = await newFormRequest.post(GET_JOBS, formData);
+      let res;
+      if (jid) {
+        res = await newFormRequest.post(`${UPDATE_JOB}/${jid}`, formData);
+      } else {
+        res = await newFormRequest.post(GET_JOBS, formData);
+      }
+
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
-        queryClient.invalidateQueries(["employeeDetails"]);
+        queryClient.invalidateQueries(["jobDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
         clearPost();
         reset();
@@ -339,6 +428,8 @@ function RecruiterJobPost() {
   const handleImageError = (event) => {
     event.target.src = "/assets/icons/tort.svg";
   };
+
+  console.log(recruiterMasters);
   return (
     <>
       <EditJobDescriptionRecruiterJobForm
@@ -684,7 +775,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="required label-text flex flex-row items-center gap-1">
-                    County
+                    State
                   </label>
                   <Controller
                     name="state_id"
@@ -764,7 +855,7 @@ function RecruiterJobPost() {
                         onChange={() => {
                           setWorkType(1);
                         }}
-                        checked={workType === 1}
+                        checked={workType == 1}
                         className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Onsite</span>
@@ -776,7 +867,7 @@ function RecruiterJobPost() {
                         onChange={() => {
                           setWorkType(2);
                         }}
-                        checked={workType === 2}
+                        checked={workType == 2}
                         className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Remote</span>
@@ -788,7 +879,7 @@ function RecruiterJobPost() {
                         onChange={() => {
                           setWorkType(3);
                         }}
-                        checked={workType === 3}
+                        checked={workType == 3}
                         className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
                       />
                       <span className="label-text">Hybrid</span>
@@ -934,7 +1025,7 @@ function RecruiterJobPost() {
                               <Select
                                 {...field}
                                 isSearchable={false}
-                                options={recruiterMasters?.paySchedules}
+                                options={recruiterMasters?.salary_types}
                                 styles={customSelectStyles}
                                 placeholder="Pay type"
                                 className="input-box"
@@ -994,7 +1085,7 @@ function RecruiterJobPost() {
                             <Select
                               {...field}
                               isSearchable={false}
-                              options={recruiterMasters?.paySchedules}
+                              options={recruiterMasters?.salary_types}
                               styles={customSelectStyles}
                               placeholder="Select salary type"
                               className="input-box"
