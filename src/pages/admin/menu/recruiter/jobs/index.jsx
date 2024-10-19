@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -113,7 +113,7 @@ function RecruiterJobs() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+            <Link to={`/admin/recruiter/jobs/post?jid=${row.original.id}`} className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
               <MoveDiagonal className="size-3" />
             </Link>
             <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
