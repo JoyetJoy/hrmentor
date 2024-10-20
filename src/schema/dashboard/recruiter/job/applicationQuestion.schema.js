@@ -16,3 +16,20 @@ export const recruiterAppQuestionnaireSchema = Yup.object({
   question: Yup.string().required("Question is required"),
   is_required: Yup.string().required("Is required is required"),
 });
+
+export const recruiterJobHiringTeamSchema = Yup.object({
+  user_id: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Employee is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  recruiting_role: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Recruiting role is required", function (value) {
+    return value?.value && value?.label;
+  }),
+});

@@ -45,6 +45,11 @@ export const bloodGroups = [
   { id: 8, label: "AB-", value: "AB-" },
 ];
 
+export const hiringMemberRole = [
+  { label: "Hiring Manager ", value: 1 },
+  { label: "Interview Analyst", value: 2 },
+];
+
 // gender
 export const genders = [
   { id: 1, label: "Male", value: "male" },

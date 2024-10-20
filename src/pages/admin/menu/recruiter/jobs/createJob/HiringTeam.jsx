@@ -1,75 +1,117 @@
 import MenuHeader from "@/components/common/MenuHeader";
 import { ArrowLeft, Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { TableData } from "@/constants/tableDummy";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import QueryTable from "@/components/table/QueryTable";
 import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
-import AddHiringTeam from "@/components/popups/recruiter/createjob/AddHiringTeam";
-import DeleteHiringTeam from "@/components/popups/recruiter/createjob/DeleteHiringTeam";
-import EditHiringTeam from "@/components/popups/recruiter/createjob/EditHiringTeam"; // Import the new popup
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import { REC_HIRING_TEAM } from "@/api/recruiter";
+import SaveHiringTeam from "@/components/popups/recruiter/createjob/SaveHiringTeam";
+import Loader from "@/components/ui/Loader";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 function RecJobHiringTeam() {
-  const [popupOpen, setPopupOpen] = useState(false); // To open/close popups
-  const [popupDelete, setPopupDelete] = useState(false); // To track 'add' or 'delete' popup
-  const [popupEditOpen, setPopupEditOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState(""); // Keyword for search
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
   const [totalPages, setTotalPages] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const pageLimit = 10;
 
-  const list = React.useMemo(() => TableData, [TableData]);
-  const location = useLocation();
+  // Fetch List
+  const { data: hiringTeamsByid, isLoading } = useQuery({
+    queryKey: ["hiringTeamsByid", currentPage, jid, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${REC_HIRING_TEAM}/${jid}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(hiringTeamsByid);
+
+  useEffect(() => {
+    if (hiringTeamsByid) {
+      setTotalPages(hiringTeamsByid?.last_page);
+    }
+  }, [hiringTeamsByid]);
 
   const columns = React.useMemo(
     () => [
       {
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
+      {
         header: "Employee name",
         accessorKey: "name",
+        cell: ({ row }) => <>{row.original?.employee?.first_name}</>,
       },
 
       {
         header: "Recruiting role",
-        accessorKey: "type",
+        accessorKey: "recruiting_role",
+        cell: ({ row }) => (
+          <>
+            {row.original?.employee?.recruiting_role == 1
+              ? "Hiring Manager"
+              : "Interview Analyst"}
+          </>
+        ),
       },
       {
         header: "Designation",
         accessorKey: "designation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
+        cell: ({ row }) => (
+          <>{row.original?.employee?.designation?.designation_name}</>
+        ),
       },
-
-      // {
-      //   header: "Status",
-      //   accessorKey: "status",
-      //   cell: ({ row }) => (
-      //     <div className="bg-[#473A990D] w-fit text-[#7D067F] h-8 px-3 font-medium flex items-center justify-center rounded-md ">
-      //       {row?.original?.status}
-      //     </div>
-      //   ),
-      // },
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link
-              to={""}
-              onClick={() => setPopupEditOpen(true)}
+            <div
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedField(row?.original?.id);
+              }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
                 className="w-full object-contain"
               />
-            </Link>
-            <Link
+            </div>
+            <button
               onClick={() => {
-                setPopupOpen(true);
-                setPopupDelete("delete"); // Open DeleteHiringTeam popup
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
               }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <Trash2 className="h-3 w-3 text-[#AB2727]" />
-            </Link>
+              <Trash2 className="size-3" />
+            </button>
           </div>
         ),
       },
@@ -78,7 +120,23 @@ function RecJobHiringTeam() {
   );
 
   return (
-    <div>
+    <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"hiringTeamsByid"}
+        api={REC_HIRING_TEAM}
+      />
+      <SaveHiringTeam
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"hiringTeamsByid"}
+        api={REC_HIRING_TEAM}
+        jid={jid}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -95,12 +153,14 @@ function RecJobHiringTeam() {
               <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-[#2C2C2C]">Team</span>
             </h1>
-            <Link
-              to={"/admin/recruiter/interview"}
-              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm font-normal text-white hover:bg-bgColor-100"
+            <button
+              onClick={() => {
+                navigate(`/admin/recruiter/jobs/hiring-team?job=${jid}`);
+              }}
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
             >
               Next
-            </Link>
+            </button>
           </div>
           <div className="w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">
@@ -112,8 +172,8 @@ function RecJobHiringTeam() {
                 who are helping you fill this position.
               </p>
             </div>
-            <div className="my-4 flex items-center justify-between">
-              <div className="input-box flex min-h-11 min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] placeholder:text-black">
+            <div className="my-4 flex items-center justify-between gap-7">
+              <div className="input-box flex min-h-11 w-fit min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] placeholder:text-black">
                 <Search className="h-4 w-4 text-[#7F7F7F]" />
                 <input
                   type="text"
@@ -124,43 +184,29 @@ function RecJobHiringTeam() {
               <Link
                 onClick={() => {
                   setPopupOpen(true);
-                  setPopupDelete("add"); // Open AddHiringTeam popup
                 }}
-                className="btn flex h-11 min-h-11 min-w-44 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-bgColor-100 text-xs text-white hover:bg-bgColor-100"
+                className="btn flex h-11 min-h-11 min-w-44 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-black/80 text-xs text-white hover:bg-bgColor-100"
               >
                 <Plus className="h-4 w-4" />
                 Add hiring team
               </Link>
             </div>
-            <QueryTable
-              columns={columns}
-              list={list}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <QueryTable
+                columns={columns}
+                list={hiringTeamsByid?.data?.listing}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
           </div>
         </div>
-        <CreateJobSideBar />
+        <CreateJobSideBar stepCounter={3} />
       </div>
-
-      {/* Conditionally render the correct popup */}
-      {popupDelete === "add" && (
-        <AddHiringTeam popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-      )}
-      {popupDelete === "delete" && (
-        <DeleteHiringTeam
-          popupdeleteOpen={popupOpen}
-          setPopupdeleteOpen={setPopupOpen}
-        />
-      )}
-      {popupEditOpen && (
-        <EditHiringTeam
-          popupEditOpen={popupEditOpen}
-          setPopupEditOpen={setPopupEditOpen}
-        />
-      )}
-    </div>
+    </>
   );
 }
 

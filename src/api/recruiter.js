@@ -21,3 +21,5 @@ export const CHANGE_STATUS_PROFILE_QUESTION = "Jobs-profile-question-required";
 export const GET_PROFILE_QUESTIONNAIRE = "get-Jobs-screening-questions";
 // DELETE QUESTIONNAIRE
 export const DELETE_PROFILE_QUESTIONNAIRE = "Jobs-screening-question-remove";
+// HIRING TEAM
+export const REC_HIRING_TEAM = "HiringTeam";
