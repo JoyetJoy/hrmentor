@@ -74,7 +74,7 @@ export const RecruiterRoutes = [
         element: <JobApplicationQuestion />,
       },
       {
-        path: "hiring-team",
+        path: "team",
         element: <RecJobHiringTeam />,
       },
     ],
