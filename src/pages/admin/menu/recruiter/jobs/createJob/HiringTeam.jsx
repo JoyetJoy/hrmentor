@@ -13,7 +13,7 @@ import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 function RecJobHiringTeam() {
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState(""); // Keyword for search
+  const [keyword, setKeyword] = useState("");
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const jid = searchParams.get("jid");
@@ -40,8 +40,6 @@ function RecJobHiringTeam() {
           return res.data;
         }),
   });
-
-  console.log(hiringTeamsByid);
 
   useEffect(() => {
     if (hiringTeamsByid) {
@@ -177,6 +175,9 @@ function RecJobHiringTeam() {
                 <Search className="h-4 w-4 text-[#7F7F7F]" />
                 <input
                   type="text"
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                  }}
                   className="h-full w-full placeholder:text-[#7F7F7F]"
                   placeholder="Search"
                 />
