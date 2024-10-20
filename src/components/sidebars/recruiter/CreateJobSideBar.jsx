@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 
-function CreateJobSideBar() {
+function CreateJobSideBar({ stepCounter }) {
+  console.log(stepCounter);
   return (
     <div className="relative w-1/3 rounded-md bg-white p-5">
       <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-[#CACACA]" />

@@ -131,8 +131,6 @@ function RecruiterJobPost() {
     enabled: !!jid,
   });
 
-  console.log(jobDetails);
-
   const queryClient = useQueryClient();
   const [masterApi, setMasterApi] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -151,6 +149,8 @@ function RecruiterJobPost() {
     exposure: false,
   });
 
+  console.log(jobDetails);
+
   useEffect(() => {
     if (jobDetails) {
       setValue("job_title", jobDetails.job_title);
@@ -168,7 +168,7 @@ function RecruiterJobPost() {
       setValue("work_type", jobDetails.work_type);
       setValue("job_code", jobDetails.job_code);
       setValue("salary_package_type", jobDetails.salaryTypeName);
-      setValue("salary_package", jobDetails.salary_package_type);
+      setValue("salary_package", jobDetails.salary_package);
       setValue("salary_type", jobDetails.sensitiveSalaryTypeName);
       setValue("minimum_range", jobDetails.minimum_range);
       setValue("maximum_range", jobDetails.maximum_range);
@@ -397,7 +397,6 @@ function RecruiterJobPost() {
     formData.append("career_page", showToCareerPage ? 1 : 0);
     postFile && formData.append("image", postFile);
     guidelinefile && formData.append("interview_guideline_file", guidelinefile);
-
     try {
       let res;
       if (jid) {
@@ -405,7 +404,6 @@ function RecruiterJobPost() {
       } else {
         res = await newFormRequest.post(GET_JOBS, formData);
       }
-
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["jobDetails"]);
@@ -413,7 +411,7 @@ function RecruiterJobPost() {
         clearPost();
         reset();
         setLoader(false);
-        navigate("/admin/recruiter/jobs");
+        navigate(`/admin/recruiter/jobs/application-question?jid=${jid}`);
       } else {
         toast.error("Failed to save job.");
         setLoader(false);
@@ -429,7 +427,6 @@ function RecruiterJobPost() {
     event.target.src = "/assets/icons/tort.svg";
   };
 
-  console.log(recruiterMasters);
   return (
     <>
       <EditJobDescriptionRecruiterJobForm
@@ -459,15 +456,22 @@ function RecruiterJobPost() {
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft className="size-4" />
+              <ArrowLeft onClick={() => history.back()} className="size-4" />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-[#2C2C2C]">Post</span>
             </div>
             <button
               type="submit"
-              className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-7 text-xs font-semibold text-white hover:bg-[#030E5C]"
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
             >
-              Next
+              {loader ? (
+                <div className="flex items-center gap-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                  Saving
+                </div>
+              ) : (
+                "Next"
+              )}
             </button>
           </div>
           <div className="w-full rounded-md bg-white">

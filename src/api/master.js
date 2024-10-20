@@ -89,3 +89,5 @@ export const MINIMUM_EXPERIENCE_LIST = "Active-MinimumExperience";
 export const SOURCES = "Source";
 // LIST
 export const SOURCES_LIST = "Active-Source";
+// GET PROFILE QUESTIONS
+export const GET_PROFILE_QUESTIONS = "Active-ProfileQuestions";
