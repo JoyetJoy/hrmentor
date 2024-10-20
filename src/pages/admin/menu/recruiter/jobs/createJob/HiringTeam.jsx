@@ -156,7 +156,9 @@ function RecJobHiringTeam() {
             </h1>
             <button
               onClick={() => {
-                navigate(`/admin/recruiter/jobs/hiring-team?job=${jid}`);
+                navigate(
+                  `/admin/recruiter/jobs/interview-guideline?jid=${jid}`,
+                );
               }}
               className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
             >

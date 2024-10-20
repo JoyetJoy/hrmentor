@@ -9,7 +9,7 @@ import "react-quill/dist/quill.snow.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export const InterviewGuide = () => {
+export const RecJobInterviewGuide = () => {
   const navigate = useNavigate();
   const {
     register,
@@ -237,37 +237,37 @@ export const InterviewGuide = () => {
             <div className="group flex flex-col px-3 py-2">
               <label className="label-text">Preparation notes</label>
               <div
-                  id="toolbar"
-                  className="mb-2 flex items-center rounded border bg-gray-50 p-2"
-                >
-                  <button className="ql-bold"></button>
-                  <button className="ql-italic"></button>
-                  <button className="ql-underline"></button>
-                  <button className="ql-strike"></button>
-                  <select className="ql-header">
-                    <option value="1"></option>
-                    <option value="2"></option>
-                    <option selected></option>
-                  </select>
-                  <select className="ql-font">
-                    <option value="sans-serif">Sans Serif</option>
-                    <option value="serif">Serif</option>
-                    <option value="monospace">Monospace</option>
-                  </select>
-                  <select className="ql-align">
-                    <option selected></option>
-                    <option value="center"></option>
-                    <option value="right"></option>
-                    <option value="justify"></option>
-                  </select>
-                  <select className="ql-color"></select>
-                  <select className="ql-background"></select>
-                  <button className="ql-list" value="ordered"></button>
-                  <button className="ql-list" value="bullet"></button>
-                  <button className="ql-link"></button>
-                  <button className="ql-image"></button>
-                  <button className="ql-clean"></button>
-                </div>
+                id="toolbar"
+                className="mb-2 flex items-center rounded border bg-gray-50 p-2"
+              >
+                <button className="ql-bold"></button>
+                <button className="ql-italic"></button>
+                <button className="ql-underline"></button>
+                <button className="ql-strike"></button>
+                <select className="ql-header">
+                  <option value="1"></option>
+                  <option value="2"></option>
+                  <option selected></option>
+                </select>
+                <select className="ql-font">
+                  <option value="sans-serif">Sans Serif</option>
+                  <option value="serif">Serif</option>
+                  <option value="monospace">Monospace</option>
+                </select>
+                <select className="ql-align">
+                  <option selected></option>
+                  <option value="center"></option>
+                  <option value="right"></option>
+                  <option value="justify"></option>
+                </select>
+                <select className="ql-color"></select>
+                <select className="ql-background"></select>
+                <button className="ql-list" value="ordered"></button>
+                <button className="ql-list" value="bullet"></button>
+                <button className="ql-link"></button>
+                <button className="ql-image"></button>
+                <button className="ql-clean"></button>
+              </div>
               {/* <EditorToolbar /> */}
               <ReactQuill
                 theme="snow"

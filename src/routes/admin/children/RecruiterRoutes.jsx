@@ -14,7 +14,7 @@ import Question from "@/pages/admin/menu/recruiter/candidate/details/question";
 import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
-import { InterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
+import { RecJobInterviewGuide } from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Save";
 import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
@@ -77,16 +77,16 @@ export const RecruiterRoutes = [
         path: "team",
         element: <RecJobHiringTeam />,
       },
+      {
+        path: "interview-guideline",
+        element: <RecJobInterviewGuide />,
+      },
     ],
   },
 
   {
     path: "interview",
     element: <JobInterview />,
-  },
-  {
-    path: "interview-guide",
-    element: <InterviewGuide />,
   },
   {
     path: "request-refferals",
