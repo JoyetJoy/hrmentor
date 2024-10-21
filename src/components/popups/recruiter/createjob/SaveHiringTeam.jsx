@@ -19,12 +19,9 @@ export default function SaveHiringTeam({
   selectedField,
   setSelectedField,
   qrKey,
-  type,
-  colKeys,
   api,
   jid,
 }) {
-  console.log(jid);
   // EMOPLOYEE LIST
   const { data: activeEmployeeList } = useEmployeeMaster(
     ACTIVE_EMPLOYEE,
@@ -34,7 +31,7 @@ export default function SaveHiringTeam({
   const [loader, setLoader] = useState(false);
   // Get selected data
   const { data: jobHiringMemberByid, isLoading } = useQuery({
-    queryKey: ["jobHiringMemberByid", colKeys, type, api, selectedField],
+    queryKey: ["jobHiringMemberByid", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
     enabled: !!selectedField != 0,
@@ -56,7 +53,7 @@ export default function SaveHiringTeam({
       setValue("user_id", jobHiringMemberByid?.user_id);
       setValue("recruiting_role", jobHiringMemberByid?.recruiting_role);
     }
-  }, [jobHiringMemberByid, type, setValue]);
+  }, [jobHiringMemberByid, setValue]);
 
   function close() {
     setPopupOpen(false);

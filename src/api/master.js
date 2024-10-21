@@ -93,3 +93,5 @@ export const SOURCES_LIST = "Active-Source";
 export const GET_PROFILE_QUESTIONS = "Active-ProfileQuestions";
 // CAREER FILTER LIST
 export const CAREER_FILTER_LIST = "career-page-filter";
+// INTERVIEW TYPE LIST
+export const REC_INTERVIEW_TYPES = "Active-InterviewTypes";
