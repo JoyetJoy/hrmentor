@@ -3,7 +3,7 @@ import { CAREERS_LISITNG } from "@/api/recruiter";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Dot, MapPin, Share2 } from "lucide-react";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function CareerDetail() {
   const { id } = useParams();
@@ -48,11 +48,13 @@ export default function CareerDetail() {
                 </button>
               </div>
               <div className="flex flex-row items-center gap-2">
-                <button className="btn h-10 min-h-10 w-36 rounded-md border border-[#CFD2E3] bg-white text-sm text-hrmprimaryorange">
+                <Link
+                  to={`/career/apply/${id}`}
+                  className="btn h-10 min-h-10 w-36 rounded-md border border-[#CFD2E3] bg-white text-sm font-semibold text-hrmprimaryorange"
+                >
                   Apply Now
-                </button>
+                </Link>
                 <button className="btn flex h-10 min-h-10 w-36 flex-row items-center rounded-md border border-[#2F324D] bg-black/80 text-sm text-white">
-                  {" "}
                   <Share2 strokeWidth={1} className="size-4" />
                   Share
                 </button>

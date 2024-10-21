@@ -6,6 +6,7 @@ import { AdminRoutes } from "./admin/AdminRoutes";
 import ErrorPage from "@/pages/Error";
 import JobAreaListing from "@/pages/jobarea/Listing";
 import CareerDetail from "@/pages/jobarea/Detail";
+import ApplyJob from "@/pages/jobarea/Apply";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ export const appRoutes = createBrowserRouter([
   {
     path: "/career/:id",
     element: <CareerDetail />,
+  },
+  {
+    path: "/career/apply/:id",
+    element: <ApplyJob />,
   },
   {
     path: "admin",
