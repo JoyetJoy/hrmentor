@@ -91,3 +91,5 @@ export const SOURCES = "Source";
 export const SOURCES_LIST = "Active-Source";
 // GET PROFILE QUESTIONS
 export const GET_PROFILE_QUESTIONS = "Active-ProfileQuestions";
+// INTERVIEW TYPE LIST
+export const REC_INTERVIEW_TYPES="Active-InterviewTypes"

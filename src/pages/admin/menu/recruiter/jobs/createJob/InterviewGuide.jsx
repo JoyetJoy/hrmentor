@@ -1,37 +1,132 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import { ArrowLeft } from "lucide-react";
-import Select from "react-select";
-import { Controller, useForm } from "react-hook-form";
-import { customSelectStyles } from "@/utils/customStyles";
-import ReactQuill from "react-quill";
-// import EditorToolbar, { modules, formats } from "./EditorToolbar";
-import "react-quill/dist/quill.snow.css";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Plus, Search, Trash2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import QueryTable from "@/components/table/QueryTable";
+import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import { REC_HIRING_TEAM } from "@/api/recruiter";
+import SaveHiringTeam from "@/components/popups/recruiter/createjob/SaveHiringTeam";
+import Loader from "@/components/ui/Loader";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import InterviewGuideline from "@/components/popups/recruiter/createjob/SaveInterviewGuideline";
 
-export const RecJobInterviewGuide = () => {
+function RecJobInterviewGuide() {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    // resolver: yupResolver(schema),
+  const [keyword, setKeyword] = useState("");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const [totalPages, setTotalPages] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: hiringTeamsByid, isLoading } = useQuery({
+    queryKey: ["hiringTeamsByid", currentPage, jid, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${REC_HIRING_TEAM}/${jid}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
   });
 
-  const [state, setState] = React.useState({ value: null });
-  const handleChange = (value) => {
-    setState({ value });
-  };
-  const modules = {
-    toolbar: {
-      container: "#toolbar", // Attach the toolbar to a custom container
-    },
-  };
+  useEffect(() => {
+    if (hiringTeamsByid) {
+      setTotalPages(hiringTeamsByid?.last_page);
+    }
+  }, [hiringTeamsByid]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        header: "Interview Guide",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
+      {
+        header: "Interview Type",
+        accessorKey: "name",
+        cell: ({ row }) => <>{row.original?.employee?.first_name}</>,
+      },
+
+      {
+        header: "Interview Mode",
+        accessorKey: "recruiting_role",
+        cell: ({ row }) => (
+          <>
+            {row.original?.employee?.recruiting_role == 1
+              ? "Hiring Manager"
+              : "Interview Analyst"}
+          </>
+        ),
+      },
+      {
+        header: "Action",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 text-xs">
+            <div
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </div>
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <Trash2 className="size-3" />
+            </button>
+          </div>
+        ),
+      },
+    ],
+    [],
+  );
+
   return (
     <>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"hiringTeamsByid"}
+        api={REC_HIRING_TEAM}
+      />
+      <InterviewGuideline
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+       
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -39,248 +134,74 @@ export const RecJobInterviewGuide = () => {
         currentpath={"Recruiter"}
         activeMenu={"Jobs"}
       />
-
-      <div className="my-1 h-screen w-full overflow-hidden rounded-md bg-white p-3">
-        <div className="flex items-center gap-2">
-          <ArrowLeft className="size-4" />
-          <p className="text-base font-bold text-black">Create New Job </p>
-        </div>
-        <div className="grid grid-cols-2 gap-x-10">
-          <div className="grid grid-cols-2 gap-x-3 py-2">
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Blood Group</label>
-              <Controller
-                name="bloodGroup"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
-                    styles={customSelectStyles}
-                    placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
-                  />
-                )}
+      <div className="flex flex-row items-start justify-between gap-3">
+        <div className="w-full">
+          <div className="mb-3 mt-1 flex items-center justify-between">
+            <h1 className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
+              <ArrowLeft
+                onClick={() => history.back()}
+                className="h-4 w-4 cursor-pointer"
               />
-              {errors.bloodGroup && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.bloodGroup?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Blood Group</label>
-              <Controller
-                name="bloodGroup"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
-                    styles={customSelectStyles}
-                    placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
-                  />
-                )}
-              />
-              {errors.bloodGroup && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.bloodGroup?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Blood Group</label>
-              <Controller
-                name="bloodGroup"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
-                    styles={customSelectStyles}
-                    placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
-                  />
-                )}
-              />
-              {errors.bloodGroup && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.bloodGroup?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Blood Group</label>
-              <Controller
-                name="bloodGroup"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
-                    styles={customSelectStyles}
-                    placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
-                  />
-                )}
-              />
-              {errors.bloodGroup && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.bloodGroup?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Blood Group</label>
-              <Controller
-                name="bloodGroup"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
-                    styles={customSelectStyles}
-                    placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
-                  />
-                )}
-              />
-              {errors.bloodGroup && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.bloodGroup?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Blood Group</label>
-              <Controller
-                name="bloodGroup"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    // required
-                    //   selected={''}
-                    //   value={''}
-                    //   onChange={(selectedOption) => {
-                    //     handle(selectedOption);
-                    //     field.onChange(selectedOption);
-                    //   }}
-                    //   options={}
-                    isSearchable={false}
-                    styles={customSelectStyles}
-                    placeholder="Select Gender"
-                    className="input-box h-10 w-full focus:border-gray-300"
-                  />
-                )}
-              />
-              {errors.bloodGroup && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.bloodGroup?.message}
-                </span>
-              )}
-            </div>
-            <div className="my-5 flex gap-5 px-3 py-2">
-              <div className="flex h-10 w-1/2 items-center justify-center rounded-md border border-[#ECE9F1] font-semibold">
-                Cancel
-              </div>
-              <button
-                // onClick={() => navigate("/admin/recruiter/request-refferals")}
-                className="flex h-10 w-1/2 cursor-pointer items-center justify-center rounded-md bg-[#181C3A] font-semibold text-white"
-              >
-                Save
-              </button>
-            </div>
+              Create New Job
+              <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
+              <span className="text-sm font-medium text-[#2C2C2C]">Team</span>
+            </h1>
+            <button
+              // onClick={() => {
+              //   navigate(
+              //     `/admin/recruiter/jobs/interview-guideline?jid=${jid}`,
+              //   );
+              // }}
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+            >
+              Next
+            </button>
           </div>
-          <div>
-            <div className="group flex flex-col px-3 py-2">
-              <label className="label-text">Preparation notes</label>
-              <div
-                id="toolbar"
-                className="mb-2 flex items-center rounded border bg-gray-50 p-2"
-              >
-                <button className="ql-bold"></button>
-                <button className="ql-italic"></button>
-                <button className="ql-underline"></button>
-                <button className="ql-strike"></button>
-                <select className="ql-header">
-                  <option value="1"></option>
-                  <option value="2"></option>
-                  <option selected></option>
-                </select>
-                <select className="ql-font">
-                  <option value="sans-serif">Sans Serif</option>
-                  <option value="serif">Serif</option>
-                  <option value="monospace">Monospace</option>
-                </select>
-                <select className="ql-align">
-                  <option selected></option>
-                  <option value="center"></option>
-                  <option value="right"></option>
-                  <option value="justify"></option>
-                </select>
-                <select className="ql-color"></select>
-                <select className="ql-background"></select>
-                <button className="ql-list" value="ordered"></button>
-                <button className="ql-list" value="bullet"></button>
-                <button className="ql-link"></button>
-                <button className="ql-image"></button>
-                <button className="ql-clean"></button>
-              </div>
-              {/* <EditorToolbar /> */}
-              <ReactQuill
-                theme="snow"
-                value={state}
-                onChange={handleChange}
-                placeholder={"Write something awesome..."}
-                className="h-36"
-                modules={modules}
-              />
+          <div className="w-full rounded-md bg-white px-7 py-4">
+            <div className="mb-7 flex flex-col gap-1">
+              <p className="text-base font-medium text-[#2C2C2C]">
+                Choose the right interview guide.
+              </p>
             </div>
+            <div className="my-4 flex items-center justify-between gap-7">
+              <div className="input-box flex min-h-11 w-fit min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] placeholder:text-black">
+                <Search className="h-4 w-4 text-[#7F7F7F]" />
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                  }}
+                  className="h-full w-full placeholder:text-[#7F7F7F]"
+                  placeholder="Search"
+                />
+              </div>
+              <Link
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
+                className="btn flex h-11 min-h-11 min-w-44 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-black/80 text-xs text-white hover:bg-bgColor-100"
+              >
+                <Plus className="h-4 w-4" />
+                Add Interview Guides
+              </Link>
+            </div>
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <QueryTable
+                columns={columns}
+                list={hiringTeamsByid?.data?.listing}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
           </div>
         </div>
+        <CreateJobSideBar stepCounter={4} />
       </div>
     </>
   );
-};
+}
+
+export default RecJobInterviewGuide;
