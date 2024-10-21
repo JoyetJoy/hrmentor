@@ -4,6 +4,8 @@ import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { AdminRoutes } from "./admin/AdminRoutes";
 import ErrorPage from "@/pages/Error";
+import JobAreaListing from "@/pages/jobarea/Listing";
+import CareerDetail from "@/pages/jobarea/Detail";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -11,11 +13,20 @@ export const appRoutes = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/careers",
+    element: <JobAreaListing />,
+  },
+  {
+    path: "/career/:id",
+    element: <CareerDetail />,
+  },
+  {
     path: "admin",
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: AdminRoutes,
   },
+
   {
     path: "*",
     element: <Navigate to="/admin" replace />,

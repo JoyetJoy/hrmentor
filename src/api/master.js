@@ -91,3 +91,5 @@ export const SOURCES = "Source";
 export const SOURCES_LIST = "Active-Source";
 // GET PROFILE QUESTIONS
 export const GET_PROFILE_QUESTIONS = "Active-ProfileQuestions";
+// CAREER FILTER LIST
+export const CAREER_FILTER_LIST = "career-page-filter";

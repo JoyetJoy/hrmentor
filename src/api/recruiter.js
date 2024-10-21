@@ -23,3 +23,5 @@ export const GET_PROFILE_QUESTIONNAIRE = "get-Jobs-screening-questions";
 export const DELETE_PROFILE_QUESTIONNAIRE = "Jobs-screening-question-remove";
 // HIRING TEAM
 export const REC_HIRING_TEAM = "HiringTeam";
+// CAREERS LISITNG
+export const CAREERS_LISITNG = "career-jobs";

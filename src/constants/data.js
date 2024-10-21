@@ -50,6 +50,14 @@ export const hiringMemberRole = [
   { label: "Interview Analyst", value: 2 },
 ];
 
+// Employment type
+
+export const employmentTypes = [
+  { label: "Design", value: 1 },
+  { label: "Development", value: 2 },
+  { label: "Customer Support", value: 3 },
+];
+
 // gender
 export const genders = [
   { id: 1, label: "Male", value: "male" },
