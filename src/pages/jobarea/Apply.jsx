@@ -43,12 +43,12 @@ export default function Apply() {
   const formValues = watch();
   console.log(formValues);
 
-  console.log(careerJobQuestion);
+  console.log(careerJobQuestion?.profileQuestions);
 
   // COUNTRY LISTING
   const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
 
-  const { country_id, state_id } = watch();
+  const { country_id, state_or_province } = watch();
 
   // GET STATTE BY COUNTRY ID AND SEARCH KEY
   const loadStatesOptions = async (inputValue) => {
@@ -67,7 +67,10 @@ export default function Apply() {
       return [];
     }
     const response = await newRequest.get(COUNTRY_CITY, {
-      params: { state_id: parseInt(state_id?.id), search: inputValue },
+      params: {
+        state_id: parseInt(state_or_province?.id),
+        search: inputValue,
+      },
     });
     return response?.data;
   };
@@ -84,13 +87,15 @@ export default function Apply() {
       sur_name: data.sur_name,
       email: data.email,
       phone_number: data.phone_number,
-      country_id: data.country_id?.id,
-      state_or_province: data.state_or_province?.id,
-      city_id: data.city_id?.id,
+      country_id: parseInt(data.country_id?.id),
+      state_or_province: parseInt(data.state_or_province?.id),
+      city_id: parseInt(data.city_id?.id),
       about_your_self: data?.about_your_self,
-      job_list_id: id,
+      job_list_id: parseInt(id),
       profile_questions: data.profile_questions.map((q, i) => ({
-        question: careerJobQuestion?.profileQuestions[i]?.question,
+        question:
+          careerJobQuestion?.profileQuestions[i]?.profile_question
+            ?.profile_question_name,
         answer: q.answer,
       })),
       screening_questions: data.screening_questions.map((q, i) => ({
@@ -318,7 +323,7 @@ export default function Apply() {
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">County</label>
                 <Controller
-                  name="state_id"
+                  name="state_or_province"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -332,9 +337,9 @@ export default function Apply() {
                     />
                   )}
                 />
-                {errors.state_id && (
+                {errors.state_or_province && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.state_id?.message}
+                    {errors.state_or_province?.message}
                   </span>
                 )}
               </div>
@@ -379,7 +384,9 @@ export default function Apply() {
                   key={question.id}
                   className="group flex flex-col space-y-1"
                 >
-                  <label className="label-text">
+                  <label
+                    className={`label-text ${question?.is_required == 1 ? "required" : ""}`}
+                  >
                     {question?.profile_question?.profile_question_name}
                   </label>
                   {renderQuestionField(question, `profile_questions.${index}`)}
@@ -391,7 +398,11 @@ export default function Apply() {
                   key={question.id}
                   className="group flex flex-col space-y-1"
                 >
-                  <label className="label-text">{question?.question}</label>
+                  <label
+                    className={`label-text ${question?.is_required == 1 ? "required" : ""}`}
+                  >
+                    {question?.question}
+                  </label>
                   {renderQuestionField(
                     question,
                     `screening_questions.${index}`,

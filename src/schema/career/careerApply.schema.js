@@ -17,7 +17,7 @@ export const CareerApplySchema = Yup.object({
   }).test("both-required", "Country is required", function (value) {
     return value?.value && value?.label;
   }),
-  state_id: Yup.object({
+  state_or_province: Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
