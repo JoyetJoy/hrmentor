@@ -27,3 +27,5 @@ export const REC_HIRING_TEAM = "HiringTeam";
 export const CAREERS_LISITNG = "career-jobs";
 // CAREER JOB QUESTIONS
 export const CAREER_JOB_QUESTIONS = "career-jobs-questions";
+// CAREER JOB APPLY
+export const CAREER_JOB_APPLY = "career-jobs-apply";

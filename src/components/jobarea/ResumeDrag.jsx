@@ -25,7 +25,7 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
     <>
       {file ? (
         <div className="flex flex-col">
-          <div className="flex items-center gap-4 pb-1 pt-14">
+          <div className="flex items-center gap-4 pb-1 pt-10">
             <h1 className="required text-[0.84rem] font-bold">Resume Upload</h1>
             <div
               onClick={() => setFile(null)}
@@ -62,7 +62,7 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
           {({ getRootProps, getInputProps }) => (
             <div {...getRootProps()} className="flex flex-col justify-center">
               <input {...getInputProps()} />
-              <h1 className="required pb-1 pt-14 text-[0.84rem] font-bold">
+              <h1 className="required pb-1 pt-10 text-[0.84rem] font-bold">
                 Resume Upload
               </h1>
               <div className="flex h-full flex-col items-center justify-center gap-3 rounded-lg border border-[#E6E3EB] py-7">
