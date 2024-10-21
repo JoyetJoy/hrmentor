@@ -40,6 +40,11 @@ export default function Apply() {
       }),
   });
 
+  const formValues = watch();
+  console.log(formValues);
+
+  console.log(careerJobQuestion);
+
   // COUNTRY LISTING
   const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
 
@@ -81,21 +86,17 @@ export default function Apply() {
       phone_number: data.phone_number,
       country_id: data.country_id?.id,
       state_or_province: data.state_or_province?.id,
-      city_id: city_id?.id,
+      city_id: data.city_id?.id,
       about_your_self: data?.about_your_self,
       job_list_id: id,
-      profile_questions: [
-        {
-          question: 5,
-          answer: "yes",
-        },
-      ],
-      screening_questions: [
-        {
-          question: 5,
-          answer: "yes",
-        },
-      ],
+      profile_questions: data.profile_questions.map((q, i) => ({
+        question: careerJobQuestion?.profileQuestions[i]?.question,
+        answer: q.answer,
+      })),
+      screening_questions: data.screening_questions.map((q, i) => ({
+        question: careerJobQuestion?.screeningQuestions[i]?.question,
+        answer: q.answer,
+      })),
     };
 
     try {
@@ -107,13 +108,81 @@ export default function Apply() {
         setLoader(false);
         navigate("/careers");
       } else {
-        toast.error("Failed to save employee.");
+        toast.error("Failed to apply some error");
         setLoader(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to save employee.");
+      toast.error("Failed to apply some error");
       setLoader(false);
+    }
+  };
+
+  // Helper function to render different input types
+  const renderQuestionField = (question, fieldName) => {
+    switch (question?.answer_type) {
+      case 1: // Text Input
+        return (
+          <input
+            autoComplete="off"
+            type="text"
+            {...register(`${fieldName}.answer`)}
+            className="input-box h-10 w-full rounded-md focus:border-gray-300"
+          />
+        );
+      case 2: // Dropdown (Select)
+        return (
+          <select
+            {...register(`${fieldName}.answer`)}
+            className="input-box h-10 w-full rounded-md focus:border-gray-300"
+          >
+            <option value="">Select</option>
+            {question?.question_options?.map((option) => (
+              <option key={option.id} value={option.option}>
+                {option?.option}
+              </option>
+            ))}
+          </select>
+        );
+      case 3: // Checkbox
+        return (
+          <div className="flex gap-4 text-sm font-medium">
+            {question?.question_options?.map((option) => (
+              <div key={option.id} className="flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  {...register(`${fieldName}.answer`)}
+                  value={option.option}
+                />
+                {option?.option}
+              </div>
+            ))}
+          </div>
+        );
+      case 4: // Radio buttons
+        return (
+          <div className="flex gap-4 text-sm font-medium">
+            {question?.question_options?.map((option) => (
+              <div key={option.id} className="flex items-center gap-1">
+                <input
+                  type="radio"
+                  {...register(`${fieldName}.answer`)}
+                  value={option.option}
+                />
+                {option?.option}
+              </div>
+            ))}
+          </div>
+        );
+      default:
+        return (
+          <input
+            autoComplete="off"
+            type="text"
+            {...register(`${fieldName}.answer`)}
+            className="input-box h-10 w-full rounded-md focus:border-gray-300"
+          />
+        );
     }
   };
 
@@ -203,7 +272,7 @@ export default function Apply() {
               <div className="group flex flex-col space-y-1">
                 <label className="required label-text">Phone</label>
                 <div className="flex gap-2">
-                  <div className="input-box flex h-10 w-24 items-center rounded-md bg-[#A7A7A7]/20 focus:border-gray-300">
+                  <div className="input-box flex h-10 w-24 items-center justify-center rounded-md bg-[#A7A7A7]/20 focus:border-gray-300">
                     +44 (UK)
                   </div>
                   <input
@@ -211,6 +280,14 @@ export default function Apply() {
                     type="text"
                     placeholder="Enter Mobile Number"
                     {...register("phone_number")}
+                    onKeyPress={(event) => {
+                      if (
+                        !/^[0-9]$/.test(event.key) ||
+                        event.target.value.length >= 10
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
                     className="input-box"
                   />
                 </div>
@@ -296,66 +373,28 @@ export default function Apply() {
                   className="input-box mt-0 h-24 w-full rounded-md focus:border-gray-300"
                 />
               </div>
-              {/* prorfile question and answer */}
-              {careerJobQuestion?.profileQuestions?.map((i) => (
-                <div key={i.id} className="group flex flex-col space-y-1">
+              {/* Render profile questions */}
+              {careerJobQuestion?.profileQuestions?.map((question, index) => (
+                <div
+                  key={question.id}
+                  className="group flex flex-col space-y-1"
+                >
                   <label className="label-text">
-                    {i?.profile_question?.profile_question_name}
+                    {question?.profile_question?.profile_question_name}
                   </label>
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    className="input-box h-10 w-full rounded-md focus:border-gray-300"
-                  />
+                  {renderQuestionField(question, `profile_questions.${index}`)}
                 </div>
               ))}
-              {/* screen question and answer */}
-              {careerJobQuestion?.screeningQuestions?.map((i) => (
-                <div key={i.id} className="group flex flex-col space-y-1">
-                  <label className="label-text">{i?.question}</label>
-                  {i?.answer_type === 1 ? (
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      className="input-box h-10 w-full rounded-md focus:border-gray-300"
-                    />
-                  ) : i?.answer_type === 2 ? (
-                    <select
-                      autoComplete="off"
-                      type="text"
-                      className="input-box h-10 w-full rounded-md focus:border-gray-300"
-                    >
-                      <option value="">Select</option>
-                      {i?.question_options?.map((option) => (
-                        <option key={option.id} value={option.option_name}>
-                          {option?.option}
-                        </option>
-                      ))}
-                    </select>
-                  ) : i?.answer_type === 3 ? (
-                    <div className="flex gap-4 text-sm font-medium">
-                      {i?.question_options?.map((option) => (
-                        <div
-                          key={option.id}
-                          className="flex items-center gap-1"
-                        >
-                          <input type="checkbox" />
-                          {option?.option}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex gap-4 text-sm font-medium">
-                      {i?.question_options?.map((option) => (
-                        <div
-                          key={option.id}
-                          className="flex items-center gap-1"
-                        >
-                          <input type="radio" />
-                          {option?.option}
-                        </div>
-                      ))}
-                    </div>
+              {/* Render screening questions */}
+              {careerJobQuestion?.screeningQuestions?.map((question, index) => (
+                <div
+                  key={question.id}
+                  className="group flex flex-col space-y-1"
+                >
+                  <label className="label-text">{question?.question}</label>
+                  {renderQuestionField(
+                    question,
+                    `screening_questions.${index}`,
                   )}
                 </div>
               ))}
