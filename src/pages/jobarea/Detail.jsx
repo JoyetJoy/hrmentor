@@ -1,12 +1,15 @@
 import { newRequest } from "@/api";
 import { CAREERS_LISITNG } from "@/api/recruiter";
+import ShareJob from "@/components/jobarea/Share";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Dot, MapPin, Share2 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 export default function CareerDetail() {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState("");
   const { id } = useParams();
   // Fetch details
   const { data: careerDetails, isLoading } = useQuery({
@@ -16,8 +19,14 @@ export default function CareerDetail() {
         return res.data;
       }),
   });
+
   return (
     <>
+      <ShareJob
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        text={selectedJob}
+      />
       {isLoading ? (
         <Loader />
       ) : (
@@ -63,7 +72,13 @@ export default function CareerDetail() {
                     >
                       Apply Now
                     </Link>
-                    <button className="btn flex h-10 min-h-10 w-36 flex-row items-center rounded-md border border-[#2F324D] bg-black/80 text-sm text-white">
+                    <button
+                      onClick={() => {
+                        setPopupOpen(true);
+                        setSelectedJob(careerDetails);
+                      }}
+                      className="btn flex h-10 min-h-10 w-36 flex-row items-center rounded-md border border-[#2F324D] bg-black/80 text-sm text-white"
+                    >
                       <Share2 strokeWidth={1} className="size-4" />
                       Share
                     </button>
