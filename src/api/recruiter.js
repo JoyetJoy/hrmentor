@@ -33,3 +33,5 @@ export const CAREER_JOB_APPLY = "career-jobs-apply";
 export const INTERVIEW_GUIDELINE = "Interview-guides";
 // JOB REFER
 export const JOB_REFER = "job-reffer";
+// JOBS CANDIDATE
+export const JOBS_CANDIDATE = "job-candidates";

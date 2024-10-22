@@ -1,7 +1,15 @@
+import { newRequest } from "@/api";
 import { Check } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function CreateJobSideBar({ stepCounter }) {
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
   // Main steps
   const mainSteps = [
     { label: "Post", step: 1 },
@@ -19,6 +27,24 @@ function CreateJobSideBar({ stepCounter }) {
     { label: "Sensitive Data", step: 1.3 },
     { label: "Exposure", step: 1.4 },
   ];
+
+  const handlePublishJob = async () => {
+    setLoader(true);
+    try {
+      const res = await newRequest.post(`job-status-update/${jid}`, {
+        status: "2",
+      });
+      if (res?.data?.status === 201) {
+        setLoader(false);
+        toast.success("Job published successfully.");
+        navigate("/admin/recruiters/jobs");
+      }
+    } catch (error) {
+      setLoader(false);
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+    }
+  };
 
   return (
     <div className="flex w-1/3 flex-col gap-3">
@@ -82,12 +108,19 @@ function CreateJobSideBar({ stepCounter }) {
         </div>
       </div>
       {stepCounter === 6 && (
-        <Link
-          to="/admin/recruiter/jobs"
+        <button
+          onClick={handlePublishJob}
           className="flex h-11 items-center justify-center rounded bg-black/80 text-[0.9rem] font-medium text-white"
         >
-          SUBMIT & PUBLISH
-        </Link>
+          {loader ? (
+            <div className="flex items-center gap-3">
+              <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+              Publishing
+            </div>
+          ) : (
+            "SUBMIT & PUBLISH"
+          )}
+        </button>
       )}
     </div>
   );
