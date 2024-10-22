@@ -3,7 +3,7 @@ import { CAREERS_LISITNG } from "@/api/recruiter";
 import ShareJob from "@/components/jobarea/Share";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Dot, MapPin, Share2 } from "lucide-react";
+import { Dot, MapPin, MoveLeft, Share2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -38,7 +38,7 @@ export default function CareerDetail() {
             >
               <div className="flex flex-col gap-3 px-10 py-8">
                 <h1 className="mb-6 flex flex-row items-center gap-1 text-sm text-white">
-                  <ArrowLeft
+                  <MoveLeft
                     onClick={() => history.back()}
                     className="size-4 cursor-pointer"
                     strokeWidth={2}
