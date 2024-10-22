@@ -27,7 +27,7 @@ function RecruiterSideBar({ jid }) {
   const handleToggleJobStatus = async (value) => {
     try {
       const res = await newRequest.post(`job-status-update/${jid}`, {
-        status: value ? 1 : 0,
+        career_page: value ? 1 : 0,
       });
       if (res?.data?.status === 201) {
         toast.success(res?.data?.message);

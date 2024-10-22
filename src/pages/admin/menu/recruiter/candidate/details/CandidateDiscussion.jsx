@@ -1,9 +1,43 @@
+import { newRequest } from "@/api";
+import { CANDIDATE_DISCUSSTIONS } from "@/api/recruiter";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { useQuery } from "@tanstack/react-query";
 import { User } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function CandidateDiscussion() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const cid = searchParams.get("cid");
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: candidateDiscussions, isLoading } = useQuery({
+    queryKey: ["candidateDiscussions", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${CANDIDATE_DISCUSSTIONS}/${cid}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(user);
   return (
     <div>
       <MenuHeader

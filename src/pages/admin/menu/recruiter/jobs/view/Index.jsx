@@ -127,7 +127,7 @@ function RecViewJobDetail() {
         </div>
       </div>
       <div className="my-3 flex flex-row gap-2">
-        <RecruiterSideBar />
+        <RecruiterSideBar jid={jid} />
         <div className="w-full">
           {isLoading ? (
             <Loader />
