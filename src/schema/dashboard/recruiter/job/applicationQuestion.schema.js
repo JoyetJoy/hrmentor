@@ -33,3 +33,38 @@ export const recruiterJobHiringTeamSchema = Yup.object({
     return value?.value && value?.label;
   }),
 });
+
+export const interviewGuidelineSchema = Yup.object().shape({
+  interview_type: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Interview type is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  interview_mode: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Interview mode is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  duration_hr: Yup.string()
+    .required("Duration in hours is required"),
+  duration_minute: Yup.string()
+    .required("Duration in minutes is required"),
+  candidate_type: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Candidate type is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  interviewer: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Interviewer is required", function (value) {
+    return value?.value && value?.label;
+  }),
+});

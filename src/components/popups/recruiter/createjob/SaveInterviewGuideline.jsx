@@ -1,12 +1,19 @@
-import { EMPLOYEE_TYPE_LIST, REC_INTERVIEW_TYPES, SALARY_DEFAULT_MASTERS } from "@/api/master";
+import { ACTIVE_EMPLOYEE, newRequest, XFormRequest } from "@/api";
+import {
+  CANDIDATE_TYPE_LIST,
+  REC_INTERVIEW_TYPES,
+  SALARY_DEFAULT_MASTERS,
+} from "@/api/master";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { interviewGuidelineSchema } from "@/schema/dashboard/recruiter/job/applicationQuestion.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import Select from "react-select";
 
@@ -19,6 +26,28 @@ function InterviewGuideline({
   api,
   jid,
 }) {
+  const {
+    handleSubmit,
+    register,
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(interviewGuidelineSchema),
+  });
+  const queryClient = useQueryClient();
+  console.log(api, selectedField);
+
+  const { data: recInterviewGuidelinebyId, isLoading } = useQuery({
+    queryKey: ["recInterviewGuidelinebyId", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
+    enabled: !!selectedField != 0,
+  });
+
+  const [loader, setLoader] = useState(false);
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
@@ -27,43 +56,68 @@ function InterviewGuideline({
 
   const [notes, setNotes] = useState("");
   // EMOPLOYEE TYPE LIST
-  const { data: employeeTypeList } = useEmployeeMaster(
-    EMPLOYEE_TYPE_LIST,
-    "employeeTypeList",
+  const { data: interviewer } = useEmployeeMaster(
+    ACTIVE_EMPLOYEE,
+    "interviewer",
+  );
+  const { data: candidateTypes } = useEmployeeMaster(
+    CANDIDATE_TYPE_LIST,
+    "candidateTypes",
   );
   // INTERVIEW TYPES
   const { data: interviewTypes } = useEmployeeMaster(
     REC_INTERVIEW_TYPES,
     "interviewTypes",
   );
-    // MASTERS LISTING
-    const { data: employeeMasters } = useEmployeeMaster(
-      SALARY_DEFAULT_MASTERS,
-      "employeeMasters",
-    );
-  const { data: jobHiringMemberByid, isLoading } = useQuery({
-    queryKey: ["jobHiringMemberByid", api, selectedField],
-    queryFn: () =>
-      newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
-    enabled: !!selectedField != 0,
-  });
-  const {
-    handleSubmit,
-    control,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(),
-  });
+  // MASTERS LISTING
+  const { data: employeeMasters } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "employeeMasters",
+  );
+
+  console.log(recInterviewGuidelinebyId);
+
+  useEffect(() => {
+    if (recInterviewGuidelinebyId) {
+      setValue(
+        "candidate_type",
+        recInterviewGuidelinebyId?.data?.candidate_type,
+      );
+      setValue(
+        "interview_mode",
+        recInterviewGuidelinebyId?.data?.interview_mode,
+      );
+      setValue("interviewer", recInterviewGuidelinebyId?.data?.interviewer);
+      setValue(
+        "candidate_type",
+        recInterviewGuidelinebyId?.data?.candidate_type,
+      );
+      setValue(
+        "candidate_type",
+        recInterviewGuidelinebyId?.data?.candidate_type,
+      );
+    }
+  }, [recInterviewGuidelinebyId]);
+
+  useEffect(() => {
+    if (recInterviewGuidelinebyId) {
+      setNotes(notes ?? "");
+    }
+  }, [recInterviewGuidelinebyId, setNotes]);
+
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      const formData = new URLSearchParams();
+      const formData = new FormData();
       formData.append("job_id", jid);
-      formData.append("user_id", data?.user_id?.id);
-      formData.append("recruiting_role", data?.recruiting_role?.value);
+      formData.append("notes", notes);
+      formData.append("interviewer", data.interviewer?.id);
+      formData.append("interview_type", data.interview_type?.id);
+      formData.append("interview_mode", data.interview_mode?.id);
+      formData.append("duration_hr", data.duration_hr);
+      formData.append("duration_minute", data.duration_minute);
+      formData.append("candidate_type", data.candidate_type?.id);
+
       let res;
       if (selectedField !== 0) {
         res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
@@ -128,21 +182,23 @@ function InterviewGuideline({
                           Interview Type
                         </label>
                         <Controller
-                          name="bloodGroup"
+                          name="interview_type"
                           control={control}
                           rules={{ required: true }}
                           render={({ field }) => (
                             <Select
+                              {...field}
                               isSearchable={false}
                               styles={customSelectStyles}
+                              options={interviewTypes}
                               placeholder="Select"
                               className="input-box h-10 w-full focus:border-gray-300"
                             />
                           )}
                         />
-                        {errors.bloodGroup && (
+                        {errors.interview_type && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.bloodGroup?.message}
+                            {errors.interview_type?.message}
                           </span>
                         )}
                       </div>
@@ -151,48 +207,52 @@ function InterviewGuideline({
                           Interview Mode
                         </label>
                         <Controller
-                          name="bloodGroup"
+                          name="interview_mode"
                           control={control}
                           rules={{ required: true }}
                           render={({ field }) => (
                             <Select
+                              {...field}
                               isSearchable={false}
+                              options={employeeMasters?.interviewModes}
                               styles={customSelectStyles}
                               placeholder="Select"
                               className="input-box h-10 w-full focus:border-gray-300"
                             />
                           )}
                         />
-                        {errors.bloodGroup && (
+                        {errors.interview_mode && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.bloodGroup?.message}
+                            {errors.interview_mode?.message}
                           </span>
                         )}
                       </div>
                       <div className="group flex flex-col space-y-1 px-3 py-2">
                         <label className="required label-text">Duration</label>
                         <input
+                          {...register("duration_hr", { required: true })}
                           autoComplete="off"
                           type="text"
                           placeholder="Hrs"
                           className="input-box"
                         />
-                        {errors.job_title && (
+                        {errors.duration_hr && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.job_title?.message}
+                            {errors.duration_hr?.message}
                           </span>
                         )}
                       </div>
-                      <div className="group flex flex-col space-y-1 px-3 py-2 mt-6">
+                      <div className="group mt-6 flex flex-col space-y-1 px-3 py-2">
                         <input
+                          {...register("duration_minute", { required: true })}
                           autoComplete="off"
                           type="text"
                           placeholder="Min"
                           className="input-box"
                         />
-                        {errors.job_title && (
+                        {errors.duration_minute && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.job_title?.message}
+                            {errors.duration_minute?.message}
                           </span>
                         )}
                       </div>
@@ -201,19 +261,13 @@ function InterviewGuideline({
                           Candidate type
                         </label>
                         <Controller
-                          name="bloodGroup"
+                          name="candidate_type"
                           control={control}
                           rules={{ required: true }}
                           render={({ field }) => (
                             <Select
-                              // required
-                              //   selected={''}
-                              //   value={''}
-                              //   onChange={(selectedOption) => {
-                              //     handle(selectedOption);
-                              //     field.onChange(selectedOption);
-                              //   }}
-                              //   options={}
+                              {...field}
+                              options={candidateTypes}
                               isSearchable={false}
                               styles={customSelectStyles}
                               placeholder="Select Candidate type"
@@ -221,28 +275,22 @@ function InterviewGuideline({
                             />
                           )}
                         />
-                        {errors.bloodGroup && (
+                        {errors.candidate_type && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.bloodGroup?.message}
+                            {errors.candidate_type?.message}
                           </span>
                         )}
                       </div>
                       <div className="group flex flex-col px-3 py-2">
                         <label className="label-text">Interviewer</label>
                         <Controller
-                          name="bloodGroup"
+                          name="interviewer"
                           control={control}
                           rules={{ required: true }}
                           render={({ field }) => (
                             <Select
-                              // required
-                              //   selected={''}
-                              //   value={''}
-                              //   onChange={(selectedOption) => {
-                              //     handle(selectedOption);
-                              //     field.onChange(selectedOption);
-                              //   }}
-                              //   options={}
+                              {...field}
+                              options={interviewer}
                               isSearchable={false}
                               styles={customSelectStyles}
                               placeholder="Select interviewer"
@@ -250,9 +298,9 @@ function InterviewGuideline({
                             />
                           )}
                         />
-                        {errors.bloodGroup && (
+                        {errors.interviewer && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.bloodGroup?.message}
+                            {errors.interviewer?.message}
                           </span>
                         )}
                       </div>

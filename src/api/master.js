@@ -80,6 +80,8 @@ export const QUALIFICATION = "EducationQualifications";
 export const INTERVIEW_TYPE = "InterviewTypes";
 // CANDIDATE TYPE
 export const CANDIDATE_TYPE = "CandidateTypes";
+// CANDIDATE TYPE LIST
+export const CANDIDATE_TYPE_LIST="Active-CandidateTypes"
 // Experience
 export const MINIMUM_Experience = "MinimumExperience";
 // LIST
