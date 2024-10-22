@@ -49,10 +49,8 @@ export const interviewGuidelineSchema = Yup.object().shape({
   }).test("both-required", "Interview mode is required", function (value) {
     return value?.value && value?.label;
   }),
-  duration_hr: Yup.string()
-    .required("Duration in hours is required"),
-  duration_minute: Yup.string()
-    .required("Duration in minutes is required"),
+  duration_hr: Yup.string().required("Duration in hours is required"),
+  duration_minute: Yup.string().required("Duration in minutes is required"),
   candidate_type: Yup.object({
     id: Yup.string(),
     value: Yup.string(),
@@ -67,4 +65,18 @@ export const interviewGuidelineSchema = Yup.object().shape({
   }).test("both-required", "Interviewer is required", function (value) {
     return value?.value && value?.label;
   }),
+});
+
+export const recJobReferSchema = Yup.object().shape({
+  Recipient: Yup.array()
+    .of(
+      Yup.object({
+        id: Yup.number().required("Recipient is required"),
+        value: Yup.string(),
+        label: Yup.string(),
+      }),
+    )
+    .min(1, "At least one role is required")
+    .required("Role is required"),
+  Subject: Yup.string().required("Subject is required"),
 });

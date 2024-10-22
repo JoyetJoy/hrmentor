@@ -20,6 +20,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { genders } from "@/constants/data";
+import { recJobReferSchema } from "@/schema/dashboard/recruiter/job/applicationQuestion.schema";
+import { newFormRequest } from "@/api";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 export const TableData = [
   {
     id: 1,
@@ -31,28 +35,12 @@ export const TableData = [
     location: "Trivandrum",
     status: "Onboarding Pending",
   },
-  {
-    id: 2,
-    name: "John Doe",
-    addNo: "#654321",
-    designation: "Software Engineer",
-    type: "Permanent",
-    department: "Engineering",
-    location: "Kochi",
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Jane Smith",
-    addNo: "#112233",
-    designation: "Product Manager",
-    type: "Freelance",
-    department: "Product Management",
-    location: "Bangalore",
-    status: "Onboarding Pending",
-  },
 ];
 export const RecRequestRefferal = () => {
+  const queryClient = useQueryClient();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
   const {
     register,
     handleSubmit,
@@ -65,12 +53,10 @@ export const RecRequestRefferal = () => {
   } = useForm({
     mode: "on",
     reValidateMode: "onChange",
-    resolver: yupResolver(EmployeeSchema),
+    resolver: yupResolver(recJobReferSchema),
   });
   const [description, setDescription] = useState("");
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const jid = searchParams.get("jid");
+
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const [selectedField, setSelectedField] = useState("");
@@ -117,6 +103,68 @@ export const RecRequestRefferal = () => {
     [],
   );
 
+  const onSubmit = (data) => {
+    setLoader(true);
+    handleEmployee(data);
+  };
+
+  const handleEmployee = async (data) => {
+    const formData = {
+      job_id: 6,
+      subject: "Refferel Mail",
+      subject: "Note This Job",
+      recipients: {
+        user_id: 44,
+      },
+    };
+    formData.append("mobile_number", data.mobile_number);
+    formData.append("work_email", data.work_email);
+    formData.append("personal_email", data.personal_email);
+    formData.append(
+      "national_insurance_number",
+      data.national_insurance_number,
+    );
+    formData.append("home_address", data.home_address);
+    formData.append("communication_address", data.communication_address);
+    formData.append("department_id", data.department_id?.id);
+    formData.append("worklocation_id", data.worklocation_id?.id);
+    formData.append("employment_type", data.employment_type?.id);
+    formData.append("designation_id", data.designation_id?.id);
+    formData.append("date_of_joining", data.date_of_joining);
+    data.role_id.forEach((role) => {
+      formData.append("role_id[]", role.id);
+    });
+    formData.append("country_id", data.country_id?.id);
+    formData.append("city_id", data.city_id?.id);
+    formData.append("state_id", data.state_id?.id);
+    imageFile && formData.append("profile_image", imageFile);
+    formData.append("same_as_home", sameAsHome ? 1 : 0);
+
+    try {
+      let res;
+      if (selectedField != 0) {
+        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
+      } else {
+        res = await newFormRequest.post(EMPLOYEE, formData);
+      }
+      if (res.data?.status === 201) {
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries(["employeeDetails"]);
+        queryClient.invalidateQueries(["employeeListing"]);
+        clearImage();
+        reset();
+        setLoader(false);
+      } else {
+        toast.error("Failed to save employee.");
+        setLoader(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to save employee.");
+      setLoader(false);
+    }
+  };
+
   const modules = {
     toolbar: {
       container: "#toolbar", // Attach the toolbar to a custom container
@@ -157,7 +205,7 @@ export const RecRequestRefferal = () => {
 
           <div className="h-full w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">
-              <p className="text-base font-medium text-[#2C2C2C]">
+              <p className="text-base font-medium text-black/90">
                 Invite you college for refer candidates for the job.
               </p>
               <p className="text-medium text-sm text-[#7F7F7F]">
@@ -165,11 +213,14 @@ export const RecRequestRefferal = () => {
                 referral program or highlight your incentive
               </p>
             </div>
+            <p className="text-[0.94rem] font-semibold text-black/90">
+              Request Refferals
+            </p>
             <form className="my-4 grid grid-cols-2 gap-4">
               <div className="group flex flex-col gap-1.5">
-                <label className="required label-text">Gender</label>
+                <label className="required label-text">Recipient</label>
                 <Controller
-                  name="gender"
+                  name="Recipient"
                   className=""
                   control={control}
                   rules={{ required: true }}
@@ -192,22 +243,7 @@ export const RecRequestRefferal = () => {
               </div>
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">Subject</label>
-                <Controller
-                  name="gender"
-                  className=""
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      isSearchable={true}
-                      styles={customSelectStyles}
-                      options={genders}
-                      placeholder="Select Gender"
-                      className="input-box"
-                    />
-                  )}
-                />
+                <input type="text" className="input-box" />
                 {errors.gender && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.gender.message}
