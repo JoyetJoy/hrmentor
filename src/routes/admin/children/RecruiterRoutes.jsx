@@ -10,7 +10,6 @@ import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/Mov
 import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
 import History from "@/pages/admin/menu/recruiter/candidate/details/history";
 import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
-import Question from "@/pages/admin/menu/recruiter/candidate/details/question";
 import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
@@ -34,6 +33,7 @@ import RecJobHiringTeam from "@/pages/admin/menu/recruiter/jobs/createJob/Hiring
 import RecJobInterviewGuide from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import RecPromoteJob from "@/pages/admin/menu/recruiter/jobs/createJob/promote";
 import RecViewJobDetail from "@/pages/admin/menu/recruiter/jobs/view/Index";
+import CandidateQuestionAnswer from "@/pages/admin/menu/recruiter/candidate/details/CadidateQuestionAnswer";
 
 export const RecruiterRoutes = [
   {
@@ -152,7 +152,7 @@ export const RecruiterRoutes = [
       },
       {
         path: "question-answers",
-        element: <Question />,
+        element: <CandidateQuestionAnswer />,
       },
       {
         path: "discussions",

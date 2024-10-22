@@ -35,3 +35,5 @@ export const INTERVIEW_GUIDELINE = "Interview-guides";
 export const JOB_REFER = "job-reffer";
 // JOBS CANDIDATE
 export const JOBS_CANDIDATE = "job-candidates";
+// JOBS CANDIDATE QUESTION AND ANSWER
+export const JOBS_CANDIDATE_QUESTION_AND_ANSWER = "candidate-questions-answers";

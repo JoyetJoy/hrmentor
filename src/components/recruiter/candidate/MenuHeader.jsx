@@ -14,20 +14,22 @@ function MenuHeaderCandidate({ page, candidate }) {
           <div className="flex size-7 items-center justify-center rounded-full border">
             <User className="size-4 fill-black" />
           </div>
-          <div className="flex flex-col">
-            <div className="text-sm font-semibold">
-              {candidate?.data?.first_name} {candidate?.data?.sur_name}
+          {candidate && (
+            <div className="flex flex-col">
+              <div className="text-sm font-semibold">
+                {candidate?.data?.first_name} {candidate?.data?.sur_name}
+              </div>
+              <div className="text-xs text-[#7F7F7F]">
+                {candidate?.data?.education?.value}
+              </div>
             </div>
-            <div className="text-xs text-[#7F7F7F]">
-              {candidate?.data?.education?.value}
-            </div>
-          </div>
+          )}
         </div>
         <div className="flex items-center gap-10 text-sm font-semibold">
           {recCandidateMenus.map((item) => (
             <Link
               key={item?.id}
-              to={item?.link}
+              to={`${item?.link}?cid=${candidate?.data?.id}`}
               className={`px-2 py-1 text-sm ${
                 page === item?.id
                   ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"

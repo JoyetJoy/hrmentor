@@ -27,6 +27,7 @@ export default function RecSaveFormCandidate({ type }) {
   const searchParams = new URLSearchParams(location.search);
   const cid = searchParams.get("cid");
   const [resumefile, setResumeFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ export default function RecSaveFormCandidate({ type }) {
       }),
     enabled: type == "update",
   });
+
+  console.log(candidateDetails);
 
   const [sameAsHome, setSameAsHome] = useState(false);
   const { country_id, state_or_province, home_address } = watch();
@@ -643,7 +646,12 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
           </div>
         </div>
-        <ResumeDragzone file={resumefile} setFile={setResumeFile} />
+        <ResumeDragzone
+          file={resumefile}
+          setFile={setResumeFile}
+          filePreview={filePreview}
+          setFilePreview={setFilePreview}
+        />
         <div className="flex items-center font-semibold">
           <button
             type="submit"

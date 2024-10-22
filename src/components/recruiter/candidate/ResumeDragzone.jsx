@@ -2,9 +2,13 @@ import { ArrowUpFromLine } from "lucide-react";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
 
-export default function ResumeDragzone({ file, setFile }) {
-  const [filePreview, setFilePreview] = useState(null); // For file preview
-
+export default function ResumeDragzone({
+  file,
+  setFile,
+  filePreview,
+  setFilePreview,
+}) {
+  console.log(file);
   const onDrop = (acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
     setFile(selectedFile);
@@ -51,9 +55,12 @@ export default function ResumeDragzone({ file, setFile }) {
                 />
               )
             ) : (
-              <p className="text-sm text-gray-500">
-                Preview not available for this file type.
-              </p>
+              <iframe
+                src={file}
+                title="PDF Preview"
+                className="mt-2 h-full w-full"
+                frameBorder="0"
+              />
             )}
           </div>
         </div>
