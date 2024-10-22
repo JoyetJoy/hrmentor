@@ -1,6 +1,5 @@
 import { newRequest } from "@/api";
 import { JOBS_CANDIDATE } from "@/api/recruiter";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import MenuHeader from "@/components/common/MenuHeader";
 import RecruiterSideBar from "@/components/sidebars/recruiter/RecruiterSideBar";
 import QueryTable from "@/components/table/QueryTable";
@@ -15,8 +14,6 @@ function RecViewJobDetail() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const jid = searchParams.get("jid");
-  const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState(0);
   const [totalPages, setTotalPages] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const pageLimit = 10;
@@ -85,7 +82,7 @@ function RecViewJobDetail() {
             }}
             className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
           >
-            {row?.original?.employee?.candidate_status?.status_name}
+            {row?.original?.candidate_status?.status_name}
           </div>
         ),
       },
@@ -100,15 +97,6 @@ function RecViewJobDetail() {
                 className="w-full object-contain"
               />
             </Link>
-            <button
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedField(row?.original?.id);
-              }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <Trash2 className="size-3" />
-            </button>
           </div>
         ),
       },
@@ -117,13 +105,6 @@ function RecViewJobDetail() {
   );
   return (
     <>
-      <DeleteConfirmation
-        open={deletePopup}
-        onCancel={setDeletePopup}
-        selectedId={selectedField}
-        qrkey={"recJobCandidatesByid"}
-        api={JOBS_CANDIDATE}
-      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
