@@ -50,8 +50,8 @@ function CandidateInterviews() {
 
   const getButtonClass = (buttonName) =>
     clickedButtons.includes(buttonName)
-      ? "bg-hrmprimaryorange text-white h-10 px-5 rounded"
-      : "bg-[#ECE9F1] text-white h-10 px-5 rounded";
+      ? "bg-hrmprimaryorange text-sm text-white h-10 px-5 rounded"
+      : "bg-[#ECE9F1] text-black/40 text-sm h-10 px-5 rounded";
 
   const tableData = [
     {
@@ -71,15 +71,6 @@ function CandidateInterviews() {
       scheduledtime: "10 AM",
       screeningstatus: "Completed",
       status: "Passed",
-    },
-    {
-      id: 3,
-      interviewType: "Face to face",
-      interviewer: "Shajin",
-      scheduleddate: "10/10/2023",
-      scheduledtime: "10 AM",
-      screeningstatus: "Completed",
-      status: "Hired",
     },
   ];
 
