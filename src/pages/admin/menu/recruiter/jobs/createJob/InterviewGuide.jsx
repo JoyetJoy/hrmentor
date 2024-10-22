@@ -6,8 +6,7 @@ import QueryTable from "@/components/table/QueryTable";
 import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
-import { REC_HIRING_TEAM } from "@/api/recruiter";
-import SaveHiringTeam from "@/components/popups/recruiter/createjob/SaveHiringTeam";
+import { INTERVIEW_GUIDELINE } from "@/api/recruiter";
 import Loader from "@/components/ui/Loader";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import InterviewGuideline from "@/components/popups/recruiter/createjob/SaveInterviewGuideline";
@@ -26,11 +25,11 @@ function RecJobInterviewGuide() {
   const pageLimit = 10;
 
   // Fetch List
-  const { data: hiringTeamsByid, isLoading } = useQuery({
-    queryKey: ["hiringTeamsByid", currentPage, jid, keyword],
+  const { data: recInterviewGuidelinesbyId, isLoading } = useQuery({
+    queryKey: ["recInterviewGuidelinesbyId", currentPage, jid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${REC_HIRING_TEAM}/${jid}`, {
+        .get(`${INTERVIEW_GUIDELINE}/${jid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -42,16 +41,18 @@ function RecJobInterviewGuide() {
         }),
   });
 
+  console.log(recInterviewGuidelinesbyId)
+
   useEffect(() => {
-    if (hiringTeamsByid) {
-      setTotalPages(hiringTeamsByid?.last_page);
+    if (recInterviewGuidelinesbyId) {
+      setTotalPages(recInterviewGuidelinesbyId?.last_page);
     }
-  }, [hiringTeamsByid]);
+  }, [recInterviewGuidelinesbyId]);
 
   const columns = React.useMemo(
     () => [
       {
-        header: "Interview Guide",
+        header: "Sl No",
         accessorKey: "sno",
         cell: ({ row }) => {
           return (
@@ -61,10 +62,16 @@ function RecJobInterviewGuide() {
           );
         },
       },
+
+      {
+        header: "Interviewer",
+        accessorKey: "name",
+        cell: ({ row }) => <>{row.original?.interviewer_value?.first_name} {row.original?.interviewer_value?.sur_name}</>,
+      },
       {
         header: "Interview Type",
         accessorKey: "name",
-        cell: ({ row }) => <>{row.original?.employee?.first_name}</>,
+        cell: ({ row }) => <>{row.original?.interview_type?.interview_type_name}</>,
       },
 
       {
@@ -72,9 +79,7 @@ function RecJobInterviewGuide() {
         accessorKey: "recruiting_role",
         cell: ({ row }) => (
           <>
-            {row.original?.employee?.recruiting_role == 1
-              ? "Hiring Manager"
-              : "Interview Analyst"}
+            {row.original?.interview_mode_value?.mode_name}
           </>
         ),
       },
@@ -117,14 +122,17 @@ function RecJobInterviewGuide() {
         open={deletePopup}
         onCancel={setDeletePopup}
         selectedId={selectedField}
-        qrkey={"hiringTeamsByid"}
-        api={REC_HIRING_TEAM}
+        qrkey={"recInterviewGuidelinesbyId"}
+        api={INTERVIEW_GUIDELINE}
       />
       <InterviewGuideline
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
+        qrKey={'recInterviewGuidelinesbyId'}
+        api={INTERVIEW_GUIDELINE}
+        jid={jid}
        
       />
       <MenuHeader
@@ -147,11 +155,11 @@ function RecJobInterviewGuide() {
               <span className="text-sm font-medium text-[#2C2C2C]">Team</span>
             </h1>
             <button
-              // onClick={() => {
-              //   navigate(
-              //     `/admin/recruiter/jobs/interview-guideline?jid=${jid}`,
-              //   );
-              // }}
+              onClick={() => {
+                navigate(
+                  `/admin/recruiter/jobs/interview-guideline?jid=${jid}`,
+                );
+              }}
               className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
             >
               Next
@@ -190,7 +198,7 @@ function RecJobInterviewGuide() {
             ) : (
               <QueryTable
                 columns={columns}
-                list={hiringTeamsByid?.data?.listing}
+                list={recInterviewGuidelinesbyId?.data?.listing}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 totalPages={totalPages}

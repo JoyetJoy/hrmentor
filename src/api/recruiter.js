@@ -29,3 +29,5 @@ export const CAREERS_LISITNG = "career-jobs";
 export const CAREER_JOB_QUESTIONS = "career-jobs-questions";
 // CAREER JOB APPLY
 export const CAREER_JOB_APPLY = "career-jobs-apply";
+// INTERVIEW GUIDELINE
+export const INTERVIEW_GUIDELINE='Interview-guides'
