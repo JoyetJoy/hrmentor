@@ -105,7 +105,7 @@ export default function RecSaveFormCandidate({ type }) {
       setValue("post_code", candidateDetails?.data?.post_code);
       setValue("sur_name", candidateDetails?.data?.sur_name);
       setValue("gender", candidateDetails?.data?.genderValue);
-      setValue("dob", candidateDetails?.data?.date_of_birth);
+      setValue("date_of_birth", candidateDetails?.data?.date_of_birth);
       setValue("nationality_id", candidateDetails?.data?.nationality_id);
       setValue(
         "communication_address",
