@@ -31,7 +31,7 @@ export default function CareerDetail() {
               />
               Job Details
             </h1>
-            <h1 className="flex flex-row items-end gap-1 text-xl font-semibold text-white">
+            <h1 className="flex flex-row items-end gap-1 text-xl font-semibold capitalize text-white">
               {careerDetails?.job_title}
               <span className="flex flex-row items-center text-xs font-normal">
                 <Dot className="size-5 text-[#6DE742]" strokeWidth={5} />
