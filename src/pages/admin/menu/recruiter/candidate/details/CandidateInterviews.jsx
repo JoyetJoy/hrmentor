@@ -194,7 +194,7 @@ function CandidateInterviews() {
           </div>
         </div>
 
-        <div className="mt-4 flex-grow">
+        <div className="flex-grow">
           {activeButton === "addInterviewer" && (
             <QueryTable
               list={tableData}
