@@ -6,12 +6,12 @@ import Select from "react-select";
 
 function RecruiterSideBar({ jid }) {
   const statusData = [
-    { id: 1, count: 2, label: "New", bgColor: "#F0F8FF" },
+    { id: 1, count: 0, label: "New", bgColor: "#F0F8FF" },
     { id: 2, count: 0, label: "Interview", bgColor: "#F0FFFD" },
-    { id: 3, count: 2, label: "Hiring", bgColor: "#F0FFF1" },
-    { id: 4, count: 28, label: "Hold", bgColor: "#FFF2F2" },
-    { id: 5, count: 11, label: "Reject", bgColor: "#FFFCF0" },
-    { id: 6, count: 7, label: "Backup", bgColor: "#FBF0FF" },
+    { id: 3, count: 0, label: "Hiring", bgColor: "#F0FFF1" },
+    { id: 4, count: 0, label: "Hold", bgColor: "#FFF2F2" },
+    { id: 5, count: 0, label: "Reject", bgColor: "#FFFCF0" },
+    { id: 6, count: 0, label: "Backup", bgColor: "#FBF0FF" },
   ];
   const statusOptions = [
     { value: "active", label: "Active" },
@@ -25,12 +25,12 @@ function RecruiterSideBar({ jid }) {
       <div className="flex flex-row justify-between">
         <h1 className="text-base font-bold">Job information</h1>
         <div className="flex flex-row gap-2">
-          <Link
+          {/* <Link
             to={""}
             className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
           >
             <Eye />
-          </Link>
+          </Link> */}
           <Link
             to={`/admin/recruiter/jobs/post?jid=${jid}`}
             className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
