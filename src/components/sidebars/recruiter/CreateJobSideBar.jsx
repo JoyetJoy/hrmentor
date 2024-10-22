@@ -49,7 +49,7 @@ function CreateJobSideBar({ stepCounter }) {
               </div>
 
               {/* Sub-steps for 'Post' */}
-              {mainStep.step === 1 && stepCounter >= 1 && (
+              {mainStep.step === 1 && stepCounter >= 1 && stepCounter == 1 && (
                 <div className="ml-5 flex flex-col gap-3 rounded px-3 text-sm">
                   {postSubSteps.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
