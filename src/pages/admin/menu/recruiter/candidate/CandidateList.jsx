@@ -49,6 +49,8 @@ function CandidatesList() {
     }
   }, [candidateListing]);
 
+  console.log(candidateListing);
+
   const columns = React.useMemo(
     () => [
       {
@@ -114,25 +116,16 @@ function CandidatesList() {
           <div className="flex items-center justify-start gap-2 text-xs">
             <Link
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              to="/admin/recruiter/candidate/profile"
+              to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}`}
             >
               <MoveDiagonal className="h-3 w-3" />
             </Link>
-            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+            {/* <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
               <img
                 src="/assets/icons/admin/marker.svg"
                 className="w-full object-contain"
               />
-            </Link>
-            <button
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedField(row?.original?.id);
-              }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <Trash2 className="size-3" />
-            </button>
+            </Link> */}
           </div>
         ),
       },

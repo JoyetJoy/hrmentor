@@ -118,7 +118,7 @@ function RecViewJobDetail() {
             onClick={() => {
               history.back();
             }}
-            className="size-4"
+            className="size-4 cursor-pointer"
           />
           Project manger
         </h1>
