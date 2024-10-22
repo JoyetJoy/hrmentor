@@ -1,9 +1,12 @@
 import { recCandidateMenus } from "@/constants/menus/recruiter";
 import { MoveLeft, User } from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function MenuHeaderCandidate({ page, candidate }) {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const cid = searchParams.get("cid");
   return (
     <>
       <div className="my-3 flex flex-row items-center justify-between rounded-md">
@@ -29,7 +32,7 @@ function MenuHeaderCandidate({ page, candidate }) {
           {recCandidateMenus.map((item) => (
             <Link
               key={item?.id}
-              to={`${item?.link}?cid=${candidate?.data?.id}`}
+              to={`${item?.link}?cid=${cid}`}
               className={`px-2 py-1 text-sm ${
                 page === item?.id
                   ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"

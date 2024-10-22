@@ -56,8 +56,6 @@ export default function RecSaveFormCandidate({ type }) {
     enabled: type == "update",
   });
 
-  console.log(candidateDetails);
-
   const [sameAsHome, setSameAsHome] = useState(false);
   const { country_id, state_or_province, home_address } = watch();
 
@@ -664,7 +662,7 @@ export default function RecSaveFormCandidate({ type }) {
                 Saving
               </div>
             ) : (
-              "Submit"
+              <>{type ? "Update" : "Submit"}</>
             )}
           </button>
         </div>
