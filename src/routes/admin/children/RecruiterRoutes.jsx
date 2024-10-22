@@ -8,7 +8,6 @@ import InterviewSchedule from "@/pages/admin/menu/recruiter/candidate/details/em
 import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/MoveHiring";
 import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
 import History from "@/pages/admin/menu/recruiter/candidate/details/history";
-import Interviews from "@/pages/admin/menu/recruiter/candidate/details/interviews";
 import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
@@ -34,6 +33,7 @@ import RecPromoteJob from "@/pages/admin/menu/recruiter/jobs/createJob/promote";
 import RecViewJobDetail from "@/pages/admin/menu/recruiter/jobs/view/Index";
 import CandidateQuestionAnswer from "@/pages/admin/menu/recruiter/candidate/details/CadidateQuestionAnswer";
 import CandidateDiscussion from "@/pages/admin/menu/recruiter/candidate/details/CandidateDiscussion";
+import CandidateInterviews from "@/pages/admin/menu/recruiter/candidate/details/CandidateInterviews";
 
 export const RecruiterRoutes = [
   {
@@ -148,7 +148,7 @@ export const RecruiterRoutes = [
       },
       {
         path: "interviews",
-        element: <Interviews />,
+        element: <CandidateInterviews />,
       },
       {
         path: "question-answers",

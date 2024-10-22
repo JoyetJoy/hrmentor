@@ -5,10 +5,11 @@ import QueryTable from "@/components/table/QueryTable";
 import ConsiderCandidate from "@/components/popups/recruiter/candiadate/ConsiderCandidate";
 import AddInterview from "@/components/popups/recruiter/candiadate/AddInterview";
 import MoveCandidate from "@/components/popups/recruiter/candiadate/MoveCandidate";
+import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 
 const buttonSequence = ["addInterviewer", "considerCandidate", "move"];
 
-function Interviews() {
+function CandidateInterviews() {
   const [AddInterviewerPopup, setAddInterviewerPopup] = useState(false);
   const [ConsiderCandidatePopup, setConsiderCandidatePopup] = useState(false);
   const [MovePopup, setMovePopup] = useState(false);
@@ -19,7 +20,7 @@ function Interviews() {
   const handleButtonClick = (buttonName) => {
     const currentIndex = buttonSequence.indexOf(activeButton);
     const newIndex = buttonSequence.indexOf(buttonName);
-    
+
     if (
       newIndex === currentIndex + 1 ||
       newIndex === currentIndex - 1 ||
@@ -29,7 +30,7 @@ function Interviews() {
       if (!clickedButtons.includes(buttonName)) {
         setClickedButtons([...clickedButtons, buttonName]);
       }
-      
+
       // Show or hide popups based on button clicked
       if (buttonName === "addInterviewer") {
         setAddInterviewerPopup(true);
@@ -49,8 +50,8 @@ function Interviews() {
 
   const getButtonClass = (buttonName) =>
     clickedButtons.includes(buttonName)
-      ? "bg-[#030E5C] text-white py-1.5 px-5 rounded"
-      : "bg-[#ECE9F1] text-white py-1.5 px-5 rounded";
+      ? "bg-hrmprimaryorange text-white h-10 px-5 rounded"
+      : "bg-[#ECE9F1] text-white h-10 px-5 rounded";
 
   const tableData = [
     {
@@ -140,17 +141,18 @@ function Interviews() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <div className="bg-white flex flex-col justify-between px-6 h-screen py-6">
-        <div className="flex gap-4 items-center">
+      <MenuHeaderCandidate page={3} />
+      <div className="flex h-screen flex-col justify-between bg-white px-6 py-6">
+        <div className="flex items-center gap-4">
           {buttonSequence.map((buttonName) => (
             <button
               key={buttonName}
               onClick={() => handleButtonClick(buttonName)}
               className={getButtonClass(buttonName)}
             >
-              {buttonName === 'addInterviewer' && 'Add Interviewer'}
-              {buttonName === 'considerCandidate' && 'Consider the Candidate'}
-              {buttonName === 'move' && 'Move'}
+              {buttonName === "addInterviewer" && "Add Interviewer"}
+              {buttonName === "considerCandidate" && "Consider the Candidate"}
+              {buttonName === "move" && "Move"}
             </button>
           ))}
         </div>
@@ -170,16 +172,13 @@ function Interviews() {
         )}
 
         {MovePopup && (
-          <MoveCandidate
-            MovePopup={MovePopup}
-            setMovePopup={setMovePopup}
-          />
+          <MoveCandidate MovePopup={MovePopup} setMovePopup={setMovePopup} />
         )}
-        
-        <div className="flex justify-between py-6">
-          <h1 className="font-bold text-base pt-3">Interviews</h1>
-          <div className="flex gap-3 justify-center items-center">
-            <label className="input outline-none border border-[#EBEBF0] pr-28 flex items-center gap-2 min-h-9 h-9">
+
+        <div className="flex items-center justify-between py-6">
+          <h1 className="text-base font-bold">Interviews</h1>
+          <div className="flex items-center justify-center gap-3">
+            <label className="input flex h-9 min-h-9 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -190,33 +189,21 @@ function Interviews() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-search text-gray-200 object-contain size-4"
+                className="lucide lucide-search size-4 object-contain text-gray-200"
               >
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.3-4.3"></path>
               </svg>
               <input
                 type="text"
-                className="grow placeholder:text-sm focus:outline-none text-sm placeholder:text-gray-200 placeholder:font-normal"
+                className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
                 placeholder="Search"
               />
             </label>
-
-            <Select
-              name="status"
-              aria-label="Project status"
-              className="w-full py-2 px-3 border border-[#EBEBF0] pl-3 rounded-md text-xs"
-            >
-              <option value="">1</option>
-              <option value="">2</option>
-              <option value="">3</option>
-              <option value="">4</option>
-            </Select>
-            <p className="whitespace-nowrap text-sm">Entries per page</p>
           </div>
         </div>
 
-        <div className="flex-grow mt-4">
+        <div className="mt-4 flex-grow">
           {activeButton === "addInterviewer" && (
             <QueryTable
               list={tableData}
@@ -250,4 +237,4 @@ function Interviews() {
   );
 }
 
-export default Interviews;
+export default CandidateInterviews;

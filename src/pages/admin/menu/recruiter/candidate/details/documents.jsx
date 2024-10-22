@@ -1,10 +1,10 @@
-import MenuHeader from '@/components/common/MenuHeader';
-import Adddocument from '@/components/popups/recruiter/createjob/Adddocument';
-import QueryTable from "@/components/table/QueryTable"; 
+import MenuHeader from "@/components/common/MenuHeader";
+import Adddocument from "@/components/popups/recruiter/createjob/Adddocument";
+import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import { ChevronRight, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function Documents() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +38,7 @@ function Documents() {
           <div className="flex items-center gap-2 text-xs">
             <Link
               to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="cursor-pointer flex items-center bg-[#EBEBF0] p-2 rounded-full"
+              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <MoveDiagonal className="size-3" />
             </Link>
@@ -46,7 +46,7 @@ function Documents() {
         ),
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -59,19 +59,20 @@ function Documents() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <div className="bg-white flex flex-col justify-between px-6 h-screen py-6">
+      <div className="flex h-screen flex-col justify-between bg-white px-6 py-6">
         <div className="flex flex-col justify-between">
-          <div className='flex items-center justify-between'>
-            <h1 className="font-bold text-base pt-3">Documents</h1>
-            <div className="flex items-center gap-3 my-4">
+          <div className="flex items-center justify-between">
+            <h1 className="pt-3 text-base font-bold">Documents</h1>
+            <div className="my-4 flex items-center gap-3">
               <Link
                 onClick={() => setPopupOpen(true)}
-                className="btn bg-bgColor-100 text-white text-xs items-center flex flex-row gap-1 rounded-[0.3rem] hover:bg-bgColor-100 min-w-28 min-h-10 h-10 whitespace-nowrap"
+                className="btn flex h-10 min-h-10 min-w-28 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-bgColor-100 text-xs text-white hover:bg-bgColor-100"
               >
-                <Plus className="size-4" />Add documents
+                <Plus className="size-4" />
+                Add documents
               </Link>
               <Adddocument popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-              <div className="flex gap-2 placeholder:text-black items-center rounded-md input-box min-h-10 h-10 w-full border pr-20 border-[#EBEBF0]">
+              <div className="input-box flex h-10 min-h-10 w-full items-center gap-2 rounded-md border border-[#EBEBF0] pr-20 placeholder:text-black">
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input
                   type="text"
