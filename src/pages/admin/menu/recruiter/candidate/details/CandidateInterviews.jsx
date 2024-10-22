@@ -169,7 +169,7 @@ function CandidateInterviews() {
         <div className="flex items-center justify-between py-6">
           <h1 className="text-base font-bold">Interviews</h1>
           <div className="flex items-center justify-center gap-3">
-            <label className="input flex h-9 min-h-9 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">
+            <label className="input flex h-10 min-h-10 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -187,7 +187,7 @@ function CandidateInterviews() {
               </svg>
               <input
                 type="text"
-                className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
+                className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-black/40 focus:outline-none"
                 placeholder="Search"
               />
             </label>
