@@ -21,8 +21,6 @@ function CandidateQuestionAnswer() {
         }),
   });
 
-  console.log(recCandidateQAByid);
-
   return (
     <>
       <MenuHeader
@@ -37,7 +35,10 @@ function CandidateQuestionAnswer() {
       <div className="flex min-h-screen flex-col gap-4 bg-white px-20 py-14">
         <h1 className="pt-3 text-base font-bold">Questions & Answers</h1>
         {recCandidateQAByid?.map((i) => (
-          <div className="collapse collapse-arrow rounded-sm bg-[#F0F8FF]">
+          <div
+            key={i?.id}
+            className="collapse collapse-arrow rounded-sm bg-[#F0F8FF]"
+          >
             <input type="radio" name="my-accordion-2" defaultChecked />
             <h1 className="collapse-title text-[0.94rem] font-bold after:bg-white">
               {i?.question}
