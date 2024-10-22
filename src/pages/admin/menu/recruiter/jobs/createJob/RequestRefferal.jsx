@@ -1,103 +1,96 @@
 import MenuHeader from "@/components/common/MenuHeader";
 import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
 import QueryTable from "@/components/table/QueryTable";
-import {
-  ArrowLeft,
-  Facebook,
-  Link2,
-  Linkedin,
-  Plus,
-  Search,
-  Trash2,
-  Twitter,
-} from "lucide-react";
-import React, { useState } from "react";
+import { ArrowLeft, Facebook, Link2, Linkedin, Twitter } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import ReactQuill from "react-quill";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { customSelectStyles } from "@/utils/customStyles";
-import { genders } from "@/constants/data";
 import { recJobReferSchema } from "@/schema/dashboard/recruiter/job/applicationQuestion.schema";
-import { newFormRequest } from "@/api";
+import { ACTIVE_EMPLOYEE, newRequest } from "@/api";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
-export const TableData = [
-  {
-    id: 1,
-    name: "Amal Joseph",
-    addNo: "#123456",
-    designation: "UI/UX Designer",
-    type: "Freelance",
-    department: "UI/UX Designer",
-    location: "Trivandrum",
-    status: "Onboarding Pending",
-  },
-];
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { JOB_REFER } from "@/api/recruiter";
+import Loader from "@/components/ui/Loader";
+
 export const RecRequestRefferal = () => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const jid = searchParams.get("jid");
+  const [keyword, setKeyword] = useState("");
+  const [totalPages, setTotalPages] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: recJobRefferals, isLoading } = useQuery({
+    queryKey: ["recJobRefferals", currentPage, jid, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${JOB_REFER}/${jid}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+  console.log(recJobRefferals);
+
+  useEffect(() => {
+    if (recJobRefferals) {
+      setTotalPages(recJobRefferals?.last_page);
+    }
+  }, [recJobRefferals]);
+
   const {
     register,
     handleSubmit,
     control,
-    setValue,
-    setError,
     reset,
-    watch,
     formState: { errors },
   } = useForm({
     mode: "on",
     reValidateMode: "onChange",
     resolver: yupResolver(recJobReferSchema),
   });
+
+  const { data: recipientList } = useEmployeeMaster(
+    ACTIVE_EMPLOYEE,
+    "recipientList",
+  );
   const [description, setDescription] = useState("");
 
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
-  const [selectedField, setSelectedField] = useState("");
-  const list = React.useMemo(() => TableData, [TableData]);
+
   // const location = useLocation();
   const columns = React.useMemo(
     () => [
       {
         header: "Job Title",
-        accessorKey: "name",
+        accessorKey: "job_title",
+        cell: ({ row }) => <div>{row?.original?.job_name?.job_title}</div>,
       },
 
       {
         header: "Receipts",
-        accessorKey: "type",
+        accessorKey: "work_email",
+        cell: ({ row }) => (
+          <div>{row?.original?.employee_name?.work_email}</div>
+        ),
       },
       {
         header: "Subject ",
-        accessorKey: "designation",
-        cell: ({ row }) => <p className="">{row?.original?.designation}</p>,
-      },
-
-      {
-        header: "",
-        accessorKey: "action",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <Link
-              to={""}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
-            </Link>
-            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2">
-              <Trash2 className="size-3 text-[#AB2727]" />
-            </Link>
-          </div>
-        ),
+        accessorKey: "subject",
       },
     ],
     [],
@@ -110,66 +103,31 @@ export const RecRequestRefferal = () => {
 
   const handleEmployee = async (data) => {
     const formData = {
-      job_id: 6,
-      subject: "Refferel Mail",
-      subject: "Note This Job",
-      recipients: {
-        user_id: 44,
-      },
+      job_id: jid,
+      subject: data?.Subject,
+      recipients: data?.Recipient?.map((i) => {
+        return { user_id: i?.id };
+      }),
+      description: description,
     };
-    formData.append("mobile_number", data.mobile_number);
-    formData.append("work_email", data.work_email);
-    formData.append("personal_email", data.personal_email);
-    formData.append(
-      "national_insurance_number",
-      data.national_insurance_number,
-    );
-    formData.append("home_address", data.home_address);
-    formData.append("communication_address", data.communication_address);
-    formData.append("department_id", data.department_id?.id);
-    formData.append("worklocation_id", data.worklocation_id?.id);
-    formData.append("employment_type", data.employment_type?.id);
-    formData.append("designation_id", data.designation_id?.id);
-    formData.append("date_of_joining", data.date_of_joining);
-    data.role_id.forEach((role) => {
-      formData.append("role_id[]", role.id);
-    });
-    formData.append("country_id", data.country_id?.id);
-    formData.append("city_id", data.city_id?.id);
-    formData.append("state_id", data.state_id?.id);
-    imageFile && formData.append("profile_image", imageFile);
-    formData.append("same_as_home", sameAsHome ? 1 : 0);
-
     try {
-      let res;
-      if (selectedField != 0) {
-        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
-      } else {
-        res = await newFormRequest.post(EMPLOYEE, formData);
-      }
+      const res = await newRequest.post(JOB_REFER, formData);
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
-        queryClient.invalidateQueries(["employeeDetails"]);
-        queryClient.invalidateQueries(["employeeListing"]);
-        clearImage();
+        queryClient.invalidateQueries(["recJobRefferals"]);
         reset();
         setLoader(false);
       } else {
-        toast.error("Failed to save employee.");
+        toast.error("Failed to save refferal.");
         setLoader(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to save employee.");
+      toast.error("Failed to save refferal.");
       setLoader(false);
     }
   };
 
-  const modules = {
-    toolbar: {
-      container: "#toolbar", // Attach the toolbar to a custom container
-    },
-  };
   return (
     <div>
       <MenuHeader
@@ -206,7 +164,7 @@ export const RecRequestRefferal = () => {
           <div className="h-full w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">
               <p className="text-base font-medium text-black/90">
-                Invite you college for refer candidates for the job.
+                Invite your college for refer candidates for the job.
               </p>
               <p className="text-medium text-sm text-[#7F7F7F]">
                 Edit the email text to include the specific details of your
@@ -216,12 +174,14 @@ export const RecRequestRefferal = () => {
             <p className="text-[0.94rem] font-semibold text-black/90">
               Request Refferals
             </p>
-            <form className="my-4 grid grid-cols-2 gap-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="my-4 grid grid-cols-2 gap-4"
+            >
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">Recipient</label>
                 <Controller
                   name="Recipient"
-                  className=""
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
@@ -229,64 +189,37 @@ export const RecRequestRefferal = () => {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={genders}
-                      placeholder="Select Gender"
+                      isMulti
+                      options={recipientList}
+                      placeholder="Select recipient"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.gender && (
+                {errors.Recipient && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.gender.message}
+                    {errors.Recipient.message}
                   </span>
                 )}
               </div>
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">Subject</label>
-                <input type="text" className="input-box" />
-                {errors.gender && (
+                <input
+                  type="text"
+                  {...register("Subject")}
+                  className="input-box"
+                />
+                {errors.Subject && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.gender.message}
+                    {errors.Subject.message}
                   </span>
                 )}
               </div>
               <div className="text-editor col-span-2 my-4 w-full rounded-md">
-                <div
-                  id="toolbar"
-                  className="mb-2 flex items-center rounded border border-[#ECE9F1] bg-gray-50 p-2"
-                >
-                  <button className="ql-bold"></button>
-                  <button className="ql-italic"></button>
-                  <button className="ql-underline"></button>
-                  <button className="ql-strike"></button>
-                  <select className="ql-header">
-                    <option value="1"></option>
-                    <option value="2"></option>
-                    <option selected></option>
-                  </select>
-                  <select className="ql-font">
-                    <option value="sans-serif">Sans Serif</option>
-                    <option value="serif">Serif</option>
-                    <option value="monospace">Monospace</option>
-                  </select>
-                  <select className="ql-align">
-                    <option selected></option>
-                    <option value="center"></option>
-                    <option value="right"></option>
-                    <option value="justify"></option>
-                  </select>
-                  <select className="ql-color"></select>
-                  <select className="ql-background"></select>
-                  <button className="ql-list" value="ordered"></button>
-                  <button className="ql-list" value="bullet"></button>
-                  <button className="ql-link"></button>
-                  <button className="ql-image"></button>
-                  <button className="ql-clean"></button>
-                </div>
-
                 <ReactQuill
                   theme="snow"
-                  modules={modules}
+                  value={description}
+                  onChange={(value) => setDescription(value)}
                   placeholder={"Write something awesome..."}
                   className="h-36 w-full rounded-md border border-[#ECE9F1]"
                 />
@@ -299,21 +232,32 @@ export const RecRequestRefferal = () => {
                 {loader ? (
                   <div className="flex items-center gap-3">
                     <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                    {selectedField ? "Updating" : "Saving"}
+                    Saving
                   </div>
                 ) : (
-                  <span>{selectedField ? "Update" : "Save"}</span>
+                  "Save"
                 )}
               </button>
             </form>
-            <QueryTable columns={columns} list={list} />
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <QueryTable
+                columns={columns}
+                list={recJobRefferals?.listing ?? []}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
+
             <div className="my-10 flex flex-col gap-1">
               <h3 className="text-base font-semibold">Share via</h3>
               <p className="text-sm text-[#7F7F7F]">
                 Share this job with your Facebook, LinkedIn, and Twitter
                 connections to spread the word that you're hiring.
               </p>
-              <div className="flex items-center gap-2">
+              <div className="mt-2 flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-full border border-[#ECE9F1]">
                   <Linkedin
                     strokeWidth={0.5}
