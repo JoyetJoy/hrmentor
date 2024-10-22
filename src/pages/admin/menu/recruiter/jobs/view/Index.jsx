@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function ViewJobDetail() {
+function RecViewJobDetail() {
   return (
     <div>
       <MenuHeader
@@ -96,4 +96,4 @@ function ViewJobDetail() {
   );
 }
 
-export default ViewJobDetail;
+export default RecViewJobDetail;

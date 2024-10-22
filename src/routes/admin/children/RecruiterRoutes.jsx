@@ -34,6 +34,7 @@ import JobApplicationQuestion from "@/pages/admin/menu/recruiter/jobs/createJob/
 import RecJobHiringTeam from "@/pages/admin/menu/recruiter/jobs/createJob/HiringTeam";
 import RecJobInterviewGuide from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
 import RecPromoteJob from "@/pages/admin/menu/recruiter/jobs/createJob/promote";
+import RecViewJobDetail from "@/pages/admin/menu/recruiter/jobs/view/Index";
 
 export const RecruiterRoutes = [
   {
@@ -64,6 +65,10 @@ export const RecruiterRoutes = [
       {
         path: "post",
         element: <RecruiterJobPost />,
+      },
+      {
+        path: "view",
+        element: <RecViewJobDetail />,
       },
       {
         path: "application-question",

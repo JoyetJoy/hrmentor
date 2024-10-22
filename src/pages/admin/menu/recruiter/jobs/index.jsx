@@ -113,9 +113,12 @@ function RecruiterJobs() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <div className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+            <Link
+              to={`/admin/recruiter/jobs/view?jid=${row.original.id}`}
+              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            >
               <MoveDiagonal className="size-3" />
-            </div>
+            </Link>
             <Link
               to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
