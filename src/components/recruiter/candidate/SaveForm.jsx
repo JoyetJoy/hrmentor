@@ -55,8 +55,6 @@ export default function RecSaveFormCandidate({ type }) {
     enabled: type == "update",
   });
 
-  console.log(candidateDetails);
-
   const [sameAsHome, setSameAsHome] = useState(false);
   const { country_id, state_or_province, home_address } = watch();
 
@@ -123,10 +121,7 @@ export default function RecSaveFormCandidate({ type }) {
       setValue("email", candidateDetails?.data?.email);
       setValue("phone_number", candidateDetails?.data?.phone_number);
       setValue("email", candidateDetails?.data?.email);
-      setValue(
-        "language_spoken",
-        candidateDetails?.data?.national_insurance_number,
-      );
+      setValue("language_spoken", candidateDetails?.data?.languages);
       setValue("country_id", candidateDetails?.data?.country);
       setValue("state_or_province", candidateDetails?.data?.stateOrProvince);
       setValue("city_id", candidateDetails?.data?.city);
