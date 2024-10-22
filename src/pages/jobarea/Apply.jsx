@@ -108,7 +108,7 @@ export default function Apply() {
       const res = await newRequest.post(CAREER_JOB_APPLY, formData);
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
-        clearImage();
+        setResume("");
         reset();
         setLoader(false);
         navigate("/careers");
