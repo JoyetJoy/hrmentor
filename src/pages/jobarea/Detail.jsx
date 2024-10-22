@@ -24,7 +24,11 @@ export default function CareerDetail() {
         >
           <div className="flex flex-col gap-3 px-10 py-8">
             <h1 className="mb-6 flex flex-row items-center gap-1 text-sm text-white">
-              <ArrowLeft className="size-4" strokeWidth={2} />
+              <ArrowLeft
+                onClick={() => history.back()}
+                className="size-4 cursor-pointer"
+                strokeWidth={2}
+              />
               Job Details
             </h1>
             <h1 className="flex flex-row items-end gap-1 text-xl font-semibold text-white">

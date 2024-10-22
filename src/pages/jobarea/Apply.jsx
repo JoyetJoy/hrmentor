@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import { CareerApplySchema } from "@/schema/career/careerApply.schema";
@@ -199,13 +199,13 @@ export default function Apply() {
             style={{ backgroundImage: 'url("/assets/icons/career-bg.svg")' }}
             className="relative flex h-72 flex-col items-center gap-5 rounded-md bg-cover py-12"
           >
-            <div className="absolute left-7 top-4">
+            <Link to="/careers" className="absolute left-7 top-4">
               <img
                 className="h-12"
                 src="/assets/icons/career-logo.svg"
                 alt=""
               />
-            </div>
+            </Link>
             <div className="text-2xl text-white">Apply with us now</div>
             <div className="max-w-2/4 min-w-2/4 w-2/4 text-center text-[0.8rem] text-[#DEDEDE]">
               Build up your career with us form by either selecting from one of
