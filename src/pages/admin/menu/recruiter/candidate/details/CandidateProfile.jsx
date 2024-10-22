@@ -38,14 +38,6 @@ function CandidateProfile() {
   };
   return (
     <>
-      <MenuHeader
-        backlink={""}
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Recruiter"}
-        activeSubMenu={"Candidates"}
-        activeMenu={"Candidates"}
-      />
       <RecSaveFormCandidate type="update" />
     </>
   );
