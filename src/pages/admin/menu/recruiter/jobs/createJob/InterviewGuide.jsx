@@ -41,7 +41,7 @@ function RecJobInterviewGuide() {
         }),
   });
 
-  console.log(recInterviewGuidelinesbyId)
+  console.log(recInterviewGuidelinesbyId);
 
   useEffect(() => {
     if (recInterviewGuidelinesbyId) {
@@ -66,22 +66,25 @@ function RecJobInterviewGuide() {
       {
         header: "Interviewer",
         accessorKey: "name",
-        cell: ({ row }) => <>{row.original?.interviewer_value?.first_name} {row.original?.interviewer_value?.sur_name}</>,
+        cell: ({ row }) => (
+          <>
+            {row.original?.interviewer_value?.first_name}{" "}
+            {row.original?.interviewer_value?.sur_name}
+          </>
+        ),
       },
       {
         header: "Interview Type",
         accessorKey: "name",
-        cell: ({ row }) => <>{row.original?.interview_type?.interview_type_name}</>,
+        cell: ({ row }) => (
+          <>{row.original?.interview_type?.interview_type_name}</>
+        ),
       },
 
       {
         header: "Interview Mode",
         accessorKey: "recruiting_role",
-        cell: ({ row }) => (
-          <>
-            {row.original?.interview_mode_value?.mode_name}
-          </>
-        ),
+        cell: ({ row }) => <>{row.original?.interview_mode_value?.mode_name}</>,
       },
       {
         header: "Action",
@@ -130,10 +133,9 @@ function RecJobInterviewGuide() {
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        qrKey={'recInterviewGuidelinesbyId'}
+        qrKey={"recInterviewGuidelinesbyId"}
         api={INTERVIEW_GUIDELINE}
         jid={jid}
-       
       />
       <MenuHeader
         backlink={""}

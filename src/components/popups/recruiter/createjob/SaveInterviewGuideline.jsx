@@ -38,7 +38,6 @@ function InterviewGuideline({
     resolver: yupResolver(interviewGuidelineSchema),
   });
   const queryClient = useQueryClient();
-  console.log(api, selectedField);
 
   const { data: recInterviewGuidelinebyId, isLoading } = useQuery({
     queryKey: ["recInterviewGuidelinebyId", api, selectedField],
@@ -75,8 +74,6 @@ function InterviewGuideline({
     "employeeMasters",
   );
 
-  console.log(recInterviewGuidelinebyId);
-
   useEffect(() => {
     if (recInterviewGuidelinebyId) {
       setValue(
@@ -89,15 +86,16 @@ function InterviewGuideline({
       );
       setValue("interviewer", recInterviewGuidelinebyId?.data?.interviewer);
       setValue(
-        "candidate_type",
-        recInterviewGuidelinebyId?.data?.candidate_type,
+        "interview_type",
+        recInterviewGuidelinebyId?.data?.interview_type,
       );
+      setValue("duration_hr", recInterviewGuidelinebyId?.data?.duration_hr);
       setValue(
-        "candidate_type",
-        recInterviewGuidelinebyId?.data?.candidate_type,
+        "duration_minute",
+        recInterviewGuidelinebyId?.data?.duration_minute,
       );
     }
-  }, [recInterviewGuidelinebyId]);
+  }, [recInterviewGuidelinebyId, setValue]);
 
   useEffect(() => {
     if (recInterviewGuidelinebyId) {
@@ -168,6 +166,7 @@ function InterviewGuideline({
                       </p>
                     </div>
                     <button
+                      type="button"
                       onClick={close}
                       className="text-lg font-extrabold text-[#00000080]"
                     >
@@ -304,15 +303,27 @@ function InterviewGuideline({
                           </span>
                         )}
                       </div>
-                      <div className="my-5 flex gap-5 px-3 py-2">
-                        <div className="flex h-10 w-1/2 items-center justify-center rounded-md border border-[#ECE9F1] font-semibold">
-                          Cancel
-                        </div>
+                      <div className="mt-2 flex flex-row items-center justify-center gap-3">
                         <button
-                          // onClick={() => navigate("/admin/recruiter/request-refferals")}
-                          className="flex h-10 w-1/2 cursor-pointer items-center justify-center rounded-md bg-[#181C3A] font-semibold text-white"
+                          type="submit"
+                          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                          disabled={loader}
                         >
-                          Save
+                          {loader ? (
+                            <div className="flex items-center gap-3">
+                              <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                              {selectedField ? "Updating" : "Saving"}
+                            </div>
+                          ) : (
+                            <span>{selectedField ? "Update" : "Save"}</span>
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={close}
+                          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                        >
+                          Cancel
                         </button>
                       </div>
                     </div>
