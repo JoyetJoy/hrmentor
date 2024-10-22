@@ -1,8 +1,9 @@
 import MenuHeader from "@/components/common/MenuHeader";
+import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import { User } from "lucide-react";
 import React from "react";
 
-function Discussions() {
+function CandidateDiscussion() {
   return (
     <div>
       <MenuHeader
@@ -13,15 +14,16 @@ function Discussions() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
+      <MenuHeaderCandidate page={4} />
       <div className="bg-white p-4">
-        <h1 className="font-bold text-base pt-3 px-24 py-2">Interviews</h1>
+        <h1 className="px-24 py-2 pt-3 text-base font-bold">Interviews</h1>
 
-        <div className="bg-white   px-24 border-gray-200 py-6 flex-col">
-          <div className="border-2 p-4 rounded-lg border-[#ECE9F1]">
-            <div className="flex justify-start mb-4 ">
-              <div className="bg-[#F0F8FF] w-3/4 pr-12 flex flex-col gap-1 px-4 py-4 rounded-lg">
-                <div className="flex gap-3 items-center">
-                  <div className="bg-white p-2 rounded-full">
+        <div className="flex-col border-gray-200 bg-white px-24 py-6">
+          <div className="rounded-lg border-2 border-[#ECE9F1] p-4">
+            <div className="mb-4 flex justify-start">
+              <div className="flex w-3/4 flex-col gap-1 rounded-lg bg-[#F0F8FF] px-4 py-4 pr-12">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-white p-2">
                     <User className="size-4" />
                   </div>
                   <div className="text-sm font-semibold">Vaisakh N S</div>
@@ -34,33 +36,33 @@ function Discussions() {
                     printer took a galley of type and scrambled it to make a
                     type specimen book👋
                   </div>
-                  <div className="flex gap-3 items-center">
-                    <label className="input w-full outline-none border rounded-md border-[#EBEBF0] pr-28 flex items-center gap-2 min-h-9 h-9">
+                  <div className="flex items-center gap-3">
+                    <label className="input flex h-9 min-h-9 w-full items-center gap-2 rounded-md border border-[#EBEBF0] pr-28 outline-none">
                       <input
                         type="text"
-                        className="grow placeholder:text-sm focus:outline-none text-sm placeholder:text-gray-200 placeholder:font-normal"
+                        className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
                         placeholder="Type here"
                       />
                     </label>
                     <button className="btn btn-neutral btn-sm p-2">
                       <img
                         src="/assets/images/candidate/mailsendwhite.png"
-                        className="object-contain h-4"
+                        className="h-4 object-contain"
                         alt=""
                       />
                     </button>
-                    <div className="flex text-[#7F7F7F] text-sm gap-2 items-center">
+                    <div className="flex items-center gap-2 text-sm text-[#7F7F7F]">
                       <p>Today</p>
-                      <p className="border border-[#7F7F7F] h-5"></p>
+                      <p className="h-5 border border-[#7F7F7F]"></p>
                       <p>03:22</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex justify-end mb-4">
-              <div className="bg-[#F7F7F7] w-3/5 flex flex-col gap-1 px-4 py-4 rounded-lg">
-                <div className="flex flex-col gap-4 ">
+            <div className="mb-4 flex justify-end">
+              <div className="flex w-3/5 flex-col gap-1 rounded-lg bg-[#F7F7F7] px-4 py-4">
+                <div className="flex flex-col gap-4">
                   <div className="text-sm">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's
@@ -68,18 +70,18 @@ function Discussions() {
                     printer took a galley of type and scrambled it to make a
                     type specimen book👋
                   </div>
-                  <div className="flex gap-3 items-center justify-between">
-                    <button className="btn btn-neutral bg-white border-white rounded-md hover:bg-white hover:border-white text-black btn-sm p-2">
+                  <div className="flex items-center justify-between gap-3">
+                    <button className="btn btn-neutral btn-sm rounded-md border-white bg-white p-2 text-black hover:border-white hover:bg-white">
                       <img
                         src="/assets/images/candidate/share.png"
-                        className="object-contain h-4"
+                        className="h-4 object-contain"
                         alt=""
                       />
                       <p className="text-xs">Replay</p>
                     </button>
-                    <div className="flex text-[#7F7F7F] text-sm gap-2 items-center">
+                    <div className="flex items-center gap-2 text-sm text-[#7F7F7F]">
                       <p>Today</p>
-                      <p className="border border-[#7F7F7F] h-5"></p>
+                      <p className="h-5 border border-[#7F7F7F]"></p>
                       <p>03:22</p>
                     </div>
                   </div>
@@ -88,17 +90,17 @@ function Discussions() {
             </div>
           </div>
           <div className="flex gap-3 pt-4">
-            <label className="input w-full outline-none border rounded-md border-[#EBEBF0] pr-28 flex items-center gap-2 min-h-9 h-9">
+            <label className="input flex h-9 min-h-9 w-full items-center gap-2 rounded-md border border-[#EBEBF0] pr-28 outline-none">
               <input
                 type="text"
-                className="grow placeholder:text-sm focus:outline-none text-sm bg-[#F7F7F7] placeholder:text-gray-200 placeholder:font-normal"
+                className="grow bg-[#F7F7F7] text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
                 placeholder="Leave a comment, Use @ to mention a team member"
               />
             </label>
             <button className="btn btn-neutral btn-sm h-9 p-2 px-7">
               <img
                 src="/assets/images/candidate/mailsendwhite.png"
-                className="object-contain h-4"
+                className="h-4 object-contain"
                 alt=""
               />
               <p>Send</p>
@@ -110,4 +112,4 @@ function Discussions() {
   );
 }
 
-export default Discussions;
+export default CandidateDiscussion;

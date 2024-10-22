@@ -1,6 +1,5 @@
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
 import CandidatesList from "@/pages/admin/menu/recruiter/candidate/CandidateList";
-import Discussions from "@/pages/admin/menu/recruiter/candidate/details/discussions";
 import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
 import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
 import CustomMail from "@/pages/admin/menu/recruiter/candidate/details/email/CustomMail";
@@ -34,6 +33,7 @@ import RecJobInterviewGuide from "@/pages/admin/menu/recruiter/jobs/createJob/In
 import RecPromoteJob from "@/pages/admin/menu/recruiter/jobs/createJob/promote";
 import RecViewJobDetail from "@/pages/admin/menu/recruiter/jobs/view/Index";
 import CandidateQuestionAnswer from "@/pages/admin/menu/recruiter/candidate/details/CadidateQuestionAnswer";
+import CandidateDiscussion from "@/pages/admin/menu/recruiter/candidate/details/CandidateDiscussion";
 
 export const RecruiterRoutes = [
   {
@@ -156,7 +156,7 @@ export const RecruiterRoutes = [
       },
       {
         path: "discussions",
-        element: <Discussions />,
+        element: <CandidateDiscussion />,
       },
       {
         path: "documents",

@@ -49,8 +49,6 @@ function CandidatesList() {
     }
   }, [candidateListing]);
 
-  console.log(candidateListing);
-
   const columns = React.useMemo(
     () => [
       {
