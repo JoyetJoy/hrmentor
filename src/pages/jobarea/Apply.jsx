@@ -92,13 +92,13 @@ export default function Apply() {
       city_id: parseInt(data.city_id?.id),
       about_your_self: data?.about_your_self,
       job_list_id: parseInt(id),
-      profile_questions: data.profile_questions.map((q, i) => ({
+      profile_questions: data?.profile_questions?.map((q, i) => ({
         question:
           careerJobQuestion?.profileQuestions[i]?.profile_question
             ?.profile_question_name,
         answer: q.answer,
       })),
-      screening_questions: data.screening_questions.map((q, i) => ({
+      screening_questions: data?.screening_questions?.map((q, i) => ({
         question: careerJobQuestion?.screeningQuestions[i]?.question,
         answer: q.answer,
       })),
