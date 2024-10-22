@@ -28,7 +28,7 @@ import { RecruiterSettingMinimumExperience } from "@/pages/admin/menu/recruiter/
 import { RecruiterSettingProfileQuestion } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
 import { RecruiterSettingSources } from "@/pages/admin/menu/recruiter/settings/Sources";
 import SaveCandidates from "@/pages/admin/menu/recruiter/candidate/Save";
-import CandidateProfile from "@/pages/admin/menu/recruiter/candidate/details/profile";
+import CandidateProfile from "@/pages/admin/menu/recruiter/candidate/details/CandidateProfile";
 import JobApplicationQuestion from "@/pages/admin/menu/recruiter/jobs/createJob/RecJobApplication";
 import RecJobHiringTeam from "@/pages/admin/menu/recruiter/jobs/createJob/HiringTeam";
 import RecJobInterviewGuide from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
@@ -197,7 +197,7 @@ export const RecruiterRoutes = [
       },
     ],
   },
-  // ----Interview----
+
   {
     path: "interview",
     children: [
