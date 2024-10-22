@@ -41,11 +41,9 @@ function RecJobInterviewGuide() {
         }),
   });
 
-  console.log(recInterviewGuidelinesbyId);
-
   useEffect(() => {
     if (recInterviewGuidelinesbyId) {
-      setTotalPages(recInterviewGuidelinesbyId?.last_page);
+      setTotalPages(recInterviewGuidelinesbyId?.data?.last_page);
     }
   }, [recInterviewGuidelinesbyId]);
 
