@@ -16,9 +16,8 @@ import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Save";
-import { RequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
+import { RecRequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
 import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
-import Promote from "@/pages/admin/menu/recruiter/jobs/promote";
 import Refer from "@/pages/admin/menu/recruiter/jobs/refer";
 import RecruiterReports from "@/pages/admin/menu/recruiter/report";
 import { RecruiterSettingCandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
@@ -34,6 +33,7 @@ import CandidateProfile from "@/pages/admin/menu/recruiter/candidate/details/pro
 import JobApplicationQuestion from "@/pages/admin/menu/recruiter/jobs/createJob/RecJobApplication";
 import RecJobHiringTeam from "@/pages/admin/menu/recruiter/jobs/createJob/HiringTeam";
 import RecJobInterviewGuide from "@/pages/admin/menu/recruiter/jobs/createJob/InterviewGuide";
+import RecPromoteJob from "@/pages/admin/menu/recruiter/jobs/createJob/promote";
 
 export const RecruiterRoutes = [
   {
@@ -43,10 +43,6 @@ export const RecruiterRoutes = [
   {
     path: "candidate",
     element: <Candidate />,
-  },
-  {
-    path: "promote",
-    element: <Promote />,
   },
   {
     path: "refer",
@@ -81,16 +77,20 @@ export const RecruiterRoutes = [
         path: "interview-guideline",
         element: <RecJobInterviewGuide />,
       },
+      {
+        path: "create-refferal",
+        element: <RecRequestRefferal />,
+      },
+      {
+        path: "promote-job",
+        element: <RecPromoteJob />,
+      },
     ],
   },
 
   {
     path: "interview",
     element: <JobInterview />,
-  },
-  {
-    path: "request-refferals",
-    element: <RequestRefferal />,
   },
   {
     path: "settings",
@@ -128,10 +128,6 @@ export const RecruiterRoutes = [
         element: <RecruiterSettingSources />,
       },
     ],
-  },
-  {
-    path: "create-job-promote",
-    element: <Promote />,
   },
 
   //  ----Candidate----

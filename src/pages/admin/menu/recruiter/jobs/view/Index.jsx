@@ -1,11 +1,10 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import ProjectManagerHeader from "@/components/common/ProjectManagerHeader";
 import RecruiterSideBar from "@/components/sidebars/recruiter/RecruiterSideBar";
 import { ArrowLeft } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Promote() {
+function ViewJobDetail() {
   return (
     <div>
       <MenuHeader
@@ -97,4 +96,4 @@ function Promote() {
   );
 }
 
-export default Promote;
+export default ViewJobDetail;

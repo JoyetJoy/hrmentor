@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 export const TableData = [
   {
     id: 1,
@@ -46,7 +46,13 @@ export const TableData = [
     status: "Onboarding Pending",
   },
 ];
-export const RequestRefferal = () => {
+export const RecRequestRefferal = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
+  const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
+  const [selectedField, setSelectedField] = useState("");
   const list = React.useMemo(() => TableData, [TableData]);
   // const location = useLocation();
   const columns = React.useMemo(
@@ -109,16 +115,24 @@ export const RequestRefferal = () => {
         <div className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
             <h1 className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft className="size-4" />
+              <ArrowLeft
+                onClick={() => {
+                  history.back();
+                }}
+                className="size-4 cursor-pointer"
+              />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-[#2C2C2C]">Refer</span>
             </h1>
-            <Link
-              to={""}
-              className="btn h-11 min-h-11 rounded-md bg-bgColor-100 px-6 text-sm text-white font-normal hover:bg-bgColor-100"
+            <button
+              type="button"
+              onClick={() => {
+                navigate(`/admin/recruiter/jobs/promote-job?jid=${jid}`);
+              }}
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
             >
               Next
-            </Link>
+            </button>
           </div>
 
           <div className="h-full w-full rounded-md bg-white px-7 py-4">
@@ -131,7 +145,7 @@ export const RequestRefferal = () => {
                 referral program or highlight your incentive
               </p>
             </div>
-            <div className="my-4 grid grid-cols-2 gap-4  ">
+            <div className="my-4 grid grid-cols-2 gap-4">
               <div className="input-box h-10 w-full">
                 <input
                   type="text"
@@ -146,10 +160,10 @@ export const RequestRefferal = () => {
                   placeholder="Search"
                 />
               </div>
-              <div className="text-editor col-span-2 my-4 w-full  rounded-md  ">
+              <div className="text-editor col-span-2 my-4 w-full rounded-md">
                 <div
                   id="toolbar"
-                  className="mb-2 flex items-center rounded  bg-gray-50 p-2 border border-[#ECE9F1]"
+                  className="mb-2 flex items-center rounded border border-[#ECE9F1] bg-gray-50 p-2"
                 >
                   <button className="ql-bold"></button>
                   <button className="ql-italic"></button>
@@ -184,14 +198,22 @@ export const RequestRefferal = () => {
                   theme="snow"
                   modules={modules}
                   placeholder={"Write something awesome..."}
-                  className="h-36 w-full border border-[#ECE9F1] rounded-md"
+                  className="h-36 w-full rounded-md border border-[#ECE9F1]"
                 />
               </div>
               <button
-                // onClick={() => navigate("/admin/recruiter/request-refferals")}
-                className="my-4 flex h-10 w-36 cursor-pointer items-center justify-center rounded-md bg-[#181C3A] font-semibold text-white"
+                type="submit"
+                className="flex h-11 w-fit min-w-52 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                disabled={loader}
               >
-                Save
+                {loader ? (
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                    {selectedField ? "Updating" : "Saving"}
+                  </div>
+                ) : (
+                  <span>{selectedField ? "Update" : "Save"}</span>
+                )}
               </button>
             </div>
             <QueryTable columns={columns} list={list} />
@@ -227,7 +249,7 @@ export const RequestRefferal = () => {
             </div>
           </div>
         </div>
-        <CreateJobSideBar />
+        <CreateJobSideBar stepCounter={5} />
       </div>
     </div>
   );
