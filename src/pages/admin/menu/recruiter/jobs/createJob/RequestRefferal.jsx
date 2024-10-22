@@ -12,8 +12,14 @@ import {
   Twitter,
 } from "lucide-react";
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
 import ReactQuill from "react-quill";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
+import { customSelectStyles } from "@/utils/customStyles";
+import { genders } from "@/constants/data";
 export const TableData = [
   {
     id: 1,
@@ -47,6 +53,21 @@ export const TableData = [
   },
 ];
 export const RecRequestRefferal = () => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    setError,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: "on",
+    reValidateMode: "onChange",
+    resolver: yupResolver(EmployeeSchema),
+  });
+  const [description, setDescription] = useState("");
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const jid = searchParams.get("jid");
@@ -95,7 +116,6 @@ export const RecRequestRefferal = () => {
     ],
     [],
   );
-  const [value, setValue] = useState("");
 
   const modules = {
     toolbar: {
@@ -145,20 +165,54 @@ export const RecRequestRefferal = () => {
                 referral program or highlight your incentive
               </p>
             </div>
-            <div className="my-4 grid grid-cols-2 gap-4">
-              <div className="input-box h-10 w-full">
-                <input
-                  type="text"
-                  className="h-full w-full placeholder:text-[#7F7F7F]"
-                  placeholder="Search"
+            <form className="my-4 grid grid-cols-2 gap-4">
+              <div className="group flex flex-col gap-1.5">
+                <label className="required label-text">Gender</label>
+                <Controller
+                  name="gender"
+                  className=""
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      isSearchable={true}
+                      styles={customSelectStyles}
+                      options={genders}
+                      placeholder="Select Gender"
+                      className="input-box"
+                    />
+                  )}
                 />
+                {errors.gender && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.gender.message}
+                  </span>
+                )}
               </div>
-              <div className="input-box h-10 w-full">
-                <input
-                  type="text"
-                  className="h-full w-full placeholder:text-[#7F7F7F]"
-                  placeholder="Search"
+              <div className="group flex flex-col gap-1.5">
+                <label className="required label-text">Subject</label>
+                <Controller
+                  name="gender"
+                  className=""
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      isSearchable={true}
+                      styles={customSelectStyles}
+                      options={genders}
+                      placeholder="Select Gender"
+                      className="input-box"
+                    />
+                  )}
                 />
+                {errors.gender && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.gender.message}
+                  </span>
+                )}
               </div>
               <div className="text-editor col-span-2 my-4 w-full rounded-md">
                 <div
@@ -215,7 +269,7 @@ export const RecRequestRefferal = () => {
                   <span>{selectedField ? "Update" : "Save"}</span>
                 )}
               </button>
-            </div>
+            </form>
             <QueryTable columns={columns} list={list} />
             <div className="my-10 flex flex-col gap-1">
               <h3 className="text-base font-semibold">Share via</h3>
