@@ -133,20 +133,16 @@ function RecViewJobDetail() {
       />
       <div className="my-4 flex flex-row items-center justify-between">
         <h1 className="flex items-center gap-1 text-base font-bold text-[#2C2C2C]">
-          <ArrowLeft className="size-4" />
+          <ArrowLeft
+            onClick={() => {
+              history.back();
+            }}
+            className="size-4"
+          />
           Project manger
         </h1>
-        <div className="flex gap-5">
-          <Link
-            to="/admin/recruiter/candidate"
-            className={`text-sm ${
-              location.pathname === "/admin/recruiter/candidate"
-                ? "active-menu px-2 font-extrabold text-[#181C3A] before:bg-[#181C3A]"
-                : "text-[#808080]"
-            }`}
-          >
-            Candidate
-          </Link>
+        <div className="flex gap-5 text-sm font-semibold text-hrmprimaryorange">
+          Candidates
         </div>
       </div>
       <div className="my-3 flex flex-row gap-2">

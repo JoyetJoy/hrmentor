@@ -1,10 +1,7 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import ProjectManagerHeader from "@/components/common/ProjectManagerHeader";
 import CreateJobSideBar from "@/components/sidebars/recruiter/CreateJobSideBar";
-import RecruiterSideBar from "@/components/sidebars/recruiter/RecruiterSideBar";
 import { ArrowLeft, Facebook, Link2, Linkedin, Twitter } from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
 
 function RecPromoteJob() {
   return (

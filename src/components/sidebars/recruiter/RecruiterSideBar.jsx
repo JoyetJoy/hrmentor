@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 
-function RecruiterSideBar() {
+function RecruiterSideBar({ jid }) {
   const statusData = [
     { id: 1, count: 2, label: "New", bgColor: "#F0F8FF" },
     { id: 2, count: 0, label: "Interview", bgColor: "#F0FFFD" },
@@ -32,7 +32,7 @@ function RecruiterSideBar() {
             <Eye />
           </Link>
           <Link
-            to={""}
+            to={`/admin/recruiter/jobs/post?jid=${jid}`}
             className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
           >
             <img src="/assets/icons/admin/marker.svg" />
@@ -65,7 +65,6 @@ function RecruiterSideBar() {
       </h1>
       <hr className="border-1 my-2 border-gray-500" />
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
-        {" "}
         Job status
         <Select
           name="status"
@@ -73,7 +72,7 @@ function RecruiterSideBar() {
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
-          className="w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs min-h-10 h-10"
+          className="h-10 min-h-10 w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs"
         />
       </div>
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
@@ -84,7 +83,7 @@ function RecruiterSideBar() {
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
-          className="w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs min-h-10 h-10"
+          className="h-10 min-h-10 w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs"
         />
       </div>
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
@@ -96,7 +95,7 @@ function RecruiterSideBar() {
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
-          className="w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs min-h-10 h-10"
+          className="h-10 min-h-10 w-7/12 rounded-md bg-[#EBEBF0] px-3 py-2 pl-3 text-xs"
         />
       </div>
     </div>
