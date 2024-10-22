@@ -151,7 +151,7 @@ export default function JobAreaListing() {
                     >
                       View Job
                     </Link>
-                    <button className="btn flex h-10 min-h-10 items-center rounded-md bg-black/15 px-8 text-xs font-semibold text-black/80 hover:bg-[#030E5C]">
+                    <button className="btn flex h-10 min-h-10 items-center rounded-md bg-black/15 px-8 text-xs font-semibold text-black/80 hover:bg-hrmprimaryorange hover:text-white">
                       <Share2 className="size-4" /> Share
                     </button>
                   </div>
