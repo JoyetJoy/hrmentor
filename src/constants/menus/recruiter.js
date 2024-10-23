@@ -47,11 +47,11 @@ export const recCandidateMenus = [
     name: "Discussions",
     link: "/admin/recruiter/candidate/discussions",
   },
-  {
-    id: 5,
-    name: "Emails",
-    link: "/admin/recruiter/candidate/email/custom-mail",
-  },
+  // {
+  //   id: 5,
+  //   name: "Emails",
+  //   link: "/admin/recruiter/candidate/email/custom-mail",
+  // },
   {
     id: 6,
     name: "Documents",
