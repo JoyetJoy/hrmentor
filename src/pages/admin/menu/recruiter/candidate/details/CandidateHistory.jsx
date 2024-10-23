@@ -1,4 +1,5 @@
 import MenuHeader from "@/components/common/MenuHeader";
+import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import {
   Disclosure,
   DisclosureButton,
@@ -7,9 +8,9 @@ import {
 import { ChevronDownIcon } from "lucide-react";
 import React from "react";
 
-function History() {
+function CandidateHistoryTimeline() {
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="min-h-screen">
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -18,7 +19,7 @@ function History() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-
+      <MenuHeaderCandidate page={7} />
       <div className="h-full w-full rounded-md bg-white py-5">
         <div className="relative mx-auto flex w-full max-w-2xl flex-col gap-2">
           <Disclosure
@@ -79,9 +80,7 @@ function History() {
             <DisclosureButton className="group flex w-full items-center justify-between">
               <div className="flex items-center gap-x-5">
                 <div className="size-4 rounded-full bg-[#00B448]" />
-                <p className="text-base font-semibold">
-                Interview Scheduled
-                </p>
+                <p className="text-base font-semibold">Interview Scheduled</p>
               </div>
               <ChevronDownIcon className="group-data-[hover]:fill-whiteml-5 size-5 fill-white/60 group-data-[open]:rotate-180" />
             </DisclosureButton>
@@ -126,5 +125,4 @@ function History() {
     </div>
   );
 }
-
-export default History;
+export default CandidateHistoryTimeline;
