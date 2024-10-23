@@ -1,57 +1,19 @@
 import React, { useState } from "react";
 import MenuHeader from "@/components/common/MenuHeader";
-import { Select } from "@headlessui/react";
 import QueryTable from "@/components/table/QueryTable";
-import ConsiderCandidate from "@/components/popups/recruiter/candiadate/ConsiderCandidate";
-import AddInterview from "@/components/popups/recruiter/candiadate/AddInterview";
-import MoveCandidate from "@/components/popups/recruiter/candiadate/MoveCandidate";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
-
-const buttonSequence = ["addInterviewer", "considerCandidate", "move"];
+import RecCreateInterview from "@/components/popups/recruiter/candiadate/CreateInterview";
+import { CANIDATE_INTERVIEWS } from "@/api/recruiter";
+import { useLocation } from "react-router-dom";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import RecCandidateInterviewActions from "@/components/popups/recruiter/candiadate/CandidateInterviewAction";
 
 function CandidateInterviews() {
-  const [AddInterviewerPopup, setAddInterviewerPopup] = useState(false);
-  const [ConsiderCandidatePopup, setConsiderCandidatePopup] = useState(false);
-  const [MovePopup, setMovePopup] = useState(false);
-
-  const [activeButton, setActiveButton] = useState("addInterviewer");
-  const [clickedButtons, setClickedButtons] = useState(["addInterviewer"]);
-
-  const handleButtonClick = (buttonName) => {
-    const currentIndex = buttonSequence.indexOf(activeButton);
-    const newIndex = buttonSequence.indexOf(buttonName);
-
-    if (
-      newIndex === currentIndex + 1 ||
-      newIndex === currentIndex - 1 ||
-      buttonName === activeButton
-    ) {
-      setActiveButton(buttonName);
-      if (!clickedButtons.includes(buttonName)) {
-        setClickedButtons([...clickedButtons, buttonName]);
-      }
-
-      // Show or hide popups based on button clicked
-      if (buttonName === "addInterviewer") {
-        setAddInterviewerPopup(true);
-        setConsiderCandidatePopup(false);
-        setMovePopup(false);
-      } else if (buttonName === "considerCandidate") {
-        setAddInterviewerPopup(false);
-        setConsiderCandidatePopup(true);
-        setMovePopup(false);
-      } else if (buttonName === "move") {
-        setAddInterviewerPopup(false);
-        setConsiderCandidatePopup(false);
-        setMovePopup(true);
-      }
-    }
-  };
-
-  const getButtonClass = (buttonName) =>
-    clickedButtons.includes(buttonName)
-      ? "bg-hrmprimaryorange text-sm text-white h-10 px-5 rounded"
-      : "bg-[#ECE9F1] text-black/40 text-sm h-10 px-5 rounded";
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const [actionType, setActionType] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const tableData = [
     {
@@ -73,6 +35,34 @@ function CandidateInterviews() {
       status: "Passed",
     },
   ];
+
+  // CANIDATE_INTERVIEWS;
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const cid = searchParams.get("cid");
+  const [keyword, setKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: candidateInterviewsById, isLoading } = useQuery({
+    queryKey: ["candidateInterviewsById", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${CANIDATE_INTERVIEWS}/${cid}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(candidateInterviewsById);
 
   const columns = [
     {
@@ -119,11 +109,26 @@ function CandidateInterviews() {
     },
   ];
 
-  const totalPages = 1;
-  const [currentPage, setCurrentPage] = useState(1);
-
   return (
     <>
+      <RecCreateInterview
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"candidateInterviewsById"}
+        api={CANIDATE_INTERVIEWS}
+        cid={cid}
+      />
+      <RecCandidateInterviewActions
+        popupOpen={modalOpen}
+        setPopupOpen={setModalOpen}
+        selectedField={actionType}
+        setSelectedField={setActionType}
+        qrKey={"candidateInterviewsById"}
+        api={CANIDATE_INTERVIEWS}
+        cid={cid}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -133,40 +138,35 @@ function CandidateInterviews() {
         activeMenu={"Candidates"}
       />
       <MenuHeaderCandidate page={3} />
-      <div className="flex h-screen flex-col justify-between bg-white px-6 py-6">
+      <div className="flex min-h-screen flex-col gap-7 bg-white px-6 py-6">
         <div className="flex items-center gap-4">
-          {buttonSequence.map((buttonName) => (
-            <button
-              key={buttonName}
-              onClick={() => handleButtonClick(buttonName)}
-              className={getButtonClass(buttonName)}
-            >
-              {buttonName === "addInterviewer" && "Add Interviewer"}
-              {buttonName === "considerCandidate" && "Consider the Candidate"}
-              {buttonName === "move" && "Move"}
-            </button>
-          ))}
+          <button
+            onClick={() => setPopupOpen(true)}
+            className="h-10 rounded bg-hrmprimaryorange px-7 text-sm text-white"
+          >
+            Add Interview
+          </button>
+          <button
+            onClick={() => {
+              setModalOpen(true);
+              setActionType(1);
+            }}
+            className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm text-black/50"
+          >
+            Consider Candidate
+          </button>
+          <button
+            onClick={() => {
+              setModalOpen(true);
+              setActionType(2);
+            }}
+            className="h-10 rounded bg-hrmprimaryorange/5 px-7 text-sm text-black/50"
+          >
+            Move
+          </button>
         </div>
 
-        {AddInterviewerPopup && (
-          <AddInterview
-            AddInterviewerPopup={AddInterviewerPopup}
-            setAddInterviewerPopup={setAddInterviewerPopup}
-          />
-        )}
-
-        {ConsiderCandidatePopup && (
-          <ConsiderCandidate
-            ConsiderCandidatePopup={ConsiderCandidatePopup}
-            setConsiderCandidatePopup={setConsiderCandidatePopup}
-          />
-        )}
-
-        {MovePopup && (
-          <MoveCandidate MovePopup={MovePopup} setMovePopup={setMovePopup} />
-        )}
-
-        <div className="flex items-center justify-between py-6">
+        <div className="flex items-center justify-between">
           <h1 className="text-base font-bold">Interviews</h1>
           <div className="flex items-center justify-center gap-3">
             <label className="input flex h-10 min-h-10 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">
@@ -193,36 +193,13 @@ function CandidateInterviews() {
             </label>
           </div>
         </div>
-
-        <div className="flex-grow">
-          {activeButton === "addInterviewer" && (
-            <QueryTable
-              list={tableData}
-              columns={columns}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          )}
-          {activeButton === "considerCandidate" && (
-            <QueryTable
-              list={tableData}
-              columns={columns}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          )}
-          {activeButton === "move" && (
-            <QueryTable
-              list={tableData}
-              columns={columns}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          )}
-        </div>
+        <QueryTable
+          list={tableData}
+          columns={columns}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </>
   );

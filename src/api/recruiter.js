@@ -43,3 +43,5 @@ export const CANDIDATE_DISCUSSTIONS = "candidate-recruitment-discussion";
 export const CANIDATE_DOCUMENTS = "candidate-documents";
 // CANDIDATE HISTORY TIMELINE
 export const CANIDATE_HISTORY = "candidate-history";
+// CANDIDATE INTERVIEWS
+export const CANIDATE_INTERVIEWS = "candidate-interviews";
