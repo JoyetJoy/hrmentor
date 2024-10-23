@@ -118,7 +118,7 @@ export default function RecCreateInterview({
       formData.append("candidate_id", cid);
       formData.append("scheduled_date", data?.scheduled_date);
       formData.append("interview_time", data?.interview_time);
-      formData.append("interview_guide_id", data?.interview_guide_id);
+      formData.append("interview_guide_id", data?.interview_guide_id?.id);
       selectedInterviewers &&
         selectedInterviewers?.forEach((interviewer) => {
           formData.append("interviewer_id[]", interviewer.id);
