@@ -87,6 +87,16 @@ function CandidateInterviews() {
     {
       accessorKey: "screeningstatus",
       header: "Screening status",
+      cell: ({ row }) => {
+        const status = row.original.screeningstatus;
+        return (
+          <div
+            className={`border-[#FFEE52]" flex h-8 w-28 items-center justify-center rounded border bg-[#FFEE52]/10 px-9`}
+          >
+            {status}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "status",
