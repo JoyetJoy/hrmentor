@@ -62,8 +62,6 @@ function CandidateInterviews() {
         }),
   });
 
-  console.log(candidateInterviewsById);
-
   const columns = [
     {
       accessorKey: "id",
@@ -153,7 +151,7 @@ function CandidateInterviews() {
             }}
             className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm text-black/50"
           >
-            Consider Candidate
+            Consider the Candidate
           </button>
           <button
             onClick={() => {
