@@ -61,6 +61,7 @@ function CandidateInterviews() {
           return res.data;
         }),
   });
+  console.log(candidateInterviewsById);
 
   const columns = [
     {
@@ -136,36 +137,35 @@ function CandidateInterviews() {
       />
       <MenuHeaderCandidate page={3} />
       <div className="flex min-h-screen flex-col gap-7 bg-white px-6 py-6">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setPopupOpen(true)}
-            className="h-10 rounded bg-hrmprimaryorange px-7 text-sm text-white"
-          >
-            Add Interview
-          </button>
-          <button
-            onClick={() => {
-              setModalOpen(true);
-              setActionType(3);
-            }}
-            className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm font-medium capitalize text-black/50"
-          >
-            Shortlist
-          </button>
-          <button
-            onClick={() => {
-              setModalOpen(true);
-              setActionType(4);
-            }}
-            className="h-10 rounded bg-hrmprimaryorange/5 px-7 text-sm font-medium capitalize text-black/50"
-          >
-            Move to hiring
-          </button>
-        </div>
-
         <div className="flex items-center justify-between">
           <h1 className="text-base font-bold">Interviews</h1>
           <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setPopupOpen(true)}
+                className="h-10 rounded bg-hrmprimaryorange px-7 text-sm text-white"
+              >
+                Add Interview
+              </button>
+              <button
+                onClick={() => {
+                  setModalOpen(true);
+                  setActionType(3);
+                }}
+                className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm font-medium capitalize text-black/50"
+              >
+                Shortlist
+              </button>
+              <button
+                onClick={() => {
+                  setModalOpen(true);
+                  setActionType(4);
+                }}
+                className="h-10 rounded bg-hrmprimaryorange/5 px-7 text-sm font-medium capitalize text-black/50"
+              >
+                Move to hiring
+              </button>
+            </div>
             <label className="input flex h-10 min-h-10 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
