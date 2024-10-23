@@ -9,7 +9,7 @@ import {
 } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon } from "lucide-react";
-import React from "react";
+import React, { Fragment } from "react";
 import { useLocation } from "react-router-dom";
 
 function CandidateHistoryTimeline() {
@@ -37,46 +37,33 @@ function CandidateHistoryTimeline() {
       />
       <MenuHeaderCandidate page={7} />
       <div className="h-full w-full rounded-md bg-white py-5">
-        <div className="relative mx-auto flex w-full max-w-4xl flex-col gap-2">
-          <Disclosure
-            as="div"
-            defaultOpen={true}
-            className="w-full rounded-md bg-[#F5F5F5] p-3"
-          >
-            {candidateHistoryTimeline?.map((i) => (
-              <>
-                <DisclosureButton className="group flex w-full items-center justify-between">
-                  <div className="flex items-center gap-x-5">
-                    <div className="size-4 rounded-full bg-[#00B448]" />
-                    <p className="text-base font-semibold">{i?.description}</p>
+        <div className="relative flex w-full max-w-4xl flex-col gap-2">
+          {candidateHistoryTimeline?.map((i) => (
+            <Fragment key={i?.id}>
+              <ul className="timeline timeline-vertical">
+                <li>
+                  <div className="timeline-middle">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="green"
+                      className="h-5 w-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </div>
-                  <ChevronDownIcon className="size-5 fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
-                </DisclosureButton>
-                <DisclosurePanel className="ml-5 mt-2 w-full text-sm/5">
-                  <div className="table mx-auto my-4 w-full max-w-4xl">
-                    <table className="mx-auto w-full table-auto">
-                      <thead className="overflow-hidden rounded-lg bg-[#D9D9D9]">
-                        <tr className="px-5 py-5 text-sm font-semibold text-black">
-                          <th className="">Scheduled</th>
-                          <th className="">Date</th>
-                          <th className="">Job Title</th>
-                          <th className="">Interview Type</th>
-                        </tr>
-                      </thead>
-                      <tbody className="border-none bg-transparent px-4">
-                        <tr className="text-xs font-medium text-black">
-                          <td className="">Shahnaz.Shaji(interviewer)</td>
-                          <td className="">10/5/23</td>
-                          <td className="">Developer</td>
-                          <td className="">Telephonic</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  <div className="timeline-end timeline-box">
+                    {i?.description}
                   </div>
-                </DisclosurePanel>
-              </>
-            ))}
-          </Disclosure>
+                  <hr />
+                </li>
+              </ul>
+            </Fragment>
+          ))}
         </div>
       </div>
     </div>

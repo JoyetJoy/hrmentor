@@ -67,9 +67,6 @@ export default function RecCreateInterview({
       }),
     [interview_guide_id, interviewersByGuideId],
   );
-  let interviewer_id = selectedInterviewers?.map((i) => {
-    return i.id;
-  });
 
   useEffect(() => {
     if (interviewersByGuide?.length) {
@@ -110,6 +107,7 @@ export default function RecCreateInterview({
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
+    setSelectedInterviewers([]);
     reset();
   }
 
@@ -121,7 +119,10 @@ export default function RecCreateInterview({
       formData.append("scheduled_date", data?.scheduled_date);
       formData.append("interview_time", data?.interview_time);
       formData.append("interview_guide_id", data?.interview_guide_id);
-      formData.append("interviewer_id", JSON.stringify(interviewer_id));
+      selectedInterviewers &&
+        selectedInterviewers?.forEach((interviewer) => {
+          formData.append("interviewer_id[]", interviewer.id);
+        });
       const res = await XFormRequest.post(api, formData);
       if (res?.data?.success === true) {
         setLoader(false);
