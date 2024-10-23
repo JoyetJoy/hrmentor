@@ -124,7 +124,6 @@ function CandidateInterviews() {
         selectedField={actionType}
         setSelectedField={setActionType}
         qrKey={"candidateInterviewsById"}
-        api={CANIDATE_INTERVIEWS}
         cid={cid}
       />
       <MenuHeader
@@ -147,20 +146,20 @@ function CandidateInterviews() {
           <button
             onClick={() => {
               setModalOpen(true);
-              setActionType(1);
+              setActionType(3);
             }}
-            className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm text-black/50"
+            className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm font-medium capitalize text-black/50"
           >
-            Consider the Candidate
+            Shortlist
           </button>
           <button
             onClick={() => {
               setModalOpen(true);
-              setActionType(2);
+              setActionType(4);
             }}
-            className="h-10 rounded bg-hrmprimaryorange/5 px-7 text-sm text-black/50"
+            className="h-10 rounded bg-hrmprimaryorange/5 px-7 text-sm font-medium capitalize text-black/50"
           >
-            Move
+            Move to hiring
           </button>
         </div>
 

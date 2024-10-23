@@ -45,3 +45,6 @@ export const CANIDATE_DOCUMENTS = "candidate-documents";
 export const CANIDATE_HISTORY = "candidate-history";
 // CANDIDATE INTERVIEWS
 export const CANIDATE_INTERVIEWS = "candidate-interviews";
+// INTERVIEW GUIDES LIST
+export const INTERVIEW_GUIDES_LIST = "Interview-guides-list";
+export const INTERVIEWERS_BY_GUID = "Interviewers";

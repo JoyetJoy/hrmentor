@@ -1,14 +1,13 @@
-import { newRequest, XFormRequest } from "@/api";
-import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
+import { ACTIVE_EMPLOYEE, newRequest, XFormRequest } from "@/api";
+import { INTERVIEW_GUIDES_LIST, INTERVIEWERS_BY_GUID } from "@/api/recruiter";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import useImageUpload from "@/hooks/useImageUpload";
-import { recCandidateDocumentSchema } from "@/schema/dashboard/recruiter/candidate/candidate.schema";
+import { recCandidateCreateInterviewSchema } from "@/schema/dashboard/recruiter/candidate/candidate.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { UploadCloud, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { CircleXIcon, Plus, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import "react-quill/dist/quill.snow.css";
@@ -23,17 +22,71 @@ export default function RecCreateInterview({
   api,
   cid,
 }) {
-  const { data: documentTypes } = useEmployeeMaster(
-    EMPLOYEE_DOCUMENT_TYPE_LIST,
-    "documentTypes",
-  );
   const {
-    image: document,
-    imageFile: documentFile,
-    handleImageChange: handleDocumentChange,
-    clearImage: clearDocument,
-    setImage: setDocument,
-  } = useImageUpload();
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(recCandidateCreateInterviewSchema),
+  });
+
+  const [selectedInterviewers, setSelectedInterviewers] = useState([]);
+  const [selectedpeople, setSelectedPeople] = useState([]);
+  const { interview_guide_id } = watch();
+
+  // INTERVIEW_GUIDES_LIST
+  const { data: interviewGuideList } = useEmployeeMaster(
+    `${INTERVIEW_GUIDES_LIST}/6`,
+    "interviewGuideList",
+  );
+
+  //   INTERVIWERS
+  const { data: interviewersList } = useEmployeeMaster(
+    ACTIVE_EMPLOYEE,
+    "interviewersList",
+  );
+  //   INTERVIEWERS BY GUIDE ID;
+  const { data: interviewersByGuideId } = useEmployeeMaster(
+    `${INTERVIEWERS_BY_GUID}/${interview_guide_id?.id}`,
+    "interviewersByGuideId",
+  );
+
+  let interviewersByGuide = useMemo(
+    () =>
+      interviewersByGuideId?.map((guide) => {
+        return {
+          value: guide.interviewer_name?.id,
+          id: guide.interviewer_name?.id,
+          label: guide.interviewer_name?.name,
+        };
+      }),
+    [interview_guide_id, interviewersByGuideId],
+  );
+  let interviewer_id = selectedInterviewers?.map((i) => {
+    return i.id;
+  });
+
+  useEffect(() => {
+    if (interviewersByGuide?.length) {
+      setSelectedInterviewers(interviewersByGuide);
+    }
+  }, [interviewersByGuide, setSelectedInterviewers]);
+
+  const handleSelectNewInterviewer = () => {
+    const newInterviewers = selectedpeople;
+    // check only added once
+    setSelectedInterviewers([
+      ...selectedInterviewers,
+      ...newInterviewers.filter(
+        (person) => !selectedInterviewers.includes(person),
+      ),
+    ]);
+  };
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
@@ -47,18 +100,6 @@ export default function RecCreateInterview({
     enabled: !!selectedField != 0,
   });
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(recCandidateDocumentSchema),
-  });
-
   useEffect(() => {
     if (recCandidateDocumentByid) {
       setValue("document_name", recCandidateDocumentByid?.document_name);
@@ -66,16 +107,9 @@ export default function RecCreateInterview({
     }
   }, [recCandidateDocumentByid, setValue]);
 
-  useEffect(() => {
-    if (recCandidateDocumentByid) {
-      setDocument(recCandidateDocumentByid?.file);
-    }
-  }, [recCandidateDocumentByid, setDocument]);
-
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
-    clearDocument();
     reset();
   }
 
@@ -83,16 +117,14 @@ export default function RecCreateInterview({
     setLoader(true);
     try {
       const formData = new FormData();
-      formData.append("document_name", data?.document_name);
-      formData.append("document_type_id", data?.document_type_id?.id);
-      documentFile && formData.append("file", documentFile);
-      let res;
-      if (selectedField !== 0) {
-        res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
-      } else {
-        res = await XFormRequest.post(`${api}/${cid}`, formData);
-      }
+      formData.append("candidate_id", cid);
+      formData.append("scheduled_date", data?.scheduled_date);
+      formData.append("interview_time", data?.interview_time);
+      formData.append("interview_guide_id", data?.interview_guide_id);
+      formData.append("interviewer_id", JSON.stringify(interviewer_id));
+      const res = await XFormRequest.post(api, formData);
       if (res?.data?.success === true) {
+        setLoader(false);
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
@@ -103,9 +135,6 @@ export default function RecCreateInterview({
     } finally {
       setLoader(false);
     }
-  };
-  const handleImageError = (event) => {
-    event.target.src = "/assets/icons/tort.svg";
   };
 
   return (
@@ -145,15 +174,25 @@ export default function RecCreateInterview({
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Interview Type
                   </label>
-                  <input
-                    {...register("document_name")}
-                    type="text"
-                    className="input-box"
+                  <Controller
+                    name="interview_guide_id"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={interviewGuideList}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select type"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
 
-                  {errors.document_name && (
+                  {errors.interview_guide_id && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.document_name?.message}
+                      {errors.interview_guide_id?.message}
                     </span>
                   )}
                 </div>
@@ -162,14 +201,13 @@ export default function RecCreateInterview({
                     Date
                   </label>
                   <input
-                    {...register("document_name")}
+                    {...register("scheduled_date")}
                     type="date"
                     className="input-box"
                   />
-
-                  {errors.document_name && (
+                  {errors.scheduled_date && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.document_name?.message}
+                      {errors.scheduled_date?.message}
                     </span>
                   )}
                 </div>
@@ -178,39 +216,51 @@ export default function RecCreateInterview({
                     Scheduled Time
                   </label>
                   <input
-                    {...register("document_name")}
+                    {...register("interview_time")}
                     type="time"
                     className="input-box"
                   />
 
-                  {errors.document_name && (
+                  {errors.interview_time && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.document_name?.message}
+                      {errors.interview_time?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Interviewer</label>
-                  <Controller
-                    name="document_type_id"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        options={documentTypes}
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select document type"
-                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                  <label className="label-text">Interviewer</label>
+                  <div className="flex items-center gap-2">
+                    <Select
+                      options={interviewersList}
+                      isSearchable={false}
+                      isMulti={true}
+                      onChange={setSelectedPeople}
+                      styles={customSelectStyles}
+                      placeholder="Select interviewer"
+                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleSelectNewInterviewer}
+                      className="flex h-10 w-12 items-center justify-center rounded bg-black text-white"
+                    >
+                      <Plus />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3 py-4">
+                  {selectedInterviewers?.map((i) => (
+                    <div
+                      className="relative flex h-8 w-fit min-w-20 items-center justify-center rounded bg-black px-3 text-sm font-medium text-white"
+                      key={i.id}
+                    >
+                      {i.label}
+                      <CircleXIcon
+                        fill="red"
+                        className="absolute -right-1 -top-2 size-4"
                       />
-                    )}
-                  />
-                  {errors.document_type_id && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.document_type_id?.message}
-                    </span>
-                  )}
+                    </div>
+                  ))}
                 </div>
                 <div className="mt-7 flex flex-row items-center justify-center gap-3">
                   <button

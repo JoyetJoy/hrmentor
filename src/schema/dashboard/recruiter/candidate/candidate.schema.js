@@ -10,3 +10,15 @@ export const recCandidateDocumentSchema = Yup.object({
     return value?.value && value?.label;
   }),
 });
+
+export const recCandidateCreateInterviewSchema = Yup.object({
+  interview_guide_id: Yup.object({
+    id: Yup.string(),
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Interview guide is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  scheduled_date: Yup.string().required("Date is required"),
+  interview_time: Yup.string().required("Time is required"),
+});

@@ -1,18 +1,8 @@
-import { newRequest, XFormRequest } from "@/api";
-import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
-import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import useImageUpload from "@/hooks/useImageUpload";
-import { recCandidateDocumentSchema } from "@/schema/dashboard/recruiter/candidate/candidate.schema";
-import { customSelectStyles } from "@/utils/customStyles";
+import { newRequest } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import "react-quill/dist/quill.snow.css";
-import Select from "react-select";
 
 export default function RecCandidateInterviewActions({
   popupOpen,
@@ -20,78 +10,22 @@ export default function RecCandidateInterviewActions({
   selectedField,
   setSelectedField,
   qrKey,
-  api,
   cid,
 }) {
-  const { data: documentTypes } = useEmployeeMaster(
-    EMPLOYEE_DOCUMENT_TYPE_LIST,
-    "documentTypes",
-  );
-  const {
-    image: document,
-    imageFile: documentFile,
-    handleImageChange: handleDocumentChange,
-    clearImage: clearDocument,
-    setImage: setDocument,
-  } = useImageUpload();
-
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  // Get selected data
-  const { data: recCandidateDocumentByid, isLoading } = useQuery({
-    queryKey: ["recCandidateDocumentByid", api, selectedField],
-    queryFn: () =>
-      newRequest
-        .get(`candidate-document-id/${selectedField}`)
-        .then((res) => res.data),
-    enabled: !!selectedField != 0,
-  });
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(recCandidateDocumentSchema),
-  });
-
-  useEffect(() => {
-    if (recCandidateDocumentByid) {
-      setValue("document_name", recCandidateDocumentByid?.document_name);
-      setValue("document_type_id", recCandidateDocumentByid?.documentTypeName);
-    }
-  }, [recCandidateDocumentByid, setValue]);
-
-  useEffect(() => {
-    if (recCandidateDocumentByid) {
-      setDocument(recCandidateDocumentByid?.file);
-    }
-  }, [recCandidateDocumentByid, setDocument]);
 
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
-    clearDocument();
-    reset();
   }
 
-  const onSubmit = async (data) => {
+  const handleChangeStatus = async () => {
     setLoader(true);
     try {
-      const formData = new FormData();
-      formData.append("document_name", data?.document_name);
-      formData.append("document_type_id", data?.document_type_id?.id);
-      documentFile && formData.append("file", documentFile);
-      let res;
-      if (selectedField !== 0) {
-        res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
-      } else {
-        res = await XFormRequest.post(`${api}/${cid}`, formData);
-      }
+      const res = await newRequest.post(
+        `candidate-status-update/${cid}/${selectedField}`,
+      );
       if (res?.data?.success === true) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
@@ -103,9 +37,6 @@ export default function RecCandidateInterviewActions({
     } finally {
       setLoader(false);
     }
-  };
-  const handleImageError = (event) => {
-    event.target.src = "/assets/icons/tort.svg";
   };
 
   return (
@@ -123,12 +54,12 @@ export default function RecCandidateInterviewActions({
           >
             <div className="mb-7 flex flex-col items-center gap-3">
               <h1 className="text-base font-bold leading-7 text-neutral-700">
-                {selectedField === 1
+                {selectedField === 3
                   ? "Consider the candidate ?"
                   : "Move candidate ?"}
               </h1>
               <p className="text-sm font-medium text-black/70">
-                {selectedField === 1
+                {selectedField === 3
                   ? "Do you want to consider the candidate ?"
                   : "Do you want to move to hiring candidate ?"}
               </p>
@@ -143,6 +74,7 @@ export default function RecCandidateInterviewActions({
               </button>
               <button
                 type="button"
+                onClick={handleChangeStatus}
                 className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
                 disabled={loader}
               >
