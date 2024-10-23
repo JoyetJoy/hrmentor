@@ -35,15 +35,15 @@ export default function SaveCandidateDocument({
     setImage: setDocument,
   } = useImageUpload();
 
-  console.log(documentFile);
-
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   // Get selected data
   const { data: recCandidateDocumentByid, isLoading } = useQuery({
     queryKey: ["recCandidateDocumentByid", api, selectedField],
     queryFn: () =>
-      newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
+      newRequest
+        .get(`candidate-document-id/${selectedField}`)
+        .then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
@@ -61,12 +61,16 @@ export default function SaveCandidateDocument({
 
   useEffect(() => {
     if (recCandidateDocumentByid) {
-      setValue("user_id", recCandidateDocumentByid?.user_id);
-      setValue("recruiting_role", recCandidateDocumentByid?.recruiting_role);
+      setValue("document_name", recCandidateDocumentByid?.document_name);
+      setValue("document_type_id", recCandidateDocumentByid?.documentTypeName);
     }
   }, [recCandidateDocumentByid, setValue]);
 
-  console.log(recCandidateDocumentByid);
+  useEffect(() => {
+    if (recCandidateDocumentByid) {
+      setDocument(recCandidateDocumentByid?.file);
+    }
+  }, [recCandidateDocumentByid, setDocument]);
 
   function close() {
     setPopupOpen(false);

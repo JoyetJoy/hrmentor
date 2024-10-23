@@ -1,19 +1,20 @@
 import { newRequest } from "@/api";
 import { CANIDATE_DOCUMENTS } from "@/api/recruiter";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import MenuHeader from "@/components/common/MenuHeader";
 import SaveCandidateDocument from "@/components/popups/recruiter/createjob/SaveDocument";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { TableData } from "@/constants/tableDummy";
 import { useQuery } from "@tanstack/react-query";
-import { MoveDiagonal, Plus, Search } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function CandidateDocuments() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [selectedField, setSelectedField] = useState(0);
+  const [deletePopup, setDeletePopup] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const location = useLocation();
@@ -43,8 +44,6 @@ function CandidateDocuments() {
       setTotalPages(recCandidateDocuments?.last_page);
     }
   }, [recCandidateDocuments]);
-
-  console.log(recCandidateDocuments);
 
   const columns = React.useMemo(
     () => [
@@ -80,12 +79,27 @@ function CandidateDocuments() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link
-              to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            <div
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <MoveDiagonal className="size-3" />
-            </Link>
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </div>
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <Trash2 className="size-3 text-red-500" />
+            </button>
           </div>
         ),
       },
@@ -103,6 +117,13 @@ function CandidateDocuments() {
         qrKey={"recCandidateDocuments"}
         api={CANIDATE_DOCUMENTS}
         cid={cid}
+      />
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"recCandidateDocuments"}
+        api={CANIDATE_DOCUMENTS}
       />
       <MenuHeader
         backlink={""}
