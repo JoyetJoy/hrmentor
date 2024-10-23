@@ -113,6 +113,7 @@ export default function RecCreateInterview({
 
   const onSubmit = async (data) => {
     setLoader(true);
+    console.log(data);
     try {
       const formData = new FormData();
       formData.append("candidate_id", cid);
@@ -190,7 +191,6 @@ export default function RecCreateInterview({
                       />
                     )}
                   />
-
                   {errors.interview_guide_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.interview_guide_id?.message}
