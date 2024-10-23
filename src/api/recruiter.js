@@ -39,3 +39,5 @@ export const JOBS_CANDIDATE = "job-candidates";
 export const JOBS_CANDIDATE_QUESTION_AND_ANSWER = "candidate-questions-answers";
 // CANDIDATE DISCUSSTIONS
 export const CANDIDATE_DISCUSSTIONS = "candidate-recruitment-discussion";
+// CANIDATE DOCUMENTS
+export const CANIDATE_DOCUMENTS = "candidate-documents";
