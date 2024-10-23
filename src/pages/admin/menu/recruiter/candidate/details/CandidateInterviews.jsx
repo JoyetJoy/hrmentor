@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuHeader from "@/components/common/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
@@ -47,42 +47,80 @@ function CandidateInterviews() {
 
   // Fetch List
   const { data: candidateInterviewsById, isLoading } = useQuery({
-    queryKey: ["candidateInterviewsById", currentPage, keyword],
+    queryKey: ["candidateInterviewsById", cid, currentPage, keyword],
     queryFn: () =>
       newRequest
-        .get(`${CANIDATE_INTERVIEWS}/${cid}`, {
+        .get(CANIDATE_INTERVIEWS, {
           params: {
             search: keyword,
             page: currentPage,
             per_limit: pageLimit,
+            candidate_id: cid,
           },
         })
         .then((res) => {
           return res.data;
         }),
   });
-  console.log(candidateInterviewsById);
+
+  useEffect(() => {
+    if (candidateInterviewsById) {
+      setTotalPages(candidateInterviewsById?.last_page);
+    }
+  }, [candidateInterviewsById]);
 
   const columns = [
     {
-      accessorKey: "id",
-      header: "Sl. no",
+      header: "Sl No",
+      accessorKey: "sno",
+      cell: ({ row }) => {
+        return (
+          <div className="flex px-2">
+            {row.index + 1 + (currentPage - 1) * pageLimit}
+          </div>
+        );
+      },
     },
     {
-      accessorKey: "interviewType",
+      accessorKey: "interview_type_name",
       header: "Interview Type",
+      cell: ({ row }) => {
+        return (
+          <span>
+            {row.original.interview?.interview_guide_name_value?.interview_type
+              ?.interview_type_name ?? "Nil"}
+          </span>
+        );
+      },
     },
     {
       accessorKey: "interviewer",
       header: "Interviewer",
+      cell: ({ row }) => {
+        return (
+          <span>
+            {row.original.interviewers?.map((i) => (
+              <span key={i?.id}>
+                {i?.first_name} {i?.middle_name} {i?.sur_name}
+              </span>
+            ))}
+          </span>
+        );
+      },
     },
     {
-      accessorKey: "scheduleddate",
+      accessorKey: "scheduled_date",
       header: "Scheduled date",
+      cell: ({ row }) => {
+        return <span>{row.original.interview?.scheduled_date ?? "Nil"}</span>;
+      },
     },
     {
-      accessorKey: "scheduledtime",
+      accessorKey: "interview_time",
       header: "Scheduled time",
+      cell: ({ row }) => {
+        return <span>{row.original.interview?.interview_time ?? "Nil"}</span>;
+      },
     },
     {
       accessorKey: "screeningstatus",
@@ -197,7 +235,7 @@ function CandidateInterviews() {
           </div>
         </div>
         <QueryTable
-          list={tableData}
+          list={candidateInterviewsById?.listing ?? []}
           columns={columns}
           totalPages={totalPages}
           currentPage={currentPage}
