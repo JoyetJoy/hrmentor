@@ -69,6 +69,8 @@ function CandidateInterviews() {
     }
   }, [candidateInterviewsById]);
 
+  console.log(candidateInterviewsById);
+
   const columns = [
     {
       header: "Sl No",
@@ -123,32 +125,36 @@ function CandidateInterviews() {
       },
     },
     {
-      accessorKey: "screeningstatus",
-      header: "Screening status",
-      cell: ({ row }) => {
-        const status = row.original.screeningstatus;
-        return (
-          <div
-            className={`border-[#FFEE52]" flex h-8 w-28 items-center justify-center rounded border bg-[#FFEE52]/10 px-9`}
-          >
-            {status}
-          </div>
-        );
-      },
+      header: "Screening Status",
+      accessorKey: "interview_status_name",
+      cell: ({ row }) => (
+        <div
+          style={{
+            backgroundColor:
+              row?.original?.interview?.interview_status_name?.background_color,
+            color: row?.original?.interview?.interview_status_name?.text_color,
+          }}
+          className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+        >
+          {row?.original?.interview?.interview_status_name?.status_name}
+        </div>
+      ),
     },
     {
-      accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => {
-        const status = row.original.status;
-        return (
-          <div
-            className={`border-[#FFEE52]" flex h-8 w-20 items-center justify-center rounded border bg-[#FFEE52]/10 px-9`}
-          >
-            {status}
-          </div>
-        );
-      },
+      accessorKey: "status",
+      cell: ({ row }) => (
+        <div
+          style={{
+            backgroundColor:
+              row?.original?.interview?.interview_status_name?.background_color,
+            color: row?.original?.interview?.interview_status_name?.text_color,
+          }}
+          className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+        >
+          {row?.original?.interview?.interview_status_name?.status_name}
+        </div>
+      ),
     },
   ];
 
