@@ -147,12 +147,18 @@ function CandidateInterviews() {
         <div
           style={{
             backgroundColor:
-              row?.original?.interview?.interview_status_name?.background_color,
-            color: row?.original?.interview?.interview_status_name?.text_color,
+              row?.original?.interview?.interview_performance_status_name
+                ?.background_color,
+            color:
+              row?.original?.interview?.interview_performance_status_name
+                ?.text_color,
           }}
           className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
         >
-          {row?.original?.interview?.interview_status_name?.status_name}
+          {
+            row?.original?.interview?.interview_performance_status_name
+              ?.status_name
+          }
         </div>
       ),
     },
