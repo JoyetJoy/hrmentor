@@ -93,17 +93,13 @@ function CandidateInterviews() {
       header: "Status",
       cell: ({ row }) => {
         const status = row.original.status;
-        let statusClass = "";
-        if (status === "Failed")
-          statusClass =
-            "p-1 bg-[#FFF2F2] px-8 rounded-sm border border-[#E39E9E]";
-        else if (status === "Passed")
-          statusClass =
-            "p-1 bg-[#F0FFF1] px-7 rounded-sm border border-[#8BE691]";
-        else if (status === "Hired")
-          statusClass =
-            "p-1 bg-[#FFEE52]/10 px-9 rounded-sm border border-[#FFEE52]";
-        return <span className={statusClass}>{status}</span>;
+        return (
+          <div
+            className={`border-[#FFEE52]" flex h-8 w-20 items-center justify-center rounded border bg-[#FFEE52]/10 px-9`}
+          >
+            {status}
+          </div>
+        );
       },
     },
   ];
