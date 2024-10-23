@@ -228,6 +228,7 @@ function CandidateInterviews() {
               </svg>
               <input
                 type="text"
+                onChange={(e) => setKeyword(e.target.value)}
                 className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-black/40 focus:outline-none"
                 placeholder="Search"
               />
