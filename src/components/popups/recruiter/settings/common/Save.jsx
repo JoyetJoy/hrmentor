@@ -23,6 +23,7 @@ export default function SaveRecruiterMasterForm({
   colKeys,
   api,
 }) {
+  let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
   const [isdefault, setIsDefault] = useState(false);
@@ -32,7 +33,7 @@ export default function SaveRecruiterMasterForm({
     queryKey: ["recMastersDetailByid", colKeys, type, api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
-    enabled: !!selectedField != 0,
+    enabled: enableKey,
   });
 
   const {
