@@ -42,6 +42,9 @@ export default function RecCreateInterview({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+
+  let enableKey = selectedField === 0 ? false : true;
+
   // Get selected data
   const { data: candidateInterviewDetail, isLoading } = useQuery({
     queryKey: ["candidateInterviewDetail", api, selectedField],
@@ -49,7 +52,7 @@ export default function RecCreateInterview({
       newRequest
         .get(`${CANDIDATE_INTERVIEW_DETAIL}/${selectedField}`)
         .then((res) => res.data),
-    enabled: !!selectedField != 0,
+    enabled: enableKey,
   });
 
   const [selectedInterviewers, setSelectedInterviewers] = useState([]);

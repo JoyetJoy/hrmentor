@@ -49,11 +49,13 @@ function InterviewGuideline({
     setPopupOpen(false);
   }
 
+  let enableKey = selectedField === 0 ? false : true;
+
   const { data: recInterviewGuidelinebyId, isLoading } = useQuery({
     queryKey: ["recInterviewGuidelinebyId", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
-    enabled: !!selectedField != 0,
+    enabled: enableKey,
   });
 
   // EMOPLOYEE TYPE LIST
