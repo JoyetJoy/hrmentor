@@ -39,6 +39,9 @@ export const JOBS_CANDIDATE = "job-candidates";
 export const JOBS_CANDIDATE_QUESTION_AND_ANSWER = "candidate-questions-answers";
 // CANDIDATE DISCUSSTIONS
 export const CANDIDATE_DISCUSSTIONS = "candidate-recruitment-discussion";
+// CANDIDATE DISCUSSTIONS REPLY
+export const CANDIDATE_DISCUSSTIONS_REPLY =
+  "candidate-recruitment-discussion-reply";
 // CANIDATE DOCUMENTS
 export const CANIDATE_DOCUMENTS = "candidate-documents";
 // CANIDATE DOCUMENTS LIST
