@@ -58,11 +58,9 @@ function CandidateDiscussion() {
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 
-  console.log(data);
   // To handle message input
-  const [replies, setReplies] = useState({}); // Track reply messages by discussion message id
+  const [replies, setReplies] = useState({});
 
-  // Function to handle changing reply input for specific message
   const handleReplyChange = (e, messageId) => {
     setReplies((prevReplies) => ({
       ...prevReplies,
@@ -192,14 +190,16 @@ function CandidateDiscussion() {
                               />
                             </button>
                           </div>
-                          {message?.disscussion_reply_message?.map((i) => (
-                            <div
-                              key={i.id}
-                              className="mt-2 flex w-full items-center rounded bg-[#D1E7DD] px-5 py-2 text-sm font-medium text-black/70"
-                            >
-                              {i?.reply_message}
-                            </div>
-                          ))}
+                          <div className="mt-2 flex flex-col">
+                            {message?.disscussion_reply_message?.map((i) => (
+                              <div
+                                key={i.id}
+                                className="mt-2 flex w-full items-center rounded bg-[#D1E7DD] px-5 py-2 text-sm font-medium text-black/70"
+                              >
+                                {i?.reply_message}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
