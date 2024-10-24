@@ -3,43 +3,31 @@ import MenuHeader from "@/components/common/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import RecCreateInterview from "@/components/popups/recruiter/candiadate/CreateInterview";
-import { CANIDATE_INTERVIEWS } from "@/api/recruiter";
-import { useLocation } from "react-router-dom";
+import { CANIDATE_INTERVIEWS, JOB_DETAIL_BY_CANDIDATE } from "@/api/recruiter";
+import { Link, useLocation } from "react-router-dom";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import RecCandidateInterviewActions from "@/components/popups/recruiter/candiadate/CandidateInterviewAction";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { MoveDiagonal } from "lucide-react";
+import RecStartScreening from "@/components/popups/recruiter/candiadate/StartScreening";
 
 function CandidateInterviews() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const cid = searchParams.get("cid");
   const [popupOpen, setPopupOpen] = useState(false);
+  const [screeningOpen, setScreeningOpen] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const [actionType, setActionType] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const tableData = [
-    {
-      id: 1,
-      interviewType: "Face to face",
-      interviewer: "Shajin",
-      scheduleddate: "10/10/2023",
-      scheduledtime: "10 AM",
-      screeningstatus: "Completed",
-      status: "Failed",
-    },
-    {
-      id: 2,
-      interviewType: "Face to face",
-      interviewer: "Shajin",
-      scheduleddate: "10/10/2023",
-      scheduledtime: "10 AM",
-      screeningstatus: "Completed",
-      status: "Passed",
-    },
-  ];
+  // JOB DETAIL BY CANDIDATE;
+  const { data: candidateAppliedJobDetail } = useEmployeeMaster(
+    `${JOB_DETAIL_BY_CANDIDATE}/${cid}`,
+    "candidateAppliedJobDetail",
+  );
 
-  // CANIDATE_INTERVIEWS;
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const cid = searchParams.get("cid");
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
@@ -63,13 +51,15 @@ function CandidateInterviews() {
         }),
   });
 
+  const allStatusAreCompleted = candidateInterviewsById?.listing?.every(
+    (item) => item?.interview.interview_status === 3,
+  );
+
   useEffect(() => {
     if (candidateInterviewsById) {
       setTotalPages(candidateInterviewsById?.last_page);
     }
   }, [candidateInterviewsById]);
-
-  console.log(candidateInterviewsById);
 
   const columns = [
     {
@@ -162,10 +152,42 @@ function CandidateInterviews() {
         </div>
       ),
     },
+    {
+      header: "Action",
+      accessorKey: "action",
+      cell: ({ row }) => (
+        <div className="flex items-center justify-start gap-3 text-xs">
+          <button
+            onClick={() => {
+              setScreeningOpen(true);
+              setSelectedField(row.original?.interview?.id);
+            }}
+            className={`h-9 cursor-pointer rounded px-5 text-xs font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/50 text-white" : "bg-hrmprimaryorange/5"}`}
+          >
+            Start Interview
+          </button>
+          <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+            <img
+              src="/assets/icons/admin/marker.svg"
+              className="w-full object-contain"
+            />
+          </Link>
+        </div>
+      ),
+    },
   ];
 
   return (
     <>
+      <RecStartScreening
+        popupOpen={screeningOpen}
+        setPopupOpen={setScreeningOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"candidateInterviewsById"}
+        api={CANIDATE_INTERVIEWS}
+        cid={cid}
+      />
       <RecCreateInterview
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
@@ -198,28 +220,40 @@ function CandidateInterviews() {
           <div className="flex items-center justify-center gap-3">
             <div className="flex items-center gap-4">
               <button
+                disabled={candidateAppliedJobDetail?.status >= 3 ? true : false}
                 onClick={() => setPopupOpen(true)}
-                className="h-10 rounded bg-hrmprimaryorange px-7 text-sm text-white"
+                className={`h-10 rounded px-7 text-sm text-white ${candidateAppliedJobDetail?.status >= 3 ? "bg-black/80" : "bg-hrmprimaryorange"}`}
               >
                 Add Interview
               </button>
               <button
+                disabled={
+                  candidateAppliedJobDetail?.status > 2 && allStatusAreCompleted
+                }
                 onClick={() => {
                   setModalOpen(true);
                   setActionType(3);
                 }}
-                className="h-10 rounded bg-hrmprimaryorange/5 px-10 text-sm font-medium capitalize text-black/50"
+                className={`h-10 rounded px-10 text-sm font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 2 ? "bg-black/80 text-white" : "bg-hrmprimaryorange/5"}`}
               >
-                Shortlist
+                {candidateAppliedJobDetail?.status === 3 &&
+                allStatusAreCompleted
+                  ? "Shortlisted"
+                  : "Shortlist"}
               </button>
               <button
+                disabled={
+                  candidateAppliedJobDetail?.status === 3 ? false : true
+                }
                 onClick={() => {
                   setModalOpen(true);
                   setActionType(4);
                 }}
-                className="h-10 rounded bg-hrmprimaryorange/5 px-7 text-sm font-medium capitalize text-black/50"
+                className={`h-10 rounded px-7 text-sm font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/80 text-white" : "bg-hrmprimaryorange/5"}`}
               >
-                Move to hiring
+                {candidateAppliedJobDetail?.status === 4
+                  ? "Moved to hiring"
+                  : "Move to hiring"}
               </button>
             </div>
             <label className="input flex h-10 min-h-10 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">

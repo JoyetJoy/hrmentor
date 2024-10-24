@@ -128,7 +128,6 @@ export default function EmployeeLists() {
           </div>
         ),
       },
-
       {
         header: "Action",
         accessorKey: "action",

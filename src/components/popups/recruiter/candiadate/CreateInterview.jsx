@@ -1,5 +1,9 @@
 import { ACTIVE_EMPLOYEE, newRequest, XFormRequest } from "@/api";
-import { INTERVIEW_GUIDES_LIST, INTERVIEWERS_BY_GUID } from "@/api/recruiter";
+import {
+  INTERVIEW_GUIDES_LIST,
+  INTERVIEWERS_BY_GUID,
+  JOB_DETAIL_BY_CANDIDATE,
+} from "@/api/recruiter";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { recCandidateCreateInterviewSchema } from "@/schema/dashboard/recruiter/candidate/candidate.schema";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -39,9 +43,15 @@ export default function RecCreateInterview({
   const [selectedpeople, setSelectedPeople] = useState([]);
   const { interview_guide_id } = watch();
 
+  // JOB DETAIL BY CANDIDATE;
+  const { data: candidateAppliedJobDetail } = useEmployeeMaster(
+    `${JOB_DETAIL_BY_CANDIDATE}/${cid}`,
+    "candidateAppliedJobDetail",
+  );
+
   // INTERVIEW_GUIDES_LIST
   const { data: interviewGuideList } = useEmployeeMaster(
-    `${INTERVIEW_GUIDES_LIST}/6`,
+    `${INTERVIEW_GUIDES_LIST}/${candidateAppliedJobDetail?.job_id}`,
     "interviewGuideList",
   );
 
