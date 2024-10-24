@@ -1,5 +1,6 @@
 import { ACTIVE_EMPLOYEE, newRequest, XFormRequest } from "@/api";
 import {
+  CANDIDATE_INTERVIEW_DETAIL,
   INTERVIEW_GUIDES_LIST,
   INTERVIEWERS_BY_GUID,
   JOB_DETAIL_BY_CANDIDATE,
@@ -38,6 +39,20 @@ export default function RecCreateInterview({
     mode: "onSubmit",
     resolver: yupResolver(recCandidateCreateInterviewSchema),
   });
+
+  const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+  // Get selected data
+  const { data: candidateInterviewDetail, isLoading } = useQuery({
+    queryKey: ["candidateInterviewDetail", api, selectedField],
+    queryFn: () =>
+      newRequest
+        .get(`${CANDIDATE_INTERVIEW_DETAIL}/${selectedField}`)
+        .then((res) => res.data),
+    enabled: !!selectedField != 0,
+  });
+
+  console.log(candidateInterviewDetail);
 
   const [selectedInterviewers, setSelectedInterviewers] = useState([]);
   const [selectedpeople, setSelectedPeople] = useState([]);
@@ -95,24 +110,16 @@ export default function RecCreateInterview({
     ]);
   };
 
-  const queryClient = useQueryClient();
-  const [loader, setLoader] = useState(false);
-  // Get selected data
-  const { data: recCandidateDocumentByid, isLoading } = useQuery({
-    queryKey: ["recCandidateDocumentByid", api, selectedField],
-    queryFn: () =>
-      newRequest
-        .get(`candidate-document-id/${selectedField}`)
-        .then((res) => res.data),
-    enabled: !!selectedField != 0,
-  });
-
   useEffect(() => {
-    if (recCandidateDocumentByid) {
-      setValue("document_name", recCandidateDocumentByid?.document_name);
-      setValue("document_type_id", recCandidateDocumentByid?.documentTypeName);
+    if (candidateInterviewDetail) {
+      setValue(
+        "interview_guide_id",
+        candidateInterviewDetail?.interview_guide_id,
+      );
+      setValue("scheduled_date", candidateInterviewDetail?.scheduled_date);
+      setValue("interview_time", candidateInterviewDetail?.interview_time);
     }
-  }, [recCandidateDocumentByid, setValue]);
+  }, [candidateInterviewDetail, setValue]);
 
   function close() {
     setPopupOpen(false);
@@ -147,6 +154,12 @@ export default function RecCreateInterview({
     } finally {
       setLoader(false);
     }
+  };
+
+  const removeInterviewer = (id) => {
+    setSelectedInterviewers(
+      selectedInterviewers.filter((interviewer) => interviewer.id !== id),
+    );
   };
 
   return (
@@ -267,6 +280,7 @@ export default function RecCreateInterview({
                     >
                       {i.label}
                       <CircleXIcon
+                        onClick={() => removeInterviewer(i.id)}
                         fill="red"
                         className="absolute -right-1 -top-2 size-4"
                       />

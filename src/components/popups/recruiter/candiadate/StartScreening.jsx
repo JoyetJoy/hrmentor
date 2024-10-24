@@ -53,6 +53,8 @@ export default function RecStartScreening({
     "candidateInterviewDetail",
   );
 
+  console.log(candidateInterviewDetail);
+
   useEffect(() => {
     if (candidateInterviewDetail?.interview_start_stop) {
       setInterviewStatus(
@@ -69,7 +71,7 @@ export default function RecStartScreening({
       );
       setValue(
         "interview_performance_status_id",
-        candidateInterviewDetail?.interview_performance_status_id,
+        candidateInterviewDetail?.interview_performance_status,
       );
       setValue("interview_note", candidateInterviewDetail?.interview_note);
 
@@ -273,7 +275,7 @@ export default function RecStartScreening({
                   </span>
                 )}
               </div>
-              {interviewStatus === 2 ? null : (
+              {candidateInterviewDetail?.have_finished?.value == 1 ? null : (
                 <div className="flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"

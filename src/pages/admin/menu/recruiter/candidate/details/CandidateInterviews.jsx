@@ -9,7 +9,7 @@ import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import RecCandidateInterviewActions from "@/components/popups/recruiter/candiadate/CandidateInterviewAction";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import { MoveDiagonal } from "lucide-react";
+import { MoveDiagonal, View } from "lucide-react";
 import RecStartScreening from "@/components/popups/recruiter/candiadate/StartScreening";
 
 function CandidateInterviews() {
@@ -162,7 +162,7 @@ function CandidateInterviews() {
               setScreeningOpen(true);
               setSelectedField(row.original?.interview?.id);
             }}
-            className={`h-9 cursor-pointer rounded px-5 text-xs font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/50 text-white" : "bg-hrmprimaryorange/5"} ${
+            className={`h-9 cursor-pointer rounded px-4 text-xs font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/50 text-white" : "bg-hrmprimaryorange/5"} ${
               row?.original?.interview?.interview_status_name?.status_name ==
               "Completed"
                 ? "!bg-blue-400 !text-white"
@@ -170,16 +170,27 @@ function CandidateInterviews() {
             }`}
           >
             {row?.original?.interview?.interview_status_name?.status_name ==
-            "Completed"
-              ? "Interview Finished"
-              : " Start Interview"}
+            "Completed" ? (
+              <div className="flex items-center gap-2">
+                <View className="size-4" />
+                Interview Finished
+              </div>
+            ) : (
+              "Start Interview"
+            )}
           </button>
-          <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+          <div
+            onClick={() => {
+              setPopupOpen(true);
+              setSelectedField(row.original?.interview?.id);
+            }}
+            className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+          >
             <img
               src="/assets/icons/admin/marker.svg"
               className="w-full object-contain"
             />
-          </Link>
+          </div>
         </div>
       ),
     },
@@ -287,6 +298,7 @@ function CandidateInterviews() {
             </label>
           </div>
         </div>
+
         <QueryTable
           list={candidateInterviewsById?.listing ?? []}
           columns={columns}
