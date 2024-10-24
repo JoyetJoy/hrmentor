@@ -2,7 +2,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import loader from "/assets/icons/recruter/fi_loader.svg";
 import user from "/assets/icons/recruter/fi_user.svg";
@@ -327,10 +327,7 @@ export default function RecruiterDashbaord() {
                   </p>
                 </div>
               </div>
-              <Link
-                to={""}
-                className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              >
+              <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
                 <MoveDiagonal className="size-3" />
               </Link>
             </div>
