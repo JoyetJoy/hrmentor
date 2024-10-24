@@ -41,6 +41,8 @@ export const JOBS_CANDIDATE_QUESTION_AND_ANSWER = "candidate-questions-answers";
 export const CANDIDATE_DISCUSSTIONS = "candidate-recruitment-discussion";
 // CANIDATE DOCUMENTS
 export const CANIDATE_DOCUMENTS = "candidate-documents";
+// CANIDATE DOCUMENTS LIST
+export const CANIDATE_DOCUMENT_LIST = "Active-CandidateDocumentTypes";
 // CANDIDATE HISTORY TIMELINE
 export const CANIDATE_HISTORY = "candidate-history";
 // CANDIDATE INTERVIEWS

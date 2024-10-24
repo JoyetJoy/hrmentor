@@ -1,5 +1,5 @@
 import { newRequest, XFormRequest } from "@/api";
-import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
+import { CANIDATE_DOCUMENT_LIST } from "@/api/recruiter";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import useImageUpload from "@/hooks/useImageUpload";
 import { recCandidateDocumentSchema } from "@/schema/dashboard/recruiter/candidate/candidate.schema";
@@ -24,7 +24,7 @@ export default function SaveCandidateDocument({
   cid,
 }) {
   const { data: documentTypes } = useEmployeeMaster(
-    EMPLOYEE_DOCUMENT_TYPE_LIST,
+    CANIDATE_DOCUMENT_LIST,
     "documentTypes",
   );
   const {
