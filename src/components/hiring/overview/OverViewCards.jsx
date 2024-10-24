@@ -24,20 +24,20 @@ export const OverViewCards = () => {
         </div>
         <img src={offerHand} className='object-contain h-12' alt="" />
     </div></Link>
-    <div className="flex p-5 justify-between items-center bg-[#EBF9ED] rounded-sm text-md font-semibold">
+    <Link to={"overview/upcoming"}> <div className="flex p-5 justify-between items-center bg-[#EBF9ED] rounded-sm text-md font-semibold">
         <div className="flex flex-col gap-3">
             <div className="">Upcoming </div>
             <div className="text-3xl font-semibold">99</div>
         </div>
         <img src={user} className='object-contain h-12' alt="" />
-    </div>
-    <div className="flex p-5 justify-between items-center bg-[#F2EAF2] rounded-sm text-md font-semibold">
+    </div></Link>
+  <Link to={"overview/offer-declined"}> <div className="flex p-5 justify-between items-center bg-[#F2EAF2] rounded-sm text-md font-semibold">
         <div className="flex flex-col gap-3">
             <div className="">Offer declined </div>
             <div className="text-3xl font-semibold">3</div>
         </div>
         <img src={noDeal} className='object-contain h-12' alt="" />
-    </div>
+    </div></Link>
    </div>
    </>
   )

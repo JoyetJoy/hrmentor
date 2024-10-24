@@ -38,52 +38,67 @@ export const FilterModalHiring = ({ isOpen, onClose, children }) => {
                 </svg>
               </button>
             </div>
-
-            <div className="flex flex-col gap-0 pt-5">
-              <div class="flex flex-col space-y-1 py-2">
-                <label class="label-text font-semibold">Type</label>
-                <div class="h-fit rounded-md border shadow-sm">
-                  <div class="relative">
-                    <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option value="" disabled selected>
-                        Select 
-                      </option>
-                      <option value="One">One</option>
-                      <option value="">Two</option>
-                    </select>
+            <div className="flex h-full flex-col justify-between pb-10">
+              <div className="flex flex-col gap-0 pt-5">
+                <div class="flex flex-col space-y-1 py-2">
+                  <label class="label-text font-semibold">Type</label>
+                  <div class="h-fit rounded-md border shadow-sm">
+                    <div class="relative">
+                      <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="" disabled selected>
+                          Select
+                        </option>
+                        <option value="One">One</option>
+                        <option value="">Two</option>
+                      </select>
+                    </div>
+                    <input name="language_spoken" type="hidden" value="" />
                   </div>
-                  <input name="language_spoken" type="hidden" value="" />
+                </div>
+                <div class="flex flex-col space-y-1 py-2">
+                  <label class="label-text font-semibold">Location</label>
+                  <div class="h-fit rounded-md border shadow-sm">
+                    <div class="relative">
+                      <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="" disabled selected>
+                          Select
+                        </option>
+                        <option value="One">One</option>
+                        <option value="">Two</option>
+                      </select>
+                    </div>
+                    <input name="language_spoken" type="hidden" value="" />
+                  </div>
+                </div>
+                <div class="flex flex-col space-y-1 py-2">
+                  <label class="label-text font-semibold">Department</label>
+                  <div class="h-fit rounded-md border shadow-sm">
+                    <div class="relative">
+                      <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="" disabled selected>
+                          Select
+                        </option>
+                        <option value="One">One</option>
+                        <option value="">Two</option>
+                      </select>
+                    </div>
+                    <input name="language_spoken" type="hidden" value="" />
+                  </div>
                 </div>
               </div>
-              <div class="flex flex-col space-y-1 py-2">
-                <label class="label-text font-semibold">Location</label>
-                <div class="h-fit rounded-md border shadow-sm">
-                  <div class="relative">
-                    <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option value="" disabled selected>
-                        Select 
-                      </option>
-                      <option value="One">One</option>
-                      <option value="">Two</option>
-                    </select>
-                  </div>
-                  <input name="language_spoken" type="hidden" value="" />
-                </div>
-              </div>
-              <div class="flex flex-col space-y-1 py-2">
-                <label class="label-text font-semibold">Department</label>
-                <div class="h-fit rounded-md border shadow-sm">
-                  <div class="relative">
-                    <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                      <option value="" disabled selected>
-                        Select 
-                      </option>
-                      <option value="One">One</option>
-                      <option value="">Two</option>
-                    </select>
-                  </div>
-                  <input name="language_spoken" type="hidden" value="" />
-                </div>
+              <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                <button
+                  type="button"
+                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                >
+                  <span>Clear all</span>
+                </button>
+                <button
+                  type="submit"
+                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                >
+                  <span>Apply</span>
+                </button>
               </div>
             </div>
             <div className="mt-5">{children}</div>

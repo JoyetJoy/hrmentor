@@ -1,7 +1,7 @@
 import MenuHeader from "@/components/common/MenuHeader";
 import { OverviewTopBar } from "@/components/hiring/overviewTopBar/OverviewTopBar";
 import React from "react";
-import { OverviewTable } from "./tables/OverviewTable";
+import { OverviewTable } from "../tables/OverviewTable";
 
 export const ReadyToHiring = () => {
   return (

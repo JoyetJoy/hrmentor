@@ -1,5 +1,6 @@
 import QueryTable from '@/components/table/QueryTable';
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 export const OverviewTable = () => {
      const [currentPage, setCurrentPage] = useState(1);
@@ -91,9 +92,9 @@ export const OverviewTable = () => {
       accessorKey: "action",
       cell: () => (
         <div className="flex gap-2">
-          <button className="bg-[#00B448] py-1.5 px-4 text-white  border-green-800 rounded-md">
+          <Link to={"offer-to-be-finalized"}><button className="bg-[#00B448] py-1.5 px-4 text-white  border-green-800 rounded-md">
             Send Offer Letter
-          </button>
+          </button></Link>
           <button className="bg-[#AB27271A]/10 py-1.5 px-4   text-[#AB2727] rounded-md">
             Reject
           </button>

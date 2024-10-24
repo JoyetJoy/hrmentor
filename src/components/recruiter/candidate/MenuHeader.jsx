@@ -46,21 +46,6 @@ function MenuHeaderCandidate({ page, candidate }) {
             </Link>
           ))}
         </div>
-        <div className="flex items-center gap-10 text-sm font-semibold">
-          {recCandidateMenus.map((item) => (
-            <Link
-              key={item?.id}
-              to={`${item?.link}?cid=${cid}`}
-              className={`px-2 py-1 text-sm ${
-                page === item?.id
-                  ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
-                  : "font-normal text-[#808080]"
-              }`}
-            >
-              {item?.name}
-            </Link>
-          ))}
-        </div>
       </div>
     </>
   );

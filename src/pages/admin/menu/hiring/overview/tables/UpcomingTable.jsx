@@ -1,7 +1,7 @@
 import QueryTable from '@/components/table/QueryTable';
 import React, { useState } from 'react'
 
-export const OfferTable = () => {
+export const UpcomingTable = () => {
      const [currentPage, setCurrentPage] = useState(1);
 
   // Example data and columns
@@ -15,7 +15,7 @@ export const OfferTable = () => {
       sentdate: "05/07/2023",
       status:"Hired",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png",
     },
     {
       name: "Varadharajan Rengaswamy",
