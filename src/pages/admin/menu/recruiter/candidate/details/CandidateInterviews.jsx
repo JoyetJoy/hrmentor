@@ -93,16 +93,16 @@ function CandidateInterviews() {
           <div>
             {row.original?.interviewers?.slice(0, 1).map((i) => (
               <span key={i?.id}>
-                {i?.first_name} {i?.middle_name} {i?.sur_name}
+                {i?.first_name} {i?.middle_name ?? ""} {i?.sur_name}
               </span>
             ))}
-            {row.original.interviewers?.length > 2 && (
+            {row.original?.interviewers?.length > 2 && (
               <div
                 className="tooltip ml-1 cursor-pointer"
-                data-tip={row.original.interviewers
+                data-tip={row.original?.interviewers
                   ?.map(
                     (i) =>
-                      `${i.first_name} ${i.middle_name ?? ""} ${i.sur_name}`,
+                      `${i?.first_name} ${i?.middle_name ?? ""} ${i?.sur_name}`,
                   )
                   .join(", ")}
               >
