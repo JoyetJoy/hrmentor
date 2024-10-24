@@ -90,13 +90,28 @@ function CandidateInterviews() {
       header: "Interviewer",
       cell: ({ row }) => {
         return (
-          <span>
-            {row.original.interviewers?.map((i) => (
+          <div>
+            {row.original?.interviewers?.slice(0, 1).map((i) => (
               <span key={i?.id}>
                 {i?.first_name} {i?.middle_name} {i?.sur_name}
               </span>
             ))}
-          </span>
+            {row.original.interviewers?.length > 2 && (
+              <div
+                className="tooltip ml-1 cursor-pointer"
+                data-tip={row.original.interviewers
+                  ?.map(
+                    (i) =>
+                      `${i.first_name} ${i.middle_name ?? ""} ${i.sur_name}`,
+                  )
+                  .join(", ")}
+              >
+                <span className="text-[0.7rem] font-bold text-hrmprimaryorange">
+                  +{row.original?.interviewers?.length - 1} more
+                </span>
+              </div>
+            )}
+          </div>
         );
       },
     },

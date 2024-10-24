@@ -52,6 +52,8 @@ export default function RecCreateInterview({
     enabled: !!selectedField != 0,
   });
 
+  console.log(candidateInterviewDetail);
+
   const [selectedInterviewers, setSelectedInterviewers] = useState([]);
   const [selectedpeople, setSelectedPeople] = useState([]);
   const { interview_guide_id } = watch();
