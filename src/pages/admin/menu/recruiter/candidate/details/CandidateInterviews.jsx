@@ -162,17 +162,17 @@ function CandidateInterviews() {
               setScreeningOpen(true);
               setSelectedField(row.original?.interview?.id);
             }}
-            className={`flex h-9 w-40 cursor-pointer items-center justify-center rounded text-xs font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/50 text-white" : "bg-hrmprimaryorange/5"} ${
+            className={`flex h-9 w-36 cursor-pointer items-center justify-center rounded text-xs font-medium capitalize text-black/50 ${
               row?.original?.interview?.interview_status_name?.status_name ==
               "Completed"
                 ? "!bg-blue-400 !text-white"
-                : ""
+                : "bg-black/50 text-white"
             }`}
           >
             {row?.original?.interview?.interview_status_name?.status_name ==
             "Completed" ? (
               <div className="flex items-center gap-2">
-                <View className="size-4" />
+                <View className="size-3" />
                 Interview Finished
               </div>
             ) : (
