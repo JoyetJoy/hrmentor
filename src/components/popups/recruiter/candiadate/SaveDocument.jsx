@@ -35,6 +35,7 @@ export default function SaveCandidateDocument({
     setImage: setDocument,
   } = useImageUpload();
 
+  let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   // Get selected data
@@ -44,7 +45,7 @@ export default function SaveCandidateDocument({
       newRequest
         .get(`candidate-document-id/${selectedField}`)
         .then((res) => res.data),
-    enabled: !!selectedField != 0,
+    enabled: enableKey,
   });
 
   const {
