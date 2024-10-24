@@ -4,12 +4,12 @@ import QueryTable from "@/components/table/QueryTable";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import RecCreateInterview from "@/components/popups/recruiter/candiadate/CreateInterview";
 import { CANIDATE_INTERVIEWS, JOB_DETAIL_BY_CANDIDATE } from "@/api/recruiter";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import RecCandidateInterviewActions from "@/components/popups/recruiter/candiadate/CandidateInterviewAction";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import { MoveDiagonal, View } from "lucide-react";
+import { View } from "lucide-react";
 import RecStartScreening from "@/components/popups/recruiter/candiadate/StartScreening";
 
 function CandidateInterviews() {

@@ -52,23 +52,29 @@ export default function RecCreateInterview({
     enabled: !!selectedField != 0,
   });
 
-  console.log(candidateInterviewDetail);
-
   const [selectedInterviewers, setSelectedInterviewers] = useState([]);
   const [selectedpeople, setSelectedPeople] = useState([]);
   const { interview_guide_id } = watch();
 
   // JOB DETAIL BY CANDIDATE;
-  const { data: candidateAppliedJobDetail } = useEmployeeMaster(
-    `${JOB_DETAIL_BY_CANDIDATE}/${cid}`,
-    "candidateAppliedJobDetail",
-  );
+  const { data: candidateAppliedJobDetail } = useQuery({
+    queryKey: ["candidateAppliedJobDetail", cid],
+    queryFn: () =>
+      newRequest
+        .get(`${JOB_DETAIL_BY_CANDIDATE}/${cid}`)
+        .then((res) => res.data),
+    enabled: !!cid,
+  });
 
   // INTERVIEW_GUIDES_LIST
-  const { data: interviewGuideList } = useEmployeeMaster(
-    `${INTERVIEW_GUIDES_LIST}/${candidateAppliedJobDetail?.job_id}`,
-    "interviewGuideList",
-  );
+  const { data: interviewGuideList } = useQuery({
+    queryKey: ["interviewGuideList", candidateAppliedJobDetail],
+    queryFn: () =>
+      newRequest
+        .get(`${INTERVIEW_GUIDES_LIST}/${candidateAppliedJobDetail?.job_id}`)
+        .then((res) => res.data),
+    enabled: !!candidateAppliedJobDetail?.job_id,
+  });
 
   //   INTERVIWERS
   const { data: interviewersList } = useEmployeeMaster(
@@ -76,10 +82,14 @@ export default function RecCreateInterview({
     "interviewersList",
   );
   //   INTERVIEWERS BY GUIDE ID;
-  const { data: interviewersByGuideId } = useEmployeeMaster(
-    `${INTERVIEWERS_BY_GUID}/${interview_guide_id?.id}`,
-    "interviewersByGuideId",
-  );
+  const { data: interviewersByGuideId } = useQuery({
+    queryKey: ["interviewersByGuideId", interview_guide_id],
+    queryFn: () =>
+      newRequest
+        .get(`${INTERVIEWERS_BY_GUID}/${interview_guide_id?.id}`)
+        .then((res) => res.data),
+    enabled: !!interview_guide_id?.id,
+  });
 
   let interviewersByGuide = useMemo(
     () =>
@@ -99,15 +109,29 @@ export default function RecCreateInterview({
     }
   }, [interviewersByGuide, setSelectedInterviewers]);
 
+  useEffect(() => {
+    if (candidateInterviewDetail?.interviewers?.length) {
+      const existingInterviewers = selectedInterviewers?.map(
+        (interviewer) => interviewer.id,
+      );
+      const prevselectedInterviewers =
+        candidateInterviewDetail?.interviewers?.filter(
+          (interviewer) => !existingInterviewers?.includes(interviewer.id),
+        );
+      setSelectedInterviewers(prevselectedInterviewers);
+    }
+  }, [interviewersByGuide, setSelectedInterviewers]);
+
   const handleSelectNewInterviewer = () => {
     const newInterviewers = selectedpeople;
-    // check only added once
-    setSelectedInterviewers([
-      ...selectedInterviewers,
-      ...newInterviewers.filter(
-        (person) => !selectedInterviewers.includes(person),
-      ),
-    ]);
+    setSelectedInterviewers((prev) => {
+      return [
+        ...prev,
+        ...newInterviewers.filter((person) => {
+          return !prev?.some((interviewer) => interviewer?.id === person?.id);
+        }),
+      ];
+    });
   };
 
   useEffect(() => {
@@ -116,6 +140,7 @@ export default function RecCreateInterview({
         "interview_guide_id",
         candidateInterviewDetail?.interview_guide_id,
       );
+      setValue("interviewer_id", candidateInterviewDetail?.interviewers);
       setValue("scheduled_date", candidateInterviewDetail?.scheduled_date);
       setValue("interview_time", candidateInterviewDetail?.interview_time);
     }
@@ -130,9 +155,8 @@ export default function RecCreateInterview({
 
   const onSubmit = async (data) => {
     setLoader(true);
-    console.log(data);
     try {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append("candidate_id", cid);
       formData.append("scheduled_date", data?.scheduled_date);
       formData.append("interview_time", data?.interview_time);
@@ -141,7 +165,12 @@ export default function RecCreateInterview({
         selectedInterviewers?.forEach((interviewer) => {
           formData.append("interviewer_id[]", interviewer.id);
         });
-      const res = await XFormRequest.post(api, formData);
+      let res;
+      if (selectedField != 0) {
+        res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
+      } else {
+        res = await XFormRequest.post(api, formData);
+      }
       if (res?.data?.success === true) {
         setLoader(false);
         toast.success(res?.data?.message);
@@ -278,7 +307,7 @@ export default function RecCreateInterview({
                       className="relative flex h-8 w-fit min-w-20 items-center justify-center rounded bg-black px-3 text-sm font-medium text-white"
                       key={i.id}
                     >
-                      {i.label}
+                      {i?.label}
                       <CircleXIcon
                         onClick={() => removeInterviewer(i.id)}
                         fill="red"
