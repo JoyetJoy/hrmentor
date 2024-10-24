@@ -81,7 +81,7 @@ export const INTERVIEW_TYPE = "InterviewTypes";
 // CANDIDATE TYPE
 export const CANDIDATE_TYPE = "CandidateTypes";
 // CANDIDATE TYPE LIST
-export const CANDIDATE_TYPE_LIST="Active-CandidateTypes"
+export const CANDIDATE_TYPE_LIST = "Active-CandidateTypes";
 // Experience
 export const MINIMUM_Experience = "MinimumExperience";
 // LIST
@@ -97,3 +97,7 @@ export const GET_PROFILE_QUESTIONS = "Active-ProfileQuestions";
 export const CAREER_FILTER_LIST = "career-page-filter";
 // INTERVIEW TYPE LIST
 export const REC_INTERVIEW_TYPES = "Active-InterviewTypes";
+// CANDIDATE MASTER
+export const CANDIDATE_MASTER = "candidate-default-master";
+// CANDIDATE INTERVIEW START STOP
+export const CANDIDATE_INTERVIEW_START_STOP = "candidate-interview-start-stop";

@@ -1,3 +1,5 @@
+import { newRequest } from "@/api";
+import { CANIDATE_HISTORY } from "@/api/recruiter";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import {
@@ -5,10 +7,24 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon } from "lucide-react";
-import React from "react";
+import React, { Fragment } from "react";
+import { useLocation } from "react-router-dom";
 
 function CandidateHistoryTimeline() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const cid = searchParams.get("cid");
+  // Fetch List
+  const { data: candidateHistoryTimeline, isLoading } = useQuery({
+    queryKey: ["candidateHistoryTimeline"],
+    queryFn: () =>
+      newRequest.get(`${CANIDATE_HISTORY}/${cid}`).then((res) => {
+        return res.data;
+      }),
+  });
+
   return (
     <div className="min-h-screen">
       <MenuHeader
@@ -21,105 +37,31 @@ function CandidateHistoryTimeline() {
       />
       <MenuHeaderCandidate page={7} />
       <div className="h-full w-full rounded-md bg-white py-5">
-        <div className="relative mx-auto flex w-full max-w-2xl flex-col gap-2">
-          <Disclosure
-            as="div"
-            defaultOpen={true}
-            className="rounded-md bg-[#F5F5F5] p-3"
-          >
-            <DisclosureButton className="group flex w-full items-center justify-between">
-              <div className="flex items-center gap-x-5">
-                <div className="size-4 rounded-full bg-[#00B448]" />
-                <p className="text-base font-semibold">
-                  Shajin S Applied Job For UI/UX designer
-                </p>
-              </div>
-
-              <ChevronDownIcon className="size-5 fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
-            </DisclosureButton>
-            <DisclosurePanel className="ml-5 mt-2 text-sm/5">
-              <div className="table mx-auto my-4 w-full max-w-2xl">
-                <table className="mx-auto w-full table-auto">
-                  <thead className="overflow-hidden rounded-lg bg-[#D9D9D9]">
-                    <tr className="px-5 py-5 text-sm font-semibold text-black">
-                      <th className="">Scheduled</th>
-                      <th className="">Date</th>
-                      <th className="">Job Title</th>
-                      <th className="">Interview Type</th>
-                    </tr>
-                  </thead>
-                  <tbody className="border-none bg-transparent px-4">
-                    <tr className="text-xs font-medium text-black">
-                      <td className="">Shahnaz.Shaji(interviewer)</td>
-                      <td className="">10/5/23</td>
-                      <td className="">Developer</td>
-                      <td className="">Telephonic</td>
-                    </tr>
-                    <tr className="py-3 text-xs font-medium text-black">
-                      <td className="">Shahnaz.Shaji(interviewer)</td>
-                      <td className="">10/5/23</td>
-                      <td className="">Developer</td>
-                      <td className="">Telephonic</td>
-                    </tr>
-                    <tr className="py-3 text-xs font-medium text-black">
-                      <td className="">Shahnaz.Shaji(interviewer)</td>
-                      <td className="">10/5/23</td>
-                      <td className="">Developer</td>
-                      <td className="">Telephonic</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </DisclosurePanel>
-          </Disclosure>
-          <Disclosure
-            as="div"
-            className="rounded-md bg-[#F5F5F5] p-3"
-            defaultOpen={true}
-          >
-            <DisclosureButton className="group flex w-full items-center justify-between">
-              <div className="flex items-center gap-x-5">
-                <div className="size-4 rounded-full bg-[#00B448]" />
-                <p className="text-base font-semibold">Interview Scheduled</p>
-              </div>
-              <ChevronDownIcon className="group-data-[hover]:fill-whiteml-5 size-5 fill-white/60 group-data-[open]:rotate-180" />
-            </DisclosureButton>
-            <DisclosurePanel className="ml-5 mt-2 text-sm/5">
-              <div className="table mx-auto my-4 w-full max-w-2xl">
-                <table className="mx-auto w-full table-auto">
-                  <thead className="overflow-hidden rounded-lg bg-[#D9D9D9]">
-                    <tr className="px-5 py-5 text-sm font-semibold text-black">
-                      <th className="">Scheduled</th>
-                      <th className="">Date</th>
-                      <th className="">Job Title</th>
-                      <th className="">Interview Type</th>
-                    </tr>
-                  </thead>
-                  <tbody className="border-none bg-transparent px-4">
-                    <tr className="text-xs font-medium text-black">
-                      <td className="">Shahnaz.Shaji(interviewer)</td>
-                      <td className="">10/5/23</td>
-                      <td className="">Developer</td>
-                      <td className="">Telephonic</td>
-                    </tr>
-                    <tr className="py-3 text-xs font-medium text-black">
-                      <td className="">Shahnaz.Shaji(interviewer)</td>
-                      <td className="">10/5/23</td>
-                      <td className="">Developer</td>
-                      <td className="">Telephonic</td>
-                    </tr>
-                    <tr className="py-3 text-xs font-medium text-black">
-                      <td className="">Shahnaz.Shaji(interviewer)</td>
-                      <td className="">10/5/23</td>
-                      <td className="">Developer</td>
-                      <td className="">Telephonic</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </DisclosurePanel>
-          </Disclosure>
-          <div className="absolute inset-5 left-5 w-0 border-l border-[#00B448]"></div>
+        <div className="relative flex w-full max-w-4xl flex-col">
+          {candidateHistoryTimeline?.map((i) => (
+            <ul key={i?.id} className="timeline timeline-vertical">
+              <li>
+                <div className="timeline-middle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="green"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="timeline-end timeline-box text-[0.94rem] font-semibold text-black/70">
+                  {i?.description}
+                </div>
+                <hr />
+              </li>
+            </ul>
+          ))}
         </div>
       </div>
     </div>

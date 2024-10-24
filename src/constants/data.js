@@ -1,6 +1,12 @@
 // LISTINGS
 
 // status
+export const successStatus = [
+  { value: 1, label: "Yes" },
+  { value: 0, label: "No" },
+];
+
+// status
 export const employeeMasterOptions = [
   { value: 1, label: "Active" },
   { value: 0, label: "In Active" },

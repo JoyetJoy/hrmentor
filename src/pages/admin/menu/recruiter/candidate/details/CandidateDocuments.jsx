@@ -2,7 +2,7 @@ import { newRequest } from "@/api";
 import { CANIDATE_DOCUMENTS } from "@/api/recruiter";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import MenuHeader from "@/components/common/MenuHeader";
-import SaveCandidateDocument from "@/components/popups/recruiter/createjob/SaveDocument";
+import SaveCandidateDocument from "@/components/popups/recruiter/candiadate/SaveDocument";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";

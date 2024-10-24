@@ -41,3 +41,17 @@ export const JOBS_CANDIDATE_QUESTION_AND_ANSWER = "candidate-questions-answers";
 export const CANDIDATE_DISCUSSTIONS = "candidate-recruitment-discussion";
 // CANIDATE DOCUMENTS
 export const CANIDATE_DOCUMENTS = "candidate-documents";
+// CANDIDATE HISTORY TIMELINE
+export const CANIDATE_HISTORY = "candidate-history";
+// CANDIDATE INTERVIEWS
+export const CANIDATE_INTERVIEWS = "candidate-interviews";
+// INTERVIEW GUIDES LIST
+export const INTERVIEW_GUIDES_LIST = "Interview-guides-list";
+export const INTERVIEWERS_BY_GUID = "Interviewers";
+// JOB DETAIL BY CANDIDATE ID
+export const JOB_DETAIL_BY_CANDIDATE = "candidate-job-id";
+// CANDIDATE INTERVIEW DETAIL
+export const CANDIDATE_INTERVIEW_DETAIL = "candidate-interviews";
+// UPDATE INTERVIEW PERFORMANCE RESULT
+export const UPDATE_INTERVIEW_PERFORMANCE_RESULT =
+  "candidate-interview-performance";

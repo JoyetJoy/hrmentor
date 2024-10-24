@@ -101,7 +101,7 @@ function RecJobInterviewGuide() {
                 className="w-full object-contain"
               />
             </div>
-            <button
+            <div
               onClick={() => {
                 setDeletePopup(true);
                 setSelectedField(row?.original?.id);
@@ -109,7 +109,7 @@ function RecJobInterviewGuide() {
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
             >
               <Trash2 className="size-3" />
-            </button>
+            </div>
           </div>
         ),
       },
@@ -196,7 +196,7 @@ function RecJobInterviewGuide() {
             ) : (
               <QueryTable
                 columns={columns}
-                list={recInterviewGuidelinesbyId?.data?.listing}
+                list={recInterviewGuidelinesbyId?.data?.listing ?? []}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
                 totalPages={totalPages}
