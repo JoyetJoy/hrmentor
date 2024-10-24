@@ -3,7 +3,7 @@ import { CANDIDATE_DISCUSSTIONS } from "@/api/recruiter";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import { useUserStore } from "@/lib/slices/auth.slice";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { User } from "lucide-react";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -20,24 +20,37 @@ function CandidateDiscussion() {
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
-  // Fetch List
-  const { data: candidateDiscussions, isLoading } = useQuery({
-    queryKey: ["candidateDiscussions", currentPage, keyword],
-    queryFn: () =>
-      newRequest
-        .get(`${CANDIDATE_DISCUSSTIONS}/${cid}`, {
-          params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        }),
+  const fetchItems = async ({ pageParam = 1 }) => {
+    const response = await newRequest.get(`${CANDIDATE_DISCUSSTIONS}/${cid}`, {
+      params: {
+        search: keyword,
+        page: pageParam,
+        per_limit: pageLimit,
+      },
+    });
+    return {
+      data: response?.data?.page[0].data,
+      nextPage: pageParam < response.data.last_page ? pageParam + 1 : null,
+    };
+  };
+
+  const {
+    data: candidateDiscussions,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["candidateDiscussions"],
+    queryFn: fetchItems,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    keepPreviousData: true,
+    staleTime: 0,
+    cacheTime: 0,
   });
 
   console.log(user);
+  console.log(candidateDiscussions);
   return (
     <div>
       <MenuHeader
