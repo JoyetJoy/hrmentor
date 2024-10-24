@@ -11,6 +11,7 @@ import RosterList from "@/pages/admin/masters/roster/Index";
 import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
 import Claim from "@/pages/admin/masters/roster/Claim";
 import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
+import { HiringRoutes } from "./children/HiringRoute";
 
 export const AdminRoutes = [
   {
@@ -37,41 +38,42 @@ export const AdminRoutes = [
     path: "recruiter",
     children: RecruiterRoutes,
   },
-  
   {
-    path:"setup",
-    children:[
-      {
-        path:"calender",
-        element:<EmployeeAttendanceCalendar/>
-      },
-      {
-        path:"shift",
-        element:<ShiftList/>
-      },
-      {
-        path:"save-shift",
-        element:<SaveMasterShift/>
-      },
-      {
-        path:"calender-department",
-        element:<RosterDepartment/>
-      },
-      {
-        path:"roster",
-        children:[
-          {
-            path:"",
-            element:<RosterList/>,
-          },
-            {
-              path:"claim",
-              element:<Claim/>
-            }
-          
-        ]
-      },
-    ]
-
+    path: "hiring",
+    children: HiringRoutes,
   },
-]
+  {
+    path: "setup",
+    children: [
+      {
+        path: "calender",
+        element: <EmployeeAttendanceCalendar />,
+      },
+      {
+        path: "shift",
+        element: <ShiftList />,
+      },
+      {
+        path: "save-shift",
+        element: <SaveMasterShift />,
+      },
+      {
+        path: "calender-department",
+        element: <RosterDepartment />,
+      },
+      {
+        path: "roster",
+        children: [
+          {
+            path: "",
+            element: <RosterList />,
+          },
+          {
+            path: "claim",
+            element: <Claim />,
+          },
+        ],
+      },
+    ],
+  },
+];
