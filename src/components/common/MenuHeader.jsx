@@ -4,6 +4,7 @@ import { AccountManngerMenu } from "@/constants/menus/employee";
 import { ArrowLeft, ChevronRight, User } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { hiringMenu } from "@/constants/menus/hiring";
 
 function MenuHeader(props) {
   const location = useLocation();
@@ -22,15 +23,19 @@ function MenuHeader(props) {
 
   const currentMenu = location.pathname.includes("/admin/recruiter")
     ? recruiterMenu
-    : location.pathname.includes("/admin/employee")
-      ? employeeMenu
-      : ["/admin/role", "/admin/subscription"].some((path) =>
-            location.pathname.includes(path),
-          )
-        ? AccountManngerMenu
-        : [];
+    : location.pathname.includes("/admin/hiring")
+      ? hiringMenu
+      : location.pathname.includes("/admin/employee")
+        ? employeeMenu
+        : ["/admin/role", "/admin/subscription"].some((path) =>
+              location.pathname.includes(path),
+            )
+          ? AccountManngerMenu
+          : [];
 
   const menuItem = currentMenu.find((item) => item.name === activeSubMenu);
+  const isHiringPath = location.pathname.startsWith("/admin/hiring");
+  const defaultActiveMenu = isHiringPath ? hiringMenu[0].name : activeSubMenu;
 
   const isSpecialPath = [
     "Employee",
@@ -39,7 +44,7 @@ function MenuHeader(props) {
     "Subscription",
     "Add Employee",
     "Employee Detail",
-    "Roster List"
+    "Roster List",
   ].includes(currentpath);
 
   return (
@@ -80,7 +85,8 @@ function MenuHeader(props) {
               <Link
                 to={item?.link}
                 className={`text-sm ${
-                  activeMenu === item?.name
+                  activeMenu === item?.name ||
+                  (isHiringPath && defaultActiveMenu === item.name)
                     ? "active-menu px-2 py-1 font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
                     : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
                 }`}
