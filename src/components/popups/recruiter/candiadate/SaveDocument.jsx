@@ -89,7 +89,10 @@ export default function SaveCandidateDocument({
       documentFile && formData.append("file", documentFile);
       let res;
       if (selectedField !== 0) {
-        res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
+        res = await XFormRequest.post(
+          `candidate-document-update/${selectedField}`,
+          formData,
+        );
       } else {
         res = await XFormRequest.post(`${api}/${cid}`, formData);
       }
