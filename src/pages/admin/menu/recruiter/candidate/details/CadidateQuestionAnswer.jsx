@@ -34,7 +34,7 @@ function CandidateQuestionAnswer() {
       <MenuHeaderCandidate page={2} />
       <div className="flex min-h-screen flex-col gap-4 bg-white px-20 py-14">
         <h1 className="pt-3 text-base font-bold">Questions & Answers</h1>
-        {recCandidateQAByid.length ? (
+        {recCandidateQAByid?.length ? (
           <>
             {recCandidateQAByid?.map((i) => (
               <div
