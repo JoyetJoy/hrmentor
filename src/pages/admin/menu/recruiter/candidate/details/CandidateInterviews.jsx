@@ -162,9 +162,17 @@ function CandidateInterviews() {
               setScreeningOpen(true);
               setSelectedField(row.original?.interview?.id);
             }}
-            className={`h-9 cursor-pointer rounded px-5 text-xs font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/50 text-white" : "bg-hrmprimaryorange/5"}`}
+            className={`h-9 cursor-pointer rounded px-5 text-xs font-medium capitalize text-black/50 ${candidateAppliedJobDetail?.status > 3 ? "bg-black/50 text-white" : "bg-hrmprimaryorange/5"} ${
+              row?.original?.interview?.interview_status_name?.status_name ==
+              "Completed"
+                ? "!bg-blue-500 !text-white"
+                : ""
+            }`}
           >
-            Start Interview
+            {row?.original?.interview?.interview_status_name?.status_name ==
+            "Completed"
+              ? "Interview Finished"
+              : " Start Interview"}
           </button>
           <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
             <img
@@ -185,8 +193,6 @@ function CandidateInterviews() {
         selectedField={selectedField}
         setSelectedField={setSelectedField}
         qrKey={"candidateInterviewsById"}
-        api={CANIDATE_INTERVIEWS}
-        cid={cid}
       />
       <RecCreateInterview
         popupOpen={popupOpen}

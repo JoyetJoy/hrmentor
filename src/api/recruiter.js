@@ -52,3 +52,6 @@ export const INTERVIEWERS_BY_GUID = "Interviewers";
 export const JOB_DETAIL_BY_CANDIDATE = "candidate-job-id";
 // CANDIDATE INTERVIEW DETAIL
 export const CANDIDATE_INTERVIEW_DETAIL = "candidate-interviews";
+// UPDATE INTERVIEW PERFORMANCE RESULT
+export const UPDATE_INTERVIEW_PERFORMANCE_RESULT =
+  "candidate-interview-performance";
