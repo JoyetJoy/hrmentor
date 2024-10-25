@@ -24,7 +24,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
           return res.data;
         }),
   });
-
+  console.log(recDashboardInterviews);
   return (
     <>
       {isLoading ? (
@@ -53,7 +53,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
                           ))}
                         </div>
                         {remainingCandidates > 0 && (
-                          <h1 className="text-sm text-hrmprimaryorange">
+                          <h1 className="text-xs font-semibold text-hrmprimaryorange">
                             {`+${remainingCandidates} more`}
                           </h1>
                         )}
