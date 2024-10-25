@@ -51,7 +51,7 @@ function CandidateHistoryTimeline() {
                     />
                   </svg>
                 </div>
-                <div className="timeline-end timeline-box text-[0.94rem] font-semibold text-black/70">
+                <div className="timeline-end timeline-box bg-black/5 text-sm font-semibold text-black/70">
                   {i?.description}
                 </div>
               </li>
