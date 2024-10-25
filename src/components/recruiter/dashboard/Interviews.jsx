@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function RecDashboardInterviews({ selectedDate }) {
   const pageLimit = 10;
-  const dateObject = selectedDate.toDate();
+  const formattedDate = selectedDate?.format("YYYY-MM-DD");
 
   // Fetch List
   const { data: recDashboardInterviews, isLoading } = useQuery({
@@ -16,7 +16,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
         .get(DASHBOARD_INTERVIEWS_LIST, {
           params: {
             per_limit: pageLimit,
-            // date: dateObject,
+            date: formattedDate,
           },
         })
         .then((res) => {
