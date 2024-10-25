@@ -28,7 +28,6 @@ export default function RecJobCandidates() {
         <Loader />
       ) : (
         <>
-          {" "}
           {newCandidates?.length ? (
             <>
               {newCandidates?.map((candidate) => (
@@ -38,13 +37,15 @@ export default function RecJobCandidates() {
                 >
                   <div className="flex items-center gap-x-2">
                     <div className="flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
-                      {candidate?.first_name
-                        ? `${candidate?.first_name?.charAt(0)} ${candidate?.first_name?.charAt(0)}`
-                        : "CD"}
+                      {`${candidate?.first_name?.charAt(0)} ${candidate?.sur_name?.charAt(0)}`}
                     </div>
                     <div>
                       <h3 className="text-base font-semibold">
                         <span className="mr-1">{candidate?.first_name}</span>
+                        <span className="mr-1">
+                          {" "}
+                          {candidate?.middle_name ?? ""}
+                        </span>
                         {candidate?.sur_name}
                       </h3>
                       <p className="text-xs font-medium text-[#2C2C2C66]">
