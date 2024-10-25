@@ -31,7 +31,7 @@ export default function RecJobCandidates() {
           className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] py-2 pl-5 pr-9"
         >
           <div className="flex items-center gap-x-2">
-            <div className="text-yipred flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 font-bold uppercase">
+            <div className="flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
               {candidate?.first_name
                 ? `${candidate?.first_name?.charAt(0)} ${candidate?.first_name?.charAt(0)}`
                 : "CD"}
