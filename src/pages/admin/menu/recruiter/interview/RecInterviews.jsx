@@ -35,7 +35,6 @@ function RecInterviews() {
           return res.data;
         }),
   });
-  console.log(interviewListing);
 
   useEffect(() => {
     if (interviewListing) {
