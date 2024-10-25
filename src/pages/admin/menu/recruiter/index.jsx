@@ -15,6 +15,7 @@ import OpenJobs from "@/components/recruiter/dashboard/OpenJobs";
 import WeeklyCalendarPicker from "@/components/common/WeeklyCanlendarPicker";
 import dayjs from "dayjs";
 import RecDashboardInterviews from "@/components/recruiter/dashboard/Interviews";
+import RecJobCandidates from "@/components/recruiter/dashboard/Candidates";
 
 export default function RecruiterDashbaord() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -194,45 +195,7 @@ export default function RecruiterDashbaord() {
         <div>
           <h1 className="text-[ #2C2C2C] mb-4 text-sm font-bold">Candidate</h1>
           <div className="flex h-screen flex-col gap-y-3 rounded-md bg-white p-5">
-            <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] py-2 pl-5 pr-9">
-              <div className="flex items-center gap-x-2">
-                <div className="avatar">
-                  <div className="w-10 rounded-full">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold">Harshal H</h3>
-                  <p className="text-xs font-medium text-[#2C2C2C66]">
-                    UI/UX Design Intern
-                  </p>
-                </div>
-              </div>
-              <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
-                <MoveDiagonal className="size-3" />
-              </Link>
-            </div>
-            <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] py-2 pl-5 pr-9">
-              <div className="flex items-center gap-x-2">
-                <div className="avatar">
-                  <div className="w-10 rounded-full">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold">Harshal H</h3>
-                  <p className="text-xs font-medium text-[#2C2C2C66]">
-                    UI/UX Design Intern
-                  </p>
-                </div>
-              </div>
-              <Link
-                to={""}
-                className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              >
-                <MoveDiagonal className="size-3" />
-              </Link>
-            </div>
+            <RecJobCandidates />
           </div>
         </div>
       </div>
