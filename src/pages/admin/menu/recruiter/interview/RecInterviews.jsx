@@ -4,11 +4,9 @@ import MenuHeader from "@/components/common/MenuHeader";
 import RecInterviewDetailView from "@/components/popups/recruiter/interview/Detail";
 import QueryTable from "@/components/table/QueryTable";
 import Loader from "@/components/ui/Loader";
-import { TableData } from "@/constants/tableDummy";
 import { useQuery } from "@tanstack/react-query";
 import { MoveDiagonal, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 function RecInterviews() {
   const [totalPages, setTotalPages] = useState(10);
@@ -17,7 +15,6 @@ function RecInterviews() {
   const [selectedField, setSelectedField] = useState(0);
   const [byStatus, setByStatus] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const list = React.useMemo(() => TableData, [TableData]);
 
   const pageLimit = 10;
 
@@ -31,7 +28,7 @@ function RecInterviews() {
             search: keyword,
             page: currentPage,
             per_limit: pageLimit,
-            by_status: byStatus,
+            status: byStatus,
           },
         })
         .then((res) => {
@@ -46,8 +43,6 @@ function RecInterviews() {
     }
   }, [interviewListing]);
 
-  const location = useLocation();
-  const isActive = (path) => path.includes(location.pathname);
   const columns = React.useMemo(
     () => [
       {
@@ -128,6 +123,7 @@ function RecInterviews() {
           <Search className="size-4 object-contain text-gray-200" />
           <input
             type="text"
+            onChange={(e) => setKeyword(e.target.value)}
             className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
             placeholder="Search"
           />
@@ -145,7 +141,7 @@ function RecInterviews() {
             onClick={() => {
               setByStatus(1);
             }}
-            className={`cursor-pointer text-sm font-bold ${byStatus === 2 ? "text-hrmprimaryorange" : "text-black/40"}`}
+            className={`cursor-pointer text-sm font-bold ${byStatus === 1 ? "text-hrmprimaryorange" : "text-black/40"}`}
           >
             Scheduled
           </div>
@@ -153,7 +149,7 @@ function RecInterviews() {
             onClick={() => {
               setByStatus(2);
             }}
-            className={`cursor-pointer text-sm font-bold ${byStatus === 1 ? "text-hrmprimaryorange" : "text-black/40"}`}
+            className={`cursor-pointer text-sm font-bold ${byStatus === 2 ? "text-hrmprimaryorange" : "text-black/40"}`}
           >
             Ongoing
           </div>
@@ -161,7 +157,7 @@ function RecInterviews() {
             onClick={() => {
               setByStatus(3);
             }}
-            className={`cursor-pointer text-sm font-bold ${byStatus === 1 ? "text-hrmprimaryorange" : "text-black/40"}`}
+            className={`cursor-pointer text-sm font-bold ${byStatus === 3 ? "text-hrmprimaryorange" : "text-black/40"}`}
           >
             Completed
           </div>
