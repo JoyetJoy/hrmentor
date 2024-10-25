@@ -30,8 +30,6 @@ export default function OpenJobs() {
         }),
   });
 
-  console.log(openJobs);
-
   const columns = React.useMemo(
     () => [
       {
@@ -39,7 +37,7 @@ export default function OpenJobs() {
         accessorKey: "job_title",
       },
       {
-        header: "Location",
+        header: "Date Created",
         accessorKey: "location",
         cell: ({ row }) => (
           <p className="">
