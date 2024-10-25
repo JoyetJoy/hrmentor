@@ -116,6 +116,7 @@ export default function RecSaveFormCandidate({ type }) {
         "college_or_university",
         candidateDetails?.data?.college_university,
       );
+      setValue("job_id", candidateDetails?.data?.JobName);
       setValue("date_applied", candidateDetails?.data?.date_applied);
       setValue("source", candidateDetails?.data?.sourceName);
       setValue("home_address", candidateDetails?.data?.home_address);
@@ -138,7 +139,9 @@ export default function RecSaveFormCandidate({ type }) {
 
   useEffect(() => {
     if (candidateDetails) {
-      setSameAsHome(candidateDetails?.same_as_home === 1 ? true : false);
+      setSameAsHome(
+        candidateDetails?.data?.same_as_home_address == 1 ? true : false,
+      );
     }
   }, [candidateDetails, setSameAsHome]);
 
