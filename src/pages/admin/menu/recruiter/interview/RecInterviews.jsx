@@ -48,6 +48,15 @@ function RecInterviews() {
       {
         header: "Candidate name",
         accessorKey: "name",
+        cell: ({ row }) => (
+          <div>
+            {row?.original?.interview?.candidate_detail?.first_name}
+            <span className="mx-1">
+              {row?.original?.interview?.candidate_detail?.middle_name}
+            </span>
+            {row?.original?.interview?.candidate_detail?.sur_name}
+          </div>
+        ),
       },
       {
         header: "interview Date ",
@@ -91,10 +100,14 @@ function RecInterviews() {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center justify-start gap-3 text-xs">
-            <div className="flex size-7 cursor-pointer items-center rounded-full bg-[#F5F5F5] p-2 text-black">
-              <MoveDiagonal className="h-3 w-3" />
-            </div>
+          <div
+            onClick={() => {
+              setPopupOpen(true);
+              setSelectedField(row.original?.interview?.id);
+            }}
+            className="flex size-7 cursor-pointer items-center rounded-full bg-[#F5F5F5] p-2 text-black"
+          >
+            <MoveDiagonal className="h-3 w-3" />
           </div>
         ),
       },
@@ -106,10 +119,10 @@ function RecInterviews() {
     <>
       <RecInterviewDetailView
         popupOpen={popupOpen}
-        setPopupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        api={""}
+        api={REC_INTERVIEWS_LIST}
       />
       <MenuHeader
         backlink={""}
