@@ -7,7 +7,6 @@ function JobDetails() {
       <div className="h-72 rounded-md bg-bgColor-100">
         <div className="flex flex-col gap-3 px-10 py-8">
           <h1 className="mb-6 flex flex-row items-center gap-1 text-sm text-white">
-            {" "}
             <ArrowLeft className="size-4" strokeWidth={2} />
             Job Details
           </h1>

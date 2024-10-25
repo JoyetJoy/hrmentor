@@ -53,8 +53,6 @@ function RecInterviews() {
         activeMenu={"Interviews"}
       />
       <div className="mb-4 mt-2 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Looking For UI/X Designer</h1>
-
         <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 border-none text-white outline-none">
           <Search className="size-4 object-contain text-gray-200" />
           <input

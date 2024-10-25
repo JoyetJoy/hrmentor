@@ -6,8 +6,7 @@ import InterviewResult from "@/pages/admin/menu/recruiter/candidate/details/emai
 import InterviewSchedule from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewSchedule";
 import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/MoveHiring";
 import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
-import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
-import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
+import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs/RecJobs";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Save";
 import { RecRequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
@@ -39,10 +38,6 @@ export const RecruiterRoutes = [
   {
     index: true,
     element: <RecruiterDashbaord />,
-  },
-  {
-    path: "candidate",
-    element: <Candidate />,
   },
   {
     path: "job-details",
