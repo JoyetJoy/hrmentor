@@ -1,12 +1,15 @@
 import MenuHeader from "@/components/common/MenuHeader";
+import RecInterviewDetailView from "@/components/popups/recruiter/interview/Detail";
 import QueryTable from "@/components/table/QueryTable";
 import { TableData } from "@/constants/tableDummy";
-import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
+import { MoveDiagonal, Search } from "lucide-react";
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function RecInterviews() {
   const [totalPages, setTotalPages] = useState(10);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
   const [byStatus, setByStatus] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const list = React.useMemo(() => TableData, [TableData]);
@@ -41,7 +44,14 @@ function RecInterviews() {
     [],
   );
   return (
-    <div className="">
+    <>
+      <RecInterviewDetailView
+        popupOpen={popupOpen}
+        setPopupOpen={popupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        api={""}
+      />
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -100,7 +110,7 @@ function RecInterviews() {
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       />
-    </div>
+    </>
   );
 }
 
