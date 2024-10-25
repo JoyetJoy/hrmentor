@@ -1,7 +1,5 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import { MoveDiagonal } from "lucide-react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import loader from "/assets/icons/recruter/fi_loader.svg";
 import user from "/assets/icons/recruter/fi_user.svg";
 import openjobs from "/assets/icons/recruter/fi_briefcase.svg";
