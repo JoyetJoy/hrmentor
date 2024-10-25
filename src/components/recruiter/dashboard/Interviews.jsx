@@ -46,7 +46,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
                         <div className="avatar-group -space-x-6 rtl:space-x-reverse">
                           {candidatesToShow?.map((candidate) => (
                             <div key={candidate?.id}>
-                              <div className="flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 font-bold uppercase">
+                              <div className="flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
                                 {`${candidate?.first_name?.charAt(0)} ${candidate?.first_name?.charAt(0)}`}
                               </div>
                             </div>
