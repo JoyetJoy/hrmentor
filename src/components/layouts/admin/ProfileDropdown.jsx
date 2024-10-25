@@ -6,11 +6,8 @@ export default function ProfileDropdown({ handleNavigation, user }) {
     <div className="relative flex flex-col items-center gap-3">
       <Menu>
         <Menu.Button className="flex cursor-pointer flex-row items-center gap-3">
-          <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              className="w-full object-contain"
-            />
+          <div className="flex h-10 w-10 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
+            {`${user?.first_name?.charAt(0)} ${user?.sur_name?.charAt(0)}`}
           </div>
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-textcolor-darkblue">
             {user.first_name} {user.sur_name}
