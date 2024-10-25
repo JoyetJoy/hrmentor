@@ -34,6 +34,7 @@ function CandidateHistoryTimeline() {
         <Loader />
       ) : (
         <div className="h-full w-full rounded-md bg-white py-5">
+          <h1 className="px-7 pb-7 text-base font-bold">Candidate History</h1>
           <ul className="overflow-y-min flex max-h-[570px] w-full flex-col gap-3 overflow-y-auto px-7">
             {candidateHistoryTimeline?.map((i) => (
               <li key={i?.id} className="timeline flex items-center">
