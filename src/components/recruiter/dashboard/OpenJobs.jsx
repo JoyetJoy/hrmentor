@@ -24,6 +24,7 @@ export default function OpenJobs() {
         }),
   });
 
+  console.log(openJobs);
   const columns = useMemo(
     () => [
       {

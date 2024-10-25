@@ -347,7 +347,7 @@ select:focus {
 }
 
 .selected {
-  background-color: #1a1a4d;
+  background-color: #e95d39;
   color: white;
 }
 
