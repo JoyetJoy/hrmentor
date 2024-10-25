@@ -32,7 +32,7 @@ import CandidateDiscussion from "@/pages/admin/menu/recruiter/candidate/details/
 import CandidateInterviews from "@/pages/admin/menu/recruiter/candidate/details/CandidateInterviews";
 import CandidateDocuments from "@/pages/admin/menu/recruiter/candidate/details/CandidateDocuments";
 import CandidateHistoryTimeline from "@/pages/admin/menu/recruiter/candidate/details/CandidateHistory";
-import RecInterviews from "@/pages/admin/menu/recruiter/interview";
+import RecInterviews from "@/pages/admin/menu/recruiter/interview/RecInterviews";
 
 export const RecruiterRoutes = [
   {
