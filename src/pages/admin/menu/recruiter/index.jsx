@@ -27,8 +27,6 @@ export default function RecruiterDashbaord() {
       }),
   });
 
-  console.log(selectedDate);
-
   return (
     <>
       <MenuHeader
