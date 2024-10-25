@@ -4,13 +4,14 @@ import {
   CANDIDATE_INTERVIEW_DETAIL,
   UPDATE_INTERVIEW_PERFORMANCE_RESULT,
 } from "@/api/recruiter";
+import Loader from "@/components/ui/Loader";
 import { successStatus } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { recCandidateInterviewPerformanceSchema } from "@/schema/dashboard/recruiter/candidate/candidate.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Clock, StopCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -25,6 +26,7 @@ export default function RecStartScreening({
   setSelectedField,
   qrKey,
 }) {
+  let enableKey = selectedField === 0 ? false : true;
   const {
     register,
     handleSubmit,
@@ -48,12 +50,14 @@ export default function RecStartScreening({
   const [loader, setLoader] = useState(false);
 
   // Interview DETAIL BY CANDIDATE;
-  const { data: candidateInterviewDetail } = useEmployeeMaster(
-    `${CANDIDATE_INTERVIEW_DETAIL}/${selectedField}`,
-    "candidateInterviewDetail",
-  );
-
-  console.log(candidateInterviewDetail);
+  const { data: candidateInterviewDetail, isLoading } = useQuery({
+    queryKey: ["candidateInterviewDetail", selectedField],
+    queryFn: () =>
+      newRequest
+        .get(`${CANDIDATE_INTERVIEW_DETAIL}/${selectedField}`)
+        .then((res) => res.data),
+    enabled: enableKey,
+  });
 
   useEffect(() => {
     if (candidateInterviewDetail?.interview_start_stop) {
@@ -160,147 +164,154 @@ export default function RecStartScreening({
                 <X />
               </button>
             </div>
-            {interviewStatus === 0 ? (
-              <button
-                onClick={handleInterviewStartStop}
-                className="flex h-10 items-center gap-2 rounded bg-black px-5 text-[0.8rem] font-medium capitalize text-white"
-              >
-                Start Interview
-                <Clock className="size-5" />
-              </button>
-            ) : interviewStatus === 1 ? (
-              <button
-                onClick={handleInterviewStartStop}
-                className="flex h-10 cursor-pointer items-center gap-2 rounded bg-red-500 px-5 text-[0.8rem] font-medium capitalize text-white"
-              >
-                Stop Interview
-                <StopCircle className="size-5" />
-              </button>
+            {isLoading ? (
+              <Loader />
             ) : (
-              <button className="flex h-10 cursor-pointer items-center gap-2 rounded bg-blue-400 px-5 text-[0.8rem] font-medium capitalize text-white">
-                Interview Finished
-              </button>
-            )}
-
-            <form
-              className="grid grid-cols-1 gap-3"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="group mt-5 flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Have You Finished The Interview ?
-                </label>
-                <Controller
-                  name="have_finished"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={successStatus}
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select type"
-                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                    />
-                  )}
-                />
-                {errors.have_finished && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.have_finished?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Select Performance
-                </label>
-                <Controller
-                  name="interview_performance_id"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={candidateMasters?.inteviewPerfomances ?? []}
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select type"
-                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                    />
-                  )}
-                />
-                {errors.interview_performance_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.interview_performance_id?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Pass/ Fail
-                </label>
-                <Controller
-                  name="interview_performance_status_id"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={
-                        candidateMasters?.interviewPerfomanceStatus ?? []
-                      }
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select type"
-                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                    />
-                  )}
-                />
-                {errors.interview_performance_status_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.interview_performance_status_id?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Interview Notes</label>
-                <textarea
-                  {...register("interview_note")}
-                  className="input-box h-24"
-                />
-                {errors.interview_note && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.interview_note?.message}
-                  </span>
-                )}
-              </div>
-              {candidateInterviewDetail?.have_finished?.value == 1 ? null : (
-                <div className="flex flex-row items-center justify-center gap-3">
+              <>
+                {" "}
+                {interviewStatus === 0 ? (
                   <button
-                    type="submit"
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
-                    disabled={loader && interviewStatus != 2}
+                    onClick={handleInterviewStartStop}
+                    className="flex h-10 items-center gap-2 rounded bg-black px-5 text-[0.8rem] font-medium capitalize text-white"
                   >
-                    {loader ? (
-                      <div className="flex items-center gap-3">
-                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                        Saving
-                      </div>
-                    ) : (
-                      <span>Update</span>
+                    Start Interview
+                    <Clock className="size-5" />
+                  </button>
+                ) : interviewStatus === 1 ? (
+                  <button
+                    onClick={handleInterviewStartStop}
+                    className="flex h-10 cursor-pointer items-center gap-2 rounded bg-red-500 px-5 text-[0.8rem] font-medium capitalize text-white"
+                  >
+                    Stop Interview
+                    <StopCircle className="size-5" />
+                  </button>
+                ) : (
+                  <button className="flex h-10 cursor-pointer items-center gap-2 rounded bg-blue-400 px-5 text-[0.8rem] font-medium capitalize text-white">
+                    Interview Finished
+                  </button>
+                )}
+                <form
+                  className="grid grid-cols-1 gap-3"
+                  onSubmit={handleSubmit(onSubmit)}
+                >
+                  <div className="group mt-5 flex flex-col space-y-1">
+                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Have You Finished The Interview ?
+                    </label>
+                    <Controller
+                      name="have_finished"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          options={successStatus}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select type"
+                          className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        />
+                      )}
+                    />
+                    {errors.have_finished && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.have_finished?.message}
+                      </span>
                     )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={close}
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
-            </form>
+                  </div>
+                  <div className="group flex flex-col space-y-1">
+                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Select Performance
+                    </label>
+                    <Controller
+                      name="interview_performance_id"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          options={candidateMasters?.inteviewPerfomances ?? []}
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select type"
+                          className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        />
+                      )}
+                    />
+                    {errors.interview_performance_id && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.interview_performance_id?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col space-y-1">
+                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Pass/ Fail
+                    </label>
+                    <Controller
+                      name="interview_performance_status_id"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          options={
+                            candidateMasters?.interviewPerfomanceStatus ?? []
+                          }
+                          isSearchable={false}
+                          styles={customSelectStyles}
+                          placeholder="Select type"
+                          className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        />
+                      )}
+                    />
+                    {errors.interview_performance_status_id && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.interview_performance_status_id?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex w-full flex-col gap-1">
+                    <label className="label-text">Interview Notes</label>
+                    <textarea
+                      {...register("interview_note")}
+                      className="input-box h-24"
+                    />
+                    {errors.interview_note && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.interview_note?.message}
+                      </span>
+                    )}
+                  </div>
+                  {candidateInterviewDetail?.have_finished?.value ==
+                  1 ? null : (
+                    <div className="flex flex-row items-center justify-center gap-3">
+                      <button
+                        type="submit"
+                        className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                        disabled={loader && interviewStatus != 2}
+                      >
+                        {loader ? (
+                          <div className="flex items-center gap-3">
+                            <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                            Saving
+                          </div>
+                        ) : (
+                          <span>Update</span>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={close}
+                        className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+                </form>
+              </>
+            )}
           </DialogPanel>
         </div>
       </div>
