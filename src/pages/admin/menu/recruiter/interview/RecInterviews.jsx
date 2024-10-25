@@ -28,7 +28,7 @@ function RecInterviews() {
             search: keyword,
             page: currentPage,
             per_limit: pageLimit,
-            status: byStatus,
+            status_id: byStatus,
           },
         })
         .then((res) => {
