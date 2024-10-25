@@ -111,8 +111,7 @@ function RecInterviews() {
         ),
       },
     ],
-
-    [],
+    [currentPage, byStatus],
   );
   return (
     <>
