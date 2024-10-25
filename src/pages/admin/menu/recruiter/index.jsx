@@ -10,35 +10,20 @@ import openjobs from "/assets/icons/recruter/fi_briefcase.svg";
 import message from "/assets/icons/recruter/fi_message-square.svg";
 import award from "/assets/icons/recruter/fi_award.svg";
 import like from "/assets/icons/recruter/interface-favorite-like-1--reward-social-up-rating-media-like-thumb-hand.svg";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import { REC_DASHBOARD_COUNT } from "@/api/recruiter";
+import OpenJobs from "@/components/recruiter/dashboard/OpenJobs";
 
 export default function RecruiterDashbaord() {
-  const list = React.useMemo(() => TableData, [TableData]);
-  const columns = React.useMemo(
-    () => [
-      {
-        header: "Name",
-        accessorKey: "name",
-      },
-      { header: "Date Created", accessorKey: "dateCreate" },
-
-      {
-        header: "Action",
-        accessorKey: "action",
-        cell: ({ row }) => (
-          <div className="relative flex gap-1 text-xs">
-            <Link
-              to={`/sales/invoices/detail-view/${row?.original?.id}`}
-              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <MoveDiagonal className="size-3" />
-            </Link>
-          </div>
-        ),
-      },
-    ],
-
-    [],
-  );
+  // REC DASHBOARD COUNT
+  const { data: recDashboardCount } = useQuery({
+    queryKey: ["recDashboardCount"],
+    queryFn: () =>
+      newRequest.get(REC_DASHBOARD_COUNT).then((res) => {
+        return res.data;
+      }),
+  });
 
   return (
     <>
@@ -50,7 +35,6 @@ export default function RecruiterDashbaord() {
         activeMenu={"Dashboard"}
       />
       <div className="grid grid-cols-6 gap-5">
-        {/* Item 1 */}
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
           <div
             className="size-12 rounded-full p-3"
@@ -69,7 +53,9 @@ export default function RecruiterDashbaord() {
             >
               Open Jobs
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">22</h1>
+            <h1 className="text-xl font-bold text-[#2C2C2C]">
+              {recDashboardCount?.openJobs}
+            </h1>
           </div>
         </div>
 
@@ -91,7 +77,9 @@ export default function RecruiterDashbaord() {
             >
               New candidates
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">15</h1>
+            <h1 className="text-xl font-bold text-[#2C2C2C]">
+              {recDashboardCount?.newCandidates}
+            </h1>
           </div>
         </div>
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
@@ -110,13 +98,13 @@ export default function RecruiterDashbaord() {
               className="whitespace-nowrap text-sm font-medium"
               style={{ color: " #8C5ED0" }}
             >
-              Consider candidates
+              Shortlisted
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">15</h1>
+            <h1 className="text-xl font-bold text-[#2C2C2C]">
+              {recDashboardCount?.shortListedCandidates}
+            </h1>
           </div>
         </div>
-
-        {/* Item 5 */}
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
           <div
             className="size-12 rounded-full p-3"
@@ -133,9 +121,11 @@ export default function RecruiterDashbaord() {
               className="whitespace-nowrap text-sm font-medium"
               style={{ color: "#35AEBE" }}
             >
-              Interviews{" "}
+              Interviews
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">7</h1>
+            <h1 className="text-xl font-bold text-[#2C2C2C]">
+              {recDashboardCount?.interviewScheduledCandidates}
+            </h1>
           </div>
         </div>
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
@@ -156,10 +146,11 @@ export default function RecruiterDashbaord() {
             >
               Offer sent
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">7</h1>
+            <h1 className="text-xl font-bold text-[#2C2C2C]">
+              {recDashboardCount?.offerSentCandidates}
+            </h1>
           </div>
         </div>
-
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
           <div
             className="size-12 rounded-full p-3"
@@ -178,16 +169,15 @@ export default function RecruiterDashbaord() {
             >
               Jobs drafted
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">3</h1>
+            <h1 className="text-xl font-bold text-[#2C2C2C]">
+              {recDashboardCount?.draftJobs}
+            </h1>
           </div>
         </div>
       </div>
 
       <div className="my-3 grid grid-cols-3 gap-3">
-        <div className="h-screen overflow-hidden">
-          <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Open Jobs</h1>
-          <QueryTable className="" columns={columns} list={list} />
-        </div>
+        <OpenJobs />
         <div>
           <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Interview</h1>
           <div className="h-screen rounded-md bg-white">
@@ -228,10 +218,7 @@ export default function RecruiterDashbaord() {
                   </div>
                   <h1 className="text-[ #2C2C2C] text-sm">Sara +2 more</h1>
                 </div>
-                <Link
-                  to={""}
-                  className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-                >
+                <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
                   <MoveDiagonal className="size-3" strokeWidth={1} />
                 </Link>
               </div>

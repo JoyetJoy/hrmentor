@@ -60,3 +60,7 @@ export const CANDIDATE_INTERVIEW_DETAIL = "candidate-interviews";
 // UPDATE INTERVIEW PERFORMANCE RESULT
 export const UPDATE_INTERVIEW_PERFORMANCE_RESULT =
   "candidate-interview-performance";
+export const REC_DASHBOARD_COUNT = "dashboard-count-data";
+// DASHBOARD OPEN JOBS
+
+export const DASHBOARD_OPEN_JOBS = "dashboard-openJobs";

@@ -5,7 +5,7 @@ import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function InterviewMain() {
+function RecInterviews() {
   const [totalPages, setTotalPages] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const list = React.useMemo(() => TableData, [TableData]);
@@ -50,7 +50,7 @@ function InterviewMain() {
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
-        activeMenu={"Interview"}
+        activeMenu={"Interviews"}
       />
       <div className="mb-4 mt-2 flex items-center justify-between">
         <h1 className="text-lg font-semibold">Looking For UI/X Designer</h1>
@@ -75,4 +75,4 @@ function InterviewMain() {
   );
 }
 
-export default InterviewMain;
+export default RecInterviews;

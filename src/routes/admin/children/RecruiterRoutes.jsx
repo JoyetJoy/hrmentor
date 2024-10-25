@@ -6,7 +6,6 @@ import InterviewResult from "@/pages/admin/menu/recruiter/candidate/details/emai
 import InterviewSchedule from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewSchedule";
 import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/MoveHiring";
 import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
-import InterviewMain from "@/pages/admin/menu/recruiter/interview";
 import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
 import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
@@ -34,6 +33,7 @@ import CandidateDiscussion from "@/pages/admin/menu/recruiter/candidate/details/
 import CandidateInterviews from "@/pages/admin/menu/recruiter/candidate/details/CandidateInterviews";
 import CandidateDocuments from "@/pages/admin/menu/recruiter/candidate/details/CandidateDocuments";
 import CandidateHistoryTimeline from "@/pages/admin/menu/recruiter/candidate/details/CandidateHistory";
+import RecInterviews from "@/pages/admin/menu/recruiter/interview";
 
 export const RecruiterRoutes = [
   {
@@ -197,13 +197,12 @@ export const RecruiterRoutes = [
       },
     ],
   },
-
   {
-    path: "interview",
+    path: "interviews",
     children: [
       {
-        path: "interview-list",
-        element: <InterviewMain />,
+        path: "",
+        element: <RecInterviews />,
       },
     ],
   },
