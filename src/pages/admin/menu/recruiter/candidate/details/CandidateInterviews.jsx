@@ -90,7 +90,7 @@ function CandidateInterviews() {
       header: "Interviewer",
       cell: ({ row }) => {
         return (
-          <div>
+          <>
             {row.original?.interviewers?.slice(0, 1).map((i) => (
               <span key={i?.id}>
                 {i?.first_name} {i?.middle_name ?? ""} {i?.sur_name}
@@ -111,7 +111,7 @@ function CandidateInterviews() {
                 </span>
               </div>
             )}
-          </div>
+          </>
         );
       },
     },

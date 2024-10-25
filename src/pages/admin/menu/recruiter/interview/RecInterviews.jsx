@@ -1,18 +1,50 @@
+import { newRequest } from "@/api";
+import { REC_INTERVIEWS_LIST } from "@/api/recruiter";
 import MenuHeader from "@/components/common/MenuHeader";
 import RecInterviewDetailView from "@/components/popups/recruiter/interview/Detail";
 import QueryTable from "@/components/table/QueryTable";
+import Loader from "@/components/ui/Loader";
 import { TableData } from "@/constants/tableDummy";
+import { useQuery } from "@tanstack/react-query";
 import { MoveDiagonal, Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function RecInterviews() {
   const [totalPages, setTotalPages] = useState(10);
+  const [keyword, setKeyword] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const [byStatus, setByStatus] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const list = React.useMemo(() => TableData, [TableData]);
+
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: interviewListing, isLoading } = useQuery({
+    queryKey: ["interviewListing", currentPage, byStatus, keyword],
+    queryFn: () =>
+      newRequest
+        .get(REC_INTERVIEWS_LIST, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+            by_status: byStatus,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+  console.log(interviewListing);
+
+  useEffect(() => {
+    if (interviewListing) {
+      setTotalPages(interviewListing?.last_page);
+    }
+  }, [interviewListing]);
 
   const location = useLocation();
   const isActive = (path) => path.includes(location.pathname);
@@ -22,11 +54,43 @@ function RecInterviews() {
         header: "Candidate name",
         accessorKey: "name",
       },
-      { header: "interview Date ", accessorKey: "date" },
+      {
+        header: "interview Date ",
+        accessorKey: "date",
+        cell: ({ row }) => (
+          <div>{row?.original?.interview?.scheduled_date}</div>
+        ),
+      },
 
       {
         header: "Interviewer",
-        accessorKey: "interviewer",
+        accessorKey: "interviewers",
+        cell: ({ row }) => {
+          return (
+            <>
+              {row.original?.interviewers?.slice(0, 1).map((i) => (
+                <span key={i?.id}>
+                  {i?.first_name} {i?.middle_name ?? ""} {i?.sur_name}
+                </span>
+              ))}
+              {row.original?.interviewers?.length > 2 && (
+                <div
+                  className="tooltip ml-1 cursor-pointer"
+                  data-tip={row.original?.interviewers
+                    ?.map(
+                      (i) =>
+                        `${i?.first_name} ${i?.middle_name ?? ""} ${i?.sur_name}`,
+                    )
+                    .join(", ")}
+                >
+                  <span className="text-[0.7rem] font-bold text-hrmprimaryorange">
+                    +{row.original?.interviewers?.length - 1} more
+                  </span>
+                </div>
+              )}
+            </>
+          );
+        },
       },
       {
         header: "Action",
@@ -79,7 +143,7 @@ function RecInterviews() {
           </div>
           <div
             onClick={() => {
-              setByStatus(2);
+              setByStatus(1);
             }}
             className={`cursor-pointer text-sm font-bold ${byStatus === 2 ? "text-hrmprimaryorange" : "text-black/40"}`}
           >
@@ -87,29 +151,33 @@ function RecInterviews() {
           </div>
           <div
             onClick={() => {
-              setByStatus(1);
+              setByStatus(2);
             }}
             className={`cursor-pointer text-sm font-bold ${byStatus === 1 ? "text-hrmprimaryorange" : "text-black/40"}`}
           >
-            Shortlisted
+            Ongoing
           </div>
           <div
             onClick={() => {
-              setByStatus(1);
+              setByStatus(3);
             }}
             className={`cursor-pointer text-sm font-bold ${byStatus === 1 ? "text-hrmprimaryorange" : "text-black/40"}`}
           >
-            Selected
+            Completed
           </div>
         </div>
       </div>
-      <QueryTable
-        columns={columns}
-        list={list}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPages={totalPages}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <QueryTable
+          columns={columns}
+          list={interviewListing?.listing ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
     </>
   );
 }

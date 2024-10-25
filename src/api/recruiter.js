@@ -69,3 +69,5 @@ export const DASHBOARD_OPEN_JOBS = "dashboard-openJobs";
 export const DASHBOARD_INTERVIEWS_LIST = "dashboard-scheduledInterviews";
 // DASHBOARD CANDIDATES LIST
 export const DASHBOARD_CANDIDATES_LIST = "dashboard-newCandidates";
+// INTERVIEWS LIST
+export const REC_INTERVIEWS_LIST = "interviews-all";
