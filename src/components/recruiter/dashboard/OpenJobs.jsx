@@ -1,27 +1,21 @@
 import { newRequest } from "@/api";
 import { DASHBOARD_OPEN_JOBS } from "@/api/recruiter";
 import QueryTable from "@/components/table/QueryTable";
-import { TableData } from "@/constants/tableDummy";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { MoveDiagonal } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 export default function OpenJobs() {
-  // dashboard-openJobs
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
   const pageLimit = 10;
-
   // Fetch List
   const { data: openJobs, isLoading } = useQuery({
-    queryKey: ["openJobs", currentPage],
+    queryKey: ["openJobs"],
     queryFn: () =>
       newRequest
         .get(DASHBOARD_OPEN_JOBS, {
           params: {
-            page: currentPage,
             per_limit: pageLimit,
           },
         })
@@ -30,7 +24,7 @@ export default function OpenJobs() {
         }),
   });
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
         header: "Title",

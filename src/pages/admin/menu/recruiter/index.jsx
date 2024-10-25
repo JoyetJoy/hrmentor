@@ -1,8 +1,6 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import QueryTable from "@/components/table/QueryTable";
-import { TableData } from "@/constants/tableDummy";
 import { MoveDiagonal } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import loader from "/assets/icons/recruter/fi_loader.svg";
 import user from "/assets/icons/recruter/fi_user.svg";
@@ -14,8 +12,12 @@ import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { REC_DASHBOARD_COUNT } from "@/api/recruiter";
 import OpenJobs from "@/components/recruiter/dashboard/OpenJobs";
+import WeeklyCalendarPicker from "@/components/common/WeeklyCanlendarPicker";
+import dayjs from "dayjs";
+import RecDashboardInterviews from "@/components/recruiter/dashboard/Interviews";
 
 export default function RecruiterDashbaord() {
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   // REC DASHBOARD COUNT
   const { data: recDashboardCount } = useQuery({
     queryKey: ["recDashboardCount"],
@@ -24,6 +26,8 @@ export default function RecruiterDashbaord() {
         return res.data;
       }),
   });
+
+  console.log(selectedDate);
 
   return (
     <>
@@ -181,120 +185,12 @@ export default function RecruiterDashbaord() {
         <div>
           <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Interview</h1>
           <div className="h-screen rounded-md bg-white">
-            <h1 className="p-5">November 2023</h1>
-            <hr className="border-[#ECE9F1]" />
-            <div className="p-5">
-              <img src={"/assets/icons/admin/calender (2).png"} alt="" />
-            </div>
-            <div className="flex w-full items-center gap-3 px-5">
-              <div className="items-center gap-1 text-sm text-[#7F7F7F]">
-                11:30pm{" "}
-              </div>
-              <div className="w-full border-b border-[#ECE9F1]"></div>
-            </div>
-            <div className="flex flex-col gap-3 p-5">
-              <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] px-5 py-2">
-                <div className="flex items-center gap-x-2">
-                  <p className="text-[ #2C2C2C] text-sm font-medium">
-                    UI/UX Design Intern
-                  </p>
-
-                  <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                  </div>
-                  <h1 className="text-[ #2C2C2C] text-sm">Sara +2 more</h1>
-                </div>
-                <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
-                  <MoveDiagonal className="size-3" strokeWidth={1} />
-                </Link>
-              </div>
-              <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] px-5 py-2">
-                <div className="flex items-center gap-x-2">
-                  <p className="text-[ #2C2C2C] text-sm font-medium">
-                    UI/UX Design Intern
-                  </p>
-
-                  <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                  </div>
-                  <h1 className="text-[ #2C2C2C] text-sm">Sara +2 more</h1>
-                </div>
-                <Link
-                  to={""}
-                  className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-                >
-                  <MoveDiagonal className="size-3" strokeWidth={1} />
-                </Link>
-              </div>
-            </div>
-            <div className="flex w-full items-center gap-3 px-5">
-              <div className="items-center gap-1 text-sm text-[#7F7F7F]">
-                9:30pm{" "}
-              </div>
-              <div className="w-full border-b border-[#ECE9F1]"></div>
-            </div>
-            <div className="flex flex-col gap-3 p-5">
-              <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] px-5 py-2">
-                <div className="flex items-center gap-x-2">
-                  <p className="text-[ #2C2C2C] text-sm font-medium">
-                    UI/UX Design Intern
-                  </p>
-
-                  <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                    <div className="avatar">
-                      <div className="w-8">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                      </div>
-                    </div>
-                  </div>
-                  <h1 className="text-[ #2C2C2C] text-sm">Sara +2 more</h1>
-                </div>
-                <Link
-                  to={""}
-                  className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-                >
-                  <MoveDiagonal className="size-3" strokeWidth={1} />
-                </Link>
-              </div>
-            </div>
+            <WeeklyCalendarPicker
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
+            <div className="w-full border-b border-[#ECE9F1] pt-3"></div>
+            <RecDashboardInterviews selectedDate={selectedDate} />
           </div>
         </div>
         <div>
