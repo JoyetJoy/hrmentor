@@ -178,11 +178,10 @@ export default function RecruiterDashbaord() {
           </div>
         </div>
       </div>
-
       <div className="my-3 grid grid-cols-3 gap-3">
         <OpenJobs />
         <div>
-          <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Interview</h1>
+          <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Interviews</h1>
           <div className="h-screen rounded-md bg-white">
             <WeeklyCalendarPicker
               selectedDate={selectedDate}
@@ -193,7 +192,7 @@ export default function RecruiterDashbaord() {
           </div>
         </div>
         <div>
-          <h1 className="text-[ #2C2C2C] mb-4 text-sm font-bold">Candidate</h1>
+          <h1 className="text-[ #2C2C2C] mb-4 text-sm font-bold">Candidates</h1>
           <div className="flex h-screen flex-col gap-y-3 rounded-md bg-white p-5">
             <RecJobCandidates />
           </div>
