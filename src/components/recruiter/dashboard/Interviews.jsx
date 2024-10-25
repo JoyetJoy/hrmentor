@@ -16,7 +16,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
         .get(DASHBOARD_INTERVIEWS_LIST, {
           params: {
             per_limit: pageLimit,
-            date: dateObject,
+            // date: dateObject,
           },
         })
         .then((res) => {
@@ -24,42 +24,40 @@ export default function RecDashboardInterviews({ selectedDate }) {
         }),
   });
 
-  console.log(recDashboardInterviews);
-
   return (
     <>
-      {recDashboardInterviews?.map((i) => (
-        <div className="flex flex-col gap-3 p-5">
-          <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] px-5 py-2">
-            <div className="flex items-center gap-x-2">
-              <p className="text-[ #2C2C2C] text-sm font-medium capitalize">
-                {i?.candidate_detail?.job_name?.job_title}
-              </p>
-              <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-                <div className="avatar">
-                  <div className="w-8">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
+      {recDashboardInterviews?.map((i) => {
+        const candidatesToShow = i?.candidates_list?.slice(0, 2);
+        const remainingCandidates = i?.candidates_list?.length - 2;
+        return (
+          <div key={i?.id} className="flex flex-col gap-3 p-5">
+            <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] px-5 py-2">
+              <div className="flex items-center gap-x-2">
+                <p className="text-[ #2C2C2C] text-sm font-medium capitalize">
+                  {i?.job_title}
+                </p>
+                <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+                  {candidatesToShow?.map((candidate) => (
+                    <div key={candidate?.id}>
+                      <div className="flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 font-bold uppercase">
+                        {`${candidate?.first_name?.charAt(0)} ${candidate?.first_name?.charAt(0)}`}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="avatar">
-                  <div className="w-8">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div className="avatar">
-                  <div className="w-8">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
+                {remainingCandidates > 0 && (
+                  <h1 className="text-sm text-hrmprimaryorange">
+                    {`+${remainingCandidates} more`}
+                  </h1>
+                )}
               </div>
-              <h1 className="text-[ #2C2C2C] text-sm">Sara +2 more</h1>
+              <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+                <MoveDiagonal className="size-3" strokeWidth={1} />
+              </Link>
             </div>
-            <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
-              <MoveDiagonal className="size-3" strokeWidth={1} />
-            </Link>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 }
