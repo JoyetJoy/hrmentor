@@ -1,50 +1,83 @@
+import { newRequest } from "@/api";
+import { SHIFT_LIST } from "@/api/setup";
 import MenuHeader from "@/components/common/MenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
+import { useQuery } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 function ShiftList() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+
+  const pageLimit = 10;
+
+  const { data: shiftDetails = { data: [], last_page: 1 }, isLoading } =
+    useQuery({
+      queryKey: ["shiftDetails", currentPage, keyword],
+      queryFn: () =>
+        newRequest
+          .get(SHIFT_LIST, {
+            params: {
+              search: keyword,
+              page: currentPage,
+              per_limit: pageLimit,
+            },
+          })
+          .then((res) => {
+            return res?.data || { data: [], last_page: 1 };
+          }),
+    });
+
+  useEffect(() => {
+    if (shiftDetails) {
+      setTotalPages(shiftDetails?.last_page);
+    }
+  }, [shiftDetails]);
 
   const columns = React.useMemo(
     () => [
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => row.index + 1,
+        cell: ({ row }) => (
+          <div className="flex px-2">
+            {row.index + 1 + (currentPage - 1) * pageLimit}
+          </div>
+        ),
       },
       {
         header: "Shift Name",
-        accessorKey: "shift-name",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "name",
+        cell: ({ row }) => row?.original?.name || "N/A",
       },
       {
         header: "Department",
-        accessorKey: "department",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "department_id",
+        cell: ({ row }) => row?.original?.department_id || "N/A",
       },
       {
         header: "Location",
-        accessorKey: "location",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "location_id",
+        cell: ({ row }) => row?.original?.location_id || "N/A",
       },
       {
         header: "Start Time",
-        accessorKey: "starttime",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "start_time",
+        cell: ({ row }) => row?.original?.start_time || "N/A",
       },
       {
         header: "End Time",
-        accessorKey: "endtime",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "end_time",
+        cell: ({ row }) => row?.original?.end_time || "N/A",
       },
       {
         header: "Duration",
-        accessorKey: "duration",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "shift_duration",
+        cell: ({ row }) => row?.original?.shift_duration || "N/A",
       },
       {
         header: "Status",
@@ -76,7 +109,7 @@ function ShiftList() {
         ),
       },
     ],
-    [],
+    [currentPage, pageLimit],
   );
 
   const data = [
@@ -132,13 +165,19 @@ function ShiftList() {
                 Add Shift
               </Link>
             </div>
-            <QueryTable
-              columns={columns}
-              list={data}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+            {isLoading ? (
+              <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+              </div>
+            ) : (
+              <QueryTable
+                columns={columns}
+                list={shiftDetails?.data?.original?.data || []}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
           </div>
         </div>
       </div>

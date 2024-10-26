@@ -308,7 +308,7 @@ export const setupItems = [
     id: 3,
     name: "Roster",
     active: "roster",
-    path: "/admin/setup/roster",
+    path: "",
   },
   {
     id: 4,
@@ -344,7 +344,7 @@ export const rosterItems = [
 export const activityItems = [
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
-  // { icon: "/assets/icons/admin/roster.svg", label: "Roster" },
+  { icon: "/assets/icons/admin/roster.svg", label: "Roster", path:"/admin/roster" },
   { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
   {
     icon: "/assets/icons/admin/setup.svg",

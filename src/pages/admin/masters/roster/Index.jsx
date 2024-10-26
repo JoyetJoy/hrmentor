@@ -1,6 +1,8 @@
+import { EMPLOYEE } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
+import { useQuery } from "@tanstack/react-query";
 import { Calendar, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,6 +11,24 @@ export default function RosterList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+
+
+  const { data: employeeListing, isLoading } = useQuery({
+    queryKey: ["employeeListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(EMPLOYEE, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
 
   const columns = React.useMemo(
     () => [
@@ -19,33 +39,40 @@ export default function RosterList() {
       },
       {
         header: "Shift Name",
-        accessorKey: "shift-name",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "name",
+        cell: ({ row }) => <p>
+        {data?.first_name}
+      </p>
       },
       {
         header: "Department",
         accessorKey: "department",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) =>   <p className="">
+        {row?.original?.employee?.department?.department_name ?? "Nill"}
+      </p>
       },
       {
         header: "Location",
         accessorKey: "location",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) => <p className="">
+        {row?.original?.employee?.work_location?.work_location_name ??
+          "Nill"}
+      </p>,
       },
       {
         header: "Start Time",
-        accessorKey: "starttime",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "start_time",
+        cell: ({ row }) => row.original.start_time || "N/A",
       },
       {
         header: "End Time",
-        accessorKey: "endtime",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "end_time",
+        cell: ({ row }) => row.original.end_time || "N/A",
       },
       {
         header: "Duration",
-        accessorKey: "duration",
-        cell: ({ row }) => row.original.details || "N/A",
+        accessorKey: "shift_duration",
+        cell: ({ row }) => row.original.shift_duration || "N/A",
       },
       {
         header: "Status",

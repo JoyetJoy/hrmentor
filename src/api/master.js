@@ -36,6 +36,8 @@ export const EMPLOYEE_EEO_CATEGORY_LIST = "active-EeoJobCategoryType";
 export const EMPLOYEE_WORK_LOCATION = "worklocations";
 // list
 export const EMPLOYEE_WORK_LOCATION_LIST = "active-worklocations";
+//work area
+export const EMPLOYEE_WORK_AREA="employee-work-area"
 
 // employee category
 export const EMPLOYEE_DOCUMENT_CATEGORY = "document-categories";

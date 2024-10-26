@@ -62,18 +62,20 @@ export const AdminRoutes = [
         element: <RosterDepartment />,
       },
       {
-        path: "roster",
-        children: [
+        path:"roster",
+        children:[
           {
-            path: "",
-            element: <RosterList />,
+            path:"",
+            element:<RosterList/>,
           },
-          {
-            path: "claim",
-            element: <Claim />,
-          },
-        ],
+            {
+              path:"claim",
+              element:<Claim/>
+            }
+          
+        ]
       },
-    ],
+    ]
+
   },
 ];
