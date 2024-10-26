@@ -1,8 +1,8 @@
-import QueryTable from '@/components/table/QueryTable';
-import React, { useState } from 'react'
+import QueryTable from "@/components/table/QueryTable";
+import React, { useState } from "react";
 
 export const OfferTable = () => {
-     const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Example data and columns
   const list = [
@@ -13,9 +13,9 @@ export const OfferTable = () => {
       departments: "Sales & Marketing",
       location: "Nill",
       sentdate: "05/07/2023",
-      status:"Hired",
+      status: "Hired",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -25,8 +25,8 @@ export const OfferTable = () => {
       location: "Nill",
       sentdate: "05/07/2023",
       action: "",
-      status:"Hired",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a2.png", // Add the image URL here
+      status: "Hired",
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -34,10 +34,10 @@ export const OfferTable = () => {
       title: "Sales & Marketing",
       departments: "Sales & Marketing",
       location: "Nill",
-      status:"Hired",
+      status: "Hired",
       sentdate: "05/07/2023",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];
@@ -51,7 +51,7 @@ export const OfferTable = () => {
           <img
             src={row.original.imageUrl}
             alt={row.original.name}
-            className="w-8 h-8 rounded-full"
+            className="h-8 w-8 rounded-full"
           />
           <span>{row.original.name}</span>
         </div>
@@ -81,40 +81,38 @@ export const OfferTable = () => {
       header: "Status",
       accessorKey: "status",
       cell: ({ getValue }) => (
-        <span className="bg-[#FFFCF0] py-1.5 px-6 border border-[#ECD682] rounded-md">
+        <span className="rounded-md border border-[#ECD682] bg-[#FFFCF0] px-6 py-1.5">
           {getValue()}
         </span>
       ),
     },
     {
-       header: "action",
+      header: "action",
       accessorKey: "action",
-      cell: ({  }) => (
-        
-       
+      cell: ({}) => (
         <button
-                type="button"
-                className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              >
-                <img
-                  src="/assets/icons/admin/marker.svg"
-                  className="w-full object-contain"
-                />
-              </button>
-      ), 
-    }
-    
+          type="button"
+          className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+        >
+          <img
+            src="/assets/icons/admin/marker.svg"
+            className="w-full object-contain"
+          />
+        </button>
+      ),
+    },
   ];
   const totalPages = 5;
 
   return (
     <>
-    <QueryTable
+      <QueryTable
         list={list}
         columns={columns}
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-      /></>
-  )
-}
+      />
+    </>
+  );
+};
