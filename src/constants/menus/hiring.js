@@ -9,9 +9,4 @@ export const hiringMenu = [
     name: "Settings",
     link: "/admin/hiring/settings",
   },
-  {
-    id: 3,
-    name: "Customer field",
-    link: "/admin/hiring/customer-field",
-  },
 ];
