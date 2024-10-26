@@ -106,7 +106,6 @@ function CandidatesList() {
         header: "Source",
         accessorKey: "source",
       },
-
       {
         header: "Action",
         accessorKey: "action",

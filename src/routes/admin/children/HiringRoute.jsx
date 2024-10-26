@@ -1,7 +1,7 @@
 import { HiringDashboard } from "@/pages/admin/menu/hiring";
 import { OfferToBeFinalized } from "@/pages/admin/menu/hiring/overview/offer-to-finalize/Index";
 import { OfferDeclined } from "@/pages/admin/menu/hiring/overview/OfferDeclined";
-import { ReadyToHiring } from "@/pages/admin/menu/hiring/overview/readyToHiring/ReadyToHiring";
+import { ReadyToHiring } from "@/pages/admin/menu/hiring/overview/ready-to-hiring/Index";
 import { Index } from "@/pages/admin/menu/hiring/overview/readyToHiring/sentOfferLetter/Index";
 import { Upcoming } from "@/pages/admin/menu/hiring/overview/Upcoming";
 import { HiringDocumentAndTemplate } from "@/pages/admin/menu/hiring/settings/Index";
