@@ -190,7 +190,6 @@ export default function BreakTime({ popupOpen, setPopupOpen, selectedField,formt
                 >
                   <span>{selectedField ? "Update" : "Save"}</span>
                 </button>
-               
               </div>
             </form>
           </DialogPanel>
