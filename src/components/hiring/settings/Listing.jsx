@@ -50,8 +50,6 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
     }
   }, [data]);
 
-  console.log(data);
-
   const columns = React.useMemo(
     () =>
       [
@@ -187,7 +185,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
                 <input
                   type="text"
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="h-full w-full text-black/80 placeholder:text-[#7F7F7F]"
+                  className="h-full w-full text-black/70 placeholder:text-[#7F7F7F]"
                   placeholder="Search"
                 />
               </div>
