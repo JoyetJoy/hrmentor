@@ -127,7 +127,11 @@ export const ReadyToHiring = () => {
 
   return (
     <>
-      <ChooseOfferLetterType open={open} setPopupOpen={setPopupOpen} />
+      <ChooseOfferLetterType
+        open={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+      />
       <MenuHeaderHiring page={1} />
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-2 font-semibold text-white">

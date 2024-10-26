@@ -4,7 +4,7 @@ import Loader from "@/components/ui/Loader";
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 
-export const FinalizedOffer = () => {
+export const FinalizeOfferLetter = () => {
   const [loader, setLoader] = useState(false);
   const [description, setDescription] = useState("");
 

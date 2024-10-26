@@ -403,6 +403,7 @@ function RecruiterJobPost() {
         res = await newFormRequest.post(GET_JOBS, formData);
       }
       if (res.data?.status === 201) {
+        console.log(res);
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["jobDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
