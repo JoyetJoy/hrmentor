@@ -10,7 +10,6 @@ import { useForm, Controller } from "react-hook-form";
 import Select from "react-select"; 
 
 export default function BreakTime({ popupOpen, setPopupOpen, selectedField,formtype ,break_time , setBreak_time}) {
-  // Initialize useForm
   const {
     register,
     handleSubmit,
@@ -50,7 +49,7 @@ export default function BreakTime({ popupOpen, setPopupOpen, selectedField,formt
     
         if (res?.status === 201) {
           toast.success("Saved break time successfully");
-          queryClient.invalidateQueries(["shiftDetails"]);
+          queryClient.invalidateQueries(["shiftbreaktime"]);
           reset();
           setLoader(false);
           formtype === "save"

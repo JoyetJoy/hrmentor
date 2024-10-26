@@ -57,12 +57,12 @@ function ShiftList() {
       {
         header: "Department",
         accessorKey: "department_id",
-        cell: ({ row }) => row?.original?.department_id || "N/A",
+        cell: ({ row }) => row?.original?.department_id || "IT",
       },
       {
         header: "Location",
         accessorKey: "location_id",
-        cell: ({ row }) => row?.original?.location_id || "N/A",
+        cell: ({ row }) => row?.original?.location_id || "Kerala",
       },
       {
         header: "Start Time",
@@ -82,7 +82,13 @@ function ShiftList() {
       {
         header: "Status",
         accessorKey: "status",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) =>
+          <div
+        className="flex h-8 w-fit items-center  justify-center rounded-md px-3 font-semibold text-[#00B448] bg-[#00B4481A]"
+      >
+        { row.original.details || "Active"}
+      </div>
+          
       },
       {
         header: "Action",
