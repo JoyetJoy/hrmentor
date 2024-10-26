@@ -1,8 +1,8 @@
-import QueryTable from '@/components/table/QueryTable';
-import React, { useState } from 'react'
+import QueryTable from "@/components/table/QueryTable";
+import React, { useState } from "react";
 
 export const OfferDeclinedTable = () => {
-     const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Example data and columns
   const list = [
@@ -13,7 +13,7 @@ export const OfferDeclinedTable = () => {
       departments: "Sales & Marketing",
       location: "Nill",
       sentdate: "05/07/2023",
-      status:"Hired",
+      status: "Hired",
       action: "",
       imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png",
     },
@@ -25,7 +25,7 @@ export const OfferDeclinedTable = () => {
       location: "Nill",
       sentdate: "05/07/2023",
       action: "",
-      status:"Hired",
+      status: "Hired",
       imageUrl: "../../../../public/assets/images/hriring/avatar/a2.png", // Add the image URL here
     },
     {
@@ -34,7 +34,7 @@ export const OfferDeclinedTable = () => {
       title: "Sales & Marketing",
       departments: "Sales & Marketing",
       location: "Nill",
-      status:"Hired",
+      status: "Hired",
       sentdate: "05/07/2023",
       action: "",
       imageUrl: "../../../../public/assets/images/hriring/avatar/a3.png", // Add the image URL here
@@ -51,7 +51,7 @@ export const OfferDeclinedTable = () => {
           <img
             src={row.original.imageUrl}
             alt={row.original.name}
-            className="w-8 h-8 rounded-full"
+            className="h-8 w-8 rounded-full"
           />
           <span>{row.original.name}</span>
         </div>
@@ -81,23 +81,23 @@ export const OfferDeclinedTable = () => {
       header: "Status",
       accessorKey: "status",
       cell: ({ getValue }) => (
-        <span className="bg-[#E95D390D]/5 py-1.5 px-6 border border-[#E95D39] rounded-md">
+        <span className="rounded-md border border-[#E95D39] bg-[#E95D390D]/5 px-6 py-1.5">
           {getValue()}
         </span>
       ),
     },
-    
   ];
   const totalPages = 5;
 
   return (
     <>
-    <QueryTable
+      <QueryTable
         list={list}
         columns={columns}
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-      /></>
-  )
-}
+      />
+    </>
+  );
+};

@@ -1,13 +1,8 @@
-import MenuHeader from '@/components/common/MenuHeader'
-import { OverviewTopBar } from '@/components/hiring/overviewTopBar/OverviewTopBar'
-import React, { useState } from 'react'
-// import { OverviewTable } from './tables/OverviewTable'
-// import QueryTable from '@/components/table/QueryTable'
-import { OfferTable } from './tables/OfferTable'
+import MenuHeader from "@/components/common/MenuHeader";
+import { OverviewTopBar } from "@/components/hiring/overviewTopBar/OverviewTopBar";
+import { OfferTable } from "./tables/OfferTable";
 
 export const OfferToBeFinalized = () => {
-        
-
   return (
     <>
       <MenuHeader
@@ -22,5 +17,5 @@ export const OfferToBeFinalized = () => {
         <OfferTable />
       </div>
     </>
-  )
-}
+  );
+};

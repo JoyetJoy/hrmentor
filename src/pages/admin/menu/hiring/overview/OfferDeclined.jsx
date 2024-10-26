@@ -1,11 +1,6 @@
-import MenuHeader from '@/components/common/MenuHeader'
-import { OverviewTopBar } from '@/components/hiring/overviewTopBar/OverviewTopBar'
-import React, { useState } from 'react'
-// import { OverviewTable } from './tables/OverviewTable'
-// import QueryTable from '@/components/table/QueryTable'
-// import { OfferTable } from './tables/OfferTable'
-// import { UpcomingTable } from './tables/UpcomingTable'
-import { OfferDeclinedTable } from './tables/OfferDeclinedTable'
+import MenuHeader from "@/components/common/MenuHeader";
+import { OverviewTopBar } from "@/components/hiring/overviewTopBar/OverviewTopBar";
+import { OfferDeclinedTable } from "./tables/OfferDeclinedTable";
 
 export const OfferDeclined = () => {
   return (
@@ -19,8 +14,8 @@ export const OfferDeclined = () => {
       />
       <div className="flex flex-col gap-3">
         <OverviewTopBar title="Offer declined" />
-        <OfferDeclinedTable/>
+        <OfferDeclinedTable />
       </div>
     </>
-  )
-}
+  );
+};

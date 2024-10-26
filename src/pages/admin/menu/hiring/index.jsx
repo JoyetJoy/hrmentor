@@ -1,7 +1,6 @@
 import MenuHeader from "@/components/common/MenuHeader";
 import { OverviewCards } from "@/components/hiring/overview/OverviewCard";
 import { UpcomingInterviewsList } from "@/components/hiring/overview/UpcomingInterviewsList";
-import React from "react";
 
 export const HiringDashboard = () => {
   return (

@@ -1,9 +1,9 @@
-import QueryTable from '@/components/table/QueryTable';
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import QueryTable from "@/components/table/QueryTable";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const OverviewTable = () => {
-     const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Example data and columns
   const list = [
@@ -16,7 +16,7 @@ export const OverviewTable = () => {
       sentdate: "05/07/2023",
       status: "Move to Hiring",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -27,7 +27,7 @@ export const OverviewTable = () => {
       sentdate: "05/07/2023",
       status: "Move to Hiring",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a2.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -38,7 +38,7 @@ export const OverviewTable = () => {
       sentdate: "05/07/2023",
       status: "Move to Hiring",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];
@@ -52,7 +52,7 @@ export const OverviewTable = () => {
           <img
             src={row.original.imageUrl}
             alt={row.original.name}
-            className="w-8 h-8 rounded-full"
+            className="h-8 w-8 rounded-full"
           />
           <span>{row.original.name}</span>
         </div>
@@ -82,7 +82,7 @@ export const OverviewTable = () => {
       header: "Status",
       accessorKey: "status",
       cell: ({ getValue }) => (
-        <span className="bg-[#F0FFF1] py-1.5 px-3 border border-[#8BE691] rounded-md">
+        <span className="rounded-md border border-[#8BE691] bg-[#F0FFF1] px-3 py-1.5">
           {getValue()}
         </span>
       ),
@@ -92,10 +92,12 @@ export const OverviewTable = () => {
       accessorKey: "action",
       cell: () => (
         <div className="flex gap-2">
-          <Link to={"offer-to-be-finalized"}><button className="bg-[#00B448] py-1.5 px-4 text-white  border-green-800 rounded-md">
-            Send Offer Letter
-          </button></Link>
-          <button className="bg-[#AB27271A]/10 py-1.5 px-4   text-[#AB2727] rounded-md">
+          <Link to={"offer-to-be-finalized"}>
+            <button className="rounded-md border-green-800 bg-[#00B448] px-4 py-1.5 text-white">
+              Send Offer Letter
+            </button>
+          </Link>
+          <button className="rounded-md bg-[#AB27271A]/10 px-4 py-1.5 text-[#AB2727]">
             Reject
           </button>
         </div>
@@ -106,12 +108,13 @@ export const OverviewTable = () => {
 
   return (
     <>
-    <QueryTable
+      <QueryTable
         list={list}
         columns={columns}
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-      /></>
-  )
-}
+      />
+    </>
+  );
+};

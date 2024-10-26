@@ -13,7 +13,6 @@ export const ReadyToHiring = () => {
         currentpath={"Hiring"}
         activeMenu={"Dashboard"}
       />
-
       <div className="flex flex-col gap-3">
         <OverviewTopBar title="Ready to Hiring" />
         <OverviewTable />
