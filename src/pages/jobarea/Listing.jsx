@@ -143,7 +143,7 @@ export default function JobAreaListing() {
                         type="button"
                         className="btn flex h-9 min-h-9 items-center rounded border border-black/20 bg-white px-5 text-xs font-semibold text-black/70 hover:scale-[1.01]"
                       >
-                        {career?.minimum_range} - {career?.maximum_range}
+                        £ {career?.minimum_range} - {career?.maximum_range}
                       </button>
                       <button
                         type="button"
