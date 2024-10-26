@@ -67,6 +67,12 @@ export default function SaveHiringMasterForm({
 
   useEffect(() => {
     if (type === "Document & Templates") {
+      setDescription(hiringMastersDetailByid?.[colKeys?.field3?.key]);
+    }
+  }, [hiringMastersDetailByid, type, setValue]);
+
+  useEffect(() => {
+    if (type === "Document & Templates") {
       setDescription(hiringMastersDetailByid?.[colKeys?.field4?.key]);
     }
   }, [hiringMastersDetailByid, type, setDescription]);
