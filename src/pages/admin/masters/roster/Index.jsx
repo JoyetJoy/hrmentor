@@ -1,4 +1,5 @@
 import { EMPLOYEE } from "@/api";
+import { ROSTER_LIST } from "@/api/setup";
 import MenuHeader from "@/components/common/MenuHeader";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
@@ -14,11 +15,11 @@ export default function RosterList() {
   const [keyword, setKeyword] = useState("");
 
 
-  const { data: employeeListing, isLoading } = useQuery({
-    queryKey: ["employeeListing", currentPage, keyword],
+  const { data: rosterListing, isLoading } = useQuery({
+    queryKey: ["rosterListing", currentPage, keyword],
     queryFn: () =>
       newRequest
-        .get(EMPLOYEE, {
+        .get(ROSTER_LIST, {
           params: {
             search: keyword,
             page: currentPage,
@@ -33,52 +34,38 @@ export default function RosterList() {
   const columns = React.useMemo(
     () => [
       {
-        header: "Sl No",
+        header: "Roster ID",
         accessorKey: "sno",
         cell: ({ row }) => row.index + 1,
       },
       {
-        header: "Shift Name",
+        header: "Created Date & Time",
         accessorKey: "name",
         cell: ({ row }) => <p>
-        {data?.first_name}
+        {data?.first_name ??"25/06/24.5.08"}
       </p>
       },
       {
-        header: "Department",
+        header: "Start Date",
         accessorKey: "department",
         cell: ({ row }) =>   <p className="">
-        {row?.original?.employee?.department?.department_name ?? "Nill"}
+        {row?.original?.employee?.department?.department_name ?? "25/06/24"}
       </p>
       },
       {
-        header: "Location",
+        header: "Shift",
         accessorKey: "location",
-        cell: ({ row }) => <p className="">
+        cell: ({ row }) => <p className=" whitespace-nowrap">
         {row?.original?.employee?.work_location?.work_location_name ??
-          "Nill"}
+          "Morning Shift OP"}
       </p>,
       },
       {
-        header: "Start Time",
+        header: "Created By",
         accessorKey: "start_time",
-        cell: ({ row }) => row.original.start_time || "N/A",
+        cell: ({ row }) => row.original.start_time || "Administrator",
       },
-      {
-        header: "End Time",
-        accessorKey: "end_time",
-        cell: ({ row }) => row.original.end_time || "N/A",
-      },
-      {
-        header: "Duration",
-        accessorKey: "shift_duration",
-        cell: ({ row }) => row.original.shift_duration || "N/A",
-      },
-      {
-        header: "Status",
-        accessorKey: "status",
-        cell: ({ row }) => row.original.details || "N/A",
-      },
+      
       {
         header: "Action",
         accessorKey: "action",

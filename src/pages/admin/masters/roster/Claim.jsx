@@ -59,17 +59,17 @@ export default function Claim() {
     ],
     [],
   );
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(ShiftSchema),
-  });
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   control,
+  //   setValue,
+  //   watch,
+  //   formState: { errors },
+  // } = useForm({
+  //   mode: "onChange",
+  //   resolver: yupResolver(ShiftSchema),
+  // });
   
   const data = [
     { sno: 1, details: "vmffghgfhfghj" },

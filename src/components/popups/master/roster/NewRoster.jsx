@@ -1,14 +1,16 @@
+import { ROSTER_LIST } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { tableRosterData } from "@/constants/tableDummy";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel, Select } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useQuery } from "@tanstack/react-query";
 import { Plus, Trash2, X } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-export default function NewRoster({ popupOpen, setPopupOpen }) {
+export default function NewRoster({ popupOpen, setPopupOpen,formtype }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
 
@@ -28,16 +30,24 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     resolver: yupResolver(),
   });
 
+  const { data: rosterlisting, isLoading } = useQuery({
+    queryKey: ["rosterlisting",  formtype],
+    queryFn: () =>
+      newRequest.get(`${ROSTER_LIST}`).then((res) => res.data),
+    enabled: formtype == "update",
+  });
+
   const columns = React.useMemo(
     () => [
       {
         header: "Emp:ID",
         accessorKey: "sno",
+         cell: ({ row }) => row.original.rosterlisting || "#001"
       },
       {
         header: "Emp:Name",
         accessorKey: "shift-name",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) => row.original.rosterlisting || "Vaisakh T G",
       },
 
       {

@@ -25,7 +25,7 @@ export default function SaveMasterShift({ formtype, sid }) {
   const [loader, setLoader] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [workArea, setWorkArea] = useState([]);
-  const [break_time, setBreak_time] = useState([]);
+  // const [break_time, setBreak_time] = useState([]);
   const [keyword, setKeyword] = useState("");
 
   const queryClient = useQueryClient();
@@ -56,22 +56,22 @@ export default function SaveMasterShift({ formtype, sid }) {
       {
         header: "Pay Mode",
         accessorKey: "pay_node",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) => row.original.shiftDetails || "N/A",
       },
       {
         header: "Start Time",
         accessorKey: "start_time",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) => row.original.shiftDetails || "N/A",
       },
       {
         header: "End Time",
         accessorKey: "end_time",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) => row.original.shiftDetails || "N/A",
       },
       {
         header: "Duration",
         accessorKey: "duration",
-        cell: ({ row }) => row.original.details || "N/A",
+        cell: ({ row }) => row.original.shiftDetails || "N/A",
       },
       {
         header: "Action",
@@ -134,45 +134,46 @@ export default function SaveMasterShift({ formtype, sid }) {
     handleShift(data);
   };
   const handleShift = async (data) => {
+
+    // const formdata = {
+    //   name: data.name,
+    //   start_time: data.start_time,
+    //   end_time: data.end_time,
+    //   shift_duration: data.shift_duration,
+    //   people_required: data.people_required,
+    //   department_id: data.department_id?.id,
+    //   work_id: data.work_id?.id,
+    //   location_id: data.location_id?.id,
+    //   calculation_type: data.calculation_type,
+    //   fullday: data.fullday,
+    //   fulltolerence: data.fulltolerence,
+    //   halfday: data.halfday,
+    //   halfdaytolerence: data.halfdaytolerence,
+    //   recur_pattern: data.recur_pattern,
+    //   week_def: data.week_def,
+    //   break_time: break_time,
+    // };
+    // console.log(formdata);
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("start_time", data.start_time);
+    formData.append("end_time", data.end_time);
+    formData.append("shift_duration", data.shift_duration);
+    formData.append("people_required", data.people_required);
+    formData.append("department_id", data.department_id?.id);
+    formData.append("work_id", data.work_id?.id);
+    formData.append("location_id", data.location_id?.id);
+    formData.append("calculation_type", data.calculation_type);
+    formData.append("fullday", data.fullday);
+    formData.append("fulltolerence", data.fulltolerence);
+    formData.append("halfday", data.halfday);
+    formData.append("halfdaytolerence", data.halfdaytolerence);
+    formData.append("recur_pattern", data.recur_pattern);
+    formData.append("week_def", data.week_def);
+
     console.log(ShiftSchema);
 
-    const formdata = {
-      name: data.name,
-      start_time: data.start_time,
-      end_time: data.end_time,
-      shift_duration: data.shift_duration,
-      people_required: data.people_required,
-      department_id: data.department_id?.id,
-      work_id: data.work_id?.id,
-      location_id: data.location_id?.id,
-      calculation_type: data.calculation_type,
-      fullday: data.fullday,
-      fulltolerence: data.fulltolerence,
-      halfday: data.halfday,
-      halfdaytolerence: data.halfdaytolerence,
-      recur_pattern: data.recur_pattern,
-      week_def: data.week_def,
-      break_time: break_time,
-    };
-    console.log(formdata);
-
-    // const formData = new FormData();
-    // formData.append("name", data.name);
-    // formData.append("start_time", data.start_time);
-    // formData.append("end_time", data.end_time);
-    // formData.append("shift_duration", data.shift_duration);
-    // formData.append("people_required", data.people_required);
-    // formData.append("department_id", data.department_id?.id);
-    // formData.append("work_id", data.work_id?.id);
-    // formData.append("location_id", data.location_id?.id);
-    // formData.append("calculation_type", data.calculation_type);
-    // formData.append("fullday", data.fullday);
-    // formData.append("fulltolerence", data.fulltolerence);
-    // formData.append("halfday", data.halfday);
-    // formData.append("halfdaytolerence", data.halfdaytolerence);
-    // formData.append("recur_pattern", data.recur_pattern);
-    // formData.append("week_def", data.week_def);
-    // console.log(formData);
     try {
       let res;
 
@@ -255,8 +256,8 @@ export default function SaveMasterShift({ formtype, sid }) {
       <BreakTime
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        break_time={break_time}
-        setBreak_time={setBreak_time}
+        // break_time={break_time}
+        // setBreak_time={setBreak_time}
       />
       <MenuHeader
         menu="Menu"
