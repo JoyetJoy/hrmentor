@@ -153,7 +153,7 @@ export default function JobAreaListing() {
                       </button>
                     </div>
                     <div
-                      className="mt-4"
+                      className="mt-4 text-sm"
                       dangerouslySetInnerHTML={{
                         __html: career?.job_description,
                       }}
