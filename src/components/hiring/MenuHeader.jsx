@@ -32,7 +32,7 @@ function MenuHeaderHiring({ page }) {
           {hiringMenu.map((item) => (
             <Link
               key={item?.id}
-              to={`${item?.link}?cid=${cid}`}
+              to={item?.link}
               className={`px-2 py-1 text-sm ${
                 page === item?.id
                   ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"

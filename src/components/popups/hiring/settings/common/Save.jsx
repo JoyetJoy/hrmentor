@@ -124,7 +124,7 @@ export default function SaveHiringMasterForm({
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-lg rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
@@ -147,9 +147,7 @@ export default function SaveHiringMasterForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    {type} Name
-                  </label>
+                  <label className="required label-text">{type} Name</label>
                   <input
                     {...register("name", { required: true })}
                     type="text"
@@ -158,6 +156,29 @@ export default function SaveHiringMasterForm({
                   {errors.name && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.name?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex w-full flex-col gap-1">
+                  <label className="required label-text">Document Type</label>
+                  <Controller
+                    name="status"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={employeeMasterOptions}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Status"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
                     </span>
                   )}
                 </div>
@@ -184,9 +205,9 @@ export default function SaveHiringMasterForm({
                     </span>
                   )}
                 </div>
-                {type === "Job Description" ? (
+                {type === "Document & Templates" ? (
                   <div className="group flex flex-col space-y-1">
-                    <label className="required text-sm font-bold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    <label className="label-text">
                       Description-Professionals
                     </label>
                     <ReactQuill
@@ -194,7 +215,7 @@ export default function SaveHiringMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                      className="min-h-52 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
                     />
                     {errors?.jobDescription && (
                       <span className="text-xs font-medium text-red-500">
