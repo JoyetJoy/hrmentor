@@ -791,7 +791,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="required label-text flex flex-row items-center gap-1">
-                    State
+                    County
                   </label>
                   <Controller
                     name="state_id"
