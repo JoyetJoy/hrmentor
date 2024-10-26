@@ -1,27 +1,17 @@
-// Assuming it's part of recruiterMenu
 export const hiringMenu = [
   {
     id: 1,
     name: "Overview",
-    link: "/admin/recruiter/hiring",
+    link: "/admin/hiring",
   },
   {
     id: 2,
     name: "Settings",
-    link: "/admin/recruiter/hiring/settings",
+    link: "/admin/hiring/settings",
   },
   {
     id: 3,
     name: "Customer field",
-    link: "/admin/recruiter/hiring/customer-field",
+    link: "/admin/hiring/customer-field",
   },
 ];
-
-// export const overviewCardList = [
-//   {
-//     id: 1,
-//     link: "/admin/hiring/ready-to-hiring",
-//     name: "rady to hiring",
-//   },
-// ];
-

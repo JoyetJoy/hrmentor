@@ -1,17 +1,11 @@
-import MenuHeader from "@/components/common/MenuHeader";
+import MenuHeaderHiring from "@/components/hiring/MenuHeader";
 import { OverviewCards } from "@/components/hiring/overview/OverviewCard";
 import { UpcomingInterviewsList } from "@/components/hiring/overview/UpcomingInterviewsList";
 
 export const HiringDashboard = () => {
   return (
     <>
-      <MenuHeader
-        backlink={""}
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Hiring"}
-        activeMenu={"Dashboard"}
-      />
+      <MenuHeaderHiring page={1} />
       <div className="flex flex-col gap-3">
         <OverviewCards />
         <UpcomingInterviewsList />

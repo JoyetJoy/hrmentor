@@ -21,28 +21,11 @@ export const HiringRoutes = [
             path: "",
             element: <ReadyToHiring />,
           },
-          {
-            path: "offer-to-be-finalized",
-            element: <Index />,
-          },
-        ],
-      },
-      {
-        path: "settings",
-        children: [
-          {
-            path: "",
-            element: <HiringDocumentAndTemplate />,
-          },
-          {
-            path: "offer-to-be-finalized",
-            element: <Index />,
-          },
         ],
       },
       {
         path: "offer-to-be-finalized",
-        element: <OfferToBeFinalized />,
+        element: <Index />,
       },
       {
         path: "upcoming",
@@ -51,6 +34,15 @@ export const HiringRoutes = [
       {
         path: "offer-declined",
         element: <OfferDeclined />,
+      },
+    ],
+  },
+  {
+    path: "settings",
+    children: [
+      {
+        path: "",
+        element: <HiringDocumentAndTemplate />,
       },
     ],
   },

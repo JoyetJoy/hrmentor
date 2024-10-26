@@ -8,7 +8,6 @@ import { Link, useLocation } from "react-router-dom";
 function MenuHeader(props) {
   const location = useLocation();
   const isActive = (paths) => paths.includes(location.pathname);
-
   const {
     menu,
     subMenu,

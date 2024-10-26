@@ -1,10 +1,10 @@
 import { JOB_DESCRIPTION } from "@/api/master";
-import { RecruiterMasters } from "@/components/popups/recruiter/settings/common/Listing";
+import { HiringMasters } from "@/components/hiring/settings/Listing";
 import { recColumnKeysForJobDescription } from "@/lib/columns/recruiter";
 
 export const HiringDocumentAndTemplate = () => {
   return (
-    <RecruiterMasters
+    <HiringMasters
       api={JOB_DESCRIPTION}
       qryKey={"recJobDescriptionList"}
       colKeys={recColumnKeysForJobDescription}

@@ -1,4 +1,4 @@
-import MenuHeader from "@/components/common/MenuHeader";
+import MenuHeaderHiring from "@/components/hiring/MenuHeader";
 import { OverviewTopBar } from "@/components/hiring/overviewTopBar/OverviewTopBar";
 import Loader from "@/components/ui/Loader";
 import React, { useState, useEffect } from "react";
@@ -23,14 +23,7 @@ export const Index = () => {
 
   return (
     <>
-      <MenuHeader
-        backlink={""}
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Hiring"}
-        activeMenu={"Dashboard"}
-      />
-
+      <MenuHeaderHiring page={1} />
       <div className="flex flex-col gap-3">
         <OverviewTopBar
           title="Ready to Hiring"
@@ -101,7 +94,7 @@ export const Index = () => {
             </div>
           </div>
 
-           <div className="flex w-full flex-col gap-5 rounded-md bg-white p-6">
+          <div className="flex w-full flex-col gap-5 rounded-md bg-white p-6">
             <div className="text-sm font-semibold">Offer Letter Template</div>
             <div className="flex w-1/2 max-w-2xl flex-col space-y-1 py-2">
               <label className="required label-text font-semibold">
