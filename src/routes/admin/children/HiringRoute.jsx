@@ -1,6 +1,7 @@
 import { HiringDashboard } from "@/pages/admin/menu/hiring";
 import { OfferToBeFinalized } from "@/pages/admin/menu/hiring/overview/offer-to-finalize/Index";
 import { OfferDeclined } from "@/pages/admin/menu/hiring/overview/OfferDeclined";
+import { FinalizeOfferLetter } from "@/pages/admin/menu/hiring/overview/ready-to-hiring/FinalizeOfferLetter";
 import { ReadyToHiring } from "@/pages/admin/menu/hiring/overview/ready-to-hiring/Index";
 import { Index } from "@/pages/admin/menu/hiring/overview/readyToHiring/sentOfferLetter/Index";
 import { Upcoming } from "@/pages/admin/menu/hiring/overview/Upcoming";
@@ -22,6 +23,10 @@ export const HiringRoutes = [
             element: <ReadyToHiring />,
           },
         ],
+      },
+      {
+        path: "finalize-offer",
+        element: <FinalizeOfferLetter />,
       },
       {
         path: "offer-to-be-finalized",

@@ -1,5 +1,19 @@
-export default function ChooseOfferLetterType({ open, setPopupOpen }) {
-  const handleNavigation = () => {};
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function ChooseOfferLetterType({
+  open,
+  setPopupOpen,
+  selectedField,
+}) {
+  const [type, setType] = useState("conditional");
+  const navigate = useNavigate();
+  const handleNavigation = () => {
+    navigate(
+      `/admin/hiring/overview/finalize-offer?lettertype=${type}&selected=${selectedField}`,
+    );
+  };
+
   return (
     <>
       {open && (
@@ -10,11 +24,25 @@ export default function ChooseOfferLetterType({ open, setPopupOpen }) {
             </h2>
             <div className="mt-7 flex w-full items-center gap-10">
               <div className="flex items-center text-sm">
-                <input type="radio" name="" id="" />
+                <input
+                  type="radio"
+                  name="offerType"
+                  value="conditional"
+                  className="size-4"
+                  checked={type === "conditional"}
+                  onChange={(e) => setType(e.target.value)} // Update type on change
+                />
                 <span className="ml-1">Conditional</span>
               </div>
               <div className="flex items-center text-sm">
-                <input type="radio" name="" id="" />
+                <input
+                  type="radio"
+                  name="offerType"
+                  className="size-4"
+                  value="unconditional"
+                  checked={type === "unconditional"}
+                  onChange={(e) => setType(e.target.value)} // Update type on change
+                />
                 <span className="ml-1">Unconditional</span>
               </div>
             </div>
@@ -22,7 +50,6 @@ export default function ChooseOfferLetterType({ open, setPopupOpen }) {
               <button
                 type="button"
                 onClick={() => {
-                  setResume("");
                   setPopupOpen(false);
                 }}
                 className="h-10 w-full rounded-lg border border-black/20 px-4 text-sm font-semibold text-black/70 hover:bg-gray-100"
