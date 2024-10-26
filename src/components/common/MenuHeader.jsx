@@ -8,7 +8,6 @@ import { Link, useLocation } from "react-router-dom";
 function MenuHeader(props) {
   const location = useLocation();
   const isActive = (paths) => paths.includes(location.pathname);
-
   const {
     menu,
     subMenu,
@@ -31,6 +30,7 @@ function MenuHeader(props) {
         : [];
 
   const menuItem = currentMenu.find((item) => item.name === activeSubMenu);
+  const defaultActiveMenu = activeSubMenu;
 
   const isSpecialPath = [
     "Employee",
@@ -39,7 +39,7 @@ function MenuHeader(props) {
     "Subscription",
     "Add Employee",
     "Employee Detail",
-    "Roster List"
+    "Roster List",
   ].includes(currentpath);
 
   return (
@@ -80,7 +80,7 @@ function MenuHeader(props) {
               <Link
                 to={item?.link}
                 className={`text-sm ${
-                  activeMenu === item?.name
+                  activeMenu === item?.name || defaultActiveMenu === item.name
                     ? "active-menu px-2 py-1 font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
                     : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
                 }`}

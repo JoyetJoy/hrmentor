@@ -1,21 +1,71 @@
 import { newRequest } from "@/api";
 import { statusDataSelecter } from "@/utils/customStyles";
 import { Switch } from "@headlessui/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Eye } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 
 function RecruiterSideBar({ jid }) {
+  const queryClient = useQueryClient();
+  const { data: jobDetailView, isLoading } = useQuery({
+    queryKey: ["jobDetailView", jid],
+    queryFn: () =>
+      newRequest.get(`job-detail-view/${jid}`).then((res) => {
+        return res.data;
+      }),
+    enabled: !!jid,
+  });
+
   const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    if (jobDetailView?.jobDetail?.career_page == 1) {
+      setEnabled(true);
+    } else {
+      setEnabled(false);
+    }
+  }, [jobDetailView]);
+
   const statusData = [
-    { id: 1, count: 0, label: "New", bgColor: "#F0F8FF" },
-    { id: 2, count: 0, label: "Interview", bgColor: "#F0FFFD" },
-    { id: 3, count: 0, label: "Hiring", bgColor: "#F0FFF1" },
-    { id: 4, count: 0, label: "Hold", bgColor: "#FFF2F2" },
-    { id: 5, count: 0, label: "Reject", bgColor: "#FFFCF0" },
-    { id: 6, count: 0, label: "Backup", bgColor: "#FBF0FF" },
+    {
+      id: 1,
+      count: jobDetailView?.newCandidatesCount ?? 0,
+      label: "New",
+      bgColor: "#F0F8FF",
+    },
+    {
+      id: 2,
+      count: jobDetailView?.interviewScheduledCount ?? 0,
+      label: "Interview",
+      bgColor: "#F0FFFD",
+    },
+    {
+      id: 3,
+      count: jobDetailView?.movedTohiringCount ?? 0,
+      label: "Hiring",
+      bgColor: "#F0FFF1",
+    },
+    {
+      id: 4,
+      count: jobDetailView?.holdCount ?? 0,
+      label: "Hold",
+      bgColor: "#FFF2F2",
+    },
+    {
+      id: 5,
+      count: jobDetailView?.rejectCount ?? 0,
+      label: "Reject",
+      bgColor: "#FFFCF0",
+    },
+    {
+      id: 6,
+      count: jobDetailView?.backupCount ?? 0,
+      label: "Backup",
+      bgColor: "#FBF0FF",
+    },
   ];
   const statusOptions = [
     { value: "active", label: "Active" },
@@ -27,9 +77,10 @@ function RecruiterSideBar({ jid }) {
   const handleToggleJobStatus = async (value) => {
     try {
       const res = await newRequest.post(`job-status-update/${jid}`, {
-        career_page: value ? 1 : 0,
+        career_page: value ? "1" : "0",
       });
       if (res?.data?.status === 201) {
+        queryClient.invalidateQueries(["jobDetailView"]);
         toast.success(res?.data?.message);
       }
     } catch (error) {
@@ -41,7 +92,7 @@ function RecruiterSideBar({ jid }) {
   return (
     <div className="flex w-1/3 flex-col gap-2 rounded-md bg-white p-7">
       <div className="flex flex-row justify-between">
-        <h1 className="text-base font-bold">Job information</h1>
+        <h1 className="text-base font-bold">Job Information</h1>
         <div className="flex flex-row gap-2">
           {/* <Link
             to={""}
@@ -67,7 +118,7 @@ function RecruiterSideBar({ jid }) {
           >
             <h1 className="flex flex-col items-center px-4 py-6 text-2xl font-semibold">
               {item.count}
-              <span className="text-sm font-normal">{item.label}</span>
+              <span className="text-sm font-medium">{item.label}</span>
             </h1>
           </div>
         ))}

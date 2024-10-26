@@ -302,3 +302,58 @@ select:focus {
 .idea {
   min-height: 92px !important;
 }
+
+.calendar-container {
+  width: 350px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.days-row,
+.dates-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.day-name,
+.day-box {
+  text-align: center;
+  width: 40px;
+  font-size: 14px;
+}
+
+.day-box {
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.day-box:hover {
+  background: #eaeaea;
+}
+
+.selected {
+  background-color: #e95d39;
+  color: white;
+}
+
+.time-selection {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 14px;
+  color: #b85c5c;
+}

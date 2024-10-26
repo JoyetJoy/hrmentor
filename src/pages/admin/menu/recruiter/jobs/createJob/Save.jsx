@@ -149,8 +149,6 @@ function RecruiterJobPost() {
     exposure: false,
   });
 
-  console.log(jobDetails);
-
   useEffect(() => {
     if (jobDetails) {
       setValue("job_title", jobDetails.job_title);

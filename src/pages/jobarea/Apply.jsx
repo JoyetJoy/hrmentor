@@ -6,19 +6,22 @@ import { customSelectStyles } from "@/utils/customStyles";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import { CareerApplySchema } from "@/schema/career/careerApply.schema";
 import toast from "react-hot-toast";
+import UploadConfirmation from "@/components/common/UploadConfirmation";
 
 export default function Apply() {
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const [resume, setResume] = useState("");
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [resumeFileName, setResumeFileName] = useState("");
   const {
     register,
     handleSubmit,
@@ -39,11 +42,6 @@ export default function Apply() {
         return res.data;
       }),
   });
-
-  const formValues = watch();
-  console.log(formValues);
-
-  console.log(careerJobQuestion?.profileQuestions);
 
   // COUNTRY LISTING
   const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
@@ -77,6 +75,11 @@ export default function Apply() {
 
   const onSubmit = (data) => {
     setLoader(true);
+    if (!resumeFileName) {
+      toast.error("Please add a resume to continue");
+      setLoader(false);
+      return;
+    }
     handleSave(data);
   };
 
@@ -102,6 +105,7 @@ export default function Apply() {
         question: careerJobQuestion?.screeningQuestions[i]?.question,
         answer: q.answer,
       })),
+      resume_file_name: resumeFileName,
     };
 
     try {
@@ -191,8 +195,22 @@ export default function Apply() {
     }
   };
 
+  useEffect(() => {
+    if (resume) {
+      setPopupOpen(true);
+    }
+  }, [resume]);
+
   return (
     <>
+      <UploadConfirmation
+        open={popupOpen}
+        setPopupOpen={setPopupOpen}
+        resume={resume}
+        setResume={setResume}
+        setResumeFileName={setResumeFileName}
+        api={"resume-upload"}
+      />
       <div className="h-full">
         <div className="flex flex-col">
           <div
@@ -217,7 +235,10 @@ export default function Apply() {
             onSubmit={handleSubmit(onSubmit)}
             className="z-50 mx-auto -mt-28 mb-20 w-full max-w-5xl rounded-md border border-[#ECE9F1] bg-white p-8"
           >
-            <ResumeDragzoneApplyJob file={resume} setFile={setResume} />
+            <div className="overflow-y-min max-h-72 overflow-y-auto">
+              <ResumeDragzoneApplyJob file={resume} setFile={setResume} />
+            </div>
+
             <div className="mt-4 grid w-full grid-cols-2 gap-5">
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">First Name</label>

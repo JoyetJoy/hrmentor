@@ -26,6 +26,10 @@ function InterviewGuideline({
   api,
   jid,
 }) {
+  const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+  const [notes, setNotes] = useState("");
+
   const {
     handleSubmit,
     register,
@@ -37,23 +41,23 @@ function InterviewGuideline({
     mode: "onSubmit",
     resolver: yupResolver(interviewGuidelineSchema),
   });
-  const queryClient = useQueryClient();
+
+  function close() {
+    setSelectedField(0);
+    reset();
+    setNotes("");
+    setPopupOpen(false);
+  }
+
+  let enableKey = selectedField === 0 ? false : true;
 
   const { data: recInterviewGuidelinebyId, isLoading } = useQuery({
     queryKey: ["recInterviewGuidelinebyId", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
-    enabled: !!selectedField != 0,
+    enabled: enableKey,
   });
 
-  const [loader, setLoader] = useState(false);
-  function close() {
-    setPopupOpen(false);
-    setSelectedField(0);
-    reset();
-  }
-
-  const [notes, setNotes] = useState("");
   // EMOPLOYEE TYPE LIST
   const { data: interviewer } = useEmployeeMaster(
     ACTIVE_EMPLOYEE,
@@ -95,18 +99,18 @@ function InterviewGuideline({
         recInterviewGuidelinebyId?.data?.duration_minute,
       );
     }
-  }, [recInterviewGuidelinebyId, setValue]);
+  }, [recInterviewGuidelinebyId, selectedField, setValue]);
 
   useEffect(() => {
     if (recInterviewGuidelinebyId) {
-      setNotes(notes ?? "");
+      setNotes(recInterviewGuidelinebyId?.data?.notes ?? "");
     }
-  }, [recInterviewGuidelinebyId, setNotes]);
+  }, [recInterviewGuidelinebyId, selectedField, setNotes]);
 
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      const formData = new FormData();
+      const formData = new URLSearchParams();
       formData.append("job_id", jid);
       formData.append("notes", notes);
       formData.append("interviewer", data.interviewer?.id);
@@ -115,14 +119,13 @@ function InterviewGuideline({
       formData.append("duration_hr", data.duration_hr);
       formData.append("duration_minute", data.duration_minute);
       formData.append("candidate_type", data.candidate_type?.id);
-
       let res;
       if (selectedField !== 0) {
         res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
       } else {
         res = await XFormRequest.post(api, formData);
       }
-      if (res?.data?.success === true) {
+      if (res?.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
@@ -173,7 +176,6 @@ function InterviewGuideline({
                       <X />
                     </button>
                   </div>
-
                   <div className="grid grid-cols-2 gap-x-10">
                     <div className="grid grid-cols-2 gap-x-3 py-2">
                       <div className="group flex flex-col px-3 py-2">

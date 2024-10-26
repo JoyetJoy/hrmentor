@@ -1,16 +1,12 @@
 import RecruiterDashbaord from "@/pages/admin/menu/recruiter";
 import CandidatesList from "@/pages/admin/menu/recruiter/candidate/CandidateList";
-import Documents from "@/pages/admin/menu/recruiter/candidate/details/documents";
 import Consider from "@/pages/admin/menu/recruiter/candidate/details/email/Consider";
 import CustomMail from "@/pages/admin/menu/recruiter/candidate/details/email/CustomMail";
 import InterviewResult from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewResult";
 import InterviewSchedule from "@/pages/admin/menu/recruiter/candidate/details/email/InterviewSchedule";
 import MoveHiring from "@/pages/admin/menu/recruiter/candidate/details/email/MoveHiring";
 import WelcomeMail from "@/pages/admin/menu/recruiter/candidate/details/email/WelcomeMail";
-import History from "@/pages/admin/menu/recruiter/candidate/details/history";
-import InterviewMain from "@/pages/admin/menu/recruiter/interview";
-import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs";
-import Candidate from "@/pages/admin/menu/recruiter/jobs/candidate";
+import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs/RecJobs";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Save";
 import { RecRequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
@@ -34,15 +30,14 @@ import RecViewJobDetail from "@/pages/admin/menu/recruiter/jobs/view/Index";
 import CandidateQuestionAnswer from "@/pages/admin/menu/recruiter/candidate/details/CadidateQuestionAnswer";
 import CandidateDiscussion from "@/pages/admin/menu/recruiter/candidate/details/CandidateDiscussion";
 import CandidateInterviews from "@/pages/admin/menu/recruiter/candidate/details/CandidateInterviews";
+import CandidateDocuments from "@/pages/admin/menu/recruiter/candidate/details/CandidateDocuments";
+import CandidateHistoryTimeline from "@/pages/admin/menu/recruiter/candidate/details/CandidateHistory";
+import RecInterviews from "@/pages/admin/menu/recruiter/interview/RecInterviews";
 
 export const RecruiterRoutes = [
   {
     index: true,
     element: <RecruiterDashbaord />,
-  },
-  {
-    path: "candidate",
-    element: <Candidate />,
   },
   {
     path: "job-details",
@@ -160,7 +155,11 @@ export const RecruiterRoutes = [
       },
       {
         path: "documents",
-        element: <Documents />,
+        element: <CandidateDocuments />,
+      },
+      {
+        path: "history",
+        element: <CandidateHistoryTimeline />,
       },
       {
         path: "email",
@@ -191,19 +190,14 @@ export const RecruiterRoutes = [
           },
         ],
       },
-      {
-        path: "history",
-        element: <History />,
-      },
     ],
   },
-
   {
-    path: "interview",
+    path: "interviews",
     children: [
       {
-        path: "interview-list",
-        element: <InterviewMain />,
+        path: "",
+        element: <RecInterviews />,
       },
     ],
   },

@@ -21,6 +21,8 @@ export default function SaveEmployeeMasterForm({
   colKeys,
   api,
 }) {
+  let enableKey = selectedField === 0 ? false : true;
+
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   // Get selected data
@@ -28,7 +30,7 @@ export default function SaveEmployeeMasterForm({
     queryKey: ["employeeMastersDetailByid", colKeys, type, api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
-    enabled: !!selectedField != 0,
+    enabled: enableKey,
   });
 
   const {

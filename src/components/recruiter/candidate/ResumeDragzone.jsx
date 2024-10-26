@@ -8,7 +8,6 @@ export default function ResumeDragzone({
   filePreview,
   setFilePreview,
 }) {
-  console.log(file);
   const onDrop = (acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
     setFile(selectedFile);

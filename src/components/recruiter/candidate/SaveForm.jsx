@@ -17,7 +17,7 @@ import { recCandidateSchema } from "@/schema/dashboard/recruiter/candidate/form/
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "@/components/ui/Loader";
 import toast from "react-hot-toast";
-import { GET_CANDIDATES } from "@/api/recruiter";
+import { GET_CANDIDATES, UPDATE_CANDIDATE } from "@/api/recruiter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import MenuHeaderCandidate from "./MenuHeader";
@@ -26,8 +26,8 @@ export default function RecSaveFormCandidate({ type }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const cid = searchParams.get("cid");
+  const [filePreview, setFilePreview] = useState("");
   const [resumefile, setResumeFile] = useState(null);
-  const [filePreview, setFilePreview] = useState(null);
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -116,6 +116,7 @@ export default function RecSaveFormCandidate({ type }) {
         "college_or_university",
         candidateDetails?.data?.college_university,
       );
+      setValue("job_id", candidateDetails?.data?.JobName);
       setValue("date_applied", candidateDetails?.data?.date_applied);
       setValue("source", candidateDetails?.data?.sourceName);
       setValue("home_address", candidateDetails?.data?.home_address);
@@ -138,7 +139,9 @@ export default function RecSaveFormCandidate({ type }) {
 
   useEffect(() => {
     if (candidateDetails) {
-      setSameAsHome(candidateDetails?.same_as_home === 1 ? true : false);
+      setSameAsHome(
+        candidateDetails?.data?.same_as_home_address == 1 ? true : false,
+      );
     }
   }, [candidateDetails, setSameAsHome]);
 
@@ -155,6 +158,7 @@ export default function RecSaveFormCandidate({ type }) {
     setLoader(true);
     handleEmployee(data);
   };
+
   const handleEmployee = async (data) => {
     if (!resumefile) {
       toast.error("Please upload resume");
@@ -193,16 +197,19 @@ export default function RecSaveFormCandidate({ type }) {
 
     try {
       let res;
-      res = await newFormRequest.post(GET_CANDIDATES, formData);
-      // else {
-      //   res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
-      // }
+      if (type == "update") {
+        res = await newFormRequest.post(`${UPDATE_CANDIDATE}/${cid}`, formData);
+      } else {
+        res = await newFormRequest.post(GET_CANDIDATES, formData);
+      }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["candidateListing"]);
         reset();
         setLoader(false);
-        navigate("/admin/recruiter/candidate");
+        type != "update"
+          ? navigate("/admin/recruiter/candidate")
+          : window.location.reload();
       } else {
         toast.error("Failed to save candidate.");
         setLoader(false);
@@ -272,7 +279,6 @@ export default function RecSaveFormCandidate({ type }) {
                 </span>
               )}
             </div>
-
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">Phone</label>
               <input
@@ -659,10 +665,10 @@ export default function RecSaveFormCandidate({ type }) {
             {loader ? (
               <div className="flex items-center gap-2">
                 <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>{" "}
-                Saving
+                {type == "update" ? "Updating" : "Saving"}
               </div>
             ) : (
-              <>{type ? "Update" : "Submit"}</>
+              <>{type == "update" ? "Update" : "Submit"}</>
             )}
           </button>
         </div>

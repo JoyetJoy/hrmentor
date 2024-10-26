@@ -118,12 +118,6 @@ function CandidatesList() {
             >
               <MoveDiagonal className="h-3 w-3" />
             </Link>
-            {/* <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
-            </Link> */}
           </div>
         ),
       },

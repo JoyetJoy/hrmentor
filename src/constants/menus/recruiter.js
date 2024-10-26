@@ -21,6 +21,11 @@ export const recruiterMenu = [
   },
   {
     id: 6,
+    name: "Interviews",
+    link: "/admin/recruiter/interviews",
+  },
+  {
+    id: 7,
     name: "Settings",
     link: "/admin/recruiter/settings/job-description",
   },
@@ -47,11 +52,11 @@ export const recCandidateMenus = [
     name: "Discussions",
     link: "/admin/recruiter/candidate/discussions",
   },
-  {
-    id: 5,
-    name: "Emails",
-    link: "/admin/recruiter/candidate/email/custom-mail",
-  },
+  // {
+  //   id: 5,
+  //   name: "Emails",
+  //   link: "/admin/recruiter/candidate/email/custom-mail",
+  // },
   {
     id: 6,
     name: "Documents",
