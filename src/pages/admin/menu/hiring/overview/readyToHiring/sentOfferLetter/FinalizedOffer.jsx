@@ -101,7 +101,7 @@ export const FinalizedOffer = () => {
             </div>
           </div>
 
-           <div className="flex w-full flex-col gap-5 rounded-md bg-white p-6">
+          <div className="flex w-full flex-col gap-5 rounded-md bg-white p-6">
             <div className="text-sm font-semibold">Offer Letter Template</div>
             <div className="flex w-1/2 max-w-2xl flex-col space-y-1 py-2">
               <label className="required label-text font-semibold">

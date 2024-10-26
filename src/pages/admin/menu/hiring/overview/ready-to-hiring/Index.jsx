@@ -1,4 +1,3 @@
-import { OverviewTopBar } from "@/components/hiring/overviewTopBar/OverviewTopBar";
 import React, { useEffect, useState } from "react";
 import MenuHeaderHiring from "@/components/hiring/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
@@ -6,8 +5,8 @@ import { newRequest } from "@/api";
 import { HIRING_READY } from "@/api/hiring";
 import Loader from "@/components/ui/Loader";
 import QueryTable from "@/components/table/QueryTable";
-import { Link } from "react-router-dom";
 import { Filter, Search } from "lucide-react";
+import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
 
 export const ReadyToHiring = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -103,12 +102,20 @@ export const ReadyToHiring = () => {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex gap-2">
-            <Link to={"offer-to-be-finalized"}>
-              <button className="rounded-md border-green-800 bg-[#00B448] px-4 py-1.5 text-white">
-                Send Offer Letter
-              </button>
-            </Link>
-            <button className="rounded-md bg-[#AB27271A]/10 px-4 py-1.5 text-[#AB2727]">
+            <button
+              type={"button"}
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedField(row.original.candidate_id);
+              }}
+              className="rounded-md border-green-800 bg-[#00B448] px-4 py-1.5 text-white"
+            >
+              Send Offer Letter
+            </button>
+            <button
+              type={"button"}
+              className="rounded-md bg-[#AB27271A]/10 px-4 py-1.5 text-[#AB2727]"
+            >
               Reject
             </button>
           </div>
@@ -120,6 +127,7 @@ export const ReadyToHiring = () => {
 
   return (
     <>
+      <ChooseOfferLetterType open={open} setPopupOpen={setPopupOpen} />
       <MenuHeaderHiring page={1} />
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-2 font-semibold text-white">
