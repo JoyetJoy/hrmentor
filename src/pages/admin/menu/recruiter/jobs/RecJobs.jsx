@@ -170,7 +170,10 @@ function RecruiterJobs() {
             <Plus className="size-5" strokeWidth={2} />
             Create Job
           </Link>
-          <Link className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white">
+          <Link
+            to="/careers"
+            className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white"
+          >
             View Career Page
           </Link>
           <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] outline-none hover:border-[#E6E7EF]">
