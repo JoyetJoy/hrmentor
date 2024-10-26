@@ -20,6 +20,8 @@ export default function CareerDetail() {
       }),
   });
 
+  console.log(careerDetails);
+
   return (
     <>
       <ShareJob
@@ -58,7 +60,7 @@ export default function CareerDetail() {
                       {careerDetails?.min_exp_id?.value}
                     </button>
                     <button className="btn h-8 min-h-8 rounded border border-[#CFD2E3] bg-transparent text-xs text-white">
-                      {careerDetails?.minimum_range} -{" "}
+                      £ {careerDetails?.minimum_range} -{" "}
                       {careerDetails?.maximum_range}
                     </button>
                     <button className="btn h-8 min-h-8 rounded border border-[#CFD2E3] bg-transparent text-xs text-white">
@@ -86,9 +88,9 @@ export default function CareerDetail() {
                 </div>
                 <h1 className="mb-4 flex flex-row items-center gap-1 text-sm font-normal text-white">
                   <MapPin className="size-4" />
-                  {careerDetails?.country?.country_name},
-                  {careerDetails?.country?.country_name},
-                  {careerDetails?.country?.country_name}
+                  {careerDetails?.country_id?.label},
+                  {careerDetails?.state_id?.label},
+                  {careerDetails?.city_id?.label}
                 </h1>
               </div>
             </div>
