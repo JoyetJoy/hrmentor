@@ -89,6 +89,7 @@ const masterConfig = {
 };
 
 function RecruiterJobPost() {
+  const [isNotMentioned, setIsNotMentioned] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -103,7 +104,7 @@ function RecruiterJobPost() {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(recruiterJobPostSchema),
+    resolver: yupResolver(recruiterJobPostSchema(isNotMentioned)),
   });
   const {
     image: post,
@@ -275,6 +276,16 @@ function RecruiterJobPost() {
   } = watch();
 
   useEffect(() => {
+    if (salary_package) {
+      if (salary_package?.value === 0) {
+        setIsNotMentioned(true);
+      } else {
+        setIsNotMentioned(false);
+      }
+    }
+  }, [salary_package, setIsNotMentioned]);
+
+  useEffect(() => {
     setPostStepStatus({
       jobDetails: !!country_id && !!job_title && !!employment_type,
       advanceJobDetails:
@@ -410,7 +421,9 @@ function RecruiterJobPost() {
         clearPost();
         reset();
         setLoader(false);
-        navigate(`/admin/recruiter/jobs/application-question?jid=${jid}`);
+        navigate(
+          `/admin/recruiter/jobs/application-question?jid=${res?.data?.data?.id}`,
+        );
       } else {
         toast.error("Failed to save job.");
         setLoader(false);
