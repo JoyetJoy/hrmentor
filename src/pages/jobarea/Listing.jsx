@@ -125,8 +125,7 @@ export default function JobAreaListing() {
                       <p className="flex items-center gap-1 text-xs font-semibold text-black/70">
                         <MapPin />
                         {career?.country?.country_name},
-                        {career?.country?.country_name},
-                        {career?.country?.country_name}
+                        {career?.state?.state_name},{career?.city?.city_name}
                       </p>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
