@@ -29,10 +29,10 @@ export const AdminHeader = () => {
   return (
     <>
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
-        <Link to="/admin" className="flex flex-row gap-1">
-          <div className="h-11">
+        <Link to="/admin" className="flex flex-row gap-1 pl-3">
+          <div className="mr-2 h-9">
             <img
-              src={"/assets/images/logo.svg"}
+              src={"/logo.svg"}
               alt="hr mentor"
               className="h-full w-full object-contain"
             />

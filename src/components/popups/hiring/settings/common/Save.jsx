@@ -1,5 +1,7 @@
 import { newRequest, XFormRequest } from "@/api";
+import { HIRING_DOCUMENT_TYPE } from "@/api/hiring";
 import { employeeMasterOptions } from "@/constants/data";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { EmployeeMasterCommanFormSchema } from "@/schema/dashboard/employee/masters/employeeType.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
@@ -23,18 +25,25 @@ export default function SaveHiringMasterForm({
   colKeys,
   api,
 }) {
+  const { data: documentTypesHiring } = useEmployeeMaster(
+    HIRING_DOCUMENT_TYPE,
+    "documentTypesHiring",
+  );
+
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
-  const [isdefault, setIsDefault] = useState(false);
   const [loader, setLoader] = useState(false);
+
   // Get selected data
-  const { data: recMastersDetailByid, isLoading } = useQuery({
-    queryKey: ["recMastersDetailByid", colKeys, type, api, selectedField],
+  const { data: hiringMastersDetailByid, isLoading } = useQuery({
+    queryKey: ["hiringMastersDetailByid", colKeys, type, api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
     enabled: enableKey,
   });
+
+  console.log(hiringMastersDetailByid);
 
   const {
     register,
@@ -50,23 +59,23 @@ export default function SaveHiringMasterForm({
   });
 
   useEffect(() => {
-    if (recMastersDetailByid) {
-      setValue("name", recMastersDetailByid?.[colKeys.field1?.key]);
-      setValue("status", recMastersDetailByid?.[colKeys.field2?.key]);
+    if (hiringMastersDetailByid) {
+      setValue("name", hiringMastersDetailByid?.[colKeys.field1?.key]);
+      setValue("status", hiringMastersDetailByid?.[colKeys.field2?.key]);
     }
-  }, [recMastersDetailByid, type, setValue]);
+  }, [hiringMastersDetailByid, type, setValue]);
 
   useEffect(() => {
-    if (type === "Job Description") {
-      setDescription(recMastersDetailByid?.[colKeys?.field3?.key]);
+    if (type === "Document & Templates") {
+      setDescription(hiringMastersDetailByid?.[colKeys?.field3?.key]);
     }
-  }, [recMastersDetailByid, type, setDescription]);
+  }, [hiringMastersDetailByid, type, setValue]);
 
   useEffect(() => {
-    if (recMastersDetailByid?.is_default) {
-      setIsDefault(recMastersDetailByid?.is_default?.id === "1" ? true : false);
+    if (type === "Document & Templates") {
+      setDescription(hiringMastersDetailByid?.[colKeys?.field4?.key]);
     }
-  }, [recMastersDetailByid, setIsDefault]);
+  }, [hiringMastersDetailByid, type, setDescription]);
 
   function close() {
     setPopupOpen(false);
@@ -74,11 +83,10 @@ export default function SaveHiringMasterForm({
     reset();
   }
 
-  const isJobDescription = type === "Job Description";
-  console.log(colKeys);
+  const isTemplateDescription = type === "Document & Templates";
   const onSubmit = async (data) => {
-    if (isJobDescription && !description) {
-      setError("jobDescription", {
+    if (isTemplateDescription && !description) {
+      setError("description", {
         type: "manual",
         message: "Job description is required",
       });
@@ -90,10 +98,9 @@ export default function SaveHiringMasterForm({
       const formData = new URLSearchParams();
       formData.append(colKeys.field1?.key, data?.name);
       formData.append(colKeys.field2?.key, data?.status?.value);
-      type === "Profile Questions" &&
-        formData.append("is_default", isdefault ? 1 : 0);
-      type === "Job Description" &&
-        formData.append("job_description", description);
+      formData.append(colKeys.field3?.key, data?.document_type_id?.id);
+      type === "Document & Templates" &&
+        formData.append("description", description);
       let res;
       if (selectedField !== 0) {
         res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
@@ -162,16 +169,16 @@ export default function SaveHiringMasterForm({
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Document Type</label>
                   <Controller
-                    name="status"
+                    name="document_type_id"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
-                        options={employeeMasterOptions}
+                        options={documentTypesHiring}
                         isSearchable={false}
                         styles={customSelectStyles}
-                        placeholder="Select Status"
+                        placeholder="Select document type"
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     )}
@@ -217,32 +224,9 @@ export default function SaveHiringMasterForm({
                       placeholder={"Type here.."}
                       className="min-h-52 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
                     />
-                    {errors?.jobDescription && (
+                    {errors?.description && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.jobDescription?.message}
-                      </span>
-                    )}
-                  </div>
-                ) : null}
-
-                {type === "Profile Questions" ? (
-                  <div className="group flex w-full items-center gap-3">
-                    <label className="required label-text">Is Default</label>
-                    <div className="flex">
-                      <input
-                        onChange={(e) => {
-                          setIsDefault(e.target.checked);
-                        }}
-                        checked={isdefault}
-                        className="size-5"
-                        type="checkbox"
-                        name=""
-                        id=""
-                      />
-                    </div>
-                    {errors.status && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.status?.message}
+                        {errors.description?.message}
                       </span>
                     )}
                   </div>

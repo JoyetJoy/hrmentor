@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import hr1logo from "/assets/images/hr1-logo.svg";
+import hr1logo from "/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginSchema } from "@/schema/auth/login.schema";
 import { basicXFormRequest } from "@/api";
@@ -50,7 +50,7 @@ function Login() {
       </div>
       <div className="col-span-4 -mb-10 flex flex-col lg:px-14">
         <div className="flex flex-col items-start">
-          <h1 className="text-hrmprimaryorange mb-4 text-xl font-bold">
+          <h1 className="mb-4 text-xl font-bold text-hrmprimaryorange">
             <span className="text-black">Welcome,</span>
             <br />
             Techbutomy Private Limited
@@ -109,7 +109,7 @@ function Login() {
             Forgot password?
           </Link>
           <div className="mt-5 flex flex-col items-center justify-center">
-            <p className="text-center text-base font-medium text-[#808080B2]">
+            <p className="text-center text-[0.94rem] font-medium text-[#808080B2]">
               Powered By
             </p>
             <div className="w-36">

@@ -37,7 +37,7 @@ function CreateJobSideBar({ stepCounter }) {
       if (res?.data?.status === 201) {
         setLoader(false);
         toast.success("Job published successfully.");
-        navigate("/admin/recruiters/jobs");
+        navigate("/admin/recruiter/jobs");
       }
     } catch (error) {
       setLoader(false);

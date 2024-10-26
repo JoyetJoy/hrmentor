@@ -1,13 +1,13 @@
-import { JOB_DESCRIPTION } from "@/api/master";
+import { HIRING_TEMPLATE } from "@/api/hiring";
 import { HiringMasters } from "@/components/hiring/settings/Listing";
-import { recColumnKeysForJobDescription } from "@/lib/columns/recruiter";
+import { hirColumnKeysForTemplate } from "@/lib/columns/hiring";
 
 export const HiringDocumentAndTemplate = () => {
   return (
     <HiringMasters
-      api={JOB_DESCRIPTION}
+      api={HIRING_TEMPLATE}
       qryKey={"recJobDescriptionList"}
-      colKeys={recColumnKeysForJobDescription}
+      colKeys={hirColumnKeysForTemplate}
       type={"Document & Templates"}
     />
   );
