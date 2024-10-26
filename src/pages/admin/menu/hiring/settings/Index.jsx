@@ -8,7 +8,7 @@ export const HiringDocumentAndTemplate = () => {
       api={JOB_DESCRIPTION}
       qryKey={"recJobDescriptionList"}
       colKeys={recColumnKeysForJobDescription}
-      type={"Job Description"}
+      type={"Document & Templates"}
     />
   );
 };
