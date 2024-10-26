@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import SaveRecruiterMasterForm from "./Save";
 import { recruiterSetting } from "@/constants/sidebars/recruiter";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
+import Loader from "@/components/ui/Loader";
 
 export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -168,33 +169,31 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
         />
         <div className="flex gap-x-3">
           <SettingsSidebar sidebarList={recruiterSetting} active={type} />
-          {isLoading ? (
-            <div className="flex min-h-96 w-full items-center justify-center bg-white">
-              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
-            </div>
-          ) : (
-            <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
-              <div className="my-4 flex items-center justify-between">
-                <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
-                  <Search className="size-4 text-[#7F7F7F]" />
-                  <input
-                    type="text"
-                    onChange={(e) => setKeyword(e.target.value)}
-                    className="h-full w-full placeholder:text-[#7F7F7F]"
-                    placeholder="Search"
-                  />
-                </div>
-                <Button
-                  onClick={() => {
-                    setPopupOpen(true);
-                  }}
-                  className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
-                >
-                  <Plus className="size-4" />
-                  Add
-                </Button>
+          <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
+            <div className="my-4 flex items-center justify-between">
+              <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
+                <Search className="size-4 text-[#7F7F7F]" />
+                <input
+                  type="text"
+                  onChange={(e) => setKeyword(e.target.value)}
+                  className="h-full w-full placeholder:text-[#7F7F7F]"
+                  placeholder="Search"
+                />
               </div>
-              <div>
+              <Button
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
+                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+              >
+                <Plus className="size-4" />
+                Add
+              </Button>
+            </div>
+            <div>
+              {isLoading ? (
+                <Loader />
+              ) : (
                 <QueryTable
                   columns={columns}
                   list={data?.listing ?? []}
@@ -202,9 +201,9 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
                   setCurrentPage={setCurrentPage}
                   totalPages={totalPages}
                 />
-              </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </>
