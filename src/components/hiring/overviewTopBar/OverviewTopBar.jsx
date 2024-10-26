@@ -70,7 +70,7 @@ export const OverviewTopBar = ({
           )}
         </div>
       </div>
-      <FilterModalHiring isOpen={isModalOpen} onClose={toggleModal} />
+      {/* <FilterModalHiring isOpen={isModalOpen} onClose={toggleModal} /> */}
     </>
   );
 };

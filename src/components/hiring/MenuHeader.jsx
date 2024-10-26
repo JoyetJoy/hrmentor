@@ -1,15 +1,12 @@
 import { hiringMenu } from "@/constants/menus/hiring";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function MenuHeaderHiring({ page }) {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const cid = searchParams.get("cid");
   return (
     <>
-      <div className="my-3 flex flex-row items-center justify-between rounded-md">
+      <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
         <div
           className={`flex items-center justify-between text-sm font-semibold text-[#030E5C]`}
         >
