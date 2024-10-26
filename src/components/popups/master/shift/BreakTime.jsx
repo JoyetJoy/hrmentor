@@ -1,7 +1,98 @@
+import { SHIFT_BREAK_TIME } from "@/api/setup";
+import { BreakTimeSchema } from "@/schema/dashboard/masters/shift.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useQuery } from "@tanstack/react-query";
+import { X } from "lucide-react";
 import React from "react";
+import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form"; 
+import Select from "react-select"; 
 
-export default function BreakTime() {
+export default function BreakTime({ popupOpen, setPopupOpen, selectedField,formtype ,break_time , setBreak_time}) {
+  // Initialize useForm
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(BreakTimeSchema),
+  });
+
+  const { data: shiftbreaktime, isLoading } = useQuery({
+    queryKey: ["shiftbreaktime",  formtype],
+    queryFn: () =>
+      newRequest.get(`${SHIFT_BREAK_TIME}`).then((res) => res.data),
+    enabled: formtype == "update",
+  });
+
+  const onSubmit = async (data) => {
+    setLoader(true);
+    handleShift(data);
+    close();
+  };
+
+  const handleShift = async (data) => {
+    const formData = new FormData();
+    formData.append("type_name", data.type_name);
+    formData.append("start_time", data.start_time);
+    formData.append("end_time", data.end_time);
+    formData.append("pay_node", data.pay_node);
+    try {
+      let res;
+        // res = await newFormRequest.post(SHIFT_BREAK_TIME, formData);
+        console.log(res)
+    
+        if (res?.status === 201) {
+          toast.success("Saved break time successfully");
+          queryClient.invalidateQueries(["shiftDetails"]);
+          reset();
+          setLoader(false);
+          formtype === "save"
+            ? navigate("/admin/setup/shift")
+            : window.location.reload();
+        } else {
+          toast.error("Failed to break time.");
+          setLoader(false);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to break time.");
+        setLoader(false);
+      }
+  }
+  console.log(shiftbreaktime)
+
+  function close() {
+    setPopupOpen(false);
+    reset();
+  }
+  useEffect(() => {
+    if (shiftbreaktime) {
+      setValue("name", shiftbreaktime?.type_name);
+      setValue("start_time", shiftbreaktime?.data?.start_time);
+      setValue("end_time", shiftbreaktime?.data?.end_time);
+      setValue("pay_node", shiftbreaktime?.data?.pay_node);
+    }
+    },[shiftbreaktime,setValue])
+
+  const employeeMasterOptions = [
+    { value: "active", label: "Active" },
+    { value: "inactive", label: "Inactive" },
+  ]; // Example options
+
+  const customSelectStyles = {
+    control: (provided) => ({
+      ...provided,
+      borderColor: "#C2C1C1",
+    }),
+  };
+ 
   return (
     <Dialog
       open={popupOpen}
@@ -17,7 +108,7 @@ export default function BreakTime() {
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-                {selectedField ? "Update" : "Add"} {type}
+                Add Break Time
               </h1>
               <button
                 onClick={close}
@@ -26,97 +117,82 @@ export default function BreakTime() {
                 <X />
               </button>
             </div>
-            {isLoading ? (
-              <div className="flex min-h-72 w-full items-center justify-center">
-                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+
+            <form
+              className="grid grid-cols-1 gap-3"
+              onSubmit={handleSubmit(onSubmit)} 
+            >
+              <div className="group flex flex-col space-y-1">
+                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  Name
+                </label>
+                <input
+                  {...register("type_name", { required: "Name is required" })}
+                  type="text"
+                  className="input-box h-10 w-full"
+                />
+                {errors.type_name && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.type_name.message}
+                  </span>
+                )}
               </div>
-            ) : (
-              <form
-                className="grid grid-cols-1 gap-3"
-                onSubmit={handleSubmit(onSubmit)}
-              >
-                <h1>Add Break Time</h1>
-                <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    {type} Name
-                  </label>
-                  <input
-                    {...register("name", { required: true })}
-                    type="text"
-                    className="input-box h-10 w-full"
-                  />
-                  {errors.name && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
-                    </span>
-                  )}
-                </div>
-                {type === "Work Location" ? (
-                  <div className="group flex flex-col space-y-1">
-                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      {type} Address
-                    </label>
-                    <textarea
-                      {...register("address")}
-                      type="text"
-                      className="input-box h-20 w-full"
+              <div className="group flex flex-col space-y-1">
+                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  Pay Mode
+                </label>
+                <input
+                  {...register("pay_node", { required: "Pay mode is required" })}
+                  type="text"
+                  className="input-box h-10 w-full"
+                />
+                {errors.pay_node && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.pay_node.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="gap flex items-center justify-center gap-2">
+                  <div className="group flex w-full flex-col gap-1.5 py-2">
+                    <label className="required label-text">Start Time</label>
+                    <input
+                      {...register("start_time", { required: true })}
+                      autoComplete="off"
+                      type="time"
+                      className="input-box"
                     />
-                    {errors.address && (
+                    {errors.start_time && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.address?.message}
+                        {errors.start_time?.message}
                       </span>
                     )}
                   </div>
-                ) : null}
-                <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Status</label>
-                  <Controller
-                    name="status"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        options={employeeMasterOptions}
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select Status"
-                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                      />
+                  <div className="group flex w-full flex-col gap-1.5 py-2 ">
+                    <label className="required label-text">End Time</label>
+                    <input
+                      {...register("end_time", { required: true })}
+                      autoComplete="off"
+                      type="time"
+                      className="input-box"
+                    />
+                    {errors.end_time && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.end_time?.message}
+                      </span>
                     )}
-                  />
-                  {errors.status && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.status?.message}
-                    </span>
-                  )}
+                  </div>
                 </div>
-
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
-                  <button
-                    type="submit"
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
-                    disabled={loader}
-                  >
-                    {loader ? (
-                      <div className="flex items-center gap-3">
-                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                        {selectedField ? "Updating" : "Saving"}
-                      </div>
-                    ) : (
-                      <span>{selectedField ? "Update" : "Save"}</span>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={close}
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            )}
+              <div className="mt-2 flex flex-row items-end justify-end  gap-3">
+                <button
+                  type="submit"
+                  className="flex h-11 w-1/2  cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange text-sm font-normal text-white focus:outline-none"
+                >
+                  <span>{selectedField ? "Update" : "Save"}</span>
+                </button>
+               
+              </div>
+            </form>
           </DialogPanel>
         </div>
       </div>

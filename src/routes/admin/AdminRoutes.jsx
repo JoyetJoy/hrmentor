@@ -57,21 +57,22 @@ export const AdminRoutes = [
         path:"calender-department",
         element:<RosterDepartment/>
       },
-      {
-        path:"roster",
-        children:[
-          {
-            path:"",
-            element:<RosterList/>,
-          },
-            {
-              path:"claim",
-              element:<Claim/>
-            }
-          
-        ]
-      },
+     
     ]
 
+  },
+  {
+    path:"roster",
+    children:[
+      {
+        path:"",
+        element:<RosterList/>,
+      },
+        {
+          path:"claim",
+          element:<Claim/>
+        }
+      
+    ]
   },
 ]

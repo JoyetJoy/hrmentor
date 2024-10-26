@@ -31,11 +31,11 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
   const columns = React.useMemo(
     () => [
       {
-        header: "Sl No",
+        header: "Emp:ID",
         accessorKey: "sno",
       },
       {
-        header: "Shift Name",
+        header: "Emp:Name",
         accessorKey: "shift-name",
         cell: ({ row }) => row.original.details || "N/A",
       },
@@ -45,16 +45,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <button
-              type="button"
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-                alt="Edit"
-              />
-            </button>
             <button
               type="button"
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
@@ -169,11 +159,25 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                 <div className="flex flex-col">
                   <label className="text-sm font-medium">Add Employee</label>
                   <div className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="Search and Select Employee"
-                      className="input-box w-full placeholder:text-sm"
+                  <Controller
+                      name="shift"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          placeholder="Select Shift"
+                          className="input-box w-full"
+                        />
+                      )}
                     />
+                    {errors.endDate && (
+                      <span className="text-xs text-red-500">
+                        {errors.endDate?.message}
+                      </span>
+                    )}
                     <button className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white">
                       <Plus className="size-4" /> Add
                     </button>

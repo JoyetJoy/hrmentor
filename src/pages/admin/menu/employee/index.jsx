@@ -14,7 +14,6 @@ export default function EmployeeLists() {
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
-  // Fetch List
   const { data: employeeListing, isLoading } = useQuery({
     queryKey: ["employeeListing", currentPage, keyword],
     queryFn: () =>
