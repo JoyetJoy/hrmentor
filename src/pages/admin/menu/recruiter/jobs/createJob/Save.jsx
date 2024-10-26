@@ -277,7 +277,7 @@ function RecruiterJobPost() {
 
   useEffect(() => {
     if (salary_package) {
-      if (salary_package?.value === 0) {
+      if (salary_package?.value == 0) {
         setIsNotMentioned(true);
       } else {
         setIsNotMentioned(false);
@@ -372,10 +372,10 @@ function RecruiterJobPost() {
     formData.append("min_exp_id", data.min_exp_id?.id);
     formData.append("job_description", jobDescription);
     formData.append("salary_package", data.salary_package?.value);
-    formData.append("sensitive_salary_type", data.salary_type?.id);
-    formData.append("minimum_range", data.minimum_range);
-    formData.append("maximum_range", data?.maximum_range);
-    formData.append("salary_package_type", data.salary_package_type?.id);
+    formData.append("sensitive_salary_type", data.salary_type?.id ?? "");
+    formData.append("minimum_range", data.minimum_range ?? "");
+    formData.append("maximum_range", data?.maximum_range ?? "");
+    formData.append("salary_package_type", data.salary_package_type?.id ?? "");
     formData.append(
       "sensitive_salary_minimum_range",
       data.sensitive_salary_minimum_range,
@@ -384,7 +384,7 @@ function RecruiterJobPost() {
       "sensitive_salary_maximum_range",
       data.sensitive_salary_maximum_range,
     );
-    formData.append("currency_type", data.currency_type?.id);
+    formData.append("currency_type", data.currency_type?.id ?? "");
     formData.append(
       "search_engine_description",
       data.search_engine_description,
@@ -918,7 +918,7 @@ function RecruiterJobPost() {
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
                     <div className="group flex flex-col space-y-1 px-3 py-2">
-                      <label className="label-text">Job code</label>
+                      <label className="required label-text">Job code</label>
                       <div className="input-box flex">
                         <input
                           {...register("job_code")}
@@ -942,7 +942,9 @@ function RecruiterJobPost() {
                       )}
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-2">
-                      <label className="label-text">Salary Package</label>
+                      <label className="required label-text">
+                        Salary Package
+                      </label>
                       <Controller
                         name="salary_package"
                         control={control}
