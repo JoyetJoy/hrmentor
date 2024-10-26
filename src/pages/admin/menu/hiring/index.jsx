@@ -1,5 +1,5 @@
 import MenuHeader from "@/components/common/MenuHeader";
-import { OverViewCards } from "@/components/hiring/overview/OverViewCards";
+import { OverviewCards } from "@/components/hiring/overview/OverviewCard";
 import { UpcomingInterviewsList } from "@/components/hiring/overview/UpcomingInterviewsList";
 import React from "react";
 
@@ -13,14 +13,10 @@ export const HiringDashboard = () => {
         currentpath={"Hiring"}
         activeMenu={"Dashboard"}
       />
-
       <div className="flex flex-col gap-3">
-        <OverViewCards/>
-      <UpcomingInterviewsList/>
+        <OverviewCards />
+        <UpcomingInterviewsList />
       </div>
-
     </>
   );
-
-  
 };
