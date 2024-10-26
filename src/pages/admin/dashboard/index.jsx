@@ -27,6 +27,7 @@ export const AdminDashboard = () => {
           </div>
         </div>
         <StatsCard />
+        <img src="/dummy.svg" />
       </aside>
       <aside className="flex w-[27%] flex-col">
         <ProfileCompletionCount />
