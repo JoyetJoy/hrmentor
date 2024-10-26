@@ -5,14 +5,12 @@ export const FilterModalHiring = ({ isOpen, onClose, children }) => {
     <>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-end">
-          {/* Backdrop */}
           <div
             className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${
               isOpen ? "opacity-100" : "opacity-0"
             }`}
             onClick={onClose}
           ></div>
-
           <div
             className={`fixed right-0 top-0 h-full w-96 transform bg-white p-5 shadow-lg transition-transform duration-300 ease-in-out ${
               isOpen ? "translate-x-0" : "translate-x-full"

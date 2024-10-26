@@ -45,7 +45,7 @@ export default function RecInterviewDetailView({
                   <User className="size-4 fill-black" />
                 </div>
                 <div className="flex flex-col">
-                  <div className="text-sm font-semibold">
+                  <div className="max-w-[10rem] text-sm font-semibold">
                     {recInterviewDetail?.candidate_name}
                   </div>
                   <div className="text-xs text-[#7F7F7F]">
@@ -55,9 +55,16 @@ export default function RecInterviewDetailView({
               </div>
               <div className="flex items-center gap-2">
                 <h5 className="text-[0.94rem] font-semibold">Status :</h5>
-                <p className="text-sm font-semibold text-hrmprimaryorange">
-                  {recInterviewDetail?.interview_status}
-                </p>
+                <div
+                  style={{
+                    backgroundColor:
+                      recInterviewDetail?.interview_status?.background_color,
+                    color: recInterviewDetail?.interview_status?.text_color,
+                  }}
+                  className="flex h-8 w-fit items-center justify-center rounded-md px-3 text-xs font-semibold"
+                >
+                  {recInterviewDetail?.interview_status?.label}
+                </div>
               </div>
             </div>
             {isLoading ? (

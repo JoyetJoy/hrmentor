@@ -18,11 +18,9 @@ export const OverviewTopBar = ({
     <>
       <div className="flex w-full items-center justify-between text-sm font-semibold">
         {title}
-
         <div className="flex gap-3">
           {showSearch && (
             <>
-              {" "}
               <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] outline-none hover:border-[#E6E7EF]">
                 <Search
                   className="size-4 object-contain text-gray-200"
@@ -62,7 +60,6 @@ export const OverviewTopBar = ({
               <span>Generate</span>
             </button>
           )}
-          ,
           {sendButton && (
             <button
               type="submit"
@@ -71,7 +68,6 @@ export const OverviewTopBar = ({
               <span>Send</span>
             </button>
           )}
-          ,
         </div>
       </div>
       <FilterModalHiring isOpen={isModalOpen} onClose={toggleModal} />
