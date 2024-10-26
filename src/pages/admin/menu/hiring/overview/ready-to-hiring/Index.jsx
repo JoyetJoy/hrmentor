@@ -59,7 +59,7 @@ export const ReadyToHiring = () => {
         cell: ({ row }) => {
           return (
             <div className="flex items-center gap-1 px-2">
-              <div className="flex h-10 w-10 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
+              <div className="flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
                 {row.original?.candidate_name?.charAt(0)}
               </div>
               {row.original?.candidate_name}
