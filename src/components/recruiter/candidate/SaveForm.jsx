@@ -595,9 +595,7 @@ export default function RecSaveFormCandidate({ type }) {
               )}
             </div>
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="label-text">
-                Date Applied<span className="text-red-500">*</span>
-              </label>
+              <label className="required label-text">Date Applied</label>
               <input
                 {...register("date_applied", { required: true })}
                 autoComplete="off"
