@@ -75,7 +75,6 @@ export default function SaveRecruiterMasterForm({
   }
 
   const isJobDescription = type === "Job Description";
-  console.log(colKeys);
   const onSubmit = async (data) => {
     if (isJobDescription && !description) {
       setError("jobDescription", {
@@ -124,7 +123,7 @@ export default function SaveRecruiterMasterForm({
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className={`data-[closed]:transform-[scale(95%)] w-full rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0 ${isJobDescription ? "max-w-2xl" : "max-w-md"}`}
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">

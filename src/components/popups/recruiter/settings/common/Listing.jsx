@@ -88,7 +88,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
             const fieldValue = getValue();
             return (
               <div
-                className="flex max-w-xl gap-1"
+                className="!line-clamp-3 flex max-w-sm flex-col gap-1"
                 dangerouslySetInnerHTML={{ __html: fieldValue }}
               />
             );
