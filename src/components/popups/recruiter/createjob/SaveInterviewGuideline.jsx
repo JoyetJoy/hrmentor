@@ -160,7 +160,7 @@ function InterviewGuideline({
                 className="grid grid-cols-1 gap-3"
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <div className="my-1 h-screen overflow-hidden rounded-md bg-white p-3">
+                <div className="h-screen rounded-md bg-white p-3">
                   <div className="mb-7 flex items-center justify-between">
                     <p className="text-base font-bold text-black">
                       Create Interview Guide
