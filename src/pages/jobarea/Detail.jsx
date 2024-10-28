@@ -59,10 +59,12 @@ export default function CareerDetail() {
                     <button className="btn h-8 min-h-8 rounded border border-[#CFD2E3] bg-transparent text-xs text-white">
                       {careerDetails?.min_exp_id?.value}
                     </button>
-                    <button className="btn h-8 min-h-8 rounded border border-[#CFD2E3] bg-transparent text-xs text-white">
-                      £ {careerDetails?.minimum_range} -{" "}
-                      {careerDetails?.maximum_range}
-                    </button>
+                    {careerDetails?.minimum_range ? (
+                      <button className="btn h-8 min-h-8 rounded border border-[#CFD2E3] bg-transparent text-xs text-white">
+                        £ {careerDetails?.minimum_range} -{" "}
+                        {careerDetails?.maximum_range}
+                      </button>
+                    ) : null}
                     <button className="btn h-8 min-h-8 rounded border border-[#CFD2E3] bg-transparent text-xs text-white">
                       {careerDetails?.employment_type?.value}
                     </button>

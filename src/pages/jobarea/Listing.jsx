@@ -138,12 +138,14 @@ export default function JobAreaListing() {
                             ?.minimum_experience_type_name
                         }
                       </button>
-                      <button
-                        type="button"
-                        className="btn flex h-9 min-h-9 items-center rounded border border-black/20 bg-white px-5 text-xs font-semibold text-black/70 hover:scale-[1.01]"
-                      >
-                        £ {career?.minimum_range} - {career?.maximum_range}
-                      </button>
+                      {career?.minimum_range && (
+                        <button
+                          type="button"
+                          className="btn flex h-9 min-h-9 items-center rounded border border-black/20 bg-white px-5 text-xs font-semibold text-black/70 hover:scale-[1.01]"
+                        >
+                          £ {career?.minimum_range} - {career?.maximum_range}
+                        </button>
+                      )}
                       <button
                         type="button"
                         className="btn flex h-9 min-h-9 items-center rounded border border-black/20 bg-white px-5 text-xs font-semibold text-black/70 hover:scale-[1.01]"
