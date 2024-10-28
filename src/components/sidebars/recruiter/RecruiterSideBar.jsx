@@ -1,23 +1,15 @@
 import { newRequest } from "@/api";
 import { statusDataSelecter } from "@/utils/customStyles";
 import { Switch } from "@headlessui/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Eye } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 
-function RecruiterSideBar({ jid }) {
+function RecruiterSideBar({ jid, jobDetailView }) {
   const queryClient = useQueryClient();
-  const { data: jobDetailView, isLoading } = useQuery({
-    queryKey: ["jobDetailView", jid],
-    queryFn: () =>
-      newRequest.get(`job-detail-view/${jid}`).then((res) => {
-        return res.data;
-      }),
-    enabled: !!jid,
-  });
 
   const [enabled, setEnabled] = useState(false);
 
@@ -94,12 +86,13 @@ function RecruiterSideBar({ jid }) {
       <div className="flex flex-row justify-between">
         <h1 className="text-base font-bold">Job Information</h1>
         <div className="flex flex-row gap-2">
-          {/* <Link
-            to={""}
+          <Link
+            to={`/career/${jid}`}
+            target="_blank"
             className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
           >
             <Eye />
-          </Link> */}
+          </Link>
           <Link
             to={`/admin/recruiter/jobs/post?jid=${jid}`}
             className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
@@ -163,7 +156,6 @@ function RecruiterSideBar({ jid }) {
         />
       </div>
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
-        {" "}
         Interviewer
         <Select
           name="status"

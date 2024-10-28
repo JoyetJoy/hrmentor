@@ -41,6 +41,15 @@ function RecViewJobDetail() {
     }
   }, [recJobCandidatesByid]);
 
+  const { data: jobDetailView, isLoading: jobDetailViewLoading } = useQuery({
+    queryKey: ["jobDetailView", jid],
+    queryFn: () =>
+      newRequest.get(`job-detail-view/${jid}`).then((res) => {
+        return res.data;
+      }),
+    enabled: !!jid,
+  });
+
   const columns = React.useMemo(
     () => [
       {
@@ -113,21 +122,21 @@ function RecViewJobDetail() {
         activeMenu={"Jobs"}
       />
       <div className="my-4 flex flex-row items-center justify-between">
-        <h1 className="flex items-center gap-1 text-base font-bold text-[#2C2C2C]">
+        <h1 className="flex items-center gap-1 text-base font-bold capitalize text-[#2C2C2C]">
           <ArrowLeft
             onClick={() => {
               history.back();
             }}
             className="size-4 cursor-pointer"
           />
-          Project manger
+          {jobDetailView?.jobDetail?.job_title}
         </h1>
         <div className="flex gap-5 text-sm font-semibold text-hrmprimaryorange">
           Candidates
         </div>
       </div>
       <div className="my-3 flex flex-row gap-2">
-        <RecruiterSideBar jid={jid} />
+        <RecruiterSideBar jid={jid} jobDetailView={jobDetailView} />
         <div className="w-full">
           {isLoading ? (
             <Loader />
