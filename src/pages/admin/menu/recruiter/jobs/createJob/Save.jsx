@@ -149,7 +149,7 @@ function RecruiterJobPost() {
     sensitiveData: false,
     exposure: false,
   });
-
+  console.log(jobDetails);
   useEffect(() => {
     if (jobDetails) {
       setValue("job_title", jobDetails.job_title);
@@ -169,24 +169,24 @@ function RecruiterJobPost() {
       setValue("salary_package_type", jobDetails.salaryTypeName);
       setValue("salary_package", jobDetails.salary_package);
       setValue("salary_type", jobDetails.sensitiveSalaryTypeName);
-      setValue("minimum_range", jobDetails.minimum_range);
-      setValue("maximum_range", jobDetails.maximum_range);
+      setValue("minimum_range", jobDetails.minimum_range ?? "");
+      setValue("maximum_range", jobDetails.maximum_range ?? "");
       setValue(
         "sensitive_salary_minimum_range",
-        jobDetails.sensitive_salary_minimum_range,
+        jobDetails.sensitive_salary_minimum_range ?? "",
       );
       setValue(
         "sensitive_salary_maximum_range",
-        jobDetails.sensitive_salary_maximum_range,
+        jobDetails.sensitive_salary_maximum_range ?? "",
       );
       setValue(
         "sensitive_data_internal_note",
-        jobDetails.sensitive_data_internal_note,
+        jobDetails.sensitive_data_internal_note ?? "",
       );
-      setValue("meta_title", jobDetails.meta_title);
+      setValue("meta_title", jobDetails.meta_title ?? "");
       setValue(
         "search_engine_description",
-        jobDetails.search_engine_description,
+        jobDetails.search_engine_description ?? "",
       );
       setValue("career_page", jobDetails.career_page);
     }
