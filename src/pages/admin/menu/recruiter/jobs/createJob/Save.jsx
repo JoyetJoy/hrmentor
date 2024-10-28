@@ -378,20 +378,20 @@ function RecruiterJobPost() {
     formData.append("salary_package_type", data.salary_package_type?.id ?? "");
     formData.append(
       "sensitive_salary_minimum_range",
-      data.sensitive_salary_minimum_range,
+      data.sensitive_salary_minimum_range ?? "",
     );
     formData.append(
       "sensitive_salary_maximum_range",
-      data.sensitive_salary_maximum_range,
+      data.sensitive_salary_maximum_range ?? "",
     );
     formData.append("currency_type", data.currency_type?.id ?? "");
     formData.append(
       "search_engine_description",
-      data.search_engine_description,
+      data.search_engine_description ?? "",
     );
     formData.append(
       "sensitive_data_internal_note",
-      data.sensitive_data_internal_note,
+      data.sensitive_data_internal_note ?? "",
     );
     formData.append("job_description_id", data.job_description_id?.id);
     formData.append("postal_code", data.postal_code);
@@ -401,7 +401,7 @@ function RecruiterJobPost() {
     formData.append("designation_id", data.designation_id?.id);
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("meta_title", data.meta_title);
+    formData.append("meta_title", data.meta_title ?? "");
     formData.append("state_id", data.state_id?.id);
     formData.append("career_page", showToCareerPage ? 1 : 0);
     postFile && formData.append("image", postFile);
@@ -414,7 +414,6 @@ function RecruiterJobPost() {
         res = await newFormRequest.post(GET_JOBS, formData);
       }
       if (res.data?.status === 201) {
-        console.log(res);
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["jobDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
