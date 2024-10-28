@@ -575,7 +575,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
-                    Minimum Experience <span className="text-red-500">*</span>
+                    Experience <span className="text-red-500">*</span>
                     <button
                       onClick={() => {
                         handleOpenSaveMaster("minimum_experience");
@@ -840,7 +840,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="label-text">Postal Code</label>
+                  <label className="required label-text">Postal Code</label>
                   <input
                     {...register("postal_code")}
                     autoComplete="off"
