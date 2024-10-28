@@ -844,14 +844,6 @@ function RecruiterJobPost() {
                   <input
                     {...register("postal_code")}
                     autoComplete="off"
-                    onKeyPress={(event) => {
-                      if (
-                        !/^[0-9]$/.test(event.key) ||
-                        event.target.value.length >= 6
-                      ) {
-                        event.preventDefault();
-                      }
-                    }}
                     type="text"
                     className="input-box"
                   />
