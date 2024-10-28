@@ -213,6 +213,7 @@ function JobApplicationQuestion() {
               </div>
               <Link
                 to={`/career/${jid}`}
+                target="_blank"
                 className="btn flex flex-row items-center gap-2 border border-[#181C3A] bg-white text-[#181C3A]"
               >
                 <Eye className="size-4" />
