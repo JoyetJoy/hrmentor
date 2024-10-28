@@ -60,7 +60,7 @@ export const recCandidateSchema = Yup.object({
   }).test("both-required", "Recruiting job is required", function (value) {
     return value?.value && value?.label;
   }),
-  linked_in: Yup.string().required("LinkendIn Id is required"),
+  linked_in: Yup.string(),
   date_applied: Yup.string().required("Date applied is required"),
   phone_number: Yup.string()
     .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")

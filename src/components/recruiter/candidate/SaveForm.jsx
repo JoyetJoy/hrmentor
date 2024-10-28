@@ -127,7 +127,7 @@ export default function RecSaveFormCandidate({ type }) {
       setValue("country_id", candidateDetails?.data?.country);
       setValue("state_or_province", candidateDetails?.data?.stateOrProvince);
       setValue("city_id", candidateDetails?.data?.city);
-      setValue("linked_in", candidateDetails?.data?.linkedin_id);
+      setValue("linked_in", candidateDetails?.data?.linkedin_id ?? "");
     }
   }, [candidateDetails, setValue]);
 
@@ -174,7 +174,7 @@ export default function RecSaveFormCandidate({ type }) {
     formData.append("source", data.source.id);
     formData.append("job_id", data.job_id.id);
     formData.append("post_code", data.post_code);
-    formData.append("linked_in", data.linked_in);
+    formData.append("linked_in", data.linked_in ?? "");
     formData.append("phone_number", data.phone_number);
     formData.append("email", data.email);
     formData.append("personal_email", data.personal_email);
@@ -637,7 +637,7 @@ export default function RecSaveFormCandidate({ type }) {
             <div className="group flex flex-col space-y-1 py-2">
               <label className="label-text">LinkedIn ID</label>
               <input
-                {...register("linked_in", { required: true })}
+                {...register("linked_in")}
                 autoComplete="off"
                 type="text"
                 className="input-box"
