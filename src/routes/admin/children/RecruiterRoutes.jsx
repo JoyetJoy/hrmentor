@@ -10,7 +10,6 @@ import RecruiterJobs from "@/pages/admin/menu/recruiter/jobs/RecJobs";
 import JobInterview from "@/pages/admin/menu/recruiter/jobs/createJob/jobinterview";
 import RecruiterJobPost from "@/pages/admin/menu/recruiter/jobs/createJob/Save";
 import { RecRequestRefferal } from "@/pages/admin/menu/recruiter/jobs/createJob/RequestRefferal";
-import JobDetails from "@/pages/admin/menu/recruiter/jobs/jobdetails";
 import RecruiterReports from "@/pages/admin/menu/recruiter/report";
 import { RecruiterSettingCandidateType } from "@/pages/admin/menu/recruiter/settings/CandidateType";
 import { RecruiterSettingQualification } from "@/pages/admin/menu/recruiter/settings/EducationQualification";
@@ -39,11 +38,6 @@ export const RecruiterRoutes = [
     index: true,
     element: <RecruiterDashbaord />,
   },
-  {
-    path: "job-details",
-    element: <JobDetails />,
-  },
-
   // ---- Job ----
   {
     path: "jobs",
