@@ -171,6 +171,7 @@ function RecruiterJobs() {
             Create Job
           </Link>
           <Link
+            target="_blank"
             to="/careers"
             className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white"
           >
