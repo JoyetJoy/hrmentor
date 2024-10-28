@@ -211,7 +211,10 @@ function JobApplicationQuestion() {
                   application to make it easier to screen candidate later.
                 </p>
               </div>
-              <Link className="btn flex flex-row items-center gap-2 border border-[#181C3A] bg-white text-[#181C3A]">
+              <Link
+                to={`/career/${jid}`}
+                className="btn flex flex-row items-center gap-2 border border-[#181C3A] bg-white text-[#181C3A]"
+              >
                 <Eye className="size-4" />
                 Application Preview
               </Link>
