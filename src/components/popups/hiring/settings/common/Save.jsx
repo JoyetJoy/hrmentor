@@ -61,6 +61,10 @@ export default function SaveHiringMasterForm({
     if (hiringMastersDetailByid) {
       setValue("name", hiringMastersDetailByid?.[colKeys.field1?.key]);
       setValue("status", hiringMastersDetailByid?.[colKeys.field2?.key]);
+      setValue(
+        "document_type_id",
+        hiringMastersDetailByid?.[colKeys.field3?.key],
+      );
     }
   }, [hiringMastersDetailByid, type, setValue]);
 
