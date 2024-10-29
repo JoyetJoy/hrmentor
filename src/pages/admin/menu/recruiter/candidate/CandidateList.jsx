@@ -83,10 +83,10 @@ function CandidatesList() {
         header: "Email",
         accessorKey: "email",
       },
-      {
-        header: "Designation",
-        accessorKey: "designation",
-      },
+      // {
+      //   header: "Designation",
+      //   accessorKey: "designation",
+      // },
       {
         header: "Workflow status",
         accessorKey: "status",
