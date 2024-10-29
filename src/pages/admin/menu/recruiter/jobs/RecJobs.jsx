@@ -56,12 +56,12 @@ function RecruiterJobs() {
         },
       },
       {
-        header: "Job Title",
-        accessorKey: "job_title",
-      },
-      {
         header: "Job ID",
         accessorKey: "unique_job_id",
+      },
+      {
+        header: "Job Title",
+        accessorKey: "job_title",
       },
       {
         header: "Type",
