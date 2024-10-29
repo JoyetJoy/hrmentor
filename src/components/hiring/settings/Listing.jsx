@@ -89,7 +89,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
           cell: ({ row }) => {
             return (
               <div
-                className="!line-clamp-2 flex max-w-xl flex-col gap-1"
+                className="!line-clamp-2 flex max-w-sm flex-col gap-1"
                 dangerouslySetInnerHTML={{ __html: row.original?.description }}
               />
             );
