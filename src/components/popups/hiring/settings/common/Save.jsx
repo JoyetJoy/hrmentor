@@ -87,6 +87,7 @@ export default function SaveHiringMasterForm({
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
+    setIsDefault(false);
     reset();
   }
 
@@ -240,7 +241,7 @@ export default function SaveHiringMasterForm({
                   </div>
                 ) : null}
 
-                <div className="group flex w-full items-center gap-3">
+                <div className="group z-[50] flex w-full items-center gap-3">
                   <label className="required label-text">Is Default</label>
                   <div className="flex">
                     <input
