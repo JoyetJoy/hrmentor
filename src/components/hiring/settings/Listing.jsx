@@ -44,6 +44,8 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
         }),
   });
 
+  console.log(data);
+
   useEffect(() => {
     if (data) {
       setTotalPages(data?.last_page);
@@ -72,7 +74,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
             return (
               <div className="flex max-w-xl items-center gap-3">
                 {fieldValue}
-                {row?.original?.is_default === "1" ? (
+                {row?.original?.default === "1" ? (
                   <div className="rounded-full border border-[#7F7F7F] px-2 py-0.5 font-semibold text-[#7F7F7F]">
                     Default
                   </div>

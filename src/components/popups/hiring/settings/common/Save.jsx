@@ -82,7 +82,7 @@ export default function SaveHiringMasterForm({
 
   useEffect(() => {
     if (hiringMastersDetailByid?.default) {
-      setIsDefault(hiringMastersDetailByid?.default?.id === "1" ? true : false);
+      setIsDefault(hiringMastersDetailByid?.default === 1 ? true : false);
     }
   }, [hiringMastersDetailByid, setIsDefault]);
 
