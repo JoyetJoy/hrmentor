@@ -81,10 +81,8 @@ export default function SaveHiringMasterForm({
   }, [hiringMastersDetailByid, type, setDescription]);
 
   useEffect(() => {
-    if (hiringMastersDetailByid?.is_default) {
-      setIsDefault(
-        hiringMastersDetailByid?.is_default?.id === "1" ? true : false,
-      );
+    if (hiringMastersDetailByid?.default) {
+      setIsDefault(hiringMastersDetailByid?.default?.id === "1" ? true : false);
     }
   }, [hiringMastersDetailByid, setIsDefault]);
 
@@ -111,7 +109,7 @@ export default function SaveHiringMasterForm({
       formData.append(colKeys.field1?.key, data?.name);
       formData.append(colKeys.field2?.key, data?.status?.value);
       formData.append(colKeys.field3?.key, data?.document_type_id?.id);
-      formData.append("is_default", isdefault ? 1 : 0);
+      formData.append("default", isdefault ? 1 : 0);
       type === "Document & Templates" &&
         formData.append("description", description);
       let res;
