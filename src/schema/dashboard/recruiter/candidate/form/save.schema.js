@@ -46,9 +46,9 @@ export const recCandidateSchema = Yup.object({
     return value?.value && value?.label;
   }),
   source: Yup.object({
-    id: Yup.string(),
-    value: Yup.string(),
-    label: Yup.string(),
+    id: Yup.string().nullable(),
+    value: Yup.string().nullable(),
+    label: Yup.string().nullable(),
   }).test("both-required", "Source is required", function (value) {
     return value?.value && value?.label;
   }),

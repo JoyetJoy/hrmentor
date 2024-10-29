@@ -193,7 +193,7 @@ export default function SaveRecruiterMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                      className="w-full flex-grow rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
                     />
                     {errors?.jobDescription && (
                       <span className="text-xs font-medium text-red-500">

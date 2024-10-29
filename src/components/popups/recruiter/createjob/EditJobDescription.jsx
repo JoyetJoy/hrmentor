@@ -63,7 +63,7 @@ export default function EditJobDescriptionRecruiterJobForm({
                   value={description}
                   onChange={setDescription}
                   placeholder={"Type here.."}
-                  className="overflow-y-min h-full max-h-96 w-full flex-grow overflow-y-auto rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                  className="overflow-y-min h-full max-h-96 w-full flex-grow overflow-y-auto rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
                 />
               )}
             </div>

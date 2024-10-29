@@ -308,7 +308,7 @@ function InterviewGuideline({
                         value={notes}
                         onChange={setNotes}
                         placeholder={"Type here.."}
-                        className="overflow-y-min h-full max-h-96 min-h-52 w-full flex-grow overflow-y-auto rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                        className="overflow-y-min h-full max-h-96 min-h-52 w-full flex-grow overflow-y-auto rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
                       />
                     </div>
                     <div className="mt-7 flex flex-row items-center justify-center gap-3 px-2">

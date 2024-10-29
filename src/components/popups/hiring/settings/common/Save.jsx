@@ -33,6 +33,7 @@ export default function SaveHiringMasterForm({
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
+  const [isdefault, setIsDefault] = useState(false);
   const [loader, setLoader] = useState(false);
 
   // Get selected data
@@ -42,8 +43,6 @@ export default function SaveHiringMasterForm({
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
     enabled: enableKey,
   });
-
-  console.log(hiringMastersDetailByid);
 
   const {
     register,
@@ -77,6 +76,14 @@ export default function SaveHiringMasterForm({
     }
   }, [hiringMastersDetailByid, type, setDescription]);
 
+  useEffect(() => {
+    if (hiringMastersDetailByid?.is_default) {
+      setIsDefault(
+        hiringMastersDetailByid?.is_default?.id === "1" ? true : false,
+      );
+    }
+  }, [hiringMastersDetailByid, setIsDefault]);
+
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
@@ -99,6 +106,7 @@ export default function SaveHiringMasterForm({
       formData.append(colKeys.field1?.key, data?.name);
       formData.append(colKeys.field2?.key, data?.status?.value);
       formData.append(colKeys.field3?.key, data?.document_type_id?.id);
+      formData.append("is_default", isdefault ? 1 : 0);
       type === "Document & Templates" &&
         formData.append("description", description);
       let res;
@@ -222,7 +230,7 @@ export default function SaveHiringMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="min-h-52 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                      className="min-h-52 w-full flex-grow rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
                     />
                     {errors?.description && (
                       <span className="text-xs font-medium text-red-500">
@@ -231,6 +239,27 @@ export default function SaveHiringMasterForm({
                     )}
                   </div>
                 ) : null}
+
+                <div className="group flex w-full items-center gap-3">
+                  <label className="required label-text">Is Default</label>
+                  <div className="flex">
+                    <input
+                      onChange={(e) => {
+                        setIsDefault(e.target.checked);
+                      }}
+                      checked={isdefault}
+                      className="size-5"
+                      type="checkbox"
+                      name=""
+                      id=""
+                    />
+                  </div>
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
+                  )}
+                </div>
 
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">
                   <button
