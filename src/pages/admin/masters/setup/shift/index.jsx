@@ -82,13 +82,11 @@ function ShiftList() {
       {
         header: "Status",
         accessorKey: "status",
-        cell: ({ row }) =>
-          <div
-        className="flex h-8 w-fit items-center  justify-center rounded-md px-3 font-semibold text-[#00B448] bg-[#00B4481A]"
-      >
-        { row.original.details || "Active"}
-      </div>
-          
+        cell: ({ row }) => (
+          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#00B4481A] px-3 font-semibold text-[#00B448]">
+            {row.original.details || "Active"}
+          </div>
+        ),
       },
       {
         header: "Action",
