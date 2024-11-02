@@ -121,7 +121,6 @@ export default function RosterList() {
             <Filter className="size-4" />
           </div>
         </div>
-
         <div className="flex items-center gap-2">
           <div className="flex h-10 min-h-10 flex-row items-center justify-center gap-1 rounded-md border border-gray-400 bg-white px-4 py-1">
             <Calendar className="size-4" />

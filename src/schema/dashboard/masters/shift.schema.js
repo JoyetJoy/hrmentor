@@ -45,11 +45,5 @@ export const ShiftSchema = Yup.object({
   pay_node: Yup.string().required("paymode name is required"),
   start_time:Yup.string().required("Start time required"),
   end_time:Yup.string().required("End time is required"),
-  shift_id: Yup.object({
-    id: Yup.string(),
-    value: Yup.string(),
-    label: Yup.string(),
-  }).test("both-required", "Shift  is required", function (value) {
-    return value?.value && value?.label;
-  }),
+  
  })

@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-export default function NewRoster({ popupOpen, setPopupOpen,formtype }) {
+export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
 
@@ -31,9 +31,8 @@ export default function NewRoster({ popupOpen, setPopupOpen,formtype }) {
   });
 
   const { data: rosterlisting, isLoading } = useQuery({
-    queryKey: ["rosterlisting",  formtype],
-    queryFn: () =>
-      newRequest.get(`${ROSTER_LIST}`).then((res) => res.data),
+    queryKey: ["rosterlisting", formtype],
+    queryFn: () => newRequest.get(`${ROSTER_LIST}`).then((res) => res.data),
     enabled: formtype == "update",
   });
 
@@ -42,7 +41,7 @@ export default function NewRoster({ popupOpen, setPopupOpen,formtype }) {
       {
         header: "Emp:ID",
         accessorKey: "sno",
-         cell: ({ row }) => row.original.rosterlisting || "#001"
+        cell: ({ row }) => row.original.rosterlisting || "#001",
       },
       {
         header: "Emp:Name",
@@ -169,7 +168,7 @@ export default function NewRoster({ popupOpen, setPopupOpen,formtype }) {
                 <div className="flex flex-col">
                   <label className="text-sm font-medium">Add Employee</label>
                   <div className="flex gap-2">
-                  <Controller
+                    <Controller
                       name="shift"
                       control={control}
                       rules={{ required: true }}

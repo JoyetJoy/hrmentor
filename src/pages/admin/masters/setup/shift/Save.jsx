@@ -10,7 +10,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import QueryTable from "@/components/table/QueryTable";
 import BreakTime from "@/components/popups/master/shift/BreakTime";
 import MenuHeader from "@/components/common/MenuHeader";
-import { ChevronRight, Plus, Trash2 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import {
   EMPLOYEE_DEPARTMENT_LIST,
@@ -18,21 +18,19 @@ import {
   EMPLOYEE_WORK_LOCATION_LIST,
 } from "@/api/master";
 import { SHIFT_BREAK_TIME, SHIFT_LIST } from "@/api/setup";
+import Break from "../Break";
 
 export default function SaveMasterShift({ formtype, sid }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+ 
   const [loader, setLoader] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
   const [workArea, setWorkArea] = useState([]);
-  // const [break_time, setBreak_time] = useState([]);
+  const [break_time, setBreak_time] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [new_break,setNew_break] = useState([]);
 
   const queryClient = useQueryClient();
 
-  const handleCreate = () => {
-    setPopupOpen(true);
-  };
+
 
   const {
     register,
@@ -46,50 +44,21 @@ export default function SaveMasterShift({ formtype, sid }) {
     mode: "onChange",
     resolver: yupResolver(ShiftSchema),
   });
-  const columns = React.useMemo(
-    () => [
-      {
-        header: "Name",
-        accessorKey: "type_name",
-        cell: ({ row }) => row.index + 1,
-      },
-      {
-        header: "Pay Mode",
-        accessorKey: "pay_node",
-        cell: ({ row }) => row.original.shiftDetails || "N/A",
-      },
-      {
-        header: "Start Time",
-        accessorKey: "start_time",
-        cell: ({ row }) => row.original.shiftDetails || "N/A",
-      },
-      {
-        header: "End Time",
-        accessorKey: "end_time",
-        cell: ({ row }) => row.original.shiftDetails || "N/A",
-      },
-      {
-        header: "Duration",
-        accessorKey: "duration",
-        cell: ({ row }) => row.original.shiftDetails || "N/A",
-      },
-      {
-        header: "Action",
-        accessorKey: "action",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <button
-              type="button"
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
-            >
-              <Trash2 className="size-3" />
-            </button>
-          </div>
-        ),
-      },
-    ],
-    [],
-  );
+
+  const { data: shiftbreaktime } = useQuery({
+      queryKey: ["shiftbreaktime"],
+      queryFn: () =>
+        newRequest.get(SHIFT_BREAK_TIME).then((res) => res.data),
+    });
+  
+    useEffect(()=>{
+      if(shiftbreaktime?.data){
+      setBreak_time(shiftbreaktime.data)
+      }
+    },[shiftbreaktime])
+    
+ console.log(new_break);
+
 
   // Watch form fields
   const calculationType = watch("calculation_type", "perday");
@@ -103,74 +72,57 @@ export default function SaveMasterShift({ formtype, sid }) {
     enabled: formtype == "update",
   });
 
-  const { data: shiftbreaktime = { data: [], last_page: 1 } } = useQuery({
-    queryKey: ["shiftbreaktime", currentPage, keyword],
-    queryFn: () =>
-      newRequest
-        .get(SHIFT_BREAK_TIME, {
-          params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
-          },
-        })
-        .then((res) => {
-          return res?.data || { data: [], last_page: 1 };
-        }),
-  });
 
-  useEffect(() => {
-    if (shiftbreaktime) {
-      setTotalPages(shiftbreaktime?.last_page);
-    }
-  }, [shiftbreaktime]);
-
-  const data = [
-    { sno: 1, details: "vmffsdsddg" },
-    { sno: 2, details: "fdgdsdfh" },
-  ];
+  // const data = [
+  //   { sno: 1, details: "vmffsdsddg" },
+  //   { sno: 2, details: "fdgdsdfh" },
+  // ];
   const onSubmit = async (data) => {
     setLoader(true);
-    handleShift(data);
+    await handleShift(data);
   };
   const handleShift = async (data) => {
+    const formdata = {
+      name: data.name,
+      start_time: data.start_time,
+      end_time: data.end_time,
+      shift_duration: data.shift_duration,
+      people_required: data.people_required,
+      department_id: data.department_id?.id,
+      work_id: data.work_id?.id,
+      location_id: data.location_id?.id,
+      calculation_type: data.calculation_type,
+      fullday: data.fullday,
+      fulltolerence: data.fulltolerence,
+      halfday: data.halfday,
+      halfdaytolerence: data.halfdaytolerence,
+      recur_pattern: data.recur_pattern,
+      week_def: data.week_def,
+      break_time: new_break,
+    };
+    console.log(formdata);
 
-    // const formdata = {
-    //   name: data.name,
-    //   start_time: data.start_time,
-    //   end_time: data.end_time,
-    //   shift_duration: data.shift_duration,
-    //   people_required: data.people_required,
-    //   department_id: data.department_id?.id,
-    //   work_id: data.work_id?.id,
-    //   location_id: data.location_id?.id,
-    //   calculation_type: data.calculation_type,
-    //   fullday: data.fullday,
-    //   fulltolerence: data.fulltolerence,
-    //   halfday: data.halfday,
-    //   halfdaytolerence: data.halfdaytolerence,
-    //   recur_pattern: data.recur_pattern,
-    //   week_def: data.week_def,
-    //   break_time: break_time,
-    // };
-    // console.log(formdata);
+    // const formData = new FormData();
+    // formData.append("name", data?.shift?.name);
+    // formData.append("start_time", data?.shift?.start_time);
+    // formData.append("end_time", data?.shift?.end_time);
+    // formData.append("shift_duration", data?.shift?.shift_duration);
+    // formData.append("people_required", data?.shift?.people_required);
+    // formData.append("department_id", data?.shift?.department_id?.id);
+    // formData.append("work_id", data?.shift?.work_id?.id);
+    // formData.append("location_id", data?.shift?.location_id?.id);
+    // formData.append("calculation_type", data?.shift?.calculation_type);
+    // formData.append("fullday", data?.shift?.fullday);
+    // formData.append("fulltolerence", data?.shift?.fulltolerence);
+    // formData.append("halfday", data?.shift?.halfday);
+    // formData.append("halfdaytolerence",data?.shift?.halfdaytolerence);
+    // formData.append("recur_pattern", data?.shift?.recur_pattern);
+    // formData.append("week_def", data?.shift?.week_def);
+    // formData.append("type_name", data.type_name);
+    // formData.append("start_time", data.start_time);
+    // formData.append("end_time", data.end_time);
+    // formData.append("pay_node", data.pay_node);
 
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("start_time", data.start_time);
-    formData.append("end_time", data.end_time);
-    formData.append("shift_duration", data.shift_duration);
-    formData.append("people_required", data.people_required);
-    formData.append("department_id", data.department_id?.id);
-    formData.append("work_id", data.work_id?.id);
-    formData.append("location_id", data.location_id?.id);
-    formData.append("calculation_type", data.calculation_type);
-    formData.append("fullday", data.fullday);
-    formData.append("fulltolerence", data.fulltolerence);
-    formData.append("halfday", data.halfday);
-    formData.append("halfdaytolerence", data.halfdaytolerence);
-    formData.append("recur_pattern", data.recur_pattern);
-    formData.append("week_def", data.week_def);
 
     console.log(ShiftSchema);
 
@@ -199,27 +151,32 @@ export default function SaveMasterShift({ formtype, sid }) {
       setLoader(false);
     }
   };
+  
 
   useEffect(() => {
     if (shiftDetails) {
-      setValue("name", shiftDetails?.data?.name);
-      setValue("department_id", shiftDetails?.data?.department_id);
-      setValue("work_id", shiftDetails?.data?.work_id);
-      setValue("location_id", shiftDetails?.data?.location_id);
+      setValue("name", shiftDetails?.data?.shift?.name);
+      setValue("department_id", shiftDetails?.data?.shift?.department_id);
+      setValue("work_id", shiftDetails?.data?.shift?.work_id);
+      setValue("location_id", shiftDetails?.data?.shift?.location_id);
+      setValue("start_time", shiftDetails?.data?.shift?.start_time);
+      setValue("end_time", shiftDetails?.data?.shift?.end_time);
+      setValue("shift_duration", shiftDetails?.data?.shift?.shift_duration);
+      setValue("people_required", shiftDetails?.data?.shift?.people_required);
+      setValue("calculation_type", shiftDetails?.data?.shift?.calculation_type);
+      setValue("fullday", shiftDetails?.data?.shift?.fullday);
+      setValue("fulltolerence", shiftDetails?.data?.shift?.fulltolerence);
+      setValue("halfday", shiftDetails?.data?.shift?.halfday);
+      setValue("halfdaytolerence", shiftDetails?.data?.shift?.halfdaytolerence);
+      setValue("recur_pattern", shiftDetails?.data?.shift?.recur_pattern);
+      setValue("status", shiftDetails?.data?.shift?.status);
+      setValue("week_def", shiftDetails?.data?.shift?.week_def);
+      setValue("weekly_shifts", shiftDetails?.data?.shift?.weekly_shifts);
+      setValue("people_count", shiftDetails?.data?.shift?.people_count);
+      setValue("name", shiftDetails?.type_name);
       setValue("start_time", shiftDetails?.data?.start_time);
       setValue("end_time", shiftDetails?.data?.end_time);
-      setValue("shift_duration", shiftDetails?.data?.shift_duration);
-      setValue("people_required", shiftDetails?.data?.people_required);
-      setValue("calculation_type", shiftDetails?.data?.calculation_type);
-      setValue("fullday", shiftDetails?.data?.fullday);
-      setValue("fulltolerence", shiftDetails?.data?.fulltolerence);
-      setValue("halfday", shiftDetails?.data?.halfday);
-      setValue("halfdaytolerence", shiftDetails?.data?.halfdaytolerence);
-      setValue("recur_pattern", shiftDetails?.data?.recur_pattern);
-      setValue("status", shiftDetails?.data?.status);
-      setValue("week_def", shiftDetails?.data?.week_def);
-      setValue("weekly_shifts", shiftDetails?.data?.weekly_shifts);
-      setValue("people_count", shiftDetails?.data?.people_count);
+      setValue("pay_node", shiftDetails?.data?.pay_node);
     }
   }, [shiftDetails, setValue]);
 
@@ -245,20 +202,13 @@ export default function SaveMasterShift({ formtype, sid }) {
         }),
       );
       setWorkArea(formattedWorkArea);
-      console.log(formattedWorkArea);
     }
   }, [workAreaList]);
 
-  console.log(workArea);
 
   return (
     <>
-      <BreakTime
-        popupOpen={popupOpen}
-        setPopupOpen={setPopupOpen}
-        // break_time={break_time}
-        // setBreak_time={setBreak_time}
-      />
+      
       <MenuHeader
         menu="Menu"
         subMenu="Setup"
@@ -450,25 +400,14 @@ export default function SaveMasterShift({ formtype, sid }) {
                 </div>
               </div>
               <hr className="my-4 border-[#A7A7A7]" />
-              <div className="my-1 flex w-full items-center justify-between">
-                <h1 className="text-lg font-bold">Break Time</h1>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={handleCreate}
-                    className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70"
-                  >
-                    <Plus className="size-4" />
-                    Add Break Time
-                  </button>
-                </div>
-              </div>
-              <QueryTable
-                columns={columns}
-                list={shiftbreaktime?.data?.original?.data || []}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                totalPages={totalPages}
-              />
+              
+              <Break 
+              formtype="save"
+              setBreak_time={setBreak_time}
+              break_time={break_time}
+              new_break={new_break}
+              setNew_break={setNew_break}
+               />
             </div>
             <div
               className={`flex flex-col rounded-md border border-gray-300 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
