@@ -59,7 +59,7 @@ export default function EmployeeBankDetailsEditForm({
     if (employeeBankDetailByid) {
       setValue("account_type", employeeBankDetailByid?.data?.account_type);
       setValue("bank_name", employeeBankDetailByid?.data?.bank_name);
-      setValue("branch", employeeBankDetailByid?.data?.branch);
+      // setValue("branch", employeeBankDetailByid?.data?.branch);
       setValue("iban", employeeBankDetailByid?.data?.iban);
       setValue("account_number", employeeBankDetailByid?.data?.account_number);
       setValue(
@@ -91,7 +91,7 @@ export default function EmployeeBankDetailsEditForm({
       formData.append("user_id", uid);
       formData.append("account_type", data.account_type?.id);
       formData.append("bank_name", data.bank_name);
-      formData.append("branch", data.branch);
+      // formData.append("branch", data.branch);
       formData.append("iban", data.iban);
       formData.append("account_number", data.account_number);
       formData.append("account_holder_name", data.account_holder_name);
@@ -171,7 +171,7 @@ export default function EmployeeBankDetailsEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Account Type</label>
+                  <label className="label-text">Account Type</label>
                   <Controller
                     name="account_type"
                     control={control}
@@ -207,7 +207,7 @@ export default function EmployeeBankDetailsEditForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col space-y-1">
+                {/* <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Branch
                   </label>
@@ -220,21 +220,7 @@ export default function EmployeeBankDetailsEditForm({
                       {errors.branch?.message}
                     </span>
                   )}
-                </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    IBAN Number
-                  </label>
-                  <input
-                    {...register("iban")}
-                    className="input-box h-10 w-full"
-                  />
-                  {errors.iban && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.iban?.message}
-                    </span>
-                  )}
-                </div>
+                </div> */}
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Account Number
@@ -246,20 +232,6 @@ export default function EmployeeBankDetailsEditForm({
                   {errors.account_number && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.account_number?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Acc. Holder Name
-                  </label>
-                  <input
-                    {...register("account_holder_name", { required: true })}
-                    className="input-box h-10 w-full"
-                  />
-                  {errors.account_holder_name && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.account_holder_name?.message}
                     </span>
                   )}
                 </div>
@@ -278,6 +250,35 @@ export default function EmployeeBankDetailsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Acc. Holder Name
+                  </label>
+                  <input
+                    {...register("account_holder_name", { required: true })}
+                    className="input-box h-10 w-full"
+                  />
+                  {errors.account_holder_name && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.account_holder_name?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    IBAN Number
+                  </label>
+                  <input
+                    {...register("iban")}
+                    className="input-box h-10 w-full"
+                  />
+                  {errors.iban && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.iban?.message}
+                    </span>
+                  )}
+                </div>
+                
+                <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Swift Code
                   </label>
@@ -291,8 +292,8 @@ export default function EmployeeBankDetailsEditForm({
                     </span>
                   )}
                 </div>
-
-                <div className="mb-4 mt-7 flex flex-row items-center justify-center gap-3">
+                <br />
+                <div className="mb-4 mt-7 flex flex-row items-center justify-center gap-3 w-full">
                   <button
                     type="submit"
                     className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"

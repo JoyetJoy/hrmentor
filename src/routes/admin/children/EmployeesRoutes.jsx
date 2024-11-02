@@ -5,6 +5,8 @@ import { EmployeeDocuments } from "@/pages/admin/menu/employee/edit/Document";
 import EmployeeEmergencyContact from "@/pages/admin/menu/employee/edit/EmergencyContact";
 import EmployeeExperienceEdit from "@/pages/admin/menu/employee/edit/Experience";
 import EmployeeMembershipEdit from "@/pages/admin/menu/employee/edit/Membership";
+import EmployeeDbsCheckEdit from "@/pages/admin/menu/employee/edit/DbsCheck";
+import EmployeeReferenceEdit from "@/pages/admin/menu/employee/edit/Reference";
 import PrimaryInformation from "@/pages/admin/menu/employee/edit/PrimaryInformation";
 import EmployeeRightToWorkEdit from "@/pages/admin/menu/employee/edit/RightToWork";
 import EmployeeSalaryEdit from "@/pages/admin/menu/employee/edit/SalaryDetails";
@@ -53,6 +55,14 @@ export const EmployeeRoutes = [
   {
     path: "registration-membership",
     element: <EmployeeMembershipEdit />,
+  },
+  {
+    path: "dbs-check",
+    element: <EmployeeDbsCheckEdit/>
+  },
+  {
+    path: "reference",
+    element:<EmployeeReferenceEdit/>
   },
   {
     path: "right-to-work",

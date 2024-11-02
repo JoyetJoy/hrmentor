@@ -26,31 +26,41 @@ export const employeeSidebarList = [
   },
   {
     id: 6,
+    link: "/admin/employee/dbs-check",
+    name: "DBS Check",
+  },
+  {
+    id: 7,
+    link: "/admin/employee/reference",
+    name: "Reference",
+  },
+  {
+    id: 8,
     link: "/admin/employee/right-to-work",
     name: "Right to work",
   },
   {
-    id: 7,
+    id: 9,
     link: "/admin/employee/emergency-contact",
     name: "Emergency Contacts",
   },
   {
-    id: 8,
+    id: 10,
     link: "/admin/employee/bank-details",
     name: "Bank Details",
   },
   {
-    id: 9,
+    id: 11,
     link: "/admin/employee/compensation",
     name: "Salary Details",
   },
   {
-    id: 10,
+    id: 12,
     link: "/admin/employee/documents",
     name: "Documents",
   },
   {
-    id: 11,
+    id: 13,
     link: "/admin/employee/payslip",
     name: "Payslip",
   },
