@@ -133,7 +133,7 @@ export default function DbsEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Candidate Name </label>
+                  <label className="label-text">Candidate Name </label>
                   <input
                     {...register("name", { required: true })}
                     type="text"
@@ -148,7 +148,23 @@ export default function DbsEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Status
+                  </label>
+                  <select {...register("status")} className="input-box w-full">
+                    <option value="">Select status</option>
+                    <option value="applied">Applied</option>
+                    <option value="received">Received</option>
+                </select>
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
+                  )}
+                </div>
+
+                <div className="group flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Start Date
                   </label>
                   <input
@@ -164,7 +180,7 @@ export default function DbsEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Reference
                   </label>
                   <input
@@ -181,7 +197,7 @@ export default function DbsEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Comments
                   </label>
                   <textarea
@@ -192,21 +208,6 @@ export default function DbsEditForm({
                   {errors.employer_details && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.employer_details?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Status
-                  </label>
-                  <select {...register("status")} className="input-box w-full">
-                    <option value="">Select status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-                  {errors.status && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.status?.message}
                     </span>
                   )}
                 </div>

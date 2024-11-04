@@ -1,9 +1,9 @@
 import * as Yup from "yup";
 
 export const dbsSchema = Yup.object({
-  name: Yup.string().required("Candidate name is required"),
-  start_date: Yup.string().required("Start date is required"),
-  reference: Yup.string().required("Reference is required"),
+  name: Yup.string(),
+  start_date: Yup.string(),
+  reference: Yup.string(),
   comments: Yup.string(),
-  status: Yup.string().required("Status is required"),
+  status: Yup.string()
 });

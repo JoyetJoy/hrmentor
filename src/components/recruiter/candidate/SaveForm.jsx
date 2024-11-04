@@ -493,7 +493,7 @@ export default function RecSaveFormCandidate({ type }) {
                     isSearchable={true}
                     styles={customSelectStyles}
                     options={recruiterMasters?.educationlevels}
-                    placeholder="Select collage or University"
+                    placeholder="Select college or University"
                     className="input-box"
                   />
                 )}
@@ -506,7 +506,7 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
             <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">
-                Collage or University
+                College or University
               </label>
               <Controller
                 name="college_or_university"
@@ -518,7 +518,7 @@ export default function RecSaveFormCandidate({ type }) {
                     isSearchable={true}
                     styles={customSelectStyles}
                     options={recruiterMasters?.collegesUniversities}
-                    placeholder="Select collage or University"
+                    placeholder="Select college or University"
                     className="input-box"
                   />
                 )}

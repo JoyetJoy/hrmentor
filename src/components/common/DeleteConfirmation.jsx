@@ -7,6 +7,8 @@ export default function DeleteConfirmation({
   open,
   selectedId,
   onCancel,
+  type,
+  setNew_break,
   qrkey,
   api,
 }) {
@@ -15,11 +17,18 @@ export default function DeleteConfirmation({
   const handleDelete = async () => {
     try {
       setLoader(true);
-      const res = await newRequest.delete(`${api}/${selectedId}`);
-      if (res?.data?.status === 200) {
-        queryClient.invalidateQueries([qrkey]);
+      if(type!=='break'){
+        const res = await newRequest.delete(`${api}/${selectedId}`);
+        if (res?.data?.status === 200) {
+          queryClient.invalidateQueries([qrkey]);
+          setLoader(false);
+          toast.success(res?.data?.message);
+          onCancel(false);
+        }
+      }else{
+        setNew_break((prevBreaks) => prevBreaks.filter((breakTime) => breakTime.id !== selectedId));
         setLoader(false);
-        toast.success(res?.data?.message);
+        toast.success("Deleted break time successfully");
         onCancel(false);
       }
     } catch (error) {

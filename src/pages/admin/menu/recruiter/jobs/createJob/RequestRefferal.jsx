@@ -164,7 +164,7 @@ export const RecRequestRefferal = () => {
           <div className="h-full w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">
               <p className="text-base font-medium text-black/90">
-                Invite your college for refer candidates for the job.
+                Invite your colleague for refer candidates for the job.
               </p>
               <p className="text-medium text-sm text-[#7F7F7F]">
                 Edit the email text to include the specific details of your

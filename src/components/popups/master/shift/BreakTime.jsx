@@ -10,14 +10,13 @@ import React from "react";
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function BreakTime({
   popupOpen,
   setPopupOpen,
   selectedField,
   formtype,
-  break_time,
-  setBreak_time,
   setNew_break,
   new_break
 }) {
@@ -44,6 +43,7 @@ export default function BreakTime({
 
   const handleShift = async (data) => {
     const formData = {
+      id:uuidv4(),
       type_name:data.type_name,
       start_time:data.start_time,
       end_time:data.end_time,
@@ -54,10 +54,6 @@ export default function BreakTime({
     
     try {
       if (formData) {
-        setBreak_time((prevBreakTime) => ({
-          ...prevBreakTime,
-          data: [...(prevBreakTime?.data || []), formData],
-        }));
         setNew_break((prevtime) => [...prevtime, formData]);
 
       }
@@ -143,13 +139,16 @@ export default function BreakTime({
                 <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Pay Mode
                 </label>
-                <input
+                <select
                   {...register("pay_node", {
                     required: "Pay mode is required",
                   })}
-                  type="text"
                   className="input-box h-10 w-full"
-                />
+                >
+                  <option value="">Select pay mode</option>
+                  <option value="paid">Paid</option>
+                  <option value="unpaid">Unpaid</option>
+                </select>
                 {errors.pay_node && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.pay_node.message}
