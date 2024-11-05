@@ -306,12 +306,12 @@ const onSubmit = async (data) => {
             >
               <div className="mt-4 grid w-full lg:grid-cols-2">
                 <div className="group col-span-2 flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">Name</label>
+                  <label className="required label-text">Shift Name</label>
                   <input
                     autoComplete="off"
                     type="text"
                     name="name"
-                    placeholder="Enter Name"
+                    placeholder="Enter Shift Name"
                     {...register("name", { required: true })}
                     className="input-box"
                   />
@@ -329,6 +329,7 @@ const onSubmit = async (data) => {
                       autoComplete="off"
                       name="start_time"
                       type="time"
+                      placeholder="HH:MM"
                       className="input-box"
                     />
                     {errors.start_time && (
@@ -488,16 +489,22 @@ const onSubmit = async (data) => {
                 </div>
                 {calculationType === "perday" && (
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs">Minimum hours required for</p>
+                    <p className="text-xs">Minimum hours required for (Either full day or half day is required)</p>
                     <div className="flex items-center gap-2">
                       <div className="flex w-full flex-col">
+                        <label className="required label-text" htmlFor="fullday">Full Day</label>
                         <input
-                          {...register("fullday", { required: true })}
+                          {...register("fullday", {
+                            pattern: {
+                              value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                              message: "Please enter a valid time format (HH:MM)"
+                            }
+                          })}
+                          id="fullday"
                           autoComplete="off"
-                          type="text"
                           name="fullday"
-                          placeholder="Full day*"
-                          className="input-box required placeholder:text-xs"
+                          type="time"
+                          className="input-box"
                         />
                         {errors.fullday && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -506,13 +513,19 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                       <div className="flex w-full flex-col">
+                      <label className="required label-text" htmlFor="fulltolerence">Full Day Tolerence</label>
                         <input
-                          {...register("fulltolerence", { required: true })}
+                          {...register("fulltolerence", {
+                            pattern: {
+                              value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                              message: "Please enter a valid time format (HH:MM)"
+                            }
+                          })}
+                          id="fulltolerence"
                           autoComplete="off"
-                          type="text"
                           name="fulltolerence"
-                          placeholder="Full day Tolerance*"
-                          className="input-box required placeholder:text-xs"
+                          type="time"
+                          className="input-box"
                         />
                         {errors.fulltolerence && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -521,13 +534,19 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                       <div className="flex w-full flex-col">
+                      <label className="required label-text" htmlFor="halfday">Half Day</label>
                         <input
-                          {...register("halfday", { required: true })}
+                          {...register("halfday", {
+                            pattern: {
+                              value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                              message: "Please enter a valid time format (HH:MM)"
+                            }
+                          })}
+                          id="halfday"
                           autoComplete="off"
-                          type="text"
                           name="halfday"
-                          placeholder="Half day*"
-                          className="input-box required placeholder:text-xs"
+                          type="time"
+                          className="input-box"
                         />
                         {errors.halfday && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -536,13 +555,19 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                       <div className="flex w-full flex-col">
+                      <label className="required label-text" htmlFor="halfdaytolerence">Half Day Tolerence</label>
                         <input
-                          {...register("halfdaytolerence", { required: true })}
+                          {...register("halfdaytolerence", {
+                            pattern: {
+                              value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                              message: "Please enter a valid time format (HH:MM)"
+                            }
+                          })}
+                          id="halfdaytolerence"
                           autoComplete="off"
-                          type="text"
                           name="halfdaytolerence"
-                          placeholder="Half day Tolerance*"
-                          className="input-box required placeholder:text-xs"
+                          type="time"
+                          className="input-box"
                         />
                         {errors.halfdaytolerence && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -618,7 +643,7 @@ const onSubmit = async (data) => {
                       <input
                         type="radio"
                         name="week_def"
-                        value="shiftsettings"
+                        value="basedonshift"
                         {...register("week_def", { required: true })}
                         defaultChecked={WeekEnd === "weekly"}
                       />

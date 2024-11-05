@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const ShiftSchema = Yup.object({
-    name: Yup.string().required("First name is required"),
+    name: Yup.string().required("Shift name is required"),
     start_time: Yup.string()
     .required("Start time is required")
     .test("is-before-end-time", "Start time must be before end time", function(value) {
@@ -28,7 +28,7 @@ export const ShiftSchema = Yup.object({
         id: Yup.string(),
         value: Yup.string(),
         label: Yup.string(),
-      }).test("both-required", "Work location is required", function (value) {
+      }).test("both-required", "Work area is required", function (value) {
         return value?.value && value?.label;
       }),
 
@@ -41,10 +41,41 @@ export const ShiftSchema = Yup.object({
       }),
       
       calculation_type:Yup.string().required("Calculation type  is reqiued"),
-      fullday:Yup.string().required("Full day  is reqiued"),
-      fulltolerence:Yup.string().required("Full day tolerence  is reqiued"),
-      halfday:Yup.string().required("Half day is reqiued"),
-      halfdaytolerence:Yup.string().required("Half day tolerence  is reqiued"),
+      fullday: Yup.string()
+    .nullable()
+    .test("check-fullday", "Full day tolerance is required", function (value) {
+      const { fulltolerence } = this.parent;
+      // Only show error for full day if it is filled and its tolerance is not
+      if (value && !fulltolerence) {
+        return this.createError({ message: "Full day tolerance is required" });
+      }
+      return true; // Pass validation if full day is not filled
+    }),
+
+  fulltolerence: Yup.string()
+    .nullable()
+    .when("fullday", {
+      is: (fullday) => !!fullday,
+      then: (schema) => schema.required("Full day tolerance is required"),
+    }),
+
+  halfday: Yup.string()
+    .nullable()
+    .test("check-halfday", "Half day tolerance is required", function (value) {
+      const { halfdaytolerence } = this.parent;
+      // Only show error for half day if it is filled and its tolerance is not
+      if (value && !halfdaytolerence) {
+        return this.createError({ message: "Half day tolerance is required" });
+      }
+      return true; // Pass validation if half day is not filled
+    }),
+
+  halfdaytolerence: Yup.string()
+    .nullable()
+    .when("halfday", {
+      is: (halfday) => !!halfday,
+      then: (schema) => schema.required("Half day tolerance is required"),
+    }),
       recur_pattern:Yup.string().required("Recurrence pattern  is reqiued"),
       week_def:Yup.string().required("Weekend definition   is reqiued"),
     
