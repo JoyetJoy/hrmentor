@@ -1,24 +1,23 @@
-import { ROSTER_LIST } from "@/api/setup";
+import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { tableRosterData } from "@/constants/tableDummy";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Dialog, DialogPanel, Select } from "@headlessui/react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, Trash2, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
+export default function NewRoster({ popupOpen, setPopupOpen}) {
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-
-  function close() {
-    setPopupOpen(false);
-    reset();
-  }
-
+  const [keyword, setKeyword] = useState("");
+  const [selectedShiftId, setSelectedShiftId] = useState("");
   const {
     register,
     handleSubmit,
@@ -29,12 +28,48 @@ export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
     mode: "onSubmit",
     resolver: yupResolver(),
   });
+  
+  function close() {
+    setPopupOpen(false);
+    reset();
+  }
 
-  const { data: rosterlisting, isLoading } = useQuery({
-    queryKey: ["rosterlisting", formtype],
-    queryFn: () => newRequest.get(`${ROSTER_LIST}`).then((res) => res.data),
-    enabled: formtype == "update",
+  const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
+  const { data: rosterEmpList, refetch: refetchRosterEmpList } = useQuery({
+    queryKey: ["rosterEmpList", selectedShiftId], 
+    queryFn: () => {
+      console.log(`Fetching employee list for shift ID: ${selectedShiftId}`);
+      return newRequest
+        .get(`${ROSTER_EMPLIST}`)
+        .then((res) => res.data);
+    },
+    enabled: !!selectedShiftId, 
+    onSuccess: (data) => {
+      console.log("Fetched employee list:", data);
+    },
+    onError: (error) => {
+      console.error("Error fetching employee list:", error?.message || error);
+    },
   });
+
+  const selectOptions = rosterEmpList?.employees?.map((item) => ({
+    label: item.first_name, 
+  }));
+ 
+  const handleShiftChange = (selectedOption) => {
+    console.log("Selected shift:", selectedOption);
+    setSelectedShiftId(selectedOption.value);
+  };
+
+  useEffect(() => {
+    console.log("Roster employee list:", rosterEmpList);
+  }, [rosterEmpList]);
+
+  
+  console.log("Current selectedShiftId:", selectedShiftId);
+  console.log("ROSTER_EMPLIST URL:", ROSTER_EMPLIST)
+  console.log(selectedShiftId);
+
 
   const columns = React.useMemo(
     () => [
@@ -71,6 +106,10 @@ export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
     { sno: 2, details: "fdgdfghfh" },
   ];
 
+  const selectedShift = shiftList?.data?.original?.data.find(
+    (item) => item.id === selectedShiftId,
+  );
+  // const list = shiftList?.data?.original?.data;
   return (
     <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
@@ -96,8 +135,18 @@ export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
+                          options={shiftList?.data?.original?.data.map(
+                            (item) => ({
+                              label: item.name,
+                              value: item.id,
+                            }),
+                          )}
                           placeholder="Select Shift"
-                          className="input-box w-full"
+                          className="input-box w-full text-black"
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption);
+                            handleShiftChange(selectedOption); 
+                          }}
                         />
                       )}
                     />
@@ -133,18 +182,64 @@ export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
                       </span>
                     )}
                   </div>
-                  <table className="mt-4 w-full table-auto border bg-[#9E9E9E] bg-opacity-20">
+                  <table className="mt-4 table-auto border bg-[#9E9E9E] bg-opacity-20">
                     <tbody>
-                      {tableRosterData.map((item, index) => (
-                        <tr key={index}>
-                          <td className="border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                            {item.label}
-                          </td>
-                          <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                            {item.value}
-                          </td>
-                        </tr>
-                      ))}
+                      <tr>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          Pay type
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.calculation_type}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          Clock In time
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.start_time}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          Clock Out time
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.end_time}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          Department
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.department?.label}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          Work Location
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.location?.label}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          Work Area
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.workArea?.label}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                          People Required
+                        </td>
+                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                          {selectedShift?.people_required}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                   <div className="mt-4 flex gap-3">
@@ -169,16 +264,16 @@ export default function NewRoster({ popupOpen, setPopupOpen, formtype }) {
                   <label className="text-sm font-medium">Add Employee</label>
                   <div className="flex gap-2">
                     <Controller
-                      name="shift"
+                      name="employees"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
                         <Select
-                          {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
                           placeholder="Select Shift"
                           className="input-box w-full"
+                          options={selectOptions}
                         />
                       )}
                     />
