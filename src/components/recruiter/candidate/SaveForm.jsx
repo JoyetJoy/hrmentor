@@ -554,7 +554,7 @@ export default function RecSaveFormCandidate({ type }) {
                       setSameAsHome(!sameAsHome);
                     }}
                   />
-                  <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-[#696969] md:text-xs">
+                  <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-gray-dim md:text-xs">
                     Same as home
                   </span>
                 </div>
@@ -658,7 +658,7 @@ export default function RecSaveFormCandidate({ type }) {
           <button
             type="submit"
             disabled={loader}
-            className="btn flex h-10 min-h-10 items-center gap-2 rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="btn flex h-10 min-h-10 items-center gap-2 rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-hrmdarkblue"
           >
             {loader ? (
               <div className="flex items-center gap-2">

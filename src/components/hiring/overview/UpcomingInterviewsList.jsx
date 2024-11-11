@@ -11,7 +11,7 @@ export const UpcomingInterviewsList = () => {
             <div className="w-full border-b border-b-black/30"></div>
           </div>
           <div className="flex flex-col gap-3 text-sm">
-            <div className="flex items-center justify-between rounded-md bg-[#F5F5F5] px-6 py-3">
+            <div className="flex items-center justify-between rounded-md bg-gray-smoke px-6 py-3">
               <div className="flex items-center gap-2">
                 <div className="avatar-group -space-x-6 rtl:space-x-reverse">
                   <div className="w-12">
@@ -28,7 +28,7 @@ export const UpcomingInterviewsList = () => {
               </div>
               <div className="">UI/UX Design intern</div>
             </div>
-            <div className="flex items-center justify-between rounded-md bg-[#F5F5F5] px-6 py-3">
+            <div className="flex items-center justify-between rounded-md bg-gray-smoke px-6 py-3">
               <div className="flex items-center gap-2">
                 <div className="avatar-group -space-x-6 rtl:space-x-reverse">
                   <div className="w-12">

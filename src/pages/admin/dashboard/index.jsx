@@ -12,7 +12,7 @@ export const AdminDashboard = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-black">Dashbord</h1>
           <div className="flex items-center gap-3">
-            <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-[#030E5C]">
+            <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
               <Clock4 className="size-4" />
               Clock in
             </div>
@@ -48,7 +48,7 @@ export const AdminDashboard = () => {
                 </h1>
                 <h2 className="p-4 text-sm font-semibold text-black">
                   {meeting.title} <br />
-                  <span className="text-xs font-normal text-gray-200">
+                  <span className="text-xs font-normal text-gray-dark">
                     {meeting.details}
                   </span>
                 </h2>

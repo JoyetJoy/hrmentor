@@ -47,7 +47,7 @@ export default function OpenJobs() {
           <div className="flex items-center gap-2 text-xs">
             <Link
               to={`/admin/recruiter/jobs/view?jid=${row.original.id}`}
-              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <MoveDiagonal className="size-3" />
             </Link>
@@ -61,7 +61,7 @@ export default function OpenJobs() {
   return (
     <>
       <div className="h-screen">
-        <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Open Jobs</h1>
+        <h1 className="mb-4 text-sm font-bold text-textcolor-darkCharcoal">Open Jobs</h1>
         <QueryTable columns={columns} list={openJobs} />
       </div>
     </>

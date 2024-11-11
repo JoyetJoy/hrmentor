@@ -8,7 +8,7 @@ function MenuHeaderHiring({ page }) {
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
         <div
-          className={`flex items-center justify-between text-sm font-semibold text-[#030E5C]`}
+          className={`flex items-center justify-between text-sm font-semibold text-hrmblue`}
         >
           <ArrowLeft
             onClick={() => {
@@ -33,7 +33,7 @@ function MenuHeaderHiring({ page }) {
               className={`px-2 py-1 text-sm ${
                 page === item?.id
                   ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
-                  : "font-normal text-[#808080]"
+                  : "font-normal text-gray-neutral"
               }`}
             >
               {item?.name}

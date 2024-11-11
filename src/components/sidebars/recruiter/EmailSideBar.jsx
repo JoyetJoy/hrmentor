@@ -11,7 +11,7 @@ function EmailSideBar({  active }) {
           <li
             key={item?.id}
             className={`font-semibold text-sm whitespace-nowrap flex items-center gap-x-3
-             ${active === item?.name ? "text-[#E95D39]" : "text-[#7F7F7F] "}`}
+             ${active === item?.name ? "text-[#E95D39]" : "text-gray-dark "}`}
           >
             <Link to={item?.link} className="whitespace-nowrap">
               {item?.name}

@@ -5,7 +5,8 @@ import { ArrowLeft, ChevronRight, User } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-function MenuHeader(props) {
+function 
+MenuHeader(props) {
   const location = useLocation();
   const isActive = (paths) => paths.includes(location.pathname);
   const {
@@ -48,7 +49,7 @@ function MenuHeader(props) {
         className={`my-2 flex min-h-11 flex-row items-center justify-between rounded-md bg-white py-2 ${isSpecialPath ? "pl-6 pr-20" : "pl-6 pr-6"}`}
       >
         <div
-          className={`flex items-center justify-between text-sm font-semibold text-[#030E5C]`}
+          className={`flex items-center justify-between text-sm font-semibold text-textcolor-blue`}
         >
           {!location.pathname.includes("/admin/recruiter") && (
             <ArrowLeft
@@ -82,7 +83,7 @@ function MenuHeader(props) {
                 className={`text-sm ${
                   activeMenu === item?.name || defaultActiveMenu === item.name
                     ? "active-menu px-2 py-1 font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
-                    : `text-[#808080] ${isSpecialPath ? "font-semibold" : "font-normal"}`
+                    : `text-gray-neutral ${isSpecialPath ? "font-semibold" : "font-normal"}`
                 }`}
               >
                 {item?.name}
@@ -99,7 +100,7 @@ function MenuHeader(props) {
             </div>
             <div className="flex flex-col">
               <div className="text-sm font-semibold">Sandeep Biju</div>
-              <div className="text-xs text-[#7F7F7F]">
+              <div className="text-xs text-gray-dark">
                 Clinical Quality Analyst
               </div>
             </div>
@@ -112,7 +113,7 @@ function MenuHeader(props) {
                 className={`px-2 py-1 text-sm ${
                   isActive([item?.link])
                     ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
-                    : "font-normal text-[#808080]"
+                    : "font-normal text-hrmblue "
                 }`}
               >
                 {item?.name}

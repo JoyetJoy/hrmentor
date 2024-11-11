@@ -52,7 +52,7 @@ export default function ChooseOfferLetterType({
                 onClick={() => {
                   setPopupOpen(false);
                 }}
-                className="h-10 w-full rounded-lg border border-black/20 px-4 text-sm font-semibold text-black/70 hover:bg-gray-100"
+                className="h-10 w-full rounded-lg border border-black/20 px-4 text-sm font-semibold text-black/70 hover:bg-gray-pale"
               >
                 Cancel
               </button>

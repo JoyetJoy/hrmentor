@@ -140,7 +140,7 @@ export const ReadyToHiring = () => {
           </div>
           <div className="flex items-center gap-2">
             <label className="input flex h-9 min-h-9 min-w-72 items-center gap-2 border-none outline-none">
-              <Search className="size-4 object-contain text-gray-200" />
+              <Search className="size-4 object-contain text-gray-dark" />
               <input
                 onChange={(e) => {
                   setKeyword(e.target.value);
@@ -150,7 +150,7 @@ export const ReadyToHiring = () => {
                 placeholder="Search"
               />
             </label>
-            <div className="h-9 min-h-9 rounded-md border border-gray-400 bg-white p-[0.58rem]">
+            <div className="h-9 min-h-9 rounded-md border border-gray-platinum bg-white p-[0.58rem]">
               <Filter
                 className="stroke size-4 font-medium text-black"
                 strokeWidth={2}

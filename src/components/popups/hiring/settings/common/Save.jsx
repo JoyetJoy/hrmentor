@@ -213,7 +213,7 @@ export default function SaveHiringMasterForm({
                         isSearchable={false}
                         styles={customSelectStyles}
                         placeholder="Select Status"
-                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
                       />
                     )}
                   />
@@ -233,7 +233,7 @@ export default function SaveHiringMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="min-h-52 w-full flex-grow rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
+                      className="min-h-52 w-full flex-grow rounded-md border border-black/10 placeholder:text-gray-mediumDark"
                     />
                     {errors?.description && (
                       <span className="text-xs font-medium text-red-500">
