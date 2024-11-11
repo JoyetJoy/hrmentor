@@ -2,14 +2,19 @@ import BreakTime from '@/components/popups/master/shift/BreakTime';
 import QueryTable from '@/components/table/QueryTable';
 import { Plus, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { Link, useParams} from "react-router-dom";
+import { newFormRequest, newRequest, XFormRequest } from "@/api";
+import { SHIFT_BREAK_TIME,SHIFT_LIST } from "@/api/setup";
+import { useQuery } from "@tanstack/react-query";
 import DeleteConfirmation from '@/components/common/DeleteConfirmation';
 
-export default function Break({  setNew_break,new_break,error}) {
+export default function Break({ formtype, sid , setNew_break,new_break,error}) {
     const [currentPage, setCurrentPage] = useState(1);
     const [popupOpen, setPopupOpen] = useState(false);
     const [deletePopup,setDeletePopup] = useState(false);
     const [deleteId,setDeleteId]= useState('');
 
+// Define the deleteBreakTime function
 const deleteBreakTime = (id) => {
   setDeleteId(id);
   setDeletePopup(true);
@@ -95,6 +100,8 @@ const deleteBreakTime = (id) => {
         selectedId={deleteId}
         type={'break'}
         setNew_break={setNew_break}
+        // qrkey={qrkey}
+        // api={api}
       />
       <div className="my-1 flex w-full items-center justify-between">
                 <h1 className="text-lg font-bold">Break Time</h1>
@@ -114,7 +121,9 @@ const deleteBreakTime = (id) => {
               <QueryTable
                 columns={columns}
                 list={ new_break|| []}
-                
+                // currentPage={currentPage}
+                // setCurrentPage={setCurrentPage}
+                // totalPages={totalPages}
               />
     </>
   )
