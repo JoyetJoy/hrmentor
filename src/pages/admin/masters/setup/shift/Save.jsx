@@ -113,16 +113,16 @@ export default function SaveMasterShift({ formtype, sid }) {
   const validateInputs = () => {
     const newErrors = selectedDays.map((day) => {
       const index = days.indexOf(day);
-      return requireDays[index] === 0; // Error if selected day's input is 0
+      return requireDays[index] === 0;
     });
     setDayerror(newErrors);
-    return !newErrors.some((error) => error === true); // Return true if no errors
+    return !newErrors.some((error) => error === true);
   };
 
 console.log(requireDays);
 
 const onSubmit = async (data) => {
-  if (validateInputs()) { // Corrected the missing closing parenthesis
+  if (validateInputs()) { 
     setLoader(true);
     await handleShift(data);
   } else {
@@ -185,11 +185,8 @@ const onSubmit = async (data) => {
     try {
 
       let res;
-
       res = await newFormRequest.post(SHIFT_LIST, formdata);
-
       console.log(res);
-
       if (res?.status === 201) {
         toast.success("Saved shift details successfully");
         queryClient.invalidateQueries(["shiftDetails"]);
