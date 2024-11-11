@@ -1,11 +1,16 @@
+import { SHIFT_BREAK_TIME,SHIFT_LIST } from "@/api/setup";
 import { BreakTimeSchema } from "@/schema/dashboard/masters/shift.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useQuery } from "@tanstack/react-query";
+import { newFormRequest, newRequest, XFormRequest } from "@/api";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function BreakTime({
   popupOpen,
@@ -13,11 +18,14 @@ export default function BreakTime({
   selectedField,
   formtype,
   setNew_break,
-  new_break,
+  new_break
 }) {
   const {
     register,
     handleSubmit,
+    control,
+    setValue,
+    watch,
     reset,
     formState: { errors },
   } = useForm({
@@ -26,37 +34,64 @@ export default function BreakTime({
   });
 
   const onSubmit = async (data) => {
+    // console.log(data);
+    // console.log("Errors:", errors);
+    // setLoader(true);
     await handleShift(data);
     close();
   };
 
   const handleShift = async (data) => {
     const formData = {
-      id: uuidv4(),
-      type_name: data.type_name,
-      start_time: data.start_time,
-      end_time: data.end_time,
-      pay_node: data.pay_node,
-    };
+      id:uuidv4(),
+      type_name:data.type_name,
+      start_time:data.start_time,
+      end_time:data.end_time,
+      pay_node:data.pay_node
+    }
 
     console.log(formData);
-
+    
     try {
       if (formData) {
         setNew_break((prevtime) => [...prevtime, formData]);
+
       }
       toast.success("Saved break time successfully");
       setPopupOpen(false);
     } catch (error) {
       console.log(error);
       toast.error("Failed to break time.");
+      
     }
   };
+  // console.log(shiftbreaktime);
 
   function close() {
     setPopupOpen(false);
     reset();
   }
+  // useEffect(() => {
+  //   if (shiftbreaktime) {
+  //     setValue("name", shiftbreaktime?.type_name);
+  //     setValue("start_time", shiftbreaktime?.data?.start_time);
+  //     setValue("end_time", shiftbreaktime?.data?.end_time);
+  //     setValue("pay_node", shiftbreaktime?.data?.pay_node);
+  //   }
+  // }, [shiftbreaktime, setValue]);
+
+  const employeeMasterOptions = [
+    { value: "active", label: "Active" },
+    { value: "inactive", label: "Inactive" },
+  ]; 
+
+  const customSelectStyles = {
+    control: (provided) => ({
+      ...provided,
+      borderColor: "#C2C1C1",
+    }),
+  };
+
   return (
     <Dialog
       open={popupOpen}

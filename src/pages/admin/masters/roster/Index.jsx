@@ -1,82 +1,71 @@
-import { EMPLOYEE, newRequest } from "@/api";
+import { EMPLOYEE } from "@/api";
 import { ROSTER_LIST } from "@/api/setup";
 import MenuHeader from "@/components/common/MenuHeader";
-// import EditRoster from "@/components/popups/master/roster/EditRoster";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
-import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Filter, Plus, Search, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function RosterList({rosterDetails ,setRosterDetails}) {
+export default function RosterList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [popupOpen, setPopupOpen] = useState(false);
-  // const [popupEditOpen, setPopupEditOpen] = useState(false);
-
   const [keyword, setKeyword] = useState("");
 
-  const pageLimit = 10;
-  // const { data: rosterDetailss } = useEmployeeMaster(ROSTER_LIST, "rosterDetailss");
-;
-const { data: rosterDetailss } =
-    useQuery({
-      queryKey: ["rosterDetailss"],
-      queryFn: () =>
-        newRequest
-          .get(ROSTER_LIST,)
-          .then((res) => {
-            return res?.data || { data: [], last_page: 1 };
-          }),
-    });
 
-  useEffect(() => {
-    if (rosterDetailss) {
-      setTotalPages(rosterDetailss?.last_page);
-    }
-  }, [rosterDetailss]);
-console.log(rosterDetailss)
+  const { data: rosterListing, isLoading } = useQuery({
+    queryKey: ["rosterListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(ROSTER_LIST, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
   const columns = React.useMemo(
     () => [
       {
         header: "Roster ID",
-        accessorKey: "id",
-        
+        accessorKey: "sno",
+        cell: ({ row }) => row.index + 1,
       },
       {
         header: "Created Date & Time",
         accessorKey: "name",
-        cell: ({ row }) => (
-          <p>
-            {row?.original?.shift_details?.name || 'N/A'}
-          </p>
-        ),
+        cell: ({ row }) => <p>
+        {data?.first_name ??"25/06/24.5.08"}
+      </p>
       },
       {
         header: "Start Date",
-        accessorKey: "start_date",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.start_date ?? 'N/A'}
-          </p>
-        ),
+        accessorKey: "department",
+        cell: ({ row }) =>   <p className="">
+        {row?.original?.employee?.department?.department_name ?? "25/06/24"}
+      </p>
       },
       {
         header: "Shift",
         accessorKey: "location",
-        cell: ({ row }) => (
-          <p className="whitespace-nowrap">
-            {row?.original?.shift_details?.name ?? 'N/A'}
-          </p>
-        ),
+        cell: ({ row }) => <p className=" whitespace-nowrap">
+        {row?.original?.employee?.work_location?.work_location_name ??
+          "Morning Shift OP"}
+      </p>,
       },
       {
         header: "Created By",
         accessorKey: "start_time",
-        cell: ({ row }) => row.original?.shift_details?.name|| 'N/A',
+        cell: ({ row }) => row.original.start_time || "Administrator",
       },
+      
       {
         header: "Action",
         accessorKey: "action",
@@ -84,7 +73,6 @@ console.log(rosterDetailss)
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={handleClick}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <img
@@ -103,22 +91,18 @@ console.log(rosterDetailss)
         ),
       },
     ],
-    []
+    [],
   );
   const data = [
     { sno: 1, details: "vmffghgfhfghj" },
     { sno: 2, details: "fdgdfghfh" },
   ];
-  const handleClick = (toOpen) => {
-    setPopupEditOpen(true);
-  };
   const handleCreate = (toOpen) => {
     setPopupOpen(true);
   };
   return (
     <>
-    {/* <EditRoster popupOpen={popupEditOpen} setPopupOpen={setPopupEditOpen}/> */}
-      <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} rosterDetails={rosterDetails} setRosterDetails={setRosterDetails}  />
+      <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <MenuHeader menu="Menu" currentpath="Roster" />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <div className="flex gap-3">
@@ -156,7 +140,7 @@ console.log(rosterDetailss)
         <div className="flex gap-3 rounded-md border border-gray-300 bg-white px-4 py-4">
           <QueryTable
             columns={columns}
-            list={rosterDetailss?.listing}
+            list={data}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={totalPages}
