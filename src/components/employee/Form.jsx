@@ -380,7 +380,7 @@ export default function SaveEmployeeForm({ formtype }) {
               {formtype === "update" && (
                 <button
                   type="button"
-                  className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-[#E0E2F3] px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-bgColor-300"
+                  className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-bgColor-300"
                 >
                   <Share2 className="size-4" color="black" />
                   Onboarding Form
@@ -388,7 +388,7 @@ export default function SaveEmployeeForm({ formtype }) {
               )}
               <button
                 type="submit"
-                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
               >
                 {loader ? (
                   <div className="flex items-center gap-3">
@@ -412,7 +412,7 @@ export default function SaveEmployeeForm({ formtype }) {
           </div>
           <div className="grid w-full gap-x-3 py-2 lg:grid-cols-2">
             <div
-              className={`flex w-full flex-col rounded-md border border-gray-300 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
+              className={`flex w-full flex-col rounded-md border border-gray-light bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
             >
               <div className="flex items-center justify-between">
                 <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
@@ -723,7 +723,7 @@ export default function SaveEmployeeForm({ formtype }) {
                           setSameAsHome(!sameAsHome);
                         }}
                       />
-                      <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-[#696969] md:text-xs">
+                      <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-gray-dim md:text-xs">
                         Same as home
                       </span>
                     </div>
@@ -761,7 +761,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     >
                       <div className="flex items-center gap-2">
                         <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
+                        <span className="font-semibold text-textcolor-darkCharcoal">
                           Upload Image
                         </span>
                       </div>

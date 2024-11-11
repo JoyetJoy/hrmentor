@@ -16,7 +16,7 @@ function MenuSubHeader(props) {
   return (
     <div>
       <div className="my-1 flex flex-row items-center justify-between">
-        <h1 className="flex flex-row items-center justify-center gap-1 text-lg font-bold text-[#2C2C2C]">
+        <h1 className="flex flex-row items-center justify-center gap-1 text-lg font-bold text-textcolor-darkCharcoal">
           {menuicon}
           {heading} <span className="text-xs">{currentpage}</span>
         </h1>
@@ -25,7 +25,7 @@ function MenuSubHeader(props) {
             <Link
               to={Secondpath}
               onClick={SecondLink?.onClick}
-              className="btn h-11 min-h-11 min-w-28 whitespace-nowrap rounded-[0.3rem] bg-[#030E5C] text-xs text-white hover:bg-[#030E5C]"
+              className="btn h-11 min-h-11 min-w-28 whitespace-nowrap rounded-[0.3rem] bg-hrmblue text-xs text-white hover:bg-hrmblue"
             >
               {Secondicon}
               {SecondLink?.label}

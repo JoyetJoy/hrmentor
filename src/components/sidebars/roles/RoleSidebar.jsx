@@ -49,7 +49,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
         <h1 className="text-bold mb-2 text-start text-lg font-semibold">
           Role
         </h1>
-        <div className="input mb-3 flex min-h-11 items-center gap-2 rounded-md border border-[#EBEBF0] !outline-none">
+        <div className="input mb-3 flex min-h-11 items-center gap-2 rounded-md border border-soft !outline-none">
           <Search className="size-4 w-fit object-contain text-gray-200" />
           <input
             type="text"
@@ -58,7 +58,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
             placeholder="Search"
           />
         </div>
-        <div className="rounded-md border border-[#EBEBF0]">
+        <div className="rounded-md border border-soft">
           <h1 className="flex items-center justify-between rounded-t-md border border-gray-300 bg-gray-500 px-6 py-3.5 text-[0.94rem] font-semibold text-black">
             Role Name
             <span>Action</span>
@@ -92,7 +92,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
                         }}
                         className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-500 p-2"
                       >
-                        <Trash2 className="text-[#AB2727]" strokeWidth={1.5} />
+                        <Trash2 className="text-textcolor-darkred" strokeWidth={1.5} />
                       </div>
                     )}
                   </div>

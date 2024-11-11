@@ -141,7 +141,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
-          className="h-10 min-h-10 w-7/12 rounded-md bg-[#EBEBF0] px-3 py-1 pl-3 text-xs"
+          className="h-10 min-h-10 w-7/12 rounded-md bg-gray-soft px-3 py-1 pl-3 text-xs"
         />
       </div>
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
@@ -152,7 +152,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
-          className="h-10 min-h-10 w-7/12 rounded-md bg-[#EBEBF0] px-3 py-1 pl-3 text-xs"
+          className="h-10 min-h-10 w-7/12 rounded-md bg-gray-soft px-3 py-1 pl-3 text-xs"
         />
       </div>
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
@@ -163,7 +163,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
-          className="h-10 min-h-10 w-7/12 rounded-md bg-[#EBEBF0] px-3 py-1 pl-3 text-xs"
+          className="h-10 min-h-10 w-7/12 rounded-md bg-gray-soft px-3 py-1 pl-3 text-xs"
         />
       </div>
     </div>

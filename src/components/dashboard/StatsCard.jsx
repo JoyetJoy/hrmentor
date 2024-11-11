@@ -14,8 +14,8 @@ export default function StatsCard() {
               {stat.title}
             </h2>
             <span
-              className={`flex h-7 items-center justify-center gap-1 rounded-full bg-[#23C10A26] px-2 text-[0.78rem] font-semibold text-[#0B8A00] ${
-                stat.trend === "minus" ? "bg-[#C71026]/10 text-[#C71026]" : ""
+              className={`flex h-7 items-center justify-center gap-1 rounded-full bg-darkgreen px-2 text-[0.78rem] font-semibold text-textcolor-green ${
+                stat.trend === "minus" ? "bg-textcolor-red/10 text-textcolor-red" : ""
               }`}
             >
               {stat.trend === "minus" ? (
@@ -29,7 +29,7 @@ export default function StatsCard() {
           <h1 className="flex items-end gap-3 text-2xl font-bold text-black">
             {stat.value}
           </h1>
-          <p className="mt-1 text-xs text-[#949494]">{stat.description}</p>
+          <p className="mt-1 text-xs text-gray-cool">{stat.description}</p>
         </div>
       ))}
     </div>

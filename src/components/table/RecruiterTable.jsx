@@ -22,17 +22,17 @@ function RecruiterTable({  list,
       const { getHeaderGroups, getRowModel } = tableInstance;
   return (
     <>
-     <div className="bg-[#FFFFFF] rounded-md border border-gray-300 pb-2">
+     <div className="bg-white rounded-md border border-gray-300 pb-2">
       <div className="table table-md  mx-auto  w-full">
         <table style={{ borderSpacing: "0", width: "100%" }}>
-          <thead className="bg-[#EBEBF0] rounded-md overflow-hidden ">
+          <thead className="bg-gray-soft rounded-md overflow-hidden ">
             {getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="">
                 {headerGroup.headers.map((column) => (
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
-                    className=" text-base font-semibold text-[#181C3A] capitalize    py-5 text-start "
+                    className=" text-base font-semibold text-hrmdarkblue capitalize    py-5 text-start "
                   >
                     {flexRender(
                       column.column.columnDef.header,
@@ -54,7 +54,7 @@ function RecruiterTable({  list,
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
-                      className="text-[15px] text-start   text-[#2C2C2C] font-medium capitalize py-7 "
+                      className="text-[15px] text-start   text-textcolor-darkCharcoal font-medium capitalize py-7 "
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

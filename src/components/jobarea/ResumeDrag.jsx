@@ -34,7 +34,7 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
               Change File
             </div>
           </div>
-          <div className="h-full overflow-hidden rounded-lg border border-[#E6E3EB] py-2">
+          <div className="h-full overflow-hidden rounded-lg border border-gray-lightSoft py-2">
             {filePreview ? (
               file.type.includes("image") ? (
                 <img
@@ -65,14 +65,14 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
               <h1 className="required pb-1 pt-10 text-[0.84rem] font-bold">
                 Resume Upload
               </h1>
-              <div className="flex h-full flex-col items-center justify-center gap-3 rounded-lg border border-[#E6E3EB] py-7">
+              <div className="flex h-full flex-col items-center justify-center gap-3 rounded-lg border border-gray-lightSoft py-7">
                 <p className="text-sm font-semibold">Upload or drag and drop</p>
-                <p className="text-sm text-[#7F7F7F]">
+                <p className="text-sm text-gray-dark">
                   (Preferred), DOCX, DOC, PDF up to 1 MB
                 </p>
                 <button
                   type="button"
-                  className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-400 bg-white px-7 py-1"
+                  className="flex h-10 min-h-10 flex-row items-center justify-center gap-2 rounded-md border border-gray-platinum bg-white px-7 py-1"
                 >
                   <ArrowUpFromLine className="size-4" strokeWidth={2} />
                   <h5 className="text-[0.8rem] font-bold">Upload</h5>

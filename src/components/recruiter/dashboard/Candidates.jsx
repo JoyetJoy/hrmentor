@@ -48,14 +48,14 @@ export default function RecJobCandidates() {
                         </span>
                         {candidate?.sur_name}
                       </h3>
-                      <p className="text-xs font-medium text-[#2C2C2C66]">
+                      <p className="text-xs font-medium text-darkblack">
                         {candidate?.job_name?.job_title}
                       </p>
                     </div>
                   </div>
                   <Link
                     to={`/admin/recruiter/candidate/profile?cid=${candidate?.id}`}
-                    className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+                    className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                   >
                     <MoveDiagonal className="size-3" />
                   </Link>

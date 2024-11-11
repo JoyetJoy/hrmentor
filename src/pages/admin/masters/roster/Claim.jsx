@@ -39,7 +39,7 @@ export default function Claim() {
             </button>
             <button
               type="button"
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -49,7 +49,7 @@ export default function Claim() {
             </button>
             <button
               type="button"
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
             >
               <Trash2 className="size-3" />
             </button>
@@ -107,13 +107,13 @@ export default function Claim() {
           <div className="flex flex-col gap-2.5 pb-7">
             <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
               <DisclosureButton className="group flex w-full items-center gap-x-2">
-                <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                <div className="flex size-5 items-center justify-center rounded-full bg-gray-dark">
                   <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                 </div>
                 <p className="text-md flex flex-row whitespace-nowrap font-bold">
                   Leave Requests
                 </p>
-                <div className="h-px w-full bg-[#ECE9F1]"></div>
+                <div className="h-px w-full bg-gray-light"></div>
               </DisclosureButton>
               <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                 <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
@@ -125,13 +125,13 @@ export default function Claim() {
             </Disclosure>
             <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
               <DisclosureButton className="group flex w-full items-center gap-x-2">
-                <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                <div className="flex size-5 items-center justify-center rounded-full bg-gray-dark">
                   <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                 </div>
                 <p className="text-md flex flex-row whitespace-nowrap font-bold">
                   Clamed Request
                 </p>
-                <div className="h-px w-full bg-[#ECE9F1]"></div>
+                <div className="h-px w-full bg-gray-light"></div>
               </DisclosureButton>
               <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                 <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
@@ -147,7 +147,7 @@ export default function Claim() {
           <div className="flex items-center justify-between">
             <h1 className="font-lg font-bold">Employee</h1>
             <div className="flex items-center gap-2">
-              <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border border-[#EBEBF0] outline-none">
+              <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border border-gray-soft outline-none">
                 <Search className="size-4 object-contain text-gray-200" />
                 <input
                   type="text"
@@ -160,7 +160,7 @@ export default function Claim() {
               </label>
               <Link
                 to={""}
-                className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
+                className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-hrmblue"
               >
                 <Plus className="size-4" />
               </Link>
@@ -190,7 +190,7 @@ export default function Claim() {
               {shiftHistoryData.map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-3 text-[#797979]"
+                  className="flex items-start gap-3 text-gray-dark"
                 >
                   <div className="flex-shrink-0">
                     <p>{dayjs(item.date).format("DD/MM/YYYY hh:mm A")}</p>
@@ -203,7 +203,7 @@ export default function Claim() {
                     )}
                   </div>
                   {item.role && (
-                    <div className="ml-auto text-sm text-[#797979]">
+                    <div className="ml-auto text-sm text-gray-dark">
                       {item.role}
                     </div>
                   )}

@@ -5,15 +5,15 @@ import { Link } from "react-router-dom";
 export const SettingsSidebar = ({ sidebarList, active }) => {
   return (
     <div className="min-h-full min-w-64 rounded-md bg-white px-5 py-6">
-      <ul className="flex flex-col justify-center gap-5 text-sm text-[#7F7F7F]">
+      <ul className="flex flex-col justify-center gap-5 text-sm text-gray-dark">
         {sidebarList?.map((item) => (
           <li
             key={item?.id}
-            className={`flex items-center gap-x-3 whitespace-nowrap text-sm ${active === item?.name ? "font-bold text-[#E95D39]" : "font-medium text-[#7F7F7F]"}`}
+            className={`flex items-center gap-x-3 whitespace-nowrap text-sm ${active === item?.name ? "font-bold text-hrmprimaryorange" : "font-medium text-gray-dark"}`}
           >
             <Icon
               svg={item?.icon}
-              color={active === item?.name ? "#E95D39" : "#7F7F7F"}
+              color={active === item?.name ? "hrmprimaryorange" : "gray-dark"}
             />
             {/* {item?.icon}     */}
             <Link to={item?.link} className="whitespace-nowrap">

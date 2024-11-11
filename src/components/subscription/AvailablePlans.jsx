@@ -32,7 +32,7 @@ export default function AvailablePlans({ data }) {
             {section.value.map((item, itemIndex) => (
               <p
                 key={itemIndex}
-                className="flex gap-3 items-center text-sm tracking-wide text-[#667085] py-1"
+                className="flex gap-3 items-center text-sm tracking-wide text-gray-bright py-1"
               >
                 <div
                   style={{ backgroundColor: section.bgColor }}
@@ -52,15 +52,15 @@ export default function AvailablePlans({ data }) {
         <div className="border-b-2 border-gray-300 mx-6 mt-4"></div>
         <div className="flex flex-col items-center justify-between  text-center  ">
           <span className="my-5 flex flex-col gap-1">
-            <h1 className="text-[15px] font-normal text-[#667085] ">
+            <h1 className="text-[15px] font-normal text-gray-bright ">
               Number Of License:10
             </h1>
-            <h2 className="text-sm  font-semibold text-[#E95D39]">
+            <h2 className="text-sm  font-semibold text-hrmprimaryorange">
               Valid till 22th July 2024
             </h2>
           </span>
           <button
-            className="btn  bg-[#181C3A]  hover:bg-[#181C3A] text-xs font-normal max-h-1 h-1 text-white px-24 py-0 "
+            className="btn  bg-hrmdarkblue  hover:bg-hrmdarkblue text-xs font-normal max-h-1 h-1 text-white px-24 py-0 "
             onClick={openModal}
           >
             Purchase

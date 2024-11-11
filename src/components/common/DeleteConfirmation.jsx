@@ -9,6 +9,7 @@ export default function DeleteConfirmation({
   onCancel,
   type,
   setNew_break,
+  setSelectedEmployees,
   qrkey,
   api,
 }) {
@@ -16,8 +17,9 @@ export default function DeleteConfirmation({
   const queryClient = useQueryClient();
   const handleDelete = async () => {
     try {
-      setLoader(true);
-      if(type!=='break'){
+      setLoader(true);console.log('kp');
+      
+      if(type!=='break'&& type!=='roster' ){
         const res = await newRequest.delete(`${api}/${selectedId}`);
         if (res?.data?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
@@ -25,10 +27,30 @@ export default function DeleteConfirmation({
           toast.success(res?.data?.message);
           onCancel(false);
         }
-      }else{
-        setNew_break((prevBreaks) => prevBreaks.filter((breakTime) => breakTime.id !== selectedId));
+      }else {
+        if (type === 'break') {
+          setNew_break((prevBreaks) => prevBreaks.filter((breakTime) => breakTime.id !== selectedId));
+          toast.success("Deleted break time successfully");
+        }
+        console.log('hii');
+        // if (type === 'roster') {
+        //   console.log('jii');
+      
+        //   setSelectedEmployees((prevEmployees) => prevEmployees.filter((selectedEmployees) => selectedEmployees.unique_id !== selectedId));
+        //   toast.success("Deleted roster item successfully");
+        // }
+        if (type === 'roster') {
+          console.log('Attempting to delete roster item');
+          console.log('Selected ID:', selectedId);
+          console.log('Selected Employees before delete:', employee);
+        
+          setSelectedEmployees((prevEmployees) =>
+            prevEmployees.filter((selectedEmployees) => selectedEmployees.value !== selectedId)
+          );
+          toast.success("Deleted roster item successfully");
+        }
+  
         setLoader(false);
-        toast.success("Deleted break time successfully");
         onCancel(false);
       }
     } catch (error) {
@@ -38,6 +60,7 @@ export default function DeleteConfirmation({
       console.error(error);
     }
   };
+  
   return (
     <>
       {open && (
@@ -46,7 +69,7 @@ export default function DeleteConfirmation({
             <h2 className="text-lg font-extrabold text-black/70">
               Confirm Delete
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-medium">
               Are you sure you want to delete this item? This action cannot be
               undone.
             </p>
@@ -55,7 +78,7 @@ export default function DeleteConfirmation({
                 onClick={() => {
                   onCancel(false);
                 }}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100"
+                className="rounded-lg border border-gray-light px-4 py-2 text-sm font-semibold text-gray-medium hover:bg-gray-smoke"
               >
                 Cancel
               </button>

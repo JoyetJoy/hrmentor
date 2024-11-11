@@ -30,14 +30,14 @@ export default function QuestionnaireListing({ jobProfileQuestionnaire, jid }) {
         jid={jid}
       />
       <div className="w-full rounded-md border border-[#ECE9F1]">
-        <h1 className="rounded-t-sm bg-[#EBEBF0] px-5 py-5 text-sm font-semibold text-[#181C3A]">
+        <h1 className="rounded-t-sm bg-gray-soft px-5 py-5 text-sm font-semibold text-hrmdarkblue">
           Candidate profile questions
         </h1>
         {jobProfileQuestionnaire?.length ? (
           <div className="flex h-60 min-h-60 flex-col gap-2 px-4 py-4">
             {jobProfileQuestionnaire?.map((i) => (
               <div className="flex items-center justify-between">
-                <div className="text-sm font-medium text-[#2C2C2C]">
+                <div className="text-sm font-medium text-textcolor-darkCharcoal">
                   {i?.question}
                 </div>
                 <div className="flex items-center gap-2 text-xs">
@@ -46,7 +46,7 @@ export default function QuestionnaireListing({ jobProfileQuestionnaire, jid }) {
                       setPopupOpen(true);
                       setSelectedField(i?.id);
                     }}
-                    className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+                    className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
                   >
                     <img
                       src="/assets/icons/admin/marker.svg"
@@ -58,7 +58,7 @@ export default function QuestionnaireListing({ jobProfileQuestionnaire, jid }) {
                       setDeletePopup(true);
                       setSelectedField(i?.id);
                     }}
-                    className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+                    className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
                   >
                     <Trash2 className="size-3 text-red-500" />
                   </button>

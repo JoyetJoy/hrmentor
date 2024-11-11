@@ -18,6 +18,7 @@ export default function QueryTable({
     columns,
     data: list,
     getCoreRowModel: getCoreRowModel(),
+   
   });
 
   // Access the table state and methods
@@ -25,17 +26,17 @@ export default function QueryTable({
   return (
     <>
       {list?.length ? (
-        <div className="rounded-md border border-gray-300 bg-[#FFFFFF] pb-2">
+        <div className="rounded-md border border-gray-300 bg-white pb-2 w-full">
           <div className="table table-md mx-auto w-full">
             <table style={{ borderSpacing: "0", width: "100%" }}>
-              <thead className="overflow-hidden rounded-md bg-[#EBEBF0]">
+              <thead className="overflow-hidden rounded-md bg-gray-soft">
                 {getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id} className="">
                     {headerGroup.headers.map((column) => (
                       <th
                         colSpan={headerGroup.colSpan}
                         key={column.id}
-                        className="text-sm font-semibold capitalize text-[#525252]"
+                        className="text-sm font-semibold capitalize text-gray-darkpale"
                       >
                         {flexRender(
                           column.column.columnDef.header,
@@ -56,7 +57,7 @@ export default function QueryTable({
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className="justify-end text-[0.8rem] font-medium capitalize text-[#525252]"
+                          className="justify-end text-[0.8rem] font-medium capitalize text-gray-darkpale"
                         >
                           {flexRender(
                             cell.column.columnDef.cell,

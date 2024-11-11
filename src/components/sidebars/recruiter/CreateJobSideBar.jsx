@@ -49,25 +49,25 @@ function CreateJobSideBar({ stepCounter }) {
   return (
     <div className="flex w-1/3 flex-col gap-3">
       <div className="relative rounded-md bg-white p-5">
-        <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-[#CACACA]" />
+        <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-gray-darkcool" />
         <div className="flex flex-col gap-y-4">
           {/* Render Main Steps */}
           {mainSteps.map((mainStep, index) => (
             <div key={index}>
               {/* Main Step */}
-              <div className="flex h-12 items-center gap-2 rounded bg-[#F5F5F7] px-3 text-[0.94rem]">
+              <div className="flex h-12 items-center gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]">
                 <div
                   className={`z-10 size-4 rounded-full border ${
                     stepCounter >= mainStep.step
-                      ? "border-[#46A724] bg-[#65D43E]"
-                      : "border-[#ABABAB] bg-[#ABABAB]"
+                      ? "border-textcolor-lightgreen bg-textcolor-lightgreen"
+                      : "border-textcolor-gray bg-textcolor-gray"
                   }`}
                 />
                 <p
                   className={
                     stepCounter >= mainStep.step
                       ? "text-black"
-                      : "text-[#7F7F7F]"
+                      : "text-gray-dark"
                   }
                 >
                   {mainStep.label}
@@ -82,19 +82,19 @@ function CreateJobSideBar({ stepCounter }) {
                       <div
                         className={`flex size-5 items-center justify-center rounded-full border ${
                           stepCounter >= subStep.step
-                            ? "border-[#65D43E17] bg-[#F0FFF1]"
-                            : "border-[#ABABAB] bg-[#F5F5F7]"
+                            ? "border-textcolor-darkgreen bg-[#F0FFF1]"
+                            : "border-textcolor-gray bg-gray-lightcool"
                         }`}
                       >
                         {stepCounter >= subStep.step && (
-                          <Check className="size-3 text-[#3FB117]" />
+                          <Check className="size-3 bg-textcolor-lightgreen" />
                         )}
                       </div>
                       <p
                         className={
                           stepCounter >= subStep.step
                             ? "text-black"
-                            : "text-[#7F7F7F]"
+                            : "text-gray-dark"
                         }
                       >
                         {subStep.label}

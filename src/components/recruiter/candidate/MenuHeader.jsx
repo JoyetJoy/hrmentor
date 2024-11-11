@@ -24,7 +24,7 @@ function MenuHeaderCandidate({ page, candidate }) {
                 <div className="text-sm font-semibold">
                   {candidate?.data?.first_name} {candidate?.data?.sur_name}
                 </div>
-                <div className="text-xs text-[#7F7F7F]">
+                <div className="text-xs text-gray-dark">
                   {candidate?.data?.education?.value}
                 </div>
               </div>
@@ -39,7 +39,7 @@ function MenuHeaderCandidate({ page, candidate }) {
               className={`px-2 py-1 text-sm ${
                 page === item?.id
                   ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
-                  : "font-normal text-[#808080]"
+                  : "font-normal text-gray-neutral"
               }`}
             >
               {item?.name}

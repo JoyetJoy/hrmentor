@@ -31,21 +31,21 @@ export default function Pagination({
       <div className="flex items-center gap-3 px-5">
         <button
           style={{
-            color: currentPage === 1 ? "#545454" : "#2E2E2E",
+            color: currentPage === 1 ? "hrmprimaryorange" : "lightblack",
           }}
           disabled={currentPage === 1}
           onClick={goToPreviousPage}
-          className="left flex items-center justify-center text-[0.84rem] font-medium text-[#2E2E2E]"
+          className="left flex items-center justify-center text-[0.84rem] font-medium text-lightblack"
         >
           Previous
         </button>
         {pageNumbers.map((page) => (
           <button
             style={{
-              backgroundColor: currentPage === page ? "#E95D39" : "",
+              backgroundColor: currentPage === page ? "hrmprimaryorange" : "",
               color: currentPage === page ? "#fff" : "",
             }}
-            className="left flex h-7 w-7 items-center justify-center rounded-full text-sm text-[#2E2E2E]"
+            className="left flex h-7 w-7 items-center justify-center rounded-full text-sm text-lightblack"
             key={page}
             onClick={() => setCurrentPage(page)}
             disabled={currentPage === page}
@@ -55,11 +55,11 @@ export default function Pagination({
         ))}
         <button
           style={{
-            color: currentPage === totalPages ? "#545454" : "#2E2E2E",
+            color: currentPage === totalPages ? "hrmprimaryorange" : "lightblack",
           }}
           onClick={goToNextPage}
           disabled={currentPage === totalPages}
-          className="right flex items-center justify-center rounded-full text-[0.84rem] font-medium text-[#2E2E2E]"
+          className="right flex items-center justify-center rounded-full text-[0.84rem] font-medium text-lightblack"
         >
           Next
         </button>

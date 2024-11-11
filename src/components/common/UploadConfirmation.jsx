@@ -49,7 +49,7 @@ export default function UploadConfirmation({
                   setResume("");
                   setPopupOpen(false);
                 }}
-                className="rounded-lg border border-black/20 px-4 py-2 text-sm font-semibold text-black/70 hover:bg-gray-100"
+                className="rounded-lg border border-black/20 px-4 py-2 text-sm font-semibold text-black/70 hover:bg-gray-pale"
               >
                 Change File
               </button>

@@ -9,9 +9,9 @@ export default function ProfileDropdown({ handleNavigation, user }) {
           <div className="flex h-10 w-10 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
             {`${user?.first_name?.charAt(0)} ${user?.sur_name?.charAt(0)}`}
           </div>
-          <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-textcolor-darkblue">
+          <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
             {user.first_name} {user.sur_name}
-            <span className="text-xs font-medium text-textcolor-200">
+            <span className="text-xs font-medium text-gray-lightDim">
               Administrator
             </span>
           </h1>

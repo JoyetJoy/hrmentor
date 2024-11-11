@@ -340,7 +340,12 @@ export const rosterItems = [
     active: "WorkArea",
   },
 ];
-
+ export const rosterHeaderList =[
+  {id:1, name:"Roster List" ,link:"/admin/roster"},
+  {
+    id:2, name:"Settings",link:""
+  }
+ ]
 export const activityItems = [
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },

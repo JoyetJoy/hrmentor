@@ -14,7 +14,6 @@ function ShiftList() {
   const [keyword, setKeyword] = useState("");
 
   const pageLimit = 10;
-
   const { data: shiftDetails = { data: [], last_page: 1 }, isLoading } =
     useQuery({
       queryKey: ["shiftDetails", currentPage, keyword],
@@ -57,12 +56,12 @@ function ShiftList() {
       {
         header: "Department",
         accessorKey: "department_id",
-        cell: ({ row }) => row?.original?.department_id || "IT",
+        cell: ({ row }) => row?.original?.department?.label || "N/A",
       },
       {
         header: "Location",
         accessorKey: "location_id",
-        cell: ({ row }) => row?.original?.location_id || "Kerala",
+        cell: ({ row }) => row?.original?.location?.label || "N/A",
       },
       {
         header: "Start Time",
@@ -83,7 +82,7 @@ function ShiftList() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-[#00B4481A] px-3 font-semibold text-[#00B448]">
+          <div className="flex h-8 w-fit items-center justify-center rounded-md bg-mediumgreen px-3 font-semibold text-textcolor-green">
             {row.original.details || "Active"}
           </div>
         ),

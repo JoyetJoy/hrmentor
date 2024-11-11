@@ -70,7 +70,7 @@ export default function ShareJob({ popupOpen, setPopupOpen, text }) {
               </button>
             </div>
 
-            <p className="text-sm font-medium text-[#848484]">
+            <p className="text-sm font-medium text-gray-lightMedium">
               Share Invitation via
             </p>
             <div className="mb-4 mt-5 flex gap-4">

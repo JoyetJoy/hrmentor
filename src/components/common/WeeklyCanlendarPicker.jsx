@@ -20,7 +20,7 @@ const WeeklyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
     <div className="Calendar-container">
       <div className="header px-3 py-2">
         <button
-          className="h-9 w-9 rounded-full bg-[#F5F5F7]"
+          className="h-9 w-9 rounded-full bg-gray-smoke"
           onClick={handlePrevWeek}
         >
           &lt;
@@ -29,13 +29,13 @@ const WeeklyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
           {selectedDate.format("MMMM YYYY")}
         </h2>
         <button
-          className="h-9 w-9 rounded-full bg-[#F5F5F7]"
+          className="h-9 w-9 rounded-full bg-gray-smoke"
           onClick={handleNextWeek}
         >
           &gt;
         </button>
       </div>
-      <hr className="border-[#ECE9F1]" />
+      <hr className="border-gray-light" />
       <div className="days-row px-7">
         {daysInWeek.map((day, index) => (
           <div key={index} className="day-name">

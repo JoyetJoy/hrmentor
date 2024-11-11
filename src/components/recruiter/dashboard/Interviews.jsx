@@ -38,9 +38,9 @@ export default function RecDashboardInterviews({ selectedDate }) {
                 const remainingCandidates = i?.candidates_list?.length - 2;
                 return (
                   <div key={i?.id} className="flex flex-col gap-3 p-2">
-                    <div className="flex h-20 w-full items-center justify-between rounded-md bg-[#F5F5F7] px-5 py-2">
+                    <div className="flex h-20 w-full items-center justify-between rounded-md bg-gray-lightcool px-5 py-2">
                       <div className="flex items-center gap-x-2">
-                        <p className="text-[ #2C2C2C] text-sm font-medium capitalize">
+                        <p className="text-textcolor-darkCharcoal text-sm font-medium capitalize">
                           {i?.job_title}
                         </p>
                         <div className="avatar-group -space-x-6 rtl:space-x-reverse">
@@ -58,7 +58,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
                           </h1>
                         )}
                       </div>
-                      <Link className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+                      <Link className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2">
                         <MoveDiagonal className="size-3" strokeWidth={1} />
                       </Link>
                     </div>

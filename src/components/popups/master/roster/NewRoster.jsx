@@ -1,23 +1,38 @@
 import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
-import { tableRosterData } from "@/constants/tableDummy";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import Select from "react-select";
+import { newRequest } from "@/api";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
+import toast from "react-hot-toast";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
-export default function NewRoster({ popupOpen, setPopupOpen}) {
-
+export default function NewRoster({
+  popupOpen,
+  setPopupOpen,
+  rosterDetails,
+  setRosterDetails,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [keyword, setKeyword] = useState("");
-  const [selectedShiftId, setSelectedShiftId] = useState("");
+  const [selectedShiftId, setSelectedShiftId] = useState(23);
+  const [selectedEmployees, setSelectedEmployees] = useState([]); 
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [employeesdetails, setEmployeesdetails] = useState([]);
+  const queryClient = useQueryClient();
+  const [deletePopup,setDeletePopup] = useState(false);
+  const [deleteId,setDeleteId]= useState('');
+
+ const deleteEmployees = selectedEmployees;
+
   const {
     register,
     handleSubmit,
@@ -26,7 +41,7 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(),
+    resolver: yupResolver(RosterSchema),
   });
   
   function close() {
@@ -34,16 +49,24 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
     reset();
   }
 
+  function close() {
+    setPopupOpen(false);
+    reset();
+  }
+
   const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
-  const { data: rosterEmpList, refetch: refetchRosterEmpList } = useQuery({
-    queryKey: ["rosterEmpList", selectedShiftId], 
+
+  const { data: rosterEmpList } = useQuery({
+    queryKey: ["rosterEmpList", selectedShiftId],
     queryFn: () => {
       console.log(`Fetching employee list for shift ID: ${selectedShiftId}`);
       return newRequest
-        .get(`${ROSTER_EMPLIST}`)
-        .then((res) => res.data);
+        .get(`${ROSTER_EMPLIST}/${selectedShiftId}`)
+        .then((res) => {
+          return res.data;
+        });
     },
-    enabled: !!selectedShiftId, 
+    enabled: !!selectedShiftId,
     onSuccess: (data) => {
       console.log("Fetched employee list:", data);
     },
@@ -52,36 +75,96 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
     },
   });
 
-  const selectOptions = rosterEmpList?.employees?.map((item) => ({
-    label: item.first_name, 
-  }));
- 
+  const selectedShift = shiftList?.data?.original?.data.find(
+    (item) => item.id === selectedShiftId,
+  );
+
   const handleShiftChange = (selectedOption) => {
     console.log("Selected shift:", selectedOption);
     setSelectedShiftId(selectedOption.value);
   };
 
-  useEffect(() => {
-    console.log("Roster employee list:", rosterEmpList);
-  }, [rosterEmpList]);
-
+  const deleteBreakTime = (id) => {
+    setDeleteId(id);
+    setDeletePopup(true);
+  };
   
-  console.log("Current selectedShiftId:", selectedShiftId);
-  console.log("ROSTER_EMPLIST URL:", ROSTER_EMPLIST)
-  console.log(selectedShiftId);
+  const handleAddEmployee = () => {
+    if (selectedEmployee) {
+      setSelectedEmployees((prev) => [
+        ...prev,
+        {
+          unique_id: selectedEmployee.value,
+          first_name: selectedEmployee.label,
+        },
+      ]);
+      setEmployeesdetails((prev) => [
+        ...prev,
+        {
+          employee_id: Number(selectedEmployee.value),
+        },
+      ]);
+    } else {
+      console.log("No employee selected to add.");
+    }
+  };
+  const data = [
+    { sno: 1, details: "vmffghgfhfghj" },
+    { sno: 2, details: "fdgdfghfh" },
+  ];
+
+  const onSubmit = async (data) => {
+    await handleRoster(data);
+    close();
+  };
+
+  const handleRoster = async (data) => {
+    const formData = {
+      shift_id: selectedShiftId,
+      start_date: data.start_date,
+      end_date: data.end_date,
+      rosterDetails: employeesdetails,
+    };
+
+    console.log(formData);
+    try {
+
+      let res;
+      res = await newRequest.post(ROSTER_LIST, formData);
+      console.log(res);
+      if (res?.status === 200) {
+        toast.success("Saved roster details successfully");
+        queryClient.invalidateQueries([""]);
+        reset();
+        setPopupOpen(false);
+
+      } else {
+        toast.error("Failed to save roster.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed roster.");
+    }
+  };
+  useEffect(() => {
+    if (selectedShiftId) {
+      console.log(`Shift selected: ${selectedShiftId}`);
+    }
+  }, [selectedShiftId]);
+
 
 
   const columns = React.useMemo(
     () => [
       {
         header: "Emp:ID",
-        accessorKey: "sno",
-        cell: ({ row }) => row.original.rosterlisting || "#001",
+        accessorKey: "unique_id",
+        cell: ({ row }) => row?.original?.unique_id || "NA",
       },
       {
         header: "Emp:Name",
-        accessorKey: "shift-name",
-        cell: ({ row }) => row.original.rosterlisting || "Vaisakh T G",
+        accessorKey: "first_name",
+        cell: ({ row }) => row?.original?.first_name || "NA",
       },
 
       {
@@ -91,6 +174,8 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
+              onClick={() => deleteBreakTime(row?.original?.unique_id)}
+
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
@@ -101,17 +186,19 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
     ],
     [],
   );
-  const data = [
-    { sno: 1, details: "vmffghgfhfghj" },
-    { sno: 2, details: "fdgdfghfh" },
-  ];
 
-  const selectedShift = shiftList?.data?.original?.data.find(
-    (item) => item.id === selectedShiftId,
-  );
   // const list = shiftList?.data?.original?.data;
   return (
-    <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
+    <>
+     <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={deleteId}
+        type='roster'
+        selectedEmployees={selectedEmployees}
+        setSelectedEmployees={setSelectedEmployees}
+      />
+      <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel className="w-full max-w-4xl rounded bg-white p-6">
@@ -122,6 +209,9 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
               </button>
             </div>
             <div className="grid grid-cols-2 gap-6">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div>
                 <div className="flex flex-col gap-4">
                   <div>
@@ -145,7 +235,7 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
                           className="input-box w-full text-black"
                           onChange={(selectedOption) => {
                             field.onChange(selectedOption);
-                            handleShiftChange(selectedOption); 
+                            handleShiftChange(selectedOption);
                           }}
                         />
                       )}
@@ -160,12 +250,12 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
                     <label className="text-sm font-medium">Start Date</label>
                     <input
                       type="date"
-                      {...register("startDate", { required: true })}
+                      {...register("start_date", { required: true })}
                       className="input-box w-full"
                     />
-                    {errors.startDate && (
+                    {errors.start_date && (
                       <span className="text-xs text-red-500">
-                        {errors.startDate?.message}
+                        {errors.start_date?.message}
                       </span>
                     )}
                   </div>
@@ -173,12 +263,12 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
                     <label className="text-sm font-medium">End Date</label>
                     <input
                       type="date"
-                      {...register("endDate", { required: true })}
+                      {...register("end_date", { required: true })}
                       className="input-box w-full"
                     />
-                    {errors.endDate && (
+                    {errors.end_date && (
                       <span className="text-xs text-red-500">
-                        {errors.endDate?.message}
+                        {errors.end_date?.message}
                       </span>
                     )}
                   </div>
@@ -259,7 +349,8 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
                   </div>
                 </div>
               </div>
-              <div className="mt-1 flex h-full flex-col gap-4">
+            </form>
+            <div className="mt-1 flex h-full flex-col gap-4">
                 <div className="flex flex-col">
                   <label className="text-sm font-medium">Add Employee</label>
                   <div className="flex gap-2">
@@ -271,34 +362,43 @@ export default function NewRoster({ popupOpen, setPopupOpen}) {
                         <Select
                           isSearchable={true}
                           styles={customSelectStyles}
-                          placeholder="Select Shift"
+                          placeholder="Select Employee"
                           className="input-box w-full"
-                          options={selectOptions}
+                          options={rosterEmpList?.employees?.map((item) => ({
+                            label: item.first_name,
+                            value: item.unique_id,
+                          }))}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption);
+                            setSelectedEmployee(selectedOption); // Store selected option in state
+                          }}
                         />
                       )}
                     />
-                    {errors.endDate && (
-                      <span className="text-xs text-red-500">
-                        {errors.endDate?.message}
-                      </span>
-                    )}
-                    <button className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white">
+                    
+                    <button
+                      type="submit"
+                      className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white"
+                      onClick={handleAddEmployee}
+                    >
                       <Plus className="size-4" /> Add
                     </button>
                   </div>
                 </div>
                 <QueryTable
                   columns={columns}
-                  list={data}
+                  list={selectedEmployees}
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
                   totalPages={totalPages}
                 />
               </div>
-            </div>
+              </div>
           </DialogPanel>
         </div>
       </div>
     </Dialog>
+    </>
+  
   );
 }

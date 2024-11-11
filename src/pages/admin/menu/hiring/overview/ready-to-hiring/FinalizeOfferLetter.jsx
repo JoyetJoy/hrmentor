@@ -95,7 +95,7 @@ export const FinalizeOfferLetter = () => {
                   value={description}
                   onChange={setDescription}
                   placeholder={"Type here.."}
-                  className="max-h-72 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                  className="max-h-72 w-full flex-grow rounded-md bg-gray-smoke placeholder:text-gray-mediumDark"
                 />
               )}
             </div>
@@ -109,7 +109,7 @@ export const FinalizeOfferLetter = () => {
               </label>
               <div className="h-fit rounded-md border shadow-sm">
                 <div className="relative">
-                  <select className="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                  <select className="block w-full rounded-md border border-gray-light py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                     <option value="" disabled selected>
                       Select
                     </option>
@@ -130,7 +130,7 @@ export const FinalizeOfferLetter = () => {
                   value={description}
                   onChange={setDescription}
                   placeholder={"Type here.."}
-                  className="max-h-72 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                  className="max-h-72 w-full flex-grow rounded-md bg-gray-smoke placeholder:text-gray-mediumDark"
                 />
               )}
             </div>

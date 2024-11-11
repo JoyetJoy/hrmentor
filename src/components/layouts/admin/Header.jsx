@@ -47,10 +47,10 @@ export const AdminHeader = () => {
             <NavLink
               to={item.path}
               key={item.id}
-              className={`flex flex-col items-center justify-end gap-1 border-[#E95D39] px-2 py-1 ${
+              className={`flex flex-col items-center justify-end gap-1 border-hrmprimaryorange px-2 py-1 ${
                 isActiveLink(item.active)
-                  ? "activeLink font-bold text-[#E95D39]"
-                  : "font-medium text-textcolor-darkblue"
+                  ? "activeLink font-bold text-hrmprimaryorange"
+                  : "font-medium text-hrmdarkblue"
               }`}
             >
               <img
@@ -69,12 +69,12 @@ export const AdminHeader = () => {
 
         <div className="flex items-center gap-3 py-2.5">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
-            <MessageSquareText className="size-5 text-textcolor-blue" />
+            <MessageSquareText className="size-5 text-hrmblue" />
           </div>
           <Menu as="div" className="relative inline-block text-left">
             <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100 p-3">
               <Menu.Button>
-                <LayoutGrid className="size-5 text-textcolor-blue" />
+                <LayoutGrid className="size-5 text-hrmblue" />
               </Menu.Button>
             </div>
             <Menu.Items className="absolute top-12 z-20 w-36 rounded-lg bg-white p-4 shadow-lg">

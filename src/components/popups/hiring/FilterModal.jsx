@@ -19,7 +19,7 @@ export const FilterModalHiring = ({ isOpen, onClose, children }) => {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Filter Job</h2>
               <button
-                className="text-xl font-bold text-gray-600"
+                className="text-xl font-bold text-gray-medium"
                 onClick={onClose}
               >
                 <svg
@@ -42,7 +42,7 @@ export const FilterModalHiring = ({ isOpen, onClose, children }) => {
                   <label class="label-text font-semibold">Type</label>
                   <div class="h-fit rounded-md border shadow-sm">
                     <div class="relative">
-                      <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <select class="block w-full rounded-md border border-gray-light py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                         <option value="" disabled selected>
                           Select
                         </option>
@@ -57,7 +57,7 @@ export const FilterModalHiring = ({ isOpen, onClose, children }) => {
                   <label class="label-text font-semibold">Location</label>
                   <div class="h-fit rounded-md border shadow-sm">
                     <div class="relative">
-                      <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <select class="block w-full rounded-md border border-gray-light py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                         <option value="" disabled selected>
                           Select
                         </option>
@@ -72,7 +72,7 @@ export const FilterModalHiring = ({ isOpen, onClose, children }) => {
                   <label class="label-text font-semibold">Department</label>
                   <div class="h-fit rounded-md border shadow-sm">
                     <div class="relative">
-                      <select class="block w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                      <select class="block w-full rounded-md border border-gray-light py-2 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                         <option value="" disabled selected>
                           Select
                         </option>

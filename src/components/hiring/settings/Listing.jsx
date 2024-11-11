@@ -75,7 +75,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
               <div className="flex max-w-xl items-center gap-3">
                 {fieldValue}
                 {row?.original?.default === 1 ? (
-                  <div className="rounded-full border border-[#7F7F7F] px-2 py-0.5 font-semibold text-[#7F7F7F]">
+                  <div className="rounded-full border border-gray-dark px-2 py-0.5 font-semibold text-gray-dark">
                     Default
                   </div>
                 ) : null}
@@ -133,7 +133,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
               <button
                 type="button"
                 onClick={() => setSelectedField(row?.original?.id)}
-                className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+                className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               >
                 <img
                   src="/assets/icons/admin/marker.svg"
@@ -146,7 +146,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
                   setDeletePopup(true);
                   setSelectedId(row?.original?.id);
                 }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
                 <Trash2 className="size-3" />
               </button>
@@ -183,11 +183,11 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
-                <Search className="size-4 text-[#7F7F7F]" />
+                <Search className="size-4 text-gray-dark" />
                 <input
                   type="text"
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="h-full w-full placeholder:text-[#7F7F7F]"
+                  className="h-full w-full placeholder:text-gray-dark"
                   placeholder="Search"
                 />
               </div>
@@ -195,7 +195,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
                 onClick={() => {
                   setPopupOpen(true);
                 }}
-                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
               >
                 <Plus className="size-4" />
                 Add
