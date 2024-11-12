@@ -71,7 +71,7 @@ export default function Break({ setNew_break, new_break, error }) {
             <button
               type="button"
               onClick={() => deleteBreakTime(row.original.id)}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
             >
               <Trash2 className="size-3" />
             </button>
@@ -101,7 +101,7 @@ export default function Break({ setNew_break, new_break, error }) {
         <div className="flex items-center gap-3">
           <button
             onClick={handleCreate}
-            className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70"
+            className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70"
           >
             <Plus className="size-4" />
             Add Break Time

@@ -13,7 +13,7 @@ export const Integrations = () => {
           Settings
         </h1>
         <div className="flex gap-5">
-          <Link className="active-menu px-2 text-sm font-extrabold text-bgColor-100 before:bg-[#181C3A]">
+          <Link className="active-menu px-2 text-sm font-extrabold text-bgColor-100 before:bg-hrmdarkblue">
             General settings
           </Link>
           <Link className="text-sm font-medium text-gray-200">
@@ -25,10 +25,10 @@ export const Integrations = () => {
         <SettingsSidebar sidebarList={recruiterSetting} active="Integrations" />
         <div className="h-full w-full rounded bg-white px-9 py-9">
           <div className="mb-4 flex w-full items-center justify-between">
-            <h3 className="text-base font-bold text-[#2C2C2C]">Integration</h3>{" "}
+            <h3 className="text-base font-bold text-textcolor-darkCharcoal">Integration</h3>{" "}
           </div>
           <div className="b h-full w-full">
-            <div className="h-fit w-full rounded border border-[#EBEBF0] px-5 py-4">
+            <div className="h-fit w-full rounded border border-gray-soft px-5 py-4">
               <p>
                 LinkedIn Recruiter is a sourcing tool for finding candidates on
                 the LinkedIn network. Connect your company's LinkedIn recruiter
@@ -36,7 +36,7 @@ export const Integrations = () => {
                 notes with HRmentor
               </p>
               <div className="flex items-center justify-between">
-                <div className="mt-5 flex items-center gap-5 text-sm font-normal text-[#7F7F7F]">
+                <div className="mt-5 flex items-center gap-5 text-sm font-normal text-gray-dark">
                   <div className="flex items-center gap-x-2">
                     <Earth />
                     <p>Website</p>
@@ -46,7 +46,7 @@ export const Integrations = () => {
                     <p>Support Article</p>
                   </div>
                 </div>
-                <div className="flex h-9 w-fit items-center rounded border border-[#CACCDC] px-3 text-sm font-medium text-[#7F7F7F]">
+                <div className="flex h-9 w-fit items-center rounded border border-gray-coollight px-3 text-sm font-medium text-gray-dark">
                   More Details
                 </div>
               </div>

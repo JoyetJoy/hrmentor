@@ -25,7 +25,7 @@ export const JobDescription = () => {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-24 items-center justify-center rounded border border-[#E39E9E] bg-[#473A990D] font-medium text-[#2C2C2C]">
+          <div className="flex h-8 w-24 items-center justify-center rounded border border-dustyrose bg-purpleblue font-medium text-textcolor-darkCharcoal">
             Inactive
           </div>
         ),
@@ -42,7 +42,7 @@ export const JobDescription = () => {
           <div className="flex items-center justify-center gap-3 text-xs">
             <Link
               to={""}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -51,7 +51,7 @@ export const JobDescription = () => {
             </Link>
             <Link
               onClick={() => setPopupdeleteOpen(true)}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#AB2727]"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-[#AB2727]"
             >
               <Trash2 className="size-3" />
             </Link>
@@ -72,7 +72,7 @@ export const JobDescription = () => {
         <div className="flex gap-5">
           <Link
             to="#"
-            className="active-menu px-2 text-sm font-extrabold text-bgColor-100 before:bg-[#181C3A]"
+            className="active-menu px-2 text-sm font-extrabold text-bgColor-100 before:bg-hrmdarkblue"
           >
             General settings
           </Link>
@@ -88,12 +88,12 @@ export const JobDescription = () => {
         />
         <div className="w-full rounded bg-white px-9 py-7">
           <div className="mb-4 flex w-full items-center justify-between">
-            <h3 className="text-base font-bold text-[#2C2C2C]">
+            <h3 className="text-base font-bold text-textcolor-darkCharcoal">
               Job Description
             </h3>
             <Link
               onClick={() => setPopupOpen(true)}
-              className="flex h-10 w-fit items-center gap-2 rounded bg-[#181C3A] px-5 text-sm font-normal text-white"
+              className="flex h-10 w-fit items-center gap-2 rounded bg-hrmdarkblue px-5 text-sm font-normal text-white"
             >
               <Plus className="size-5" strokeWidth={1.7} /> Insert Descriptions
             </Link>

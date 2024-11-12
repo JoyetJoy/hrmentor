@@ -185,8 +185,8 @@ function JobApplicationQuestion() {
                 onClick={() => history.back()}
                 className="size-4 cursor-pointer"
               />
-              Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-[#2C2C2C]">
+              Create New Job <div className="h-4 w-[.07rem] bg-gray-dimlight"></div>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">
                 Application
               </span>
             </h1>
@@ -194,7 +194,7 @@ function JobApplicationQuestion() {
               onClick={() => {
                 navigate(`/admin/recruiter/jobs/team?jid=${jid}`);
               }}
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               Next
             </button>
@@ -202,11 +202,11 @@ function JobApplicationQuestion() {
           <div className="w-full rounded-md bg-white px-7 py-4">
             <div className="flex flex-row items-center justify-between">
               <div className="flex flex-col gap-1">
-                <p className="text-base font-medium text-[#2C2C2C]">
+                <p className="text-base font-medium text-textcolor-darkCharcoal">
                   Customize the application that candidate will complete when
                   they apply.
                 </p>
-                <p className="text-medium text-sm text-[#7F7F7F]">
+                <p className="text-medium text-sm text-gray-dark">
                   All the preset questions and the custom questions for the
                   application to make it easier to screen candidate later.
                 </p>
@@ -214,7 +214,7 @@ function JobApplicationQuestion() {
               <Link
                 to={`/career/${jid}`}
                 target="_blank"
-                className="btn flex flex-row items-center gap-2 border border-[#181C3A] bg-white text-[#181C3A]"
+                className="btn flex flex-row items-center gap-2 border border-hrmdarkblue bg-white text-hrmdarkblue"
               >
                 <Eye className="size-4" />
                 Application Preview
@@ -223,22 +223,22 @@ function JobApplicationQuestion() {
             <div>
               <p className="my-7 flex flex-row items-center gap-4 whitespace-nowrap text-sm font-bold">
                 Job application
-                <div className="h-px w-full bg-[#ECE9F1]"></div>
+                <div className="h-px w-full bg-gray-light"></div>
               </p>
               <div className="mb-7 flex flex-col gap-1">
-                <p className="text-base font-medium text-[#2C2C2C]">
+                <p className="text-base font-medium text-textcolor-darkCharcoal">
                   Select the standard profile questions you want all candidate
                   to answer.
                 </p>
-                <p className="text-medium text-sm text-[#7F7F7F]">
+                <p className="text-medium text-sm text-gray-dark">
                   Some field are required and cannot be removed from the
                   application, while other field are optional, including the
                   resume.
                 </p>
               </div>
               <div className="flex flex-row gap-4">
-                <div className="w-full rounded-md border border-[#ECE9F1]">
-                  <h1 className="rounded-t-sm bg-[#EBEBF0] px-5 py-5 text-sm font-semibold text-[#181C3A]">
+                <div className="w-full rounded-md border border-gray-light">
+                  <h1 className="rounded-t-sm bg-gray-soft px-5 py-5 text-sm font-semibold text-hrmdarkblue">
                     Candidate profile questions
                   </h1>
                   <div className="flex flex-col gap-2 px-4 pb-16 pt-4">
@@ -246,7 +246,7 @@ function JobApplicationQuestion() {
                       (i) => {
                         console.log(i);
                         return (
-                          <div className="label cursor-pointer justify-between rounded-sm bg-[#F5F5F7] px-4 py-3 text-xs font-medium text-[#2C2C2C]">
+                          <div className="label cursor-pointer justify-between rounded-sm bg-gray-lightcool px-4 py-3 text-xs font-medium text-textcolor-darkCharcoal">
                             <div className="flex flex-row items-center gap-2">
                               <input
                                 type="checkbox"
@@ -265,7 +265,7 @@ function JobApplicationQuestion() {
                                 setSelectedField(i?.id);
                                 setDeletePopup(true);
                               }}
-                              className="size-4 rounded-sm border border-[#D0D0D0] text-[#2C2C2C]"
+                              className="size-4 rounded-sm border border-[#D0D0D0] text-textcolor-darkCharcoal"
                               strokeWidth={1}
                             />
                           </div>
@@ -274,14 +274,14 @@ function JobApplicationQuestion() {
                     )}
                   </div>
                 </div>
-                <div className="w-full rounded-md border border-[#ECE9F1]">
-                  <h1 className="rounded-t-sm bg-[#EBEBF0] px-5 py-5 text-sm font-semibold text-[#181C3A]">
+                <div className="w-full rounded-md border border-gray-light">
+                  <h1 className="rounded-t-sm bg-gray-soft px-5 py-5 text-sm font-semibold text-hrmdarkblue">
                     Select profile questions
                   </h1>
                   <div className="flex flex-col gap-2 px-4 py-4">
                     {jobProfileQuestions?.profile_questions?.map((i) => {
                       return (
-                        <label className="label cursor-pointer justify-between rounded-sm bg-[#F5F5F7] px-4 py-3 text-xs font-medium text-[#2C2C2C]">
+                        <label className="label cursor-pointer justify-between rounded-sm bg-gray-lightcool px-4 py-3 text-xs font-medium text-textcolor-darkCharcoal">
                           <div className="flex flex-row items-center gap-2">
                             <input
                               type="checkbox"
@@ -325,22 +325,22 @@ function JobApplicationQuestion() {
               <div>
                 <Disclosure as="div" className="" defaultOpen={false}>
                   <DisclosureButton className="group my-14 flex w-full items-center gap-x-2 font-bold">
-                    <div className="flex size-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                    <div className="flex size-5 items-center justify-center rounded-full bg-gray-darklight">
                       <ChevronRight className="size-6 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                     </div>
                     <p className="flex w-full flex-row items-center gap-1 whitespace-nowrap text-sm">
                       Screening questionnaire(Optional)
-                      <div className="h-px w-full bg-[#ECE9F1]"></div>
+                      <div className="h-px w-full bg-gray-light"></div>
                     </p>
                   </DisclosureButton>
                   <DisclosurePanel className="text-sm/5 text-black/50">
                     <div>
                       <div className="mb-10 flex flex-col gap-1">
-                        <p className="text-base font-medium text-[#2C2C2C]">
+                        <p className="text-base font-medium text-textcolor-darkCharcoal">
                           Get answer to job-specific questions by attaching a
                           questionnaire.
                         </p>
-                        <p className="text-medium text-sm text-[#7F7F7F]">
+                        <p className="text-medium text-sm text-gray-dark">
                           Questionnaire are reusable template that can be
                           attached to the job application or Sent to candidates
                           after they apply
@@ -351,7 +351,7 @@ function JobApplicationQuestion() {
                           onSubmit={handleSubmit(onSubmit)}
                           className="w-full"
                         >
-                          <h1 className="mb-5 text-sm font-bold text-[#2C2C2C]">
+                          <h1 className="mb-5 text-sm font-bold text-textcolor-darkCharcoal">
                             Create questionnaire
                           </h1>
                           <div className="group flex flex-col gap-1 py-2">
@@ -363,7 +363,7 @@ function JobApplicationQuestion() {
                               type="text"
                               placeholder="Type Here"
                               {...register("question", { required: true })}
-                              className="input-box h-10 w-full placeholder:text-xs placeholder:text-[#7F7F7F] focus:border-gray-300"
+                              className="input-box h-10 w-full placeholder:text-xs placeholder:text-gray-dark focus:border-gray-300"
                             />
                             {errors.question && (
                               <span className="text-xs font-medium text-red-500">
@@ -409,7 +409,7 @@ function JobApplicationQuestion() {
                               onClick={() => {
                                 reset();
                               }}
-                              className="btn h-11 min-h-11 border border-[#ECE9F1] bg-white px-12 text-[#7F7F7F] hover:border-[#ECE9F1] hover:bg-white"
+                              className="btn h-11 min-h-11 border border-gray-light bg-white px-12 text-gray-dark hover:border-gray-light hover:bg-white"
                             >
                               Clear
                             </div>

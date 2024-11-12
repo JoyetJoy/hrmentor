@@ -186,7 +186,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                 </div>
               </div>
 
-              <div className="rounded-full bg-[#F7F7F7] p-2">
+              <div className="rounded-full bg-gray-darklight p-2">
                 <img
                   src="/assets/icons/setup/re-Edit.svg"
                   alt="icons"
@@ -243,7 +243,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
             </div>
 
             <div class="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-              <div className="rounded-full bg-[#845d5d] p-4"></div>
+              <div className="rounded-full bg-gray-dark p-4"></div>
               <div>
                 <p class="text-sm font-medium">Akhil Soman</p>
                 <p class="text-xs font-medium text-darkblack">

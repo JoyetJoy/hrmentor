@@ -148,14 +148,14 @@ export const RecRequestRefferal = () => {
                 className="size-4 cursor-pointer"
               />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-[#2C2C2C]">Refer</span>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">Refer</span>
             </h1>
             <button
               type="button"
               onClick={() => {
                 navigate(`/admin/recruiter/jobs/promote-job?jid=${jid}`);
               }}
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               Next
             </button>
@@ -166,7 +166,7 @@ export const RecRequestRefferal = () => {
               <p className="text-base font-medium text-black/90">
                 Invite your colleague for refer candidates for the job.
               </p>
-              <p className="text-medium text-sm text-[#7F7F7F]">
+              <p className="text-medium text-sm text-gray-dark">
                 Edit the email text to include the specific details of your
                 referral program or highlight your incentive
               </p>
@@ -221,7 +221,7 @@ export const RecRequestRefferal = () => {
                   value={description}
                   onChange={(value) => setDescription(value)}
                   placeholder={"Write something awesome..."}
-                  className="h-36 w-full rounded-md border border-[#ECE9F1]"
+                  className="h-36 w-full rounded-md border border-gray-light"
                 />
               </div>
               <button
@@ -253,30 +253,30 @@ export const RecRequestRefferal = () => {
 
             <div className="my-10 flex flex-col gap-1">
               <h3 className="text-base font-semibold">Share via</h3>
-              <p className="text-sm text-[#7F7F7F]">
+              <p className="text-sm text-gray-dark">
                 Share this job with your Facebook, LinkedIn, and Twitter
                 connections to spread the word that you're hiring.
               </p>
               <div className="mt-2 flex items-center gap-2">
-                <div className="flex size-10 items-center justify-center rounded-full border border-[#ECE9F1]">
+                <div className="flex size-10 items-center justify-center rounded-full border border-gray-light">
                   <Linkedin
                     strokeWidth={0.5}
-                    className="size-5 fill-[#0071BC] text-[#0071BC]"
+                    className="size-5 fill-lightblue text-lightblue"
                   />
                 </div>
-                <div className="flex size-10 items-center justify-center rounded-full border border-[#ECE9F1]">
+                <div className="flex size-10 items-center justify-center rounded-full border border-gray-light">
                   <Facebook
                     strokeWidth={0.5}
-                    className="size-5 fill-[#0071BC] text-[#0071BC]"
+                    className="size-5 fill-lightblue text-lightblue"
                   />
                 </div>
-                <div className="flex size-10 items-center justify-center rounded-full border border-[#ECE9F1]">
+                <div className="flex size-10 items-center justify-center rounded-full border border-gray-light">
                   <Twitter
                     strokeWidth={0.5}
-                    className="size-5 fill-[#1DA1F2] text-[#1DA1F2]"
+                    className="size-5 fill-lightblue text-lightblue"
                   />
                 </div>
-                <div className="flex size-10 items-center justify-center rounded-full border border-[#ECE9F1]">
+                <div className="flex size-10 items-center justify-center rounded-full border border-gray-light">
                   <Link2 className="size-5 -rotate-45" />
                 </div>
               </div>

@@ -112,7 +112,7 @@ function CandidatesList() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-2 text-xs">
             <Link
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}`}
             >
               <MoveDiagonal className="h-3 w-3" />
@@ -179,7 +179,7 @@ function CandidatesList() {
         <div className="flex items-center gap-7">
           <Link
             to={"/admin/recruiter/candidate/save"}
-            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-5" strokeWidth={2} />
             Add Candidate

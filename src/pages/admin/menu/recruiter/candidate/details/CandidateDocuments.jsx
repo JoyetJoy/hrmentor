@@ -84,7 +84,7 @@ function CandidateDocuments() {
                 setPopupOpen(true);
                 setSelectedField(row?.original?.id);
               }}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -96,7 +96,7 @@ function CandidateDocuments() {
                 setDeletePopup(true);
                 setSelectedField(row?.original?.id);
               }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
             >
               <Trash2 className="size-3 text-red-500" />
             </button>
@@ -147,11 +147,11 @@ function CandidateDocuments() {
                 <Plus className="size-4" />
                 Add documents
               </button>
-              <div className="input-box flex h-10 min-h-10 w-full items-center gap-2 rounded-md border border-[#EBEBF0] pr-20 placeholder:text-black">
-                <Search className="size-4 text-[#7F7F7F]" />
+              <div className="input-box flex h-10 min-h-10 w-full items-center gap-2 rounded-md border border-gray-soft pr-20 placeholder:text-black">
+                <Search className="size-4 text-gray-dark" />
                 <input
                   type="text"
-                  className="w-full placeholder:text-[#7F7F7F]"
+                  className="w-full placeholder:text-gray-dark"
                   placeholder="Search"
                 />
               </div>

@@ -43,14 +43,14 @@ export default function EmployeeDetails() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-[#E0E2F3] px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-bgColor-300"
+                className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none hover:bg-paleblue"
               >
                 <Share2 className="size-4" color="black" />
                 Onboarding Form
               </button>
               <Link
                 to={`/admin/employee/primary/?uid=${uid}`}
-                className="btn flex h-10 min-h-10 min-w-24 items-center justify-center gap-1 bg-hrmblack px-6 text-xs font-bold text-white shadow-none hover:bg-[#030E5C]/70"
+                className="btn flex h-10 min-h-10 min-w-24 items-center justify-center gap-1 bg-hrmblack px-6 text-xs font-bold text-white shadow-none hover:bg-hrmblue/70"
               >
                 Edit
               </Link>
@@ -78,12 +78,12 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                <div className="ml-5 flex h-7 items-center rounded bg-[#CF1212]/5 px-3 text-[0.8rem] font-bold text-[#CF1212]">
+                <div className="ml-5 flex h-7 items-center rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold text-mediumred">
                   On Leave
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-[#E0E2F3] px-6 text-xs font-bold text-[#2C2C2C] shadow-none transition-all duration-500 hover:scale-[1.01]">
+                <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
                   Activity Log
                 </Link>
                 <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
@@ -96,7 +96,7 @@ export default function EmployeeDetails() {
                 <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
                   <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
                     <p className="w-fit">Basic Details</p>
-                    <div className="flex size-7 items-center justify-center rounded-full bg-[#F7F7F7]">
+                    <div className="flex size-7 items-center justify-center rounded-full bg-gray-darklight">
                       <ChevronRight className="size-5 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                     </div>
                   </DisclosureButton>
@@ -124,7 +124,7 @@ export default function EmployeeDetails() {
                 <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
                   <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
                     <p className="w-fit">Work Information</p>
-                    <div className="flex size-7 items-center justify-center rounded-full bg-[#F7F7F7]">
+                    <div className="flex size-7 items-center justify-center rounded-full bg-gray-darklight">
                       <ChevronRight className="size-5 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                     </div>
                   </DisclosureButton>

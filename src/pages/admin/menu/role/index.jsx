@@ -199,7 +199,7 @@ export const MenuRoles = () => {
               <input
                 type="text"
                 placeholder="Enter role name"
-                className="input-box h-11 min-h-11 w-full max-w-xs placeholder:text-[#2C2C2C] focus:outline-none"
+                className="input-box h-11 min-h-11 w-full max-w-xs placeholder:text-textcolor-darkCharcoal focus:outline-none"
                 {...register("name")}
               />
               <button className="flex h-11 w-fit items-center justify-center rounded-md bg-hrmprimaryorange px-14 text-[0.8rem] font-medium tracking-[0.1px] text-white">
@@ -219,7 +219,7 @@ export const MenuRoles = () => {
                 />
               ) : null}
             </div>
-            <div className="my-2 flex h-28 w-full items-start gap-20 bg-[#F9F9FA]">
+            <div className="my-2 flex h-28 w-full items-start gap-20 bg-gray-softlight">
               <div className="flex flex-col gap-0.5 px-4 py-3">
                 <h5 className="font-semibold">Role Menu Managment</h5>
                 <p className="text-[0.8rem]">
@@ -240,7 +240,7 @@ export const MenuRoles = () => {
             <div className="flex flex-col gap-3">
               {permissionList?.map((parentCategory) => (
                 <div key={parentCategory.parentCategory} className="mb-3">
-                  <div className="collapse w-full rounded-none border-y border-[#EAEAEA] bg-white pb-2 text-[#3A3A3A]">
+                  <div className="collapse w-full rounded-none border-y border-[#EAEAEA] bg-white pb-2 text-gray-smokemedium">
                     <div
                       className="collapse-title flex w-full cursor-pointer items-center justify-between px-0 text-[0.94rem] font-semibold"
                       onClick={() =>

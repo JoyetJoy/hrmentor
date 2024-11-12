@@ -130,7 +130,7 @@ function CandidateDiscussion() {
           Discussions
         </h1>
         <div className="mx-auto max-w-6xl flex-col border-gray-200 bg-white p-7">
-          <div className="overflow-y-min max-h-[520px] overflow-y-auto rounded-lg border-2 border-[#ECE9F1] p-4">
+          <div className="overflow-y-min max-h-[520px] overflow-y-auto rounded-lg border-2 border-gray-light p-4">
             <div className="flex flex-col gap-6 px-3">
               {data?.pages?.map((page) =>
                 page?.data?.data?.map((message, index) => (
@@ -145,8 +145,8 @@ function CandidateDiscussion() {
                     <div
                       className={`flex w-1/2 flex-col gap-1 rounded-lg ${
                         message?.user_id === user?.id
-                          ? "bg-[#D1E7DD] text-right"
-                          : "bg-[#F0F8FF]"
+                          ? "bg-lightgreen text-right"
+                          : "bg-gray-mutedlight"
                       } px-4 py-4 pr-12`}
                     >
                       <div className="flex items-center gap-3">
@@ -194,7 +194,7 @@ function CandidateDiscussion() {
                             {message?.disscussion_reply_message?.map((i) => (
                               <div
                                 key={i.id}
-                                className="mt-2 flex w-full items-center rounded bg-[#D1E7DD] px-5 py-2 text-sm font-medium text-black/70"
+                                className="mt-2 flex w-full items-center rounded bg-lightgreen px-5 py-2 text-sm font-medium text-black/70"
                               >
                                 {i?.reply_message}
                               </div>

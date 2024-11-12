@@ -77,13 +77,13 @@ function RecJobHiringTeam() {
           </>
         ),
       },
-      {
-        header: "Designation",
-        accessorKey: "designation",
-        cell: ({ row }) => (
-          <>{row.original?.employee?.designation?.designation_name}</>
-        ),
-      },
+      // {
+      //   header: "Designation",
+      //   accessorKey: "designation",
+      //   cell: ({ row }) => (
+      //     <>{row.original?.employee?.designation?.designation_name}</>
+      //   ),
+      // },
       {
         header: "Action",
         accessorKey: "action",
@@ -94,7 +94,7 @@ function RecJobHiringTeam() {
                 setPopupOpen(true);
                 setSelectedField(row?.original?.id);
               }}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -106,7 +106,7 @@ function RecJobHiringTeam() {
                 setDeletePopup(true);
                 setSelectedField(row?.original?.id);
               }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft  p-2"
             >
               <Trash2 className="size-3" />
             </button>
@@ -151,8 +151,8 @@ function RecJobHiringTeam() {
                 className="h-4 w-4 cursor-pointer"
               />
               Create New Job
-              <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-[#2C2C2C]">Team</span>
+              <div className="h-4 w-[.07rem] bg-gray-dimlight"></div>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">Team</span>
             </h1>
             <button
               onClick={() => {
@@ -160,30 +160,30 @@ function RecJobHiringTeam() {
                   `/admin/recruiter/jobs/interview-guideline?jid=${jid}`,
                 );
               }}
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               Next
             </button>
           </div>
           <div className="w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">
-              <p className="text-base font-medium text-[#2C2C2C]">
+              <p className="text-base font-medium text-textcolor-darkCharcoal">
                 Choose the right team for the job.
               </p>
-              <p className="text-medium text-sm text-[#7F7F7F]">
+              <p className="text-medium text-sm text-gray-dark">
                 This job's hiring team can include group or individual people
                 who are helping you fill this position.
               </p>
             </div>
             <div className="my-4 flex items-center justify-between gap-7">
-              <div className="input-box flex min-h-11 w-fit min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] placeholder:text-black">
-                <Search className="h-4 w-4 text-[#7F7F7F]" />
+              <div className="input-box flex min-h-11 w-fit min-w-96 items-center gap-2 rounded-md border border-gray-soft  placeholder:text-black">
+                <Search className="h-4 w-4 text-gray-dark" />
                 <input
                   type="text"
                   onChange={(e) => {
                     setKeyword(e.target.value);
                   }}
-                  className="h-full w-full placeholder:text-[#7F7F7F]"
+                  className="h-full w-full placeholder:text-gray-dark"
                   placeholder="Search"
                 />
               </div>

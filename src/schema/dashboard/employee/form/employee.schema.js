@@ -89,9 +89,7 @@ export const EmployeeSchema = Yup.object({
     .required("Personal email is required"),
 
   work_email: Yup.string()
-    .email("Invalid email format")
-    .required("Work email is required"),
-
+    .email("Invalid email format"),
   country_id: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

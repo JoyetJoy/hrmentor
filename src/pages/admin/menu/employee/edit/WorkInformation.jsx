@@ -140,7 +140,7 @@ export const WorkInformation = () => {
               <h1 className="text-lg font-bold">Work Information</h1>
               <button
                 type="submit"
-                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
               >
                 {loader ? (
                   <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ export const WorkInformation = () => {
             </div>
             <div className="grid grid-cols-2 gap-x-3 pt-2">
               <div className="flex h-screen flex-col items-baseline rounded-md border border-gray-300 bg-white px-3 py-4">
-                <h1 className="flex w-full flex-row items-center justify-between px-3 text-lg font-bold text-[#2C2C2C]">
+                <h1 className="flex w-full flex-row items-center justify-between px-3 text-lg font-bold text-textcolor-darkCharcoal">
                   Reporting to
                   <div className="flex items-center gap-1.5">
                     <input
@@ -165,7 +165,7 @@ export const WorkInformation = () => {
                       type="checkbox"
                       className="size-4"
                     />
-                    <p className="mt-[1px] whitespace-nowrap text-[13px] font-normal text-[#848484]">
+                    <p className="mt-[1px] whitespace-nowrap text-[13px] font-normal text-lightMedium">
                       Doesn't report to anyone
                     </p>
                   </div>
@@ -223,7 +223,7 @@ export const WorkInformation = () => {
                   </div>
                 ) : null}
               </div>
-              <div className="flex flex-col rounded-md border border-[#EBEBF0] bg-white px-5 py-4">
+              <div className="flex flex-col rounded-md border border-gray-soft bg-white px-5 py-4">
                 <h1 className="#2C2C2C px-3 text-lg font-bold">EEO Details</h1>
                 <div className="mt-4 grid w-full grid-cols-2 gap-x-2">
                   <div className="group flex flex-col gap-1.5 px-3 py-2">

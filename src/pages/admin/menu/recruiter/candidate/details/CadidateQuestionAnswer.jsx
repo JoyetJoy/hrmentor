@@ -39,7 +39,7 @@ function CandidateQuestionAnswer() {
             {recCandidateQAByid?.map((i) => (
               <div
                 key={i?.id}
-                className="collapse collapse-arrow rounded-sm bg-[#F0F8FF]"
+                className="collapse collapse-arrow rounded-sm bg-mutedlight"
               >
                 <input type="radio" name="my-accordion-2" defaultChecked />
                 <h1 className="collapse-title text-[0.94rem] font-bold after:bg-white">

@@ -104,7 +104,7 @@ function RecInterviews() {
               setPopupOpen(true);
               setSelectedField(row.original?.interview?.id);
             }}
-            className="flex size-7 cursor-pointer items-center rounded-full bg-[#F5F5F5] p-2 text-black"
+            className="flex size-7 cursor-pointer items-center rounded-full bg-gray-smoke p-2 text-black"
           >
             <MoveDiagonal className="h-3 w-3" />
           </div>

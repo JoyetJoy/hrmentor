@@ -469,11 +469,11 @@ function RecruiterJobPost() {
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
               <ArrowLeft onClick={() => history.back()} className="size-4" />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-[#2C2C2C]">Post</span>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">Post</span>
             </div>
             <button
               type="submit"
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               {loader ? (
                 <div className="flex items-center gap-3">
@@ -661,7 +661,7 @@ function RecruiterJobPost() {
                     >
                       <div className="flex items-center gap-2">
                         <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
+                        <span className="font-semibold text-textcolor-darkCharcoal">
                           Upload File
                         </span>
                       </div>
@@ -747,7 +747,7 @@ function RecruiterJobPost() {
                     >
                       <div className="flex items-center gap-2">
                         <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
+                        <span className="font-semibold text-textcolor-darkCharcoal">
                           Upload File
                         </span>
                       </div>
@@ -898,13 +898,13 @@ function RecruiterJobPost() {
             <div className="flex flex-col gap-2.5 pb-7">
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Advanced job details{" "}
                   </p>
-                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                  <div className="h-px w-full bg-gray-light"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
@@ -1069,13 +1069,13 @@ function RecruiterJobPost() {
               </Disclosure>
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Sensitive data
                   </p>
-                  <div className="h-[0.5px] w-full bg-[#ECE9F1]"></div>
+                  <div className="h-[0.5px] w-full bg- gray-light"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>
@@ -1171,13 +1171,13 @@ function RecruiterJobPost() {
               </Disclosure>
               <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
-                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-[#F7F7F7]">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Exposure
                   </p>
-                  <div className="h-px w-full bg-[#ECE9F1]"></div>
+                  <div className="h-px w-full bg- gray-light"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>

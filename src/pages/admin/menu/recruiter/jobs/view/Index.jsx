@@ -100,7 +100,7 @@ function RecViewJobDetail() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2">
+            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
               <img
                 src="/assets/icons/admin/marker.svg"
                 className="w-full object-contain"
@@ -122,7 +122,7 @@ function RecViewJobDetail() {
         activeMenu={"Jobs"}
       />
       <div className="my-4 flex flex-row items-center justify-between">
-        <h1 className="flex items-center gap-1 text-base font-bold capitalize text-[#2C2C2C]">
+        <h1 className="flex items-center gap-1 text-base font-bold capitalize text-textcolor-darkCharcoal">
           <ArrowLeft
             onClick={() => {
               history.back();

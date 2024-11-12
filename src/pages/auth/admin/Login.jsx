@@ -56,7 +56,7 @@ function Login() {
             Techbutomy Private Limited
           </h1>
           <h2 className="text-xl font-bold text-black">Log In</h2>
-          <p className="mt-1 text-[#808080B2]">
+          <p className="mt-1 text-softslate">
             Access is granted only to <br /> company employees.
           </p>
         </div>
@@ -65,14 +65,14 @@ function Login() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-1">
-            <label className="text-base font-semibold text-[#2C2C2C]">
+            <label className="text-base font-semibold text-textcolor-darkCharcoal">
               Email
             </label>
             <input
               type="email"
               placeholder="Enter email id"
-              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
-                errors.email ? "border-red-500" : "border-[#181C3A4D]"
+              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark  ${
+                errors.email ? "border-red-500" : "border-tdarkblue"
               }`}
               {...register("email")}
             />
@@ -81,14 +81,14 @@ function Login() {
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-base font-semibold text-[#2C2C2C]">
+            <label className="text-base font-semibold text-textcolor-darkCharcoal">
               Password
             </label>
             <input
               type="password"
               placeholder="Enter Password"
-              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-[#7F7F7F] ${
-                errors.password ? "border-red-500" : "border-[#181C3A4D]"
+              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark ${
+                errors.password ? "border-red-500" : "border-tdarkblue"
               }`}
               {...register("password")}
             />
@@ -98,18 +98,18 @@ function Login() {
           </div>
           <button
             type="submit"
-            className="h-12 w-full rounded-md bg-[#2B2B2B] text-center text-base font-medium text-white hover:bg-[#2B2B2B]"
+            className="h-12 w-full rounded-md bg-neutralmedium text-center text-base font-medium text-white hover:bg-neutralmedium"
           >
             Log In
           </button>
           <Link
             to="/forgot-password"
-            className="mt-2.5 text-center text-base font-semibold text-[#E95D39]"
+            className="mt-2.5 text-center text-base font-semibold text-hrmprimaryorange"
           >
             Forgot password?
           </Link>
           <div className="mt-5 flex flex-col items-center justify-center">
-            <p className="text-center text-[0.94rem] font-medium text-[#808080B2]">
+            <p className="text-center text-[0.94rem] font-medium text-softslate">
               Powered By
             </p>
             <div className="w-36">
