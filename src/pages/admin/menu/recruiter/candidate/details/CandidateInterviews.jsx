@@ -199,7 +199,7 @@ function CandidateInterviews() {
               setPopupOpen(true);
               setSelectedField(row.original?.interview?.id);
             }}
-            className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
           >
             <img
               src="/assets/icons/admin/marker.svg"
@@ -288,7 +288,7 @@ function CandidateInterviews() {
                   : "Move to hiring"}
               </button>
             </div>
-            <label className="input flex h-10 min-h-10 items-center gap-2 border border-[#EBEBF0] pr-28 outline-none">
+            <label className="input flex h-10 min-h-10 items-center gap-2 border border-gray-soft pr-28 outline-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

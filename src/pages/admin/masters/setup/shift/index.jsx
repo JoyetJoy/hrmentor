@@ -94,7 +94,7 @@ function ShiftList() {
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -104,7 +104,7 @@ function ShiftList() {
             </button>
             <button
               type="button"
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
             >
               <Trash2 className="size-3" />
             </button>
@@ -131,7 +131,7 @@ function ShiftList() {
               <h1 className="text-lg font-bold">Shift</h1>
               <Link
                 to="/admin/setup/save-shift"
-                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70"
+                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70"
               >
                 <Plus className="size-4" />
                 Add Shift

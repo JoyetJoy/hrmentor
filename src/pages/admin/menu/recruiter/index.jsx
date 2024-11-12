@@ -39,7 +39,7 @@ export default function RecruiterDashbaord() {
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
           <div
             className="size-12 rounded-full p-3"
-            style={{ backgroundColor: "#AE3C601A" }}
+            style={{ backgroundColor: "mutedruby" }}
           >
             <img
               src={openjobs}
@@ -50,11 +50,11 @@ export default function RecruiterDashbaord() {
           <div>
             <h2
               className="whitespace-nowrap text-sm font-medium"
-              style={{ color: "#AE3C60" }}
+              style={{ color: "pinkishred" }}
             >
               Open Jobs
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">
+            <h1 className="text-xl font-bold text-textcolor-darkCharcoal">
               {recDashboardCount?.openJobs}
             </h1>
           </div>
@@ -63,7 +63,7 @@ export default function RecruiterDashbaord() {
         <div className="flex items-center gap-2 rounded-md bg-white p-4">
           <div
             className="size-12 rounded-full p-3"
-            style={{ backgroundColor: "#EEB81E1A" }}
+            style={{ backgroundColor: "sunlit" }}
           >
             <img
               src={user}
@@ -78,7 +78,7 @@ export default function RecruiterDashbaord() {
             >
               New candidates
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">
+            <h1 className="text-xl font-bold text-textcolor-darkCharcoal">
               {recDashboardCount?.newCandidates}
             </h1>
           </div>
@@ -101,7 +101,7 @@ export default function RecruiterDashbaord() {
             >
               Shortlisted
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">
+            <h1 className="text-xl font-bold text-textcolor-darkCharcoal">
               {recDashboardCount?.shortListedCandidates}
             </h1>
           </div>
@@ -124,7 +124,7 @@ export default function RecruiterDashbaord() {
             >
               Interviews
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">
+            <h1 className="text-xl font-bold text-textcolor-darkCharcoal">
               {recDashboardCount?.interviewScheduledCandidates}
             </h1>
           </div>
@@ -147,7 +147,7 @@ export default function RecruiterDashbaord() {
             >
               Offer sent
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">
+            <h1 className="text-xl font-bold text-textcolor-darkCharcoal">
               {recDashboardCount?.offerSentCandidates}
             </h1>
           </div>
@@ -170,7 +170,7 @@ export default function RecruiterDashbaord() {
             >
               Jobs drafted
             </h2>
-            <h1 className="text-xl font-bold text-[#2C2C2C]">
+            <h1 className="text-xl font-bold text-textcolor-darkCharcoal">
               {recDashboardCount?.draftJobs}
             </h1>
           </div>
@@ -179,13 +179,13 @@ export default function RecruiterDashbaord() {
       <div className="my-3 grid grid-cols-3 gap-3">
         <OpenJobs />
         <div>
-          <h1 className="mb-4 text-sm font-bold text-[#2C2C2C]">Interviews</h1>
+          <h1 className="mb-4 text-sm font-bold text-textcolor-darkCharcoal">Interviews</h1>
           <div className="h-screen rounded-md bg-white">
             <WeeklyCalendarPicker
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
             />
-            <div className="w-full border-b border-[#ECE9F1] pt-3"></div>
+            <div className="w-full border-b border-gray-light pt-3"></div>
             <RecDashboardInterviews selectedDate={selectedDate} />
           </div>
         </div>

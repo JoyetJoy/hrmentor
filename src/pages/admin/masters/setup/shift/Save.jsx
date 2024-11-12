@@ -275,7 +275,7 @@ const onSubmit = async (data) => {
             <div className="flex items-center gap-3">
               <button
                 type="submit"
-                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-[#030E5C]/70"
+                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmdarkblue/70"
               >
                 {loader ? (
                   <div className="flex items-center gap-3">
@@ -573,7 +573,7 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                     </div>
-                    <p className="mt-3 border-l-4 border-hrmprimaryorange bg-[#FFECE7] py-3 pl-3 text-xs font-normal text-[#525252]">
+                    <p className="mt-3 border-l-4 border-hrmprimaryorange bg-[#FFECE7] py-3 pl-3 text-xs font-normal text-gray-darkpale">
                       Employee must reach the minimum hours required to qualify
                       themselves as full day or half day present
                     </p>
@@ -607,7 +607,7 @@ const onSubmit = async (data) => {
                   </div>
                 </div>
 
-                <p className="text-sm text-[#A1A1A1]">
+                <p className="text-sm text-gray-dark">
                   This shift occurs every single day, and no weekend is defined.
                 </p>
                 <WeeklyRecurrence
@@ -650,7 +650,7 @@ const onSubmit = async (data) => {
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-[#A1A1A1]">
+                <p className="text-sm text-gray-dark">
                   Calendar-based weekend definition will be considered
                 </p>
               </div>

@@ -32,8 +32,8 @@ export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,sel
               onClick={() => toggleDaySelection(day)}
               className={`px-2 py-2 text-center text-xs border-r border-black-300 cursor-pointer ${
                 selectedDays.includes(day)
-                  ? "bg-[#e95d39] text-white" // Apply orange background and white text if selected
-                  : "bg-white text-black" // Default style for unselected days
+                  ? "bg-[#e95d39] text-white" 
+                  : "bg-white text-black" 
               }`}
             >
               {day}

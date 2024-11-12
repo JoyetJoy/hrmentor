@@ -225,7 +225,7 @@ export default function Apply() {
               />
             </Link>
             <div className="text-2xl text-white">Apply with us now</div>
-            <div className="max-w-2/4 min-w-2/4 w-2/4 text-center text-[0.8rem] text-[#DEDEDE]">
+            <div className="max-w-2/4 min-w-2/4 w-2/4 text-center text-[0.8rem] text-softcool">
               Build up your career with us form by either selecting from one of
               our application form. Using the Neodesk form builder to format and
               customize the application form template to match your needs.

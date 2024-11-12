@@ -175,7 +175,7 @@ export default function EmployeeBankDetailsEditForm({
                   <Controller
                     name="account_type"
                     control={control}
-                    rules={{ required: true }}
+                    // rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}

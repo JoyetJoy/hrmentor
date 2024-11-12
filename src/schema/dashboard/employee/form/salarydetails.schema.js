@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const empSalaryDetailsSchema = Yup.object({
-  effective_from: Yup.string().required("Effective from date is required"),
+  effective_from: Yup.string(),
   currency: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

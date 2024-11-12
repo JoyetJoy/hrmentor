@@ -57,7 +57,7 @@ export default function EmployeeLists() {
           <div className="flex items-center gap-x-2">
             <p
               style={{ backgroundColor: getRandomPastelColor() }}
-              className="flex size-8 items-center justify-center rounded-full bg-[#F3] font-medium text-[#202020]"
+              className="flex size-8 items-center justify-center rounded-full bg-[#F3] font-medium text-textcolor-mute"
             >
               {row?.original?.first_name?.match(/\b\w/g).join("")}
             </p>
@@ -121,7 +121,7 @@ export default function EmployeeLists() {
                 row?.original?.employee?.employment_status?.background_color,
               color: row?.original?.employee?.employment_status?.text_color,
             }}
-            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold whitespace-nowrap"
           >
             {row?.original?.employee?.employment_status?.status_name}
           </div>
@@ -134,13 +134,13 @@ export default function EmployeeLists() {
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
               to={`/admin/employee/details/?uid=${row.original.id}`}
-              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <MoveDiagonal className="size-3" />
             </Link>
             <Link
               to={`/admin/employee/primary/?uid=${row.original.id}`}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -164,7 +164,7 @@ export default function EmployeeLists() {
         activeMenu={"Employee"}
       />
       <div className="mb-4 mt-1 flex items-center justify-between">
-        <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-[#EBEBF0] outline-none">
+        <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
           <Search className="size-4 object-contain text-gray-200" />
           <input
             type="text"
@@ -185,7 +185,7 @@ export default function EmployeeLists() {
           </div>
           <Link
             to={"/admin/employee/create"}
-            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-4" />
             Add Employee{" "}

@@ -88,7 +88,7 @@ export const Index = () => {
                   value={description}
                   onChange={setDescription}
                   placeholder={"Type here.."}
-                  className="max-h-72 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                  className="max-h-72 w-full flex-grow rounded-md bg-gray-smoke placeholder:text-gray-mediumDark"
                 />
               )}
             </div>
@@ -123,7 +123,7 @@ export const Index = () => {
                   value={description}
                   onChange={setDescription}
                   placeholder={"Type here.."}
-                  className="max-h-72 w-full flex-grow rounded-md bg-[#F5F5F5] placeholder:text-[#8b8b8b]"
+                  className="max-h-72 w-full flex-grow rounded-md bg-gray-smoke placeholder:text-gray-mediumDark"
                 />
               )}
             </div>

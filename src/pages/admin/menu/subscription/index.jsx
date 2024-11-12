@@ -29,7 +29,7 @@ export const MenuSubscription = () => {
           <ArrowLeft className="relative top-10 left-5 size-7" />
          <div className="flex flex-col  px-56  ">
         <div className="flex flex-col  mt-4  mb-6">
-          <p className="text-[#E95D39] text-[15px] font-bold mb-3">Pricing</p>
+          <p className="text-hrmprimaryorange text-[15px] font-bold mb-3">Pricing</p>
           <h1 className="text-4xl text-black font-bold ">
             Select Your Plan to Enhance
             <br /> HR Management
@@ -51,11 +51,11 @@ export const MenuSubscription = () => {
             <div className="flex flex-row  items-center justify-between mt-6">
               <h1 className=" flex flex-col text-[18px] font-thin text-white   ">
                 Number Of License:10
-                <span className=" text-[#E95D39] font-semibold ">
+                <span className=" text-hrmprimaryorange font-semibold ">
                   Valid till 22th July 2024
                 </span>
               </h1>
-              <button className="btn  bg-white  hover:bg-white text-lg font-bold  text-[#030E5C] px-12 min-h-14 rounded-md ">
+              <button className="btn  bg-white  hover:bg-white text-lg font-bold  text-hrmblue px-12 min-h-14 rounded-md ">
                 Add More License
               </button>
             </div>

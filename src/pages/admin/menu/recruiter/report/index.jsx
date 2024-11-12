@@ -16,7 +16,7 @@ function RecruiterReports() {
           Highlight Report
         </h1>
         <div className="mt-4 grid max-w-5xl grid-cols-4 gap-3">
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-[#AE3C60]/5 p-3 text-sm font-medium">
+          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-pinkishred/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/0.svg"
@@ -24,7 +24,7 @@ function RecruiterReports() {
             />
             <p>Job Reports</p>
           </div>
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-[#EEB81E]/5 p-3 text-sm font-medium">
+          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-goldenyellow/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/1.svg"
@@ -32,7 +32,7 @@ function RecruiterReports() {
             />
             <p>Interview by jobs</p>
           </div>
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-[#255E79]/5 p-3 text-sm font-medium">
+          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-coolblack/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/2.svg"
@@ -40,7 +40,7 @@ function RecruiterReports() {
             />
             <p>Time to hire by jobs</p>
           </div>
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-[#255E79]/5 p-3 text-sm font-medium">
+          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-coolblack/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/3.svg"

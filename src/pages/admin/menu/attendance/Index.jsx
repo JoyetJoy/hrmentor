@@ -155,7 +155,7 @@ const EmployeeAttendanceCalendar = () => {
             onChange={handleYearChange}
             styles={customSelectStyles}
             placeholder={dayjs(date).format("YYYY")}
-            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
           <Select
             options={months}
@@ -163,10 +163,10 @@ const EmployeeAttendanceCalendar = () => {
             onChange={handleMonthChange}
             styles={customSelectStyles}
             placeholder={dayjs(date).format("MMMM")}
-            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
-        <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white">
+        <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
           Team Attendance
         </button>
       </div>
@@ -197,15 +197,15 @@ const EmployeeAttendanceCalendar = () => {
                       {event.status}
                     </div>
                   </div>
-                  <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
+                  <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
                     <span className="font-bold">Clock In</span>{" "}
                     <span>{event.clockIn}</span>
                   </div>
-                  <div className="c-af flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
+                  <div className="c-af flex h-7 w-full items-center justify-between bg-mediumblack  px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
                     <span className="font-bold">Clock Out</span>{" "}
                     <span>{event.clockIn}</span>
                   </div>
-                  <div className="flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
+                  <div className="flex h-7 w-full items-center justify-between bg-mediumblack  px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
                     <span className="font-bold">Time In</span>{" "}
                     <span
                       className={`font-semibold ${event.status === "L" ? "text-red-500" : ""}`}

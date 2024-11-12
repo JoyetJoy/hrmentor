@@ -115,13 +115,13 @@ function RecruiterJobs() {
           <div className="flex items-center gap-2 text-xs">
             <Link
               to={`/admin/recruiter/jobs/view?jid=${row.original.id}`}
-              className="flex cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <MoveDiagonal className="size-3" />
             </Link>
             <Link
               to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -134,7 +134,7 @@ function RecruiterJobs() {
                   setDeletePopup(true);
                   setSelectedField(row?.original?.id);
                 }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2"
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
               >
                 <Trash2 className="size-3" />
               </button>
@@ -165,7 +165,7 @@ function RecruiterJobs() {
         <div className="flex items-center gap-2 text-white">
           <Link
             to="/admin/recruiter/jobs/post"
-            className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-[#030E5C]"
+            className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-5" strokeWidth={2} />
             Create Job
@@ -173,11 +173,11 @@ function RecruiterJobs() {
           <Link
             target="_blank"
             to="/careers"
-            className="btn h-10 min-h-10 rounded-md border border-[#E6E7EF] bg-white px-5 text-xs font-bold text-[#323232] hover:border-[#E6E7EF] hover:bg-white"
+            className="btn h-10 min-h-10 rounded-md border border-gray-platinum bg-white px-5 text-xs font-bold text-[#323232] hover:border-gray-platinum hover:bg-white"
           >
             View Career Page
           </Link>
-          <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-[#E6E7EF] outline-none hover:border-[#E6E7EF]">
+          <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
             <Search
               className="size-4 object-contain text-gray-200"
               strokeWidth={2}

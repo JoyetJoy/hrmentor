@@ -58,11 +58,11 @@ export const EmployeeDocuments = () => {
             <div className="flex items-center gap-7">
               <h5 className="text-lg font-bold">Documents</h5>
               <div className="input-box flex min-h-10 w-80 items-center gap-2 bg-white placeholder:text-black">
-                <Search className="size-4 text-[#7F7F7F]" />
+                <Search className="size-4 text-gray-dark" />
                 <input
                   type="text"
                   onChange={(e) => setKeyword(e.target.value)}
-                  className="h-full w-full placeholder:text-[#7F7F7F]"
+                  className="h-full w-full placeholder:text-gray-dark"
                   placeholder="Search"
                 />
               </div>
@@ -81,7 +81,7 @@ export const EmployeeDocuments = () => {
                     defaultOpen={false}
                   >
                     <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
-                      <div className="flex size-6 items-center justify-center rounded-full bg-[#F7F7F7]">
+                      <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
                         <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                       </div>
                       <p className="text-sm">{item?.document_category_name}</p>
