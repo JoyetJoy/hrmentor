@@ -41,7 +41,6 @@ export default function EditRoster({
     setEditPopupOpen(false);
     reset();
   }
-
   // GET ROSTER DETAILS
   const { data: rosterDetail, isLoading } = useQuery({
     queryKey: ["rosterDetail", selectedRoster?.roster_id],
@@ -57,9 +56,10 @@ export default function EditRoster({
     console.log("Selected shift:", selectedOption);
     setSelectedShiftId(selectedOption.value);
   };
+
   const handleDeleteEmployee = (employeeId) => {
     setSelectedEmployees((prevEmployees) =>
-      prevEmployees.filter((employee) => employee.value !== employeeId),
+      prevEmployees.filter((employee) => employee.unique_id !== employeeId),
     );
     toast.success("Employee deleted successfully");
   };
@@ -108,7 +108,7 @@ export default function EditRoster({
       console.error("Error fetching employee list:", error?.message || error);
     },
   });
-
+ console.log(employeesdetails)
   const handleRoster = async (data) => {
     const formData = {
       shift_id: selectedShiftId,
@@ -180,7 +180,7 @@ export default function EditRoster({
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => handleDeleteEmployee(row.original.value)}
+              onClick={() => handleDeleteEmployee(row.original.unique_id)}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
@@ -191,7 +191,17 @@ export default function EditRoster({
     ],
     [],
   );
-
+  console.log(selectedRoster?.employees)
+  useEffect(() => {
+    if (selectedRoster?.employees) {
+      setSelectedEmployees(
+        selectedRoster.employees.map((employee) => ({
+          unique_id: employee.unique_id,
+          first_name: employee.first_name,
+        }))
+      );
+    }
+  }, [selectedRoster]);
   return (
     <>
       <Dialog
@@ -343,7 +353,7 @@ export default function EditRoster({
                             </td>
                             <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
                               {selectedRoster?.shift_details?.people_required ||
-                                "NA"}
+                                "N/A"}
                             </td>
                           </tr>
                         </tbody>
@@ -400,7 +410,10 @@ export default function EditRoster({
                       </button>
                     </div>
                   </div>
-                  <QueryTable columns={columns} list={selectedEmployees} />
+                  <QueryTable columns={columns}
+                   list={selectedEmployees}
+                  // list={selectedRoster?.employees}
+                    />
                 </div>
               </div>
             </DialogPanel>

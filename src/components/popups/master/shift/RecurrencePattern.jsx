@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,selectedDays,type,days,dayerror,setDayerror }) {
+export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,selectedDays,type,days,setDayerror }) {
 
     const toggleDaySelection = (day) => {
         setSelectedDays((prev) =>
           prev.includes(day)
-            ? prev.filter((d) => d !== day) // Deselect if already selected
-            : [...prev, day] // Select if not already selected
+            ? prev.filter((d) => d !== day) 
+            : [...prev, day] 
         );
         setDayerror((prev) => {
           const newErrors = [...prev];
           const dayIndex = days.indexOf(day);
-          newErrors[dayIndex] = false; // Reset error if day is toggled
+          newErrors[dayIndex] = false; 
           return newErrors;
         });
       };

@@ -22,16 +22,23 @@ import { SHIFT_BREAK_TIME, SHIFT_LIST } from "@/api/setup";
 import Break from "../Break";
 
 export default function SaveMasterShift({ formtype, sid }) {
- 
   const [loader, setLoader] = useState(false);
   const [workArea, setWorkArea] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const [new_break,setNew_break] = useState([]);
+  const [new_break, setNew_break] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [error, setError] = useState('');
-  const [requireDays,setRequireDays] = useState([0,0,0,0,0,0,0]);
+  const [error, setError] = useState("");
+  const [requireDays, setRequireDays] = useState([0, 0, 0, 0, 0, 0, 0]);
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const [dayerror, setDayerror] = useState([false, false, false, false, false, false, false]);
+  const [dayerror, setDayerror] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
   const [duration, setDuration] = useState(null);
 
   const queryClient = useQueryClient();
@@ -48,7 +55,6 @@ export default function SaveMasterShift({ formtype, sid }) {
     resolver: yupResolver(ShiftSchema),
   });
 
-  // Watch form fields
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
   const WeekEnd = watch("week_def", "basedoncalender");
@@ -60,47 +66,38 @@ export default function SaveMasterShift({ formtype, sid }) {
     enabled: formtype == "update",
   });
 
-  // Watch for changes in start_time and end_time fields
   const startTime = watch("start_time");
   const endTime = watch("end_time");
 
-  // Calculate duration in hh:mm format whenever startTime or endTime changes
   useEffect(() => {
     if (startTime && endTime) {
       const [startHours, startMinutes] = startTime.split(":").map(Number);
       const [endHours, endMinutes] = endTime.split(":").map(Number);
 
-      // Convert both start and end times to minutes
       let startTotalMinutes = startHours * 60 + startMinutes;
       let endTotalMinutes = endHours * 60 + endMinutes;
 
-      // If end time is before start time, assume it goes into the next day
       if (endTotalMinutes < startTotalMinutes) {
         endTotalMinutes += 24 * 60;
       }
 
-      // Calculate the difference in minutes
       const diffMinutes = endTotalMinutes - startTotalMinutes;
 
-      // Convert the difference to hours and minutes in hh:mm format
       const hours = String(Math.floor(diffMinutes / 60)).padStart(2, "0");
       const minutes = String(diffMinutes % 60).padStart(2, "0");
 
       setDuration(`${hours}:${minutes}`);
     } else {
-      setDuration(null); // Clear duration if either time is missing
+      setDuration(null);
     }
   }, [startTime, endTime]);
 
-
-  // Handle input change
   const handleInputChange = (index) => (event) => {
-    const value = parseInt(event.target.value) || 0; // Parse input as integer, default to 0 if invalid
+    const value = parseInt(event.target.value) || 0;
     const newRequireDays = [...requireDays];
-    newRequireDays[index] = value; // Update specific day's required count
+    newRequireDays[index] = value;
     setRequireDays(newRequireDays);
 
-    // Reset error if input is valid
     if (value > 0) {
       setDayerror((prev) => {
         const newErrors = [...prev];
@@ -119,25 +116,25 @@ export default function SaveMasterShift({ formtype, sid }) {
     return !newErrors.some((error) => error === true);
   };
 
-console.log(requireDays);
+  console.log(requireDays);
 
-const onSubmit = async (data) => {
-  if (validateInputs()) { 
-    setLoader(true);
-    await handleShift(data);
-  } else {
-    toast.error('Please enter the count for the selected days');
-  }
-};
+  const onSubmit = async (data) => {
+    if (validateInputs()) {
+      setLoader(true);
+      await handleShift(data);
+    } else {
+      toast.error("Please enter the count for the selected days");
+    }
+  };
 
   const handleShift = async (data) => {
     let formdata;
     console.log(new_break);
-    
-    if(new_break.length===0){
-      setError('Break time is required')
-    }else{
-      if(recurrencePattern==='weekly'){
+
+    if (new_break.length === 0) {
+      setError("Break time is required");
+    } else {
+      if (recurrencePattern === "weekly") {
         formdata = {
           name: data.name,
           start_time: data.start_time,
@@ -154,11 +151,11 @@ const onSubmit = async (data) => {
           halfdaytolerence: data.halfdaytolerence,
           recur_pattern: data.recur_pattern,
           weeks: selectedDays,
-          people_count:requireDays,
+          people_count: requireDays,
           week_def: data.week_def,
           break_times: new_break,
         };
-      }else{
+      } else {
         formdata = {
           name: data.name,
           start_time: data.start_time,
@@ -179,11 +176,10 @@ const onSubmit = async (data) => {
         };
       }
     }
-    
+
     console.log(formdata);
 
     try {
-
       let res;
       res = await newFormRequest.post(SHIFT_LIST, formdata);
       console.log(res);
@@ -205,7 +201,6 @@ const onSubmit = async (data) => {
       setLoader(false);
     }
   };
-  
 
   useEffect(() => {
     if (shiftDetails) {
@@ -258,10 +253,8 @@ const onSubmit = async (data) => {
     }
   }, [workAreaList]);
 
-
   return (
     <>
-      
       <MenuHeader
         menu="Menu"
         subMenu="Setup"
@@ -354,8 +347,10 @@ const onSubmit = async (data) => {
 
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Shift Duration</label>
-                  <div className="border w-full h-10 border-[#cacaca] rounded-lg flex items-center px-2 text-sm">
-                    {duration !== null ? `${duration}` : "Please select start and end time"}
+                  <div className="flex h-10 w-full items-center rounded-lg border border-[#cacaca] px-2 text-sm">
+                    {duration !== null
+                      ? `${duration}`
+                      : "Please select start and end time"}
                   </div>
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
@@ -445,13 +440,12 @@ const onSubmit = async (data) => {
                 </div>
               </div>
               <hr className="my-4 border-[#A7A7A7]" />
-              
-              <Break 
+              <Break
                 formtype="save"
                 error={error}
                 new_break={new_break}
                 setNew_break={setNew_break}
-               />
+              />
             </div>
             <div
               className={`flex flex-col rounded-md border border-gray-300 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
@@ -486,16 +480,25 @@ const onSubmit = async (data) => {
                 </div>
                 {calculationType === "perday" && (
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs">Minimum hours required for (Either full day or half day is required)</p>
+                    <p className="text-xs">
+                      Minimum hours required for (Either full day or half day is
+                      required)
+                    </p>
                     <div className="flex items-center gap-2">
                       <div className="flex w-full flex-col">
-                        <label className="required label-text" htmlFor="fullday">Full Day</label>
+                        <label
+                          className="required label-text"
+                          htmlFor="fullday"
+                        >
+                          Full Day
+                        </label>
                         <input
                           {...register("fullday", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message: "Please enter a valid time format (HH:MM)"
-                            }
+                              message:
+                                "Please enter a valid time format (HH:MM)",
+                            },
                           })}
                           id="fullday"
                           autoComplete="off"
@@ -510,13 +513,19 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                       <div className="flex w-full flex-col">
-                      <label className="required label-text" htmlFor="fulltolerence">Full Day Tolerence</label>
+                        <label
+                          className="required label-text"
+                          htmlFor="fulltolerence"
+                        >
+                          Full Day Tolerence
+                        </label>
                         <input
                           {...register("fulltolerence", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message: "Please enter a valid time format (HH:MM)"
-                            }
+                              message:
+                                "Please enter a valid time format (HH:MM)",
+                            },
                           })}
                           id="fulltolerence"
                           autoComplete="off"
@@ -531,13 +540,19 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                       <div className="flex w-full flex-col">
-                      <label className="required label-text" htmlFor="halfday">Half Day</label>
+                        <label
+                          className="required label-text"
+                          htmlFor="halfday"
+                        >
+                          Half Day
+                        </label>
                         <input
                           {...register("halfday", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message: "Please enter a valid time format (HH:MM)"
-                            }
+                              message:
+                                "Please enter a valid time format (HH:MM)",
+                            },
                           })}
                           id="halfday"
                           autoComplete="off"
@@ -552,13 +567,19 @@ const onSubmit = async (data) => {
                         )}
                       </div>
                       <div className="flex w-full flex-col">
-                      <label className="required label-text" htmlFor="halfdaytolerence">Half Day Tolerence</label>
+                        <label
+                          className="required label-text"
+                          htmlFor="halfdaytolerence"
+                        >
+                          Half Day Tolerence
+                        </label>
                         <input
                           {...register("halfdaytolerence", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message: "Please enter a valid time format (HH:MM)"
-                            }
+                              message:
+                                "Please enter a valid time format (HH:MM)",
+                            },
                           })}
                           id="halfdaytolerence"
                           autoComplete="off"
@@ -656,33 +677,35 @@ const onSubmit = async (data) => {
               </div>
               {recurrencePattern === "weekly" && (
                 <div className="mt-4">
-                <h3 className="mb-2 text-sm font-semibold">People Required</h3>
-                <div className="grid h-8 grid-cols-7 overflow-hidden rounded-md border">
-                {days.map((day, index) => (
-                  <div key={index} className="relative">
-                    <input
-                      className={`border-r px-2 py-2 text-start text-xs placeholder:text-zinc-700 ${
-                        selectedDays.includes(day)
-                          ? errors[index]
-                            ? "border-red-500 bg-white" // Red border for error
-                            : "bg-white"
-                          : "bg-gray-100 cursor-not-allowed"
-                      }`}
-                      placeholder={day}
-                      type="number"
-                      onChange={handleInputChange(index)}
-                      disabled={!selectedDays.includes(day)} // Disable input if the day is not selected
-                    />
-                    {/* Display error message */}
-                    {dayerror[index] && (
-                      <span className="absolute text-red-500 text-xs mt-1">
-                        Required
-                      </span>
-                    )}
+                  <h3 className="mb-2 text-sm font-semibold">
+                    People Required
+                  </h3>
+                  <div className="grid h-8 grid-cols-7 overflow-hidden rounded-md border">
+                    {days.map((day, index) => (
+                      <div key={index} className="relative">
+                        <input
+                          className={`border-r px-2 py-2 text-start text-xs placeholder:text-zinc-700 ${
+                            selectedDays.includes(day)
+                              ? errors[index]
+                                ? "border-red-500 bg-white" // Red border for error
+                                : "bg-white"
+                              : "cursor-not-allowed bg-gray-100"
+                          }`}
+                          placeholder={day}
+                          type="number"
+                          onChange={handleInputChange(index)}
+                          disabled={!selectedDays.includes(day)} // Disable input if the day is not selected
+                        />
+                        {/* Display error message */}
+                        {dayerror[index] && (
+                          <span className="absolute mt-1 text-xs text-red-500">
+                            Required
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
                 </div>
-              </div>
               )}
             </div>
           </div>
