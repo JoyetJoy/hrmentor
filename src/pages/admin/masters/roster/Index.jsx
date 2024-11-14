@@ -5,7 +5,6 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import {
   Calendar,
-  Filter,
   MoveDiagonal,
   Plus,
   Search,
@@ -28,8 +27,6 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
   const [keyword, setKeyword] = useState("");
   const [rosterList, setRosterList] = useState("");
   const [selectedRoster, setSelectedRoster] = useState(null);
-  // const [selectedRosterId, setSelectedRosterId] = useState(null);
-  // const location = useLocation();
   const pageLimit = 10;
 
   const { data: rosterDetailss } = useQuery({
@@ -71,11 +68,6 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     setSelectedRoster(roster);
   };
 
-  // const handleEdit = (roster) => {
-  //   setEditPopupOpen(true);
-  //   setSelectedRoster(roster);
-
-  // };
   const handleEdit = (roster) => {
     console.log("Selected roster for editing:", roster);
     setEditPopupOpen(true);
@@ -147,7 +139,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               type="button"
               onClick={() => {
                 setDeletePopup(true);
-                setSelectedField(row.original?.roster_details?.roster_id );
+                setSelectedField(row.original?.roster_details?.roster_id);
               }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
@@ -159,7 +151,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     ],
     [],
   );
-console.log(selectedField);
+  console.log(selectedField);
 
   return (
     <>
@@ -176,12 +168,10 @@ console.log(selectedField);
         selectedRoster={selectedRoster}
         rosterDetails={rosterDetails}
         setRosterDetails={setRosterDetails}
-        // type={modalType}
       />
       <EditRoster
         editpopupOpen={editpopupOpen}
         setEditPopupOpen={setEditPopupOpen}
-
         selectedRoster={selectedRoster}
         rosterDetails={rosterDetails}
         setRosterDetails={setRosterDetails}
@@ -252,7 +242,6 @@ console.log(selectedField);
               <div
                 className="cursor-pointer rounded-full bg-gray-darklight p-2"
                 onClick={() => {
-                  // handleCreate("edit", rosterDetailss?.roster_details)
                   handleEdit(rosterDetailss?.roster_details);
                 }}
               >

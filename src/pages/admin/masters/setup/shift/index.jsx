@@ -12,7 +12,6 @@ function ShiftList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
-
   const pageLimit = 10;
   const { data: shiftDetails = { data: [], last_page: 1 }, isLoading } =
     useQuery({

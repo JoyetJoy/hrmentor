@@ -13,17 +13,13 @@ import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 
-export default function NewRoster({
-  popupOpen,
-  setPopupOpen,
-  
-}) {
+export default function NewRoster({ popupOpen, setPopupOpen }) {
   const [selectedShiftId, setSelectedShiftId] = useState(23);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
   const queryClient = useQueryClient();
-  
+
   const {
     register,
     handleSubmit,
@@ -34,7 +30,6 @@ export default function NewRoster({
     mode: "onSubmit",
     resolver: yupResolver(RosterSchema),
   });
-
 
   function close() {
     setPopupOpen(false);
@@ -73,7 +68,7 @@ export default function NewRoster({
 
   const handleDeleteEmployee = (employeeId) => {
     setSelectedEmployees((prevEmployees) =>
-      prevEmployees.filter((employee) => employee.value !== employeeId),
+      prevEmployees.filter((employee) => employee.unique_id !== employeeId),
     );
     toast.success("Employee deleted successfully");
   };
@@ -154,7 +149,7 @@ export default function NewRoster({
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => handleDeleteEmployee(row.original.value)}
+              onClick={() => handleDeleteEmployee(row.original.unique_id)}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
@@ -349,7 +344,6 @@ export default function NewRoster({
                           />
                         )}
                       />
-
                       <button
                         type="submit"
                         className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white"
