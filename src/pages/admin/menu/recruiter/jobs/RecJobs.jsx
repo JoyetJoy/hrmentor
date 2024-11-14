@@ -150,7 +150,7 @@ function RecruiterJobs() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"jobListing"}
         api={GET_JOBS}
       />
