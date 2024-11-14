@@ -1,7 +1,5 @@
 import { EMPLOYEE, newRequest } from "@/api";
 import { ROSTER_LIST } from "@/api/setup";
-import MenuHeader from "@/components/common/MenuHeader";
-// import EditRoster from "@/components/popups/master/roster/EditRoster";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
@@ -17,34 +15,80 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import RosterHeader from "@/components/common/RosterHeader";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import EditRoster from "@/components/popups/master/roster/EditRoster";
 
 export default function RosterList({ rosterDetails, setRosterDetails }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [popupOpen, setPopupOpen] = useState(false);
-
+  const [editpopupOpen, setEditPopupOpen] = useState(false);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
   const [keyword, setKeyword] = useState("");
-
+  const [rosterList, setRosterList] = useState("");
+  const [selectedRoster, setSelectedRoster] = useState(null);
+  // const [selectedRosterId, setSelectedRosterId] = useState(null);
+  // const location = useLocation();
   const pageLimit = 10;
+
   const { data: rosterDetailss } = useQuery({
-    queryKey: ["rosterDetailss"],
+    queryKey: ["rosterDetailss", currentPage, keyword],
     queryFn: () =>
-      newRequest.get(ROSTER_LIST).then((res) => {
-        return res?.data || { data: [], last_page: 1 };
-      }),
+      newRequest
+        .get(ROSTER_LIST, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res?.data || { data: [], last_page: 1 };
+        }),
   });
+
+  useEffect(() => {
+    setRosterList(rosterDetailss);
+  }, [rosterDetailss]);
 
   useEffect(() => {
     if (rosterDetailss) {
       setTotalPages(rosterDetailss?.last_page);
+      if (!selectedRoster && rosterDetailss.listing?.length > 0) {
+        setSelectedRoster(rosterDetailss.listing[0]?.roster_details);
+      }
     }
-  }, [rosterDetailss]);
+  }, [rosterDetailss, selectedRoster]);
+
+  const handleCreate = (toOpen) => {
+    setPopupOpen(true);
+  };
+
+  console.log(selectedRoster);
+
+  const handleView = (roster) => {
+    setSelectedRoster(roster);
+  };
+
+  // const handleEdit = (roster) => {
+  //   setEditPopupOpen(true);
+  //   setSelectedRoster(roster);
+
+  // };
+  const handleEdit = (roster) => {
+    console.log("Selected roster for editing:", roster);
+    setEditPopupOpen(true);
+  };
+
+  console.log(selectedRoster);
 
   const columns = React.useMemo(
     () => [
       {
         header: "Roster ID",
-        accessorKey: "id",
+        accessorKey: "roster_id",
+        cell: ({ row }) => row.original?.roster_details?.roster_id || "N/A",
       },
       {
         header: "Created Date & Time",
@@ -77,7 +121,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         accessorKey: "name",
         cell: ({ row }) => (
           <p className="whitespace-nowrap">
-            {row?.original?.shift_details?.name ?? "N/A"}
+            {row.original?.roster_details?.shift_details?.name ?? "N/A"}
           </p>
         ),
       },
@@ -91,15 +135,20 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <button
+            <Link
               type="button"
-              // onClick={handleClick}
+              to="#"
+              onClick={() => handleView(row.original?.roster_details)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <MoveDiagonal className="size-3" />
-            </button>
+            </Link>
             <button
               type="button"
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row.original?.roster_details?.roster_id );
+              }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
@@ -110,53 +159,63 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     ],
     [],
   );
+console.log(selectedField);
 
-  // const handleClick = (toOpen) => {
-  //   setPopupEditOpen(true);
-  // };
-  const handleCreate = (toOpen) => {
-    setPopupOpen(true);
-  };
   return (
     <>
-      {/* <EditRoster popupOpen={popupEditOpen} setPopupOpen={setPopupEditOpen}/> */}
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        selectedId={selectedField}
+        qrkey={"rosterDetailss"}
+        api={ROSTER_LIST}
+      />
       <NewRoster
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
+        selectedRoster={selectedRoster}
+        rosterDetails={rosterDetails}
+        setRosterDetails={setRosterDetails}
+        // type={modalType}
+      />
+      <EditRoster
+        editpopupOpen={editpopupOpen}
+        setEditPopupOpen={setEditPopupOpen}
+
+        selectedRoster={selectedRoster}
         rosterDetails={rosterDetails}
         setRosterDetails={setRosterDetails}
       />
+
       <RosterHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
-        <div className="flex gap-3">
-          <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
-            <Search className="size-4 object-contain text-gray-200" />
-            <input
-              type="text"
-              onChange={(e) => {
-                setKeyword(e.target.value);
-              }}
-              className="grow placeholder:text-sm placeholder:text-gray-200 focus:outline-none"
-              placeholder="Search"
-            />
-          </label>
-          <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
-            <Filter className="size-4" />
-          </div>
+        <div className="relative flex items-center">
+          <Search className="absolute left-2 size-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            className="rounded-md border border-gray-300 py-2 pl-8 pr-4"
+          />
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 min-h-10 flex-row items-center justify-center gap-1 rounded-md border border-gray-400 bg-white px-4 py-1">
-            <Calendar className="size-4" />
-            <h1 className="text-xs font-semibold">Calender View</h1>
-          </div>
-          <Link
-            to={""}
-            onClick={handleCreate}
-            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-hrmblue"
+
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black"
           >
-            <Plus className="size-4" />
-            Create Roster
-          </Link>
+            <Calendar className="size-4 text-black" />
+            <span>Calendar View</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCreate()}
+            className="flex items-center gap-2 rounded-md bg-hrmprimaryorange px-3 py-2 text-sm text-white"
+          >
+            <Plus strokeWidth={2} className="size-4" />
+            <span>Create Roster</span>
+          </button>
         </div>
       </div>
       <div className="flex gap-2">
@@ -169,9 +228,9 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
             totalPages={totalPages}
           />
         </div>
-        <div className="flex h-screen w-1/2 flex-col gap-2 rounded-md border border-gray-300 bg-white p-6">
-          <>
-            <div class="flex items-center justify-between">
+        {selectedRoster && (
+          <div className="flex h-screen w-1/2 flex-col gap-2 rounded-md border border-gray-300 bg-white p-6">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-gray-darklight p-2">
                   <img
@@ -181,12 +240,22 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                   />
                 </div>
                 <div>
-                  <h3 class="text-sm font-normal">Afternoon shift</h3>
-                  <p class="text-sm">01:00PM - 08:00PM</p>
+                  <h3 className="text-sm font-normal">
+                    {selectedRoster?.shift_details?.name || "N/A"}
+                  </h3>
+                  <p className="text-sm">
+                    {moment(selectedRoster.start_time).format("hh:mm A")} -{" "}
+                    {moment(selectedRoster.end_time).format("hh:mm A")}
+                  </p>
                 </div>
               </div>
-
-              <div className="rounded-full bg-gray-darklight p-2">
+              <div
+                className="cursor-pointer rounded-full bg-gray-darklight p-2"
+                onClick={() => {
+                  // handleCreate("edit", rosterDetailss?.roster_details)
+                  handleEdit(rosterDetailss?.roster_details);
+                }}
+              >
                 <img
                   src="/assets/icons/setup/re-Edit.svg"
                   alt="icons"
@@ -195,64 +264,92 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               </div>
             </div>
             <div className="border-b border-gray-dark"></div>
-            <div class="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+            <div className="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
               <div>
-                <p class="text-black">Start Date</p>
-                <p class="font-semibold">12-11-2024</p>
+                <p className="text-black">Start Date</p>
+                <p className="font-semibold">
+                  {moment(selectedRoster?.start_date).format("YYYY-MM-DD") ||
+                    "NA"}
+                </p>
               </div>
               <div>
-                <p class="text-black">End Date</p>
-                <p class="font-semibold">12-11-2024</p>
+                <p className="text-black">End Date</p>
+                <p className="font-semibold">
+                  {moment(selectedRoster?.end_date).format("YYYY-MM-DD") ||
+                    "NA"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Clock in time</p>
-                <p cla ss="font-semibold">01:00 PM</p>
+                <p className="text-black">Start Time</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.start_time || "NA"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Clock out time</p>
-                <p class="font-semibold">08:00 PM</p>
+                <p className="text-black">End Time</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.end_time || "NA"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Break time start</p>
-                <p class="font-semibold">03:00 PM</p>
+                <p className="text-black">Break time start</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.break_times?.[0]
+                    ?.break_start_time || "N/A"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Break time end</p>
-                <p class="font-semibold">04:00 PM</p>
+                <p className="text-black">Break time end</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.break_times?.[0]
+                    ?.break_end_time || "N/A"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Department</p>
-                <p class="font-semibold">General Medicine</p>
+                <p className="text-black">Department</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.department_name || "N/A"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Work location</p>
-                <p class="font-semibold">Trivandrum</p>
+                <p className="text-black">Work location</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.worklocation_name || "N/A"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Work area</p>
-                <p class="font-semibold">HRD</p>
+                <p className="text-black">Work area</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.workArea_name || "N/A"}
+                </p>
               </div>
               <div>
-                <p class="text-black">Pay type</p>
-                <p class="font-semibold">Per day</p>
+                <p className="text-black">Pay type</p>
+                <p className="font-semibold">
+                  {selectedRoster?.shift_details?.pay_type || "N/A"}
+                </p>
               </div>
-              <div class="col-span-2">
-                <p class="text-black">Created by</p>
-                <p class="font-semibold">Sneha</p>
+              <div className="col-span-2">
+                <p className="text-black">Created by</p>
+                <p className="font-semibold">
+                  {selectedRoster?.user_name || "N/A"}
+                </p>
               </div>
             </div>
 
-            <div class="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
+            <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
               <div className="rounded-full bg-gray-dark p-4"></div>
               <div>
-                <p class="text-sm font-medium">Akhil Soman</p>
-                <p class="text-xs font-medium text-darkblack">
+                <p className="text-sm font-medium">
+                  {selectedRoster?.employees?.[0]?.first_name || "N/A"}
+                </p>
+                <p className="text-xs font-medium text-darkblack">
                   UI/UX Design Intern
                 </p>
               </div>
             </div>
-          </>
-        </div>
+          </div>
+        )}
       </div>
     </>
   );

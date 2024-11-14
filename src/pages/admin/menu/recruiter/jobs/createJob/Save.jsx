@@ -149,7 +149,7 @@ function RecruiterJobPost() {
     sensitiveData: false,
     exposure: false,
   });
-  console.log(jobDetails);
+  console.log(jobDetails.employment_type);
   useEffect(() => {
     if (jobDetails) {
       setValue("job_title", jobDetails.job_title);

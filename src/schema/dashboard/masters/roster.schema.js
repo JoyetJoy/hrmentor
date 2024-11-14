@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 export const RosterSchema = Yup.object({
-      start_date: Yup.string()
+    start_date: Yup.string()
     .required("Start date is required")
     .test("is-before-end_date", "Start date must be before end date", function(value) {
       const { end_date } = this.parent;
@@ -12,5 +12,13 @@ export const RosterSchema = Yup.object({
       const { start_date } = this.parent;
       return !start_date || value > start_date; // Only return false if start_time exists and end_time is not after it
     }),
+    // employees: Yup.object({
+    //   unique_id: Yup.string(),
+    //   first_name: Yup.string(),
+    // })
+    // .required("Employee is required")
+    // .test("both-required", "Employment type is required", function (value) {
+    //   return value?.unique_id && value?.first_name;
+    // }),
 
 })

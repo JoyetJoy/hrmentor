@@ -66,14 +66,8 @@ export default {
         tdarkblue:"#181C3A4D",
         neutralmedium:"#2B2B2B",
 
-       
-
         textcolor: {
-          // darkblue: "#181C3A",
-          // 200: "#646464",
-          // 300: "#3A3A3A",
-          // blue: " #030E5C",
-          //
+          
           green: "#0B8A00",
           red: "#C71026",
           darkCharcoal: "#2C2C2C",
@@ -84,13 +78,8 @@ export default {
           mediumred: "#CF1212",
           mute: "#202020",
         },
+
         btncolor: "#283277",
-        // bgColor: {
-        //   100: "#181C3A",
-        //   200: "#FFFFFF",
-        //   300: "#E0E2F3",
-        //   400: "5264EA",
-        // },
       },
       backgroundImage: {
         subcription: "url('/public/assets/images/bg-subcription.png')",

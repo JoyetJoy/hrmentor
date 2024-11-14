@@ -1,11 +1,11 @@
 import { newRequest } from "@/api";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function DeleteConfirmation({
   open,
-  selectedId,
+  id,
   onCancel,
   type,
   setNew_break,
@@ -13,14 +13,18 @@ export default function DeleteConfirmation({
   qrkey,
   api,
 }) {
+  
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
+
+  
+  
   const handleDelete = async () => {
     try {
       setLoader(true);console.log('kp');
       
       if(type!=='break'&& type!=='roster' ){
-        const res = await newRequest.delete(`${api}/${selectedId}`);
+        const res = await newRequest.delete(`${api}/${id}`);
         if (res?.data?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
           setLoader(false);
@@ -29,7 +33,7 @@ export default function DeleteConfirmation({
         }
       }else {
         if (type === 'break') {
-          setNew_break((prevBreaks) => prevBreaks.filter((breakTime) => breakTime.id !== selectedId));
+          setNew_break((prevBreaks) => prevBreaks.filter((breakTime) => breakTime.id !== id));
           toast.success("Deleted break time successfully");
         }
         console.log('hii');
@@ -45,7 +49,7 @@ export default function DeleteConfirmation({
           console.log('Selected Employees before delete:', employee);
         
           setSelectedEmployees((prevEmployees) =>
-            prevEmployees.filter((selectedEmployees) => selectedEmployees.value !== selectedId)
+            prevEmployees.filter((selectedEmployees) => selectedEmployees.value !== id)
           );
           toast.success("Deleted roster item successfully");
         }

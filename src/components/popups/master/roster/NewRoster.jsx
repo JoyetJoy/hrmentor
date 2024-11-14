@@ -12,27 +12,18 @@ import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 export default function NewRoster({
   popupOpen,
   setPopupOpen,
-  rosterDetails,
-  setRosterDetails,
+  
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
-  const [keyword, setKeyword] = useState("");
   const [selectedShiftId, setSelectedShiftId] = useState(23);
-  const [selectedEmployees, setSelectedEmployees] = useState([]); 
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
   const queryClient = useQueryClient();
-  const [deletePopup,setDeletePopup] = useState(false);
-  const [deleteId,setDeleteId]= useState('');
-
- const deleteEmployees = selectedEmployees;
-
+  
   const {
     register,
     handleSubmit,
@@ -43,11 +34,7 @@ export default function NewRoster({
     mode: "onSubmit",
     resolver: yupResolver(RosterSchema),
   });
-  
-  function close() {
-    setPopupOpen(false);
-    reset();
-  }
+
 
   function close() {
     setPopupOpen(false);
@@ -84,11 +71,12 @@ export default function NewRoster({
     setSelectedShiftId(selectedOption.value);
   };
 
-  const deleteBreakTime = (id) => {
-    setDeleteId(id);
-    setDeletePopup(true);
+  const handleDeleteEmployee = (employeeId) => {
+    setSelectedEmployees((prevEmployees) =>
+      prevEmployees.filter((employee) => employee.value !== employeeId),
+    );
+    toast.success("Employee deleted successfully");
   };
-  
   const handleAddEmployee = () => {
     if (selectedEmployee) {
       setSelectedEmployees((prev) => [
@@ -108,10 +96,6 @@ export default function NewRoster({
       console.log("No employee selected to add.");
     }
   };
-  const data = [
-    { sno: 1, details: "vmffghgfhfghj" },
-    { sno: 2, details: "fdgdfghfh" },
-  ];
 
   const onSubmit = async (data) => {
     await handleRoster(data);
@@ -128,7 +112,6 @@ export default function NewRoster({
 
     console.log(formData);
     try {
-
       let res;
       res = await newRequest.post(ROSTER_LIST, formData);
       console.log(res);
@@ -137,7 +120,6 @@ export default function NewRoster({
         queryClient.invalidateQueries([""]);
         reset();
         setPopupOpen(false);
-
       } else {
         toast.error("Failed to save roster.");
       }
@@ -151,8 +133,6 @@ export default function NewRoster({
       console.log(`Shift selected: ${selectedShiftId}`);
     }
   }, [selectedShiftId]);
-
-
 
   const columns = React.useMemo(
     () => [
@@ -174,8 +154,7 @@ export default function NewRoster({
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => deleteBreakTime(row?.original?.unique_id)}
-
+              onClick={() => handleDeleteEmployee(row.original.value)}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
@@ -186,219 +165,207 @@ export default function NewRoster({
     ],
     [],
   );
-
-  // const list = shiftList?.data?.original?.data;
   return (
     <>
-     <DeleteConfirmation
-        open={deletePopup}
-        onCancel={setDeletePopup}
-        selectedId={deleteId}
-        type='roster'
-        selectedEmployees={selectedEmployees}
-        setSelectedEmployees={setSelectedEmployees}
-      />
-      <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
-        <div className="flex min-h-full items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-4xl rounded bg-white p-6">
-            <div className="mb-5 flex justify-between">
-              <h1 className="text-md font-bold">Create New Roster</h1>
-              <button onClick={close}>
-                <X />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div>
-                <div className="flex flex-col gap-4">
+      <Dialog
+        open={popupOpen}
+        as="div"
+        className="relative z-10"
+        onClose={close}
+      >
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel className="w-full max-w-4xl rounded bg-white p-6">
+              <div className="mb-5 flex justify-between">
+                <h1 className="text-md font-bold">Create New Roster</h1>
+                <button onClick={close}>
+                  <X />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit(onSubmit)}>
                   <div>
-                    <label className="text-sm font-medium">Shift</label>
-                    <Controller
-                      name="shift"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          options={shiftList?.data?.original?.data.map(
-                            (item) => ({
-                              label: item.name,
-                              value: item.id,
-                            }),
+                    <div className="flex flex-col gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Shift</label>
+                        <Controller
+                          name="shift"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Select
+                              {...field}
+                              isSearchable={true}
+                              styles={customSelectStyles}
+                              options={shiftList?.data?.original?.data.map(
+                                (item) => ({
+                                  label: item.name,
+                                  value: item.id,
+                                }),
+                              )}
+                              placeholder="Select Shift"
+                              className="input-box w-full text-black"
+                              onChange={(selectedOption) => {
+                                field.onChange(selectedOption);
+                                handleShiftChange(selectedOption);
+                              }}
+                            />
                           )}
-                          placeholder="Select Shift"
-                          className="input-box w-full text-black"
-                          onChange={(selectedOption) => {
-                            field.onChange(selectedOption);
-                            handleShiftChange(selectedOption);
-                          }}
                         />
-                      )}
-                    />
-                    {errors.shift && (
-                      <span className="text-xs text-red-500">
-                        {errors.shift?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Start Date</label>
-                    <input
-                      type="date"
-                      {...register("start_date", { required: true })}
-                      className="input-box w-full"
-                    />
-                    {errors.start_date && (
-                      <span className="text-xs text-red-500">
-                        {errors.start_date?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">End Date</label>
-                    <input
-                      type="date"
-                      {...register("end_date", { required: true })}
-                      className="input-box w-full"
-                    />
-                    {errors.end_date && (
-                      <span className="text-xs text-red-500">
-                        {errors.end_date?.message}
-                      </span>
-                    )}
-                  </div>
-                  <table className="mt-4 table-auto border bg-[#9E9E9E] bg-opacity-20">
-                    <tbody>
-                      <tr>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          Pay type
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.calculation_type}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          Clock In time
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.start_time}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          Clock Out time
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.end_time}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          Department
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.department?.label}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          Work Location
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.location?.label}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          Work Area
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.workArea?.label}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
-                          People Required
-                        </td>
-                        <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
-                          {selectedShift?.people_required}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div className="mt-4 flex gap-3">
-                    <button
-                      type="submit"
-                      className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      onClick={close}
-                      className="w-full rounded border border-black px-4 py-3"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-            <div className="mt-1 flex h-full flex-col gap-4">
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium">Add Employee</label>
-                  <div className="flex gap-2">
-                    <Controller
-                      name="employees"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          placeholder="Select Employee"
+                        {errors.shift && (
+                          <span className="text-xs text-red-500">
+                            {errors.shift?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">
+                          Start Date
+                        </label>
+                        <input
+                          type="date"
+                          {...register("start_date", { required: true })}
                           className="input-box w-full"
-                          options={rosterEmpList?.employees?.map((item) => ({
-                            label: item.first_name,
-                            value: item.unique_id,
-                          }))}
-                          onChange={(selectedOption) => {
-                            field.onChange(selectedOption);
-                            setSelectedEmployee(selectedOption); // Store selected option in state
-                          }}
                         />
-                      )}
-                    />
-                    
-                    <button
-                      type="submit"
-                      className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white"
-                      onClick={handleAddEmployee}
-                    >
-                      <Plus className="size-4" /> Add
-                    </button>
+                        {errors.start_date && (
+                          <span className="text-xs text-red-500">
+                            {errors.start_date?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">End Date</label>
+                        <input
+                          type="date"
+                          {...register("end_date", { required: true })}
+                          className="input-box w-full"
+                        />
+                        {errors.end_date && (
+                          <span className="text-xs text-red-500">
+                            {errors.end_date?.message}
+                          </span>
+                        )}
+                      </div>
+                      <table className="mt-4 table-auto border bg-[#9E9E9E] bg-opacity-20">
+                        <tbody>
+                          <tr>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              Pay type
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.calculation_type}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              Clock In time
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.start_time}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              Clock Out time
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.end_time}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              Department
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.department?.label}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              Work Location
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.location?.label}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              Work Area
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.workArea?.label}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="w-fit border border-[#9E9E9E] px-2 py-1 text-sm font-bold">
+                              People Required
+                            </td>
+                            <td className="border border-[#9E9E9E] px-2 py-1 text-sm">
+                              {selectedShift?.people_required}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div className="mt-4 flex gap-3">
+                        <button
+                          type="submit"
+                          className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          onClick={close}
+                          className="w-full rounded border border-black px-4 py-3"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
                   </div>
+                </form>
+                <div className="mt-1 flex h-full flex-col gap-4">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium">Add Employee</label>
+                    <div className="flex gap-2">
+                      <Controller
+                        name="employees"
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <Select
+                            isSearchable={true}
+                            styles={customSelectStyles}
+                            placeholder="Select Employee"
+                            className="input-box w-full"
+                            options={rosterEmpList?.employees?.map((item) => ({
+                              label: item.first_name,
+                              value: item.unique_id,
+                            }))}
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption);
+                              setSelectedEmployee(selectedOption);
+                            }}
+                          />
+                        )}
+                      />
+
+                      <button
+                        type="submit"
+                        className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white"
+                        onClick={handleAddEmployee}
+                      >
+                        <Plus className="size-4" /> Add
+                      </button>
+                    </div>
+                  </div>
+                  <QueryTable columns={columns} list={selectedEmployees} />
                 </div>
-                <QueryTable
-                  columns={columns}
-                  list={selectedEmployees}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                  totalPages={totalPages}
-                />
               </div>
-              </div>
-          </DialogPanel>
+            </DialogPanel>
+          </div>
         </div>
-      </div>
-    </Dialog>
+      </Dialog>
     </>
-  
   );
 }

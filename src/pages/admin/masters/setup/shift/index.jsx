@@ -66,7 +66,7 @@ function ShiftList() {
       {
         header: "Start Time",
         accessorKey: "start_time",
-        cell: ({ row }) => row?.original?.start_time || "06:55",
+        cell: ({ row }) => row?.original?.start_time || "NA",
       },
       {
         header: "End Time",
