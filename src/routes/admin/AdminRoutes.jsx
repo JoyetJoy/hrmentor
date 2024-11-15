@@ -12,6 +12,7 @@ import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
 import Claim from "@/pages/admin/masters/roster/Claim";
 import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
 import { HiringRoutes } from "./children/HiringRoute";
+import ProfileManagement from "@/pages/admin/dashboard/profile-management";
 
 export const AdminRoutes = [
   {
@@ -41,6 +42,10 @@ export const AdminRoutes = [
   {
     path: "hiring",
     children: HiringRoutes,
+  },
+  {
+    path: "profile-management",
+    element: <ProfileManagement />,
   },
   {
     path: "setup",

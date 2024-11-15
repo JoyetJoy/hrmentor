@@ -276,7 +276,9 @@ export const adminItems = [
   {
     icon: "/assets/icons/admin/profilemang.svg",
     label: "Profile Management",
-    path: "/profile-management",
+    path: "/admin/profile-management",
+    active: "profile-management",
+
   },
   {
     icon: "/assets/icons/admin/company.svg",
