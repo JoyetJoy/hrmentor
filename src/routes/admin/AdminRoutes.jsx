@@ -6,6 +6,7 @@ import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
 import ShiftList from "@/pages/admin/masters/setup/shift";
 import AddShift from "@/pages/admin/masters/setup/shift/Save";
+import { LeaveRoutes } from "./children/LeaveRoute";
 import SaveMasterShift from "@/pages/admin/masters/setup/shift/Save";
 import RosterList from "@/pages/admin/masters/roster/Index";
 import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
@@ -47,6 +48,11 @@ export const AdminRoutes = [
     path: "profile-management",
     element: <ProfileManagement />,
   },
+  {
+    path: "leave",
+    children: LeaveRoutes,
+  },
+
   {
     path: "setup",
     children: [

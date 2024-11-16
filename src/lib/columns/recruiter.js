@@ -7,6 +7,17 @@ export const recColumnKeysForJobDescription = {
   field3: { key: "job_description", label: "Job Description" },
 };
 
+// job description
+export const recColumnKeysForHolidayreqList = {
+  field1: { key: "employee_name_id", label: "Employee Name & ID" },
+  field2: { key: "start_date", label: "Start Date" },
+  field3: { key: "end_date", label: "End Date" },
+  field4: { key: "leave_type", label: "Leave Type" },
+  field5: { key: "leave_count", label: "Leave Count" },
+  field6: { key: "applied_on", label: "Applied On" },
+  field7: { key: "status", label: "Status" },
+};
+
 // profile question
 export const recColumnKeysForProfileQuestion = {
   field1: { key: "profile_question_name", label: "Name" },

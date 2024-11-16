@@ -1,4 +1,5 @@
 import { recruiterMenu } from "@/constants/menus/recruiter";
+import { leaveMenu } from "@/constants/menus/leave";
 import { employeeMenu } from "@/constants/menus/employee";
 import { AccountManngerMenu } from "@/constants/menus/employee";
 import { ArrowLeft, ChevronRight, User } from "lucide-react";

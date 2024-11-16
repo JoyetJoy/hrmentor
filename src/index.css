@@ -51,6 +51,11 @@ input[type="radio"] {
   accent-color: #e95d39 !important;
 }
 
+.radio-black[type="radio"] {
+  accent-color: black !important;
+}
+
+
 input::-webkit-calendar-picker-indicator {
   color: #8c8989;
   opacity: 1;

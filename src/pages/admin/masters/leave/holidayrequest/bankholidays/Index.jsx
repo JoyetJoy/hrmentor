@@ -1,0 +1,233 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
+import QueryTable from "@/components/table/QueryTable";
+import MenuHeader from "@/components/common/MenuHeader";
+import LeaveHeader from "@/components/common/LeaveMenuHeader";
+import { GET_JOBS } from "@/api/recruiter";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
+import dayjs from "dayjs";
+import Loader from "@/components/ui/Loader";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import AddBankHoliday from "@/components/popups/master/leave/Addbankholiday";
+
+function BankHolidays() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [byStatus, setByStatus] = useState(null);
+  const [keyword, setKeyword] = useState("");
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const [date, setDate] = useState(new Date());
+  const [popupOpen, setPopupOpen] = useState(false);
+  const pageLimit = 10;
+
+  const months = Array.from({ length: 12 }, (_, i) => ({
+    value: i,
+    label: dayjs().month(i).format("MMMM"),
+  }));
+  
+  const years = Array.from({ length: 11 }, (_, i) => ({
+    value: 2020 + i,
+    label: (2020 + i).toString(),
+  }));  
+
+  const handleMonthChange = (selectedOption) => {
+    const updatedDate = dayjs(date).month(selectedOption.value).toDate();
+    setDate(updatedDate);
+  };
+  const handleYearChange = (selectedOption) => {
+    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
+    setDate(updatedDate);
+  };
+
+  // Fetch List
+  const { data: jobListing, isLoading } = useQuery({
+    queryKey: ["jobListing", currentPage, byStatus, keyword],
+    queryFn: () =>
+      newRequest
+        .get(GET_JOBS, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+            by_status: byStatus,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (jobListing) {
+      setTotalPages(jobListing?.last_page);
+    }
+  }, [jobListing]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
+      {
+        header: "Holiday",
+        accessorKey: "job_title",
+      },
+      {
+        header: "Date",
+        accessorKey: "date",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.roster_details?.start_date
+              ? moment(row.original.roster_details.start_date).format(
+                  "DD-MM-YYY",
+                )
+              : "N/A"}
+          </p>
+        ),
+      },
+      {
+        header: "Description",
+        accessorKey: "designation",
+        cell: ({ row }) => (
+          <p className="">{row?.original?.designation?.designation_name}</p>
+        ),
+      },
+      {
+        header: "Location",
+        accessorKey: "location",
+        cell: ({ row }) => (
+          <p className="">{row?.original?.country?.country_name}</p>
+        ),
+      },
+      {
+        header: "Type",
+        accessorKey: "type",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employment_type?.employment_type_name}
+          </p>
+        ),
+      },
+      {
+        header: "Action",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 text-xs">
+            <Link
+              to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </Link>
+              <button
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedField(row?.original?.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
+              >
+                <Trash2 className="size-3" />
+              </button>
+          </div>
+        ),
+      },
+    ],
+    [jobListing, byStatus],
+  );
+  return (
+    <>
+      <AddBankHoliday
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+      />
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedField}
+        qrkey={"jobListing"}
+        api={GET_JOBS}
+      />
+      <LeaveHeader page={2} currentPage ={'Bank Holidays'} />
+      <div className="items-centerm flex justify-between pb-3 pt-2">
+      <div className="flex items-center gap-4">
+          <h5 className="text-lg font-bold">Bank Holiday</h5>
+          <Select
+            options={years}
+            isSearchable={true}
+            onChange={handleYearChange}
+            styles={customSelectStyles}
+            placeholder={dayjs(date).format("YYYY")}
+            className="input-box h-10 w-40 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+          />
+          <Select
+            options={months}
+            isSearchable={true}
+            onChange={handleMonthChange}
+            styles={customSelectStyles}
+            placeholder={dayjs(date).format("MMMM")}
+            className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+        <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
+            <Search
+              className="size-4 object-contain text-gray-200"
+              strokeWidth={2}
+            />
+            <input
+              type="text"
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
+              value={keyword}
+              className="grow  h-full w-full text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
+              placeholder="Search"
+            />
+          </label>
+          <div className="h-10 min-h-10 rounded-md border border-gray-platinum bg-white p-3">
+            <Filter
+              className="stroke size-4 font-medium text-black"
+              strokeWidth={2}
+            />
+          </div>
+          <button
+            onClick={()=>setPopupOpen(true)}
+            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue rounded-md"
+          >
+            <Plus className="size-5" strokeWidth={2} />
+            Add Bank Holiday
+          </button>
+        </div>
+      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <QueryTable
+          columns={columns}
+          list={jobListing?.listing ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+      )}
+    </>
+  );
+}
+
+export default BankHolidays;
