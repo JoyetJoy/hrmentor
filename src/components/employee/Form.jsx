@@ -283,6 +283,7 @@ export default function SaveEmployeeForm({ formtype }) {
 
   // ROLES LIST
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
+console.log(rolesList);
 
   const onSubmit = (data) => {
     setLoader(true);
