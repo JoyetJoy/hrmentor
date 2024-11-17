@@ -149,11 +149,11 @@ function RecruiterJobPost() {
     sensitiveData: false,
     exposure: false,
   });
-  console.log(jobDetails.employment_type);
+
   useEffect(() => {
     if (jobDetails) {
       setValue("job_title", jobDetails.job_title);
-      setValue("employment_type", jobDetails.employment_type);
+      setValue("employment_type", jobDetails?.employment_type);
       setValue("min_exp_id", jobDetails.min_exp_id);
       setValue("designation_id", jobDetails.designation_id);
       setValue("department_id", jobDetails.department_id);
@@ -469,7 +469,9 @@ function RecruiterJobPost() {
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
               <ArrowLeft onClick={() => history.back()} className="size-4" />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
-              <span className="text-sm font-medium text-textcolor-darkCharcoal">Post</span>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">
+                Post
+              </span>
             </div>
             <button
               type="submit"
@@ -532,7 +534,7 @@ function RecruiterJobPost() {
                       />
                     )}
                   />
-                  {errors.employment_type && (
+                  {errors?.employment_type && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.employment_type?.message}
                     </span>
@@ -863,7 +865,7 @@ function RecruiterJobPost() {
                           setWorkType(1);
                         }}
                         checked={workType == 1}
-                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="accent-bgColor-100 checked:accent-bgColor-100 ml-2 h-4 w-4 rounded-sm"
                       />
                       <span className="label-text">Onsite</span>
                     </label>
@@ -875,7 +877,7 @@ function RecruiterJobPost() {
                           setWorkType(2);
                         }}
                         checked={workType == 2}
-                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="accent-bgColor-100 checked:accent-bgColor-100 ml-2 h-4 w-4 rounded-sm"
                       />
                       <span className="label-text">Remote</span>
                     </label>
@@ -887,7 +889,7 @@ function RecruiterJobPost() {
                           setWorkType(3);
                         }}
                         checked={workType == 3}
-                        className="ml-2 h-4 w-4 rounded-sm accent-bgColor-100 checked:accent-bgColor-100"
+                        className="accent-bgColor-100 checked:accent-bgColor-100 ml-2 h-4 w-4 rounded-sm"
                       />
                       <span className="label-text">Hybrid</span>
                     </label>
@@ -1075,7 +1077,7 @@ function RecruiterJobPost() {
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Sensitive data
                   </p>
-                  <div className="h-[0.5px] w-full bg- gray-light"></div>
+                  <div className="bg- gray-light h-[0.5px] w-full"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>
@@ -1177,7 +1179,7 @@ function RecruiterJobPost() {
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
                     Exposure
                   </p>
-                  <div className="h-px w-full bg- gray-light"></div>
+                  <div className="bg- gray-light h-px w-full"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div>
