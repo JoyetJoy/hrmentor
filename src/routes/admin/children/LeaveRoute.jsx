@@ -29,14 +29,6 @@ export const LeaveRoutes = [
             path: "",
             element: <BankHolidays />,
         },
-        {
-            path: "awaitingapproval",
-            element: <AwaitingapprovalList />,
-        },
-        {
-            path: "completed",
-            element: <CompletedList />,
-        },
       ],
     },{
       path: "settings",

@@ -60,7 +60,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
   return (
     <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto overflow-y-min bg-black/20">
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
@@ -165,7 +165,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                   )}
                 </div>
                 {percentage&&
-                    <div>
+                    <div className="group items-center gap-3 text-[0.85rem]">
                         <label className="label-text">Percentage</label>
                         <input
                             autoComplete="off"
