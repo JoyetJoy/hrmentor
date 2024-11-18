@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from 'react-router-dom';
 import Select from "react-select";
 import toast from "react-hot-toast";
 import { ShiftSchema } from "@/schema/dashboard/masters/shift.schema";
 import { newFormRequest, newRequest, XFormRequest } from "@/api";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import QueryTable from "@/components/table/QueryTable";
-import BreakTime from "@/components/popups/master/shift/BreakTime";
 import MenuHeader from "@/components/common/MenuHeader";
 import { ChevronRight } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -22,6 +21,7 @@ import { SHIFT_BREAK_TIME, SHIFT_LIST } from "@/api/setup";
 import Break from "../Break";
 
 export default function SaveMasterShift({ formtype, sid }) {
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [workArea, setWorkArea] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -116,12 +116,13 @@ export default function SaveMasterShift({ formtype, sid }) {
     return !newErrors.some((error) => error === true);
   };
 
-  console.log(requireDays);
-
   const onSubmit = async (data) => {
     if (validateInputs()) {
-      setLoader(true);
-      await handleShift(data);
+      if(data.fullday===''&& data.halfday===''){
+        toast.error('Either full day or half day is required')
+      }else{
+       await handleShift(data);
+      }
     } else {
       toast.error("Please enter the count for the selected days");
     }
@@ -129,11 +130,12 @@ export default function SaveMasterShift({ formtype, sid }) {
 
   const handleShift = async (data) => {
     let formdata;
-    console.log(new_break);
 
     if (new_break.length === 0) {
       setError("Break time is required");
+      toast.error("Break time is required")
     } else {
+      setLoader(true);
       if (recurrencePattern === "weekly") {
         formdata = {
           name: data.name,
@@ -175,22 +177,16 @@ export default function SaveMasterShift({ formtype, sid }) {
           break_times: new_break,
         };
       }
-    }
-
-    console.log(formdata);
 
     try {
       let res;
       res = await newFormRequest.post(SHIFT_LIST, formdata);
-      console.log(res);
       if (res?.status === 201) {
         toast.success("Saved shift details successfully");
         queryClient.invalidateQueries(["shiftDetails"]);
         reset();
         setLoader(false);
-        formtype === "save"
-          ? navigate("/admin/setup/shift")
-          : window.location.reload();
+        navigate("/admin/setup/shift")
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
@@ -200,6 +196,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       toast.error("Failed to save employee.");
       setLoader(false);
     }
+  }
   };
 
   useEffect(() => {
@@ -253,6 +250,17 @@ export default function SaveMasterShift({ formtype, sid }) {
     }
   }, [workAreaList]);
 
+  const formatTime = (input) => {
+    let value = input.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+  
+    // Format input as HH:MM
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + ":" + value.slice(2, 4); // Insert colon
+    }
+  
+    return value;
+  };
+
   return (
     <>
       <MenuHeader
@@ -290,9 +298,9 @@ export default function SaveMasterShift({ formtype, sid }) {
               </button>
             </div>
           </div>
-          <div className="grid gap-x-3 py-2 lg:grid-cols-2">
+          <div className="grid gap-x-3 lg:grid-cols-2">
             <div
-              className={`flex flex-col gap-3 rounded-md border border-gray-300 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
+              className={`flex flex-col gap-3 rounded-md mb-5 lg:mb-0 lg:rounded-b-none border border-gray-300 lg:border-b-0 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
             >
               <div className="mt-4 grid w-full lg:grid-cols-2">
                 <div className="group col-span-2 flex flex-col gap-1.5 px-3 py-2">
@@ -358,7 +366,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <input
                     {...register("people_required", { required: true })}
                     autoComplete="off"
-                    type="text"
+                    type="number"
                     name="people_required"
                     placeholder="Enter Required Count"
                     className="input-box"
@@ -439,16 +447,10 @@ export default function SaveMasterShift({ formtype, sid }) {
                   )}
                 </div>
               </div>
-              <hr className="my-4 border-[#A7A7A7]" />
-              <Break
-                formtype="save"
-                error={error}
-                new_break={new_break}
-                setNew_break={setNew_break}
-              />
+              
             </div>
             <div
-              className={`flex flex-col rounded-md border border-gray-300 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
+              className={`flex flex-col rounded-md rounded-b-none border-b-0 border border-gray-300 bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
             >
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
@@ -480,7 +482,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                 </div>
                 {calculationType === "perday" && (
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs">
+                    <p className="text-xs text-red-500">
                       Minimum hours required for (Either full day or half day is
                       required)
                     </p>
@@ -494,17 +496,21 @@ export default function SaveMasterShift({ formtype, sid }) {
                         </label>
                         <input
                           {...register("fullday", {
+                            required: "Time is required",
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message:
-                                "Please enter a valid time format (HH:MM)",
+                              message: "Please enter a valid time format (HH:MM)",
                             },
                           })}
                           id="fullday"
                           autoComplete="off"
                           name="fullday"
-                          type="time"
+                          type="text"
+                          placeholder="--:--"
                           className="input-box"
+                          onChange={(e) => {
+                            e.target.value = formatTime(e.target.value); // Call the helper function
+                          }}
                         />
                         {errors.fullday && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -523,15 +529,18 @@ export default function SaveMasterShift({ formtype, sid }) {
                           {...register("fulltolerence", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message:
-                                "Please enter a valid time format (HH:MM)",
+                              message: "Please enter a valid time format (HH:MM)",
                             },
                           })}
                           id="fulltolerence"
                           autoComplete="off"
                           name="fulltolerence"
-                          type="time"
+                          type="text"
+                          placeholder="--:--"
                           className="input-box"
+                          onChange={(e) => {
+                            e.target.value = formatTime(e.target.value); // Call the helper function
+                          }}
                         />
                         {errors.fulltolerence && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -550,15 +559,18 @@ export default function SaveMasterShift({ formtype, sid }) {
                           {...register("halfday", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message:
-                                "Please enter a valid time format (HH:MM)",
+                              message: "Please enter a valid time format (HH:MM)",
                             },
                           })}
                           id="halfday"
                           autoComplete="off"
                           name="halfday"
-                          type="time"
+                          type="text"
+                          placeholder="--:--"
                           className="input-box"
+                          onChange={(e) => {
+                            e.target.value = formatTime(e.target.value); // Call the helper function
+                          }}
                         />
                         {errors.halfday && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -577,15 +589,18 @@ export default function SaveMasterShift({ formtype, sid }) {
                           {...register("halfdaytolerence", {
                             pattern: {
                               value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-                              message:
-                                "Please enter a valid time format (HH:MM)",
+                              message: "Please enter a valid time format (HH:MM)",
                             },
                           })}
                           id="halfdaytolerence"
                           autoComplete="off"
                           name="halfdaytolerence"
-                          type="time"
+                          type="text" // Change type to text for manual input (no time picker)
+                          placeholder="--:--"
                           className="input-box"
+                          onChange={(e) => {
+                            e.target.value = formatTime(e.target.value); // Call the helper function for formatting
+                          }}
                         />
                         {errors.halfdaytolerence && (
                           <span className="whitespace-nowrap text-xs font-medium text-red-500">
@@ -710,6 +725,19 @@ export default function SaveMasterShift({ formtype, sid }) {
             </div>
           </div>
         </form>
+        <div className="grid gap-x-3 lg:grid-cols-2">
+          <div className="bg-white p-10 pt-0 border border-gray-300 border-t-0 rounded-md rounded-t-none">
+            <hr className=" border-[#A7A7A7] pb-5" />
+            <Break
+                formtype="save"
+                error={error}
+                new_break={new_break}
+                setNew_break={setNew_break}
+              />
+          </div>
+          <div className="bg-white p-10 pt-0 border border-gray-300 border-t-0 rounded-md rounded-t-none">
+          </div>
+        </div>
       </>
     </>
   );
