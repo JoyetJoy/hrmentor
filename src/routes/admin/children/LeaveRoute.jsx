@@ -6,7 +6,7 @@ import { HolidayList } from "@/pages/admin/masters/leave/settings/Index"
 
 export const LeaveRoutes = [
     {
-      path: "holidayrequest",
+      path: "request",
       children: [
         {
             path: "",

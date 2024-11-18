@@ -31,8 +31,28 @@ export const leaveMenu = [
     },
   ];
 
+  export const LeaveList = [
+    {
+      id: 1,
+      name: "Leave request list",
+      link: "/admin/leave/request",
+    },
+    {
+      id: 2,
+      name: "Awaiting Approval",
+      link: "/admin/leave/request/awaitingapproval",
+      
+    },
+    {
+      id: 3,
+      name: "Completed",
+      link: "/admin/leave/request/completed",
+      
+    },
+  ];  
+
   export const LeaveHeaderList =[
-    {id:1, name:"Leave request list" ,link:"/admin/leave/holidayrequest"},
+    {id:1, name:"Leave request" ,link:"/admin/leave/request"},
     {
       id:2, name:"Bank Holidays",link:"/admin/leave/bankholidays"
     },
