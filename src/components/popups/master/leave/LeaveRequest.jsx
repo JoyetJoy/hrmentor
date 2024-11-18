@@ -165,6 +165,7 @@ export default function LeaveRequest({
                     value="pending"
                     onClick={()=>setRejected(false)}
                     className="radio-black " 
+                    defaultChecked
                     />
                     <label className="text-sm font-normal">Pending</label>
                 </div>

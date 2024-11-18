@@ -2,7 +2,6 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -11,8 +10,7 @@ import toast from "react-hot-toast";
 
 export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
-  const [percentage, setPercentage] = useState(false)
-  const queryClient = useQueryClient();
+  const [percentage, setPercentage] = useState(true)
 
   const {
     register,
@@ -81,7 +79,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                     type="text"
                     placeholder="Enter Holiday Name"
                     {...register("name")}
-                    className="input-box"
+                    className="input-box label-text"
                   />
                   {errors.name && (
                     <span className="text-xs font-medium text-red-500">
@@ -92,7 +90,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
                 {/* Date */}
                 <div>
-                  <label className="text-sm font-medium">Date</label>
+                  <label className="label-text">Date</label>
                   <input
                     type="date"
                     {...register("date")}
@@ -107,7 +105,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
                 {/* Location */}
                 <div>
-                  <label className="text-sm font-medium">Location</label>
+                  <label className="label-text">Location</label>
                   <Controller
                     name="location"
                     control={control}
@@ -144,8 +142,9 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         onClick={()=>setPercentage(true)}
                         className="radio-black"
                         {...register("holiday_status")}
+                        defaultChecked
                       />
-                      <label className="text-sm font-normal">Paid</label>
+                      <label className="label-text">Paid</label>
                     </div>
                     <div className="flex items-center gap-2">
                       <input
@@ -156,7 +155,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         className="radio-black"
                         {...register("holiday_status")}
                       />
-                      <label className="text-sm font-normal">Unpaid</label>
+                      <label className="label-text">Unpaid</label>
                     </div>
                   </div>
                   {errors.holiday_status && (
@@ -173,7 +172,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                             type="text"
                             placeholder="Enter Percentage"
                             {...register("percentage")}
-                            className="input-box"
+                            className="input-box label-text"
                         />
                         {errors.percentage && (
                             <span className="text-xs font-medium text-red-500">
@@ -185,9 +184,9 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
                 {/* Description */}
                 <div className="flex flex-col gap-2 mt-2">
-                  <label>Description</label>
+                  <label className="label-text">Description</label>
                   <textarea
-                    className="w-full p-1 h-20 border border-[#cecdcd] rounded-md"
+                    className="w-full p-1 h-20 border border-[#cecdcd] rounded-md label-text"
                     placeholder="Enter description here..."
                     {...register("description")}
                   ></textarea>
