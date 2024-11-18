@@ -401,14 +401,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
               type="submit"
               className="btn flex h-10 min-h-10 min-w-[10rem] items-center bg-hrmblack text-sm font-medium text-white transition-all duration-500 hover:bg-hrmdarkblue/70"
             >
-              {loader ? (
-                <div className="flex items-center gap-3">
-                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                  {formtype === "update" ? "Updating" : "Saving"}
-                </div>
-              ) : (
-                <>{formtype === "update" ? "Update" : "Save"}</>
-              )}
+              {loader ? "Saving..." : "Save"}
             </button>
           </div>
         </div>
