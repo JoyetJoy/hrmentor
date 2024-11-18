@@ -45,14 +45,6 @@ export const LeaveRoutes = [
             path: "",
             element: <HolidayList />,
         },
-        {
-            path: "awaitingapproval",
-            element: <AwaitingapprovalList />,
-        },
-        {
-            path: "completed",
-            element: <CompletedList />,
-        },
       ],
     },
 ]  
