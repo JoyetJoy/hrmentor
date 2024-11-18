@@ -228,7 +228,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         
       />
       <div className="flex flex-col">
-        <LeaveHeader page={1} currentPage ={'Holiday request list'} />
+        <LeaveHeader page={1} currentPage ={'Leave request list'} />
         <div className="flex gap-x-3">
           <SettingsSidebar sidebarList={LeaveList} active={type} />
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">

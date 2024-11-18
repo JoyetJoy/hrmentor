@@ -194,7 +194,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                     setIsOn1(true);
                   }
                 }}
-                className={`h-5 w-10 rounded-full p-[1px] ${isOn1 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn1 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
               >
                 <div
                   className={`h-4 w-4 ${isOn1 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -248,7 +248,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                     setIsOn2(true);
                   }
                 }}
-                className={`h-5 w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
               >
                 <div
                   className={`h-4 w-4 ${isOn2 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -272,7 +272,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                     setIsOn3(true);
                   }
                 }}
-                className={`h-5 w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
               >
                 <div
                   className={`h-4 w-4 ${isOn3 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -377,7 +377,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                     setIsOn5(true);
                   }
                 }}
-                className={`h-5 w-10 rounded-full p-[1px] ${isOn5 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn5 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
               >
                 <div
                   className={`h-4 w-4 ${isOn5 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${

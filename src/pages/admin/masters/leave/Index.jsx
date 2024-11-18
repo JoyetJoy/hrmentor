@@ -9,7 +9,7 @@ export const LeaveHolidayrequestList = () => {
       api={JOB_DESCRIPTION}
       qryKey={"recJobDescriptionList"}
       colKeys={recColumnKeysForHolidayreqList}
-      type={"Holiday request list"}
+      type={"Leave request list"}
     />
   );
 };
