@@ -17,7 +17,7 @@ import {
   EMPLOYEE_WORK_AREA,
   EMPLOYEE_WORK_LOCATION_LIST,
 } from "@/api/master";
-import { SHIFT_BREAK_TIME, SHIFT_LIST } from "@/api/setup";
+import { SHIFT_LIST } from "@/api/setup";
 import Break from "../Break";
 
 export default function SaveMasterShift({ formtype, sid }) {
