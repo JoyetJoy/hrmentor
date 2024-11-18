@@ -283,7 +283,7 @@ export const adminItems = [
   {
     icon: "/assets/icons/admin/company.svg",
     label: "Company Settings",
-    path: "/company-settings",
+    path: "/admin/company/general",
   },
   {
     icon: "/assets/icons/admin/ac.svg",
