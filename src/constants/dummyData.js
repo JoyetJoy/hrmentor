@@ -353,7 +353,7 @@ export const activityItems = [
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
   { icon: "/assets/icons/admin/roster.svg", label: "Roster", path:"/admin/roster" },
   { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
-  { icon: "/assets/icons/admin/payroll.svg", label: "Leave", path: "/admin/leave/holidayrequest" },
+  { icon: "/assets/icons/admin/payroll.svg", label: "Leave", path: "/admin/leave/request" },
   {
     icon: "/assets/icons/admin/setup.svg",
     label: "Setup",
@@ -442,23 +442,3 @@ export const shiftHistoryData = [
     additional: "with 15 Employees",
   },
 ];
-export const LeaveList = [
-  {
-    id: 1,
-    name: "Leave request list",
-    link: "/admin/leave/holidayrequest",
-  },
-  {
-    id: 2,
-    name: "Awaiting Approval",
-    link: "/admin/leave/holidayrequest/awaitingapproval",
-    
-  },
-  {
-    id: 3,
-    name: "Completed",
-    link: "/admin/leave/holidayrequest/completed",
-    
-  },
-];
-
