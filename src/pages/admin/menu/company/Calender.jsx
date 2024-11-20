@@ -29,7 +29,7 @@ export default function CompanyCalender() {
         <form className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft onClick={() => history.back()} className="size-4" />
+              <ArrowLeft onClick={() => history.back()} className="size-4 cursor-pointer" />
               Company Profile{" "}
             </div>
             <button
