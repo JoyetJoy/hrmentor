@@ -14,6 +14,7 @@ import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
 import Claim from "@/pages/admin/masters/roster/Claim";
 import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
 import { HiringRoutes } from "./children/HiringRoutes";
+import ProfileManagement from "@/pages/admin/dashboard/profile-management";
 
 export const AdminRoutes = [
   {
