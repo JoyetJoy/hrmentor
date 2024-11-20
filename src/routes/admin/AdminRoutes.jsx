@@ -5,16 +5,12 @@ import { AttendanceRoutes } from "./children/AttendanceRoute";
 import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
 import { CompanyRoutes } from "./children/CompanyRoutes";
-import ShiftList from "@/pages/admin/masters/setup/shift";
-import AddShift from "@/pages/admin/masters/setup/shift/Save";
 import { LeaveRoutes } from "./children/LeaveRoute";
-import SaveMasterShift from "@/pages/admin/masters/setup/shift/Save";
-import RosterList from "@/pages/admin/masters/roster/Index";
-import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
-import Claim from "@/pages/admin/masters/roster/Claim";
-import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
 import { HiringRoutes } from "./children/HiringRoutes";
 import ProfileManagement from "@/pages/admin/dashboard/profile-management";
+import { SetupRoutes } from "./children/SetupRoutes";
+import { ShiftRoutes } from "./children/ShiftRoutes";
+import { RosterRoutes } from "./children/RosterRoutes";
 
 export const AdminRoutes = [
   {
@@ -57,40 +53,16 @@ export const AdminRoutes = [
     path: "company",
     children: CompanyRoutes,
   },
-
   {
-    path: "setup",
-    children: [
-      {
-        path: "calender",
-        element: <EmployeeAttendanceCalendar />,
-      },
-      {
-        path: "shift",
-        element: <ShiftList />,
-      },
-      {
-        path: "save-shift",
-        element: <SaveMasterShift />,
-      },
-      {
-        path: "calender-department",
-        element: <RosterDepartment />,
-      },
-    ]
+    path:"setup",
+    children:SetupRoutes
+  },
+  {
+    path:"shift",
+    children:ShiftRoutes
   },
   {
     path:"roster",
-    children:[
-      {
-        path:"",
-        element:<RosterList/>,
-      },
-        {
-          path:"claim",
-          element:<Claim/>
-        }
-      
-    ]
+    children:RosterRoutes
   },
 ];

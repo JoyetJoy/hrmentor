@@ -179,16 +179,17 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
 
       <RosterHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
-        <div className="relative flex items-center">
-          <Search className="absolute left-2 size-4 text-gray-dark" />
+      <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
+          <Search className="size-4 object-contain text-gray-dark" />
           <input
             type="text"
-            placeholder="Search..."
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className="rounded-md border border-gray-dark py-2 pl-8 pr-4"
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+            className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
+            placeholder="Search"
           />
-        </div>
+        </label>
 
         <div className="flex items-center gap-3">
           <button
