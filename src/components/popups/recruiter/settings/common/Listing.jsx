@@ -162,9 +162,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
       <div className="flex flex-col">
         <MenuHeader
           menu={"Menu"}
-          subMenu={"Employee"}
-          currentpath={"Settings"}
-          icon={<ChevronRight className="size-3" />}
+          currentpath={"Recruiter"}
           activeMenu={"Settings"}
         />
         <div className="flex gap-x-3">

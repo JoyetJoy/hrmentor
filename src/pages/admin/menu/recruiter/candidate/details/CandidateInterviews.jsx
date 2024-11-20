@@ -299,7 +299,7 @@ function CandidateInterviews() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-search size-4 object-contain text-gray-200"
+                className="lucide lucide-search size-4 object-contain text-gray-dark"
               >
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.3-4.3"></path>

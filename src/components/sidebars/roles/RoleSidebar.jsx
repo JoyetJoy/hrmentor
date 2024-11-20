@@ -50,16 +50,16 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
           Role
         </h1>
         <div className="input mb-3 flex min-h-11 items-center gap-2 rounded-md border border-soft !outline-none">
-          <Search className="size-4 w-fit object-contain text-gray-200" />
+          <Search className="size-4 w-fit object-contain text-gray-dark" />
           <input
             type="text"
             onChange={(e) => setKeyword(e.target.value)}
-            className="w-full grow outline-none placeholder:text-sm placeholder:text-gray-200 focus:outline-none"
+            className="w-full grow outline-none placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
             placeholder="Search"
           />
         </div>
         <div className="rounded-md border border-soft">
-          <h1 className="flex items-center justify-between rounded-t-md border border-gray-300 bg-gray-500 px-6 py-3.5 text-[0.94rem] font-semibold text-black">
+          <h1 className="flex items-center justify-between rounded-t-md border  bg-gray-soft px-6 py-3.5 text-[0.94rem] font-semibold text-black">
             Role Name
             <span>Action</span>
           </h1>
@@ -68,7 +68,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
               {rolesList?.roles?.map((role, index) => (
                 <li
                   key={index}
-                  className={`flex cursor-pointer items-center justify-between border-t border-gray-500 px-6 py-3 text-sm ${selectedRole === role.id ? "font-bold text-textcolor-darkblue" : ""} ${role.id === 1 ? "font-medium text-gray-200" : ""}`}
+                  className={`flex cursor-pointer items-center justify-between border-t border-gray-light px-6 py-3 text-sm ${selectedRole === role.id ? "font-bold text-darkblack" : ""} ${role.id === 1 ? "font-medium text-darkblack" : ""}`}
                 >
                   <span>
                     {role.name}[{role.permissions_count}]
@@ -76,7 +76,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
                   <div className="flex gap-3">
                     <div
                       onClick={() => setSelectedRole(role.id)}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 p-2"
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-soft p-2"
                     >
                       <img
                         src={edit}
@@ -90,7 +90,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
                           setDeletePopup(true);
                           setSelectedId(role.id);
                         }}
-                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-500 p-2"
+                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
                       >
                         <Trash2 className="text-textcolor-darkred" strokeWidth={1.5} />
                       </div>

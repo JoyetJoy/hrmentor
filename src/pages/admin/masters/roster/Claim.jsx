@@ -148,13 +148,13 @@ export default function Claim() {
             <h1 className="font-lg font-bold">Employee</h1>
             <div className="flex items-center gap-2">
               <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border border-gray-soft outline-none">
-                <Search className="size-4 object-contain text-gray-200" />
+                <Search className="size-4 object-contain text-gray-dark" />
                 <input
                   type="text"
                   onChange={(e) => {
                     setKeyword(e.target.value);
                   }}
-                  className="grow placeholder:text-sm placeholder:text-gray-200 focus:outline-none"
+                  className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
                   placeholder="Search"
                 />
               </label>

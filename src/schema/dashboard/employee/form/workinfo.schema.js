@@ -47,7 +47,43 @@ export const WorkInfoSchema = (reportNotRequired) => {
         return value?.value && value?.label;
       }),
 
-    probation_period: Yup.string().required("Probation Period is required"),
-    notice_period: Yup.string().required("Notice Period is required"),
+    gender: Yup.object({
+      id: Yup.string().nullable(),
+      value: Yup.string().nullable(),
+      label: Yup.string().nullable(),
+    })
+      .nullable()
+      .test("both-required", "Gender is required", function (value) {
+        return value?.value && value?.label;
+      }),
+
+    maritalstatus: Yup.object({
+      id: Yup.string().nullable(),
+      value: Yup.string().nullable(),
+      label: Yup.string().nullable(),
+    })
+      .nullable()
+      .test("both-required", "Marital Status is required", function (value) {
+        return value?.value && value?.label;
+      }),
+
+    physical: Yup.object({
+      id: Yup.string().nullable(),
+      value: Yup.string().nullable(),
+      label: Yup.string().nullable(),
+    })
+      .nullable()
+      .test(
+        "both-required",
+        "Physical / Mental disability is required",
+        function (value) {
+          return value?.value && value?.label;
+        },
+      ),
+
+    age: Yup.string().required("Age is required"),
+    religious: Yup.string().required("Religious belief is required"),
+    sexualorientation: Yup.string().required("Sexual orientation is required"),
+    pregnancy: Yup.string().required("Pregnancy & maternity is required"),
   });
 };
