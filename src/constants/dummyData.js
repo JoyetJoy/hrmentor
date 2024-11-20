@@ -283,7 +283,7 @@ export const adminItems = [
   {
     icon: "/assets/icons/admin/company.svg",
     label: "Company Settings",
-    path: "/company-settings",
+    path: "/admin/company/general",
   },
   {
     icon: "/assets/icons/admin/ac.svg",
@@ -353,7 +353,7 @@ export const activityItems = [
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
   { icon: "/assets/icons/admin/roster.svg", label: "Roster", path:"/admin/roster" },
   { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
-  { icon: "/assets/icons/admin/payroll.svg", label: "Leave", path: "/admin/leave/holidayrequest" },
+  { icon: "/assets/icons/admin/payroll.svg", label: "Leave", path: "/admin/leave/request" },
   {
     icon: "/assets/icons/admin/setup.svg",
     label: "Setup",

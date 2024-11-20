@@ -7,6 +7,7 @@ import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import MenuHeader from "@/components/common/MenuHeader";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { genders, maritalStatuses, successStatus } from "@/constants/data";
 import {
   ACTIVE_EMPLOYEE,
   EMPLOYEE_WORK_INFO,
@@ -82,8 +83,8 @@ export const WorkInformation = () => {
     formData.append("reporting_manager_id", data.reporting_manager_id?.id ?? 0);
     formData.append("ethinicity_id", data.ethinicity_id?.id);
     formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
-    formData.append("probation_period", data.probation_period);
-    formData.append("notice_period", data.notice_period);
+    formData.append("age", data.age);
+    formData.append("religious", data.religious);
     formData.append("dosent_reporting", reportNotRequired ? 1 : 0);
     try {
       const res = await newFormRequest.post(EMPLOYEE_WORK_INFO, formData);
@@ -165,7 +166,7 @@ export const WorkInformation = () => {
                       type="checkbox"
                       className="size-4"
                     />
-                    <p className="mt-[1px] whitespace-nowrap text-[13px] font-normal text-lightMedium">
+                    <p className="text-lightMedium mt-[1px] whitespace-nowrap text-[13px] font-normal">
                       Doesn't report to anyone
                     </p>
                   </div>
@@ -173,9 +174,7 @@ export const WorkInformation = () => {
                 {!reportNotRequired ? (
                   <div className="mt-4 grid w-full grid-cols-2 items-start gap-y-2">
                     <div className="group flex flex-col gap-1.5 px-3 py-2">
-                      <label className="required label-text">
-                        Reporting Manager
-                      </label>
+                      <label className="label-text">Reporting Manager</label>
                       <Controller
                         name="reporting_manager_id"
                         control={control}
@@ -198,7 +197,7 @@ export const WorkInformation = () => {
                       )}
                     </div>
                     <div className="group flex flex-col gap-1.5 px-3 py-2">
-                      <label className="required label-text">Hr Manager</label>
+                      <label className="label-text">Hr Manager</label>
                       <Controller
                         name="hiring_manager_id"
                         control={control}
@@ -227,32 +226,30 @@ export const WorkInformation = () => {
                 <h1 className="#2C2C2C px-3 text-lg font-bold">EEO Details</h1>
                 <div className="mt-4 grid w-full grid-cols-2 gap-x-2">
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
-                    <label className="required label-text">Ethinicity</label>
-                    <Controller
-                      name="ethinicity_id"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          options={ethinicityList}
-                          placeholder="Select ethinicity"
-                          className="input-box"
-                        />
-                      )}
+                    <label className="label-text">Age</label>
+                    <input
+                      autoComplete="off"
+                      type="number"
+                      placeholder="Enter Probation Period"
+                      {...register("age", { required: true })}
+                      onKeyPress={(event) => {
+                        if (
+                          !/^[0-9]$/.test(event.key) ||
+                          event.target.value.length >= 3
+                        ) {
+                          event.preventDefault();
+                        }
+                      }}
+                      className="input-box placeholder:text-[0.8rem]"
                     />
-                    {errors.ethinicity_id && (
+                    {errors.age && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.ethinicity_id?.message}
+                        {errors.age?.message}
                       </span>
                     )}
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
-                    <label className="required label-text">
-                      EEO Job Category
-                    </label>
+                    <label className="label-text">EEO Job Category</label>
                     <Controller
                       name="eeo_job_category_id"
                       control={control}
@@ -275,52 +272,139 @@ export const WorkInformation = () => {
                     )}
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
-                    <label className="required label-text">
-                      Probation Period (In Days)
-                    </label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      placeholder="Enter Probation Period"
-                      {...register("probation_period", { required: true })}
-                      onKeyPress={(event) => {
-                        if (
-                          !/^[0-9]$/.test(event.key) ||
-                          event.target.value.length >= 3
-                        ) {
-                          event.preventDefault();
-                        }
-                      }}
-                      className="input-box placeholder:text-[0.8rem]"
+                    <label className="label-text">Ethinicity</label>
+                    <Controller
+                      name="ethinicity_id"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={ethinicityList}
+                          placeholder="Select ethinicity"
+                          className="input-box"
+                        />
+                      )}
                     />
-                    {errors.probation_period && (
+                    {errors.ethinicity_id && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.probation_period?.message}
+                        {errors.ethinicity_id?.message}
                       </span>
                     )}
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
-                    <label className="required label-text">
-                      Notice Period (In Days)
-                    </label>
+                    <label className="label-text">Religious belief</label>
                     <input
                       autoComplete="off"
                       type="text"
-                      placeholder="Enter Notice Period"
-                      {...register("notice_period", { required: true })}
-                      onKeyPress={(event) => {
-                        if (
-                          !/^[0-9]$/.test(event.key) ||
-                          event.target.value.length >= 3
-                        ) {
-                          event.preventDefault();
-                        }
-                      }}
+                      placeholder="Enter Details"
+                      {...register("religious", { required: true })}
                       className="input-box placeholder:text-[0.8rem]"
                     />
-                    {errors.notice_period && (
+                    {errors.religious && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.notice_period?.message}
+                        {errors.religious?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                    <label className="label-text">Gender</label>
+                    <Controller
+                      name="gender"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={genders}
+                          placeholder="Select a gender"
+                          className="input-box"
+                        />
+                      )}
+                    />
+                    {errors.gender && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.gender?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                    <label className="label-text">Sexual orientation</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      {...register("sexualorientation", { required: true })}
+                      className="input-box placeholder:text-[0.8rem]"
+                    />
+                    {errors.sexualorientation && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.sexualorientation?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                    <label className="label-text">Marital status</label>
+                    <Controller
+                      name="maritalstatus"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={maritalStatuses}
+                          placeholder="Select a status"
+                          className="input-box"
+                        />
+                      )}
+                    />
+                    {errors.maritalstatus && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.maritalstatus?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                    <label className="label-text">Pregnancy & maternity</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      {...register("pregnancy", { required: true })}
+                      className="input-box placeholder:text-[0.8rem]"
+                    />
+                    {errors.pregnancy && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.pregnancy?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                    <label className="label-text">
+                      Physical / Mental disability{" "}
+                    </label>
+                    <Controller
+                      name="physical"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={successStatus}
+                          placeholder="Yes/ No"
+                          className="input-box"
+                        />
+                      )}
+                    />
+                    {errors.physical && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.physical?.message}
                       </span>
                     )}
                   </div>

@@ -4,6 +4,7 @@ import { MenuSubscription } from "@/pages/admin/menu/subscription";
 import { AttendanceRoutes } from "./children/AttendanceRoute";
 import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
+import { CompanyRoutes } from "./children/CompanyRoutes";
 import ShiftList from "@/pages/admin/masters/setup/shift";
 import AddShift from "@/pages/admin/masters/setup/shift/Save";
 import { LeaveRoutes } from "./children/LeaveRoute";
@@ -12,7 +13,7 @@ import RosterList from "@/pages/admin/masters/roster/Index";
 import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
 import Claim from "@/pages/admin/masters/roster/Claim";
 import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
-import { HiringRoutes } from "./children/HiringRoute";
+import { HiringRoutes } from "./children/HiringRoutes";
 import ProfileManagement from "@/pages/admin/dashboard/profile-management";
 
 export const AdminRoutes = [
@@ -51,6 +52,10 @@ export const AdminRoutes = [
   {
     path: "leave",
     children: LeaveRoutes,
+  },
+  {
+    path: "company",
+    children: CompanyRoutes,
   },
 
   {

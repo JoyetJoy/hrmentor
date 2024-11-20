@@ -91,7 +91,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
   return (
     <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto overflow-y-min bg-black/20">
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
@@ -121,7 +121,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
                 {/* Date */}
                 <div>
-                  <label className="text-sm font-medium">Date</label>
+                  <label className="label-text">Date</label>
                   <input
                     type="date"
                     {...register("date")}
@@ -136,7 +136,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
                 {/* Location */}
                 <div>
-                  <label className="text-sm font-medium">Location</label>
+                  <label className="label-text">Location</label>
                   <Controller
                     name="location_id"
                     control={control}
@@ -179,7 +179,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         className="radio-black"
                         {...register("type")}
                       />
-                      <label className="text-sm font-normal">Paid</label>
+                      <label className="label-text">Paid</label>
                     </div>
                     <div className="flex items-center gap-2">
                       <input
@@ -190,7 +190,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         className="radio-black"
                         {...register("type")}
                       />
-                      <label className="text-sm font-normal">Unpaid</label>
+                      <label className="label-text">Unpaid</label>
                     </div>
                   </div>
                   {errors.type && (

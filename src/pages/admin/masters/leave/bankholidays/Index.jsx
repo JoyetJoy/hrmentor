@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
-import MenuHeader from "@/components/common/MenuHeader";
 import LeaveHeader from "@/components/common/LeaveMenuHeader";
 import { newRequest, TEAM_BANK_HOLIDAY } from "@/api";
 import { useQuery } from "@tanstack/react-query";
@@ -130,7 +129,6 @@ function BankHolidays() {
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
             <Link
-              to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img

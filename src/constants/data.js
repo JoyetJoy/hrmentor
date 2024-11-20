@@ -78,3 +78,9 @@ export const maritalStatuses = [
   { id: 3, label: "Divorced", value: "divorced" },
   { id: 4, label: "Widowed", value: "widowed" },
 ];
+
+export const pentionStatuses = [
+  { id: 1, label: "Opt-in", value: "optin" },
+  { id: 2, label: "Opt-out", value: "optout" },
+];
+

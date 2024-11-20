@@ -6,7 +6,7 @@ import { HolidayList } from "@/pages/admin/masters/leave/settings/Index"
 
 export const LeaveRoutes = [
     {
-      path: "holidayrequest",
+      path: "request",
       children: [
         {
             path: "",
@@ -29,14 +29,6 @@ export const LeaveRoutes = [
             path: "",
             element: <BankHolidays />,
         },
-        {
-            path: "awaitingapproval",
-            element: <AwaitingapprovalList />,
-        },
-        {
-            path: "completed",
-            element: <CompletedList />,
-        },
       ],
     },{
       path: "settings",
@@ -44,14 +36,6 @@ export const LeaveRoutes = [
         {
             path: "",
             element: <HolidayList />,
-        },
-        {
-            path: "awaitingapproval",
-            element: <AwaitingapprovalList />,
-        },
-        {
-            path: "completed",
-            element: <CompletedList />,
         },
       ],
     },

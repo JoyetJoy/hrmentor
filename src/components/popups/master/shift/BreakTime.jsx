@@ -57,6 +57,18 @@ export default function BreakTime({
     setPopupOpen(false);
     reset();
   }
+
+  const formatTime = (input) => {
+    let value = input.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+
+    // Format input as HH:MM
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + ":" + value.slice(2, 4); // Insert colon
+    }
+
+    return value;
+  };
+
   return (
     <Dialog
       open={popupOpen}
@@ -85,6 +97,7 @@ export default function BreakTime({
               className="grid grid-cols-1 gap-3"
               onSubmit={handleSubmit(onSubmit)}
             >
+              {/* Type Name */}
               <div className="group flex flex-col space-y-1">
                 <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Name
@@ -100,6 +113,8 @@ export default function BreakTime({
                   </span>
                 )}
               </div>
+
+              {/* Pay Mode */}
               <div className="group flex flex-col space-y-1">
                 <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Pay Mode
@@ -121,36 +136,78 @@ export default function BreakTime({
                 )}
               </div>
 
-              <div className="gap flex items-center justify-center gap-2">
-                <div className="group flex w-full flex-col gap-1.5 py-2">
-                  <label className="required label-text">Start Time</label>
-                  <input
-                    {...register("start_time", { required: true })}
-                    autoComplete="off"
-                    type="time"
-                    className="input-box"
-                  />
-                  {errors.start_time && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.start_time?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex w-full flex-col gap-1.5 py-2">
-                  <label className="required label-text">End Time</label>
-                  <input
-                    {...register("end_time", { required: true })}
-                    autoComplete="off"
-                    type="time"
-                    className="input-box"
-                  />
-                  {errors.end_time && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.end_time?.message}
-                    </span>
-                  )}
-                </div>
+              {/* Time Duration (HH:MM) */}
+              <div className="group flex flex-col space-y-1">
+                <label className="label-text" htmlFor="time">
+                  Break Time (Duration)
+                </label>
+                <input
+                  {...register("time", {
+                    required: "Time is required",
+                    pattern: {
+                      value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                      message: "Please enter a valid time format (HH:MM)",
+                    },
+                  })}
+                  id="time"
+                  autoComplete="off"
+                  name="time"
+                  type="text"
+                  placeholder="--:--"
+                  className="input-box"
+                  onChange={(e) => {
+                    e.target.value = formatTime(e.target.value); // Call the helper function
+                  }}
+                />
+                {errors.time && (
+                  <span className="whitespace-nowrap text-xs font-medium text-red-500">
+                    {errors.time?.message}
+                  </span>
+                )}
               </div>
+
+              {/* OR between Time Input and Time Pickers */}
+              <div className="flex items-center space-x-2">
+                <hr className="flex-grow border-t-2 border-gray-300" />
+                <p className="text-gray-500">or</p>
+                <hr className="flex-grow border-t-2 border-gray-300" />
+              </div>
+
+              {/* Start Time and End Time (Only visible if 'time' is not provided) */}
+              {!new_break.time && (
+                <div className="gap flex items-center justify-center gap-2">
+                  <div className="group flex w-full flex-col gap-1.5 py-2">
+                    <label className="required label-text">Start Time</label>
+                    <input
+                      {...register("start_time", { required: true })}
+                      autoComplete="off"
+                      type="time"
+                      className="input-box"
+                    />
+                    {errors.start_time && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.start_time?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex w-full flex-col gap-1.5 py-2">
+                    <label className="required label-text">End Time</label>
+                    <input
+                      {...register("end_time", { required: true })}
+                      autoComplete="off"
+                      type="time"
+                      className="input-box"
+                    />
+                    {errors.end_time && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.end_time?.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Submit Button */}
               <div className="mt-2 flex flex-row items-end justify-end gap-3">
                 <button
                   type="submit"

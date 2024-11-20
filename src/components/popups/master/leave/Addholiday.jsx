@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import BasicSettings from './BasicSettings';
-import AvailabilitySettings from './AvailabilitySettings';
+import BasicSettings from './settings/BasicSettings';
+import AvailabilitySettings from './settings/AvailabilitySettings';
+import AdvancedSettings from './settings/AdvancedSettings';
 
 function Addholiday() {
     const [active,setActive] = useState('Basic settings')
@@ -39,6 +40,7 @@ function Addholiday() {
             <div>
                 {active === 'Basic settings' && <BasicSettings />}
                 {active === 'Availability settings' && <AvailabilitySettings />}
+                {active === 'Advanced settings' && <AdvancedSettings />}
               
             </div>
           </div>

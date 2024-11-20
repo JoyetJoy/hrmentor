@@ -65,6 +65,10 @@ export default {
         softslate:"#808080B2",
         tdarkblue:"#181C3A4D",
         neutralmedium:"#2B2B2B",
+        coolgreen:" #00B448",
+        coollightgreen:"#8BE691",
+        orange:"#FCCC4F",
+        coolorange:"#FCCC4F33",
 
         textcolor: {
           

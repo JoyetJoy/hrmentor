@@ -174,9 +174,9 @@ const BasicSettings = ({ formtype = "save" }) => {
         <h1 className="text-lg font-bold">Basic Settings</h1>
       </div>
 
-      <div className="grid gap-x-3 lg:grid-cols-2">
-        <div className="mt-4 w-full">
-          <div className="flex w-full gap-2">
+      <div className="grid gap-x-3 lg:grid-cols-2 mt-4">
+        <div className="mt-4 w-full flex flex-col gap-1">
+          <div className="flex w-full gap-3">
             {/* Name of the Leave */}
             <div className="flex w-[50%] flex-col gap-1.5 py-2">
               <label className="required label-text">Name of the Leave</label>
@@ -212,7 +212,7 @@ const BasicSettings = ({ formtype = "save" }) => {
             </div>
           </div>
           {/* Code */}
-          <div className="group col-span-2 flex w-full flex-col gap-1.5 py-2 lg:w-[49.5%]">
+          <div className="group col-span-2 flex w-full flex-col gap-1.5 py-2 lg:w-[49%]">
             <label className="required label-text">Code</label>
             <input
               autoComplete="off"
@@ -228,7 +228,7 @@ const BasicSettings = ({ formtype = "save" }) => {
             )}
           </div>
           <div className="grid grid-cols-2">
-            <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
+            <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
               <label className="required label-text">Pay type</label>
               <div className="flex gap-3">
                 <div className="flex items-center gap-2">
@@ -254,7 +254,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
               </div>
             </div>
-            <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
+            <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
               <label className="required label-text">Units</label>
               <div className="flex gap-3">
                 <div className="flex items-center gap-2">
@@ -289,7 +289,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               autoComplete="off"
               placeholder="Enter Description"
               {...register("description")}
-              className="input-box h-20"
+              className="input-box h-20 p-2"
             ></textarea>
             {errors.description && (
               <span className="text-xs font-medium text-red-500">
@@ -317,7 +317,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
             {/* Status */}
             <div className="group flex flex-col gap-1.5 py-2">
-              <label className="text-sm font-medium">Status</label>
+              <label className="label-text">Status</label>
               <Controller
                 name="status"
                 control={control}
@@ -341,10 +341,10 @@ const BasicSettings = ({ formtype = "save" }) => {
             </div>
           </div>
 
-          <div className="text-[0.85rem] font-semibold">Leave accrual</div>
-          <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
+          <div className="text-[0.9rem] font-semibold mt-3">Leave accrual</div>
+          <div className="group mt-2 flex flex-col gap-3 text-[0.89rem] font-medium">
             <label className="required label-text">Accrual type</label>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
@@ -354,7 +354,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   className="radio-black"
                   defaultChecked
                 />
-                <label className="text-sm font-normal">By cycle</label>
+                <label className="label-text">By cycle</label>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -364,7 +364,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   onClick={() => setAccrualType("byworkingdays")}
                   className="radio-black"
                 />
-                <label className="text-sm font-normal">By Working days</label>
+                <label className="label-text">By Working days</label>
               </div>
             </div>
           </div>
@@ -372,7 +372,7 @@ const BasicSettings = ({ formtype = "save" }) => {
             <div className="grid grid-cols-2 gap-3">
               {/* Accrual Period */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="text-sm font-medium">Accrual period</label>
+                <label className="label-text">Accrual period</label>
                 <Controller
                   name="accural_period"
                   control={control}
@@ -402,7 +402,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
               {/* Accrual Days */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="text-sm font-medium">Accrual day(s)</label>
+                <label className="label-text">Accrual day(s)</label>
                 <Controller
                   name="accural_day"
                   control={control}
@@ -433,7 +433,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
               {/* Accrual Month */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="text-sm font-medium">Accrual month(s)</label>
+                <label className="label-text">Accrual month(s)</label>
                 <Controller
                   name="accural_monthly"
                   control={control}
@@ -466,7 +466,7 @@ const BasicSettings = ({ formtype = "save" }) => {
             <div className="grid grid-cols-2 gap-3">
               {/* Accrual Period */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="text-sm font-medium">
+                <label className="label-text">
                   Number of working days to accrual leave
                 </label>
                 <input
@@ -484,7 +484,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               </div>
 
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="mb-1 mt-4 text-sm font-medium">
+                <label className="label-text">
                   Accrual period
                 </label>
                 <Controller
@@ -503,7 +503,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         field.onChange(selectedOption);
                         setAccuralPeriod(selectedOption.value);
                       }}
-                      className="input-box w-full"
+                      className="input-box w-full overflow-hidden"
                     />
                   )}
                 />
@@ -516,7 +516,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
               {/* Accrual Days */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="text-sm font-medium">Accrual at</label>
+                <label className="label-text">Accrual at</label>
                 <Controller
                   name="accural_at"
                   control={control}
@@ -534,7 +534,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         field.onChange(selectedOption);
                         setAccuralAt(selectedOption.value);
                       }}
-                      className="input-box w-full"
+                      className="input-box w-full overflow-hidden"
                     />
                   )}
                 />
@@ -547,7 +547,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
               {/* Accrual Month */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="required text-sm font-medium">
+                <label className="required label-text">
                   Specific days{" "}
                 </label>
                 <input
@@ -567,7 +567,7 @@ const BasicSettings = ({ formtype = "save" }) => {
           )}
           <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
             <label className="required label-text">Applicable to </label>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
@@ -577,7 +577,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   className="radio-black"
                   defaultChecked
                 />
-                <label className="text-sm font-normal">All employees</label>
+                <label className="label-text">All employees</label>
               </div>
               <div className="flex items-center gap-2">
                 <input
@@ -587,7 +587,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   onClick={() => setApplicable("based_on_exp")}
                   className="radio-black"
                 />
-                <label className="text-sm font-normal">
+                <label className="label-text">
                   Based on experience
                 </label>
               </div>
@@ -704,7 +704,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
           <div className="group col-span-2 flex flex-col gap-1.5 py-2">
             <div className="flex justify-between">
-              <p className="text-[0.85rem] font-bold">Carry Forward</p>
+              <p className="text-[0.9rem] font-bold">Carry Forward</p>
               <div
                 onClick={() => {
                   if (isOn) {
@@ -713,7 +713,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     setIsOn(true);
                   }
                 }}
-                className={`h-5 w-10 rounded-full p-[1px] ${isOn ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                className={`h-5 w-10 rounded-full p-[1px] ${isOn ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white pt-[1.5px]"}`}
               >
                 <div
                   className={`h-4 w-4 ${isOn ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -722,7 +722,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 ></div>
               </div>
             </div>
-            <p className="text-[0.85rem] font-normal">
+            <p className="label-text">
               Number of unused leaves of an employee can be carry forwarded
             </p>
           </div>
@@ -808,7 +808,7 @@ const BasicSettings = ({ formtype = "save" }) => {
           )}
           <div className="group col-span-2 flex flex-col gap-1.5 py-2">
             <div className="flex justify-between">
-              <p className="text-[0.85rem] font-semibold">Encashments</p>
+              <p className="text-[0.9rem] font-bold">Encashments</p>
               <div
                 onClick={() => {
                   if (isOn3) {
@@ -817,7 +817,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     setIsOn3(true);
                   }
                 }}
-                className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.2px]"}`}
+                className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1px]"}`}
               >
                 <div
                   className={`h-4 w-4 ${isOn3 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -826,7 +826,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 ></div>
               </div>
             </div>
-            <p className="text-[0.85rem] font-medium">
+            <p className="label-text">
               Number of unused leaves of an employee can be encashed
             </p>
           </div>

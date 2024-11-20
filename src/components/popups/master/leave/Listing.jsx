@@ -8,9 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronRight,Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import LeaveRequest from "./LeaveRequest";
-// import SaveRecruiterMasterForm from "./Save";
-import { LeaveList } from "@/constants/dummyData";
-// import { recruiterSetting } from "@/constants/sidebars/recruiter";
+import { LeaveList } from "@/constants/menus/leave";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import Loader from "@/components/ui/Loader";
 
@@ -228,7 +226,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         
       />
       <div className="flex flex-col">
-        <LeaveHeader page={1} currentPage ={'Leave request list'} />
+        <LeaveHeader page={1} currentPage ={'Leave request'} />
         <div className="flex gap-x-3">
           <SettingsSidebar sidebarList={LeaveList} active={type} />
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
