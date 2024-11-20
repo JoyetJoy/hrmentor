@@ -83,12 +83,15 @@ export default function EmployeeSalaryDetailsEditForm({
       const formData = new FormData();
       formData.append("user_id", uid);
       formData.append("effective_from", data.effective_from);
+      formData.append("effective_to", data.to);
       formData.append("currency", data.currency?.id);
+      formData.append("roles", data.roles);
       formData.append("pay_rate", data.pay_rate);
       formData.append("per", data.per?.id);
       formData.append("pay_schedule", data.pay_schedule?.id);
       formData.append("pay_type", data.pay_type?.id);
       formData.append("over_time", data.over_time?.value);
+      formData.append("pay_calculation", data.pay_calculation);
       formData.append("weekly_contract_hours", data.weekly_contract_hours);
       formData.append("weekly_pay", data.weekly_pay);
       formData.append("annual_pay", data.annual_pay);
@@ -148,7 +151,7 @@ export default function EmployeeSalaryDetailsEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Effective from
                   </label>
                   <input
@@ -159,6 +162,21 @@ export default function EmployeeSalaryDetailsEditForm({
                   {errors.effective_from && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.effective_from?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Effective To
+                  </label>
+                  <input
+                    {...register("effective_to", { required: true })}
+                    type="date"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                  />
+                  {errors.effective_to && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.effective_to?.message}
                     </span>
                   )}
                 </div>
@@ -182,6 +200,29 @@ export default function EmployeeSalaryDetailsEditForm({
                   {errors.currency && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.currency?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex w-full flex-col gap-1">
+                  <label className="required label-text">Roles</label>
+                  <Controller
+                    name="roles"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={empSalaryMasterList?.currencies}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select role"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.roles && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.roles?.message}
                     </span>
                   )}
                 </div>
@@ -292,6 +333,24 @@ export default function EmployeeSalaryDetailsEditForm({
                   {errors.over_time && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.over_time?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex w-full flex-col gap-1">
+                  <label className="required label-text">Pay calculation</label>
+                  <input
+                    {...register("pay_calculation", { required: true })}
+                    type="text"
+                    onKeyPress={(event) => {
+                      if (!/^[0-9]$/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                  />
+                  {errors.pay_calculation && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.pay_calculation?.message}
                     </span>
                   )}
                 </div>

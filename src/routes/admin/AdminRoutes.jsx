@@ -44,10 +44,10 @@ export const AdminRoutes = [
     path: "hiring",
     children: HiringRoutes,
   },
-  // {
-  //   path: "profile-management",
-  //   element: <ProfileManagement />,
-  // },
+  {
+    path: "profile-management",
+    element: <ProfileManagement />,
+  },
   {
     path: "leave",
     children: LeaveRoutes,
