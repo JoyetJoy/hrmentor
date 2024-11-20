@@ -4,8 +4,7 @@ import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import LeaveHeader from "@/components/common/LeaveMenuHeader";
-import { GET_JOBS } from "@/api/recruiter";
-import { newRequest } from "@/api";
+import { newRequest, TEAM_BANK_HOLIDAY } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -13,6 +12,7 @@ import dayjs from "dayjs";
 import Loader from "@/components/ui/Loader";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import AddBankHoliday from "@/components/popups/master/leave/Addbankholiday";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 function BankHolidays() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,16 +24,18 @@ function BankHolidays() {
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
   const pageLimit = 10;
-
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: i,
     label: dayjs().month(i).format("MMMM"),
   }));
-  
+
   const years = Array.from({ length: 11 }, (_, i) => ({
     value: 2020 + i,
     label: (2020 + i).toString(),
-  }));  
+  }));
 
   const handleMonthChange = (selectedOption) => {
     const updatedDate = dayjs(date).month(selectedOption.value).toDate();
@@ -45,28 +47,33 @@ function BankHolidays() {
   };
 
   // Fetch List
-  const { data: jobListing, isLoading } = useQuery({
-    queryKey: ["jobListing", currentPage, byStatus, keyword],
+  const {
+    data: bankHolidays,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["bankHolidays", currentPage, byStatus, keyword, user?.id, date],
     queryFn: () =>
       newRequest
-        .get(GET_JOBS, {
+        .get(TEAM_BANK_HOLIDAY, {
           params: {
             search: keyword,
             page: currentPage,
             per_limit: pageLimit,
             by_status: byStatus,
+            user_id: user?.id,
+            date: date,
           },
         })
-        .then((res) => {
-          return res.data;
-        }),
+        .then((res) => res.data),
+    enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
   });
 
   useEffect(() => {
-    if (jobListing) {
-      setTotalPages(jobListing?.last_page);
+    if (bankHolidays) {
+      setTotalPages(bankHolidays?.original?.pagination?.last_page);
     }
-  }, [jobListing]);
+  }, [bankHolidays]);
 
   const columns = React.useMemo(
     () => [
@@ -83,43 +90,39 @@ function BankHolidays() {
       },
       {
         header: "Holiday",
-        accessorKey: "job_title",
+        accessorKey: "leave_name",
       },
       {
         header: "Date",
         accessorKey: "date",
         cell: ({ row }) => (
           <p className="">
-            {row?.original?.roster_details?.start_date
-              ? moment(row.original.roster_details.start_date).format(
-                  "DD-MM-YYY",
-                )
+            {row.original?.date
+              ? dayjs(row.original.date).format("DD-MM-YYYY")
               : "N/A"}
           </p>
         ),
       },
       {
         header: "Description",
-        accessorKey: "designation",
+        accessorKey: "description",
         cell: ({ row }) => (
-          <p className="">{row?.original?.designation?.designation_name}</p>
+          <p className="">{row.original?.description || "N/A"}</p>
         ),
       },
       {
         header: "Location",
         accessorKey: "location",
         cell: ({ row }) => (
-          <p className="">{row?.original?.country?.country_name}</p>
+          <p className="">
+            {row.original?.work_location?.location_name || "N/A"}
+          </p>
         ),
       },
       {
         header: "Type",
         accessorKey: "type",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employment_type?.employment_type_name}
-          </p>
-        ),
+        cell: ({ row }) => <p className="">{row.original?.type || "N/A"}</p>,
       },
       {
         header: "Action",
@@ -135,37 +138,34 @@ function BankHolidays() {
                 className="w-full object-contain"
               />
             </Link>
-              <button
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedField(row?.original?.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
-              >
-                <Trash2 className="size-3" />
-              </button>
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
+            >
+              <Trash2 className="size-3" />
+            </button>
           </div>
         ),
       },
     ],
-    [jobListing, byStatus],
+    [bankHolidays, byStatus],
   );
   return (
     <>
-      <AddBankHoliday
-        popupOpen={popupOpen}
-        setPopupOpen={setPopupOpen}
-      />
+      <AddBankHoliday popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
         id={selectedField}
-        qrkey={"jobListing"}
-        api={GET_JOBS}
+        qrkey={"bankHolidays"}
+        api={TEAM_BANK_HOLIDAY}
       />
-      <LeaveHeader page={2} currentPage ={'Bank Holidays'} />
+      <LeaveHeader page={2} currentPage={"Bank Holidays"} />
       <div className="items-centerm flex justify-between pb-3 pt-2">
-      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <h5 className="text-lg font-bold">Bank Holiday</h5>
           <Select
             options={years}
@@ -185,7 +185,7 @@ function BankHolidays() {
           />
         </div>
         <div className="flex items-center gap-2">
-        <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
+          <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
             <Search
               className="size-4 object-contain text-gray-200"
               strokeWidth={2}
@@ -196,7 +196,7 @@ function BankHolidays() {
                 setKeyword(e.target.value);
               }}
               value={keyword}
-              className="grow  h-full w-full text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
+              className="h-full w-full grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
               placeholder="Search"
             />
           </label>
@@ -207,8 +207,8 @@ function BankHolidays() {
             />
           </div>
           <button
-            onClick={()=>setPopupOpen(true)}
-            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue rounded-md"
+            onClick={() => setPopupOpen(true)}
+            className="btn flex h-10 min-h-10 items-center rounded-md bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-5" strokeWidth={2} />
             Add Bank Holiday
@@ -220,7 +220,7 @@ function BankHolidays() {
       ) : (
         <QueryTable
           columns={columns}
-          list={jobListing?.listing ?? []}
+          list={bankHolidays?.original?.data ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}

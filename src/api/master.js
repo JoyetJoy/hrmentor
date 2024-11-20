@@ -1,7 +1,31 @@
 // MASTER APIS ENDPOINTS
+import axios from "axios";
 
 // ---- EMPLOYEE MASTER APIS ----
+export const newRequest = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
+  export const newFormRequest = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  const addAuthorizationInterceptor = (request) => {
+    request.interceptors.request.use((config) => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      }
+      return config;
+    });
+  };
+  
+  addAuthorizationInterceptor(newRequest);
 // empolyee type
 export const EMPLOYEE_TYPE = "employment-types";
 // listing

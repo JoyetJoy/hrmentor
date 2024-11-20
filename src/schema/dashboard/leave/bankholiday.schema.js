@@ -1,15 +1,15 @@
 import * as Yup from "yup";
 
 export const BankHolidaySchema = Yup.object().shape({
-  name: Yup.string()
+  holiday_name: Yup.string()
     .trim()
     .required("Holiday name is required"),
   date: Yup.date()
     .required("Date is required")
     .typeError("Invalid date format"),
-  location: Yup.object()
+  location_id: Yup.object()
     .required("Location is required"),
-  holiday_status: Yup.string()
+  type: Yup.string()
     .oneOf(["paid", "unpaid"], "Invalid holiday status")
     .required("Holiday status is required"),
   description: Yup.string()

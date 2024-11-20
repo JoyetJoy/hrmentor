@@ -5,7 +5,7 @@ import QueryTable from "@/components/table/QueryTable";
 import { MoveDiagonal } from "lucide-react";
 import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight,Filter, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import LeaveRequest from "./LeaveRequest";
 // import SaveRecruiterMasterForm from "./Save";
@@ -15,6 +15,7 @@ import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar
 import Loader from "@/components/ui/Loader";
 import LeaveSettingsHeader from "@/components/common/LeaveSettingsHeader";
 import Addholiday from "./Addholiday";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,8 +25,11 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
-  const [addholidayOpen,setAddholidayOpen] = useState(false);
+  const [addholidayOpen, setAddholidayOpen] = useState(false);
   const pageLimit = 10;
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
 
   useEffect(() => {
     if (selectedField) {
@@ -35,7 +39,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
 
   // Fetch List
   const { data, isLoading } = useQuery({
-    queryKey: [qrkey, currentPage, type, qrkey, keyword],
+    queryKey: [qrkey, currentPage, type, qrkey, keyword, user?.id],
     queryFn: () =>
       newRequest
         .get(api, {
@@ -43,6 +47,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
             search: keyword,
             page: currentPage,
             per_limit: pageLimit,
+            user_id: user?.id,
           },
         })
         .then((res) => {
@@ -50,9 +55,10 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
         }),
   });
 
+
   useEffect(() => {
     if (data) {
-      setTotalPages(data?.last_page);
+      setTotalPages(data?.original?.pagination);
     }
   }, [data]);
   const columns = React.useMemo(
@@ -70,38 +76,35 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
       },
       {
         header: "Holiday Name",
-        accessorKey: "job_title",
+        accessorKey: "leave_name",
       },
       {
         header: "Display Name",
-        accessorKey: "designation",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.designation?.designation_name}</p>
-        ),
+        accessorKey: "display_name",
+        cell: ({ row }) => <p className="">{row?.original?.display_name}</p>,
       },
       {
         header: "Type",
-        accessorKey: "type",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employment_type?.employment_type_name}
-          </p>
-        ),
+        accessorKey: "pay_type",
+        cell: ({ row }) => <p className="">{row?.original?.pay_type}</p>,
       },
       {
-        header: 'Status',
-        accessorKey: "status",
+        header: "Status",
+        accessorKey: "status_name",
         cell: ({ row }) => {
-          const fieldValue = row.original?.status
+          const fieldValue = row.original?.status?.status_name;
+          const isActive = fieldValue === "Active";
+
+          // Define colors based on the status
+          const bgColor = isActive ? "bg-green-100" : "bg-red-100";
+          const textColor = isActive ? "text-green-600" : "text-red-600";
+          const borderColor = isActive ? "border-green-300" : "border-red-300";
+
           return (
             <div
-              className={`flex h-8 w-28 items-center justify-center rounded-md px-3 font-semibold ${
-                fieldValue === "active"
-                  ? "bg-[#e6f8ed] text-[#00b448]"
-                  : "bg-[#f7eaea] text-[#db0000]"
-              }`}
+              className={`flex h-8 w-28 items-center justify-center rounded-md px-3 font-semibold ${bgColor} ${textColor} ${borderColor}`}
             >
-              {fieldValue ==='active' ? "Active" : "Inactive"}
+              {fieldValue}
             </div>
           );
         },
@@ -120,23 +123,23 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
                 className="w-full object-contain"
               />
             </button>
-              <button
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedField(row?.original?.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
-              >
-                <Trash2 className="size-3" />
-              </button>
+            <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
+            >
+              <Trash2 className="size-3" />
+            </button>
           </div>
         ),
       },
     ],
-    
-    [currentPage, pageLimit, colKeys]
+
+    [currentPage, pageLimit, colKeys],
   );
-  
+
   return (
     <>
       <DeleteConfirmation
@@ -146,40 +149,34 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
         qrkey={qrkey}
         api={api}
       />
-      <LeaveRequest
-        popupOpen={popupOpen}
-        setPopupOpen={setPopupOpen}
-        
-      />
+      <LeaveRequest popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex flex-col">
-      <LeaveHeader page={3} currentPage ={'Settings'} />
-        {addholidayOpen?
-        <Addholiday/> 
-        :(
-        <>
-            
-        <LeaveSettingsHeader setAddholidayOpen={setAddholidayOpen}/>
-        <div className="flex gap-x-3">
-          <SettingsSidebar sidebarList={SettingsList} active={type} />
-          <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
-            <div>
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <QueryTable
-                  columns={columns}
-                  list={data?.listing ?? []}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                  totalPages={totalPages}
-                />
-              )}
+        <LeaveHeader page={3} currentPage={"Settings"} />
+        {addholidayOpen ? (
+          <Addholiday />
+        ) : (
+          <>
+            <LeaveSettingsHeader setAddholidayOpen={setAddholidayOpen} />
+            <div className="flex gap-x-3">
+              <SettingsSidebar sidebarList={SettingsList} active={type} />
+              <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
+                <div>
+                  {isLoading ? (
+                    <Loader />
+                  ) : (
+                    <QueryTable
+                      columns={columns}
+                      list={data?.original?.data ?? []}
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                      totalPages={totalPages}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-            </>
-        )
-        }
+          </>
+        )}
       </div>
     </>
   );

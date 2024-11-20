@@ -96,4 +96,20 @@ export const EMPLOYEE_SALARY_DETAILS = "employee-salary-details";
 // PROFILE MANAGEMENT
 export const PROFILE_MANAGEMENT = "profile";
 
+// BANK HOLIDAYS
+export const TEAM_BANK_HOLIDAY = "team-bank-holiday";
+
+// WORK LOCATIONS
+export const WORK_LOCATIONS = "active-worklocations";
+
+// HOLIDAY STATUS
+export const HOLIDAY_STATUS = "employee-holiday-basic-settings"
+
+// HOLIDAY AVAILABLE SETTING
+export const HOLIDAY_AVAILABLE_SETTING = "employee-holiday-availabilty-settings"
+
+
+
+
+
 

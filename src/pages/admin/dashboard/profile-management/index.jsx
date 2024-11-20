@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import useImageUpload from "@/hooks/useImageUpload";
 import { UploadCloud } from "lucide-react";
 import { ProfileManagementSchema } from "@/schema/dashboard/masters/shift.schema";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function ProfileManagement() {
   const location = useLocation();
@@ -16,7 +17,9 @@ export default function ProfileManagement() {
   const [loader, setLoader] = useState(false);
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
-
+    const { user } = useUserStore((state) => ({
+      user: state.user,
+    }));
   const {
     register,
     handleSubmit,
@@ -50,8 +53,6 @@ export default function ProfileManagement() {
       });
     }
   }, [profileManagement, reset]);
-
-  console.log(profileManagement,"profileManagement");
   
 
   const onSubmit = async (data) => {

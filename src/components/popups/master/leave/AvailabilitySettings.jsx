@@ -4,97 +4,156 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
+import {
+  EMPLOYEE_DEPARTMENT_LIST,
+  newRequest,
+  ROLES_LIST,
+  SALARY_DEFAULT_MASTERS,
+} from "@/api/master";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { HOLIDAY_AVAILABLE_SETTING, WORK_LOCATIONS } from "@/api";
+import toast from "react-hot-toast";
 
 // Validation Schema
 const leaveSchema = Yup.object().shape({
-  departmentAvailableTo: Yup.array()
-    .min(1, "Select at least one department")
-    .required("Available departments are required"),
-  departmentExcept: Yup.array()
-    .min(1, "Select at least one department")
-    .required("Except departments are required"),
-  locationAvailableTo: Yup.array()
-    .min(1, "Select at least one location")
-    .required("Available locations are required"),
-  locationExcept: Yup.array()
-    .min(1, "Select at least one location")
-    .required("Except locations are required"),
-  genderAvailableTo: Yup.array()
-    .min(1, "Select at least one gender")
-    .required("Available genders are required"),
-  genderExcept: Yup.array()
-    .min(1, "Select at least one gender")
-    .required("Except genders are required"),
-  roleAvailableTo: Yup.array()
-    .min(1, "Select at least one role")
-    .required("Available roles are required"),
-  roleExcept: Yup.array()
-    .min(1, "Select at least one role")
-    .required("Except roles are required"),
+  user_id: Yup.string().min(1, "Select at least one department"),
+  department_except: Yup.array().min(1, "Select at least one department"),
+  locations_availability: Yup.array().min(1, "Select at least one location"),
+  locations_except: Yup.array().min(1, "Select at least one location"),
+  gender_availability: Yup.array().min(1, "Select at least one gender"),
+  gender_except: Yup.array().min(1, "Select at least one gender"),
+  role_availability: Yup.array().min(1, "Select at least one role"),
+  role_except: Yup.array().min(1, "Select at least one role"),
 });
-
-const available = [
-  { id: 1, label: "All Department", value: "All Department" },
-  { id: 2, label: "Marketing", value: "Marketing" },
-  { id: 3, label: "Sales", value: "Sales" },
-];
-const availableExcept = [
-  { id: 1, label: "All Department", value: "All Department" },
-  { id: 2, label: "Marketing", value: "Marketing" },
-  { id: 3, label: "Sales", value: "Sales" },
-];
-const location = [
-  { id: 1, label: "All Location", value: "All Location" },
-  { id: 2, label: "Kochi", value: "Kochi" },
-  { id: 3, label: "Kollam", value: "Kollam" },
-];
-const locationExcept = [
-  { id: 1, label: "All Location", value: "All Location" },
-  { id: 2, label: "Kochi", value: "Kochi" },
-  { id: 3, label: "Kollam", value: "Kollam" },
-];
-const gender = [
-  { id: 1, label: "All Gender", value: "All Gender" },
-  { id: 2, label: "Male", value: "Male" },
-  { id: 3, label: "Female", value: "Female" },
-];
-const genderExcept = [
-  { id: 1, label: "All Gender", value: "All Gender" },
-  { id: 2, label: "Male", value: "Male" },
-  { id: 3, label: "Female", value: "Female" },
-];
-const role = [
-  { id: 1, label: "All Role", value: "All Role" },
-  { id: 2, label: "Developer", value: "Developer" },
-  { id: 3, label: "Tester", value: "Tester" },
-];
-const roleExcept = [
-  { id: 1, label: "All Role", value: "All Role" },
-  { id: 2, label: "Developer", value: "Developer" },
-  { id: 3, label: "Tester", value: "Tester" },
-];
 
 const AvailabilitySettings = ({ formtype = "save" }) => {
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(leaveSchema),
   });
 
-  const [loader, setLoader] = useState(false);
+  const close = () => {
+    setPopupOpen(false);
+    reset();
+  };
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    setLoader(true);
-    setTimeout(() => {
+  const [loader, setLoader] = useState(false);
+  const { user } = useUserStore((state) => ({ user: state.user }));
+  const queryClient = useQueryClient();
+
+  const [availabilitySelection, setAvailabilitySelection] = useState({
+    department_availability: [],
+    department_except: [],
+    locations_availability: [],
+    locations_except: [],
+    gender_availability: [],
+    gender_except: [],
+    role_availability: [],
+    role_except: [],
+  });
+
+  const { isLoading: isLocation, data: location } = useQuery({
+    queryKey: ["location", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(WORK_LOCATIONS, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id,
+  });
+
+  const { isLoading: isGender, data: gender } = useQuery({
+    queryKey: ["gender", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(SALARY_DEFAULT_MASTERS, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data.genders),
+    enabled: !!user?.id,
+  });
+
+  const { isLoading: isDepartment, data: department } = useQuery({
+    queryKey: ["department", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(EMPLOYEE_DEPARTMENT_LIST, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id,
+  });
+
+  const { isLoading: isRoleList, data: role } = useQuery({
+    queryKey: ["role", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(ROLES_LIST, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id,
+  });
+
+  const onSubmit = async () => {
+    handledSubmit(availabilitySelection);
+  };
+
+  const handledSubmit = async (availabilitySelection) => {
+    try {
+      setLoader(true);
+      const formData = {
+        holiday_id: 5,
+        ...availabilitySelection, // Use spread syntax to avoid listing each field
+      };
+
+      const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
+
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries(["availability_settings"]);
+      close();
+    } catch (error) {
+      console.error("Error Details:", error);
+      console.error("Error Response Data:", error?.response?.data);
+
+      // Display a specific error message from the server if available
+      const errorMessage =
+        error?.response?.data?.error || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
       setLoader(false);
-      console.log(
-        formtype === "update" ? "Updated successfully!" : "Saved successfully!"
-      );
-    }, 2000);
+    }
+  };
+
+  const handleSelectChange = (selectedOptions, field, oppositeField) => {
+    // Convert selected options to an array of values
+    const selectedValues = selectedOptions.map((option) => option.id);
+
+    // Update the availabilitySelection state for the current field
+    setAvailabilitySelection((prev) => ({ ...prev, [field]: selectedValues }));
+
+    // Update the form field value in React Hook Form's control
+    control.setValue(field, selectedValues);
+
+    // Filter out selected values from the opposite field to prevent duplication
+    const filteredOptions = availabilitySelection[oppositeField].filter(
+      (val) => !selectedValues.includes(val),
+    );
+    setAvailabilitySelection((prev) => ({
+      ...prev,
+      [oppositeField]: filteredOptions,
+    }));
+
+    // Update the opposite field value in React Hook Form's control
+    control.setValue(oppositeField, filteredOptions);
   };
 
   return (
@@ -103,34 +162,33 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
         <h1 className="text-lg font-bold">AvailabilitySettings</h1>
       </div>
 
-      <div className="grid gap-x-3 lg:grid-cols-2 mt-5">
-        <div className="mt-4 w-full flex flex-col gap-3">
-          {/* Sections */}
+      <div className="mt-5 grid gap-x-3 lg:grid-cols-2">
+        <div className="mt-4 flex w-full flex-col gap-3">
           {[
             {
               title: "Department",
-              fields: ["departmentAvailableTo", "departmentExcept"],
-              options: [available, availableExcept],
+              fields: ["department_availability", "department_except"],
+              options: department || [], // Fallback to empty array
             },
             {
               title: "Office locations",
-              fields: ["locationAvailableTo", "locationExcept"],
-              options: [location, locationExcept],
+              fields: ["locations_availability", "locations_except"],
+              options: location || [], // Fallback to empty array
             },
             {
               title: "Gender",
-              fields: ["genderAvailableTo", "genderExcept"],
-              options: [gender, genderExcept],
+              fields: ["gender_availability", "gender_except"],
+              options: gender || [], // Fallback to empty array
             },
             {
               title: "Roles",
-              fields: ["roleAvailableTo", "roleExcept"],
-              options: [role, roleExcept],
+              fields: ["role_availability", "role_except"],
+              options: role || [], // Fallback to empty array
             },
           ].map(({ title, fields, options }) => (
             <div key={title} className="flex flex-col gap-3">
               <div className="text-[0.9rem] font-bold">{title}</div>
-              <div className="w-full grid grid-cols-2 gap-3">
+              <div className="grid w-full grid-cols-2 gap-3">
                 {fields.map((field, idx) => (
                   <div className="group flex flex-col gap-1.5" key={field}>
                     <label className="required label-text">
@@ -139,15 +197,30 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
                     <Controller
                       name={field}
                       control={control}
-                      render={({ field }) => (
+                      render={({ field: controllerField }) => (
                         <Select
-                          {...field}
-                          isSearchable={true}
+                          {...controllerField}
+                          isSearchable
                           styles={customSelectStyles}
-                          options={options[idx]}
+                          options={(options || []).filter(
+                            (opt) =>
+                              !availabilitySelection[fields[1 - idx]].includes(
+                                opt.id,
+                              ),
+                          )}
                           isMulti
+                          value={availabilitySelection[field].map((id) =>
+                            options.find((opt) => opt.id === id),
+                          )}
                           placeholder={`Select ${title}`}
                           className="input-box h-fit"
+                          onChange={(selectedOptions) =>
+                            handleSelectChange(
+                              selectedOptions,
+                              field,
+                              fields[1 - idx],
+                            )
+                          }
                         />
                       )}
                     />
@@ -161,8 +234,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
               </div>
             </div>
           ))}
-
-          {/* Buttons */}
           <div className="mt-6 flex items-center justify-end gap-4">
             <button
               type="button"

@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
-import { Plus , Minus} from 'lucide-react';
+import { Plus, Minus } from "lucide-react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Select from "react-select";
+import moment from "moment";
+import { newRequest, HOLIDAY_STATUS } from "@/api";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const customSelectStyles = {
   control: (base) => ({
@@ -13,31 +17,48 @@ const customSelectStyles = {
 };
 
 const statusOptions = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
+  { value: 3, label: "Active" },
+  { value: 4, label: "Inactive" },
 ];
+
 const accrualPeriodOptions = [
   { value: "annual", label: "Annual" },
   { value: "monthly", label: "Monthly" },
 ];
 
+const monthOptions = [
+  { value: "jan", label: "January" },
+  { value: "feb", label: "February" },
+  { value: "mar", label: "March" },
+  { value: "apr", label: "April" },
+  { value: "may", label: "May" },
+  { value: "jun", label: "June" },
+  { value: "jul", label: "July" },
+  { value: "aug", label: "August" },
+  { value: "sep", label: "September" },
+  { value: "oct", label: "October" },
+  { value: "nov", label: "November" },
+  { value: "dec", label: "December" },
+];
+
 // Validation Schema
 const leaveSchema = Yup.object().shape({
-  leaveName: Yup.string().required("Name of the leave is required"),
-  displayName: Yup.string().required("Display name is required"),
+  leave_name: Yup.string().required("Name of the leave is required"),
+  display_name: Yup.string().required("Display name is required"),
   code: Yup.string()
     .required("Code is required")
     .matches(
       /^[A-Za-z0-9_-]+$/,
       "Code must be alphanumeric and can include dashes or underscores",
     ),
+  pay_type: Yup.string().required("Type is required"),
   description: Yup.string()
     .max(200, "Description cannot exceed 200 characters")
     .required("Description is required"),
-  validFrom: Yup.date()
+  valid_from: Yup.date()
     .required("Valid from date is required")
     .typeError("Invalid date format"),
-  status: Yup.object().required("Status is required"),
+  status: Yup.string().required("Status is required"),
 });
 
 const BasicSettings = ({ formtype = "save" }) => {
@@ -45,39 +66,106 @@ const BasicSettings = ({ formtype = "save" }) => {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
+    setValue,
   } = useForm({
+    mode: "onSubmit",
     resolver: yupResolver(leaveSchema),
   });
 
-  const [loader, setLoader] = useState(false);
-  const [accrualType, setAccrualType] = useState("bycycle");
-  const [applicable, setApplicable] = useState("allemployees");
-  const [isOn, setIsOn] = useState(false); // Track the button state
-  const [isOn2, setIsOn2] = useState(false); // Track the button state
-  const [isOn3, setIsOn3] = useState(false); // Track the button state
-  const [units,setUnits] = useState('day')
-  const [boxes, setBoxes] = useState([{ id: 1 }]); // Initial box
-
-  // Handler to add a new box
-  const addBox = () => {
-    setBoxes([...boxes, { id: boxes.length + 1 }]);
+  const close = () => {
+    setPopupOpen(false);
+    reset();
   };
 
-  // Handler to remove a box
+  const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+  const [accrualType, setAccrualType] = useState("bycycle");
+  const [applicable, setApplicable] = useState("all_employees");
+  const [isOn, setIsOn] = useState(false);
+  const [isOn2, setIsOn2] = useState(false);
+  const [isOn3, setIsOn3] = useState(false);
+  const [units, setUnits] = useState("days");
+  const [status, setStatus] = useState("");
+  const [accuralPeriod, setAccuralPeriod] = useState("");
+  const [accuralDays, setAccuralDays] = useState("");
+  const [accuralMonth, setAccuralMonth] = useState("");
+  const [accuralAt, setAccuralAt] = useState("");
+  const [encashmentsPay, setEncashmentsPay] = useState("");
+
+  const [boxes, setBoxes] = useState([
+    { id: 1, years: "", months: "", daysleave: "" },
+  ]);
+
+  const addBox = () => {
+    setBoxes([
+      ...boxes,
+      { id: boxes.length + 1, years: "", months: "", daysleave: "" },
+    ]);
+  };
+
   const removeBox = (id) => {
     setBoxes(boxes.filter((box) => box.id !== id));
   };
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    setLoader(true);
-    setTimeout(() => {
+  const handleInputChange = (id, field, value) => {
+    setBoxes(
+      boxes.map((box) => (box.id === id ? { ...box, [field]: value } : box)),
+    );
+  };
+
+  const onSubmit = async (data) => {
+    handledSubmit(data);
+  };
+
+  const handledSubmit = async (data) => {
+    try {
+      setLoader(true);
+      const formData = {
+        leave_name: data.leave_name,
+        display_name: data.display_name,
+        code: data.code,
+        pay_type: data.pay_type,
+        description: data.description,
+        units: units,
+        status: status,
+        valid_from: moment(data.valid_from).format("YYYY-MM-DD"),
+        accural_type: accrualType,
+        accural_period: accuralPeriod,
+        accural_day: accuralDays,
+        accural_monthly: accuralMonth,
+        accural_at: accuralAt,
+        accrual_leave: data.accrual_leave,
+        specific_days: data.specific_days,
+        application_to: applicable,
+        emp_no_days: data.emp_no_days,
+        based_experience_details: boxes,
+        carry_forword: isOn,
+        max_no_days: data.max_no_days,
+        carry_expire: isOn2,
+        exp_days: data.exp_days,
+        encashments: isOn3,
+        encashments_pay: "basicpay",
+        max_encashments: Number(encashmentsPay),
+        no_of_days: data.no_of_days,
+      };
+      const res = await newRequest.post(HOLIDAY_STATUS, formData);
+
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries(["basicHolidaysSettings"]);
+      close();
+    } catch (error) {
+      console.error("Error Details:", error);
+      console.error("Error Response Data:", error?.response?.data);
+
+      // Display a specific error message from the server if available
+      const errorMessage =
+        error?.response?.data?.error || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
       setLoader(false);
-      console.log(
-        formtype === "update" ? "Updated successfully!" : "Saved successfully!",
-      );
-    }, 2000);
+    }
   };
 
   return (
@@ -96,12 +184,12 @@ const BasicSettings = ({ formtype = "save" }) => {
                 autoComplete="off"
                 type="text"
                 placeholder="Enter Name of the Leave"
-                {...register("leaveName")}
+                {...register("leave_name")}
                 className="input-box"
               />
-              {errors.leaveName && (
+              {errors.leave_name && (
                 <span className="text-xs font-medium text-red-500">
-                  {errors.leaveName.message}
+                  {errors.leave_name.message}
                 </span>
               )}
             </div>
@@ -113,12 +201,12 @@ const BasicSettings = ({ formtype = "save" }) => {
                 autoComplete="off"
                 type="text"
                 placeholder="Enter Display Name"
-                {...register("displayName")}
+                {...register("display_name")}
                 className="input-box"
               />
-              {errors.displayName && (
+              {errors.display_name && (
                 <span className="text-xs font-medium text-red-500">
-                  {errors.displayName.message}
+                  {errors.display_name.message}
                 </span>
               )}
             </div>
@@ -146,9 +234,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="leaveStatus"
+                    name="pay_type"
                     value="paid"
-                    onClick={() => setRejected(false)}
+                    {...register("pay_type")}
                     className="radio-black"
                     defaultChecked
                   />
@@ -157,9 +245,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="leaveStatus"
+                    name="pay_type"
                     value="unpaid"
-                    onClick={() => setRejected(false)}
+                    {...register("pay_type")}
                     className="radio-black"
                   />
                   <label className="text-sm font-normal">Unpaid</label>
@@ -172,9 +260,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="unitStatus"
+                    name="units"
                     value="days"
-                    onClick={() => setUnits('day')}
+                    onClick={() => setUnits("days")}
                     className="radio-black"
                     defaultChecked
                   />
@@ -183,9 +271,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="unitStatus"
+                    name="units"
                     value="hours"
-                    onClick={() => setUnits('hour')}
+                    onClick={() => setUnits("hours")}
                     className="radio-black"
                   />
                   <label className="text-sm font-normal">Hours</label>
@@ -217,12 +305,12 @@ const BasicSettings = ({ formtype = "save" }) => {
               <input
                 autoComplete="off"
                 type="date"
-                {...register("validFrom")}
+                {...register("valid_from")}
                 className="input-box"
               />
-              {errors.validFrom && (
+              {errors.valid_from && (
                 <span className="text-xs font-medium text-red-500">
-                  {errors.validFrom.message}
+                  {errors.valid_from.message}
                 </span>
               )}
             </div>
@@ -236,23 +324,20 @@ const BasicSettings = ({ formtype = "save" }) => {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    isSearchable
-                    // styles={customSelectStyles}
+                    value={statusOptions.find(
+                      (option) => option.value === field.value,
+                    )}
                     options={statusOptions}
+                    isSearchable
                     placeholder="Select a status"
                     onChange={(selectedOption) => {
-                      field.onChange(selectedOption);
-                      setSelectedlocationId(selectedOption.value);
+                      field.onChange(selectedOption.value); // Update the field value in react-hook-form
+                      setStatus(selectedOption.value); // Update the status in the component's state
                     }}
                     className="input-box w-full"
                   />
                 )}
               />
-              {errors.status && (
-                <span className="text-xs text-red-500">
-                  {errors.status.message}
-                </span>
-              )}
             </div>
           </div>
 
@@ -289,7 +374,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="group flex flex-col gap-1.5 py-2">
                 <label className="text-sm font-medium">Accrual period</label>
                 <Controller
-                  name="accrualPeriod"
+                  name="accural_period"
                   control={control}
                   render={({ field }) => (
                     <Select
@@ -302,15 +387,15 @@ const BasicSettings = ({ formtype = "save" }) => {
                       placeholder="Select a period"
                       onChange={(selectedOption) => {
                         field.onChange(selectedOption);
-                        setSelectedlocationId(selectedOption.value);
+                        setAccuralPeriod(selectedOption.value);
                       }}
-                      className="input-box w-full overflow-hidden"
+                      className="input-box w-full"
                     />
                   )}
                 />
-                {errors.accrualPeriod && (
+                {errors.accural_period && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualPeriod.message}
+                    {errors.accural_period.message}
                   </span>
                 )}
               </div>
@@ -319,30 +404,29 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="group flex flex-col gap-1.5 py-2">
                 <label className="text-sm font-medium">Accrual day(s)</label>
                 <Controller
-                  name="accrualDays"
+                  name="accural_day"
                   control={control}
                   render={({ field }) => (
                     <Select
                       {...field}
                       options={[
                         ...Array.from({ length: 28 }, (_, i) => ({
-                          value: i + 1,
-                          label: (i + 1).toString(),
+                          value: i + 1 + "st",
+                          label: (i + 1).toString() + "st",
                         })),
                         { value: "lastDay", label: "Last day" }, // Adding the "last day" option
                       ]}
-                      placeholder="Select a day"
                       onChange={(selectedOption) => {
                         field.onChange(selectedOption);
-                        setSelectedlocationId(selectedOption.value);
+                        setAccuralDays(selectedOption.value);
                       }}
-                      className="input-box w-full overflow-hidden"
+                      className="input-box w-full"
                     />
                   )}
                 />
-                {errors.accrualDays && (
+                {errors.accural_day && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualDays.message}
+                    {errors.accural_day.message}
                   </span>
                 )}
               </div>
@@ -351,38 +435,28 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="group flex flex-col gap-1.5 py-2">
                 <label className="text-sm font-medium">Accrual month(s)</label>
                 <Controller
-                  name="accrualMonth"
+                  name="accural_monthly"
                   control={control}
                   render={({ field }) => (
                     <Select
                       {...field}
+                      value={monthOptions.find(
+                        (option) => option.value === field.value,
+                      )}
+                      options={monthOptions}
                       isSearchable
-                      options={[
-                        { value: "jan", label: "January" },
-                        { value: "feb", label: "February" },
-                        { value: "mar", label: "March" },
-                        { value: "apr", label: "April" },
-                        { value: "may", label: "May" },
-                        { value: "jun", label: "June" },
-                        { value: "jul", label: "July" },
-                        { value: "aug", label: "August" },
-                        { value: "sep", label: "September" },
-                        { value: "oct", label: "October" },
-                        { value: "nov", label: "November" },
-                        { value: "dec", label: "December" },
-                      ]}
                       placeholder="Select a month"
                       onChange={(selectedOption) => {
-                        field.onChange(selectedOption);
-                        setSelectedlocationId(selectedOption.value);
+                        field.onChange(selectedOption.value); // Update the form value
+                        setAccuralMonth(selectedOption.value); // Update local state with selected month
                       }}
-                      className="input-box w-full overflow-hidden"
+                      className="input-box w-full"
                     />
                   )}
                 />
-                {errors.accrualMonth && (
+                {errors.accural_monthly && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualMonth.message}
+                    {errors.accural_monthly.message}
                   </span>
                 )}
               </div>
@@ -395,10 +469,16 @@ const BasicSettings = ({ formtype = "save" }) => {
                 <label className="text-sm font-medium">
                   Number of working days to accrual leave
                 </label>
-                <input autoComplete="off" type="number" className="input-box" />
-                {errors.accrualPeriod && (
+                <input
+                  autoComplete="off"
+                  type="number"
+                  placeholder="Enter Name of the Leave"
+                  {...register("accrual_leave")}
+                  className="input-box"
+                />
+                {errors.accrual_leave && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualPeriod.message}
+                    {errors.accrual_leave.message}
                   </span>
                 )}
               </div>
@@ -408,7 +488,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   Accrual period
                 </label>
                 <Controller
-                  name="accrualPeriod"
+                  name="accural_period"
                   control={control}
                   render={({ field }) => (
                     <Select
@@ -421,15 +501,15 @@ const BasicSettings = ({ formtype = "save" }) => {
                       placeholder="Select a period"
                       onChange={(selectedOption) => {
                         field.onChange(selectedOption);
-                        setSelectedlocationId(selectedOption.value);
+                        setAccuralPeriod(selectedOption.value);
                       }}
                       className="input-box w-full"
                     />
                   )}
                 />
-                {errors.accrualPeriod && (
+                {errors.accural_period && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualPeriod.message}
+                    {errors.accural_period.message}
                   </span>
                 )}
               </div>
@@ -438,29 +518,29 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="group flex flex-col gap-1.5 py-2">
                 <label className="text-sm font-medium">Accrual at</label>
                 <Controller
-                  name="accrualat"
+                  name="accural_at"
                   control={control}
                   render={({ field }) => (
                     <Select
                       {...field}
+                      isSearchable
                       options={[
-                        ...Array.from({ length: 28 }, (_, i) => ({
-                          value: i + 1,
-                          label: (i + 1).toString(),
-                        })),
-                        { value: "lastDay", label: "Last day" }, // Adding the "last day" option
+                        { value: "0", label: "As soon as condition met" },
+                        { value: "1", label: "End of this accrual period" },
+                        { value: "2", label: "After specific number of days" },
                       ]}
+                      placeholder="Select a Accrual At"
                       onChange={(selectedOption) => {
                         field.onChange(selectedOption);
-                        setSelectedlocationId(selectedOption.value);
+                        setAccuralAt(selectedOption.value);
                       }}
                       className="input-box w-full"
                     />
                   )}
                 />
-                {errors.accrualDays && (
+                {errors.accural_at && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualDays.message}
+                    {errors.accural_at.message}
                   </span>
                 )}
               </div>
@@ -470,10 +550,16 @@ const BasicSettings = ({ formtype = "save" }) => {
                 <label className="required text-sm font-medium">
                   Specific days{" "}
                 </label>
-                <input autoComplete="off" type="number" className="input-box" />
-                {errors.accrualPeriod && (
+                <input
+                  autoComplete="off"
+                  type="number"
+                  placeholder="Enter Name of the Leave"
+                  {...register("specific_days")}
+                  className="input-box"
+                />{" "}
+                {errors.specific_days && (
                   <span className="text-xs text-red-500">
-                    {errors.accrualPeriod.message}
+                    {errors.specific_days.message}
                   </span>
                 )}
               </div>
@@ -485,9 +571,9 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
-                  name="applicableStatus"
-                  value="allemployees"
-                  onClick={() => setApplicable("allemployees")}
+                  name="application_to"
+                  value="all_employees"
+                  onClick={() => setApplicable("all_employees")}
                   className="radio-black"
                   defaultChecked
                 />
@@ -496,9 +582,9 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
-                  name="applicableStatus"
-                  value="onexperience"
-                  onClick={() => setApplicable("onexperience")}
+                  name="application_to"
+                  value="based_on_exp"
+                  onClick={() => setApplicable("based_on_exp")}
                   className="radio-black"
                 />
                 <label className="text-sm font-normal">
@@ -507,80 +593,104 @@ const BasicSettings = ({ formtype = "save" }) => {
               </div>
             </div>
           </div>
-          {applicable==='allemployees'&&(
+          {applicable === "all_employees" && (
             <div className="grid grid-cols-2">
-            <div className="group flex flex-col gap-1.5 py-2">
-              <input
-                autoComplete="off"
-                placeholder={`Number of ${units}(s)`}
-                type="number"
-                className="input-box"
-              />
-              {errors.accrualPeriod && (
-                <span className="text-xs text-red-500">
-                  {errors.accrualPeriod.message}
-                </span>
-              )}
+              <div className="group flex flex-col gap-1.5 py-2">
+                <input
+                  autoComplete="off"
+                  placeholder={`Number of ${units}(s)`}
+                  type="number"
+                  className="input-box"
+                  name="emp_no_days"
+                  {...register("emp_no_days")}
+                />
+                {errors.emp_no_days && (
+                  <span className="text-xs text-red-500">
+                    {errors.emp_no_days.message}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
           )}
-          {applicable === 'onexperience' && (
-            <div className="flex flex-col gap-4 mt-2">
+          {applicable === "based_on_exp" && (
+            <div className="mt-2 flex flex-col gap-4">
               <p className="mt-3 border-l-4 border-hrmprimaryorange bg-[#FFECE7] py-3 pl-3 text-xs font-normal text-gray-darkpale">
-                Please make sure that you have covered values from beginning to end
+                Please make sure that you have covered values from beginning to
+                end
               </p>
               <div className="w-full">
                 {boxes.map((box, index) => (
                   <div
                     key={box.id}
-                    className={`mb-4 ${index>0?'px-2 py-5':'p-5'} w-full border border-dashed border-black rounded-lg flex flex-row justify-around`}
+                    className={`mb-4 ${index > 0 ? "px-2 py-5" : "p-5"} flex w-full flex-row justify-around rounded-lg border border-dashed border-black`}
                   >
-                    <div className="flex flex-col w-1/5">
-                      <label htmlFor={`years-${box.id}`} className="text-sm font-normal">
+                    <div className="flex w-1/5 flex-col">
+                      <label
+                        htmlFor={`years-${box.id}`}
+                        className="text-sm font-normal"
+                      >
                         Years
                       </label>
                       <input
                         type="number"
                         id={`years-${box.id}`}
-                        className="input-box h-10 border rounded-md"
+                        value={box.years}
+                        onChange={(e) =>
+                          handleInputChange(box.id, "years", e.target.value)
+                        }
+                        className="input-box h-10 rounded-md border"
                       />
                     </div>
-                    <div className="flex flex-col w-1/5">
-                      <label htmlFor={`months-${box.id}`} className="text-sm font-normal">
+                    <div className="flex w-1/5 flex-col">
+                      <label
+                        htmlFor={`months-${box.id}`}
+                        className="text-sm font-normal"
+                      >
                         Months
                       </label>
                       <input
                         type="number"
                         id={`months-${box.id}`}
-                        className="input-box h-10 border rounded-md"
+                        value={box.months}
+                        onChange={(e) =>
+                          handleInputChange(box.id, "months", e.target.value)
+                        }
+                        className="input-box h-10 rounded-md border"
                       />
                     </div>
-                    <div className="flex items-center justify-center w-1/6 text-sm font-normal">
+                    <div className="flex w-1/6 items-center justify-center text-sm font-normal">
                       Will get
                     </div>
-                    <div className="flex flex-col w-1/5">
-                      <label htmlFor={`days-${box.id}`} className="text-sm font-normal">
+                    <div className="flex w-1/5 flex-col">
+                      <label
+                        htmlFor={`days-${box.id}`}
+                        className="text-sm font-normal"
+                      >
                         Days of leave
                       </label>
                       <input
                         type="number"
                         id={`days-${box.id}`}
-                        className="input-box h-10 border rounded-md"
+                        value={box.daysleave}
+                        onChange={(e) =>
+                          handleInputChange(box.id, "daysleave", e.target.value)
+                        }
+                        className="input-box h-10 rounded-md border"
                       />
                     </div>
-                    <div className={`flex items-center space-x-2 w-1/12 justify-center ${index>0?'w-[5rem]': 'w-1/12'}`}>
-                      {/* Show Minus button for boxes after the first one */}
+                    <div
+                      className={`flex w-1/12 items-center justify-center space-x-2 ${index > 0 ? "w-[5rem]" : "w-1/12"}`}
+                    >
                       {index > 0 && (
                         <div
-                          className="h-8 w-8 flex items-center justify-center rounded-full bg-black text-white cursor-pointer"
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black text-white"
                           onClick={() => removeBox(box.id)}
                         >
                           <Minus className="size-5" strokeWidth={2} />
                         </div>
                       )}
-                      {/* Plus button */}
                       <div
-                        className="h-8 w-8 flex items-center justify-center rounded-full bg-hrmprimaryorange text-white cursor-pointer"
+                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-hrmprimaryorange text-white"
                         onClick={addBox}
                       >
                         <Plus className="size-5" strokeWidth={2} />
@@ -591,6 +701,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               </div>
             </div>
           )}
+
           <div className="group col-span-2 flex flex-col gap-1.5 py-2">
             <div className="flex justify-between">
               <p className="text-[0.85rem] font-bold">Carry Forward</p>
@@ -615,75 +726,84 @@ const BasicSettings = ({ formtype = "save" }) => {
               Number of unused leaves of an employee can be carry forwarded
             </p>
           </div>
-          {isOn&&(
+          {isOn && (
             <>
-                <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
-                    <p className="text-[0.85rem] font-normal">
-                    The specified leave count will be automatically carried forward to
-                    the next year's leave balance at the end of each year
-                    </p>
-                    <label className="required label-text">
-                    Max no of {units}(s) can be carry forwarded{" "}
-                    </label>
+              <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
+                <p className="text-[0.85rem] font-normal">
+                  The specified leave count will be automatically carried
+                  forward to the next year's leave balance at the end of each
+                  year
+                </p>
+                <label className="required label-text">
+                  Max no of {units}(s) can be carry forwarded{" "}
+                </label>
+              </div>
+              <div className="grid grid-cols-2">
+                <div className="group flex flex-col gap-1.5 py-2">
+                  <input
+                    autoComplete="off"
+                    type="number"
+                    className="input-box"
+                    name="max_no_days"
+                    {...register("max_no_days")}
+                  />
+                  {errors.max_no_days && (
+                    <span className="text-xs text-red-500">
+                      {errors.max_no_days.message}
+                    </span>
+                  )}
                 </div>
-                <div className="grid grid-cols-2">
-                    <div className="group flex flex-col gap-1.5 py-2">
-                    <input autoComplete="off" type="number" className="input-box" />
-                    {errors.accrualPeriod && (
-                        <span className="text-xs text-red-500">
-                        {errors.accrualPeriod.message}
-                        </span>
-                    )}
-                    </div>
-                </div>
-                <div className="group col-span-2 flex flex-col gap-1.5 py-2">
-                    <div className="flex justify-between">
-                    <p className="text-[0.85rem] font-semibold">
-                        Carry forward expires
-                    </p>
+              </div>
+              <div className="group col-span-2 flex flex-col gap-1.5 py-2">
+                <div className="flex justify-between">
+                  <p className="text-[0.85rem] font-semibold">
+                    Carry forward expires
+                  </p>
+                  <div
+                    onClick={() => {
+                      if (isOn2) {
+                        setIsOn2(false);
+                      } else {
+                        setIsOn2(true);
+                      }
+                    }}
+                    className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2px]" : "border border-[#888888] bg-white pt-[0.5px]"}`}
+                  >
                     <div
-                        onClick={() => {
-                        if (isOn2) {
-                            setIsOn2(false);
-                        } else {
-                            setIsOn2(true);
-                        }
-                        }}
-                        className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2px]" : "border border-[#888888] pt-[0.5px] bg-white"}`}
-                    >
-                        <div
-                        className={`h-4 w-4 ${isOn2 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
-                            isOn2 ? "translate-x-5" : "translate-x-0"
-                        }`}
-                        ></div>
-                    </div>
-                    </div>
+                      className={`h-4 w-4 ${isOn2 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                        isOn2 ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    ></div>
+                  </div>
                 </div>
-                {isOn2&&(
-                    <>
-                        <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
-                            <p className="text-[0.85rem] font-normal">
-                            The expiry days for unused carry forwarded leave(s) will be
-                            calculated from the beginning of the leave year.
-                            </p>
-                        </div>
-                        <div className="grid grid-cols-2">
-                            <div className="group flex flex-col gap-1.5 py-2">
-                            <input
-                                autoComplete="off"
-                                type="number"
-                                placeholder="Expires in days"
-                                className="input-box"
-                            />
-                            {errors.accrualPeriod && (
-                                <span className="text-xs text-red-500">
-                                {errors.accrualPeriod.message}
-                                </span>
-                            )}
-                            </div>
-                        </div>
-                    </>
-                )}
+              </div>
+              {isOn2 && (
+                <>
+                  <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
+                    <p className="text-[0.85rem] font-normal">
+                      The expiry days for unused carry forwarded leave(s) will
+                      be calculated from the beginning of the leave year.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2">
+                    <div className="group flex flex-col gap-1.5 py-2">
+                      <input
+                        autoComplete="off"
+                        type="number"
+                        placeholder="Expires in days"
+                        className="input-box"
+                        name="exp_days"
+                        {...register("exp_days")}
+                      />
+                      {errors.exp_days && (
+                        <span className="text-xs text-red-500">
+                          {errors.exp_days.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
           <div className="group col-span-2 flex flex-col gap-1.5 py-2">
@@ -710,80 +830,95 @@ const BasicSettings = ({ formtype = "save" }) => {
               Number of unused leaves of an employee can be encashed
             </p>
           </div>
-          {isOn3&&(
+          {isOn3 && (
             <div className={`group col-span-2 flex flex-col gap-1.5 py-2`}>
-                <div className="flex justify-between">
-                <p className="text-[0.85rem] font-bold">Encashment Basic pay </p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                <div className={`group flex flex-col gap-1.5 py-2 ${units==='day'?'mt-5':''}`}>
-                    <label className="label-text">
-                    Max number of {units}s can be enchased {" "}
-                    </label>
-                    <Controller
-                    name="status"
+              <div className="flex justify-between">
+                <p className="text-[0.85rem] font-bold">
+                  Encashment Basic pay{" "}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div
+                  className={`group flex flex-col gap-1.5 py-2 ${units === "day" ? "mt-5" : ""}`}
+                >
+                  <label className="label-text">
+                    Max number of {units}s can be encashed
+                  </label>
+                  <Controller
+                    name="max_encashments" // Assuming "status" is the field you're using here
                     control={control}
                     render={({ field }) => (
-                    <Select
+                      <Select
                         {...field}
+                        value={
+                          encashmentsPay === `0`
+                            ? {
+                                value: `0`,
+                                label: `All the remaining ${units}s`,
+                              }
+                            : {
+                                value: `1`,
+                                label: `Specific number of ${units}s`,
+                              }
+                        }
                         isSearchable
-                        // styles={customSelectStyles}
                         options={[
-                            { value: `allremaining${units}`, label: `All the remaining ${units}(s)` },
-                            { value: `specificnumberof${units}`, label: `Specific number of ${units}(s)` },
+                          {
+                            value: `0`,
+                            label: `All the remaining ${units}s`, // Correct plural/singular form
+                          },
+                          {
+                            value: `1`,
+                            label: `Specific number of ${units}s`, // Correct plural/singular form
+                          },
                         ]}
-                        placeholder="Select a status"
+                        placeholder={`Select a ${units}`} // Using the plural form correctly
                         onChange={(selectedOption) => {
-                        field.onChange(selectedOption);
-                        setSelectedlocationId(selectedOption.value);
+                          field.onChange(selectedOption.value); // Update react-hook-form field value
+                          setEncashmentsPay(selectedOption.value); // Update local state
                         }}
-                        className="input-box w-full overflow-hidden"
-                    />
+                        className="input-box w-full"
+                      />
                     )}
-                />
+                  />
                 </div>
+
                 <div className="group flex flex-col gap-1.5 py-2">
-                    <label className="label-text mt-5">Number of {units}s</label>
-                <input
+                  <label className="label-text mt-5">Number of {units}s</label>
+                  <input
                     autoComplete="off"
                     placeholder="Number of day(s)"
                     type="number"
                     className="input-box"
-                />
-                {errors.accrualPeriod && (
+                    name="no_of_days"
+                    {...register("no_of_days")}
+                  />
+                  {errors.no_of_days && (
                     <span className="text-xs text-red-500">
-                    {errors.accrualPeriod.message}
+                      {errors.no_of_days.message}
                     </span>
-                )}
+                  )}
                 </div>
-                </div>
+              </div>
             </div>
           )}
+
           {/* Buttons Section */}
-            <div className="mt-6 flex items-center justify-end gap-4">
-                <button
-                type="button"
-                className="btn flex h-10 min-h-10 min-w-[8rem] items-center border border-gray-400 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100"
-                onClick={() => console.log("Cancel clicked")}
-                >
-                Cancel
-                </button>
-                <button
-                type="submit"
-                className="btn flex h-10 min-h-10 min-w-[8rem] items-center bg-hrmblack text-sm font-medium text-white transition-all duration-500 hover:bg-hrmdarkblue/70"
-                >
-                {loader ? (
-                    <div className="flex items-center gap-3">
-                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                    {formtype === "update" ? "Updating" : "Saving"}
-                    </div>
-                ) : (
-                    <>{formtype === "update" ? "Update" : "Save"}</>
-                )}
-                </button>
-            </div>
+          <div className="mt-6 flex items-center justify-end gap-4">
+            <button
+              type="button"
+              className="btn flex h-10 min-h-10 min-w-[8rem] items-center border border-gray-400 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn flex h-10 min-h-10 min-w-[8rem] items-center bg-hrmblack text-sm font-medium text-white transition-all duration-500 hover:bg-hrmdarkblue/70"
+            >
+              Save
+            </button>
+          </div>
         </div>
-        
       </div>
     </form>
   );

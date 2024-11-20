@@ -2,17 +2,25 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { BankHolidaySchema } from "@/schema/dashboard/leave/bankholiday.schema";
 import toast from "react-hot-toast";
+import { newRequest, TEAM_BANK_HOLIDAY, WORK_LOCATIONS } from "@/api";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { date } from "yup";
+import moment from "moment";
 
 export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
-  const [percentage, setPercentage] = useState(false)
+  const [percentage, setPercentage] = useState(false);
   const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+
+  // Get user details
+  const { user } = useUserStore((state) => ({ user: state.user }));
 
   const {
     register,
@@ -25,11 +33,21 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
     resolver: yupResolver(BankHolidaySchema),
   });
 
-  const locationList = [
-    { label: "Kochi", value: "kochi" },
-    { label: "Kozhikode", value: "kozhikode" },
-    { label: "Kannur", value: "kannur" },
-  ];
+  // Location List API Query
+  const {
+    isLoading: isWorkLocations,
+    data: locationList,
+    error,
+  } = useQuery({
+    queryKey: ["locationList", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(WORK_LOCATIONS, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id, // Only run if user.id is defined
+  });
 
   const close = () => {
     setPopupOpen(false);
@@ -37,26 +55,37 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
   };
 
   const onSubmit = async (data) => {
-    const formData = {
-      shift_id: selectedShiftId,
-      ...data,
-    };
+    handledSubmit(data);
+  };
 
-    console.log(formData);
-
+  const handledSubmit = async (data) => {
     try {
-      // Simulate API call
-      const res = { status: 200 }; // Replace with actual API call
-      if (res?.status === 200) {
-        toast.success("Saved bank holiday details successfully");
+      setLoader(true);
 
-        close();
-      } else {
-        toast.error("Failed to save holiday.");
-      }
+      const formData = {
+        holiday_name: data.holiday_name,
+        date: moment(data.date).format("YYYY-MM-DD"),
+        location_id: selectedlocationId,
+        type: data.type,
+        percentage: Number(data.percentage),
+        description: data.description,
+      };
+      // Make the API call
+      const res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
+
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries(["bankHolidays"]);
+      close();
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to save holiday.");
+      console.error("Error Details:", error);
+      console.error("Error Response Data:", error?.response?.data);
+
+      // Display a specific error message from the server if available
+      const errorMessage =
+        error?.response?.data?.error || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -80,12 +109,12 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                     autoComplete="off"
                     type="text"
                     placeholder="Enter Holiday Name"
-                    {...register("name")}
+                    {...register("holiday_name")}
                     className="input-box"
                   />
-                  {errors.name && (
+                  {errors.holiday_name && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name.message}
+                      {errors.holiday_name.message}
                     </span>
                   )}
                 </div>
@@ -109,7 +138,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                 <div>
                   <label className="text-sm font-medium">Location</label>
                   <Controller
-                    name="location"
+                    name="location_id"
                     control={control}
                     render={({ field }) => (
                       <Select
@@ -119,8 +148,13 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         options={locationList}
                         placeholder="Select Location"
                         onChange={(selectedOption) => {
+                          console.log(
+                            selectedOption,
+                            "selectedOptionselectedOption",
+                          );
+
                           field.onChange(selectedOption);
-                          setSelectedlocationId(selectedOption.value);
+                          setSelectedlocationId(selectedOption.id);
                         }}
                         className="input-box w-full"
                       />
@@ -139,55 +173,55 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                     <div className="flex items-center gap-2">
                       <input
                         type="radio"
-                        name="holiday_status"
+                        name="type"
                         value="paid"
-                        onClick={()=>setPercentage(true)}
+                        onClick={() => setPercentage(true)}
                         className="radio-black"
-                        {...register("holiday_status")}
+                        {...register("type")}
                       />
                       <label className="text-sm font-normal">Paid</label>
                     </div>
                     <div className="flex items-center gap-2">
                       <input
                         type="radio"
-                        name="holiday_status"
+                        name="type"
                         value="unpaid"
-                        onClick={()=>setPercentage(false)}
+                        onClick={() => setPercentage(false)}
                         className="radio-black"
-                        {...register("holiday_status")}
+                        {...register("type")}
                       />
                       <label className="text-sm font-normal">Unpaid</label>
                     </div>
                   </div>
-                  {errors.holiday_status && (
+                  {errors.type && (
                     <span className="text-xs text-red-500">
-                      {errors.holiday_status.message}
+                      {errors.type.message}
                     </span>
                   )}
                 </div>
-                {percentage&&
-                    <div>
-                        <label className="label-text">Percentage</label>
-                        <input
-                            autoComplete="off"
-                            type="text"
-                            placeholder="Enter Percentage"
-                            {...register("percentage")}
-                            className="input-box"
-                        />
-                        {errors.percentage && (
-                            <span className="text-xs font-medium text-red-500">
-                            {errors.percentage.message}
-                            </span>
-                        )}
-                    </div>
-                }
+                {percentage && (
+                  <div>
+                    <label className="label-text">Percentage</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      placeholder="Enter Percentage"
+                      {...register("percentage")}
+                      className="input-box"
+                    />
+                    {errors.percentage && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.percentage.message}
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 {/* Description */}
-                <div className="flex flex-col gap-2 mt-2">
+                <div className="mt-2 flex flex-col gap-2">
                   <label>Description</label>
                   <textarea
-                    className="w-full p-1 h-20 border border-[#cecdcd] rounded-md"
+                    className="h-20 w-full rounded-md border border-[#cecdcd] p-1"
                     placeholder="Enter description here..."
                     {...register("description")}
                   ></textarea>
