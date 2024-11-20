@@ -4,6 +4,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
+import { CalendarDays } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 function CandidateHistoryTimeline() {
@@ -18,9 +19,51 @@ function CandidateHistoryTimeline() {
         return res.data;
       }),
   });
+  const historyData = [
+    {
+      date: "12 October, 2023",
+      entries: [
+        {
+          title: "Move to hire",
+          description: "VM applied job for US Recruiter",
+          date: "10/11/2023 ",
+          time: "10:30 AM",
+        },
+        {
+          title: "Move to hire",
+          description: "VM applied job for US Recruiter",
+          date: "10/11/2023 ",
+          time: "10:30 AM",
+        },
+        {
+          title: "Interview",
+          description: "Sandeep applied job for Customer Relationship Officer",
+          date: "10/11/2023 ",
+          time: "10:30 AM",
+        },
+      ],
+    },
+    {
+      date: "11 October, 2023",
+      entries: [
+        {
+          title: "Resume viewed by abc",
+          description: "VM applied job for US Recruiter",
+          date: "10/11/2023 ",
+          time: "10:30 AM",
+        },
+        {
+          title: "Applied job for US Recruiter",
+          description: "VM applied job for US Recruiter",
+          date: "10/11/2023 ",
+          time: "10:30 AM",
+        },
+      ],
+    },
+  ];
 
   return (
-    <div className="min-h-screen">
+    <>
       <MenuHeader
         backlink={""}
         menu={"Menu"}
@@ -34,33 +77,49 @@ function CandidateHistoryTimeline() {
         <Loader />
       ) : (
         <div className="h-full w-full rounded-md bg-white py-5">
-          <h1 className="px-7 pb-7 text-base font-bold">Candidate History</h1>
-          <ul className="overflow-y-min flex max-h-[570px] w-full flex-col gap-3 overflow-y-auto px-7">
-            {candidateHistoryTimeline?.map((i) => (
-              <li key={i?.id} className="timeline flex items-center">
-                <div className="timeline-middle">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="green"
-                    className="h-5 w-5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+          <h1 className="mb-5 px-7 text-base font-bold text-neutralmedium">
+            Candidate History
+          </h1>
+          <div className="overflow-y-min h-[500px] w-full overflow-y-scroll p-5">
+            {historyData.map((day, index) => (
+              <div
+                key={index}
+                className="relative rounded-md bg-white p-5 pt-0"
+              >
+                <p className="mb-5 text-sm font-bold text-neutralmedium">
+                  {day.date}
+                </p>
+                <div className="absolute bottom-20 left-10 top-16 z-0 border-l-2 border-hrmprimaryorange" />
+                <div className="flex flex-col gap-y-4">
+                  {day.entries.map((entry, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]"
+                    >
+                      <div className="absolute z-10 mb-9 size-4 rounded-full border border-hrmprimaryorange bg-hrmprimaryorange" />
+                      <div className="flex flex-col gap-1 px-9 py-4">
+                        <p className="text-sm font-bold text-neutralmedium">
+                          {entry.title}
+                        </p>
+                        <p className="text-xs text-black">
+                          {entry.description}
+                        </p>
+                        <p className="flex items-center gap-2 text-xs text-black">
+                          <CalendarDays className="size-3" />
+                          {entry.date}
+                          <p className="h-3 border border-l border-gray-dark"></p>
+                          {entry.time}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="timeline-end timeline-box bg-black/5 text-sm font-semibold text-black/70">
-                  {i?.description}
-                </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 export default CandidateHistoryTimeline;

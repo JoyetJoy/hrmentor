@@ -162,7 +162,7 @@ export default function EmployeeRightToWorkEdit() {
                 <div className="flex items-center gap-7">
                   <h5 className="text-lg font-bold">Right to work</h5>
                   <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
-                    <Search className="size-4 text-gray-soft" />
+                    <Search className="size-4 text-gray-dark" />
                     <input
                       type="text"
                       onChange={(e) => setKeyword(e.target.value)}

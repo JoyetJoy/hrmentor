@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, ChevronRight, Upload } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 export default function CompanySignatory() {
     const [loader, setLoader] = useState(false);
@@ -26,22 +27,16 @@ export default function CompanySignatory() {
         <form className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft onClick={() => history.back()} className="size-4" />
+              <ArrowLeft onClick={() => history.back()} className="size-4 cursor-pointer" />
               Company Profile{" "}
             </div>
-            <button
-              type="submit"
+            <Link
+            to="/admin/company/calender"
+              
               className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
-              {loader ? (
-                <div className="flex items-center gap-3">
-                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                  Saving
-                </div>
-              ) : (
-                "Next"
-              )}
-            </button>
+             Next
+            </Link>
           </div>
           <div className="h-screen w-full rounded-md bg-white px-5 py-7">
             <div className="group flex w-full items-center gap-x-2">

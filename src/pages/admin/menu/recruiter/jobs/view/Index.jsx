@@ -115,7 +115,6 @@ function RecViewJobDetail() {
   return (
     <>
       <MenuHeader
-        backlink={""}
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}

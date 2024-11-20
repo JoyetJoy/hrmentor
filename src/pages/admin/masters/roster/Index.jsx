@@ -180,13 +180,13 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
       <RosterHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <div className="relative flex items-center">
-          <Search className="absolute left-2 size-4 text-gray-400" />
+          <Search className="absolute left-2 size-4 text-gray-dark" />
           <input
             type="text"
             placeholder="Search..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            className="rounded-md border border-gray-300 py-2 pl-8 pr-4"
+            className="rounded-md border border-gray-dark py-2 pl-8 pr-4"
           />
         </div>
 

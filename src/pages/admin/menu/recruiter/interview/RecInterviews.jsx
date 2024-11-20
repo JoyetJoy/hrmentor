@@ -64,7 +64,6 @@ function RecInterviews() {
           <div>{row?.original?.interview?.scheduled_date}</div>
         ),
       },
-
       {
         header: "Interviewer",
         accessorKey: "interviewers",
@@ -94,6 +93,36 @@ function RecInterviews() {
             </>
           );
         },
+      },
+      {
+        header: "interview mode ",
+        accessorKey: "interview_mode ",
+        cell: ({ row }) => (
+          <div>{row?.original?.interview?.interview_guide_name_value?.interview_type?.interview_type_name || "NA"}</div>
+        ),
+      },
+      {
+        header: "Department ",
+        accessorKey: "department",
+        cell: ({ row }) => (
+          <div>{row?.original?.interview?.scheduled_dat || "NA"}</div>
+        ),
+      },
+      {
+        header: "Status",
+        accessorKey: "status",
+        cell: ({ row }) => (
+          <div
+          style={{
+            backgroundColor:
+            row?.original?.interview?.interview_status_name?.background_color,
+            color:row?.original?.interview?.interview_status_name?.text_color,
+          }}
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+          >
+            {row?.original?.interview?.interview_status_name?.status_name || "NA"}
+          </div>
+        ),
       },
       {
         header: "Action",
@@ -131,11 +160,11 @@ function RecInterviews() {
       />
       <div className="mb-4 mt-2 flex items-center justify-between">
         <label className="input flex h-11 min-h-11 min-w-96 items-center gap-2 border border-black/10 text-white outline-none">
-          <Search className="size-4 object-contain text-gray-200" />
+          <Search className="size-4 object-contain text-gray-dark" />
           <input
             type="text"
             onChange={(e) => setKeyword(e.target.value)}
-            className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-200 focus:outline-none"
+            className="grow text-sm placeholder:text-sm placeholder:font-normal placeholder:text-gray-dark focus:outline-none"
             placeholder="Search"
           />
         </label>

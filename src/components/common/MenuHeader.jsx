@@ -52,25 +52,25 @@ MenuHeader(props) {
         <div
           className={`flex items-center justify-between text-sm font-semibold text-textcolor-blue`}
         >
-          {!location.pathname.includes("/admin/recruiter") && (
+          
             <ArrowLeft
               onClick={() => {
                 history.back();
               }}
               className="mr-2 size-4 cursor-pointer"
             />
-          )}
+          
           {menu}
           <ChevronRight className="size-3" />
           <Link className="capitalize" to={`/admin/${subMenu}`}>
             {subMenu}
           </Link>
           {icon}
-          <span className="text-sm text-textcolor-lightred">{currentpath}</span>
+          <span className="text-sm text-hrmprimaryorange">{currentpath}</span>
         </div>
         <h1 className="flex cursor-pointer items-center justify-between gap-1 text-[0.8rem] font-medium text-black">
           {centertextmain}
-          <span className="font-bold text-textcolor-lightred underline underline-offset-4">
+          <span className="font-bold text-hrmprimaryorange underline underline-offset-4">
             {centertext}
           </span>
         </h1>

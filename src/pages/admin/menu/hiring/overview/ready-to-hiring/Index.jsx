@@ -146,7 +146,7 @@ export const ReadyToHiring = () => {
                   setKeyword(e.target.value);
                 }}
                 type="text"
-                className="w-full grow text-sm text-black/70 placeholder:text-sm placeholder:font-normal focus:outline-none"
+                className="w-full grow text-sm text-gray-dark placeholder:text-sm placeholder:font-normal focus:outline-none"
                 placeholder="Search"
               />
             </label>

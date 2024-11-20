@@ -466,7 +466,7 @@ function RecruiterJobPost() {
       <div className="flex flex-row items-start justify-between gap-3">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
-            <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
+            <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black cursor-pointer">
               <ArrowLeft onClick={() => history.back()} className="size-4" />
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-textcolor-darkCharcoal">
@@ -804,7 +804,7 @@ function RecruiterJobPost() {
                         placeholder="Search ..."
                         loadOptions={loadStatesOptions}
                         isSearchable={true}
-                        noOptionsMessage={() => "type state name"}
+                        noOptionsMessage={() => "type county name"}
                         className="input-box"
                       />
                     )}
@@ -991,7 +991,7 @@ function RecruiterJobPost() {
                             autoComplete="off"
                             type="text"
                             {...register("maximum_range")}
-                            placeholder="Minimum range"
+                            placeholder="Maximum range"
                             onKeyPress={(event) => {
                               if (!/^[0-9]$/.test(event.key)) {
                                 event.preventDefault();
@@ -1138,7 +1138,7 @@ function RecruiterJobPost() {
                               autoComplete="off"
                               type="text"
                               {...register("sensitive_salary_maximum_range")}
-                              placeholder="Minimum range"
+                              placeholder="Maximum range"
                               onKeyPress={(event) => {
                                 if (!/^[0-9]$/.test(event.key)) {
                                   event.preventDefault();

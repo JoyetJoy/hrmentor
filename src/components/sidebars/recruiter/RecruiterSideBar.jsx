@@ -89,19 +89,19 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           <Link
             to={`/career/${jid}`}
             target="_blank"
-            className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
+            className="flex size-8 cursor-pointer items-center rounded-full bg-gray-soft p-2 text-black"
           >
             <Eye />
           </Link>
           <Link
             to={`/admin/recruiter/jobs/post?jid=${jid}`}
-            className="flex size-8 cursor-pointer items-center rounded-full bg-gray-500 p-2 text-black"
+            className="flex size-8 cursor-pointer items-center rounded-full bg-gray-soft p-2 text-black"
           >
             <img src="/assets/icons/admin/marker.svg" />
           </Link>
         </div>
       </div>
-      <hr className="border-1 my-2 border-gray-500" />
+      <hr className="border-1 my-2 border-gray-soft" />
       <div className="mt-3 grid grid-cols-3 gap-3">
         {statusData.map((item) => (
           <div
@@ -116,7 +116,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           </div>
         ))}
       </div>
-      <hr className="border-1 my-2 border-gray-500" />
+      <hr className="border-1 my-2 border-gray-soft" />
       <h1 className="flex items-center justify-between text-sm font-medium text-black">
         Display on career page
         <Switch
@@ -132,7 +132,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           />
         </Switch>
       </h1>
-      <hr className="border-1 my-2 border-gray-500" />
+      <hr className="border-1 my-2 border-gray-soft" />
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
         Job status
         <Select

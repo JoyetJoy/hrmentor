@@ -185,7 +185,7 @@ function BankHolidays() {
         <div className="flex items-center gap-2">
           <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
             <Search
-              className="size-4 object-contain text-gray-200"
+              className="size-4 object-contain text-gray-dark"
               strokeWidth={2}
             />
             <input
