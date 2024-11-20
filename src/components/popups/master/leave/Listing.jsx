@@ -231,7 +231,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
           <SettingsSidebar sidebarList={LeaveList} active={type} />
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-end gap-2">
-              <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+              <div className="input bg-[#f3f4f6] flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input
                   type="text"
