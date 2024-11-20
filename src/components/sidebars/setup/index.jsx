@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Setup() {
-  const [activeItem, setActiveItem] = useState('Shift'); 
-  const handleItemClick = (itemName) => {
-    setActiveItem(itemName); 
-  };
+  const [activeItem, setActiveItem] = useState('Attendance'); 
+  // const handleItemClick = (itemName) => {
+  //   setActiveItem(itemName); 
+  // };
 
   return (
     <div className="min-h-full min-w-64 rounded-md bg-white px-5 py-6">
@@ -20,7 +20,7 @@ function Setup() {
         >
          <Link 
               to={item.path} 
-              onClick={() => handleItemClick(item.name)} 
+              // onClick={() => handleItemClick(item.name)} 
               className={`whitespace-nowrap `}
             >
               {item.name}

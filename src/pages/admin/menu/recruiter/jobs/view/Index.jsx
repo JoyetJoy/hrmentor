@@ -4,6 +4,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import RecruiterSideBar from "@/components/sidebars/recruiter/RecruiterSideBar";
 import QueryTable from "@/components/table/QueryTable";
 import Loader from "@/components/ui/Loader";
+import { jobSubList } from "@/constants/dummyData";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -130,8 +131,25 @@ function RecViewJobDetail() {
           />
           {jobDetailView?.jobDetail?.job_title}
         </h1>
-        <div className="flex gap-5 text-sm font-semibold text-hrmprimaryorange">
-          Candidates
+        <div className="flex items-center gap-7 text-sm">
+          <Link
+            to="/admin/recruiter/jobs/view"
+            className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
+          >
+            Candidates
+          </Link>
+          <Link
+            to="/admin/recruiter/jobs/view"
+            className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
+          >
+            Promote
+          </Link>
+          <Link
+            to=""
+            className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
+          >
+            Refer
+          </Link>
         </div>
       </div>
       <div className="my-3 flex flex-row gap-2">
