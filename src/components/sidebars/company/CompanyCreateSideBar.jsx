@@ -22,7 +22,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
     { label: "Tax details", step: 2.2 },
   ];
   const signatorySubSteps = [
-    { label: "ompany Signatory", step: 3.1 },
+    { label: "company Signatory", step: 3.1 },
   ];
   const calenderSubSteps = [
     { label: "Add calender Settings", step: 1.1 },

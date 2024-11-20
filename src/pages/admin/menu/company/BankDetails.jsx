@@ -192,7 +192,7 @@ export default function CompanyBankDetails() {
                       )}
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-1">
-                      <label className="label-text"> TAN </label>
+                      <label className="label-text">TAN </label>
                       <input
                         autoComplete="off"
                         type="text"

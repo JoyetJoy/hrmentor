@@ -17,10 +17,10 @@ export const AdminDashboard = () => {
               Clock in
             </div>
             <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
-              <Search className="size-4 object-contain text-gray-200" />
+              <Search className="size-4 object-contain text-gray-dark" />
               <input
                 type="text"
-                className="grow placeholder:text-sm placeholder:text-gray-200 focus:outline-none"
+                className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
                 placeholder="Search"
               />
             </label>
