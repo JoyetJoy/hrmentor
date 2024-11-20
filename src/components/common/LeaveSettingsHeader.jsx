@@ -3,8 +3,9 @@ import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import dayjs from "dayjs";
 import Select from "react-select";
+import { Link } from 'react-router-dom';
 
-function LeaveSettingsHeader({setAddholidayOpen}) {
+function LeaveSettingsHeader() {
     const [date, setDate] = useState(new Date());
     const [keyword, setKeyword]= useState('')
 
@@ -69,13 +70,13 @@ function LeaveSettingsHeader({setAddholidayOpen}) {
               strokeWidth={2}
             />
           </div>
-          <button
-            onClick={()=>setAddholidayOpen(true)}
+          <Link
+            to={'/admin/leave/settings/basesettings'}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue rounded-md"
           >
             <Plus className="size-5" strokeWidth={2} />
             Add Holiday
-          </button>
+          </Link>
         </div>
       </div>
   )
