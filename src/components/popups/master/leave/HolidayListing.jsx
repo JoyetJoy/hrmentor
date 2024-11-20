@@ -2,17 +2,14 @@ import { newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import LeaveHeader from "@/components/common/LeaveMenuHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { MoveDiagonal } from "lucide-react";
-import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Filter, Plus, Search, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import LeaveRequest from "./LeaveRequest";
 import { SettingsList } from "@/constants/menus/leave";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import Loader from "@/components/ui/Loader";
 import LeaveSettingsHeader from "@/components/common/LeaveSettingsHeader";
-import Addholiday from "./Addholiday";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
 export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
@@ -23,7 +20,6 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
-  const [addholidayOpen, setAddholidayOpen] = useState(false);
   const pageLimit = 10;
   const { user } = useUserStore((state) => ({
     user: state.user,
@@ -150,11 +146,8 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
       <LeaveRequest popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex flex-col">
         <LeaveHeader page={3} currentPage={"Settings"} />
-        {addholidayOpen ? (
-          <Addholiday />
-        ) : (
           <>
-            <LeaveSettingsHeader setAddholidayOpen={setAddholidayOpen} />
+            <LeaveSettingsHeader />
             <div className="flex gap-x-3">
               <SettingsSidebar sidebarList={SettingsList} active={type} />
               <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
@@ -174,7 +167,6 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
               </div>
             </div>
           </>
-        )}
       </div>
     </>
   );
