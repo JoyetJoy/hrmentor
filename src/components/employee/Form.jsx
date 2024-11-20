@@ -7,7 +7,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SaveEmployeeMasterForm from "../popups/employees/settings/common/Save";
-import { bloodGroups, maritalStatuses } from "@/constants/data";
+import { bloodGroups, maritalStatuses, pentionStatuses } from "@/constants/data";
 import {
   COUNTRY,
   COUNTRY_CITY,
@@ -1032,6 +1032,29 @@ console.log(rolesList);
                   {errors.work_email && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.work_email?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="required label-text">Pension subscription</label>
+                  <Controller
+                    name="pention_status"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        options={pentionStatuses}
+                        placeholder="Select status"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.pention_status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.pention?.message}
                     </span>
                   )}
                 </div>
