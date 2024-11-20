@@ -9,17 +9,19 @@ import useImageUpload from "@/hooks/useImageUpload";
 import { UploadCloud } from "lucide-react";
 import { ProfileManagementSchema } from "@/schema/dashboard/masters/shift.schema";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import toast from "react-hot-toast";
 
 export default function ProfileManagement() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
   const [loader, setLoader] = useState(false);
+  const [id, setId] = useState("");
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
-    const { user } = useUserStore((state) => ({
-      user: state.user,
-    }));
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
   const {
     register,
     handleSubmit,
@@ -51,26 +53,22 @@ export default function ProfileManagement() {
         formatted_dob: profileManagement.formatted_dob,
         name: profileManagement.name,
       });
+      setId(profileManagement.id);
     }
   }, [profileManagement, reset]);
-  
 
   const onSubmit = async (data) => {
     setLoader(true);
     try {
       const formData = {
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
-        phone: data.phone,
-        location: data.location,
-        message: data.message,
-        note: data.note,
-        status: data.status,
+        current_password: data.current_password,
+        new_password: data.new_password,
+        confirm_password: data.confirm_password,
+        profile_image: imageFile ? imageFile : data.profile_image,
       };
 
-      const res = await newRequest.patch(
-        `${PROFILE_MANAGEMENT}/${id}`, // URL with dynamic ID
+      const res = await newRequest.post(
+        `${PROFILE_MANAGEMENT}`, // URL with dynamic ID
         formData,
         {
           user_id: user?.id,
@@ -97,12 +95,12 @@ export default function ProfileManagement() {
         // icon={<ChevronRight className="size-3" />}
         activeMenu={"Profile Management"}
       />
-      {/* {isLoading ? (
+      {isLoading ? (
         <div className="flex min-h-96 w-full items-center justify-center bg-white">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : 
-      ( */}
+      (
       <>
         <div className="flex items-center justify-between gap-7">
           <h5 className="text-lg font-bold">Profile Management</h5>
@@ -223,7 +221,7 @@ export default function ProfileManagement() {
           </div>
         </div>
       </>
-      {/* )} */}
+      )} 
     </>
   );
 }
