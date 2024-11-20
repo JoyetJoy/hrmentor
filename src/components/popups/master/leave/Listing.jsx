@@ -2,10 +2,8 @@ import { newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import LeaveHeader from "@/components/common/LeaveMenuHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { MoveDiagonal } from "lucide-react";
-import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight,Filter, Plus, Search, Trash2 } from "lucide-react";
+import { Eye,Filter, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import LeaveRequest from "./LeaveRequest";
 import { LeaveList } from "@/constants/menus/leave";
@@ -179,7 +177,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
                 onClick={() => setSelectedField(row?.original?.id)}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
-              <MoveDiagonal className="size-3" />
+              <Eye className="size-3" />
            
               </button>
               <button

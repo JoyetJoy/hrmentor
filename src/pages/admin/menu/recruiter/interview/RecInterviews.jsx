@@ -5,7 +5,7 @@ import RecInterviewDetailView from "@/components/popups/recruiter/interview/Deta
 import QueryTable from "@/components/table/QueryTable";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { MoveDiagonal, Search } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 function RecInterviews() {
@@ -135,7 +135,7 @@ function RecInterviews() {
             }}
             className="flex size-7 cursor-pointer items-center rounded-full bg-gray-smoke p-2 text-black"
           >
-            <MoveDiagonal className="h-3 w-3" />
+            <Eye className="h-3 w-3" />
           </div>
         ),
       },

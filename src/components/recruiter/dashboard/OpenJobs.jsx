@@ -3,7 +3,7 @@ import { DASHBOARD_OPEN_JOBS } from "@/api/recruiter";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { MoveDiagonal } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
@@ -49,7 +49,7 @@ export default function OpenJobs() {
               to={`/admin/recruiter/jobs/view?jid=${row.original.id}`}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
-              <MoveDiagonal className="size-3" />
+              <Eye className="size-3" />
             </Link>
           </div>
         ),

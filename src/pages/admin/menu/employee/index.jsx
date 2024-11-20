@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, Filter, ArrowUpFromLine, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { MoveDiagonal } from "lucide-react";
+import { Eye } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import { getRandomPastelColor } from "@/utils/helpers";
@@ -136,7 +136,7 @@ export default function EmployeeLists() {
               to={`/admin/employee/details/?uid=${row.original.id}`}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
-              <MoveDiagonal className="size-3" />
+              <Eye className="size-3" />
             </Link>
             <Link
               to={`/admin/employee/primary/?uid=${row.original.id}`}

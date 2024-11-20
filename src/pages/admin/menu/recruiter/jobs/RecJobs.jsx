@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Filter, MoveDiagonal, Plus, Search, Trash2 } from "lucide-react";
+import { Filter, Eye, Plus, Search, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import { GET_JOBS } from "@/api/recruiter";
@@ -117,7 +117,7 @@ function RecruiterJobs() {
               to={`/admin/recruiter/jobs/view?jid=${row.original.id}`}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
-              <MoveDiagonal className="size-3" />
+              <Eye className="size-3" />
             </Link>
             <Link
               to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
