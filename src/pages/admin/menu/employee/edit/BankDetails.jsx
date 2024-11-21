@@ -175,7 +175,7 @@ export default function EmployeeBankDetails() {
               <div className="my-4 flex items-center justify-between">
                 <div className="flex items-center gap-7">
                   <h5 className="text-lg font-bold">Bank Details </h5>
-                  <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+                  <div className="input flex h-10 min-h-10 w-80 items-center gap-2 border border-gray-platinum text-sm outline-none placeholder:text-black hover:border-gray-platinum">
                     <Search className="size-4 text-gray-dark" />
                     <input
                       type="text"

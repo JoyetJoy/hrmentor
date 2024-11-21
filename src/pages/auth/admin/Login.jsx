@@ -30,7 +30,7 @@ function Login() {
       if (res?.data?.success === true) {
         toast.success("Login successful");
         localStorage.setItem("token", res?.data?.data?.token);
-        navigate("/");
+        navigate("/admin/dashboard");
       }
     } catch (error) {
       console.log(error);
