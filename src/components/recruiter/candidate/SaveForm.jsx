@@ -230,9 +230,17 @@ export default function RecSaveFormCandidate({ type }) {
         className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12"
       >
         <div className="flex flex-col">
+          <div>
           <h1 className="pt-3 text-base font-bold">
             {type === "update" ? "Personal information" : "Add Candidate"}
           </h1>
+          </div>
+           <div>
+            <button>
+              
+            </button>
+           </div>
+         
           <div className="mt-5 grid w-full grid-cols-2 gap-x-5">
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">First Name</label>

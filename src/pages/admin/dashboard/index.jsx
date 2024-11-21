@@ -1,5 +1,5 @@
 import React from "react";
-import { Clock4, Search, Calendar, CircleAlert, MoveRight } from "lucide-react";
+import { Clock4, Search} from "lucide-react";
 import { employeeDetails, meetings } from "@/constants/dummyData";
 import StatsCard from "@/components/dashboard/StatsCard";
 import ProfileCompletionCount from "@/components/dashboard/ProfileCompletionCount";

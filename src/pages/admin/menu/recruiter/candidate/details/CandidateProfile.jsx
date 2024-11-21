@@ -5,7 +5,7 @@ function CandidateProfile() {
   return (
     <>
       <MenuHeader
-        backlink={""}
+        backlink={""} 
         menu={"Menu"}
         subMenu={""}
         currentpath={"Recruiter"}
