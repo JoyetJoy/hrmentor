@@ -1,7 +1,8 @@
 import { newRequest } from "@/api";
-import { JOBS_CANDIDATE_QUESTION_AND_ANSWER } from "@/api/recruiter";
+import { GET_CANDIDATES, JOBS_CANDIDATE_QUESTION_AND_ANSWER } from "@/api/recruiter";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useLocation } from "react-router-dom";
@@ -20,7 +21,14 @@ function CandidateQuestionAnswer() {
           return res.data;
         }),
   });
-
+  // const { data: candidateDetails, isLoading } = useQuery({
+  //   queryKey: ["candidateDetails", cid, type],
+  //   queryFn: () =>
+  //     newRequest.get(`${GET_CANDIDATES}/${cid}`).then((res) => {
+  //       return res.data;
+  //     }),
+  //   enabled: type == "update",
+  // });
   return (
     <>
       <MenuHeader
@@ -33,28 +41,45 @@ function CandidateQuestionAnswer() {
       />
       <MenuHeaderCandidate page={2} />
       <div className="flex min-h-screen flex-col gap-4 bg-white px-20 py-14">
-        <h1 className="pt-3 text-base font-bold">Questions & Answers</h1>
-        {recCandidateQAByid?.length ? (
-          <>
-            {recCandidateQAByid?.map((i) => (
-              <div
-                key={i?.id}
-                className="collapse collapse-arrow rounded-sm bg-mutedlight"
-              >
-                <input type="radio" name="my-accordion-2" defaultChecked />
-                <h1 className="collapse-title text-[0.94rem] font-bold after:bg-white">
-                  {i?.question}
-                </h1>
-                <div className="collapse-content">
-                  <p className="text-sm">{i?.answer}</p>
-                </div>
-              </div>
-            ))}
-          </>
-        ) : (
-          <img className="my-10 h-52 object-contain" src="/not-found.svg" />
-        )}
-      </div>
+      <h1 className="pt-3 text-base font-bold">Questions & Answers</h1>
+
+      {recCandidateQAByid?.length ? (
+        <>
+          {recCandidateQAByid.map((item) => (
+            <Disclosure key={item?.id} as="div" className="rounded-sm bg-gray-mutedlight">
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full items-center justify-between py-7 px-4 text-[0.94rem] font-bold focus:outline-none">
+                    <span>{item?.question}</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={`h-5 w-5 transform transition-transform ${
+                        open ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </DisclosureButton>
+                  <DisclosurePanel className="px-4 pb-4 text-sm text-black/50">
+                    {item?.answer}
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
+          ))}
+        </>
+      ) : (
+        <img className="my-10 h-52 object-contain mx-auto" src="/not-found.svg" alt="Not Found" />
+      )}
+    </div>
     </>
   );
 }
