@@ -69,6 +69,7 @@ export default {
         coollightgreen:"#8BE691",
         orange:"#FCCC4F",
         coolorange:"#FCCC4F33",
+        soft:"#FEEBE6",
 
         textcolor: {
           

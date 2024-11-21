@@ -497,3 +497,72 @@ export const jobSubList = [
     name: "Refer",
   },
 ];
+ 
+// EMPLOYEE ACCESS
+
+ // list menu items
+export const employeemenuitems = [
+  {
+    id: 1,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/dashbord-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/dashbord-color.svg",
+    name: "Dashboard",
+    path: "/employee/dashboard",
+    active: "dashboard",
+  },
+  {
+    id: 2,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/attendance-black (2).svg",
+    iconSrcActive: "/assets/icons/employee_access/header/attendance-color.svg",
+    name: "Attendance",
+    path: "",
+    active: "attendance",
+  },
+  {
+    id: 3,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/roster-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/roster-color.svg",
+    name: "Roster",
+    path: "",
+    active: "roster",
+  },
+  {
+    id: 4,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/time-sheet-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/time-sheet-color.svg",
+    name: "Time Sheet",
+    path: "",
+    active: "timesheet",
+  },
+  {
+    id: 5,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/leave-color.svg",
+    name: "Leave",
+    path: "",
+    active: "leave",
+  },
+ 
+];
+ 
+// list activity items
+
+export const employeeAccessActivityList =[
+  { icon: "/assets/icons/admin/project.svg", label: "Project" },
+  { icon: "/assets/icons/admin/task.svg", label: "Task" },
+] 
+export const employeeaccessItems = [
+  {
+    icon: "/assets/icons/employee_access/header/profilemang.svg",
+    label: "Profile Management",
+    path: "",
+    active: "profile-management",
+  },
+  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
+
+]
