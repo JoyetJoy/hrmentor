@@ -1,5 +1,6 @@
 import { employeeDetails } from "@/constants/dummyData";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function StatsCard() {
   return (
@@ -26,10 +27,19 @@ export default function StatsCard() {
               {stat.percentage}
             </span>
           </div>
-          <h1 className="flex items-end gap-3 text-2xl font-bold text-black">
+          <div className="flex justify-between w-full items-center">
+            <div>
+            <h1 className="flex items-end gap-3 text-2xl font-bold text-black">
             {stat.value}
           </h1>
           <p className="mt-1 text-xs text-gray-cool">{stat.description}</p>
+            </div>
+            <Link 
+            to={stat.path}
+            className="h-5 w-5 flex cursor-pointer items-center justify-center rounded-full bg-gray-soft">
+              <Eye className="size-3" />
+            </Link>
+          </div>
         </div>
       ))}
     </div>

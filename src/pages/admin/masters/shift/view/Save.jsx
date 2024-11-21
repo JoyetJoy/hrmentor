@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams,useLocation } from "react-router-dom";
 import Select from "react-select";
 import toast from "react-hot-toast";
 import { ShiftSchema } from "@/schema/dashboard/masters/shift.schema";
@@ -17,7 +17,7 @@ import {
   EMPLOYEE_WORK_AREA,
   EMPLOYEE_WORK_LOCATION_LIST,
 } from "@/api/master";
-import { SHIFT_LIST } from "@/api/setup";
+import { SHIFT_LIST,SHIFT_BREAK_TIME } from "@/api/setup";
 import Break from "../Break";
 
 export default function SaveMasterShift({ formtype, sid }) {
@@ -30,6 +30,9 @@ export default function SaveMasterShift({ formtype, sid }) {
   const [error, setError] = useState("");
   const [requireDays, setRequireDays] = useState([0, 0, 0, 0, 0, 0, 0]);
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const id = queryParams.get('id');
   const [dayerror, setDayerror] = useState([
     false,
     false,
@@ -54,17 +57,25 @@ export default function SaveMasterShift({ formtype, sid }) {
     mode: "onChange",
     resolver: yupResolver(ShiftSchema),
   });
+console.log(selectedDays);
 
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
   const WeekEnd = watch("week_def", "basedoncalender");
 
-  const { data: shiftDetails, isLoading } = useQuery({
-    queryKey: ["shiftDetails", sid, formtype],
-    queryFn: () =>
-      newRequest.get(`${SHIFT_LIST}/${sid}`).then((res) => res.data),
-    enabled: formtype == "update",
-  });
+const { data: shiftDetails, isLoading } = useQuery({
+  queryKey: ["shiftDetails", id, formtype],
+  queryFn: () =>
+    newRequest.get(`${SHIFT_LIST}/${id}`).then((res) => res.data),
+  enabled: !!id,
+});
+
+// Log the shift details
+useEffect(() => {
+  if (shiftDetails) {
+    console.log(shiftDetails);
+  }
+}, [shiftDetails]);
 
   const startTime = watch("start_time");
   const endTime = watch("end_time");
@@ -90,7 +101,8 @@ export default function SaveMasterShift({ formtype, sid }) {
     } else {
       setDuration(null);
     }
-  }, [startTime, endTime]);
+  }, [startTime, endTime,shiftDetails]);
+console.log(requireDays);
 
   const handleInputChange = (index) => (event) => {
     const value = parseInt(event.target.value) || 0;
@@ -140,6 +152,7 @@ export default function SaveMasterShift({ formtype, sid }) {
 
     // Start loader
     setLoader(true);
+console.log(data.department_id);
 
     // Common shift data for both weekly and non-weekly recurrence
     formdata = {
@@ -160,6 +173,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       week_def: data.week_def,
       break_times: new_break,
     };
+console.log(formdata);
 
     // Add weekly specific fields if recurrence pattern is weekly
     if (recurrencePattern === "weekly") {
@@ -171,9 +185,10 @@ export default function SaveMasterShift({ formtype, sid }) {
     }
 
     try {
-      const res = await newFormRequest.post(SHIFT_LIST, formdata);
+      const api=(id?SHIFT_BREAK_TIME:SHIFT_LIST)
+      // const res = await newFormRequest.post(api, formdata);
       if (res?.status === 201) {
-        toast.success("Saved shift details successfully");
+        toast.success(id?'Updated shift details successfully':+'Saved shift details successfully');
         queryClient.invalidateQueries(["shiftDetails"]);
         reset();
         navigate("/admin/setup/shift");
@@ -190,27 +205,25 @@ export default function SaveMasterShift({ formtype, sid }) {
 
   useEffect(() => {
     if (shiftDetails) {
-      setValue("name", shiftDetails?.data?.shift?.name);
-      setValue("department_id", shiftDetails?.data?.shift?.department_id);
-      setValue("work_id", shiftDetails?.data?.shift?.work_id);
-      setValue("location_id", shiftDetails?.data?.shift?.location_id);
-      setValue("start_time", shiftDetails?.data?.shift?.start_time);
-      setValue("end_time", shiftDetails?.data?.shift?.end_time);
-      setValue("people_required", shiftDetails?.data?.shift?.people_required);
-      setValue("calculation_type", shiftDetails?.data?.shift?.calculation_type);
-      setValue("fullday", shiftDetails?.data?.shift?.fullday);
-      setValue("fulltolerence", shiftDetails?.data?.shift?.fulltolerence);
-      setValue("halfday", shiftDetails?.data?.shift?.halfday);
-      setValue("halfdaytolerence", shiftDetails?.data?.shift?.halfdaytolerence);
-      setValue("recur_pattern", shiftDetails?.data?.shift?.recur_pattern);
-      setValue("status", shiftDetails?.data?.shift?.status);
-      setValue("week_def", shiftDetails?.data?.shift?.week_def);
-      setValue("weekly_shifts", shiftDetails?.data?.shift?.weekly_shifts);
-      setValue("people_count", shiftDetails?.data?.shift?.people_count);
-      setValue("name", shiftDetails?.type_name);
-      setValue("start_time", shiftDetails?.data?.start_time);
-      setValue("end_time", shiftDetails?.data?.end_time);
-      setValue("pay_node", shiftDetails?.data?.pay_node);
+      setValue("name", shiftDetails?.name);
+      setValue("department_id", shiftDetails?.department);
+      setValue("work_id", shiftDetails?.workArea);
+      setValue("location_id", shiftDetails?.location);
+      setValue("start_time", shiftDetails?.start_time);
+      setValue("end_time", shiftDetails?.end_time);
+      setValue("people_required", shiftDetails?.people_required);
+      setValue("calculation_type", shiftDetails?.calculation_type);
+      setValue("fullday", shiftDetails?.fullday);
+      setValue("fulltolerence", shiftDetails?.fulltolerence);
+      setValue("halfday", shiftDetails?.halfday);
+      setValue("halfdaytolerence", shiftDetails?.halfdaytolerence);
+      setValue("recur_pattern", shiftDetails?.recur_pattern);
+      setValue("week_def", shiftDetails?.week_def);
+      setValue("weekly_shifts", shiftDetails?.weekly_shifts);
+      setValue("people_count", shiftDetails?.people_count);
+      setNew_break(shiftDetails?.breakTime)
+      setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks)
+      setRequireDays(shiftDetails?.weekly_shifts[0]?.people_count);
     }
   }, [shiftDetails, setValue]);
 
@@ -255,13 +268,13 @@ export default function SaveMasterShift({ formtype, sid }) {
       <MenuHeader
         menu="Menu"
         subMenu="Shift"
-        currentpath="Add Shift"
+        currentpath={id? "Edit Shift" : "Add Shift"}
         icon={<ChevronRight className="size-3" />}
       />
       <>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="my-1 flex w-full flex-row items-center justify-between">
-            <h1 className="text-lg font-bold">Create New Shift</h1>
+            <h1 className="text-lg font-bold">{id?'Edit New Shift' : 'Create New Shift'}</h1>
             <div className="flex items-center gap-3">
               <button
                 type="submit"
@@ -270,7 +283,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                 {loader ? (
                   <div className="flex items-center gap-3">
                     <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                    {formtype === "update" ? "Updating" : "Saving"}
+                    {id ? "Updating" : "Saving"}
                   </div>
                 ) : (
                   <>
@@ -281,7 +294,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                         className="w-full object-contain"
                       />
                     </div>
-                    {formtype === "update" ? "Update" : "Save"}
+                    {id ? "Update" : "Save"}
                   </>
                 )}
               </button>
@@ -405,7 +418,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                         className="input-box text-black"
                       />
                     )}
-                  />
+                    />
                   {errors.work_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.work_id?.message}
@@ -700,6 +713,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           }`}
                           placeholder={day}
                           type="number"
+                          defaultValue={requireDays[index] === '0' || requireDays[index] === 0 ? '' : requireDays[index]}
                           onChange={handleInputChange(index)}
                           disabled={!selectedDays.includes(day)} // Disable input if the day is not selected
                         />

@@ -5,6 +5,7 @@ export const employeeDetails = [
   {
     title: "Total Employees",
     value: "750",
+    path:"/admin/employee",
     percentage: "10.0%",
     trend: "plus",
     description: "Employees",
@@ -12,6 +13,7 @@ export const employeeDetails = [
   {
     title: "Job Open",
     value: "27",
+    path:"/admin/recruiter/jobs",
     percentage: "10.0%",
     trend: "plus",
     description: "Jobs",
