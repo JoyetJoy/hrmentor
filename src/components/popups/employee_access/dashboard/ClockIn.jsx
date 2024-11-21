@@ -1,0 +1,113 @@
+import { Dialog, DialogPanel, Radio, RadioGroup } from "@headlessui/react";
+import { CheckCircleIcon, X } from "lucide-react";
+import React, { useState } from "react";
+
+export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen }) {
+  const [loader, setLoader] = useState(false);
+  const time = [{ name: "Morning" }, { name: "After" }];
+  const [selected, setSelected] = useState(time[0]);
+
+  function close() {
+    setClockInPopupOpen(false);
+  }
+  return (
+    <Dialog
+      open={clockInpopupOpen}
+      as="div"
+      className="relative z-10 focus:outline-none"
+      onClose={close}
+    >
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+        <div className="flex min-h-full items-center justify-center p-4">
+          <DialogPanel
+            transition
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 px-14 py-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+          >
+            <div className="mb-7 flex items-center justify-between">
+              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">
+                Click In{" "}
+              </h1>
+              <button
+                onClick={close}
+                className="text-xl font-extrabold text-textcolor-darkCharcoal"
+              >
+                <X />
+              </button>
+            </div>
+            {loader ? (
+              <div className="flex min-h-72 w-full items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+              </div>
+            ) : (
+              <form
+                className="grid grid-cols-1"
+                //   onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="w-full">
+                  <div className="mx-auto w-full max-w-md">
+                    <RadioGroup
+                      by="name"
+                      value={selected}
+                      onChange={setSelected}
+                      aria-label="Time Slots"
+                      className="space-y-4"
+                    >
+                      {time.map((times) => (
+                        <RadioGroup.Option
+                          key={times.name}
+                          value={times}
+                          className="group"
+                        >
+                          {({ checked }) => (
+                            <div
+                              className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                                checked
+                                  ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                  : "border-gray-300 bg-white"
+                              } `}
+                            >
+                              {/* Text Content */}
+                              <p className="font-medium text-textcolor-darkCharcoal">
+                                {times.name}
+                              </p>
+                              <p className="font-bold text-textcolor-darkCharcoal">
+                                11:00 AM - 12:00 PM
+                              </p>
+                            </div>
+                          )}
+                        </RadioGroup.Option>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                </div>
+                <div className="col-span-2 mt-6 flex w-full flex-row items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                    disabled={loader}
+                  >
+                    {loader ? (
+                      <div className="flex items-center gap-3">
+                        <div className="h-5 w-full animate-spin rounded-full border-b-2 border-white"></div>
+                        Start
+                      </div>
+                    ) : (
+                      <span>Start</span>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </DialogPanel>
+        </div>
+      </div>
+    </Dialog>
+  );
+}
