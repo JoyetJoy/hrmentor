@@ -231,7 +231,7 @@ export const menuitems = [
     iconSrcBlack: "/assets/icons/admin/dashbordBlack.svg",
     iconSrcActive: "/assets/icons/admin/dashbordcolor.svg",
     name: "Dashboard",
-    path: "/admin",
+    path: "/admin/dashboard",
     active: "dashboard",
   },
   {

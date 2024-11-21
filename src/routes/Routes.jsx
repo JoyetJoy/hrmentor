@@ -26,7 +26,7 @@ export const appRoutes = createBrowserRouter([
     element: <ApplyJob />,
   },
   {
-    path: "admin",
+    path: "",
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: AdminRoutes,
@@ -34,6 +34,6 @@ export const appRoutes = createBrowserRouter([
 
   {
     path: "*",
-    element: <Navigate to="/admin" replace />,
+    element: <Navigate to="/admin/dashboard" replace />,
   },
 ]);

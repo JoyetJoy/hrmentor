@@ -14,55 +14,55 @@ import { RosterRoutes } from "./children/RosterRoutes";
 
 export const AdminRoutes = [
   {
-    path: "",
+    path: "/admin/dashboard",
     element: <AdminDashboard />,
   },
   {
-    path: "role",
+    path: "/admin/role",
     element: <MenuRoles />,
   },
   {
-    path: "subscription",
+    path: "/admin/subscription",
     element: <MenuSubscription />,
   },
   {
-    path: "employee",
+    path: "/admin/employee",
     children: EmployeeRoutes,
   },
   {
-    path: "attendance",
+    path: "/admin/attendance",
     children: AttendanceRoutes,
   },
   {
-    path: "recruiter",
+    path: "/admin/recruiter",
     children: RecruiterRoutes,
   },
   {
-    path: "hiring",
+    path: "/admin/hiring",
     children: HiringRoutes,
   },
   {
-    path: "profile-management",
+    path: "/admin/profile-management",
     element: <ProfileManagement />,
   },
   {
-    path: "leave",
+    path: "/admin/leave",
     children: LeaveRoutes,
   },
   {
-    path: "company",
+    path: "/admin/company",
     children: CompanyRoutes,
   },
   {
-    path:"setup",
+    path:"/admin/setup",
     children:SetupRoutes
   },
   {
-    path:"shift",
+    path:"/admin/shift",
     children:ShiftRoutes
   },
   {
-    path:"roster",
+    path:"/admin/roster",
     children:RosterRoutes
   },
 ];

@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
 import { menuitems, activityItems } from "@/constants/dummyData";
-import { LayoutGrid, MessageSquareText } from "lucide-react";
+import { LayoutGrid, MessageSquareText, Bell } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
@@ -29,7 +29,7 @@ export const AdminHeader = () => {
   return (
     <>
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
-        <Link to="/admin" className="flex flex-row gap-1 pl-3">
+        <Link to="/admin/dashboard" className="flex flex-row gap-1 pl-3">
           <div className="mr-2 h-9">
             <img
               src={"/logo.svg"}
@@ -68,6 +68,9 @@ export const AdminHeader = () => {
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+            <Bell className="size-5 text-hrmblue" />
+          </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
             <MessageSquareText className="size-5 text-hrmblue" />
           </div>
