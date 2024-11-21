@@ -227,7 +227,7 @@ function CandidateDiscussion() {
                   setMessage(e.target.value);
                 }}
                 value={message}
-                className="grow text-sm placeholder:text-black/40"
+                className="px-3 grow text-sm placeholder:text-black/40"
                 placeholder="Leave a comment"
               />
             </label>

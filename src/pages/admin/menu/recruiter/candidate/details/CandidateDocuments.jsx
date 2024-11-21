@@ -147,7 +147,7 @@ function CandidateDocuments() {
                 <Plus className="size-4" />
                 Add documents
               </button>
-              <div className="input-box flex h-10 min-h-10 w-full items-center gap-2 rounded-md border border-gray-soft pr-20 placeholder:text-black">
+              <div className="input bg-[#f3f4f6] flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
                 <Search className="size-4 text-gray-dark" />
                 <input
                   type="text"
