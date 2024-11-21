@@ -11,10 +11,6 @@ function MenuHeaderCandidate({ page, candidate }) {
     <>
       <div className="my-3 flex flex-row items-center justify-between rounded-md">
         <div className="flex items-center justify-center gap-2">
-          <Link to="/admin/recruiter/candidate">
-            <MoveLeft />
-          </Link>
-
           {candidate && (
             <>
               <div className="flex size-7 items-center justify-center rounded-full border">
@@ -22,10 +18,10 @@ function MenuHeaderCandidate({ page, candidate }) {
               </div>
               <div className="flex flex-col">
                 <div className="text-sm font-semibold">
-                  {candidate?.data?.first_name} {candidate?.data?.sur_name}
+                  {candidate?.first_name} {candidate?.sur_name}
                 </div>
                 <div className="text-xs text-gray-dark">
-                  {candidate?.data?.education?.value}
+                  {candidate?.education?.value}
                 </div>
               </div>
             </>

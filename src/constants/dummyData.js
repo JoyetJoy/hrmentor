@@ -354,7 +354,7 @@ export const activityItems = [
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
   { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
   {
-    icon: "/assets/icons/admin/leave-day.svg",
+    icon: "/assets/icons/admin/leaveday.svg",
     label: "Leave",
     path: "/admin/leave/request",
   },

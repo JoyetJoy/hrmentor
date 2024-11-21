@@ -4,7 +4,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderCandidate from "@/components/recruiter/candidate/MenuHeader";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Search } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 function CandidateHistoryTimeline() {
@@ -62,6 +62,8 @@ function CandidateHistoryTimeline() {
     },
   ];
 
+  const storedData = JSON.parse(localStorage.getItem("candidateDetails") || "null");
+
   return (
     <>
       <MenuHeader
@@ -72,14 +74,24 @@ function CandidateHistoryTimeline() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <MenuHeaderCandidate page={7} />
+      <MenuHeaderCandidate page={7} candidate={storedData}/>
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="h-full w-full rounded-md bg-white py-5">
-          <h1 className="mb-5 px-7 text-base font-bold text-neutralmedium">
-            Candidate History
-          </h1>
+        <div className="h-full w-full rounded-md bg-white py-5 px-20">
+          <div className="flex justify-between">
+            <h1 className="mb-5 px-7 text-base font-bold text-neutralmedium">
+              Candidate History
+            </h1>
+            <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
+                  <Search className="size-4 text-gray-dark" />
+                  <input
+                    type="text"
+                    className="w-full placeholder:text-gray-dark"
+                    placeholder="Search"
+                  />
+            </div>
+          </div>
           <div className="overflow-y-min h-[500px] w-full overflow-y-scroll p-5">
             {historyData.map((day, index) => (
               <div

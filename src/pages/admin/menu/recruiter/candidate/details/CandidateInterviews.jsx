@@ -33,6 +33,9 @@ function CandidateInterviews() {
   const [totalPages, setTotalPages] = useState(10);
   const pageLimit = 10;
 
+  const storedData = JSON.parse(localStorage.getItem("candidateDetails") || "null");
+
+
   // Fetch List
   const { data: candidateInterviewsById, isLoading } = useQuery({
     queryKey: ["candidateInterviewsById", cid, currentPage, keyword],
@@ -245,7 +248,7 @@ function CandidateInterviews() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <MenuHeaderCandidate page={3} />
+      <MenuHeaderCandidate page={3} candidate={storedData}/>
       <div className="flex min-h-screen flex-col gap-7 bg-white px-6 py-6">
         <div className="flex items-center justify-between">
           <h1 className="text-base font-bold">Interviews</h1>

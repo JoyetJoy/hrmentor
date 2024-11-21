@@ -21,14 +21,10 @@ function CandidateQuestionAnswer() {
           return res.data;
         }),
   });
-  // const { data: candidateDetails, isLoading } = useQuery({
-  //   queryKey: ["candidateDetails", cid, type],
-  //   queryFn: () =>
-  //     newRequest.get(`${GET_CANDIDATES}/${cid}`).then((res) => {
-  //       return res.data;
-  //     }),
-  //   enabled: type == "update",
-  // });
+
+  // Retrieve data as a JSON string and parse it into an object
+const storedData = JSON.parse(localStorage.getItem("candidateDetails") || "null");
+ 
   return (
     <>
       <MenuHeader
@@ -39,7 +35,7 @@ function CandidateQuestionAnswer() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <MenuHeaderCandidate page={2} />
+      <MenuHeaderCandidate page={2} candidate={storedData}/>
       <div className="flex min-h-screen flex-col gap-4 bg-white px-20 py-14">
       <h1 className="pt-3 text-base font-bold">Questions & Answers</h1>
 

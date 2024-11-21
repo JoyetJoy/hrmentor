@@ -39,6 +39,8 @@ function CandidateDocuments() {
         }),
   });
 
+  const storedData = JSON.parse(localStorage.getItem("candidateDetails") || "null");
+
   useEffect(() => {
     if (recCandidateDocuments) {
       setTotalPages(recCandidateDocuments?.last_page);
@@ -133,7 +135,7 @@ function CandidateDocuments() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <MenuHeaderCandidate page={6} />
+      <MenuHeaderCandidate page={6} candidate={storedData}/>
       <div className="flex h-screen flex-col justify-between bg-white px-6 py-6">
         <div className="flex flex-col justify-between">
           <div className="flex items-center justify-between">
@@ -147,7 +149,7 @@ function CandidateDocuments() {
                 <Plus className="size-4" />
                 Add documents
               </button>
-              <div className="input bg-[#f3f4f6] flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
+              <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
                 <Search className="size-4 text-gray-dark" />
                 <input
                   type="text"
