@@ -249,12 +249,12 @@ export default function SaveMasterShift({ formtype, sid }) {
 
     return value;
   };
-
+  
   return (
     <>
       <MenuHeader
         menu="Menu"
-        subMenu="Setup"
+        subMenu="Shift"
         currentpath="Add Shift"
         icon={<ChevronRight className="size-3" />}
       />

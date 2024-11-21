@@ -215,6 +215,28 @@ export const RecRequestRefferal = () => {
                   </span>
                 )}
               </div>
+              <div className="group flex flex-col gap-1.5 py-2">
+                  <label className="required label-text">Choose Template</label>
+                  <Controller
+                    name="template"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        placeholder="Choose template"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.template && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.template?.message}
+                    </span>
+                  )}
+                </div>
               <div className="text-editor col-span-2 my-4 w-full rounded-md">
                 <ReactQuill
                   theme="snow"

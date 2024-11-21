@@ -152,7 +152,6 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     [],
   );
   console.log(selectedField);
-
   return (
     <>
       <DeleteConfirmation
