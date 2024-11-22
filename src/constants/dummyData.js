@@ -5,6 +5,7 @@ export const employeeDetails = [
   {
     title: "Total Employees",
     value: "750",
+    path:"/admin/employee",
     percentage: "10.0%",
     trend: "plus",
     description: "Employees",
@@ -12,6 +13,7 @@ export const employeeDetails = [
   {
     title: "Job Open",
     value: "27",
+    path:"/admin/recruiter/jobs",
     percentage: "10.0%",
     trend: "plus",
     description: "Jobs",
@@ -231,7 +233,7 @@ export const menuitems = [
     iconSrcBlack: "/assets/icons/admin/dashbordBlack.svg",
     iconSrcActive: "/assets/icons/admin/dashbordcolor.svg",
     name: "Dashboard",
-    path: "/admin",
+    path: "/admin/dashboard",
     active: "dashboard",
   },
   {
@@ -278,7 +280,6 @@ export const adminItems = [
     label: "Profile Management",
     path: "/admin/profile-management",
     active: "profile-management",
-
   },
   {
     icon: "/assets/icons/admin/company.svg",
@@ -298,13 +299,13 @@ export const setupItems = [
     id: 1,
     name: "Attendance",
     active: "attendance",
-    path: "/admin/setup/calender",
+    path: "",
   },
   {
     id: 2,
     name: "Shift",
     active: "shift",
-    path: "/admin/setup/shift",
+    path: "/",
   },
   {
     id: 3,
@@ -342,22 +343,38 @@ export const rosterItems = [
     active: "WorkArea",
   },
 ];
- export const rosterHeaderList =[
-  {id:1, name:"Roster List" ,link:"/admin/roster"},
+export const rosterHeaderList = [
+  { id: 1, name: "Roster List", link: "/admin/roster" },
   {
-    id:2, name:"Settings",link:""
-  }
- ]
+    id: 2,
+    name: "Settings",
+    link: "",
+  },
+];
 export const activityItems = [
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
-  { icon: "/assets/icons/admin/roster.svg", label: "Roster", path:"/admin/roster" },
   { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" },
-  { icon: "/assets/icons/admin/payroll.svg", label: "Leave", path: "/admin/leave/request" },
+  {
+    icon: "/assets/icons/admin/leaveday.svg",
+    label: "Leave",
+    path: "/admin/leave/request",
+  },
+  {
+    icon: "/assets/icons/admin/shift.svg",
+    label: "Shift",
+    path: "/admin/shift",
+  },
+  {
+    icon: "/assets/icons/admin/roster.svg",
+    label: "Roster",
+    path: "/admin/roster",
+  },
+
   {
     icon: "/assets/icons/admin/setup.svg",
     label: "Setup",
-    path: "/admin/setup/shift",
+    path: "/admin/setup",
   },
 ];
 export const EmailData = [
@@ -465,3 +482,89 @@ export const companySettingSideList = [
   },
 ];
 
+export const jobSubList = [
+  {
+    id: 1,
+    link: "",
+    name: "Candidate",
+  },
+  {
+    id: 2,
+    link: "",
+    name: "Promote",
+  },
+  {
+    id: 3,
+    link: "",
+    name: "Refer",
+  },
+];
+ 
+// EMPLOYEE ACCESS
+
+ // list menu items
+export const employeemenuitems = [
+  {
+    id: 1,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/dashbord-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/dashbord-color.svg",
+    name: "Dashboard",
+    path: "/employee/dashboard",
+    active: "dashboard",
+  },
+  {
+    id: 2,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/attendance-black (2).svg",
+    iconSrcActive: "/assets/icons/employee_access/header/attendance-color.svg",
+    name: "Attendance",
+    path: "",
+    active: "attendance",
+  },
+  {
+    id: 3,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/roster-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/roster-color.svg",
+    name: "Roster",
+    path: "",
+    active: "roster",
+  },
+  {
+    id: 4,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/time-sheet-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/time-sheet-color.svg",
+    name: "Time Sheet",
+    path: "",
+    active: "timesheet",
+  },
+  {
+    id: 5,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/leave-color.svg",
+    name: "Leave",
+    path: "",
+    active: "leave",
+  },
+ 
+];
+ 
+// list activity items
+
+export const employeeAccessActivityList =[
+  { icon: "/assets/icons/admin/project.svg", label: "Project" },
+  { icon: "/assets/icons/admin/task.svg", label: "Task" },
+] 
+export const employeeaccessItems = [
+  {
+    icon: "/assets/icons/employee_access/header/profilemang.svg",
+    label: "Profile Management",
+    path: "",
+    active: "profile-management",
+  },
+  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
+
+]

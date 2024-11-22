@@ -60,6 +60,8 @@ function CandidateDiscussion() {
 
   // To handle message input
   const [replies, setReplies] = useState({});
+  const storedData = JSON.parse(localStorage.getItem("candidateDetails") || "null");
+
 
   const handleReplyChange = (e, messageId) => {
     setReplies((prevReplies) => ({
@@ -124,7 +126,7 @@ function CandidateDiscussion() {
         activeSubMenu={"Candidates"}
         activeMenu={"Candidates"}
       />
-      <MenuHeaderCandidate page={4} />
+      <MenuHeaderCandidate page={4} candidate={storedData}/>
       <div className="bg-white p-4">
         <h1 className="mx-auto max-w-6xl px-7 pt-2 text-lg font-bold">
           Discussions
@@ -227,7 +229,7 @@ function CandidateDiscussion() {
                   setMessage(e.target.value);
                 }}
                 value={message}
-                className="grow text-sm placeholder:text-black/40"
+                className="px-3 grow text-sm placeholder:text-black/40"
                 placeholder="Leave a comment"
               />
             </label>

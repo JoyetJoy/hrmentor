@@ -7,6 +7,8 @@ import ErrorPage from "@/pages/Error";
 import JobAreaListing from "@/pages/jobarea/Listing";
 import CareerDetail from "@/pages/jobarea/Detail";
 import ApplyJob from "@/pages/jobarea/Apply";
+import EmployeeAccessLayouts from "@/layouts/employee_access/EmployeeAccessLayouts";
+import { EmployeeAccessRoutes } from "./employee_access/EmployeeAccessRoutes";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -26,14 +28,21 @@ export const appRoutes = createBrowserRouter([
     element: <ApplyJob />,
   },
   {
-    path: "admin",
+    path: "",
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: AdminRoutes,
   },
-
   {
-    path: "*",
-    element: <Navigate to="/admin" replace />,
+    path:"employee_access",
+    element:<EmployeeAccessLayouts/>,
+    errorElement: <ErrorPage />,
+    children:EmployeeAccessRoutes,
   },
+  
+  // {
+  //   path: "*",
+  //   element: <Navigate to="/admin/dashboard" replace />,
+  // },
+
 ]);

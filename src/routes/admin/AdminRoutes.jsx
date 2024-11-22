@@ -5,92 +5,65 @@ import { AttendanceRoutes } from "./children/AttendanceRoute";
 import { EmployeeRoutes } from "./children/EmployeesRoutes";
 import { RecruiterRoutes } from "./children/RecruiterRoutes";
 import { CompanyRoutes } from "./children/CompanyRoutes";
-import ShiftList from "@/pages/admin/masters/setup/shift";
-import AddShift from "@/pages/admin/masters/setup/shift/Save";
 import { LeaveRoutes } from "./children/LeaveRoute";
-import SaveMasterShift from "@/pages/admin/masters/setup/shift/Save";
-import RosterList from "@/pages/admin/masters/roster/Index";
-import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
-import Claim from "@/pages/admin/masters/roster/Claim";
-import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
 import { HiringRoutes } from "./children/HiringRoutes";
 import ProfileManagement from "@/pages/admin/dashboard/profile-management";
+import { SetupRoutes } from "./children/SetupRoutes";
+import { ShiftRoutes } from "./children/ShiftRoutes";
+import { RosterRoutes } from "./children/RosterRoutes";
 
 export const AdminRoutes = [
   {
-    path: "",
+    path: "/admin/dashboard",
     element: <AdminDashboard />,
   },
   {
-    path: "role",
+    path: "/admin/role",
     element: <MenuRoles />,
   },
   {
-    path: "subscription",
+    path: "/admin/subscription",
     element: <MenuSubscription />,
   },
   {
-    path: "employee",
+    path: "/admin/employee",
     children: EmployeeRoutes,
   },
   {
-    path: "attendance",
+    path: "/admin/attendance",
     children: AttendanceRoutes,
   },
   {
-    path: "recruiter",
+    path: "/admin/recruiter",
     children: RecruiterRoutes,
   },
   {
-    path: "hiring",
+    path: "/admin/hiring",
     children: HiringRoutes,
   },
   {
-    path: "profile-management",
+    path: "/admin/profile-management",
     element: <ProfileManagement />,
   },
   {
-    path: "leave",
+    path: "/admin/leave",
     children: LeaveRoutes,
   },
   {
-    path: "company",
+    path: "/admin/company",
     children: CompanyRoutes,
   },
+  {
+    path:"/admin/setup",
+    children:SetupRoutes
+  },
+  {
+    path:"/admin/shift",
+    children:ShiftRoutes
+  },
+  {
+    path:"/admin/roster",
+    children:RosterRoutes
+  },
 
-  {
-    path: "setup",
-    children: [
-      {
-        path: "calender",
-        element: <EmployeeAttendanceCalendar />,
-      },
-      {
-        path: "shift",
-        element: <ShiftList />,
-      },
-      {
-        path: "save-shift",
-        element: <SaveMasterShift />,
-      },
-      {
-        path: "calender-department",
-        element: <RosterDepartment />,
-      },
-    ]
-  },
-  {
-    path:"roster",
-    children:[
-      {
-        path:"",
-        element:<RosterList/>,
-      },
-        {
-          path:"claim",
-          element:<Claim/>
-        }
-      
-    ]
-  },
 ];

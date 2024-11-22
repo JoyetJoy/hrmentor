@@ -2,7 +2,7 @@ import { newRequest } from "@/api";
 import { DASHBOARD_CANDIDATES_LIST } from "@/api/recruiter";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { MoveDiagonal } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function RecJobCandidates() {
@@ -57,7 +57,7 @@ export default function RecJobCandidates() {
                     to={`/admin/recruiter/candidate/profile?cid=${candidate?.id}`}
                     className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                   >
-                    <MoveDiagonal className="size-3" />
+                    <Eye className="size-3" />
                   </Link>
                 </div>
               ))}

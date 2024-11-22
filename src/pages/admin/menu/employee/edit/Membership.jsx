@@ -138,7 +138,7 @@ export default function EmployeeMembershipEdit() {
               <div className="my-4 flex items-center justify-between">
                 <div className="flex items-center gap-7">
                   <h5 className="text-lg font-bold">Registration/Training</h5>
-                  <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+                  <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
                     <Search className="size-4 text-gray-dark" />
                     <input
                       type="text"
@@ -155,7 +155,7 @@ export default function EmployeeMembershipEdit() {
                   className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <Plus className="size-4" />
-                  Add
+                  Add Registration/Training
                 </button>
               </div>
               <div>

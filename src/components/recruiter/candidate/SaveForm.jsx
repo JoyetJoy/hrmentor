@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
 import ResumeDragzone from "@/components/recruiter/candidate/ResumeDragzone";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import Addtransfer from "@/components/popups/recruiter/candiadate/AddTransfer";
 import {
   COUNTRY,
   COUNTRY_CITY,
@@ -21,6 +22,7 @@ import { GET_CANDIDATES, UPDATE_CANDIDATE } from "@/api/recruiter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import MenuHeaderCandidate from "./MenuHeader";
+import { ChevronDown, Plus } from "lucide-react";
 
 export default function RecSaveFormCandidate({ type }) {
   const location = useLocation();
@@ -29,6 +31,9 @@ export default function RecSaveFormCandidate({ type }) {
   const [filePreview, setFilePreview] = useState("");
   const [resumefile, setResumeFile] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Consider");
+  const [popupOpen, setPopupOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -55,6 +60,13 @@ export default function RecSaveFormCandidate({ type }) {
       }),
     enabled: type == "update",
   });
+ console.log(candidateDetails?.data);
+ 
+  useEffect(()=>{
+    if(candidateDetails){
+      localStorage.setItem("candidateDetails", JSON.stringify(candidateDetails?.data));
+    }
+  },[])
 
   const [sameAsHome, setSameAsHome] = useState(false);
   const { country_id, state_or_province, home_address } = watch();
@@ -220,19 +232,87 @@ export default function RecSaveFormCandidate({ type }) {
       setLoader(false);
     }
   };
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option); // Update the button text
+    setDropdownOpen(false); // Close the dropdown
+  };
+
   return (
     <>
+      <Addtransfer popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       {type === "update" && (
-        <MenuHeaderCandidate page={1} candidate={candidateDetails} />
+        <MenuHeaderCandidate page={1} candidate={candidateDetails?.data} />
       )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12"
       >
         <div className="flex flex-col">
-          <h1 className="pt-3 text-base font-bold">
-            {type === "update" ? "Personal information" : "Add Candidate"}
-          </h1>
+          <div className="flex w-full justify-between">
+            <h1 className="pt-3 text-base font-bold">
+              {type === "update" ? "Personal information" : "Add Candidate"}
+            </h1>
+            {type === "update" && (
+              <div className="relative flex gap-3">
+                {/* Consider Button */}
+                <div className="relative">
+                  <div
+                    className="flex h-10 min-h-10 w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#ecbebe] bg-[#fff2f2] pl-4 text-xs font-semibold text-black"
+                    onClick={toggleDropdown}
+                  >
+                    {selectedOption}
+                    <ChevronDown
+                      size={20}
+                      strokeWidth={1.25}
+                      className={`transform transition-transform duration-500 ease-in-out ${
+                        isDropdownOpen ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                  </div>
+
+                  {/* Dropdown Menu */}
+                  {isDropdownOpen && (
+                    <div className="absolute left-0 top-12 z-10 w-40 rounded-md border border-gray-200 bg-white text-sm shadow-lg">
+                      <ul className="py-2">
+                        <li
+                          className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleOptionClick("Option 1")}
+                        >
+                          Option 1
+                        </li>
+                        <li
+                          className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleOptionClick("Option 2")}
+                        >
+                          Option 2
+                        </li>
+                        <li
+                          className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                          onClick={() => handleOptionClick("Option 3")}
+                        >
+                          Option 3
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                {/* Transfer to Job Button */}
+                <div
+                  onClick={() => setPopupOpen(true)}
+                  className="flex h-10 min-h-10 w-40 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange pl-4 text-xs font-semibold text-white"
+                >
+                  Transfer to job
+                  <Plus size={20} color="#ffffff" strokeWidth={2} />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="mt-5 grid w-full grid-cols-2 gap-x-5">
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">First Name</label>

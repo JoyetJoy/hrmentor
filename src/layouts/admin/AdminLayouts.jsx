@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { AdminHeader } from "../../components/layouts/admin/Header";
 import { useQuery } from "@tanstack/react-query";
 import { GET_USER } from "@/api/auth";
@@ -8,10 +8,11 @@ import ScrollBack from "@/components/common/ScrollBack";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
 export const AdminLayout = () => {
-  let token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const { setUser } = useUserStore((state) => ({
     setUser: state.setUser,
   }));
+  const location = useLocation(); 
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile", token],
@@ -34,6 +35,11 @@ export const AdminLayout = () => {
         <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
       </div>
     );
+  }
+
+  // Redirect to dashboard if the current path is "/" without content
+  if (location.pathname === "/") {
+    return <Navigate to="/admin/dashboard" />;
   }
 
   return token ? (

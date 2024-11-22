@@ -161,7 +161,7 @@ export default function EmployeeReferenceEdit() {
               <div className="my-4 flex items-center justify-between">
                 <div className="flex items-center gap-7">
                   <h5 className="text-lg font-bold">Reference</h5>
-                  <div className="input-box flex min-h-10 w-80 items-center gap-2 placeholder:text-black">
+                  <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
                     <Search className="size-4 text-gray-dark" />
                     <input
                       type="text"

@@ -4,7 +4,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { Button } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SaveRecruiterMasterForm from "./Save";
 import { recruiterSetting } from "@/constants/sidebars/recruiter";
@@ -169,7 +169,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
           <SettingsSidebar sidebarList={recruiterSetting} active={type} />
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
-              <div className="input-box flex min-h-11 w-80 items-center gap-2 placeholder:text-black">
+            <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input
                   type="text"

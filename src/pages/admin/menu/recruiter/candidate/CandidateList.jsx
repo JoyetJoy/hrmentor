@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft,
   Filter,
-  MoveDiagonal,
   Plus,
   Search,
-  Trash2,
+  Eye
 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -115,7 +114,7 @@ function CandidatesList() {
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}`}
             >
-              <MoveDiagonal className="h-3 w-3" />
+              <Eye className="h-3 w-3" />
             </Link>
           </div>
         ),
