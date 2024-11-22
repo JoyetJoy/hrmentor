@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
+import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
+import EmployeeAttendance from "@/components/popups/employee_access/attendance/EmployeeAttendance";
 
 const events = [
   {
@@ -119,6 +121,11 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 
 const EmployeeAccessAttendanceCalendar = () => {
   const [date, setDate] = useState(new Date());
+  const [popupOpen, setPopupOpen] = useState(false)
+  
+  const handleClick =  () =>{
+    setPopupOpen(true)
+   }
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -138,17 +145,16 @@ const EmployeeAccessAttendanceCalendar = () => {
   };
 
   return (
-    <div className="flex flex-col py-4">
-      <MenuHeader
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Attendance"}
-        icon={""}
-        activeMenu={""}
+    <div className="flex flex-col">
+      <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+      <MenuHeaderEmployeeAccess
+        pathlink={""}
+        currentpage={"Attendance"}
+
       />
-      <div className="flex items-center justify-between bg-white px-4 py-2 w-full">
+      <div className="flex items-center justify-between px-4 py-2 w-full">
         <div className="flex items-center gap-4">
-          <h5 className="text-lg font-bold">My Attendance</h5>
+          <h5 className="text-md font-bold">My Attendance</h5>
           <Select
             options={years}
             isSearchable={true}
@@ -166,7 +172,8 @@ const EmployeeAccessAttendanceCalendar = () => {
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
-        <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
+        <button onClick={handleClick}
+        className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
           Team Attendance
         </button>
       </div>

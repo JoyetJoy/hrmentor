@@ -7,106 +7,79 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { Plus } from "lucide-react";
 import { Controller,useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import RosterHeader from "@/components/common/RosterHeader";
 
 
 const events = [
     {
       date: "2024-10-01",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "P",
+      shift:'Morning Shift',
+      count:'20',
+      totalCount:'20',
+      time:'09:00-11:00'
+    },
+    {
+      date: "2024-10-01",
+      shift:'Evening Shift',
+      count:'20',
+      totalCount:'20',
+      time:'14:00-18:00'
     },
     {
       date: "2024-10-02",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "P",
+      shift:'Morning Shift',
+      count:'20',
+      totalCount:'20',
+      time:'09:00-11:00'
+    },
+    {
+      date: "2024-10-02",
+      shift:'Evening Shift',
+      count:'20',
+      totalCount:'20',
+      time:'14:00-18:00'
     },
     {
       date: "2024-10-03",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "L",
+      shift:'Morning Shift',
+      count:'20',
+      totalCount:'20',
+      time:'09:00-11:00'
+    },
+    {
+      date: "2024-10-03",
+      shift:'Evening Shift',
+      count:'20',
+      totalCount:'20',
+      time:'14:00-18:00'
     },
     {
       date: "2024-10-04",
-      clockIn: "09:15 AM",
-      clockOut: "05:45 PM",
-      totalTime: "08:30:00",
-      status: "P",
+      shift:'Morning Shift',
+      count:'20',
+      totalCount:'20',
+      time:'09:00-11:00'
+    },
+    {
+      date: "2024-10-04",
+      shift:'Evening Shift',
+      count:'15',
+      totalCount:'20',
+      time:'14:00-18:00'
     },
     {
       date: "2024-10-05",
-      clockIn: "08:45 AM",
-      clockOut: "05:15 PM",
-      totalTime: "08:30:00",
-      status: "P",
+      shift:'Morning Shift',
+      count:'20',
+      totalCount:'20',
+      time:'09:00-11:00'
     },
     {
-      date: "2024-10-06",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "L",
-    },
-    {
-      date: "2024-10-07",
-      clockIn: "09:10 AM",
-      clockOut: "05:40 PM",
-      totalTime: "08:30:00",
-      status: "P",
-    },
-    {
-      date: "2024-10-08",
-      clockIn: "08:50 AM",
-      clockOut: "05:20 PM",
-      totalTime: "08:30:00",
-      status: "P",
-    },
-    {
-      date: "2024-10-09",
-      clockIn: "09:05 AM",
-      clockOut: "05:35 PM",
-      totalTime: "08:30:00",
-      status: "L",
-    },
-    {
-      date: "2024-10-10",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "P",
-    },
-    {
-      date: "2024-10-11",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "P",
-    },
-    {
-      date: "2024-10-12",
-      clockIn: "09:20 AM",
-      clockOut: "05:50 PM",
-      totalTime: "08:30:00",
-      status: "P",
-    },
-    {
-      date: "2024-10-13",
-      clockIn: "09:10 AM",
-      clockOut: "05:40 PM",
-      totalTime: "08:30:00",
-      status: "P",
-    },
-    {
-      date: "2024-10-14",
-      clockIn: "09:00 AM",
-      clockOut: "05:30 PM",
-      totalTime: "08:30:00",
-      status: "L",
+      date: "2024-10-05",
+      shift:'Evening Shift',
+      count:'20',
+      totalCount:'20',
+      time:'14:00-18:00'
     },
   ];
  
@@ -164,13 +137,17 @@ const events = [
       setDate(updatedDate);
     };
   
-    const findEvent = (date) => {
-      return events.find((event) => dayjs(event.date).isSame(date, "day"));
+    const findEvents = (date) => {
+      return events.filter((event) => dayjs(event.date).isSame(date, "day"));
     };
   
     return (
-      <div className="flex flex-col py-4">
-      
+      <>
+      <RosterHeader page={1} />
+      <div className="flex flex-row py-4">
+        <div className="min-h-full min-w-56 rounded-md bg-white px-5 py-4">
+          </div>
+        <div>
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex items-center gap-4">
             <Select
@@ -198,15 +175,12 @@ const events = [
               placeholder={'All employee'}
               className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
             />
-          <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-[#2B2B2B] px-5 py-2.5 text-sm font-medium text-white focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white">
-          Claimed Request
-          </button>
           <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white">
             <Plus className="size-4" />Add Roster
           </button>
           </div>
         </div>
-        <div className="mb-10 mt-7 w-full max-w-7xl">
+        <div className="ml-4 mt-7 w-full max-w-6xl">
           <Calendar
             onChange={handleDateChange}
             value={date}
@@ -215,46 +189,36 @@ const events = [
             formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
             tileContent={({ date, view }) => {
               if (view === "month") {
-                const event = findEvent(date);
-                return event ? (
-                  <div className="flex w-full flex-col gap-2">
-                    <div className="relative flex justify-between p-1">
-                      {event.status === "L" ? (
-                        <img
-                          className="h-5 object-contain"
-                          src="/assets/icons/tort.svg"
-                          alt="late"
-                        />
-                      ) : null}
+                const dailyEvents = findEvents(date);
+                return dailyEvents.length ? (
+                  <div className="flex flex-col gap-2">
+                    {dailyEvents.map((event, index) => (
                       <div
-                        className={`absolute -top-4 right-1 flex h-7 w-7 items-center justify-center rounded-full font-extrabold ${event.status === "P" ? "bg-[#00B448] text-white" : "hidden"}`}
+                        key={index}
+                        className={`mt-2 flex flex-col h-14 w-full px-3 text-[0.7rem] font-medium border-l-4 rounded-sm ${
+                          event.totalCount === event.count
+                            ? "bg-[#2832770D] border-l-[#e95d39] text-[#2C2C2C]"
+                            : "bg-[#e95d39] border-l-[#e95d39] text-white"
+                        }`}
                       >
-                        {event.status}
+                        <span className={`flex float-start font-semibold text-[0.8rem]${event.totalCount === event.count?'text-[#2C2C2C]':'text-white'}`}>
+                          {event.shift}
+                        </span>
+                        <span className={`flex float-start text-[#2C2C2C]${event.totalCount === event.count?'text-[#2C2C2C]':'text-white'}`}>{event.time}</span>
+                        <span className="flex float-start font-semibold">
+                          Employee: {event.count}/{event.totalCount}
+                        </span>
                       </div>
-                    </div>
-                    <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
-                      <span className="font-bold">Clock In</span>{" "}
-                      <span>{event.clockIn}</span>
-                    </div>
-                    <div className="c-af flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
-                      <span className="font-bold">Clock Out</span>{" "}
-                      <span>{event.clockIn}</span>
-                    </div>
-                    <div className="flex h-7 w-full items-center justify-between bg-[#2832770D] px-3 text-[0.7rem] font-medium text-[#2C2C2C]">
-                      <span className="font-bold">Time In</span>{" "}
-                      <span
-                        className={`font-semibold ${event.status === "L" ? "text-red-500" : ""}`}
-                      >
-                        {event.totalTime}
-                      </span>
-                    </div>
+                    ))}
                   </div>
                 ) : null;
               }
             }}
           />
         </div>
+        </div>
       </div>
+      </>
     );
   };
   

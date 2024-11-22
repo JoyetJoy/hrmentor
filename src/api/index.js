@@ -108,7 +108,15 @@ export const HOLIDAY_STATUS = "employee-holiday-basic-settings"
 // HOLIDAY AVAILABLE SETTING
 export const HOLIDAY_AVAILABLE_SETTING = "employee-holiday-availabilty-settings"
 
+// HOLIDAY ADVANCE SETTINGS
+export const HOLIDAY_ADVANCE_SETTINGS = "holiday-advance-settings"
 
+// COMPANY PROFILE BASIC
+export const COMPANY_PROFILE_BASIC ="company-profile-settings"
+
+
+// BUSINESS TYPE
+export const BUSINESS_TYPE ="company-bussiness-type"
 
 
 

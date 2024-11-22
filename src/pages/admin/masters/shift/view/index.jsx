@@ -1,5 +1,5 @@
 import { newRequest } from "@/api";
-import { SHIFT_LIST } from "@/api/setup";
+import { SHIFT_LIST,SHIFT_BREAK_TIME } from "@/api/setup";
 import MenuHeader from "@/components/common/MenuHeader";
 // import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
@@ -7,11 +7,14 @@ import { useQuery } from "@tanstack/react-query";
 import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
 function ShiftList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
+  const [selectedField, setSelectedField] = useState('');
+  const [deletePopup, setDeletePopup] = useState(false);
   const pageLimit = 10;
   const { data: shiftDetails = { data: [], last_page: 1 }, isLoading } =
     useQuery({
@@ -91,8 +94,8 @@ function ShiftList() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <button
-              type="button"
+            <Link
+              to={`/admin/shift/save-shift?id=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
@@ -100,9 +103,13 @@ function ShiftList() {
                 className="w-full object-contain"
                 alt="Edit"
               />
-            </button>
+            </Link>
             <button
               type="button"
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row.original.id);
+              }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
             >
               <Trash2 className="size-3" />
@@ -116,6 +123,14 @@ function ShiftList() {
 
   return (
     <>
+    <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedField}
+        qrkey={"shiftDetails"}
+        type={'Shift'}
+        api={SHIFT_BREAK_TIME}
+      />
       <MenuHeader menu="Menu" currentpath="Shift" />
       <div className="flex flex-col gap-x-3">
         {/* <Setup /> */}

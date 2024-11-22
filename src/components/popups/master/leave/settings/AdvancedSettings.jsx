@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "react-router-dom";
+import { HOLIDAY_ADVANCE_SETTINGS } from "@/api";
 
 const AdvancedSettings = ({ formtype = "save" }) => {
   const [isOn1, setIsOn1] = useState(false); // For applyDays
@@ -10,31 +11,25 @@ const AdvancedSettings = ({ formtype = "save" }) => {
   const { id } = useParams();
 
   const advancedSettingsSchema = Yup.object().shape({
-    leave: Yup.string().required("This field is required"),
-    leaveDaysAllowed: Yup.number().min(0, "Value must be 0 or greater"),
-    applyDays: Yup.number()
-      .min(0, "Value must be 0 or greater")
-      .when("isOn1", {
-        is: true,
-        then: Yup.number().required(
-          "This field is required when toggle is enabled",
-        ),
-      }),
-    daysBeforeLeave: Yup.number().min(0, "Value must be 0 or greater"),
-    documentsMandatoryDays: Yup.number()
-      .min(0, "Value must be 0 or greater")
-      .when("isOn4", {
-        is: true,
-        then: Yup.number().required(
-          "This field is required when toggle is enabled",
-        ),
-      }),
+    leave_type: Yup.string(),
+    leave_balance: Yup.string(),
+    consecutive_leave_allow: Yup.number(),
+    half_day_leave: Yup.string(),
+    taken_past_leave: Yup.string(),
+    taken_past_leave_days: Yup.number(),
+    holiday_leaves: Yup.string(),
+    weekend_leaves: Yup.string(),
+    before_leave_apply: Yup.number(),
+    support_documents: Yup.string(),
+    support_document_leave: Yup.number(),
+    notice_period_leave: Yup.string(),
   });
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(advancedSettingsSchema),
@@ -51,15 +46,50 @@ const AdvancedSettings = ({ formtype = "save" }) => {
   const [isOn5, setIsOn5] = useState(false);
   const [leaveBalance, setLeaveBalance] = useState("dontallow");
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    setLoader(true);
-    setTimeout(() => {
+  const close = () => {
+    reset();
+  };
+
+  const onSubmit = async (data) => {
+    handledSubmit(data);
+  };
+
+  const handledSubmit = async (data) => {
+    try {
+      setLoader(true);
+
+      const formData = {
+        leave_type: data.leave_type,
+        leave_balance: leaveBalance,
+        consecutive_leave_allow: data.consecutive_leave_allow,
+        half_day_leave: isOn,
+        taken_past_leave: isOn1,
+        taken_past_leave_days: data.taken_past_leave_days,
+        holiday_leaves: isOn2,
+        weekend_leaves: isOn3,
+        before_leave_apply: data.before_leave_apply,
+        support_documents: isOn4,
+        support_document_leave: data.support_document_leave,
+        notice_period_leave: isOn5,
+        holiday_id: id,
+      };
+      // Make the API call
+      const res = await newRequest.post(HOLIDAY_ADVANCE_SETTINGS, formData);
+
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries(["bank_holidays"]);
+      close();
+    } catch (error) {
+      console.error("Error Details:", error);
+      console.error("Error Response Data:", error?.response?.data);
+
+      // Display a specific error message from the server if available
+      const errorMessage =
+        error?.response?.data?.error || "An unexpected error occurred";
+      toast.error(errorMessage);
+    } finally {
       setLoader(false);
-      console.log(
-        formtype === "update" ? "Updated successfully!" : "Saved successfully!",
-      );
-    }, 2000);
+    }
   };
 
   return (
@@ -78,10 +108,10 @@ const AdvancedSettings = ({ formtype = "save" }) => {
               <div className="group col-span-2 flex w-full flex-col gap-1.5 py-2 lg:w-[49.5%]">
                 <input
                   autoComplete="off"
-                  name="leave"
+                  name="leave_type"
                   type="text"
                   placeholder="Leave Type"
-                  {...register("leave")}
+                  {...register("leave_type")}
                   className="input-box"
                 />
                 {errors.leave && (
@@ -100,7 +130,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="leaveStatus"
+                    name="leave_balance"
                     value="dontallow"
                     onClick={() => setLeaveBalance("dontallow")}
                     className="radio-black"
@@ -111,7 +141,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="leaveStatus"
+                    name="leave_balance"
                     value="allowwithnegativebalance"
                     onClick={() => setLeaveBalance("allowwithnegativebalance")}
                     className="radio-black"
@@ -123,7 +153,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
-                    name="leaveStatus"
+                    name="leave_balance"
                     value="allowwithlop"
                     onClick={() => setLeaveBalance("dontallow")}
                     className="radio-black"
@@ -146,16 +176,16 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 </label>
                 <input
                   autoComplete="off"
-                  name="leaveDaysAllowed"
+                  name="consecutive_leave_allow"
                   type="number"
                   min={0}
                   placeholder="0"
-                  {...register("leaveDaysAllowed")}
+                  {...register("consecutive_leave_allow")}
                   className="input-box"
                 />
-                {errors.leaveDaysAllowed && (
+                {errors.consecutive_leave_allow && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.leaveDaysAllowed.message}
+                    {errors.consecutive_leave_allow.message}
                   </span>
                 )}
               </div>
@@ -220,16 +250,16 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   </label>
                   <input
                     autoComplete="off"
-                    name="applyDays"
+                    name="taken_past_leave_days"
                     type="number"
                     min={0}
                     placeholder="0"
-                    {...register("applyDays")}
+                    {...register("taken_past_leave_days")}
                     className="input-box"
                   />
-                  {errors.applyDays && (
+                  {errors.taken_past_leave_days && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.applyDays.message}
+                      {errors.taken_past_leave_days.message}
                     </span>
                   )}
                 </div>
@@ -299,15 +329,15 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 </label>
                 <input
                   autoComplete="off"
-                  name="daysBeforeLeave"
+                  name="before_leave_apply"
                   type="number"
                   placeholder="0"
-                  {...register("daysBeforeLeave")}
+                  {...register("before_leave_apply")}
                   className="input-box"
                 />
-                {errors.daysBeforeLeave && (
+                {errors.before_leave_apply && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.daysBeforeLeave.message}
+                    {errors.before_leave_apply.message}
                   </span>
                 )}
               </div>
@@ -354,16 +384,16 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   </label>
                   <input
                     autoComplete="off"
-                    name="documentsMandatoryDays"
+                    name="support_document_leave"
                     type="number"
                     min={0}
                     placeholder="0"
-                    {...register("documentsMandatoryDays")}
+                    {...register("support_document_leave")}
                     className="input-box"
                   />
-                  {errors.documentsMandatoryDays && (
+                  {errors.support_document_leave && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.documentsMandatoryDays.message}
+                      {errors.support_document_leave.message}
                     </span>
                   )}
                 </div>

@@ -18,11 +18,14 @@ export default function EditRoster({
   editpopupOpen,
   setEditPopupOpen,
   selectedRoster,
+  copy,
+  setCopy
 }) {
   const [selectedShiftId, setSelectedShiftId] = useState(23);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
+  const [employeeError, setEmployeeError] = useState('');
   const queryClient = useQueryClient();
 
   const {
@@ -41,6 +44,17 @@ export default function EditRoster({
     setEditPopupOpen(false);
     reset();
   }
+  useEffect(()=>{
+    setSelectedShiftId(selectedRoster?.shift_details?.shift_id)
+  })
+  
+  useEffect(()=>{
+    setTimeout(() => {
+      setEmployeeError('')
+    }, 3000)
+    
+  },[employeeError])
+
   // GET ROSTER DETAILS
   const { data: rosterDetail, isLoading } = useQuery({
     queryKey: ["rosterDetail", selectedRoster?.roster_id],
@@ -84,11 +98,6 @@ export default function EditRoster({
     }
   };
 
-  const onSubmit = async (data) => {
-    await handleRoster(data);
-    close();
-  };
-
   //GET EMP DETAILS
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedShiftId],
@@ -108,13 +117,25 @@ export default function EditRoster({
       console.error("Error fetching employee list:", error?.message || error);
     },
   });
- console.log(employeesdetails)
+ console.log(selectedEmployees)
+
+ const onSubmit = async (data) => {
+  console.log(employeesdetails);
+  
+  if(selectedEmployees.length===0){
+    setEmployeeError('Employee is required');
+  }else{
+    await handleRoster(data);
+    close();
+  }
+};
+
   const handleRoster = async (data) => {
     const formData = {
       shift_id: selectedShiftId,
       start_date: data.start_date,
       end_date: data.end_date,
-      rosterDetails: employeesdetails,
+      rosterDetails: selectedEmployees,
     };
     console.log(formData);
     try {
@@ -180,7 +201,11 @@ export default function EditRoster({
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => handleDeleteEmployee(row.original.unique_id)}
+              onClick={() => {
+                if (!copy) {
+                  handleDeleteEmployee(row.original.unique_id);
+                }
+              }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
@@ -214,7 +239,7 @@ export default function EditRoster({
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel className="w-full max-w-4xl rounded bg-white p-6">
               <div className="mb-5 flex justify-between">
-                <h1 className="text-md font-bold">Edit Roster</h1>
+                <h1 className="text-md font-bold">{copy?'Copy': 'Edit'} Roster</h1>
                 <button onClick={close}>
                   <X />
                 </button>
@@ -233,11 +258,12 @@ export default function EditRoster({
                             <Select
                               {...field}
                               isSearchable={true}
+                              isDisabled={copy}
                               styles={customSelectStyles}
                               options={shiftList?.data?.original?.data.map(
                                 (item) => ({
-                                  label: item.name,
-                                  value: item.id,
+                                  label: item?.name,
+                                  value: item?.id,
                                 }),
                               )}
                               placeholder="Select Shift"
@@ -363,7 +389,7 @@ export default function EditRoster({
                           type="submit"
                           className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
                         >
-                          Save
+                          {copy?'Save': 'Update'}
                         </button>
                         <button
                           type="button"
@@ -387,12 +413,13 @@ export default function EditRoster({
                         render={({ field }) => (
                           <Select
                             isSearchable={true}
+                            isDisabled={copy}
                             styles={customSelectStyles}
                             placeholder="Select Employee"
                             className="input-box w-full"
                             options={rosterEmpList?.employees?.map((item) => ({
-                              label: item.first_name,
-                              value: item.unique_id,
+                              label: item?.first_name,
+                              value: item?.unique_id,
                             }))}
                             onChange={(selectedOption) => {
                               field.onChange(selectedOption);
@@ -409,6 +436,11 @@ export default function EditRoster({
                         <Plus className="size-4" /> Add
                       </button>
                     </div>
+                    {employeeError!==''&&(
+                          <span className=" mt-2 text-xs text-red-500">
+                            {employeeError}
+                          </span>
+                        )}
                   </div>
                   <QueryTable columns={columns}
                    list={selectedEmployees}
