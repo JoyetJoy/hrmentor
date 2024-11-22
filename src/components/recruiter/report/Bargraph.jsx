@@ -24,7 +24,7 @@ export default function CustomBarChart() {
       {/* Render the chart */}
       <BarChart
         width={800}
-        height={300}
+        height={350}
         data={data}
         margin={{ top: 20, right: 30, bottom: 5 }}
       >

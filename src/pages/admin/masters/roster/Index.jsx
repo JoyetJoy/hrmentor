@@ -9,6 +9,7 @@ import {
   Plus,
   Search,
   Trash2,
+  Files
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -27,6 +28,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
   const [keyword, setKeyword] = useState("");
   const [rosterList, setRosterList] = useState("");
   const [selectedRoster, setSelectedRoster] = useState(null);
+  const [copy, setCopy] = useState(false);
   const pageLimit = 10;
 
   const { data: rosterDetailss } = useQuery({
@@ -72,6 +74,11 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     console.log("Selected roster for editing:", roster);
     setEditPopupOpen(true);
   };
+  const handleCopy = (roster) => {
+    console.log("Selected roster for editing:", roster);
+    setCopy(true);
+    setEditPopupOpen(true);
+  };
 
   console.log(selectedRoster);
 
@@ -83,25 +90,25 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         cell: ({ row }) => row.original?.roster_details?.roster_id || "N/A",
       },
       {
-        header: "Created Date & Time",
-        accessorKey: "created_at",
-        cell: ({ row }) => (
-          <p>
-            {row?.original?.roster_details?.created_at
-              ? moment(row.original.roster_details.created_at).format(
-                  "YYYY-MM-DD, HH:mm:ss",
-                )
-              : "N/A"}
-          </p>
-        ),
-      },
-      {
         header: "Start Date",
         accessorKey: "start_date",
         cell: ({ row }) => (
           <p className="">
             {row?.original?.roster_details?.start_date
               ? moment(row.original.roster_details.start_date).format(
+                  "YYYY-MM-DD",
+                )
+              : "N/A"}
+          </p>
+        ),
+      },
+      {
+        header: "End Date",
+        accessorKey: "end_date",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.roster_details?.end_date
+              ? moment(row.original.roster_details.end_date).format(
                   "YYYY-MM-DD",
                 )
               : "N/A"}
@@ -127,6 +134,15 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
+            <button
+              type="button"
+              onClick={() => {
+                handleCopy(row.original?.roster_details)
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
+            >
+              <Files className="size-3" />
+            </button>
             <Link
               type="button"
               to="#"
@@ -151,7 +167,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     ],
     [],
   );
-  console.log(selectedField);
+  console.log(selectedRoster);
   return (
     <>
       <DeleteConfirmation
@@ -172,8 +188,8 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         editpopupOpen={editpopupOpen}
         setEditPopupOpen={setEditPopupOpen}
         selectedRoster={selectedRoster}
-        rosterDetails={rosterDetails}
-        setRosterDetails={setRosterDetails}
+        copy={copy}
+        setCopy={setCopy}
       />
 
       <RosterHeader page={1} />
@@ -231,18 +247,18 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                 </div>
                 <div>
                   <h3 className="text-sm font-normal">
-                    {selectedRoster?.shift_details?.name || "N/A"}
+                    {selectedRoster?.shift_details?.name || ""}
                   </h3>
                   <p className="text-sm">
-                    {moment(selectedRoster.start_time).format("hh:mm A")} -{" "}
-                    {moment(selectedRoster.end_time).format("hh:mm A")}
+                  {moment(selectedRoster.shift_details.start_time, "HH:mm:ss").format("hh:mm A")} -{" "}
+                  {moment(selectedRoster.shift_details.end_time, "HH:mm:ss").format("hh:mm A")}
                   </p>
                 </div>
               </div>
               <div
                 className="cursor-pointer rounded-full bg-gray-darklight p-2"
                 onClick={() => {
-                  handleEdit(rosterDetailss?.roster_details);
+                  handleEdit(selectedRoster);
                 }}
               >
                 <img
@@ -258,85 +274,92 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                 <p className="text-black">Start Date</p>
                 <p className="font-semibold">
                   {moment(selectedRoster?.start_date).format("YYYY-MM-DD") ||
-                    "NA"}
+                    ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">End Date</p>
                 <p className="font-semibold">
                   {moment(selectedRoster?.end_date).format("YYYY-MM-DD") ||
-                    "NA"}
+                    ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">Start Time</p>
                 <p className="font-semibold">
-                  {selectedRoster?.shift_details?.start_time || "NA"}
+                {moment(selectedRoster.shift_details.start_time, "HH:mm:ss").format("hh:mm A")||''}
                 </p>
               </div>
               <div>
                 <p className="text-black">End Time</p>
                 <p className="font-semibold">
-                  {selectedRoster?.shift_details?.end_time || "NA"}
+                {moment(selectedRoster.shift_details.end_time, "HH:mm:ss").format("hh:mm A")||''}
                 </p>
               </div>
               <div>
                 <p className="text-black">Break time start</p>
                 <p className="font-semibold">
                   {selectedRoster?.shift_details?.break_times?.[0]
-                    ?.break_start_time || "N/A"}
+                    ?.break_start_time || "00:00"}
                 </p>
               </div>
               <div>
                 <p className="text-black">Break time end</p>
                 <p className="font-semibold">
                   {selectedRoster?.shift_details?.break_times?.[0]
-                    ?.break_end_time || "N/A"}
+                    ?.break_end_time || "00:00"}
                 </p>
               </div>
               <div>
                 <p className="text-black">Department</p>
                 <p className="font-semibold">
-                  {selectedRoster?.shift_details?.department_name || "N/A"}
+                  {selectedRoster?.shift_details?.department_name || ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">Work location</p>
                 <p className="font-semibold">
-                  {selectedRoster?.shift_details?.worklocation_name || "N/A"}
+                  {selectedRoster?.shift_details?.worklocation_name || ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">Work area</p>
                 <p className="font-semibold">
-                  {selectedRoster?.shift_details?.workArea_name || "N/A"}
+                  {selectedRoster?.shift_details?.workArea_name || ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">Pay type</p>
                 <p className="font-semibold">
-                  {selectedRoster?.shift_details?.pay_type || "N/A"}
+                  {selectedRoster?.shift_details?.pay_type || ""}
                 </p>
               </div>
               <div className="col-span-2">
                 <p className="text-black">Created by</p>
                 <p className="font-semibold">
-                  {selectedRoster?.user_name || "N/A"}
+                  {selectedRoster?.user_name || ""}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-              <div className="rounded-full bg-gray-dark p-4"></div>
-              <div>
-                <p className="text-sm font-medium">
-                  {selectedRoster?.employees?.[0]?.first_name || "N/A"}
-                </p>
-                <p className="text-xs font-medium text-darkblack">
-                  UI/UX Design Intern
-                </p>
-              </div>
-            </div>
+            {selectedRoster?.employees &&selectedRoster?.employees?.map((item) => {
+              return (
+                <div key={item?.id} className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
+                  <div className=" w-11 h-11 rounded-full bg-gray-dark p-1">
+                    <img className="" src={item?.profile_image} alt="employee image" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {item?.first_name || ""}
+                    </p>
+                    <p className="text-xs font-medium text-darkblack">
+                    {item?.designation || ""}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+
           </div>
         )}
       </div>
