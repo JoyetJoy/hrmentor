@@ -510,7 +510,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/dashbord-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/dashbord-color.svg",
     name: "Dashboard",
-    path: "/employee/dashboard",
+    path: "/employee_access/dashboard",
     active: "dashboard",
   },
   {
@@ -519,7 +519,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/attendance-black (2).svg",
     iconSrcActive: "/assets/icons/employee_access/header/attendance-color.svg",
     name: "Attendance",
-    path: "",
+    path: "/employee_access/attendance",
     active: "attendance",
   },
   {
@@ -528,16 +528,16 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/roster-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/roster-color.svg",
     name: "Roster",
-    path: "",
+    path: "/employee_access/roster",
     active: "roster",
   },
   {
     id: 4,
     iconType: "image",
-    iconSrcBlack: "/assets/icons/employee_access/header/time-sheet-black.svg",
+    iconSrcBlack: "/assets/icons/employee_access/header/time-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/time-sheet-color.svg",
     name: "Time Sheet",
-    path: "",
+    path: "/employee_access/timesheet",
     active: "timesheet",
   },
   {
@@ -546,7 +546,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/leave-color.svg",
     name: "Leave",
-    path: "",
+    path: "/employee_access/leave",
     active: "leave",
   },
  

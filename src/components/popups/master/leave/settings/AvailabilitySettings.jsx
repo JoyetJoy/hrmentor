@@ -114,7 +114,7 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     try {
       setLoader(true);
       const formData = {
-        holiday_id: 5,
+        holiday_id:id,
         ...availabilitySelection, // Use spread syntax to avoid listing each field
       };
 

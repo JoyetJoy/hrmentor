@@ -74,7 +74,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
       const res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
 
       toast.success(res?.data?.message);
-      queryClient.invalidateQueries(["bankHolidays"]);
+      queryClient.invalidateQueries(["bank_holidays"]);
       close();
     } catch (error) {
       console.error("Error Details:", error);
