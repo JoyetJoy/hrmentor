@@ -2,7 +2,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import { OverviewTopBar } from "@/components/hiring/overviewTopBar/OverviewTopBar";
 import { OfferTable } from "../tables/OfferTable";
 
-export const OfferToBeFinalized = () => {
+export const OfferToBeFinalizedListing = () => {
   return (
     <>
       <MenuHeader

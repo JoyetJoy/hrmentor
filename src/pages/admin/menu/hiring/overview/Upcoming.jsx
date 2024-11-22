@@ -7,7 +7,7 @@ export const Upcoming = () => {
     <>
       <MenuHeaderHiring page={1} />
       <div className="flex flex-col gap-3">
-        <OverviewTopBar title="Upcoming start dates" />
+        <OverviewTopBar title="Conditional Offered" />
         <UpcomingTable />
       </div>
     </>

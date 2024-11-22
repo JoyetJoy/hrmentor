@@ -13,7 +13,7 @@ export const OfferTable = () => {
       departments: "Sales & Marketing",
       location: "Nill",
       sentdate: "05/07/2023",
-      status: "Hired",
+      status: "Conditional Offered",
       action: "",
       imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
@@ -25,7 +25,7 @@ export const OfferTable = () => {
       location: "Nill",
       sentdate: "05/07/2023",
       action: "",
-      status: "Hired",
+      status: "Conditional Offered",
       imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
@@ -34,7 +34,7 @@ export const OfferTable = () => {
       title: "Sales & Marketing",
       departments: "Sales & Marketing",
       location: "Nill",
-      status: "Hired",
+      status: "Conditional Offered",
       sentdate: "05/07/2023",
       action: "",
       imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 export const OfferDeclinedTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Example data and columns
   const list = [
     {
       name: "Varadharajan Rengaswamy",
@@ -13,9 +12,9 @@ export const OfferDeclinedTable = () => {
       departments: "Sales & Marketing",
       location: "Nill",
       sentdate: "05/07/2023",
-      status: "Hired",
+      status: " Conditional Rejected",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png",
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -25,8 +24,8 @@ export const OfferDeclinedTable = () => {
       location: "Nill",
       sentdate: "05/07/2023",
       action: "",
-      status: "Hired",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a2.png", // Add the image URL here
+      status: " Conditional Rejected",
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -34,10 +33,10 @@ export const OfferDeclinedTable = () => {
       title: "Sales & Marketing",
       departments: "Sales & Marketing",
       location: "Nill",
-      status: "Hired",
+      status: " Conditional Rejected",
       sentdate: "05/07/2023",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];
