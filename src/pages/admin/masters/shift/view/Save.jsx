@@ -173,7 +173,7 @@ console.log(data.department_id);
       week_def: data.week_def,
       break_times: new_break,
     };
-console.log(formdata);
+console.log(new_break);
 
     // Add weekly specific fields if recurrence pattern is weekly
     if (recurrencePattern === "weekly") {
@@ -186,7 +186,7 @@ console.log(formdata);
 
     try {
       const api=(id?SHIFT_BREAK_TIME:SHIFT_LIST)
-      // const res = await newFormRequest.post(api, formdata);
+      const res = await newFormRequest.post(api, formdata);
       if (res?.status === 201) {
         toast.success(id?'Updated shift details successfully':+'Saved shift details successfully');
         queryClient.invalidateQueries(["shiftDetails"]);
@@ -705,7 +705,7 @@ console.log(formdata);
                       <div key={index} className="relative">
                         <input
                           className={`border-r px-2 py-2 text-start text-xs placeholder:text-zinc-700 ${
-                            selectedDays.includes(day)
+                            selectedDays?.includes(day)
                               ? errors[index]
                                 ? "border-red-500 bg-white" // Red border for error
                                 : "bg-white"

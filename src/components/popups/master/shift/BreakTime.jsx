@@ -37,6 +37,7 @@ export default function BreakTime({
       start_time: data.start_time,
       end_time: data.end_time,
       pay_node: data.pay_node,
+      time: data.time
     };
 
     console.log(formData);
