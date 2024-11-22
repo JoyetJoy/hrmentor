@@ -1,4 +1,6 @@
 import MenuHeader from "@/components/common/MenuHeader";
+import CustomBarChart from "@/components/recruiter/report/Bargraph";
+import SingleLineChart from "@/components/recruiter/report/Linegraph";
 
 function RecruiterReports() {
   // Highlight Report
@@ -15,8 +17,8 @@ function RecruiterReports() {
         <h1 className="text-base font-bold leading-7 text-neutral-700">
           Highlight Report
         </h1>
-        <div className="mt-4 grid max-w-5xl grid-cols-4 gap-3">
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-pinkishred/5 p-3 text-sm font-medium">
+        <div className="mt-4 grid  grid-cols-4 gap-5">
+          <div className="flex h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-pinkishred/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/0.svg"
@@ -24,7 +26,7 @@ function RecruiterReports() {
             />
             <p>Job Reports</p>
           </div>
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-goldenyellow/5 p-3 text-sm font-medium">
+          <div className="flex h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-goldenyellow/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/1.svg"
@@ -32,7 +34,7 @@ function RecruiterReports() {
             />
             <p>Interview by jobs</p>
           </div>
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-coolblack/5 p-3 text-sm font-medium">
+          <div className="flex h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-coolblack/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/2.svg"
@@ -40,7 +42,7 @@ function RecruiterReports() {
             />
             <p>Time to hire by jobs</p>
           </div>
-          <div className="flex h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-coolblack/5 p-3 text-sm font-medium">
+          <div className="flex h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-coolblack/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
               src="/assets/icons/recruter/report/3.svg"
@@ -49,12 +51,22 @@ function RecruiterReports() {
             <p>Saved reports</p>
           </div>
         </div>
-        <p className="max-w-5xl text-[0.9rem] font-medium text-black/50">
+        <p className="text-[0.9rem] font-medium text-black/50">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
           scrambled it to make a type specimen book.
         </p>
+        <div className="w-full h-full mt-16 flex flex-col lg:flex-row">
+          <div className="w-full lg:w-7/12">
+            <CustomBarChart/>
+
+          </div>
+          <div className="w-full lg:w-6/12">
+            <SingleLineChart/>
+          </div>
+        </div>
+
       </div>
     </div>
   );
