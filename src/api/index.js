@@ -118,6 +118,3 @@ export const COMPANY_PROFILE_BASIC ="company-profile-settings"
 // BUSINESS TYPE
 export const BUSINESS_TYPE ="company-bussiness-type"
 
-
-
-

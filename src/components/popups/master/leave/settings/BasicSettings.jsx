@@ -147,10 +147,10 @@ const BasicSettings = ({ formtype = "save" }) => {
       };
       const res = await newRequest.post(HOLIDAY_STATUS, formData);
 
-      if (res.status === 200) {
-        toast.success(res?.data?.message);
-        queryClient.invalidateQueries(["basicHolidaysSettings"]);
-        navigate(`admin/leave/settings/availabilitysettings/${id}`);
+      
+
+      if (res.data.success === true) {
+        navigate(`/admin/leave/settings/availabilitysettings/${res.data.data.id}`);
       }
     } catch (error) {
       console.error("Error Details:", error);

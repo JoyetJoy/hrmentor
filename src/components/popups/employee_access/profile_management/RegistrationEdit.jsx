@@ -1,0 +1,170 @@
+import useImageUpload from '@/hooks/useImageUpload';
+import { Dialog, DialogPanel } from '@headlessui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {  X } from 'lucide-react';
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form';
+
+export default function RegistrationEdit({ popupOpen, setPopupOpen, selectedField }) {
+    const {
+        register,
+        handleSubmit,
+        control,
+        reset,
+        setValue,
+        formState: { errors },
+      } = useForm({
+        mode: "onSubmit",
+        resolver: yupResolver(),
+      });
+    
+      function close() {
+        setPopupOpen(false);
+      }
+   
+      const [isLoading, setIsLoading] = useState();
+      const [loader, setLoder] = useState();
+  return (
+    <Dialog
+    open={popupOpen}
+    as="div"
+    className="relative z-10 focus:outline-none"
+    onClose={close}
+  >
+    <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+      <div className="flex min-h-full items-center justify-center p-4">
+        <DialogPanel
+          transition
+          className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+        >
+          <div className="mb-7 flex items-center justify-between">
+            <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
+              {selectedField ? "Update" : "Add"} Registration & Memberships
+            </h1>
+            <button
+              type="button"
+              onClick={close}
+              className="text-lg font-extrabold text-[#00000080]"
+            >
+              <X />
+            </button>
+          </div>
+          {isLoading ? (
+            <div className="flex min-h-72 w-full items-center justify-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+            </div>
+          ) : (
+            <form
+              className="grid grid-cols-1 gap-3"
+            //   onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="group flex w-full flex-col gap-1">
+                <label className="required label-text">
+                  Registration/Membership body
+                </label>
+                <input
+                  {...register("reg_memb_body", { required: true })}
+                  type="text"
+                  placeholder="Enter job role"
+                  className="input-box h-10 w-full"
+                />
+                {errors.reg_memb_body && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.reg_memb_body?.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="group flex flex-col space-y-1">
+                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  Professional Registration Number
+                </label>
+                <input
+                  {...register("professional_reg_number", { required: true })}
+                  type="text"
+                  placeholder="Enter employer name"
+                  className="input-box h-10 w-full"
+                />
+                {errors.professional_reg_number && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.professional_reg_number?.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="group flex flex-col space-y-1">
+                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  Expiry Date
+                </label>
+                <input
+                  {...register("expiry_date", { required: true })}
+                  type="date"
+                  className="input-box h-10 w-full"
+                />
+                {errors.expiry_date && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.expiry_date?.message}
+                  </span>
+                )}
+              </div>
+              <div className="group flex flex-col space-y-1">
+                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  First Registered Date
+                </label>
+                <input
+                  {...register("first_registered_date", { required: true })}
+                  type="date"
+                  className="input-box h-10 w-full"
+                />
+                {errors.first_registered_date && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.first_registered_date?.message}
+                  </span>
+                )}
+              </div>
+              <div className="group flex flex-col space-y-1">
+                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  Revalidation/Renewal Date
+                </label>
+                <input
+                  {...register("renewal_date", { required: true })}
+                  type="date"
+                  className="input-box h-10 w-full"
+                />
+                {errors.renewal_date && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.renewal_date?.message}
+                  </span>
+                )}
+              </div>
+              <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                <button
+                  type="submit"
+                  className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
+                  disabled={loader}
+                >
+                  {loader ? (
+                    <div className="flex items-center gap-3">
+                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                      {selectedField ? "Updating" : "Saving"}
+                    </div>
+                  ) : (
+                    <span>{selectedField ? "Update" : "Save"}</span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={close}
+                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
+        </DialogPanel>
+      </div>
+    </div>
+  </Dialog>
+  )
+}
