@@ -27,7 +27,7 @@ export const OverviewCards = ({ data }) => {
     {
       path: "/admin/hiring/hired",
       title: "Hired",
-      count: `${data?.hired ?? 0}`,
+      count: `${data?.hired_candidates ?? 0}`,
       bgColor: "#EBF9ED",
       imgSrc: "/assets/images/hiring/3.png",
     },
