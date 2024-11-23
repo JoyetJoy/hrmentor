@@ -38,6 +38,7 @@ export const HiringDashboard = () => {
               </div>
             </div>
             <div>
+              <div className="mb-4 h-5" />
               <div className="h-fit rounded-md bg-white pb-7">
                 <MonthlyCalendarPicker
                   selectedDate={selectedDate}
