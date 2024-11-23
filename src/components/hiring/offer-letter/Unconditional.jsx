@@ -72,8 +72,6 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
     "recruiterMasters",
   );
 
-  console.log(recruiterMasters?.payTypes);
-
   const { doc_template_heading, email_template_heading } = watch();
 
   // default templates
@@ -87,7 +85,6 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
     DEFAULT_UN_EMAIL_TEMPLATE,
     "olEmailDefaultTemplate",
   );
-  console.log(olEmailDefaultTemplate);
 
   // SET DEFAULT VALUES
   useEffect(() => {
@@ -128,7 +125,6 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
         }),
     enabled: !!email_template_heading,
   });
-  console.log("aa", defaultEmailDesc);
 
   useEffect(() => {
     if (defaultDesc) {
@@ -193,6 +189,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
       setLoader(false);
     }
   };
+  console.log(candidate);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex w-full items-center justify-between text-sm font-semibold">
@@ -248,7 +245,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
             src="/assets/images/hiring/offer/2.png"
             alt=""
           />
-          <p className="text-[0.9rem] font-medium">11/07/2023</p>
+          <p className="text-[0.9rem] font-medium">{candidate?.date_applied}</p>
         </div>
         <div className="flex items-center gap-2">
           <img
@@ -256,7 +253,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
             src="/assets/images/hiring/offer/3.png"
             alt=""
           />
-          <p className="text-[0.9rem] font-medium">Trivandrum</p>
+          <p className="text-[0.9rem] font-medium">{candidate?.city.label}</p>
         </div>
         <div className="flex items-center gap-2">
           <img

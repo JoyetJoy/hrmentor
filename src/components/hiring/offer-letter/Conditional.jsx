@@ -228,7 +228,7 @@ export const ConditionalOfferLetter = ({ candidate }) => {
             src="/assets/images/hiring/offer/2.png"
             alt=""
           />
-          <p className="text-[0.9rem] font-medium">11/07/2023</p>
+          <p className="text-[0.9rem] font-medium">{candidate?.date_applied}</p>
         </div>
         <div className="flex items-center gap-2">
           <img
@@ -236,7 +236,7 @@ export const ConditionalOfferLetter = ({ candidate }) => {
             src="/assets/images/hiring/offer/3.png"
             alt=""
           />
-          <p className="text-[0.9rem] font-medium">Trivandrum</p>
+          <p className="text-[0.9rem] font-medium">{candidate?.city.label}</p>
         </div>
         <div className="flex items-center gap-2">
           <img
