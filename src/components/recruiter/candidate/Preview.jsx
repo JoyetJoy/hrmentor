@@ -7,20 +7,20 @@ export default function ResumePreview({
   return (
     <>
       {file ? (
-        <div className="flex flex-col">
+        <div className="flex min-h-full flex-col">
           <div className="h-full overflow-hidden rounded-lg border border-gray-lightSoft py-2">
             {filePreview ? (
               file.type.includes("image") ? (
                 <img
                   src={filePreview}
                   alt="file preview"
-                  className="mt-2 h-auto w-full max-w-full"
+                  className="h-full w-full max-w-full"
                 />
               ) : (
                 <iframe
                   src={filePreview}
                   title="PDF Preview"
-                  className="mt-2 h-full w-full"
+                  className="h-full w-full"
                   frameBorder="0"
                 />
               )
@@ -28,7 +28,7 @@ export default function ResumePreview({
               <iframe
                 src={file}
                 title="PDF Preview"
-                className="mt-2 h-full w-full"
+                className="h-full min-h-96 w-full"
                 frameBorder="0"
               />
             )}
