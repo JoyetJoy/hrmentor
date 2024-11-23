@@ -562,7 +562,7 @@ export const employeeaccessItems = [
   {
     icon: "/assets/icons/employee_access/header/profilemang.svg",
     label: "Profile Management",
-    path: "",
+    path: "/employee_access/profile/primary",
     active: "profile-management",
   },
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },

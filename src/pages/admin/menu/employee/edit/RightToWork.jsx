@@ -150,8 +150,8 @@ export default function EmployeeRightToWorkEdit() {
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}
-          currentpath={"Employee Edit"}
           icon={<ChevronRight className="size-3" />}
+          currentpath={"Employee Edit"}
           activeMenu={"Employee"}
         />
         <div className="flex gap-x-3">
