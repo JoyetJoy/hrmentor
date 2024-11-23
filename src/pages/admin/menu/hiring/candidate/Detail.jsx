@@ -277,7 +277,7 @@ export default function HiringCandidateDetails() {
                 setRejectOpen(true);
                 setSelectedField(candidateDetails?.data?.id);
               }}
-              className="h-9 rounded bg-[#AB2727]/10 px-7 text-xs text-[#AB2727]"
+              className="h-9 rounded bg-[#AB2727]/10 px-7 text-xs font-semibold text-[#AB2727]"
             >
               Reject
             </button>
