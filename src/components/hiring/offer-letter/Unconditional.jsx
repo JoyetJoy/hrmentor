@@ -274,7 +274,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
       </div>
       <div className="grid grid-cols-4 gap-x-3 rounded border-t bg-white p-4">
         <div className="group flex flex-col space-y-1 py-2">
-          <label className="label-text">Joining Date</label>
+          <label className="required label-text">Joining Date</label>
           <input
             {...register("joining_date")}
             autoComplete="off"
@@ -288,7 +288,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
           )}
         </div>
         <div className="group flex flex-col space-y-1 py-2">
-          <label className="label-text">Pay Type</label>
+          <label className="required label-text">Pay Type</label>
           <Controller
             name="pay_type"
             className=""
@@ -312,7 +312,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
           )}
         </div>
         <div className="group flex flex-col space-y-1 py-2">
-          <label className="label-text">Salary</label>
+          <label className="required label-text">Salary</label>
           <input
             {...register("salary")}
             autoComplete="off"
@@ -412,6 +412,9 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
                 )}
               </div>
             </div>
+            <h5 className="label-text -mb-3">
+              Offer letter will be converted to pdf format automatically
+            </h5>
             <ReactQuill
               theme="snow"
               value={description}

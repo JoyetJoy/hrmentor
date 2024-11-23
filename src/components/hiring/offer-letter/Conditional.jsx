@@ -341,6 +341,9 @@ export const ConditionalOfferLetter = ({ candidate }) => {
                 )}
               </div>
             </div>
+            <h5 className="label-text -mb-3">
+              Offer letter will be converted to pdf format automatically
+            </h5>
             <ReactQuill
               theme="snow"
               value={description}
