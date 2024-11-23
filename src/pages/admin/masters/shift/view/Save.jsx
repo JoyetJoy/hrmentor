@@ -172,7 +172,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       calculation_type: data.calculation_type,
       fullday: data.fullday,
       fulltolerence: data.fulltolerence,
-      halfday: data.halfday,
+      halfday: data?.halfday,
       halfdaytolerence: data.halfdaytolerence,
       recur_pattern: data.recur_pattern,
       week_def: data.week_def,
@@ -197,8 +197,8 @@ export default function SaveMasterShift({ formtype, sid }) {
 
     try {
       const api = id ? `${SHIFT_LIST}/${id}` : SHIFT_LIST;
-      const res = await newFormRequest.post(api, formdata);
-      if (res?.status === 201) {
+      const res = await newRequest.post(api, formdata);
+      if (res?.status === 201||200) {
         toast.success(
           id
             ? "Updated shift details successfully"

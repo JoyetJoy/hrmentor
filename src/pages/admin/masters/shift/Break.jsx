@@ -50,7 +50,7 @@ export default function Break({ setNew_break, new_break, error }) {
           let duration;
           if (row?.original?.start_time) {
             const parseTime = (time) => {
-              const [hours, minutes] = time.split(":").map(Number);
+              const [hours, minutes] = time?.split(":").map(Number);
               return hours * 60 + minutes;
             };
 
@@ -78,11 +78,12 @@ export default function Break({ setNew_break, new_break, error }) {
 
             duration = formattedDuration;
           } else {
-            const formattedTime = row.original.time
-              .split(":")
-              .slice(0, 2)
-              .join(":");
-            duration = formattedTime;
+            // const formattedTime = row.original.time
+            //   .split(":")
+            //   .slice(0, 2)
+            //   .join(":");
+            // duration = formattedTime;
+            duration = row.original.time;
           }
           return `${duration} mins`;
         },

@@ -17,6 +17,8 @@ const events = [
     extendedProps: {
       count: 20,
       totalCount: 20,
+      shift: "Morning Shift",
+      time: "09:00 AM - 11:00 AM",
     },
   },
   {
@@ -27,6 +29,8 @@ const events = [
     extendedProps: {
       count: 20,
       totalCount: 20,
+      shift: "Evening Shift",
+      time: "02:00 PM - 06:00 PM",
     },
   },
   {
@@ -37,6 +41,8 @@ const events = [
     extendedProps: {
       count: 20,
       totalCount: 20,
+      shift: "Morning Shift",
+      time: "09:00 AM - 11:00 AM",
     },
   },
 ];
@@ -72,7 +78,7 @@ const RosterCalendar = () => {
       title: "New Event",
       start: info.dateStr,
       end: dayjs(info.dateStr).add(2, "hour").toISOString(),
-      extendedProps: { count: 10, totalCount: 20 },
+      extendedProps: { count: 10, totalCount: 20, shift: "New Shift", time: "Time Not Set" },
     };
     setCalendarEvents([...calendarEvents, newEvent]);
     alert(`Date clicked: ${info.dateStr}`);
@@ -86,6 +92,11 @@ const RosterCalendar = () => {
     console.log("Change year to:", selectedOption.value);
   };
 
+  // Event click handler for the design
+  const handleClick = (event, index) => {
+    console.log(`Event clicked: ${event.title}, index: ${index}`);
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex w-full items-center justify-between px-4 py-2">
@@ -96,7 +107,7 @@ const RosterCalendar = () => {
             onChange={handleYearChange}
             styles={customSelectStyles}
             placeholder={dayjs().format("YYYY")}
-            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 focus:border-[#C2C1C1]"
+            className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1]"
           />
           <Select
             options={months}
@@ -104,7 +115,7 @@ const RosterCalendar = () => {
             onChange={handleMonthChange}
             styles={customSelectStyles}
             placeholder={dayjs().format("MMMM")}
-            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 focus:border-[#C2C1C1]"
+            className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1]"
           />
         </div>
         <div className="flex gap-2">
@@ -113,9 +124,9 @@ const RosterCalendar = () => {
             isSearchable={true}
             styles={customSelectStyles}
             placeholder={"All employee"}
-            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 focus:border-[#C2C1C1]"
+            className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1]"
           />
-          <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white hover:bg-[#030E5C]/70 focus:outline-none focus:ring-2 focus:ring-white">
+          <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none hover:bg-[#030E5C]/70 focus:ring-2 focus:ring-white">
             <Plus className="size-4" />
             Add Roster
           </button>
@@ -132,6 +143,41 @@ const RosterCalendar = () => {
           editable={true}
           height="auto"
         />
+      </div>
+      <div className="mt-5">
+        {calendarEvents.map((event, index) => (
+          <div
+            key={event.id}
+            onClick={() => handleClick(event, index)}
+            className={`mt-2 flex flex-col h-14 w-full px-3 text-[0.7rem] font-medium border-l-4 rounded-sm ${
+              event.extendedProps.totalCount === event.extendedProps.count
+                ? "bg-[#2832770D] border-l-[#e95d39] text-[#2C2C2C]"
+                : "bg-[#e95d39] border-l-[#e95d39] text-white"
+            }`}
+          >
+            <span
+              className={`flex float-start font-semibold text-[0.8rem] ${
+                event.extendedProps.totalCount === event.extendedProps.count
+                  ? "text-[#2C2C2C]"
+                  : "text-white"
+              }`}
+            >
+              {event.extendedProps.shift}
+            </span>
+            <span
+              className={`flex float-start text-[#2C2C2C] ${
+                event.extendedProps.totalCount === event.extendedProps.count
+                  ? "text-[#2C2C2C]"
+                  : "text-white"
+              }`}
+            >
+              {event.extendedProps.time}
+            </span>
+            <span className="flex float-start font-semibold">
+              Employee: {event.extendedProps.count}/{event.extendedProps.totalCount}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
