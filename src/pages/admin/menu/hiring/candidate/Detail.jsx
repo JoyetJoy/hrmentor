@@ -29,6 +29,7 @@ import {
   ChevronDown,
   CircleArrowDown,
   MoveDown,
+  MoveLeft,
   Plus,
   User,
 } from "lucide-react";
@@ -196,6 +197,7 @@ export default function HiringCandidateDetails() {
           <div className="flex">
             {candidateDetails && (
               <div className="flex items-center gap-2">
+                <MoveLeft onClick={() => history.back()} className="h-5" />
                 <div className="flex size-7 items-center justify-center rounded-full border">
                   <User className="size-4 fill-black" />
                 </div>
