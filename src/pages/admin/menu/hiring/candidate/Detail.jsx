@@ -35,10 +35,12 @@ import {
 } from "lucide-react";
 import ResumePreview from "@/components/recruiter/candidate/Preview";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
+import RejectCandidate from "@/components/popups/hiring/ready-to-hiring/RejectCandidate";
 
 export default function HiringCandidateDetails() {
   let type = "update";
   const [popupOpen, setPopupOpen] = useState(false);
+  const [rejectOpen, setRejectOpen] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -72,7 +74,6 @@ export default function HiringCandidateDetails() {
       }),
     enabled: type == "update",
   });
-  console.log(candidateDetails?.data);
 
   useEffect(() => {
     if (candidateDetails) {
@@ -91,72 +92,6 @@ export default function HiringCandidateDetails() {
     SALARY_DEFAULT_MASTERS,
     "recruiterMasters",
   );
-
-  // SOURCES LISTING
-  const { data: sourcesList } = useEmployeeMaster(SOURCES_LIST, "sourcesList");
-
-  // COUNTRY LISTING
-  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
-  // GET STATTE BY COUNTRY ID AND SEARCH KEY
-  const loadStatesOptions = async (inputValue) => {
-    if (inputValue?.length < 3) {
-      return [];
-    }
-    const response = await newRequest.get(STATE_COUNTRY, {
-      params: { country_id: parseInt(country_id?.id), search: inputValue },
-    });
-    return response?.data;
-  };
-
-  // GET CITY BY STATE ID AND SEARCH KEY
-  const loadCitiesOptions = async (inputValue) => {
-    if (inputValue?.length < 3) {
-      return [];
-    }
-    const response = await newRequest.get(COUNTRY_CITY, {
-      params: {
-        state_id: parseInt(state_or_province?.id),
-        search: inputValue,
-      },
-    });
-
-    return response?.data;
-  };
-
-  useEffect(() => {
-    if (candidateDetails?.data) {
-      setValue("employee_id", candidateDetails?.data?.employee_id);
-      setValue("first_name", candidateDetails?.data?.first_name);
-      setValue("middle_name", candidateDetails?.data?.middle_name);
-      setValue("post_code", candidateDetails?.data?.post_code);
-      setValue("sur_name", candidateDetails?.data?.sur_name);
-      setValue("gender", candidateDetails?.data?.genderValue);
-      setValue("date_of_birth", candidateDetails?.data?.date_of_birth);
-      setValue("nationality_id", candidateDetails?.data?.nationality_id);
-      setValue(
-        "communication_address",
-        candidateDetails?.data?.communication_address,
-      );
-      setValue("post_code", candidateDetails?.data?.post_code);
-      setValue("highest_education_level", candidateDetails?.data?.education);
-      setValue(
-        "college_or_university",
-        candidateDetails?.data?.college_university,
-      );
-      setValue("job_id", candidateDetails?.data?.JobName);
-      setValue("date_applied", candidateDetails?.data?.date_applied);
-      setValue("source", candidateDetails?.data?.sourceName);
-      setValue("home_address", candidateDetails?.data?.home_address);
-      setValue("email", candidateDetails?.data?.email);
-      setValue("phone_number", candidateDetails?.data?.phone_number);
-      setValue("email", candidateDetails?.data?.email);
-      setValue("language_spoken", candidateDetails?.data?.languages);
-      setValue("country_id", candidateDetails?.data?.country);
-      setValue("state_or_province", candidateDetails?.data?.stateOrProvince);
-      setValue("city_id", candidateDetails?.data?.city);
-      setValue("linked_in", candidateDetails?.data?.linkedin_id ?? "");
-    }
-  }, [candidateDetails, setValue]);
 
   useEffect(() => {
     if (candidateDetails) {
@@ -190,6 +125,11 @@ export default function HiringCandidateDetails() {
       <ChooseOfferLetterType
         open={popupOpen}
         setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+      />
+      <RejectCandidate
+        open={rejectOpen}
+        setPopupOpen={setRejectOpen}
         selectedField={selectedField}
       />
       <form className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12">
@@ -334,7 +274,7 @@ export default function HiringCandidateDetails() {
             <button
               type={"button"}
               onClick={() => {
-                setPopupOpen(true);
+                setRejectOpen(true);
                 setSelectedField(candidateDetails?.data?.id);
               }}
               className="h-9 rounded bg-[#AB2727]/10 px-7 text-xs text-[#AB2727]"
@@ -355,7 +295,7 @@ export default function HiringCandidateDetails() {
         </div>
 
         <div className="mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl bg-white">
-          <Disclosure as="div" className="p-6" defaultOpen={true}>
+          <Disclosure as="div" className="p-6" defaultOpen={false}>
             <DisclosureButton className="group flex w-full items-center gap-4 border px-5 py-3">
               <CircleArrowDown className="size-5 !fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
               <span className="text-sm/6 font-medium group-data-[hover]:text-black/80">
