@@ -1,29 +1,61 @@
 import CompanyMenuHeader from "@/components/company/MenuHeader";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ArrowLeft, ChevronRight, Upload } from "lucide-react";
+import { ArrowLeft, ChevronRight, Upload, UploadCloud, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import {
+  Dialog,
+  DialogPanel,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
 import CompanyCreateSideBar from "@/components/sidebars/company/CompanyCreateSideBar";
-import AddLogo from "@/components/popups/company/AddLogo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { BUSINESS_TYPE, COMPANY_PROFILE_BASIC, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
+import { COUNTRY, COUNTRY_CITY, STATE_COUNTRY } from "@/api/master";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+
+const CompanyStatus = [
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+];
+
+const CompanyBasicSchema = Yup.object({
+  company_name: Yup.string(),
+  first_name: Yup.string(),
+  last_name: Yup.string(),
+  email: Yup.string(),
+  phone_no: Yup.string(),
+  created_date: Yup.string(),
+  status: Yup.string(),
+  username: Yup.string(),
+  upload_company_logo: Yup.string(),
+  upload_letter_head: Yup.string(),
+  address_one: Yup.string(),
+  address_two: Yup.string(),
+  postal_code: Yup.string(),
+});
 
 export default function CompanyGeneral() {
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
-  const [business_Type, setBusiness_Type] = useState("");
+  const [business_Type, setBusiness_Type] = useState();
+  const [status, setStatus] = useState("");
+  const [countryId, setCountryId] = useState("");
+  const [stateId, setStateId] = useState("");
+  const [cityId, setCityId] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedLogo, setSelectedLogo] = useState(null);
   const [businessTypes, setBusinessTypes] = useState([]);
   const [companyBasic, SetCompanyBasic] = useState({
     company_name: "",
@@ -31,7 +63,6 @@ export default function CompanyGeneral() {
     last_name: "",
     email: "",
     phone_no: "",
-    bussines_type: "",
     created_date: "",
     status: "",
     username: "",
@@ -39,9 +70,6 @@ export default function CompanyGeneral() {
     upload_letter_head: "",
     address_one: "",
     address_two: "",
-    country: "",
-    state: "",
-    city: "",
     postal_code: "",
   });
   const {
@@ -52,9 +80,14 @@ export default function CompanyGeneral() {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(),
+    resolver: yupResolver(CompanyBasicSchema),
   });
 
+  console.log(errors, "errorserrors");
+
+  function close() {
+    setPopupOpen(false);
+  }
   // Fetch List
   const { data: companyProfileBasic } = useQuery({
     queryKey: ["companyProfileBasic", user?.id],
@@ -84,8 +117,6 @@ export default function CompanyGeneral() {
     enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
   });
 
-
-
   useEffect(() => {
     if (businessType) {
       // Transform `businessType` data into an array of { value, label } objects
@@ -97,6 +128,49 @@ export default function CompanyGeneral() {
     }
   }, [businessType]);
 
+  const { data: countryList } = useQuery({
+    queryKey: ["countryList", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(COUNTRY, {
+          params: {
+            user_id: user?.id,
+          },
+        })
+
+        .then((res) => res.data),
+    enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
+  });
+
+  const { data: stateList } = useQuery({
+    queryKey: ["stateList", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(STATE_COUNTRY, {
+          params: {
+            user_id: user?.id,
+            country_id: countryId,
+          },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id && !!countryId, // Ensure the query only runs if both `user.id` and `country_id` are available
+  });
+
+  const { data: cityList } = useQuery({
+    queryKey: ["cityList", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(COUNTRY_CITY, {
+          params: {
+            user_id: user?.id,
+            state_id: stateId,
+            search: search,
+          },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id && !!stateId && !!search, // Ensure the query only runs if both `user.id` and `country_id` are available
+  });
+
   useEffect(() => {
     if (companyProfileBasic) {
       SetCompanyBasic({
@@ -106,40 +180,107 @@ export default function CompanyGeneral() {
         email: companyProfileBasic?.email,
         phone_no: companyProfileBasic?.phone_no,
         created_date: companyProfileBasic?.created_date,
-        status: companyProfileBasic?.status,
         username: companyProfileBasic?.username,
         upload_company_logo: companyProfileBasic?.upload_company_logo,
         upload_letter_head: companyProfileBasic?.upload_letter_head,
         address_one: companyProfileBasic?.address_one,
         address_two: companyProfileBasic?.address_two,
-        country: companyProfileBasic?.country?.id,
-        state: companyProfileBasic?.state?.id,
-        city: companyProfileBasic?.city?.id,
         postal_code: companyProfileBasic.postal_code,
       });
       setBusiness_Type(companyProfileBasic?.bussines_type?.id);
+      setStatus(companyProfileBasic?.status);
+      setStateId(companyProfileBasic?.state?.id);
+      setCountryId(companyProfileBasic?.country?.id);
+      setCityId(companyProfileBasic?.city?.id);
     }
   }, [companyProfileBasic]);
 
   const HandleCompanyBasic = (e) => {
-    console.log(e);
-
-    // if (e.target.name === "image") {
-    //   return setEditIntroBanner({
-    //     ...editIntroBanner,
-    //     [e.target.name]: e.target.files[0],
-    //   });
-    // }
+    if (e.target.name == "upload_letter_head") {
+      return SetCompanyBasic({
+        ...companyBasic,
+        [e.target.name]: e.target.files[0],
+      });
+    }
+    if (e.target.name == "upload_company_logo") {
+      return SetCompanyBasic({
+        ...companyBasic,
+        [e.target.name]: e.target.files[0],
+      });
+    }
     SetCompanyBasic({
       ...companyBasic,
       [e.target.name]: e.target.value,
     });
   };
 
+  const handleLogoSelect = (logoSrc) => {
+    setSelectedLogo(logoSrc); // Update selected logo
+  };
+
+  // Handle form submission
+  const handleSubmitLogo = (e) => {
+    e.preventDefault();
+    if (selectedLogo) {
+    } else {
+      console.log("No logo selected");
+    }
+  };
+
+  const onSubmit = async () => {
+    setLoader(true);
+    try {
+      const formData = new FormData();
+      formData.append("company_name", companyBasic.company_name);
+      formData.append("first_name", companyBasic.first_name);
+      formData.append("last_name", companyBasic.last_name);
+      formData.append("email", companyBasic.email);
+      formData.append("phone_no", companyBasic.phone_no);
+      formData.append("created_date", companyBasic.created_date);
+      formData.append("bussines_type", business_Type);
+      formData.append("status", status);
+      formData.append("username", companyBasic.username);
+      formData.append(
+        "upload_company_logo",
+        selectedLogo || companyBasic.upload_company_logo,
+      );
+      formData.append("upload_letter_head", companyBasic.upload_letter_head);
+      formData.append("address_one", companyBasic.address_one);
+      formData.append("address_two", companyBasic.address_two);
+      formData.append("country", countryId);
+      formData.append("state", stateId);
+      formData.append("city", cityId);
+      formData.append("postal_code", companyBasic.postal_code);
+
+      // const res = await newRequest.post(
+      //   `${COMPANY_PROFILE_BASIC}`, // URL with dynamic ID
+      //   formData, // formData should be the second argument, which is the request body
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //     params: {
+      //       user_id: user?.id,
+      //     },
+      //   },
+      // );
+      // if (res) {
+      //   toast.success(res?.data?.message);
+      return navigate("/admin/company/bank_details");
+      // }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  console.log(selectedLogo,"cdcdc");
+  
 
   return (
     <>
-      <AddLogo popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <CompanyMenuHeader />
       <div className="flex flex-row items-start justify-between gap-3">
         <form className="w-full">
@@ -151,12 +292,12 @@ export default function CompanyGeneral() {
               />
               Company Profile{" "}
             </div>
-            <Link
-              to="/admin/company/bank_details"
+            <div
+              onClick={handleSubmit(onSubmit)}
               className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               Next
-            </Link>
+            </div>
           </div>
           <div className="w-full rounded-md bg-white px-5 py-7">
             <Disclosure as="div" className="py-1" defaultOpen={true}>
@@ -273,11 +414,11 @@ export default function CompanyGeneral() {
                           className="input-box"
                           options={businessTypes}
                           value={businessTypes.find(
-                            (option) => option.value == business_Type,
+                            (option) => option.value === business_Type,
                           )}
                           onChange={(selectedOption) => {
-                            field.onChange(selectedOption); // Update form state
-                            setBusiness_Type(selectedOption.value); // Trigger any custom logic
+                            field.onChange(selectedOption);
+                            setBusiness_Type(selectedOption.value);
                           }}
                         />
                       )}
@@ -303,10 +444,9 @@ export default function CompanyGeneral() {
                   <div className="group flex flex-col space-y-1 px-3 py-1">
                     <label className="label-text">Account status</label>
                     <Controller
-                      name="ac_status"
+                      name="status"
                       control={control}
                       rules={{ required: true }}
-                      onChange={HandleCompanyBasic}
                       render={({ field }) => (
                         <Select
                           {...field}
@@ -314,12 +454,20 @@ export default function CompanyGeneral() {
                           styles={customSelectStyles}
                           placeholder="Select status"
                           className="input-box"
+                          options={CompanyStatus}
+                          value={CompanyStatus.find(
+                            (option) => option.value === status,
+                          )}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption.value);
+                            setStatus(selectedOption.value);
+                          }}
                         />
                       )}
                     />
-                    {errors.ac_status && (
+                    {errors.status && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.ac_status?.message}
+                        {errors.status?.message}
                       </span>
                     )}
                   </div>
@@ -341,12 +489,10 @@ export default function CompanyGeneral() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Company Logo(Size)</label>
+                    <label className="label-text">Company Logo (Size)</label>
                     <label
                       htmlFor=""
-                      onClick={() => {
-                        setPopupOpen(true);
-                      }}
+                      onClick={() => setPopupOpen(true)}
                       className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed bg-gray-darklight"
                     >
                       <div className="flex items-center gap-2">
@@ -363,23 +509,30 @@ export default function CompanyGeneral() {
                       </span>
                     )}
                   </div>
+
                   <div className="group flex flex-col space-y-1 px-3 py-1">
                     <label className="label-text">Letter header</label>
                     <label
-                      htmlFor=""
-                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed bg-gray-darklight"
+                      htmlFor="upload_letter_head"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
                     >
                       <div className="flex items-center gap-2">
-                        <Upload className="size-5 text-black" />
-                        <span className="font-semibold text-black">
-                          Upload Letter header
+                        <UploadCloud />
+                        <span className="font-semibold text-textcolor-darkCharcoal">
+                          Upload Image
                         </span>
                       </div>
-                      <input type="file" className="hidden" />
+                      <input
+                        id="upload_letter_head"
+                        onChange={HandleCompanyBasic}
+                        type="file"
+                        className="hidden"
+                        name="upload_letter_head"
+                      />
                     </label>
-                    {errors.upload_letter_header && (
+                    {errors.upload_letter_head && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.upload_letter_header?.message}
+                        {errors.upload_letter_head?.message}
                       </span>
                     )}
                   </div>
@@ -409,6 +562,8 @@ export default function CompanyGeneral() {
                         type="text"
                         placeholder="Enter address"
                         className="input-box"
+                        onChange={HandleCompanyBasic}
+                        name="address_one"
                         value={companyBasic.address_one}
                       />
                       {errors.address_one && (
@@ -427,6 +582,8 @@ export default function CompanyGeneral() {
                         type="text"
                         placeholder="Enter address"
                         className="input-box"
+                        onChange={HandleCompanyBasic}
+                        name="address_two"
                         value={companyBasic.address_two}
                       />
                       {errors.address_two && (
@@ -438,7 +595,7 @@ export default function CompanyGeneral() {
                     <div className="group flex flex-col space-y-1 px-3 py-1">
                       <label className="label-text"> Country</label>
                       <Controller
-                        name="contry"
+                        name="country"
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
@@ -446,8 +603,16 @@ export default function CompanyGeneral() {
                             {...field}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Select status"
+                            placeholder="Select"
                             className="input-box"
+                            options={countryList}
+                            value={countryList.find(
+                              (option) => option.id == countryId,
+                            )}
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption); // Update form state
+                              setCountryId(selectedOption.id); // Trigger any custom logic
+                            }}
                           />
                         )}
                       />
@@ -468,8 +633,16 @@ export default function CompanyGeneral() {
                             {...field}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Select status"
+                            placeholder="Select"
                             className="input-box"
+                            options={stateList}
+                            value={stateList.find(
+                              (option) => option.id == stateId,
+                            )}
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption); // Update form state
+                              setStateId(selectedOption.id); // Trigger any custom logic
+                            }}
                           />
                         )}
                       />
@@ -481,12 +654,34 @@ export default function CompanyGeneral() {
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-1">
                       <label className="label-text"> City</label>
-                      <input
-                        autoComplete="off"
-                        type="text"
-                        placeholder="Enter"
-                        className="input-box"
+                      <Controller
+                        name="city"
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            isSearchable={true} // Enable search
+                            styles={customSelectStyles}
+                            placeholder="Select"
+                            className="input-box"
+                            options={cityList}
+                            value={
+                              cityList?.find(
+                                (option) => option.id === cityId,
+                              ) || null
+                            }
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption); // Update form state
+                              setCityId(selectedOption.id); // Trigger any custom logic
+                            }}
+                            onInputChange={(inputValue) => {
+                              setSearch(inputValue); // Update the search variable
+                            }}
+                          />
+                        )}
                       />
+
                       {errors.city && (
                         <span className="text-xs font-medium text-red-500">
                           {errors.city?.message}
@@ -500,6 +695,8 @@ export default function CompanyGeneral() {
                         type="text"
                         placeholder="Enter"
                         className="input-box"
+                        onChange={HandleCompanyBasic}
+                        name="postal_code"
                         value={companyBasic.postal_code}
                       />
                       {errors.postal_code && (
@@ -516,6 +713,102 @@ export default function CompanyGeneral() {
         </form>
         <CompanyCreateSideBar stepCounter={1} />
       </div>
+
+      <Dialog
+        open={popupOpen}
+        as="div"
+        className="relative z-10 focus:outline-none"
+        onClose={close}
+      >
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel
+              transition
+              className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            >
+              <div className="mb-7 flex items-center justify-between">
+                <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
+                  Choose Logo
+                </h1>
+                <button
+                  onClick={close}
+                  className="text-lg font-extrabold text-[#00000080]"
+                >
+                  <X />
+                </button>
+              </div>
+              {loader ? (
+                <div className="flex min-h-72 w-full items-center justify-center">
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+                </div>
+              ) : (
+                <form
+                  onSubmit={handleSubmitLogo}
+                  className="grid grid-cols-2 gap-3"
+                >
+                  {/* First Logo */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img
+                      src="/assets/images/company/companylogo1.png"
+                      alt="logo"
+                      className="w-full object-contain"
+                    />
+                    <input
+                      type="radio"
+                      name="logo"
+                      value="/assets/images/company/companylogo1.png"
+                      checked={selectedLogo === "companylogo1.png"}
+                      onChange={() => handleLogoSelect("companylogo1.png")}
+                      className="size-4"
+                    />
+                  </div>
+                  {/* Second Logo */}
+                  <div className="flex flex-col items-center gap-6">
+                    <img
+                      src="/assets/images/company/companylogo2.png"
+                      alt="logo"
+                      className="w-full object-contain"
+                    />
+                    <input
+                      type="radio"
+                      name="logo"
+                      value="/assets/images/company/companylogo2.png"
+                      checked={selectedLogo === "companylogo2.png"}
+                      onChange={() => handleLogoSelect("companylogo2.png")}
+                      className="size-4"
+                    />
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="col-span-2 mt-2 flex w-full flex-row items-center justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={close}
+                      className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                      disabled={loader || !selectedLogo}
+                    >
+                      {loader ? (
+                        <div className="flex items-center gap-3">
+                          <div className="h-5 w-full animate-spin rounded-full border-b-2 border-white"></div>
+                          Choose Logo
+                        </div>
+                      ) : (
+                        <span>Choose Logo</span>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 }

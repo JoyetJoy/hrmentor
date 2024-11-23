@@ -114,15 +114,13 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     try {
       setLoader(true);
       const formData = {
-        holiday_id:id,
+        holiday_id: id,
         ...availabilitySelection, // Use spread syntax to avoid listing each field
       };
 
       const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
 
-      if (res.status === 200) {
-        toast.success(res?.data?.message);
-        queryClient.invalidateQueries(["availability_settings"]);
+      if (res.data.success === true) {
         navigate(`admin/leave/settings/advancedsettings/${id}`);
       }
     } catch (error) {
