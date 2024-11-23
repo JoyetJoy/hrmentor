@@ -30,7 +30,7 @@ const MonthlyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
 
   return (
     <div className="Calendar-container">
-      <div className="header px-3 py-3">
+      <div className="header px-5 py-3">
         <h2 className="!text-base font-medium">
           {selectedDate.format("MMMM YYYY")}
         </h2>
