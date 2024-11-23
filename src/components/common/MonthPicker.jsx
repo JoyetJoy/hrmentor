@@ -3,17 +3,13 @@ import dayjs from "dayjs";
 const MonthlyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
   const daysInWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-  // Get the first day and the last day of the selected month
   const startOfMonth = dayjs(selectedDate).startOf("month");
   const endOfMonth = dayjs(selectedDate).endOf("month");
 
-  // Get the first day of the grid (start of the week containing the first day of the month)
   const startOfGrid = startOfMonth.startOf("week");
 
-  // Get the last day of the grid (end of the week containing the last day of the month)
   const endOfGrid = endOfMonth.endOf("week");
 
-  // Generate all days to display in the grid
   const days = [];
   let currentDay = startOfGrid;
   while (
