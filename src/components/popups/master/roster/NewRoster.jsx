@@ -14,11 +14,11 @@ import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 
 export default function NewRoster({ popupOpen, setPopupOpen }) {
-  const [selectedShiftId, setSelectedShiftId] = useState(23);
+  const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
-  const [employeeError, setEmployeeError] = useState('');
+  const [employeeError, setEmployeeError] = useState("");
   const queryClient = useQueryClient();
 
   const {
@@ -93,21 +93,19 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setTimeout(() => {
-      setEmployeeError('')
-    }, 3000)
-    
-  },[employeeError])
+      setEmployeeError("");
+    }, 3000);
+  }, [employeeError]);
 
   const onSubmit = async (data) => {
-    if(employeesdetails.length===0){
-      setEmployeeError('Employee is required');
-    }else{
+    if (employeesdetails.length === 0) {
+      setEmployeeError("Employee is required");
+    } else {
       await handleRoster(data);
       close();
     }
-    
   };
 
   const handleRoster = async (data) => {
@@ -133,7 +131,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.error||"Failed roster.");
+      toast.error(error.response.data.error || "Failed roster.");
     }
   };
   useEffect(() => {
@@ -365,11 +363,11 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                         <Plus className="size-4" /> Add
                       </button>
                     </div>
-                    {employeeError!==''&&(
-                          <span className=" mt-2 text-xs text-red-500">
-                            {employeeError}
-                          </span>
-                        )}
+                    {employeeError !== "" && (
+                      <span className="mt-2 text-xs text-red-500">
+                        {employeeError}
+                      </span>
+                    )}
                   </div>
                   <QueryTable columns={columns} list={selectedEmployees} />
                 </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate, useParams,useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Select from "react-select";
 import toast from "react-hot-toast";
 import { ShiftSchema } from "@/schema/dashboard/masters/shift.schema";
@@ -17,7 +17,7 @@ import {
   EMPLOYEE_WORK_AREA,
   EMPLOYEE_WORK_LOCATION_LIST,
 } from "@/api/master";
-import { SHIFT_LIST,SHIFT_BREAK_TIME } from "@/api/setup";
+import { SHIFT_LIST, SHIFT_BREAK_TIME } from "@/api/setup";
 import Break from "../Break";
 
 export default function SaveMasterShift({ formtype, sid }) {
@@ -32,7 +32,7 @@ export default function SaveMasterShift({ formtype, sid }) {
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get('id');
+  const id = queryParams.get("id");
   const [dayerror, setDayerror] = useState([
     false,
     false,
@@ -57,25 +57,25 @@ export default function SaveMasterShift({ formtype, sid }) {
     mode: "onChange",
     resolver: yupResolver(ShiftSchema),
   });
-console.log(selectedDays);
+  console.log(selectedDays);
 
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
   const WeekEnd = watch("week_def", "basedoncalender");
 
-const { data: shiftDetails, isLoading } = useQuery({
-  queryKey: ["shiftDetails", id, formtype],
-  queryFn: () =>
-    newRequest.get(`${SHIFT_LIST}/${id}`).then((res) => res.data),
-  enabled: !!id,
-});
+  const { data: shiftDetails, isLoading } = useQuery({
+    queryKey: ["shiftDetails", id, formtype],
+    queryFn: () =>
+      newRequest.get(`${SHIFT_LIST}/${id}`).then((res) => res.data),
+    enabled: !!id,
+  });
 
-// Log the shift details
-useEffect(() => {
-  if (shiftDetails) {
-    console.log(shiftDetails);
-  }
-}, [shiftDetails]);
+  // Log the shift details
+  useEffect(() => {
+    if (shiftDetails) {
+      console.log(shiftDetails);
+    }
+  }, [shiftDetails]);
 
   const startTime = watch("start_time");
   const endTime = watch("end_time");
@@ -101,8 +101,8 @@ useEffect(() => {
     } else {
       setDuration(null);
     }
-  }, [startTime, endTime,shiftDetails]);
-console.log(requireDays);
+  }, [startTime, endTime, shiftDetails]);
+  console.log(requireDays);
 
   const handleInputChange = (index) => (event) => {
     const value = parseInt(event.target.value) || 0;
@@ -129,17 +129,22 @@ console.log(requireDays);
   };
 
   const onSubmit = async (data) => {
-    if (validateInputs()) {
-      if (data.fullday === "" && data.halfday === "") {
-        toast.error("Either full day or half day is required");
+    if (recurrencePattern === "weekly") {
+      if (validateInputs()) {
+        if (data.fullday === "" && data.halfday === "") {
+          toast.error("Either full day or half day is required");
+        } else {
+          await handleShift(data);
+        }
       } else {
-        await handleShift(data);
+        toast.error("Please enter the count for the selected days");
       }
+    } else if (data.fullday === "" && data.halfday === "") {
+      toast.error("Either full day or half day is required");
     } else {
-      toast.error("Please enter the count for the selected days");
+      await handleShift(data);
     }
   };
-
   const handleShift = async (data) => {
     let formdata;
 
@@ -152,7 +157,7 @@ console.log(requireDays);
 
     // Start loader
     setLoader(true);
-console.log(data.department_id);
+    console.log(data.department_id);
 
     // Common shift data for both weekly and non-weekly recurrence
     formdata = {
@@ -173,7 +178,6 @@ console.log(data.department_id);
       week_def: data.week_def,
       break_times: new_break,
     };
-console.log(new_break);
 
     // Add weekly specific fields if recurrence pattern is weekly
     if (recurrencePattern === "weekly") {
@@ -183,15 +187,26 @@ console.log(new_break);
         people_count: requireDays,
       };
     }
+    if (id) {
+      formdata = {
+        ...formdata,
+        shift_id: id,
+      };
+    }
+    console.log(formdata);
 
     try {
-      const api=(id?SHIFT_BREAK_TIME:SHIFT_LIST)
+      const api = id ? `${SHIFT_LIST}/${id}` : SHIFT_LIST;
       const res = await newFormRequest.post(api, formdata);
       if (res?.status === 201) {
-        toast.success(id?'Updated shift details successfully':+'Saved shift details successfully');
+        toast.success(
+          id
+            ? "Updated shift details successfully"
+            : "Saved shift details successfully",
+        );
         queryClient.invalidateQueries(["shiftDetails"]);
         reset();
-        navigate("/admin/setup/shift");
+        navigate("/admin/shift");
       } else {
         toast.error("Failed to save shift details");
       }
@@ -221,8 +236,8 @@ console.log(new_break);
       setValue("week_def", shiftDetails?.week_def);
       setValue("weekly_shifts", shiftDetails?.weekly_shifts);
       setValue("people_count", shiftDetails?.people_count);
-      setNew_break(shiftDetails?.breakTime)
-      setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks)
+      setNew_break(shiftDetails?.breakTime);
+      setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks);
       setRequireDays(shiftDetails?.weekly_shifts[0]?.people_count);
     }
   }, [shiftDetails, setValue]);
@@ -262,19 +277,21 @@ console.log(new_break);
 
     return value;
   };
-  
+
   return (
     <>
       <MenuHeader
         menu="Menu"
         subMenu="Shift"
-        currentpath={id? "Edit Shift" : "Add Shift"}
+        currentpath={id ? "Edit Shift" : "Add Shift"}
         icon={<ChevronRight className="size-3" />}
       />
       <>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="my-1 flex w-full flex-row items-center justify-between">
-            <h1 className="text-lg font-bold">{id?'Edit New Shift' : 'Create New Shift'}</h1>
+            <h1 className="text-lg font-bold">
+              {id ? "Edit New Shift" : "Create New Shift"}
+            </h1>
             <div className="flex items-center gap-3">
               <button
                 type="submit"
@@ -418,7 +435,7 @@ console.log(new_break);
                         className="input-box text-black"
                       />
                     )}
-                    />
+                  />
                   {errors.work_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.work_id?.message}
@@ -713,7 +730,12 @@ console.log(new_break);
                           }`}
                           placeholder={day}
                           type="number"
-                          defaultValue={requireDays[index] === '0' || requireDays[index] === 0 ? '' : requireDays[index]}
+                          defaultValue={
+                            requireDays[index] === "0" ||
+                            requireDays[index] === 0
+                              ? ""
+                              : requireDays[index]
+                          }
                           onChange={handleInputChange(index)}
                           disabled={!selectedDays.includes(day)} // Disable input if the day is not selected
                         />

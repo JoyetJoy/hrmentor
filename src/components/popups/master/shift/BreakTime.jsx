@@ -19,6 +19,7 @@ export default function BreakTime({
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onChange",
@@ -26,8 +27,15 @@ export default function BreakTime({
   });
 
   const onSubmit = async (data) => {
-    await handleShift(data);
-    close();
+    if (!data.start_time && !data.time) {
+      setError("time", {
+        type: "manual",
+        message: "Either duration or start and end time should be provided",
+      });
+    } else {
+      await handleShift(data);
+      close();
+    }
   };
 
   const handleShift = async (data) => {
@@ -37,7 +45,7 @@ export default function BreakTime({
       start_time: data.start_time,
       end_time: data.end_time,
       pay_node: data.pay_node,
-      time: data.time
+      time: data.time,
     };
 
     console.log(formData);
@@ -180,7 +188,7 @@ export default function BreakTime({
                   <div className="group flex w-full flex-col gap-1.5 py-2">
                     <label className="required label-text">Start Time</label>
                     <input
-                      {...register("start_time", { required: true })}
+                      {...register("start_time")}
                       autoComplete="off"
                       type="time"
                       className="input-box"

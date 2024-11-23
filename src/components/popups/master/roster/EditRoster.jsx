@@ -19,13 +19,13 @@ export default function EditRoster({
   setEditPopupOpen,
   selectedRoster,
   copy,
-  setCopy
+  setCopy,
 }) {
-  const [selectedShiftId, setSelectedShiftId] = useState(23);
+  const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
-  const [employeeError, setEmployeeError] = useState('');
+  const [employeeError, setEmployeeError] = useState("");
   const queryClient = useQueryClient();
 
   const {
@@ -44,16 +44,15 @@ export default function EditRoster({
     setEditPopupOpen(false);
     reset();
   }
-  useEffect(()=>{
-    setSelectedShiftId(selectedRoster?.shift_details?.shift_id)
-  })
-  
-  useEffect(()=>{
+  useEffect(() => {
+    setSelectedShiftId(selectedRoster?.shift_details?.shift_id);
+  });
+
+  useEffect(() => {
     setTimeout(() => {
-      setEmployeeError('')
-    }, 3000)
-    
-  },[employeeError])
+      setEmployeeError("");
+    }, 3000);
+  }, [employeeError]);
 
   // GET ROSTER DETAILS
   const { data: rosterDetail, isLoading } = useQuery({
@@ -117,18 +116,18 @@ export default function EditRoster({
       console.error("Error fetching employee list:", error?.message || error);
     },
   });
- console.log(selectedEmployees)
+  console.log(selectedEmployees);
 
- const onSubmit = async (data) => {
-  console.log(employeesdetails);
-  
-  if(selectedEmployees.length===0){
-    setEmployeeError('Employee is required');
-  }else{
-    await handleRoster(data);
-    close();
-  }
-};
+  const onSubmit = async (data) => {
+    console.log(employeesdetails);
+
+    if (selectedEmployees.length === 0) {
+      setEmployeeError("Employee is required");
+    } else {
+      await handleRoster(data);
+      close();
+    }
+  };
 
   const handleRoster = async (data) => {
     const formData = {
@@ -146,6 +145,7 @@ export default function EditRoster({
       );
       console.log(res);
       if (res?.status === 200) {
+        setCopy("");
         toast.success("Update roster details successfully");
         queryClient.invalidateQueries([""]);
         reset();
@@ -216,14 +216,14 @@ export default function EditRoster({
     ],
     [],
   );
-  console.log(selectedRoster?.employees)
+  console.log(selectedRoster?.employees);
   useEffect(() => {
     if (selectedRoster?.employees) {
       setSelectedEmployees(
         selectedRoster.employees.map((employee) => ({
           unique_id: employee.unique_id,
           first_name: employee.first_name,
-        }))
+        })),
       );
     }
   }, [selectedRoster]);
@@ -239,8 +239,15 @@ export default function EditRoster({
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel className="w-full max-w-4xl rounded bg-white p-6">
               <div className="mb-5 flex justify-between">
-                <h1 className="text-md font-bold">{copy?'Copy': 'Edit'} Roster</h1>
-                <button onClick={close}>
+                <h1 className="text-md font-bold">
+                  {copy ? "Copy" : "Edit"} Roster
+                </h1>
+                <button
+                  onClick={() => {
+                    setCopy(false);
+                    close();
+                  }}
+                >
                   <X />
                 </button>
               </div>
@@ -389,11 +396,14 @@ export default function EditRoster({
                           type="submit"
                           className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
                         >
-                          {copy?'Save': 'Update'}
+                          {copy ? "Save" : "Update"}
                         </button>
                         <button
                           type="button"
-                          onClick={close}
+                          onClick={() => {
+                            setCopy(false);
+                            close();
+                          }}
                           className="w-full rounded border border-black px-4 py-3"
                         >
                           Cancel
@@ -436,16 +446,17 @@ export default function EditRoster({
                         <Plus className="size-4" /> Add
                       </button>
                     </div>
-                    {employeeError!==''&&(
-                          <span className=" mt-2 text-xs text-red-500">
-                            {employeeError}
-                          </span>
-                        )}
+                    {employeeError !== "" && (
+                      <span className="mt-2 text-xs text-red-500">
+                        {employeeError}
+                      </span>
+                    )}
                   </div>
-                  <QueryTable columns={columns}
-                   list={selectedEmployees}
-                  // list={selectedRoster?.employees}
-                    />
+                  <QueryTable
+                    columns={columns}
+                    list={selectedEmployees}
+                    // list={selectedRoster?.employees}
+                  />
                 </div>
               </div>
             </DialogPanel>

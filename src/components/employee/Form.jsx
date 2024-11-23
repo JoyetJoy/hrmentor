@@ -7,7 +7,11 @@ import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SaveEmployeeMasterForm from "../popups/employees/settings/common/Save";
-import { bloodGroups, maritalStatuses, pentionStatuses } from "@/constants/data";
+import {
+  bloodGroups,
+  maritalStatuses,
+  pentionStatuses,
+} from "@/constants/data";
 import {
   COUNTRY,
   COUNTRY_CITY,
@@ -283,7 +287,7 @@ export default function SaveEmployeeForm({ formtype }) {
 
   // ROLES LIST
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
-console.log(rolesList);
+  console.log(rolesList);
 
   const onSubmit = (data) => {
     setLoader(true);
@@ -381,7 +385,13 @@ console.log(rolesList);
               {formtype === "update" && (
                 <button
                   type="button"
-                  className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none hover:bg-bgColor-300"
+                  onClick={() => {
+                    window.open(
+                      "https://hr-mentor.techbutomy.com/public/onboardform",
+                      "_blank",
+                    );
+                  }}
+                  className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
                 >
                   <Share2 className="size-4" color="black" />
                   Onboarding Form
@@ -1019,9 +1029,7 @@ console.log(rolesList);
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">
-                    Work Email Address
-                  </label>
+                  <label className="label-text">Work Email Address</label>
                   <input
                     {...register("work_email", { required: true })}
                     autoComplete="off"
@@ -1036,7 +1044,9 @@ console.log(rolesList);
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">Pension subscription</label>
+                  <label className="required label-text">
+                    Pension subscription
+                  </label>
                   <Controller
                     name="pention_status"
                     control={control}
