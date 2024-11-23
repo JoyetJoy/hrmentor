@@ -213,7 +213,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
         )}
         <div className="flex w-fit gap-3 text-[0.8rem] font-semibold">
           <button
-            type="submit"
+            type="button"
             className="flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-white px-4 text-black focus:outline-none"
           >
             <PenTool className="h-4" /> <span>Draft</span>
