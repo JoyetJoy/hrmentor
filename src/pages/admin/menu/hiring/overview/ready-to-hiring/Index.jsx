@@ -113,7 +113,7 @@ export const ReadyToHiring = () => {
             </button>
             <button
               type={"button"}
-              className="flex w-fit items-center justify-center rounded bg-[#AB27271A]/10 px-1 py-1.5 text-xs text-[#AB2727]"
+              className="flex w-fit items-center justify-center rounded bg-[#AB27271A]/10 px-2 py-1.5 text-xs text-[#AB2727]"
             >
               Close <CircleX className="h-4" />
             </button>
