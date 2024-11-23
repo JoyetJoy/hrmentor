@@ -118,7 +118,7 @@ export const ReadyToHiring = () => {
               Close <CircleX className="h-4" />
             </button>
             <Link
-              to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}`}
+              to={`/admin/hiring/view-candidate?cid=${row?.original?.id}`}
               className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Maximize2 className="size-3" />
