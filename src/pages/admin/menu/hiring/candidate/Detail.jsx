@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import AsyncSelect from "react-select/async";
 import {
   Disclosure,
   DisclosureButton,
@@ -9,30 +8,14 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import Addtransfer from "@/components/popups/recruiter/candiadate/AddTransfer";
-import {
-  COUNTRY,
-  COUNTRY_CITY,
-  SALARY_DEFAULT_MASTERS,
-  SOURCES_LIST,
-  STATE_COUNTRY,
-} from "@/api/master";
+import { SALARY_DEFAULT_MASTERS } from "@/api/master";
 import { newFormRequest, newRequest } from "@/api";
 import { recCandidateSchema } from "@/schema/dashboard/recruiter/candidate/form/save.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Loader from "@/components/ui/Loader";
-import toast from "react-hot-toast";
-import { GET_CANDIDATES, UPDATE_CANDIDATE } from "@/api/recruiter";
+import { GET_CANDIDATES } from "@/api/recruiter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  ChevronDown,
-  CircleArrowDown,
-  MoveDown,
-  MoveLeft,
-  Plus,
-  User,
-} from "lucide-react";
+import { CircleArrowDown, MoveLeft, User } from "lucide-react";
 import ResumePreview from "@/components/recruiter/candidate/Preview";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
 import RejectCandidate from "@/components/popups/hiring/ready-to-hiring/RejectCandidate";

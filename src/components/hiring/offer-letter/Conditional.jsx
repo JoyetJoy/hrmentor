@@ -11,7 +11,7 @@ import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { PenTool, User } from "lucide-react";
+import { NotebookPen, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
@@ -196,7 +196,7 @@ export const ConditionalOfferLetter = ({ candidate }) => {
             type="button"
             className="flex h-10 w-full cursor-pointer items-center justify-center rounded-md bg-white px-4 text-black focus:outline-none"
           >
-            <PenTool className="h-4" /> <span>Draft</span>
+            <NotebookPen className="h-4" /> <span>Draft</span>
           </button>
           <button
             type="submit"
