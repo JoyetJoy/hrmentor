@@ -12,7 +12,7 @@ export const OfferToBeFinalizedListing = () => {
         currentpath={"Hiring"}
         activeMenu={"Dashboard"}
       />
-      <div className="flex flex-col gap-3">
+      <div className="flex min-h-screen flex-col gap-3">
         <OverviewTopBar title="Offer to be finalized" />
         <OfferTable />
       </div>

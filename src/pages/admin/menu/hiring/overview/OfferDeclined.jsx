@@ -6,7 +6,7 @@ export const OfferDeclined = () => {
   return (
     <>
       <MenuHeaderHiring page={1} />
-      <div className="flex flex-col gap-3">
+      <div className="flex min-h-screen flex-col gap-3">
         <OverviewTopBar title="Offer declined" />
         <OfferDeclinedTable />
       </div>
