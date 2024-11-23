@@ -2,7 +2,7 @@ import { newRequest } from "@/api";
 import { DASHBOARD_CANDIDATES_LIST } from "@/api/recruiter";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { Eye, Maximize2 } from "lucide-react";
+import { Maximize2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function NewJoiners() {
@@ -33,10 +33,10 @@ export default function NewJoiners() {
               {newCandidates?.slice(0, 5).map((candidate) => (
                 <div
                   key={candidate?.id}
-                  className="flex h-[4.3rem] w-full items-center justify-between rounded-md bg-[#F5F5F7] py-2 pl-5 pr-9"
+                  className="flex h-16 w-full items-center justify-between rounded-md bg-[#F5F5F7] py-2 pl-5 pr-9"
                 >
                   <div className="flex items-center gap-x-2">
-                    <div className="flex h-12 w-12 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
+                    <div className="flex h-11 w-11 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
                       {`${candidate?.first_name?.charAt(0)} ${candidate?.sur_name?.charAt(0)}`}
                     </div>
                     <div>
