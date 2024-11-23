@@ -3,7 +3,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-function MenuHeaderEmployeeAccess({ page ,currentpage,pathlink }) {
+function MenuHeaderEmployeeAccess({ page ,currentpage,pathlink,subMenu,icon }) {
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
@@ -18,6 +18,12 @@ function MenuHeaderEmployeeAccess({ page ,currentpage,pathlink }) {
           />
           Menu
           <ChevronRight className="size-3" />
+          <Link className="capitalize"
+          //  to={`/employee_access/${subMenu}`}
+           >
+            {subMenu}
+          </Link>
+          {icon}
           <Link
             className="capitalize text-hrmprimaryorange"
             to={pathlink}
@@ -25,21 +31,6 @@ function MenuHeaderEmployeeAccess({ page ,currentpage,pathlink }) {
             {currentpage}
           </Link>
         </div>
-        {/* <div className="flex items-center gap-5 text-sm font-semibold">
-          {emplyeeaccessMenu.map((item) => (
-            <Link
-              key={item?.id}
-              to={item?.link}
-              className={`px-2 py-1 text-sm ${
-                page === item?.id
-                  ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
-                  : "font-normal text-gray-neutral"
-              }`}
-            >
-              {item?.name}
-            </Link>
-          ))}
-        </div> */}
       </div>
     </>
   );
