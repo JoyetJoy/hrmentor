@@ -14,7 +14,7 @@ export const OfferDeclinedTable = () => {
       sentdate: "05/07/2023",
       status: " Conditional Rejected",
       action: "",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -25,7 +25,7 @@ export const OfferDeclinedTable = () => {
       sentdate: "05/07/2023",
       action: "",
       status: " Conditional Rejected",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -36,7 +36,7 @@ export const OfferDeclinedTable = () => {
       status: " Conditional Rejected",
       sentdate: "05/07/2023",
       action: "",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];

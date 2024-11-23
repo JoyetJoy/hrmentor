@@ -1,5 +1,7 @@
 import QueryTable from "@/components/table/QueryTable";
+import { Maximize2 } from "lucide-react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export const OfferTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +17,7 @@ export const OfferTable = () => {
       sentdate: "05/07/2023",
       status: "Conditional Offered",
       action: "",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -26,7 +28,7 @@ export const OfferTable = () => {
       sentdate: "05/07/2023",
       action: "",
       status: "Conditional Offered",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -37,7 +39,7 @@ export const OfferTable = () => {
       status: "Conditional Offered",
       sentdate: "05/07/2023",
       action: "",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];
@@ -89,16 +91,13 @@ export const OfferTable = () => {
     {
       header: "action",
       accessorKey: "action",
-      cell: ({}) => (
-        <button
-          type="button"
-          className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+      cell: ({ row }) => (
+        <Link
+          to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}`}
+          className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
         >
-          <img
-            src="/assets/icons/admin/marker.svg"
-            className="w-full object-contain"
-          />
-        </button>
+          <Maximize2 className="size-3" />
+        </Link>
       ),
     },
   ];

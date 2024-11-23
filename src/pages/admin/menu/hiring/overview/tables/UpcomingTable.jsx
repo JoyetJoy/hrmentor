@@ -15,7 +15,7 @@ export const UpcomingTable = () => {
       sentdate: "05/07/2023",
       status: "Conditional Accepted",
       action: "",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a1.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -26,7 +26,7 @@ export const UpcomingTable = () => {
       sentdate: "05/07/2023",
       action: "",
       status: "Conditional Accepted",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a2.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -37,7 +37,7 @@ export const UpcomingTable = () => {
       status: "Conditional Accepted",
       sentdate: "05/07/2023",
       action: "",
-      imageUrl: "../../../../public/assets/images/hiring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];

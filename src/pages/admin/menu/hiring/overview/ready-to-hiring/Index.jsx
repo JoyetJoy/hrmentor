@@ -123,6 +123,8 @@ export const ReadyToHiring = () => {
     [readyToHirings, currentPage],
   );
 
+  console.log(readyToHirings);
+
   return (
     <>
       <ChooseOfferLetterType
