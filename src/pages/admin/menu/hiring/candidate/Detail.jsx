@@ -297,7 +297,7 @@ export default function HiringCandidateDetails() {
         <div className="mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl bg-white">
           <Disclosure as="div" className="p-6" defaultOpen={false}>
             <DisclosureButton className="group flex w-full items-center gap-4 border px-5 py-3">
-              <CircleArrowDown className="size-5 !fill-white/60 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
+              <CircleArrowDown className="size-5 !fill-white/60 text-black/30 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
               <span className="text-sm/6 font-medium group-data-[hover]:text-black/80">
                 View uploaded document
               </span>

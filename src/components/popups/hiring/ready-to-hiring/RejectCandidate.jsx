@@ -9,7 +9,7 @@ export default function RejectCandidate({ open, setPopupOpen, selectedField }) {
       {open && (
         <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-sm rounded bg-white px-9 py-7 shadow-lg">
-            <h2 className="text-base font-bold text-black/70">
+            <h2 className="text-base font-semibold text-black/70">
               Reason for Rejection
             </h2>
             <textarea
