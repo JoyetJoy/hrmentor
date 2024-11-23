@@ -30,22 +30,25 @@ const MonthlyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
 
   return (
     <div className="Calendar-container">
-      <div className="header px-3 py-2">
-        <button
-          className="h-9 w-9 rounded-full bg-gray-smoke"
-          onClick={handlePrevMonth}
-        >
-          &lt;
-        </button>
+      <div className="header px-3 py-3">
         <h2 className="!text-base font-medium">
           {selectedDate.format("MMMM YYYY")}
         </h2>
-        <button
-          className="h-9 w-9 rounded-full bg-gray-smoke"
-          onClick={handleNextMonth}
-        >
-          &gt;
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="size-7 rounded-full bg-gray-smoke"
+            onClick={handlePrevMonth}
+          >
+            &lt;
+          </button>
+
+          <button
+            className="size-7 rounded-full bg-gray-smoke"
+            onClick={handleNextMonth}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
       <hr className="border-gray-light" />
       <div className="grid grid-cols-7 px-7 pt-4 text-center font-medium">
