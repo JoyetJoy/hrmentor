@@ -5,8 +5,9 @@ import { newRequest } from "@/api";
 import { HIRING_READY } from "@/api/hiring";
 import Loader from "@/components/ui/Loader";
 import QueryTable from "@/components/table/QueryTable";
-import { CircleX, Filter, Search, X } from "lucide-react";
+import { CircleX, Filter, Maximize2, Search, X } from "lucide-react";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
+import { Link } from "react-router-dom";
 
 export const ReadyToHiring = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -43,19 +44,19 @@ export const ReadyToHiring = () => {
 
   const columns = React.useMemo(
     () => [
+      // {
+      //   header: "Sl No",
+      //   accessorKey: "sno",
+      //   cell: ({ row }) => {
+      //     return (
+      //       <div className="flex px-2">
+      //         {row.index + 1 + (currentPage - 1) * pageLimit}
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        header: "Sl No",
-        accessorKey: "sno",
-        cell: ({ row }) => {
-          return (
-            <div className="flex px-2">
-              {row.index + 1 + (currentPage - 1) * pageLimit}
-            </div>
-          );
-        },
-      },
-      {
-        header: "Candidate name",
+        header: "Name",
         accessorKey: "candidate_name",
         cell: ({ row }) => {
           return (
@@ -99,23 +100,29 @@ export const ReadyToHiring = () => {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             <button
               type={"button"}
               onClick={() => {
                 setPopupOpen(true);
                 setSelectedField(row.original.id);
               }}
-              className="rounded bg-hrmprimaryorange px-4 py-1.5 text-xs text-white"
+              className="rounded bg-hrmprimaryorange px-2 py-1.5 text-xs text-white"
             >
               Send Offer Letter
             </button>
             <button
               type={"button"}
-              className="flex w-fit items-center justify-center rounded bg-[#AB27271A]/10 px-2 py-1.5 text-xs text-[#AB2727]"
+              className="flex w-fit items-center justify-center rounded bg-[#AB27271A]/10 px-1 py-1.5 text-xs text-[#AB2727]"
             >
               Close <CircleX className="h-4" />
             </button>
+            <Link
+              to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}`}
+              className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
+              <Maximize2 className="size-3" />
+            </Link>
           </div>
         ),
       },
