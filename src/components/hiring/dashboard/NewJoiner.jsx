@@ -54,7 +54,7 @@ export default function NewJoiners() {
                     </div>
                   </div>
                   <Link
-                    to={`/admin/recruiter/candidate/profile?cid=${candidate?.id}`}
+                    to={`/admin/hiring/view-candidate?cid=${candidate?.id}`}
                     className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                   >
                     <Maximize2 className="size-3" />
