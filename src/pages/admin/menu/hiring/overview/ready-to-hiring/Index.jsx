@@ -5,8 +5,9 @@ import { newRequest } from "@/api";
 import { HIRING_READY } from "@/api/hiring";
 import Loader from "@/components/ui/Loader";
 import QueryTable from "@/components/table/QueryTable";
-import { Filter, Search } from "lucide-react";
+import { CircleX, Filter, Maximize2, Search, X } from "lucide-react";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
+import { Link } from "react-router-dom";
 
 export const ReadyToHiring = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -33,6 +34,8 @@ export const ReadyToHiring = () => {
         }),
   });
 
+  console.log(readyToHirings);
+
   useEffect(() => {
     if (readyToHirings) {
       setTotalPages(readyToHirings?.last_page);
@@ -41,24 +44,24 @@ export const ReadyToHiring = () => {
 
   const columns = React.useMemo(
     () => [
+      // {
+      //   header: "Sl No",
+      //   accessorKey: "sno",
+      //   cell: ({ row }) => {
+      //     return (
+      //       <div className="flex px-2">
+      //         {row.index + 1 + (currentPage - 1) * pageLimit}
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        header: "Sl No",
-        accessorKey: "sno",
-        cell: ({ row }) => {
-          return (
-            <div className="flex px-2">
-              {row.index + 1 + (currentPage - 1) * pageLimit}
-            </div>
-          );
-        },
-      },
-      {
-        header: "Candidate name",
+        header: "Name",
         accessorKey: "candidate_name",
         cell: ({ row }) => {
           return (
             <div className="flex items-center gap-1 px-2">
-              <div className="flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
+              <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
                 {row.original?.candidate_name?.charAt(0)}
               </div>
               {row.original?.candidate_name}
@@ -67,7 +70,7 @@ export const ReadyToHiring = () => {
         },
       },
       {
-        header: "Contact",
+        header: "Type",
         accessorKey: "phone_number",
       },
       {
@@ -75,11 +78,7 @@ export const ReadyToHiring = () => {
         accessorKey: "job_title",
       },
       {
-        header: "Email",
-        accessorKey: "email",
-      },
-      {
-        header: "Designation",
+        header: "Department",
         accessorKey: "designation",
       },
       {
@@ -91,7 +90,7 @@ export const ReadyToHiring = () => {
               backgroundColor: row?.original?.status?.background_color,
               color: row?.original?.status?.text_color,
             }}
-            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+            className="flex h-8 w-fit items-center justify-center rounded px-3 text-xs font-semibold"
           >
             {row?.original?.status?.status_name}
           </div>
@@ -101,29 +100,37 @@ export const ReadyToHiring = () => {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             <button
               type={"button"}
               onClick={() => {
                 setPopupOpen(true);
-                setSelectedField(row.original.candidate_id);
+                setSelectedField(row.original.id);
               }}
-              className="rounded-md border-green-800 bg-[#00B448] px-4 py-1.5 text-white"
+              className="rounded bg-hrmprimaryorange px-2 py-1.5 text-xs text-white"
             >
               Send Offer Letter
             </button>
             <button
               type={"button"}
-              className="rounded-md bg-[#AB27271A]/10 px-4 py-1.5 text-[#AB2727]"
+              className="flex w-fit items-center justify-center rounded bg-[#AB27271A]/10 px-2 py-1.5 text-xs text-[#AB2727]"
             >
-              Reject
+              Close <CircleX className="h-4" />
             </button>
+            <Link
+              to={`/admin/hiring/view-candidate?cid=${row?.original?.id}`}
+              className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
+              <Maximize2 className="size-3" />
+            </Link>
           </div>
         ),
       },
     ],
     [readyToHirings, currentPage],
   );
+
+  console.log(readyToHirings);
 
   return (
     <>

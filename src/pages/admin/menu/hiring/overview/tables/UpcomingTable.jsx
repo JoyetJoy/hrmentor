@@ -1,8 +1,8 @@
-import QueryTable from '@/components/table/QueryTable';
-import React, { useState } from 'react'
+import QueryTable from "@/components/table/QueryTable";
+import React, { useState } from "react";
 
 export const UpcomingTable = () => {
-     const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Example data and columns
   const list = [
@@ -13,9 +13,9 @@ export const UpcomingTable = () => {
       departments: "Sales & Marketing",
       location: "Nill",
       sentdate: "05/07/2023",
-      status:"Hired",
+      status: "Conditional Accepted",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a1.png",
+      imageUrl: "../../../../assets/images/hiring/avatar/a1.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -25,8 +25,8 @@ export const UpcomingTable = () => {
       location: "Nill",
       sentdate: "05/07/2023",
       action: "",
-      status:"Hired",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a2.png", // Add the image URL here
+      status: "Conditional Accepted",
+      imageUrl: "../../../../assets/images/hiring/avatar/a2.png", // Add the image URL here
     },
     {
       name: "Varadharajan Rengaswamy",
@@ -34,10 +34,10 @@ export const UpcomingTable = () => {
       title: "Sales & Marketing",
       departments: "Sales & Marketing",
       location: "Nill",
-      status:"Hired",
+      status: "Conditional Accepted",
       sentdate: "05/07/2023",
       action: "",
-      imageUrl: "../../../../public/assets/images/hriring/avatar/a3.png", // Add the image URL here
+      imageUrl: "../../../../assets/images/hiring/avatar/a3.png", // Add the image URL here
     },
     // Add more rows as needed
   ];
@@ -51,7 +51,7 @@ export const UpcomingTable = () => {
           <img
             src={row.original.imageUrl}
             alt={row.original.name}
-            className="w-8 h-8 rounded-full"
+            className="h-8 w-8 rounded-full"
           />
           <span>{row.original.name}</span>
         </div>
@@ -81,23 +81,23 @@ export const UpcomingTable = () => {
       header: "Status",
       accessorKey: "status",
       cell: ({ getValue }) => (
-        <span className="bg-[#FFFCF0] py-1.5 px-6 border border-[#ECD682] rounded-md">
+        <span className="rounded-md border border-[#00B448] bg-[#F0FFF180] px-6 py-1.5 text-[#00B448]">
           {getValue()}
         </span>
       ),
     },
-    
   ];
   const totalPages = 5;
 
   return (
     <>
-    <QueryTable
+      <QueryTable
         list={list}
         columns={columns}
         totalPages={totalPages}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-      /></>
-  )
-}
+      />
+    </>
+  );
+};

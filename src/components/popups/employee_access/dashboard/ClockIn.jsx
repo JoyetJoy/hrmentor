@@ -1,5 +1,5 @@
 import { Dialog, DialogPanel, Radio, RadioGroup } from "@headlessui/react";
-import { CheckCircleIcon, X } from "lucide-react";
+import {  X } from "lucide-react";
 import React, { useState } from "react";
 
 export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen }) {

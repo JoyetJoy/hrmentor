@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 export default function DeleteConfirmation({
   open,
   id,
+  setId,
   onCancel,
   type,
   setNew_break,
@@ -37,6 +38,7 @@ export default function DeleteConfirmation({
           setNew_break((prevBreaks) =>
             prevBreaks.filter((breakTime) => breakTime.id !== id),
           );
+          setId("");
           toast.success("Deleted break time successfully");
         }
         console.log("hii");

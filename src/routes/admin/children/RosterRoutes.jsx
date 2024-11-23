@@ -1,13 +1,18 @@
 import Claim from "@/pages/admin/masters/roster/Claim";
 import RosterList from "@/pages/admin/masters/roster/Index";
-
-export const RosterRoutes =[
-    {
-        path:"",
-        element:<RosterList/>,
-      },
-        {
-          path:"claim",
-          element:<Claim/>
-        }
-]
+import RosterCalendar from "@/pages/admin/masters/roster/calender/Calender";
+import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
+export const RosterRoutes = [
+  {
+    path: "",
+    element: <RosterList />,
+  },
+  {
+    path: "claim",
+    element: <Claim />,
+  },
+  {
+    path: "calendar",
+    element: <RosterDepartment />,
+  },
+];

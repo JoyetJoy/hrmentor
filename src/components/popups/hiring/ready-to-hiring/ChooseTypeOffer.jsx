@@ -18,7 +18,7 @@ export default function ChooseOfferLetterType({
     <>
       {open && (
         <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg">
+          <div className="w-full max-w-sm rounded bg-white px-10 py-7 shadow-lg">
             <h2 className="text-base font-bold text-black/70">
               Offer Letter Type
             </h2>
@@ -61,7 +61,7 @@ export default function ChooseOfferLetterType({
                 onClick={handleNavigation}
                 className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-black/80 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
               >
-                Submit
+                Next
               </button>
             </div>
           </div>

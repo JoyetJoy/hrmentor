@@ -1,44 +1,44 @@
 import { Link } from "react-router-dom";
 
-const cardData = [
-  {
-    path: "overview/ready-to-hiring",
-    title: "Ready to Hiring",
-    count: 5,
-    bgColor: "#FEF8E9",
-    imgSrc: "/assets/images/hiring/1.png",
-  },
-  {
-    path: "overview/offer-to-be-finalized",
-    title: "Offer to be finalized",
-    count: 1322,
-    bgColor: "#F8F3FF",
-    imgSrc: "/assets/images/hiring/2.png",
-  },
-  {
-    path: "overview/upcoming",
-    title: "Offer Accepted",
-    count: 99,
-    bgColor: "#F2EAF2",
-    imgSrc: "/assets/images/hiring/5.svg",
-  },
-  {
-    path: "overview/hired",
-    title: "Hired",
-    count: 99,
-    bgColor: "#EBF9ED",
-    imgSrc: "/assets/images/hiring/3.png",
-  },
-  {
-    path: "overview/offer-declined",
-    title: "Offer declined",
-    count: 3,
-    bgColor: "#FEEDDF",
-    imgSrc: "/assets/images/hiring/4.png",
-  },
-];
-
-export const OverviewCards = () => {
+export const OverviewCards = ({ data }) => {
+  const cardData = [
+    {
+      path: "overview/ready-to-hiring",
+      title: "Ready to Hiring",
+      count: `${data?.candidatesHiringCount}`,
+      bgColor: "#FEF8E9",
+      imgSrc: "/assets/images/hiring/1.png",
+    },
+    {
+      path: "overview/offer-to-be-finalized",
+      title: "Offer to be finalized",
+      count: 1322,
+      count: `${data?.offer_requested_candidates}`,
+      bgColor: "#F8F3FF",
+      imgSrc: "/assets/images/hiring/2.png",
+    },
+    {
+      path: "overview/upcoming",
+      title: "Offer Accepted",
+      count: `${data?.conditional_offer_accepted_candidates}`,
+      bgColor: "#F2EAF2",
+      imgSrc: "/assets/images/hiring/5.svg",
+    },
+    {
+      path: "/admin/hiring/hired",
+      title: "Hired",
+      count: `${data?.hired_candidates ?? 0}`,
+      bgColor: "#EBF9ED",
+      imgSrc: "/assets/images/hiring/3.png",
+    },
+    {
+      path: "overview/offer-declined",
+      title: "Offer declined",
+      count: `${data?.offer_rejected}`,
+      bgColor: "#FEEDDF",
+      imgSrc: "/assets/images/hiring/4.png",
+    },
+  ];
   return (
     <div className="grid grid-cols-5 gap-3">
       {cardData.map((card, index) => (

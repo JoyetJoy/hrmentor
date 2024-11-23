@@ -2,26 +2,8 @@ import * as Yup from "yup";
 
 export const ShiftSchema = Yup.object({
   name: Yup.string().required("Shift name is required"),
-  start_time: Yup.string()
-    .required("Start time is required")
-    .test(
-      "is-before-end-time",
-      "Start time must be before end time",
-      function (value) {
-        const { end_time } = this.parent;
-        return !end_time || value < end_time; // Only return false if end_time exists and start_time is not before it
-      },
-    ),
-  end_time: Yup.string()
-    .required("End time is required")
-    .test(
-      "is-after-start-time",
-      "End time must be after start time",
-      function (value) {
-        const { start_time } = this.parent;
-        return !start_time || value > start_time; // Only return false if start_time exists and end_time is not after it
-      },
-    ),
+  start_time: Yup.string().required("Start time is required"),
+  end_time: Yup.string().required("End time is required"),
   people_required: Yup.string().required("People Required  is reqiued"),
 
   department_id: Yup.object({
@@ -91,32 +73,8 @@ export const ShiftSchema = Yup.object({
 export const BreakTimeSchema = Yup.object().shape({
   type_name: Yup.string().required("Name is required"),
   pay_node: Yup.string().required("Pay mode is required"),
-  time: Yup.string()
-    .nullable() // Allow null values but validate if provided
-    .test(
-      "either-time-or-start-time",
-      "Either break time or start time must be provided",
-      function (value) {
-        const { start_time } = this.parent;
-        return value || start_time; // Valid if either time or start_time is filled
-      },
-    ),
-  start_time: Yup.string()
-    .nullable()
-    .test(
-      "is-valid-start-time",
-      "Start time must be before end time",
-      function (value) {
-        const { end_time, time } = this.parent;
-        if (!value && !time) {
-          return false; // If neither time nor start_time is provided, it's invalid
-        }
-        if (end_time && value >= end_time) {
-          return false; // Ensure start_time is before end_time
-        }
-        return true; // Otherwise, it's valid
-      },
-    ),
+  time: Yup.string().nullable(),
+  start_time: Yup.string().nullable(),
   end_time: Yup.string()
     .nullable()
     .test(
