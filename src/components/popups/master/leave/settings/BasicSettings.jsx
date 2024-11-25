@@ -147,10 +147,10 @@ const BasicSettings = ({ formtype = "save" }) => {
       };
       const res = await newRequest.post(HOLIDAY_STATUS, formData);
 
-      
-
       if (res.data.success === true) {
-        navigate(`/admin/leave/settings/availabilitysettings/${res.data.data.id}`);
+        navigate(
+          `/admin/leave/settings/availabilitysettings/${res.data.data.id}`,
+        );
       }
     } catch (error) {
       console.error("Error Details:", error);
@@ -359,8 +359,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="accrualStatus"
-                    value="byworkingdays"
-                    onClick={() => setAccrualType("byworkingdays")}
+                    value="byworking"
+                    onClick={() => setAccrualType("byworking")}
                     className="radio-black"
                   />
                   <label className="label-text">By Working days</label>
@@ -461,7 +461,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
               </div>
             )}
-            {accrualType === "byworkingdays" && (
+            {accrualType === "byworking" && (
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">
@@ -500,7 +500,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                           field.onChange(selectedOption);
                           setAccuralPeriod(selectedOption.value);
                         }}
-                        className="input-box w-full overflow-hidden"
+                        className="input-box w-full"
                       />
                     )}
                   />
@@ -529,12 +529,12 @@ const BasicSettings = ({ formtype = "save" }) => {
                             label: "After specific number of days",
                           },
                         ]}
-                        placeholder="Select a Accrual At"
+                        placeholder="Select a At"
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption);
                           setAccuralAt(selectedOption.value);
                         }}
-                        className="input-box w-full overflow-hidden"
+                        className="input-box w-full"
                       />
                     )}
                   />
@@ -570,8 +570,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="application_to"
-                    value="all_employees"
-                    onClick={() => setApplicable("all_employees")}
+                    value="all_employee"
+                    onClick={() => setApplicable("all_employee")}
                     className="radio-black"
                     defaultChecked
                   />
@@ -589,7 +589,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
               </div>
             </div>
-            {applicable === "all_employees" && (
+            {applicable === "all_employee" && (
               <div className="grid grid-cols-2">
                 <div className="group flex flex-col gap-1.5 py-2">
                   <input

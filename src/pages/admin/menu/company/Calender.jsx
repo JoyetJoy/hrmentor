@@ -4,12 +4,67 @@ import { ArrowLeft, ChevronRight, Plus, Upload } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
-import { customSelectStyles } from "@/utils/customStyles";
-import CompanyWeekendCalendar from "./WeedendCalender";
 import CompanyCreateSideBar from "@/components/sidebars/company/CompanyCreateSideBar";
+import { COMPANY_CALENDER, newRequest, WORK_LOCATIONS } from "@/api";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+
+const CompanyCalenderSchema = Yup.object({
+  max_work_hr: Yup.string(),
+  shift_start_time: Yup.string(),
+  shift_end_time: Yup.string(),
+  shift_duration: Yup.string(),
+  full_day: Yup.string(),
+  full_tolarance: Yup.string(),
+  half_day: Yup.string(),
+  half_day_tolarance: Yup.string(),
+});
+
+const monthOptions = [
+  { value: "jan", label: "January" },
+  { value: "feb", label: "February" },
+  { value: "mar", label: "March" },
+  { value: "apr", label: "April" },
+  { value: "may", label: "May" },
+  { value: "jun", label: "June" },
+  { value: "jul", label: "July" },
+  { value: "aug", label: "August" },
+  { value: "sep", label: "September" },
+  { value: "oct", label: "October" },
+  { value: "nov", label: "November" },
+  { value: "dec", label: "December" },
+];
+
+const weekOptions = [
+  { value: "mon", label: "Monday" },
+  { value: "tue", label: "Tuesday" },
+  { value: "wed", label: "Wednesday" },
+  { value: "thu", label: "Thursday" },
+  { value: "fri", label: "Friday" },
+  { value: "sat", label: "Saturday" },
+  { value: "sun", label: "Sunday" },
+];
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const headers = ["All", "1st", "2nd", "3rd", "4th", "5th", "Alternate weekend"];
 
 export default function CompanyCalender() {
   const [loader, setLoader] = useState(false);
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  const { id } = useParams();
   const {
     register,
     handleSubmit,
@@ -20,16 +75,149 @@ export default function CompanyCalender() {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(),
+    resolver: yupResolver(CompanyCalenderSchema),
   });
+
+  function close() {
+    SetCompanyCalender({
+      max_work_hr: "",
+      shift_start_time: "",
+      shift_end_time: "",
+      shift_duration: "",
+      full_day: "",
+      full_tolarance: "",
+      half_day: "",
+      half_day_tolarance: "",
+    });
+  }
+
+  const [location, setLocation] = useState([]);
+  const [fiscalCalendar, setFiscalCalendar] = useState(false);
+  const [leaveYear, setLeaveYear] = useState(false);
+  const [calenderFrom, setCalenderFrom] = useState("");
+  const [calenderTo, setCalenderTo] = useState("");
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo, setYearTo] = useState("");
+  const [weekStart, setWeekStart] = useState("");
+
+  const [companyCalender, SetCompanyCalender] = useState({
+    max_work_hr: "",
+    shift_start_time: "",
+    shift_end_time: "",
+    shift_duration: "",
+    full_day: "",
+    full_tolarance: "",
+    half_day: "",
+    half_day_tolarance: "",
+  });
+
+  const HandleCompanyCalender = (e) => {
+    SetCompanyCalender({
+      ...companyCalender,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const [weekendDefinition, setWeekendDefinition] = useState(
+    days.reduce((acc, day) => {
+      acc[day.toLowerCase()] = Array(headers.length).fill(false);
+      return acc;
+    }, {}),
+  );
+
+  // Handle checkbox change
+  const handleCheckboxChange = (day, index) => {
+    setWeekendDefinition((prev) => ({
+      ...prev,
+      [day]: prev[day].map((selected, i) =>
+        i === index ? !selected : selected,
+      ),
+    }));
+  };
+
+  const { data: companyCalenderDetails } = useQuery({
+    queryKey: ["companyCalender", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(COMPANY_CALENDER, {
+          params: {
+            user_id: user?.id,
+          },
+        })
+
+        .then((res) => res.data.original.data),
+    enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
+  });
+
+  const { data: localtionDetails } = useQuery({
+    queryKey: ["localtionDetails", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(WORK_LOCATIONS, {
+          params: {
+            user_id: user?.id,
+          },
+        })
+
+        .then((res) => res.data),
+    enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
+  });
+
+  const onSubmit = async () => {
+    setLoader(true);
+    try {
+      const location_id = location.map((item) => item.id);
+      const formData = {
+        location: 12,
+        fiscal_calendar: fiscalCalendar,
+        calender_from: calenderFrom,
+        calender_to: calenderTo,
+        leave_year: leaveYear,
+        leave_year_from: yearFrom,
+        leave_year_to: yearTo,
+        max_work_hr: companyCalender.max_work_hr,
+        week_start: weekStart,
+        shift_start_time: companyCalender.shift_start_time,
+        shift_end_time: companyCalender.shift_end_time,
+        shift_duration: companyCalender.shift_duration,
+        full_day: companyCalender.full_day,
+        full_tolarance: companyCalender.full_tolarance,
+        half_day: companyCalender.half_day,
+        half_day_tolarance: companyCalender.half_day_tolarance,
+        weekend_definition: weekendDefinition,
+      };
+      const res = await newRequest.post(
+        `${COMPANY_CALENDER}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
+      if (res) {
+        toast.success(res?.data?.message);
+        close();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
+
   return (
     <>
       <CompanyMenuHeader />
       <div className="flex flex-row items-start justify-between gap-3">
-        <form className="w-full">
+        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft onClick={() => history.back()} className="size-4 cursor-pointer" />
+              <ArrowLeft
+                onClick={() => history.back()}
+                className="size-4 cursor-pointer"
+              />
               Company Profile{" "}
             </div>
             <button
@@ -42,7 +230,7 @@ export default function CompanyCalender() {
                   Saving
                 </div>
               ) : (
-                "Next"
+                "Save"
               )}
             </button>
           </div>
@@ -60,141 +248,178 @@ export default function CompanyCalender() {
               <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
                 <label className="label-text">Location</label>
                 <div className="flex items-center gap-2">
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    {...register("location", { required: true })}
-                    className="input-box"
+                  <Controller
+                    name="accural_monthly"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={localtionDetails}
+                        isMulti
+                        isSearchable
+                        placeholder="Select a Location"
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption); // Update the form value
+                          setLocation(selectedOption);
+                        }}
+                        className="input-box w-full"
+                      />
+                    )}
                   />
                   <div className="rounded-full bg-hrmprimaryorange">
-                    <Plus className="size-6 text-white" />
+                    {/* <Plus className="size-6 text-white" /> */}
                   </div>
                 </div>
-                {errors.location && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.location?.message}
-                  </span>
-                )}
               </div>
               <div className="group col-span-2 flex items-center gap-4 space-y-1 px-3 py-1">
                 <h1 className="text-sm">Fiscal calender</h1>
-                <input
-                  type="checkbox"
-                  className="border-coollightgreen bg-coolgreen hover:bg-coolgreen toggle [--tglbg:theme(colors.coollightgreen)]"
-                  defaultChecked
-                />
+                <div
+                  onClick={() => {
+                    if (fiscalCalendar) {
+                      setFiscalCalendar(false);
+                    } else {
+                      setFiscalCalendar(true);
+                    }
+                  }}
+                  className={`h-5 w-10 rounded-full p-[1px] ${fiscalCalendar ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white pt-[1.5px]"}`}
+                >
+                  <div
+                    className={`h-4 w-4 ${fiscalCalendar ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                      fiscalCalendar ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  ></div>
+                </div>
                 <p className="text-xs text-gray-dark">
                   Same as the calendar year
                 </p>
               </div>
-              <div className="grid grid-cols-2">
-                <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">From</label>
-                  <Controller
-                    name="from"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select salary type"
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.from && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.from?.message}
-                    </span>
-                  )}
+              {fiscalCalendar && (
+                <div className="grid grid-cols-2">
+                  <div className="group flex flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">From</label>
+                    <Controller
+                      name="accural_monthly"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={monthOptions.find(
+                            (option) => option.value === calenderFrom,
+                          )}
+                          options={monthOptions}
+                          isSearchable
+                          placeholder="Select a month"
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption.value); // Update the form value
+                            setCalenderFrom(selectedOption.value); // Update local state with selected month
+                          }}
+                          className="input-box w-full"
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="group flex flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">To</label>
+                    <Controller
+                      name="accural_monthly"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={monthOptions.find(
+                            (option) => option.value === calenderTo,
+                          )}
+                          options={monthOptions}
+                          isSearchable
+                          placeholder="Select a month"
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption.value); // Update the form value
+                            setCalenderTo(selectedOption.value); // Update local state with selected month
+                          }}
+                          className="input-box w-full"
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
-                <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">To</label>
-                  <Controller
-                    name="to"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select salary type"
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.to && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.to?.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <p className="border-orange bg-coolorange col-span-2 mt-3 border-l-4 py-3 pl-3 text-xs font-normal text-gray-darkpale">
+              )}
+              <p className="col-span-2 mt-3 border-l-4 border-orange bg-coolorange py-3 pl-3 text-xs font-normal text-gray-darkpale">
                 The financial-based calculation will consider the selected
                 period as one year
               </p>
               <div className="group col-span-2 flex items-center gap-4 space-y-1 px-3 py-1">
                 <h1 className="text-sm">Leave year</h1>
-                <input
-                  type="checkbox"
-                  className="border-coollightgreen bg-coolgreen hover:bg-coolgreen toggle [--tglbg:theme(colors.coollightgreen)]"
-                  defaultChecked
-                />
+                <div
+                  onClick={() => {
+                    if (leaveYear) {
+                      setLeaveYear(false);
+                    } else {
+                      setLeaveYear(true);
+                    }
+                  }}
+                  className={`h-5 w-10 rounded-full p-[1px] ${leaveYear ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white pt-[1.5px]"}`}
+                >
+                  <div
+                    className={`h-4 w-4 ${leaveYear ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                      leaveYear ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  ></div>
+                </div>
                 <p className="text-xs text-gray-dark">
                   Same as the calendar year
                 </p>
               </div>
-              <div className="grid grid-cols-2">
-                <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">From</label>
-                  <Controller
-                    name="from"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select salary type"
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.from && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.from?.message}
-                    </span>
-                  )}
+              {leaveYear && (
+                <div className="grid grid-cols-2">
+                  <div className="group flex flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">From</label>
+                    <Controller
+                      name="accural_monthly"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={monthOptions.find(
+                            (option) => option.value === yearFrom,
+                          )}
+                          options={monthOptions}
+                          isSearchable
+                          placeholder="Select a month"
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption.value); // Update the form value
+                            setYearFrom(selectedOption.value); // Update local state with selected month
+                          }}
+                          className="input-box w-full"
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className="group flex flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">To</label>
+                    <Controller
+                      name="accural_monthly"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={monthOptions.find(
+                            (option) => option.value === yearTo,
+                          )}
+                          options={monthOptions}
+                          isSearchable
+                          placeholder="Select a month"
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption.value); // Update the form value
+                            setYearTo(selectedOption.value); // Update local state with selected month
+                          }}
+                          className="input-box w-full"
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
-                <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">To</label>
-                  <Controller
-                    name="to"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={false}
-                        styles={customSelectStyles}
-                        placeholder="Select salary type"
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.to && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.to?.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <p className="border-orange bg-coolorange col-span-2 mt-3 border-l-4 py-3 pl-3 text-xs font-normal text-gray-darkpale">
+              )}
+              <p className="col-span-2 mt-3 border-l-4 border-orange bg-coolorange py-3 pl-3 text-xs font-normal text-gray-darkpale">
                 The leave based calculation will consider the selected period as
                 one year
               </p>
@@ -206,37 +431,50 @@ export default function CompanyCalender() {
                   <input
                     autoComplete="off"
                     type="text"
-                    {...register("location", { required: true })}
                     className="input-box"
+                    name="max_work_hr"
+                    value={companyCalender.max_work_hr}
+                    onChange={HandleCompanyCalender}
                   />
-                  {errors.max_hr && (
+                  {errors.max_work_hr && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.max_hr?.message}
+                      {errors.max_work_hr?.message}
                     </span>
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
                   <label className="label-text">Week start on</label>
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    {...register("location", { required: true })}
-                    className="input-box"
+                  <Controller
+                    name="accural_monthly"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={weekOptions.find(
+                          (option) => option.value === field.value,
+                        )}
+                        options={weekOptions}
+                        isSearchable
+                        placeholder="Select a Day"
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption.value); // Update the form value
+                          setWeekStart(selectedOption.value); // Update local state with selected month
+                        }}
+                        className="input-box w-full"
+                      />
+                    )}
                   />
-                  {errors.to && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.to?.message}
-                    </span>
-                  )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
                   <label className="label-text">Shift Start time</label>
                   <input
                     autoComplete="off"
-                    type="text"
+                    type="time"
                     placeholder="HH:MM"
-                    {...register("shift_start_time", { required: true })}
                     className="input-box"
+                    name="shift_start_time"
+                    value={companyCalender.shift_start_time}
+                    onChange={HandleCompanyCalender}
                   />
                   {errors.shift_start_time && (
                     <span className="text-xs font-medium text-red-500">
@@ -248,10 +486,12 @@ export default function CompanyCalender() {
                   <label className="label-text">Shift end time</label>
                   <input
                     autoComplete="off"
-                    type="text"
+                    type="time"
                     placeholder="HH:MM"
-                    {...register("shift_end_time", { required: true })}
                     className="input-box"
+                    name="shift_end_time"
+                    value={companyCalender.shift_end_time}
+                    onChange={HandleCompanyCalender}
                   />
                   {errors.shift_end_time && (
                     <span className="text-xs font-medium text-red-500">
@@ -263,9 +503,12 @@ export default function CompanyCalender() {
                   <label className="label-text">Shift duration</label>
                   <input
                     autoComplete="off"
-                    type="text"
-                    {...register("shift_duration", { required: true })}
+                    type="time"
                     className="input-box"
+                    placeholder="HH:MM"
+                    name="shift_duration"
+                    value={companyCalender.shift_duration}
+                    onChange={HandleCompanyCalender}
                   />
                   {errors.shift_duration && (
                     <span className="text-xs font-medium text-red-500">
@@ -282,9 +525,11 @@ export default function CompanyCalender() {
                   <label className="label-text">Full day</label>
                   <input
                     autoComplete="off"
-                    type="text"
+                    type="time"
                     placeholder="HH:MM"
-                    {...register("full_day", { required: true })}
+                    name="full_day"
+                    value={companyCalender.full_day}
+                    onChange={HandleCompanyCalender}
                     className="input-box"
                   />
 
@@ -299,13 +544,15 @@ export default function CompanyCalender() {
                   <input
                     autoComplete="off"
                     placeholder="HH:MM"
-                    type="text"
-                    {...register("full_day_tolarance", { required: true })}
+                    type="time"
+                    name="full_tolarance"
+                    value={companyCalender.full_tolarance}
+                    onChange={HandleCompanyCalender}
                     className="input-box"
                   />
-                  {errors.full_day_tolarance && (
+                  {errors.full_tolarance && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.full_day_tolarance?.message}
+                      {errors.full_tolarance?.message}
                     </span>
                   )}
                 </div>
@@ -313,9 +560,11 @@ export default function CompanyCalender() {
                   <label className="label-text">Half day </label>
                   <input
                     autoComplete="off"
-                    type="text"
+                    type="time"
                     placeholder="HH:MM"
-                    {...register("half_day", { required: true })}
+                    name="half_day"
+                    value={companyCalender.half_day}
+                    onChange={HandleCompanyCalender}
                     className="input-box"
                   />
                   {errors.half_day && (
@@ -328,9 +577,11 @@ export default function CompanyCalender() {
                   <label className="label-text">Half day tolarance</label>
                   <input
                     autoComplete="off"
-                    type="text"
+                    type="time"
                     placeholder="HH:MM"
-                    {...register("half_day_tolarance", { required: true })}
+                    name="half_day_tolarance"
+                    value={companyCalender.half_day_tolarance}
+                    onChange={HandleCompanyCalender}
                     className="input-box"
                   />
                   {errors.half_day_tolarance && (
@@ -340,7 +591,7 @@ export default function CompanyCalender() {
                   )}
                 </div>
               </div>
-              <p className="border-orange bg-coolorange col-span-2 mt-3 border-l-4 py-3 pl-3 text-xs font-normal text-gray-darkpale">
+              <p className="col-span-2 mt-3 border-l-4 border-orange bg-coolorange py-3 pl-3 text-xs font-normal text-gray-darkpale">
                 Employee must reach the minimum hours required to qualify
                 themselves as full day or half day present
               </p>
@@ -348,10 +599,41 @@ export default function CompanyCalender() {
                 <h1 className="col-span-2 my-6 text-base font-semibold text-black">
                   Weekend definition
                 </h1>
-                <p className="border-orange bg-coolorange col-span-2 mb-7 mt-3 border-l-4 py-3 pl-3 text-xs font-normal text-gray-darkpale">
-                  The selected day(s) will be considered as weekend{" "}
+                <p className="col-span-2 mb-7 mt-3 border-l-4 border-orange bg-coolorange py-3 pl-3 text-xs font-normal text-gray-darkpale">
+                  The selected day(s) will be considered as weekend
                 </p>
-                <CompanyWeekendCalendar />
+
+                <div className="grid grid-cols-8 gap-28 text-center font-semibold">
+                  <div></div>
+                  {headers.map((header, index) => (
+                    <div
+                      key={index}
+                      className="whitespace-nowrap text-sm font-normal"
+                    >
+                      {header}
+                    </div>
+                  ))}
+                </div>
+
+                {days.map((day, dayIndex) => (
+                  <div
+                    key={dayIndex}
+                    className="my-7 grid grid-cols-8 items-center gap-28 text-center"
+                  >
+                    <div className="text-left">{day}</div>
+                    {headers.map((_, colIndex) => (
+                      <input
+                        key={colIndex}
+                        type="checkbox"
+                        className="h-5 w-5 rounded border-gray-400 focus:ring-hrmprimaryorange focus:ring-offset-0"
+                        checked={weekendDefinition[day.toLowerCase()][colIndex]}
+                        onChange={() =>
+                          handleCheckboxChange(day.toLowerCase(), colIndex)
+                        }
+                      />
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

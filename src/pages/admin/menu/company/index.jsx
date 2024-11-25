@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { COUNTRY, COUNTRY_CITY, STATE_COUNTRY } from "@/api/master";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-
+import useImageUpload from "@/hooks/useImageUpload";
 const CompanyStatus = [
   { value: "active", label: "Active" },
   { value: "inactive", label: "Inactive" },
@@ -56,6 +56,7 @@ export default function CompanyGeneral() {
   const [cityId, setCityId] = useState("");
   const [search, setSearch] = useState("");
   const [selectedLogo, setSelectedLogo] = useState(null);
+  const [selectedLogoBlob, setSelectedLogoBlob] = useState(null); // Store binary data
   const [businessTypes, setBusinessTypes] = useState([]);
   const [companyBasic, SetCompanyBasic] = useState({
     company_name: "",
@@ -83,10 +84,27 @@ export default function CompanyGeneral() {
     resolver: yupResolver(CompanyBasicSchema),
   });
 
-  console.log(errors, "errorserrors");
-
   function close() {
-    setPopupOpen(false);
+    SetCompanyBasic({
+      company_name: "",
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_no: "",
+      created_date: "",
+      status: "",
+      username: "",
+      upload_company_logo: "",
+      upload_letter_head: "",
+      address_one: "",
+      address_two: "",
+      postal_code: "",
+    });
+    setBusiness_Type("");
+    setStatus("");
+    setStateId("");
+    setCountryId("");
+    setCityId("");
   }
   // Fetch List
   const { data: companyProfileBasic } = useQuery({
@@ -214,17 +232,24 @@ export default function CompanyGeneral() {
     });
   };
 
-  const handleLogoSelect = (logoSrc) => {
-    setSelectedLogo(logoSrc); // Update selected logo
+  const handleLogoSelect = async (logoSrc) => {
+    setSelectedLogo(logoSrc);
+
+    // Fetch the image and convert it to Blob
+    try {
+      const response = await fetch(logoSrc);
+      const blob = await response.blob();
+      setSelectedLogoBlob(blob);
+    } catch (error) {
+      console.error("Error fetching image:", error);
+    }
   };
 
-  // Handle form submission
-  const handleSubmitLogo = (e) => {
+  const handleSubmitLogo = async (e) => {
     e.preventDefault();
-    if (selectedLogo) {
-    } else {
-      console.log("No logo selected");
-    }
+    if (!selectedLogoBlob) return;
+    setPopupOpen(false);
+    setLoader(true);
   };
 
   const onSubmit = async () => {
@@ -242,7 +267,8 @@ export default function CompanyGeneral() {
       formData.append("username", companyBasic.username);
       formData.append(
         "upload_company_logo",
-        selectedLogo || companyBasic.upload_company_logo,
+        selectedLogoBlob || companyBasic.upload_company_logo,
+        selectedLogoBlob ? selectedLogo : undefined,
       );
       formData.append("upload_letter_head", companyBasic.upload_letter_head);
       formData.append("address_one", companyBasic.address_one);
@@ -252,22 +278,23 @@ export default function CompanyGeneral() {
       formData.append("city", cityId);
       formData.append("postal_code", companyBasic.postal_code);
 
-      // const res = await newRequest.post(
-      //   `${COMPANY_PROFILE_BASIC}`, // URL with dynamic ID
-      //   formData, // formData should be the second argument, which is the request body
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //     params: {
-      //       user_id: user?.id,
-      //     },
-      //   },
-      // );
-      // if (res) {
-      //   toast.success(res?.data?.message);
-      return navigate("/admin/company/bank_details");
-      // }
+      const res = await newRequest.post(
+        `${COMPANY_PROFILE_BASIC}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
+      if (res) {
+        toast.success(res?.data?.message);
+        close();
+        return navigate(`/admin/company/bank_details/${res.data.data.id}`);
+      }
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.error);
@@ -275,9 +302,6 @@ export default function CompanyGeneral() {
       setLoader(false);
     }
   };
-
-  console.log(selectedLogo,"cdcdc");
-  
 
   return (
     <>
@@ -757,8 +781,15 @@ export default function CompanyGeneral() {
                       type="radio"
                       name="logo"
                       value="/assets/images/company/companylogo1.png"
-                      checked={selectedLogo === "companylogo1.png"}
-                      onChange={() => handleLogoSelect("companylogo1.png")}
+                      checked={
+                        selectedLogo ===
+                        "/assets/images/company/companylogo1.png"
+                      }
+                      onChange={() =>
+                        handleLogoSelect(
+                          "/assets/images/company/companylogo1.png",
+                        )
+                      }
                       className="size-4"
                     />
                   </div>
@@ -773,8 +804,15 @@ export default function CompanyGeneral() {
                       type="radio"
                       name="logo"
                       value="/assets/images/company/companylogo2.png"
-                      checked={selectedLogo === "companylogo2.png"}
-                      onChange={() => handleLogoSelect("companylogo2.png")}
+                      checked={
+                        selectedLogo ===
+                        "/assets/images/company/companylogo2.png"
+                      }
+                      onChange={() =>
+                        handleLogoSelect(
+                          "/assets/images/company/companylogo2.png",
+                        )
+                      }
                       className="size-4"
                     />
                   </div>

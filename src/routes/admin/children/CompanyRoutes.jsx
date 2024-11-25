@@ -9,15 +9,15 @@ export const CompanyRoutes = [
         element: <CompanyGeneral /> 
     },
     {
-        path:"bank_details",
+        path:"bank_details/:id",
         element: <CompanyBankDetails/>
     },
     {
-        path:"signatory",
+        path:"signatory/:id",
         element:<CompanySignatory/>
     },
     {
-        path:"calender",
+        path:"calender/:id",
         element:<CompanyCalender/>
     },
     

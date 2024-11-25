@@ -6,28 +6,179 @@ import {
 } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft, ChevronRight } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Controller, useForm } from "react-hook-form";
 import { customSelectStyles } from "@/utils/customStyles";
 import CompanyCreateSideBar from "@/components/sidebars/company/CompanyCreateSideBar";
-import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { COMPANY_BANK_DETAILS, newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+
+const PaymentStatus = [
+  { value: "some", label: "Some" },
+  { value: "new", label: "New" },
+];
+
+const CompanyBankSchema = Yup.object({
+  bank_name: Yup.string(),
+  branch: Yup.string(),
+  ifsc_code: Yup.string(),
+  account_no: Yup.string(),
+  pan_numner: Yup.string(),
+  tan_number: Yup.string(),
+  tds_code: Yup.string(),
+  deductor_father_name: Yup.string(),
+  account_holder_name: Yup.string(),
+  sort_code: Yup.string(),
+  swift_code: Yup.string(),
+  iban_no: Yup.string(),
+  company_profile_id: Yup.string(),
+});
 
 export default function CompanyBankDetails() {
   const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  const { id } = useParams();
   const {
-    register,
     handleSubmit,
     control,
-    setValue,
-    watch,
-    reset,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(),
+    resolver: yupResolver(CompanyBankSchema),
+  });
+  const [taxPayment, setTaxPayment] = useState("");
+  const [diductorName, setDiductorname] = useState("");
+  const [bankDetails, SetBankDetails] = useState({
+    bank_name: "",
+    branch: "",
+    ifsc_code: "",
+    account_no: "",
+    pan_numner: "",
+    tan_number: "",
+    tds_code: "",
+    deductor_father_name: "",
+    account_holder_name: "",
+    sort_code: "",
+    swift_code: "",
+    iban_no: "",
+    company_profile_id: "",
   });
 
+  function close() {
+    SetBankDetails({
+      bank_name: "",
+      branch: "",
+      ifsc_code: "",
+      account_no: "",
+      pan_numner: "",
+      tan_number: "",
+      tds_code: "",
+      deductor_father_name: "",
+      account_holder_name: "",
+      sort_code: "",
+      swift_code: "",
+      iban_no: "",
+      company_profile_id: "",
+    });
+    setTaxPayment("");
+    setDiductorname("");
+  }
+
+  const { data: companyBankDetails } = useQuery({
+    queryKey: ["companyBankDetails", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(COMPANY_BANK_DETAILS, {
+          params: {
+            user_id: user?.id,
+          },
+        })
+
+        .then((res) => res.data.original.data[0]),
+    enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
+  });
+
+  useEffect(() => {
+    if (companyBankDetails) {
+      SetBankDetails({
+        bank_name: companyBankDetails.bank_name,
+        branch: companyBankDetails.branch,
+        ifsc_code: companyBankDetails.ifsc_code,
+        account_no: companyBankDetails.account_no,
+        pan_numner: companyBankDetails.pan_numner,
+        tan_number: companyBankDetails.tan_number,
+        tds_code: companyBankDetails.tds_code,
+        deductor_father_name: companyBankDetails.deductor_father_name,
+        account_holder_name: companyBankDetails.account_holder_name,
+        sort_code: companyBankDetails.sort_code,
+        swift_code: companyBankDetails.swift_code,
+        iban_no: companyBankDetails.iban_no,
+        company_profile_id: companyBankDetails.company_profile_id,
+      });
+      setTaxPayment(companyBankDetails.tax_payment);
+      setDiductorname(companyBankDetails.deductor_name);
+    }
+  }, [companyBankDetails]);
+
+  const HandleCompanyBasic = (e) => {
+    SetBankDetails({
+      ...bankDetails,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async () => {
+    setLoader(true);
+    try {
+      const formData = {
+        bank_name: bankDetails.bank_name,
+        branch: bankDetails.branch,
+        ifsc_code: bankDetails.ifsc_code,
+        account_no: bankDetails.account_no,
+        pan_numner: bankDetails.pan_numner,
+        tan_number: bankDetails.tan_number,
+        tds_code: bankDetails.tds_code,
+        deductor_father_name: bankDetails.deductor_father_name,
+        account_holder_name: bankDetails.account_holder_name,
+        sort_code: bankDetails.sort_code,
+        swift_code: bankDetails.swift_code,
+        iban_no: bankDetails.iban_no,
+        company_profile_id: id,
+        tax_payment: taxPayment,
+        deductor_name: diductorName,
+      };
+
+      const res = await newRequest.post(
+        `${COMPANY_BANK_DETAILS}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
+      console.log(res);
+
+      if (res) {
+        toast.success(res?.data?.message);
+        close();
+        return navigate(`/admin/company/signatory/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
   return (
     <>
       <CompanyMenuHeader />
@@ -35,15 +186,18 @@ export default function CompanyBankDetails() {
         <form className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft onClick={() => history.back()} className="size-4 cursor-pointer" />
+              <ArrowLeft
+                onClick={() => history.back()}
+                className="size-4 cursor-pointer"
+              />
               Company Profile{" "}
             </div>
-            <Link
-              to="/admin/company/signatory"
+            <div
+              onClick={handleSubmit(onSubmit)}
               className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               Next
-            </Link>
+            </div>
           </div>
           <div className="h-screen w-full rounded-md bg-white px-5 py-7">
             <Disclosure as="div" className="py-1" defaultOpen={true}>
@@ -63,8 +217,10 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("bank_name", { required: true })}
                       className="input-box"
+                      name="bank_name"
+                      value={bankDetails.bank_name}
+                      onChange={HandleCompanyBasic}
                     />
                     {errors.bank_name && (
                       <span className="text-xs font-medium text-red-500">
@@ -77,7 +233,9 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("branch", { required: true })}
+                      name="branch"
+                      value={bankDetails.branch}
+                      onChange={HandleCompanyBasic}
                       className="input-box"
                     />
                     {errors.branch && (
@@ -93,12 +251,14 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("ac_number", { required: true })}
+                      name="account_no"
+                      value={bankDetails.account_no}
+                      onChange={HandleCompanyBasic}
                       className="input-box"
                     />
-                    {errors.ac_number && (
+                    {errors.account_no && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.ac_number?.message}
+                        {errors.account_no?.message}
                       </span>
                     )}
                   </div>
@@ -109,12 +269,14 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("ac_holder_name", { required: true })}
+                      name="account_holder_name"
+                      value={bankDetails.account_holder_name}
+                      onChange={HandleCompanyBasic}
                       className="input-box"
                     />
-                    {errors.ac_holder_name && (
+                    {errors.account_holder_name && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.ac_holder_name?.message}
+                        {errors.account_holder_name?.message}
                       </span>
                     )}
                   </div>
@@ -123,7 +285,9 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("sort_code", { required: true })}
+                      name="sort_code"
+                      value={bankDetails.sort_code}
+                      onChange={HandleCompanyBasic}
                       className="input-box"
                     />
                     {errors.sort_code && (
@@ -138,7 +302,9 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("swift_code", { required: true })}
+                      name="swift_code"
+                      value={bankDetails.swift_code}
+                      onChange={HandleCompanyBasic}
                       className="input-box"
                     />
                     {errors.swift_code && (
@@ -152,7 +318,9 @@ export default function CompanyBankDetails() {
                     <input
                       autoComplete="off"
                       type="text"
-                      {...register("iban_num", { required: true })}
+                      name="iban_no"
+                      value={bankDetails.iban_no}
+                      onChange={HandleCompanyBasic}
                       className="input-box"
                     />
                     {errors.iban_num && (
@@ -182,7 +350,9 @@ export default function CompanyBankDetails() {
                       <input
                         autoComplete="off"
                         type="text"
-                        {...register("pan_number", { required: true })}
+                        name="pan_numner"
+                        value={bankDetails.pan_numner}
+                        onChange={HandleCompanyBasic}
                         className="input-box"
                       />
                       {errors.pan_number && (
@@ -196,7 +366,9 @@ export default function CompanyBankDetails() {
                       <input
                         autoComplete="off"
                         type="text"
-                        {...register("tan_num", { required: true })}
+                        name="tan_number"
+                        value={bankDetails.tan_number}
+                        onChange={HandleCompanyBasic}
                         className="input-box"
                       />
                       {errors.tan_num && (
@@ -210,12 +382,14 @@ export default function CompanyBankDetails() {
                       <input
                         autoComplete="off"
                         type="text"
-                        {...register("tds_circle", { required: true })}
+                        name="tds_code"
+                        value={bankDetails.tds_code}
+                        onChange={HandleCompanyBasic}
                         className="input-box"
                       />
-                      {errors.tds_circle && (
+                      {errors.tds_code && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.tds_circle?.message}
+                          {errors.tds_code?.message}
                         </span>
                       )}
                     </div>
@@ -232,16 +406,19 @@ export default function CompanyBankDetails() {
                             {...field}
                             isSearchable={false}
                             styles={customSelectStyles}
+                            options={PaymentStatus}
                             placeholder="Select "
                             className="input-box"
+                            value={PaymentStatus.find(
+                              (option) => option.value === taxPayment,
+                            )}
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption);
+                              setTaxPayment(selectedOption.value);
+                            }}
                           />
                         )}
                       />
-                      {errors.tax_payment && (
-                        <span className="text-xs font-medium text-red-500">
-                          {errors.tax_payment?.message}
-                        </span>
-                      )}
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-1">
                       <label className="label-text"> Deductor name</label>
@@ -254,8 +431,16 @@ export default function CompanyBankDetails() {
                             {...field}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Select"
+                            options={PaymentStatus}
+                            placeholder="Select "
                             className="input-box"
+                            value={PaymentStatus.find(
+                              (option) => option.value === diductorName,
+                            )}
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption);
+                              setDiductorname(selectedOption.value);
+                            }}
                           />
                         )}
                       />
@@ -271,7 +456,9 @@ export default function CompanyBankDetails() {
                         autoComplete="off"
                         type="text"
                         placeholder="Enter"
-                        {...register("city", { required: true })}
+                        name="deductor_father_name"
+                        value={bankDetails.deductor_father_name}
+                        onChange={HandleCompanyBasic}
                         className="input-box"
                       />
                       {errors.deductor_father_name && (
