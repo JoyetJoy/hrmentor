@@ -26,7 +26,7 @@ const CalendarShiftHistory = () => {
         onClick={()=>setClick('2')}
         className="text-sm text-[#797979] cursor-pointer">
             <div className="grid grid-cols-4 ">
-            <div className={`pt-2 ${click==='2'?'border-r border-r-black':'border-r'}`}>
+            <div className={`pt-4 ${click==='2'?'border-r border-r-black':'border-r'}`}>
                 <p>30/04/2024</p>
                 <p>9:20 PM</p>
             </div>
@@ -43,7 +43,7 @@ const CalendarShiftHistory = () => {
         onClick={()=>setClick('3')}
         className="text-sm text-[#797979] cursor-pointer">
             <div className="grid grid-cols-4 ">
-            <div className={`pt-2 ${click==='3'?'border-r border-r-black':'border-r'}`}>
+            <div className={`pt-4 ${click==='3'?'border-r border-r-black':'border-r'}`}>
                 <p>30/04/2024</p>
                 <p>9:20 PM</p>
             </div>
@@ -60,7 +60,7 @@ const CalendarShiftHistory = () => {
         onClick={()=>setClick('4')}
         className="text-sm text-[#797979] cursor-pointer">
             <div className="grid grid-cols-4 ">
-            <div className={`pt-2 ${click==='4'?'border-r border-r-black':'border-r'}`}>
+            <div className={`pt-4 ${click==='4'?'border-r border-r-black':'border-r'}`}>
                 <p>30/04/2024</p>
                 <p>9:20 PM</p>
             </div>
