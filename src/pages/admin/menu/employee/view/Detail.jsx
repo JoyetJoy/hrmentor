@@ -14,14 +14,12 @@ import dayjs from "dayjs";
 import Reschedule from "@/components/popups/employees/view/Reschedule";
 
 export default function EmployeeDetails() {
+  const [type, setType] = useState('');
   const [popupOpen,setPopupOpen] = useState(false)
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
-
-  const options = ["On Leave", "Onboarding Pending", "Active", "Awaiting joining", "Resigned", "Terminated"];
-
 
   // EMPLOYEE DETAILS;
   const { data: employeeViewDetails, isLoading } = useQuery({
@@ -44,6 +42,7 @@ export default function EmployeeDetails() {
       <Reschedule
       popupOpen={popupOpen}
       setPopupOpen={setPopupOpen}
+      type={type}
       />
       {isLoading ? (
         <div className="flex min-h-96 w-full items-center justify-center bg-white">
@@ -91,19 +90,13 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                <div className="ml-5">
-  <select
-    className="h-7 rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold text-mediumred focus:outline-none focus:ring focus:ring-mediumred/30"
-    defaultValue="On Leave"
-  >
-    {options.map((option, index) => (
-      <option key={index} value={option}>
-        {option}
-      </option>
-    ))}
-  </select>
-</div>
-
+                <div 
+                onClick={()=>{
+                  setPopupOpen(true)
+                setType('status')}}
+                className="ml-5 flex h-7 items-center cursor-pointer rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold text-mediumred">
+                  On Leave
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="text-xs">
@@ -118,7 +111,9 @@ export default function EmployeeDetails() {
               className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 text-xs font-bold bg-[#e0e2f3] rounded-md text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
                   Reschedule
                 </button>
-                <Link className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 bg-[#e0e2f3] rounded-md text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
+                <Link 
+                to={`/admin/employee/activitylog/?uid=${uid}`}
+                className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 bg-[#e0e2f3] rounded-md text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
                   Activity Log
                 </Link>
                 <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
