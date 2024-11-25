@@ -103,18 +103,27 @@ export const TEAM_BANK_HOLIDAY = "team-bank-holiday";
 export const WORK_LOCATIONS = "active-worklocations";
 
 // HOLIDAY STATUS
-export const HOLIDAY_STATUS = "employee-holiday-basic-settings"
+export const HOLIDAY_STATUS = "employee-holiday-basic-settings";
 
 // HOLIDAY AVAILABLE SETTING
-export const HOLIDAY_AVAILABLE_SETTING = "employee-holiday-availabilty-settings"
+export const HOLIDAY_AVAILABLE_SETTING =
+  "employee-holiday-availabilty-settings";
 
 // HOLIDAY ADVANCE SETTINGS
-export const HOLIDAY_ADVANCE_SETTINGS = "holiday-advance-settings"
+export const HOLIDAY_ADVANCE_SETTINGS = "holiday-advance-settings";
 
 // COMPANY PROFILE BASIC
-export const COMPANY_PROFILE_BASIC ="company-profile-settings"
+export const COMPANY_PROFILE_BASIC = "company-profile-settings";
 
+// COMPANY BANK DETAILS
+export const COMPANY_BANK_DETAILS = "company-profile-bank-details";
+
+// COMPANY SIGNATURE
+
+export const COMPANY_SIGNATURE = "company-profile-signature";
 
 // BUSINESS TYPE
-export const BUSINESS_TYPE ="company-bussiness-type"
+export const BUSINESS_TYPE = "company-bussiness-type";
 
+// COMPANY CALENDER
+export const COMPANY_CALENDER = "company-calender-settings";
