@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import "quill/dist/quill.snow.css";
 import Select from "react-select";
 
 export default function SaveHiringMasterForm({

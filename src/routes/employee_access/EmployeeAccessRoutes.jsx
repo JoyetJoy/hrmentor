@@ -5,6 +5,7 @@ import { AttendanceRoutes } from "./children/AttendanceRoute";
 import { RosterRoutes } from "./children/RosterRoute";
 import { TimeSheetRoutes } from "./children/TimeSheetRoute";
 import { LeaveRoute } from "./children/LeaveRoute";
+import { ProfileRoutes } from "./children/ProfileRoutes";
 
 export const EmployeeAccessRoutes = [
   {
@@ -26,6 +27,10 @@ export const EmployeeAccessRoutes = [
   {
     path: "leave",
     children: LeaveRoute,
+  },
+  {
+    path: "profile",
+    children: ProfileRoutes,
   },
   {
     path: "*",

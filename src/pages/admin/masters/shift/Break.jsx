@@ -50,7 +50,7 @@ export default function Break({ setNew_break, new_break, error }) {
           let duration;
           if (row?.original?.start_time) {
             const parseTime = (time) => {
-              const [hours, minutes] = time.split(":").map(Number);
+              const [hours, minutes] = time?.split(":").map(Number);
               return hours * 60 + minutes;
             };
 

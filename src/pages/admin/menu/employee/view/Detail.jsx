@@ -8,11 +8,20 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Share2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import MonthlyCalendarPicker from "@/components/common/MonthPicker";
+import { useState } from "react";
+import dayjs from "dayjs";
+import Reschedule from "@/components/popups/employees/view/Reschedule";
 
 export default function EmployeeDetails() {
+  const [popupOpen,setPopupOpen] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
+
+  const options = ["On Leave", "Onboarding Pending", "Active", "Awaiting joining", "Resigned", "Terminated"];
+
 
   // EMPLOYEE DETAILS;
   const { data: employeeViewDetails, isLoading } = useQuery({
@@ -31,6 +40,10 @@ export default function EmployeeDetails() {
         currentpath={"Employee Details"}
         icon={<ChevronRight className="size-3" />}
         activeMenu={"Employee"}
+      />
+      <Reschedule
+      popupOpen={popupOpen}
+      setPopupOpen={setPopupOpen}
       />
       {isLoading ? (
         <div className="flex min-h-96 w-full items-center justify-center bg-white">
@@ -78,12 +91,34 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                <div className="ml-5 flex h-7 items-center rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold text-mediumred">
-                  On Leave
-                </div>
+                <div className="ml-5">
+  <select
+    className="h-7 rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold text-mediumred focus:outline-none focus:ring focus:ring-mediumred/30"
+    defaultValue="On Leave"
+  >
+    {options.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>
+    ))}
+  </select>
+</div>
+
               </div>
               <div className="flex items-center gap-3">
-                <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
+                <div className="text-xs">
+                  <p>Date of joining</p>
+                  <p className="font-semibold">Oct 10,2024</p>
+                </div>
+              <button 
+              onClick={()=>{
+                setPopupOpen(true)
+                setType('reschedule')
+              }}
+              className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 text-xs font-bold bg-[#e0e2f3] rounded-md text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
+                  Reschedule
+                </button>
+                <Link className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 bg-[#e0e2f3] rounded-md text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
                   Activity Log
                 </Link>
                 <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
@@ -91,8 +126,8 @@ export default function EmployeeDetails() {
                 </Link>
               </div>
             </div>
-            <div className="grid w-full grid-cols-12">
-              <div className="col-span-5 py-7">
+            <div className="grid w-full grid-cols-4 gap-3">
+              <div className="col-span-2 py-7">
                 <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
                   <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
                     <p className="w-fit">Basic Details</p>
@@ -149,6 +184,21 @@ export default function EmployeeDetails() {
                     </div>
                   </DisclosurePanel>
                 </Disclosure>
+              </div>
+              <div className="border rounded-md">
+              <MonthlyCalendarPicker
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                />
+              </div>
+              <div className="px-3 flex flex-col gap-2">
+                <div className="bg-[#f8f7f7] text-sm font-medium p-4 rounded-md">
+                  Clock In - 05:10 am
+                </div>
+                <div className="bg-[#f8f7f7] text-sm font-medium p-4 rounded-md">
+                  Clock Out - 06:00 pm
+                </div>
+
               </div>
 
               {/* log */}

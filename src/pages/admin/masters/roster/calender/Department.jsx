@@ -1,4 +1,4 @@
-import MenuHeader from "@/components/common/MenuHeader";
+import RosterHeader from "@/components/common/RosterHeader";
 import React from "react";
 import RosterItemList from "@/components/sidebars/roster/Index";
 import RosterCalendar from "./Calender";
@@ -6,7 +6,7 @@ import RosterCalendar from "./Calender";
 export default function RosterDepartment() {
   return (
     <>
-      <MenuHeader menu="Menu" currentpath="Roster" />
+      <RosterHeader page={1} />
       <div className="flex gap-2">
         <RosterItemList />
         <RosterCalendar />
