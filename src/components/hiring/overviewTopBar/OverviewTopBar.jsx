@@ -7,6 +7,8 @@ export const OverviewTopBar = ({
   showSearch = true,
   overviewButton = false,
   sendButton = false,
+  keyword,
+  setKeyword,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,6 +30,7 @@ export const OverviewTopBar = ({
                 />
                 <input
                   type="text"
+                  onChange={(e) => setKeyword(e.target.value)}
                   className="grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
                   placeholder="Search"
                 />

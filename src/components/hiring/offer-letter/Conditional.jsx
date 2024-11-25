@@ -111,7 +111,6 @@ export const ConditionalOfferLetter = ({ candidate }) => {
         }),
     enabled: !!email_template_heading,
   });
-  console.log("aa", defaultEmailDesc);
 
   useEffect(() => {
     if (defaultDesc) {
