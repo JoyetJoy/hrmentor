@@ -69,6 +69,7 @@ function CalendarEmployees() {
         <Reassign
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
+        type={'reassign'}
         />
         <div className="flex items-center gap-2 text-white justify-between">
             <p className='text-black font-semibold text-[1rem]'>Employees</p>

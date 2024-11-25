@@ -1,10 +1,16 @@
 import React,{useState} from 'react'
+import Reassign from '../popups/master/roster/Calendar/Reassign';
 
 
 function Rosteroveview() {
     const [isOn,setIsOn] = useState(false)
   return (
     <div className='mx-3 mb-2 flex items-center justify-between'>
+      <Reassign
+      popupOpen={isOn}
+      setPopupOpen={setIsOn}
+      type={'claim'}
+      />
         <div className="flex items-center gap-2 font-semibold text-black">
           <div className='flex gap-36'>
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
