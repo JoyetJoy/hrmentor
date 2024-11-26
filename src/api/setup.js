@@ -7,6 +7,6 @@ export const SHIFT_BREAK_TIME='employee-shift-break-time'
 // ROSTER LIST
 export const ROSTER_LIST ="employee-roster-list"
 //ROSTER EMP
-export const ROSTER_EMPLIST="getEmployeeeDetails"
+export const ROSTER_EMPLIST="get-employee-details"
 export const UPDATE_ROSTER_LIST ="employee-roster-list "
 //

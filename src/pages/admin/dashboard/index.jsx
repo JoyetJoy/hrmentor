@@ -1,5 +1,5 @@
 import React from "react";
-import { Clock4, Search} from "lucide-react";
+import { Clock4, LogIn, Search} from "lucide-react";
 import { employeeDetails, meetings } from "@/constants/dummyData";
 import StatsCard from "@/components/dashboard/StatsCard";
 import ProfileCompletionCount from "@/components/dashboard/ProfileCompletionCount";
@@ -10,7 +10,7 @@ export const AdminDashboard = () => {
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
       <aside className="flex min-w-[73%] flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-black">Dashbord</h1>
+          <h1 className="text-xl font-bold text-black">Dashboard</h1>
           <div className="flex items-center gap-3">
             <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
               <Clock4 className="size-4" />

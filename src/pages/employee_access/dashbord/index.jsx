@@ -6,13 +6,32 @@ import { Menu } from "@headlessui/react";
 import StopBreak from "@/components/popups/employee_access/dashboard/StopBreak";
 import ClockIn from "@/components/popups/employee_access/dashboard/ClockIn";
 // import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
+import {
+  EMPLOYEE_DEPARTMENT_LIST,
+  newRequest,
+  ROLES_LIST,
+  CLOCK_IN,
+  SALARY_DEFAULT_MASTERS,
+} from "@/api/master";
+import { useQuery} from "@tanstack/react-query";
+import { HOLIDAY_AVAILABLE_SETTING, DASHBOARD } from "@/api";
 
 export const EmployeeDashboard = () => {
   const sampleData = ["Lunch Break", "Tea Break"];
   const [data, setData] = useState([]);
   const [breakpopupOpen, setBreakPopupOpen] = useState(false);
   const [clockInpopupOpen, setClockInPopupOpen] = useState(false);
-  //   const [clockOutpopupOpen,setClockOutPopupOpen] = useState (false)
+  const [clockIn, SetClockIn] = useState('');
+
+  
+  const { data: dashboard } = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: () => 
+      newRequest
+        .get(DASHBOARD)
+        .then((res) => res.data),
+  });
+  console.log(dashboard);
 
   const handleClick = () => {
     setData(sampleData);
@@ -21,8 +40,26 @@ export const EmployeeDashboard = () => {
     setBreakPopupOpen(true);
   };
 
-  const handleClockIn = (toOpen) => {
-    setClockInPopupOpen(true);
+  const handleClockIn = async(toOpen) => {
+    if(!dashboard){
+      return;
+    }
+    if(dashboard?.rosterOrShift){
+      setClockInPopupOpen(true);
+    }else{
+      const formData=dashboard?.shiftTime
+      let res;
+      res = await newRequest.post(CLOCK_IN, formData);
+      console.log(res);
+      if (res?.status === 200) {
+        toast.success("Saved roster details successfully");
+        queryClient.invalidateQueries([""]);
+        setPopupOpen(false);
+      } else {
+        toast.error("Failed to save roster.");
+      }
+    }
+    
   };
   //   const handleClockOut = (toOpen) => {
   //     setClockOutPopupOpen(true);
@@ -34,6 +71,8 @@ export const EmployeeDashboard = () => {
       <ClockIn
         clockInpopupOpen={clockInpopupOpen}
         setClockInPopupOpen={setClockInPopupOpen}
+        api={CLOCK_IN}
+        data={dashboard?.rosterOrShift}
       />
       <StopBreak
         breakpopupOpen={breakpopupOpen}

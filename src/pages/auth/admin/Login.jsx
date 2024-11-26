@@ -29,8 +29,34 @@ function Login() {
       const res = await basicXFormRequest.post(LOGIN, formData);
       if (res?.data?.success === true) {
         toast.success("Login successful");
-        localStorage.setItem("token", res?.data?.data?.token);
-        navigate("/admin/dashboard");
+        if(res?.data?.data?.roles?.length===1){
+          if(res?.data?.data?.roles?.includes(1)){
+            localStorage.setItem("super_token", res?.data?.data?.token);
+            navigate("/admin/dashboard");
+          }else if(res?.data?.data?.roles?.includes(2)){
+            localStorage.setItem("hr_token", res?.data?.data?.token);
+          }else if(res?.data?.data?.roles?.includes(3)){
+            localStorage.setItem("team_token", res?.data?.data?.token)
+          }else if(res?.data?.data?.roles?.includes(5)){
+            localStorage.setItem("manager_token", res?.data?.data?.token)
+          }else{
+            localStorage.setItem("employee_token", res?.data?.data?.token);
+            navigate("/employee_access/dashboard");
+          }
+        }else{
+          if(res?.data?.data?.roles?.includes(1)){
+            localStorage.setItem("super_token", res?.data?.data?.token);
+            navigate("/admin/dashboard");
+          }else if(res?.data?.data?.roles?.includes(2,3||2,4)){
+            localStorage.setItem("hr_token", res?.data?.data?.token);
+          }else if(res?.data?.data?.roles?.includes(3,4)){
+            localStorage.setItem("team_token", res?.data?.data?.token)
+          }else{
+            localStorage.setItem("employee_token", res?.data?.data?.token);
+            navigate("/employee_access/dashboard");
+          }
+        }
+        
       }
     } catch (error) {
       console.log(error);

@@ -8,7 +8,7 @@ import ScrollBack from "@/components/common/ScrollBack";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
 export const AdminLayout = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("super_token");
   const { setUser } = useUserStore((state) => ({
     setUser: state.setUser,
   }));

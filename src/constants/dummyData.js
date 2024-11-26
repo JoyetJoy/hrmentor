@@ -291,7 +291,7 @@ export const adminItems = [
     label: "Account Management",
     path: "/admin/role",
   },
-  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
+  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
 ];
 
 export const setupItems = [
@@ -565,6 +565,6 @@ export const employeeaccessItems = [
     path: "/employee_access/profile/primary",
     active: "profile-management",
   },
-  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/logout" },
+  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
 
 ]

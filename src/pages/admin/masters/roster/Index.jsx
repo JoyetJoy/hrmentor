@@ -80,7 +80,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
     setEditPopupOpen(true);
   };
 
-  console.log(selectedRoster);
+  console.log(rosterDetailss?.listing);
 
   const columns = React.useMemo(
     () => [
@@ -173,8 +173,9 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"rosterDetailss"}
+        type={'roster'}
         api={ROSTER_LIST}
       />
       <NewRoster

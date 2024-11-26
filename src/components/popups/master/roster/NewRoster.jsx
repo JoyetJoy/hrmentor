@@ -57,6 +57,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       console.error("Error fetching employee list:", error?.message || error);
     },
   });
+console.log(selectedShiftId);
 
   const selectedShift = shiftList?.data?.original?.data.find(
     (item) => item.id === selectedShiftId,
@@ -73,6 +74,8 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     );
     toast.success("Employee deleted successfully");
   };
+  console.log(selectedEmployee);
+  
   const handleAddEmployee = () => {
     if (selectedEmployee) {
       setSelectedEmployees((prev) => [
@@ -346,7 +349,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                             className="input-box w-full"
                             options={rosterEmpList?.employees?.map((item) => ({
                               label: item.first_name,
-                              value: item.unique_id,
+                              value: item?.id,
                             }))}
                             onChange={(selectedOption) => {
                               field.onChange(selectedOption);
