@@ -10,7 +10,7 @@ export const OverviewCards = ({ data }) => {
       imgSrc: "/assets/images/hiring/1.png",
     },
     {
-      path: "overview/offer-to-be-finalized",
+      path: `overview/listing?type=offer`,
       title: "Offer to be finalized",
       count: 1322,
       count: `${data?.offer_requested_candidates}`,
@@ -18,21 +18,21 @@ export const OverviewCards = ({ data }) => {
       imgSrc: "/assets/images/hiring/2.png",
     },
     {
-      path: "overview/upcoming",
+      path: "overview/listing?type=accepted",
       title: "Offer Accepted",
       count: `${data?.conditional_offer_accepted_candidates}`,
       bgColor: "#F2EAF2",
       imgSrc: "/assets/images/hiring/5.svg",
     },
     {
-      path: "/admin/hiring/hired",
+      path: "overview/listing?type=hired",
       title: "Hired",
       count: `${data?.hired_candidates ?? 0}`,
       bgColor: "#EBF9ED",
       imgSrc: "/assets/images/hiring/3.png",
     },
     {
-      path: "overview/offer-declined",
+      path: "overview/listing?type=declined",
       title: "Offer declined",
       count: `${data?.offer_rejected}`,
       bgColor: "#FEEDDF",
