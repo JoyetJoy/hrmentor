@@ -1,0 +1,30 @@
+import { ArrowLeft, ChevronRight } from "lucide-react";
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function SetUpHeader({ currentPage }) {
+  return (
+    <>
+      <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
+        <div
+          className={`flex items-center justify-between text-sm font-semibold text-hrmblue`}
+        >
+          <ArrowLeft
+            onClick={() => {
+              history.back();
+            }}
+            className="mr-2 size-4 cursor-pointer"
+          />
+          Menu
+          <ChevronRight className="size-3" />
+          Setup
+          <ChevronRight className="size-3" />
+          <Link className="capitalize text-hrmprimaryorange" to={""}>
+            {currentPage}
+          </Link>
+        </div>
+        <div className="flex items-center gap-5 text-sm font-semibold"></div>
+      </div>
+    </>
+  );
+}
