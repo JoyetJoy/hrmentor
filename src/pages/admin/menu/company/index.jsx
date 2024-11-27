@@ -84,6 +84,8 @@ export default function CompanyGeneral() {
     resolver: yupResolver(CompanyBasicSchema),
   });
 
+  console.log(errors);
+
   function close() {
     SetCompanyBasic({
       company_name: "",
@@ -205,7 +207,8 @@ export default function CompanyGeneral() {
         address_two: companyProfileBasic?.address_two,
         postal_code: companyProfileBasic.postal_code,
       });
-      setBusiness_Type(companyProfileBasic?.bussines_type?.id);
+
+      setBusiness_Type(companyProfileBasic.business_type.id);
       setStatus(companyProfileBasic?.status);
       setStateId(companyProfileBasic?.state?.id);
       setCountryId(companyProfileBasic?.country?.id);
@@ -255,6 +258,10 @@ export default function CompanyGeneral() {
   const onSubmit = async () => {
     setLoader(true);
     try {
+      console.log(selectedLogoBlob);
+
+      console.log(selectedLogo, "selectedLogoselectedLogo");
+
       const formData = new FormData();
       formData.append("company_name", companyBasic.company_name);
       formData.append("first_name", companyBasic.first_name);
@@ -265,11 +272,19 @@ export default function CompanyGeneral() {
       formData.append("bussines_type", business_Type);
       formData.append("status", status);
       formData.append("username", companyBasic.username);
-      formData.append(
-        "upload_company_logo",
-        selectedLogoBlob || companyBasic.upload_company_logo,
-        selectedLogoBlob ? selectedLogo : undefined,
-      );
+      if (selectedLogoBlob) {
+        formData.append(
+          "upload_company_logo",
+          selectedLogoBlob, // Blob or File object
+          selectedLogo, // Filename
+        );
+      } else {
+        formData.append(
+          "upload_company_logo_name",
+          companyBasic.upload_company_logo,
+        );
+      }
+
       formData.append("upload_letter_head", companyBasic.upload_letter_head);
       formData.append("address_one", companyBasic.address_one);
       formData.append("address_two", companyBasic.address_two);
@@ -560,6 +575,16 @@ export default function CompanyGeneral() {
                       </span>
                     )}
                   </div>
+                  <img
+                    alt="Authorised Person Signature"
+                    className="h-28 rounded-md"
+                    src={companyBasic.upload_company_logo}
+                  />
+                  <img
+                    alt="Authorised Person Signature"
+                    className="h-28 rounded-md"
+                    src={companyBasic.upload_letter_head}
+                  />
                 </div>
               </DisclosurePanel>
             </Disclosure>
