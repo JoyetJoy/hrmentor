@@ -18,7 +18,7 @@ export default function EmployeeAccessHeader() {
       const handleNavigation = (path) => {
         if (path === "/logout") {
           setUser({});
-          localStorage.removeItem("token");
+          localStorage.removeItem("employee_token");
           navigate("/login");
         }
         navigate(path);
@@ -27,7 +27,7 @@ export default function EmployeeAccessHeader() {
   return (
     <>
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
-        <Link to="/employee-access" className="flex flex-row gap-1 pl-3">
+        <Link to="/employee_access/dashboard" className="flex flex-row gap-1 pl-3">
           <div className="mr-2 h-9">
             <img
               src={"/logo.svg"}
@@ -38,7 +38,7 @@ export default function EmployeeAccessHeader() {
           <span className="font-monorope text-base font-normal">
             Welcome,
             <h1 className="-mt-0.5 text-base font-semibold">
-            Tech Butomy Pvt Ltd</h1>
+            {user?.name}</h1>
           </span>
         </Link>
         <div className="items flex gap-x-3">

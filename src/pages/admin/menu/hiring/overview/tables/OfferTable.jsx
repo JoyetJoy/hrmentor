@@ -1,48 +1,41 @@
+import { newRequest } from "@/api";
 import QueryTable from "@/components/table/QueryTable";
+import Loader from "@/components/ui/Loader";
+import { useQuery } from "@tanstack/react-query";
 import { Maximize2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const OfferTable = () => {
+export const OfferTable = ({ api, keyword, setKeyword }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
 
-  // Example data and columns
-  const list = [
-    {
-      name: "Varadharajan Rengaswamy",
-      type: "Full time",
-      title: "Sales & Marketing",
-      departments: "Sales & Marketing",
-      location: "Nill",
-      sentdate: "05/07/2023",
-      status: "Conditional Offered",
-      action: "",
-      imageUrl: "../../../../assets/images/hiring/avatar/a1.png", // Add the image URL here
-    },
-    {
-      name: "Varadharajan Rengaswamy",
-      type: "Full time",
-      title: "Sales & Marketing",
-      departments: "Sales & Marketing",
-      location: "Nill",
-      sentdate: "05/07/2023",
-      action: "",
-      status: "Conditional Offered",
-      imageUrl: "../../../../assets/images/hiring/avatar/a2.png", // Add the image URL here
-    },
-    {
-      name: "Varadharajan Rengaswamy",
-      type: "Full time",
-      title: "Sales & Marketing",
-      departments: "Sales & Marketing",
-      location: "Nill",
-      status: "Conditional Offered",
-      sentdate: "05/07/2023",
-      action: "",
-      imageUrl: "../../../../assets/images/hiring/avatar/a3.png", // Add the image URL here
-    },
-    // Add more rows as needed
-  ];
+  const pageLimit = 10;
+
+  // Fetch List
+  const { data: offerToBeFinalized, isLoading } = useQuery({
+    queryKey: ["offerToBeFinalized", api, currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(api, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  console.log(offerToBeFinalized);
+
+  useEffect(() => {
+    if (offerToBeFinalized) {
+      setTotalPages(offerToBeFinalized?.last_page);
+    }
+  }, [offerToBeFinalized]);
 
   const columns = [
     {
@@ -50,26 +43,24 @@ export const OfferTable = () => {
       accessorKey: "name",
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <img
-            src={row.original.imageUrl}
-            alt={row.original.name}
-            className="h-8 w-8 rounded-full"
-          />
-          <span>{row.original.name}</span>
+          <div className="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
+            {row.original?.candidate_name?.charAt(0)}
+          </div>
+          <span>{row.original.candidate_name}</span>
         </div>
       ),
     },
     {
       header: "Type",
-      accessorKey: "type",
+      accessorKey: "employement_type",
     },
     {
       header: "Title",
-      accessorKey: "title",
+      accessorKey: "job_title",
     },
     {
       header: "Departments",
-      accessorKey: "departments",
+      accessorKey: "designation",
     },
     {
       header: "Location",
@@ -77,15 +68,21 @@ export const OfferTable = () => {
     },
     {
       header: "Sent Date",
-      accessorKey: "sentdate",
+      accessorKey: "date_applied",
     },
     {
       header: "Status",
       accessorKey: "status",
-      cell: ({ getValue }) => (
-        <span className="rounded-md border border-[#ECD682] bg-[#FFFCF0] px-6 py-1.5">
-          {getValue()}
-        </span>
+      cell: ({ row }) => (
+        <div
+          style={{
+            backgroundColor: row?.original?.status?.background_color,
+            color: row?.original?.status?.text_color,
+          }}
+          className="flex h-8 w-fit items-center justify-center rounded px-3 text-xs font-semibold"
+        >
+          {row?.original?.status?.status_name}
+        </div>
       ),
     },
     {
@@ -93,7 +90,7 @@ export const OfferTable = () => {
       accessorKey: "action",
       cell: ({ row }) => (
         <Link
-          to={`/admin/hiring/view-candidate?cid=${1}`}
+          to={`/admin/hiring/view-candidate?cid=${row.original?.id}`}
           className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
         >
           <Maximize2 className="size-3" />
@@ -101,17 +98,20 @@ export const OfferTable = () => {
       ),
     },
   ];
-  const totalPages = 5;
 
   return (
     <>
-      <QueryTable
-        list={list}
-        columns={columns}
-        totalPages={totalPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <QueryTable
+          list={offerToBeFinalized?.listing || []}
+          columns={columns}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </>
   );
 };

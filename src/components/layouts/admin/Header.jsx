@@ -17,9 +17,9 @@ export const AdminHeader = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
-    if (path === "/logout") {
+    if (path === "/login") {
       setUser({});
-      localStorage.removeItem("token");
+      localStorage.removeItem("super_token");
       navigate("/login");
     }
     navigate(path);

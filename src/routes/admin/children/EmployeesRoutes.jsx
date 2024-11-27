@@ -22,6 +22,7 @@ import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity
 import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
 import EmployeeDetails from "@/pages/admin/menu/employee/view/Detail";
 import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
+import EmployeeActivitylogDetails from "@/pages/admin/menu/employee/view/Activitylog";
 
 export const EmployeeRoutes = [
   {
@@ -31,6 +32,10 @@ export const EmployeeRoutes = [
   {
     path: "details",
     element: <EmployeeDetails />,
+  },
+  {
+    path: "activitylog",
+    element: <EmployeeActivitylogDetails />,
   },
   {
     path: "create",

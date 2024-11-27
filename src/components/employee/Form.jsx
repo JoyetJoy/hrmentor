@@ -291,6 +291,8 @@ export default function SaveEmployeeForm({ formtype }) {
 
   const onSubmit = (data) => {
     setLoader(true);
+    console.log(data.role_id);
+    
     handleEmployee(data);
   };
 
@@ -322,6 +324,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("date_of_joining", data.date_of_joining);
     data.role_id.forEach((role) => {
       formData.append("role_id[]", role.id);
+      formData.append("roles[]", role.value);
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);

@@ -7,10 +7,10 @@ export default function ProfileDropdown({ handleNavigation, user }) {
       <Menu>
         <Menu.Button className="flex cursor-pointer flex-row items-center gap-3">
           <div className="flex h-10 w-10 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
-            KA
+          {`${user?.name?.charAt(0)} ${user?.sur_name?.charAt(0)}`}
           </div>
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
-            Kiran A
+            {user?.name} {user?.sur_name}
             <span className="text-xs font-medium text-gray-lightDim">
               Developer
             </span>

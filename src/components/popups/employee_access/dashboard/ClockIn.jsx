@@ -1,15 +1,47 @@
 import { Dialog, DialogPanel, Radio, RadioGroup } from "@headlessui/react";
-import {  X } from "lucide-react";
+import { X } from "lucide-react";
 import React, { useState } from "react";
+import { newRequest } from "@/api/master";
+import moment from 'moment';
 
-export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen }) {
+export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data }) {
   const [loader, setLoader] = useState(false);
-  const time = [{ name: "Morning" }, { name: "After" }];
-  const [selected, setSelected] = useState(time[0]);
+  const [selected, setSelected] = useState(null);
 
   function close() {
     setClockInPopupOpen(false);
+  } 
+
+  function formatTime(time) {
+    if (!time) return "";
+    const [hours, minutes, seconds] = time.split(":");
+    const date = new Date();
+    date.setHours(hours, minutes, seconds);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if(!selected){
+        return;
+      }
+      const payload = {
+        shift_id: selected?.shift_id,
+        roster_id: selected?.id,
+      };
+
+      const response = await newRequest.post(api, payload);
+      console.log("Response:", response);
+      close();
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoader(false);
+    }
+  };
+
   return (
     <Dialog
       open={clockInpopupOpen}
@@ -24,9 +56,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen }) {
             className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 px-14 py-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
-              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">
-                Click In{" "}
-              </h1>
+              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">Clock In</h1>
               <button
                 onClick={close}
                 className="text-xl font-extrabold text-textcolor-darkCharcoal"
@@ -39,44 +69,46 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen }) {
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
               </div>
             ) : (
-              <form
-                className="grid grid-cols-1"
-                //   onSubmit={handleSubmit(onSubmit)}
-              >
+              <form className="grid grid-cols-1" onSubmit={handleSubmit}>
                 <div className="w-full">
                   <div className="mx-auto w-full max-w-md">
                     <RadioGroup
-                      by="name"
                       value={selected}
                       onChange={setSelected}
                       aria-label="Time Slots"
                       className="space-y-4"
                     >
-                      {time.map((times) => (
-                        <RadioGroup.Option
-                          key={times.name}
-                          value={times}
-                          className="group"
-                        >
-                          {({ checked }) => (
-                            <div
-                              className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
-                                checked
-                                  ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                                  : "border-gray-300 bg-white"
-                              } `}
-                            >
-                              {/* Text Content */}
-                              <p className="font-medium text-textcolor-darkCharcoal">
-                                {times.name}
-                              </p>
-                              <p className="font-bold text-textcolor-darkCharcoal">
-                                11:00 AM - 12:00 PM
-                              </p>
-                            </div>
-                          )}
-                        </RadioGroup.Option>
-                      ))}
+                      {data?.map((times) => {
+                        return (
+                          <RadioGroup.Option
+                            key={times?.shift?.name}
+                            value={{ id: times?.id, shift_id: times?.shift_id }}
+                            className="group cursor-pointer"
+                            aria-label={`Select ${times?.shift?.name}`}
+                          >
+                            {({ checked, disabled }) => (
+                              <div
+                                className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                                  disabled
+                                    ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                                    : checked
+                                    ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                    : "border-gray-300 bg-white"
+                                }`}
+                              >
+                                <p className="font-medium text-textcolor-darkCharcoal">
+                                  {times?.shift?.name}
+                                </p>
+                                <p className="font-bold text-textcolor-darkCharcoal">
+                                  {formatTime(times?.shift?.start_time)} -{" "}
+                                  {formatTime(times?.shift?.end_time)}
+                                </p>
+                                
+                              </div>
+                            )}
+                          </RadioGroup.Option>
+                        );
+                      })}
                     </RadioGroup>
                   </div>
                 </div>
@@ -90,13 +122,17 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen }) {
                   </button>
                   <button
                     type="submit"
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                    className={`flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md ${
+                      loader
+                        ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                        : "bg-hrmblack text-white"
+                    } text-sm font-normal focus:outline-none`}
                     disabled={loader}
                   >
                     {loader ? (
                       <div className="flex items-center gap-3">
                         <div className="h-5 w-full animate-spin rounded-full border-b-2 border-white"></div>
-                        Start
+                        Starting...
                       </div>
                     ) : (
                       <span>Start</span>

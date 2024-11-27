@@ -34,7 +34,11 @@ export const newFormRequest = axios.create({
 
 const addAuthorizationInterceptor = (request) => {
   request.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
+    const token = 
+      localStorage.getItem("super_token")||
+      localStorage.getItem("hr_token")||
+      localStorage.getItem("manager_token")||
+      localStorage.getItem("employee_token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -127,3 +131,9 @@ export const BUSINESS_TYPE = "company-bussiness-type";
 
 // COMPANY CALENDER
 export const COMPANY_CALENDER = "company-calender-settings";
+
+
+//EMPLOYEE SECTION
+
+//DASHBOARD
+export const DASHBOARD = "employee-access/dashboard";
