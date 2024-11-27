@@ -136,4 +136,4 @@ export const CANDIDATE_INTERVIEW_START_STOP = "candidate-interview-start-stop";
 //-----EMPLOYEE SECTION API-----
 
 //EMPLOYEE CLOCKIN
-export const CLOCK_IN = "/employee/employee-clock-in";
+export const CLOCK_IN = "/employee-access/employee-clock-in";

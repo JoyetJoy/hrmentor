@@ -47,7 +47,7 @@ export const EmployeeDashboard = () => {
     if(dashboard?.rosterOrShift){
       setClockInPopupOpen(true);
     }else{
-      const formData=dashboard?.shiftTime
+      const formData={company_setting_id:dashboard?.shiftTime?.id}
       let res;
       res = await newRequest.post(CLOCK_IN, formData);
       console.log(res);
@@ -79,7 +79,7 @@ export const EmployeeDashboard = () => {
         setBreakPopupOpen={setBreakPopupOpen}
       />
       <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
-        <aside className="flex min-w-[73%] flex-col gap-3">
+        <aside className="flex min-w-[70%] flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashbord</h1>
             <div className="flex items-center gap-3">

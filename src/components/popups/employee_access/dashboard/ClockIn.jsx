@@ -2,6 +2,7 @@ import { Dialog, DialogPanel, Radio, RadioGroup } from "@headlessui/react";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import { newRequest } from "@/api/master";
+import moment from 'moment';
 
 export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data }) {
   const [loader, setLoader] = useState(false);
@@ -9,7 +10,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
 
   function close() {
     setClockInPopupOpen(false);
-  }
+  } 
 
   function formatTime(time) {
     if (!time) return "";
@@ -21,10 +22,11 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoader(true);
 
     try {
-      // Extracting shift_id and id from the selected value
+      if(!selected){
+        return;
+      }
       const payload = {
         shift_id: selected?.shift_id,
         roster_id: selected?.id,
@@ -76,31 +78,37 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                       aria-label="Time Slots"
                       className="space-y-4"
                     >
-                      {data?.map((times) => (
-                        <RadioGroup.Option
-                          key={times?.shift?.name}
-                          value={{ id: times?.id, shift_id: times?.shift_id }}
-                          className="group"
-                          aria-label={`Select ${times?.shift?.name}`}
-                        >
-                          {({ checked }) => (
-                            <div
-                              className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
-                                checked
-                                  ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                                  : "border-gray-300 bg-white"
-                              }`}
-                            >
-                              <p className="font-medium text-textcolor-darkCharcoal">
-                                {times?.shift?.name}
-                              </p>
-                              <p className="font-bold text-textcolor-darkCharcoal">
-                                {formatTime(times?.shift?.start_time)} - {formatTime(times?.shift?.end_time)}
-                              </p>
-                            </div>
-                          )}
-                        </RadioGroup.Option>
-                      ))}
+                      {data?.map((times) => {
+                        return (
+                          <RadioGroup.Option
+                            key={times?.shift?.name}
+                            value={{ id: times?.id, shift_id: times?.shift_id }}
+                            className="group cursor-pointer"
+                            aria-label={`Select ${times?.shift?.name}`}
+                          >
+                            {({ checked, disabled }) => (
+                              <div
+                                className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                                  disabled
+                                    ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                                    : checked
+                                    ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                    : "border-gray-300 bg-white"
+                                }`}
+                              >
+                                <p className="font-medium text-textcolor-darkCharcoal">
+                                  {times?.shift?.name}
+                                </p>
+                                <p className="font-bold text-textcolor-darkCharcoal">
+                                  {formatTime(times?.shift?.start_time)} -{" "}
+                                  {formatTime(times?.shift?.end_time)}
+                                </p>
+                                
+                              </div>
+                            )}
+                          </RadioGroup.Option>
+                        );
+                      })}
                     </RadioGroup>
                   </div>
                 </div>
@@ -115,7 +123,9 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                   <button
                     type="submit"
                     className={`flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md ${
-                      loader ? "bg-gray-400 text-gray-200 cursor-not-allowed" : "bg-hrmblack text-white"
+                      loader
+                        ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                        : "bg-hrmblack text-white"
                     } text-sm font-normal focus:outline-none`}
                     disabled={loader}
                   >
