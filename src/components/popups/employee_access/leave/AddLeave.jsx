@@ -97,10 +97,10 @@ export default function AddLeave({ popupOpen, setPopupOpen }) {
                     <label className="text-sm font-medium">
                       Reason for leave
                     </label>
-                    <input
-                      type="text"
+                    <textarea
                       {...register("end_date", { required: true })}
-                      className="input-box h-20 w-full"
+                      className="input-box h-20 w-full overflow-y-auto overflow-y-min pt-2"
+                      rows="4" 
                     />
                     {errors.end_date && (
                       <span className="text-xs text-red-500">

@@ -97,11 +97,14 @@ useEffect(() => {
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
             <div className="flex items-center gap-3">
+              {clockin&&
               <Menu as="div" className="relative inline-block text-left">
-                <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmprimaryorange">
-                  <Menu.Button>Break</Menu.Button>
-                </div>
-              </Menu>
+              <div 
+              onClick={()=>setBreakPopupOpen(true)}
+              className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmprimaryorange">
+                <Menu.Button>Break</Menu.Button>
+              </div>
+            </Menu>}
               <div
                 onClick={handleClockIn}
                 className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue"
@@ -110,7 +113,7 @@ useEffect(() => {
                 {clockin ? "Clock Out" : "Clock In"}
               </div>
               <p className="text-xs w-36 font-semibold text-hrmprimaryorange">
-                Logged Time: {loggedTime}
+                Logged Time: {loggedTime||'00:00:00'}
               </p>
               <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
                 <Search className="size-4 object-contain text-gray-dark" />

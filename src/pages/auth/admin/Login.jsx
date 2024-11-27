@@ -31,6 +31,7 @@ function Login() {
         toast.success("Login successful");
         if(res?.data?.data?.roles?.length===1){
           if(res?.data?.data?.roles?.includes(1)){
+            localStorage.removeItem('employee_token')
             localStorage.setItem("super_token", res?.data?.data?.token);
             navigate("/admin/dashboard");
           }else if(res?.data?.data?.roles?.includes(2)){
@@ -40,6 +41,7 @@ function Login() {
           }else if(res?.data?.data?.roles?.includes(5)){
             localStorage.setItem("manager_token", res?.data?.data?.token)
           }else{
+            localStorage.removeItem('super_token')
             localStorage.setItem("employee_token", res?.data?.data?.token);
             navigate("/employee_access/dashboard");
           }
