@@ -137,3 +137,5 @@ export const COMPANY_CALENDER = "company-calender-settings";
 
 //DASHBOARD
 export const DASHBOARD = "employee-access/dashboard";
+//CLOCKIN
+export const CLOCKIN = "employee-current-running-shift";

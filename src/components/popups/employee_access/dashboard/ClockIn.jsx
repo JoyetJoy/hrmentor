@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { newRequest } from "@/api/master";
 import moment from 'moment';
 
-export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data }) {
+export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data, clockindata }) {
   const [loader, setLoader] = useState(false);
   const [selected, setSelected] = useState(null);
 
@@ -33,7 +33,6 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
       };
 
       const response = await newRequest.post(api, payload);
-      console.log("Response:", response);
       close();
     } catch (error) {
       console.error("Error:", error);
@@ -56,7 +55,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
             className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 px-14 py-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
-              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">Clock In</h1>
+              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">{clockindata?'Clock Out':'Clock In'}</h1>
               <button
                 onClick={close}
                 className="text-xl font-extrabold text-textcolor-darkCharcoal"
@@ -78,7 +77,38 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                       aria-label="Time Slots"
                       className="space-y-4"
                     >
-                      {data?.map((times) => {
+                      {clockindata?(
+                        <>
+                          <RadioGroup.Option
+                            key={clockindata?.shift_detail?.name}
+                            value={{ id: clockindata?.shift_detail?.id, shift_id: clockindata?.shift_id }}
+                            className="group cursor-pointer"
+                            aria-label={`Select ${clockindata?.shift_detail?.name}`}
+                            disabled
+                          >
+                            {({ checked }) => (
+                              <div
+                                className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                                  clockindata
+                                    ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                    : "border-gray-300 bg-white"
+                                }`}
+                              >
+                                <p className="font-medium text-textcolor-darkCharcoal">
+                                  {clockindata?.shift_detail?.name || "Unnamed Shift"}
+                                </p>
+                                <p className="font-bold text-textcolor-darkCharcoal">
+                                  {formatTime(clockindata?.shift_detail?.start_time)} - {formatTime(clockindata?.shift_detail?.end_time)}
+                                </p>
+                              </div>
+                            )}
+                          </RadioGroup.Option>
+                        
+                      
+                        </>
+                      ):(
+                        <>
+                        {data?.map((times) => {
                         return (
                           <RadioGroup.Option
                             key={times?.shift?.name}
@@ -109,6 +139,8 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                           </RadioGroup.Option>
                         );
                       })}
+                        </>
+                      )}
                     </RadioGroup>
                   </div>
                 </div>
@@ -135,7 +167,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                         Starting...
                       </div>
                     ) : (
-                      <span>Start</span>
+                      <span>{clockindata?'Clock Out':'Start'}</span>
                     )}
                   </button>
                 </div>
