@@ -30,6 +30,8 @@ export default function CompanyCreateSideBar({ stepCounter }) {
   ];
 
   return (
+
+    <>
     <div className="flex w-1/3 flex-col gap-3">
       <div className="relative rounded-md bg-white p-5">
         <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-hrmprimaryorange" />
@@ -196,5 +198,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
         </div>
       </div>
     </div>
+
+    </>
   );
 }

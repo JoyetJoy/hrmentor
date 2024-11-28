@@ -44,8 +44,6 @@ export default function EmailSetupSave() {
     resolver: yupResolver(EmailSchema),
   });
 
-  console.log(errors, "error");
-
   const queryClient = useQueryClient();
 
   const [saveEmail, SetSaveEmail] = useState({

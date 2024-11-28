@@ -10,12 +10,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-
+import { companySettingSideList } from "@/constants/dummyData";
+import { Link } from "react-router-dom";
 const CompanySignatorySchema = Yup.object({
   authorised_name: Yup.string(),
 });
 
 export default function CompanySignatory() {
+  const [activeItem, setActiveItem] = useState("Company Signatory");
+  const handleItemClick = (itemName) => {
+    setActiveItem(itemName);
+  };
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const { user } = useUserStore((state) => ({
@@ -110,9 +115,97 @@ export default function CompanySignatory() {
 
   return (
     <>
-      <CompanyMenuHeader />
-      <div className="flex flex-row items-start justify-between gap-3">
-        <form className="w-full">
+      {!companySignature ? (
+        <>
+          <CompanyMenuHeader />
+          <div className="flex flex-row items-start justify-between gap-3">
+            <form className="w-full">
+              <div className="mb-3 mt-1 flex items-center justify-between">
+                <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
+                  <ArrowLeft
+                    onClick={() => history.back()}
+                    className="size-4 cursor-pointer"
+                  />
+                  Company Profile{" "}
+                </div>
+
+                <div
+                  onClick={handleSubmit(onSubmit)}
+                  className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+                >
+                  Next
+                </div>
+              </div>
+              <div className="h-screen w-full rounded-md bg-white px-5 py-7">
+                <div className="group flex w-full items-center gap-x-2">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
+                    <ChevronRight className="size-4 group-data-[open]:rotate-90" />
+                  </div>
+                  <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
+                    Company Signatory
+                  </p>
+                  <div className="h-px w-full bg-gray-light"></div>
+                </div>
+                <div className="grid grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
+                  <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">Authorised Person Name</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      className="input-box"
+                      name="authorised_name"
+                      value={companySignature.authorised_name}
+                      onChange={HandleCompanySignature}
+                    />
+                    {errors.authorised_name && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.authorised_name?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">
+                      Authorised Person Signature(90px*150px)
+                    </label>
+                    <label
+                      htmlFor="authorised_signature"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed bg-gray-darklight"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Upload className="size-5 text-black" />
+                        <span className="font-semibold text-black">
+                          Upload Signature
+                        </span>
+                      </div>
+                      <input
+                        id="authorised_signature"
+                        onChange={handleLogoSelect}
+                        type="file"
+                        className="hidden"
+                        name="authorised_signature"
+                      />
+                    </label>
+                  </div>
+                  <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">
+                      Authorised Person Signature
+                    </label>
+
+                    <img
+                      alt="Authorised Person Signature"
+                      className="h-28 rounded-md"
+                      src={selectedLogo}
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+            <CompanyCreateSideBar stepCounter={3} />
+          </div>
+        </>
+      ) : (
+        <>
+          <CompanyMenuHeader />
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
               <ArrowLeft
@@ -129,72 +222,107 @@ export default function CompanySignatory() {
               Next
             </div>
           </div>
-          <div className="h-screen w-full rounded-md bg-white px-5 py-7">
-            <div className="group flex w-full items-center gap-x-2">
-              <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
-                <ChevronRight className="size-4 group-data-[open]:rotate-90" />
-              </div>
-              <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
-                Company Signatory
-              </p>
-              <div className="h-px w-full bg-gray-light"></div>
+          <div className="flex flex-row items-start justify-between gap-3">
+            <div className="h-screen min-w-64 rounded-md bg-white px-5 py-6">
+              <ul className="flex flex-col justify-center gap-5 text-sm text-gray-dark">
+                {companySettingSideList?.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`flex items-center gap-x-3 whitespace-nowrap text-sm ${
+                      activeItem === item.name
+                        ? "font-bold text-hrmprimaryorange"
+                        : "font-medium text-gray-dark"
+                    }`}
+                  >
+                    {item.name == "Company profile" ? (
+                      <Link
+                        to={`${item.link}`} // Properly interpolates the path
+                        onClick={() => handleItemClick(item.name)} // Passes the item name to the click handler
+                        className="whitespace-nowrap" // Class name applied directly
+                      >
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <Link
+                        to={`${item.link}/${id}`} // Properly interpolates the path
+                        onClick={() => handleItemClick(item.name)} // Passes the item name to the click handler
+                        className="whitespace-nowrap" // Class name applied directly
+                      >
+                        {item.name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="grid grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
-              <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
-                <label className="label-text">Authorised Person Name</label>
-                <input
-                  autoComplete="off"
-                  type="text"
-                  className="input-box"
-                  name="authorised_name"
-                  value={companySignature.authorised_name}
-                  onChange={HandleCompanySignature}
-                />
-                {errors.authorised_name && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.authorised_name?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
-                <label className="label-text">
-                  Authorised Person Signature(90px*150px)
-                </label>
-                <label
-                  htmlFor="authorised_signature"
-                  className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed bg-gray-darklight"
-                >
-                  <div className="flex items-center gap-2">
-                    <Upload className="size-5 text-black" />
-                    <span className="font-semibold text-black">
-                      Upload Signature
-                    </span>
+            <form className="w-full">
+              <div className="h-screen w-full rounded-md bg-white px-5 py-7">
+                <div className="group flex w-full items-center gap-x-2">
+                  <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
+                    <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
-                  <input
-                    id="authorised_signature"
-                    onChange={handleLogoSelect}
-                    type="file"
-                    className="hidden"
-                    name="authorised_signature"
-                  />
-                </label>
-              </div>
-              <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
-                <label className="label-text">
-                  Authorised Person Signature
-                </label>
+                  <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
+                    Company Signatory
+                  </p>
+                  <div className="h-px w-full bg-gray-light"></div>
+                </div>
+                <div className="grid grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
+                  <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">Authorised Person Name</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      className="input-box"
+                      name="authorised_name"
+                      value={companySignature.authorised_name}
+                      onChange={HandleCompanySignature}
+                    />
+                    {errors.authorised_name && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.authorised_name?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">
+                      Authorised Person Signature(90px*150px)
+                    </label>
+                    <label
+                      htmlFor="authorised_signature"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed bg-gray-darklight"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Upload className="size-5 text-black" />
+                        <span className="font-semibold text-black">
+                          Upload Signature
+                        </span>
+                      </div>
+                      <input
+                        id="authorised_signature"
+                        onChange={handleLogoSelect}
+                        type="file"
+                        className="hidden"
+                        name="authorised_signature"
+                      />
+                    </label>
+                  </div>
+                  <div className="group flex w-1/3 flex-col space-y-1 px-3 py-1">
+                    <label className="label-text">
+                      Authorised Person Signature
+                    </label>
 
-                <img
-                  alt="Authorised Person Signature"
-                  className="h-28 rounded-md"
-                  src={selectedLogo}
-                />
+                    <img
+                      alt="Authorised Person Signature"
+                      className="h-28 rounded-md"
+                      src={selectedLogo}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
-        </form>
-        <CompanyCreateSideBar stepCounter={3} />
-      </div>
+        </>
+      )}
     </>
   );
 }

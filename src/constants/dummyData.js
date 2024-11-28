@@ -462,22 +462,22 @@ export const shiftHistoryData = [
 export const companySettingSideList = [
   {
     id: 1,
-    link: "/admin/company/",
+    link: "/admin/company/general",
     name: "Company profile",
   },
   {
     id: 2,
-    link: "/admin/company",
+    link: "/admin/company/bank_details",
     name: "Organisation bank and tax details",
   },
   {
     id: 3,
-    link: "/admin/company",
+    link: "/admin/company/signatory",
     name: "Company Signatory",
   },
   {
     id: 4,
-    link: "/admin/company",
+    link: "/admin/company/calender",
     name: "Calender settings",
   },
 ];

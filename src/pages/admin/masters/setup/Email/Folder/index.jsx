@@ -1,4 +1,5 @@
 import MenuHeader from "@/components/common/MenuHeader";
+import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { Plus } from "lucide-react";
@@ -78,7 +79,7 @@ export default function EmailSetup() {
 
   return (
     <>
-      <MenuHeader menu="Menu" currentpath="Setup" />
+      <SetUpHeader menu="Menu" currentpath="Folder"  page={1}/>
       <div className="mb-4 mt-1 flex items-center justify-between">
         <label></label>
         <Link
