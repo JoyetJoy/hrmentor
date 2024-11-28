@@ -31,35 +31,44 @@ export const EmployeeDashboard = () => {
 
   // Fetch clock-in data
   const { data: clockin } = useQuery({
-    queryKey: ["clockin"],
-    queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data)
+    queryKey: ["clockin",clockInpopupOpen],
+    queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data),
   });
 
-// Update logged time dynamically
-useEffect(() => {
-  
-  if (!clockin) return;
+  // Update logged time dynamically
+  useEffect(() => {
+    if (!clockin) return;
 
-  const calculateLoggedTime = () => {
-    const currentTimeUTC = new Date().getTime(); // Current time in milliseconds UTC
-    const clockInDateUTC = new Date(`1970-01-01T${clockin?.clock_in_time}Z`).getTime(); // Clock-in time in milliseconds UTC
+    const calculateLoggedTime = () => {
+      const currentTimeUTC = new Date().getTime(); // Current time in milliseconds UTC
+      const clockInDateUTC = new Date(
+        `1970-01-01T${clockin?.clock_in_time}Z`,
+      ).getTime(); // Clock-in time in milliseconds UTC
 
-    const elapsedTime = currentTimeUTC - clockInDateUTC;
+      if (clockInDateUTC) {
+        const elapsedTime = currentTimeUTC - clockInDateUTC;
 
-    const hours = String(Math.floor((elapsedTime / (1000 * 60 * 60)) % 24)).padStart(2, "0");
-    const minutes = String(Math.floor((elapsedTime / (1000 * 60)) % 60)).padStart(2, "0");
-    const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(2, "0");
+        const hours = String(
+          Math.floor((elapsedTime / (1000 * 60 * 60)) % 24),
+        ).padStart(2, "0");
+        const minutes = String(
+          Math.floor((elapsedTime / (1000 * 60)) % 60),
+        ).padStart(2, "0");
+        const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(
+          2,
+          "0",
+        );
 
-    setLoggedTime(`${hours}:${minutes}:${seconds}`);
-  };
+        setLoggedTime(`${hours}:${minutes}:${seconds}`);
+      }
+    };
 
-  calculateLoggedTime(); // Run the calculation immediately
+    calculateLoggedTime(); // Run the calculation immediately
 
-  const interval = setInterval(calculateLoggedTime, 1000); // Update every second
+    const interval = setInterval(calculateLoggedTime, 1000); // Update every second
 
-  return () => clearInterval(interval); // Cleanup interval on unmount
-}, [clockin]);
-
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [clockin]);
 
   const handleClockIn = async (toOpen) => {
     if (!dashboard) {
@@ -91,29 +100,35 @@ useEffect(() => {
         clockindata={clockin}
         data={dashboard?.rosterOrShift}
       />
-      <StopBreak breakpopupOpen={breakpopupOpen} setBreakPopupOpen={setBreakPopupOpen} />
+      <StopBreak
+        breakpopupOpen={breakpopupOpen}
+        setBreakPopupOpen={setBreakPopupOpen}
+        loggedTime={loggedTime}
+      />
       <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
         <aside className="flex min-w-[70%] flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
             <div className="flex items-center gap-3">
-              {clockin&&
-              <Menu as="div" className="relative inline-block text-left">
-              <div 
-              onClick={()=>setBreakPopupOpen(true)}
-              className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmprimaryorange">
-                <Menu.Button>Break</Menu.Button>
-              </div>
-            </Menu>}
+              {clockin?.clock_in_time && (
+                <Menu as="div" className="relative inline-block text-left">
+                  <div
+                    onClick={() => setBreakPopupOpen(true)}
+                    className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmprimaryorange"
+                  >
+                    <Menu.Button>Break</Menu.Button>
+                  </div>
+                </Menu>
+              )}
               <div
                 onClick={handleClockIn}
                 className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue"
               >
                 <Clock4 className="size-4" />
-                {clockin ? "Clock Out" : "Clock In"}
+                {clockin?.clock_in_time ? "Clock Out" : "Clock In"}
               </div>
-              <p className="text-xs w-36 font-semibold text-hrmprimaryorange">
-                Logged Time: {loggedTime||'00:00:00'}
+              <p className="w-36 text-xs font-semibold text-hrmprimaryorange">
+                Logged Time: {loggedTime || "00:00:00"}
               </p>
               <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
                 <Search className="size-4 object-contain text-gray-dark" />
@@ -130,7 +145,9 @@ useEffect(() => {
         <aside className="flex w-[27%] flex-col">
           <LeaveAvailability />
           <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
-            <h1 className="mb-4 text-lg font-semibold text-black">News & Events</h1>
+            <h1 className="mb-4 text-lg font-semibold text-black">
+              News & Events
+            </h1>
             <div className="flex flex-col gap-3">
               {meetings.map((meeting, index) => (
                 <div

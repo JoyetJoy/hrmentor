@@ -55,7 +55,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
             className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 px-14 py-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
-              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">{clockindata?'Clock Out':'Clock In'}</h1>
+              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">{clockindata?.clock_in_time?'Clock Out':'Clock In'}</h1>
               <button
                 onClick={close}
                 className="text-xl font-extrabold text-textcolor-darkCharcoal"
@@ -77,7 +77,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                       aria-label="Time Slots"
                       className="space-y-4"
                     >
-                      {clockindata?(
+                      {clockindata?.shift_detail?(
                         <>
                           <RadioGroup.Option
                             key={clockindata?.shift_detail?.name}
@@ -167,7 +167,7 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                         Starting...
                       </div>
                     ) : (
-                      <span>{clockindata?'Clock Out':'Start'}</span>
+                      <span>{clockindata?.clock_in_time?'Clock Out':'Start'}</span>
                     )}
                   </button>
                 </div>

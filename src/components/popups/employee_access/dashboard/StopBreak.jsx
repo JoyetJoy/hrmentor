@@ -2,7 +2,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 
-export default function StopBreak({ breakpopupOpen, setBreakPopupOpen }) {
+export default function StopBreak({ breakpopupOpen, setBreakPopupOpen, loggedTime }) {
   const [loader, setLoader] = useState(false);
 
   function close() {
@@ -33,7 +33,7 @@ export default function StopBreak({ breakpopupOpen, setBreakPopupOpen }) {
                   className="w-1/4 object-contain"
                 />
                 <p className="text-xs font-semibold text-hrmprimaryorange">
-                  Logged Time : 00: 00{" "}
+                  Logged Time : {loggedTime}
                 </p>
                 <button
                   type="submit"
