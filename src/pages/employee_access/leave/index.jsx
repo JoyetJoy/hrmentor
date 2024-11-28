@@ -190,7 +190,7 @@ export default function Leave() {
                 </label>
                 <Link
                   onClick={handleClick}
-                  className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                  className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <PlusIcon className="size-5" />
                   Add Leave Request

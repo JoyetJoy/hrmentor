@@ -41,7 +41,7 @@ export default function TeamTimeSheet() {
         accessorKey: "sno",
         cell: ({ row }) => {
           return (
-            <div className="bg-darkgreen px-3 py-2">
+            <div className=" px-3 py-2">
               NA
               {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
             </div>
@@ -52,7 +52,7 @@ export default function TeamTimeSheet() {
         header: "Mon",
         accessorKey: "mon",
         cell: ({ row }) => (
-          <div className="bg-darkgreen px-3 py-2">
+          <div className="bg-blurecool px-3 py-2">
             <p>
               {row?.original?.first_name} {row?.original?.sur_name || "NA"}
             </p>
@@ -63,7 +63,7 @@ export default function TeamTimeSheet() {
         header: "Tue",
         accessorKey: "tue",
         cell: ({ row }) => (
-          <p className="bg-darkgreen px-3 py-2">
+          <p className="bg-blurecool px-3 py-2">
             {row?.original?.employee?.unique_id || "NA"}
           </p>
         ),
@@ -72,7 +72,7 @@ export default function TeamTimeSheet() {
         header: "Wen",
         accessorKey: "wed",
         cell: ({ row }) => (
-          <p className="bg-darkgreen px-3 py-2">
+          <p className="bg-blurecool px-3 py-2">
             {row?.original?.employee?.designation?.designation_name || "NA"}
           </p>
         ),
@@ -81,7 +81,7 @@ export default function TeamTimeSheet() {
         header: "Thue",
         accessorKey: "thue",
         cell: ({ row }) => (
-          <p className="bg-darkgreen px-3 py-2">
+          <p className="bg-blurecool px-3 py-2">
             {row?.original?.employee?.employment_type?.employment_type_name ||
               "NA"}
           </p>
@@ -91,7 +91,7 @@ export default function TeamTimeSheet() {
         header: "Fri",
         accessorKey: "fri",
         cell: ({ row }) => (
-          <p className="bg-darkgreen px-3 py-2">
+          <p className="bg-blurecool px-3 py-2">
             {row?.original?.employee?.department?.department_name || "NA"}
           </p>
         ),
@@ -100,7 +100,7 @@ export default function TeamTimeSheet() {
         header: "Sat",
         accessorKey: "sat",
         cell: ({ row }) => (
-          <p className="bg-darkgreen px-3 py-2">
+          <p className="bg-blurecool px-3 py-2">
             {row?.original?.employee?.work_location?.work_location_name || "NA"}
           </p>
         ),
@@ -109,7 +109,7 @@ export default function TeamTimeSheet() {
         header: "Sun",
         accessorKey: "sun",
         cell: ({ row }) => (
-          <div className="whitespace-nowrap bg-darkgreen px-3 py-2">
+          <div className="whitespace-nowrap bg-blurecool px-3 py-2">
             {row?.original?.employee?.employment_status?.status_name || "NA"}
           </div>
         ),
@@ -163,7 +163,7 @@ export default function TeamTimeSheet() {
           <Link
             to=""
             onClick={handleClick}
-            className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+            className="flex w-fit whitespace-nowrap items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
           >
             <PlusIcon />
             Add Manually

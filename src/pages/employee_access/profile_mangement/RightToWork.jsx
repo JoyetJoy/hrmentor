@@ -86,7 +86,7 @@ export default function RightToWork() {
   const [popupOpen, setPopupOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col">
       <RightToWorkEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <MenuHeaderEmployeeAccess
         pathlink={""}
@@ -98,7 +98,7 @@ export default function RightToWork() {
         <ProfileSidebar />
 
         <div className="flex w-full flex-col">
-          <div className="w-full rounded-md bg-white px-5 py-4">
+          <div className="w-full rounded-md h-screen bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Right to work</h5>

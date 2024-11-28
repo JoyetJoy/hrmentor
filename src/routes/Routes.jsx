@@ -34,7 +34,7 @@ export const appRoutes = createBrowserRouter([
     children: AdminRoutes,
   },
   {
-    path:"employee_access",
+    path:"employee-access",
     element:<EmployeeAccessLayouts/>,
     errorElement: <ErrorPage />,
     children:EmployeeAccessRoutes,

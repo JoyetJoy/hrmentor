@@ -6,6 +6,7 @@ import { RosterRoutes } from "./children/RosterRoute";
 import { TimeSheetRoutes } from "./children/TimeSheetRoute";
 import { LeaveRoute } from "./children/LeaveRoute";
 import { ProfileRoutes } from "./children/ProfileRoutes";
+import { ChatRoutes } from "./children/ChatRoute";
 
 export const EmployeeAccessRoutes = [
   {
@@ -33,8 +34,16 @@ export const EmployeeAccessRoutes = [
     children: ProfileRoutes,
   },
   {
+  path:"chat",
+  children:ChatRoutes,
+  },
+  {
     path: "*",
-    element: <Navigate to="/employee_access/dashboard" replace />,
+    element: <Navigate to="/employee-access/dashboard" replace />,
   },
  
 ];
+
+
+
+

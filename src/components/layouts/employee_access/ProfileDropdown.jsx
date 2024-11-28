@@ -12,7 +12,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
             {user?.name} {user?.sur_name}
             <span className="text-xs font-medium text-gray-lightDim">
-              Developer
+              Doctor
             </span>
           </h1>
         </Menu.Button>

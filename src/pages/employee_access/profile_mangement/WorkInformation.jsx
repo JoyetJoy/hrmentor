@@ -40,7 +40,7 @@ export default function WorkInformation() {
             <h1 className="text-lg font-bold">Work Information</h1>
           </div>
           <div className="grid grid-cols-2 gap-x-3 pt-2">
-            <div className="flex h-screen flex-col items-baseline rounded-md border border-gray-300 bg-white px-3 py-4">
+            <div className="flex h-screen flex-col items-baseline rounded-md border border-gray-soft bg-white px-3 py-4">
               <h1 className="flex w-full flex-row items-center justify-between px-3 text-lg font-bold text-textcolor-darkCharcoal">
                 Reporting to
               </h1>
@@ -163,7 +163,7 @@ export default function WorkInformation() {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Notice Period(in Days)</label>
+                  <label className="label-text">Religious belief</label>
                   <input
                     autoComplete="off"
                     type="text"
@@ -176,36 +176,7 @@ export default function WorkInformation() {
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">
-                    Probation Period(in Days)
-                  </label>
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    {...register("pregnancy", { required: true })}
-                    className="input-box placeholder:text-[0.8rem]"
-                  />
-                  {errors.pregnancy && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.pregnancy?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Pregnancy & maternity</label>
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    {...register("pregnancy", { required: true })}
-                    className="input-box placeholder:text-[0.8rem]"
-                  />
-                  {errors.pregnancy && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.pregnancy?.message}
-                    </span>
-                  )}
-                </div>
+               
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="label-text">Gender</label>
                   <Controller
@@ -217,7 +188,7 @@ export default function WorkInformation() {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        placeholder="Select a gender"
+                        placeholder="Select gender"
                         className="input-box"
                       />
                     )}
@@ -225,30 +196,6 @@ export default function WorkInformation() {
                   {errors.gender && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.gender?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">
-                    Physical / Mental disability{" "}
-                  </label>
-                  <Controller
-                    name="physical"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={true}
-                        styles={customSelectStyles}
-                        placeholder="Yes/ No"
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.physical && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.physical?.message}
                     </span>
                   )}
                 </div>
@@ -277,7 +224,7 @@ export default function WorkInformation() {
                         {...field}
                         isSearchable={true}
                         styles={customSelectStyles}
-                        placeholder="Select a status"
+                        placeholder="Select status"
                         className="input-box"
                       />
                     )}
@@ -285,6 +232,44 @@ export default function WorkInformation() {
                   {errors.maritalstatus && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.maritalstatus?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">Pregnancy& maternity</label>
+                  <input
+                    autoComplete="off"
+                    type="text"
+                    {...register("sexualorientation", { required: true })}
+                    className="input-box placeholder:text-[0.8rem]"
+                  />
+                  {errors.sexualorientation && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.sexualorientation?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">
+                    Physical / Mental disability{" "}
+                  </label>
+                  <Controller
+                    name="physical"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        placeholder="Yes/ No"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.physical && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.physical?.message}
                     </span>
                   )}
                 </div>

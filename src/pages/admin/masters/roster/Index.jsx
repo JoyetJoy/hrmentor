@@ -1,5 +1,5 @@
 import { EMPLOYEE, newRequest } from "@/api";
-import { ROSTER_LIST } from "@/api/setup";
+import { ROSTER_LIST,DELETE_ROSTER } from "@/api/setup";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
@@ -175,8 +175,8 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         onCancel={setDeletePopup}
         id={selectedField}
         qrkey={"rosterDetailss"}
-        type={'roster'}
-        api={ROSTER_LIST}
+        type={'rosterdelete'}
+        api={DELETE_ROSTER}
       />
       <NewRoster
         popupOpen={popupOpen}
