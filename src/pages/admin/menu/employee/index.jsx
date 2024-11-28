@@ -155,7 +155,7 @@ export default function EmployeeLists() {
   );
 
   return (
-    <div className="">
+    <div className="h-screen">
       <MenuHeader
         menu={"Menu"}
         currentpath={"Employee"}
@@ -193,7 +193,7 @@ export default function EmployeeLists() {
         </div>
       </div>
       {isLoading ? (
-        <div className="flex min-h-96 w-full items-center justify-center bg-white">
+        <div className="flex min-h-96 w-full  items-center justify-center bg-white">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (

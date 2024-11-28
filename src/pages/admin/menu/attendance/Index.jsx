@@ -138,7 +138,7 @@ const EmployeeAttendanceCalendar = () => {
   };
 
   return (
-    <div className="flex flex-col py-4">
+    <div className="flex flex-col">
       <MenuHeader
         menu={"Menu"}
         subMenu={""}

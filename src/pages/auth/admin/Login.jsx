@@ -43,7 +43,7 @@ function Login() {
           }else{
             localStorage.removeItem('super_token')
             localStorage.setItem("employee_token", res?.data?.data?.token);
-            navigate("/employee_access/dashboard");
+            navigate("/employee-access/dashboard");
           }
         }else{
           if(res?.data?.data?.roles?.includes(1)){
@@ -55,7 +55,7 @@ function Login() {
             localStorage.setItem("team_token", res?.data?.data?.token)
           }else{
             localStorage.setItem("employee_token", res?.data?.data?.token);
-            navigate("/employee_access/dashboard");
+            navigate("/employee-access/dashboard");
           }
         }
         

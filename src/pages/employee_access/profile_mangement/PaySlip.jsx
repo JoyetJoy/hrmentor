@@ -28,7 +28,7 @@ export default function PaySlip() {
                 />
               </div>
             </div>
-            <div className="overflow-y-min mt-5 h-full w-full overflow-y-auto rounded-md bg-white pb-7"></div>
+            <div className="overflow-y-min mt-5 h-full w-full overflow-y-auto rounded-md h-screen bg-white pb-7"></div>
           </>
         </div>
       </div>

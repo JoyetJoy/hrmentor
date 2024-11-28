@@ -35,7 +35,7 @@ export default function Documents() {
               </div>
             </div>
 
-            <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white pb-7">
+            <div className="overflow-y-min mt-5 w-full  h-screen overflow-y-auto rounded-md bg-white pb-7">
               <Disclosure
                 as="div"
                 className="p-5"

@@ -16,7 +16,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
             </span>
           </h1>
         </Menu.Button>
-        <Menu.Items className="absolute top-12 z-20 w-48 rounded-lg bg-white p-4 shadow-lg">
+        <Menu.Items className="absolute top-12 z-20 w-48  ml-7 rounded-lg bg-white p-4 shadow-lg">
           <ul className="flex flex-col gap-4">
             {adminItems.map((item, index) => (
               <Menu.Item key={index}>
@@ -27,7 +27,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
                       active ? "" : ""
                     }`}
                   >
-                    <div className="h-4 w-4">
+                    <div className="h-4 w-4 ">
                       <img
                         src={item.icon}
                         alt={`${item.label} icon`}

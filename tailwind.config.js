@@ -70,9 +70,10 @@ export default {
         orange:"#FCCC4F",
         coolorange:"#FCCC4F33",
         soft:"#FEEBE6",
+        bluesoft:" #F0F8FF",
+        blurecool:"#ADD8E61A",
 
         textcolor: {
-          
           green: "#0B8A00",
           red: "#C71026",
           darkCharcoal: "#2C2C2C",

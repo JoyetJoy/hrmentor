@@ -500,17 +500,15 @@ export const jobSubList = [
   },
 ];
  
-// EMPLOYEE ACCESS
-
  // list menu items
 export const employeemenuitems = [
   {
     id: 1,
     iconType: "image",
     iconSrcBlack: "/assets/icons/employee_access/header/dashbord-black.svg",
-    iconSrcActive: "/assets/icons/employee_access/header/dashbord-color.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/dashboard/dashbordColor.svg",
     name: "Dashboard",
-    path: "/employee_access/dashboard",
+    path: "/employee-access/dashboard",
     active: "dashboard",
   },
   {
@@ -519,7 +517,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/attendance-black (2).svg",
     iconSrcActive: "/assets/icons/employee_access/header/attendance-color.svg",
     name: "Attendance",
-    path: "/employee_access/attendance",
+    path: "/employee-access/attendance",
     active: "attendance",
   },
   {
@@ -528,7 +526,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/roster-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/roster-color.svg",
     name: "Roster",
-    path: "/employee_access/roster",
+    path: "/employee-access/roster",
     active: "roster",
   },
   {
@@ -537,7 +535,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/time-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/time-sheet-color.svg",
     name: "Time Sheet",
-    path: "/employee_access/timesheet",
+    path: "/employee-access/timesheet",
     active: "timesheet",
   },
   {
@@ -546,7 +544,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/leave-color.svg",
     name: "Leave",
-    path: "/employee_access/leave",
+    path: "/employee-access/leave",
     active: "leave",
   },
  
@@ -562,7 +560,7 @@ export const employeeaccessItems = [
   {
     icon: "/assets/icons/employee_access/header/profilemang.svg",
     label: "Profile Management",
-    path: "/employee_access/profile/primary",
+    path: "/employee-access/profile/primary",
     active: "profile-management",
   },
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },

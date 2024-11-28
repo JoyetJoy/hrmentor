@@ -63,7 +63,7 @@ export default function EmergencyContactEdit({
             ) : (
               <form className="grid grid-cols-1 gap-3">
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Name
                   </label>
                   <input
@@ -80,7 +80,7 @@ export default function EmergencyContactEdit({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Relationship
                   </label>
                   <Controller
@@ -104,7 +104,7 @@ export default function EmergencyContactEdit({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Phone Number
                   </label>
                   <input
@@ -126,7 +126,7 @@ export default function EmergencyContactEdit({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Address
                   </label>
                   <textarea
