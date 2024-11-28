@@ -23,7 +23,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
   function close() {
     setPopupOpen(false);
   }
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
+  const { image, clearImage } =
     useImageUpload();
   const [loader, setLoader] = useState();
   return (
@@ -57,7 +57,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
               //   onSubmit={handleSubmit(onSubmit)}
             >
               <div className="group flex w-full flex-col gap-1">
-                <label className="required label-text">Type</label>
+                <label className=" label-text">Type</label>
                 <Controller
                   name="type"
                   control={control}
@@ -80,7 +80,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
               </div>
 
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Field of study
                 </label>
                 <input
@@ -96,7 +96,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
               </div>
 
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Name of the institution
                 </label>
                 <input
@@ -129,7 +129,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Start Date
                 </label>
                 <input
@@ -144,7 +144,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   End Date
                 </label>
                 <input
@@ -159,7 +159,7 @@ function SkillEdit({ popupOpen, setPopupOpen, selectedField }) {
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Status
                 </label>
                 <Controller

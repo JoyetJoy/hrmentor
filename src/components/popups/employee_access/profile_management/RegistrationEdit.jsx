@@ -59,7 +59,7 @@ export default function RegistrationEdit({ popupOpen, setPopupOpen, selectedFiel
             //   onSubmit={handleSubmit(onSubmit)}
             >
               <div className="group flex w-full flex-col gap-1">
-                <label className="required label-text">
+                <label className=" label-text">
                   Registration/Membership body
                 </label>
                 <input
@@ -76,7 +76,7 @@ export default function RegistrationEdit({ popupOpen, setPopupOpen, selectedFiel
               </div>
 
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Professional Registration Number
                 </label>
                 <input
@@ -93,7 +93,7 @@ export default function RegistrationEdit({ popupOpen, setPopupOpen, selectedFiel
               </div>
 
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Expiry Date
                 </label>
                 <input
@@ -123,7 +123,7 @@ export default function RegistrationEdit({ popupOpen, setPopupOpen, selectedFiel
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Revalidation/Renewal Date
                 </label>
                 <input

@@ -64,7 +64,7 @@ export default function RightToWorkEdit({
               className="grid grid-cols-2 gap-3"
             >
               <div className="group flex w-full flex-col gap-1">
-                <label className="required label-text">Reference No</label>
+                <label className=" label-text">Reference No</label>
                 <input
                   {...register("reference_no", { required: true })}
                   type="text"
@@ -78,7 +78,7 @@ export default function RightToWorkEdit({
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Expiry Date
                 </label>
                 <input
@@ -93,7 +93,7 @@ export default function RightToWorkEdit({
                 )}
               </div>
               <div className="group col-span-2 flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Condition
                 </label>
                 <textarea
@@ -107,7 +107,7 @@ export default function RightToWorkEdit({
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Reviewed by
                 </label>
                 <input
@@ -121,7 +121,7 @@ export default function RightToWorkEdit({
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Document
                 </label>
                 <div className="group flex flex-col gap-1.5">

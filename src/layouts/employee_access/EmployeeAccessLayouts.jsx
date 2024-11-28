@@ -35,7 +35,7 @@ export default function EmployeeAccessLayouts() {
   return (
     <>
       <ScrollBack />
-      <div className="h-full w-full bg-gray-100 px-12 py-4">
+      <div className="w-full bg-gray-100 px-12 py-4">
         <EmployeeAccessHeader />
         <Outlet />
       </div>

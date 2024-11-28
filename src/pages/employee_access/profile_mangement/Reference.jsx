@@ -86,7 +86,7 @@ export default function Reference() {
     [],
   );
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col">
       <ReferenceEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
       <MenuHeaderEmployeeAccess
         pathlink={""}
@@ -98,7 +98,7 @@ export default function Reference() {
         <ProfileSidebar />
 
         <div className="flex w-full flex-col">
-          <div className="w-full rounded-md bg-white px-5 py-4">
+          <div className="w-full  h-screen rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Reference</h5>

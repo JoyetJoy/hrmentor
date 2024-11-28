@@ -6,7 +6,7 @@ import { ChevronRight, Plus, Search } from "lucide-react";
 import React, { useState } from "react";
 
 export default function Experience() {
-  const [popupOpen, setPopupOpen] = useState(false)
+  const [popupOpen, setPopupOpen] = useState(false);
   const columns = React.useMemo(
     () =>
       [
@@ -95,8 +95,8 @@ export default function Experience() {
     [],
   );
   return (
-    <div className="flex min-h-screen flex-col">
-      <ExperienceEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+    <div className="flex flex-col">
+      <ExperienceEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <MenuHeaderEmployeeAccess
         pathlink={""}
         currentpage={"Experience"}
@@ -106,7 +106,7 @@ export default function Experience() {
       <div className="flex gap-x-3">
         <ProfileSidebar />
         <div className="flex w-full flex-col">
-          <div className="w-full rounded-md bg-white px-5 py-4">
+          <div className="h-screen w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Experience</h5>
@@ -121,9 +121,9 @@ export default function Experience() {
                 </div>
               </div>
               <button
-                  onClick={() => {
-                    setPopupOpen(true);
-                  }}
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
                 className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
               >
                 <Plus className="size-4" />
