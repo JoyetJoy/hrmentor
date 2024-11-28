@@ -21,7 +21,7 @@ export default function ClockOut({ clockOutpopupOpen, setClockOutPopupOpen }) {
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">
-                Click Out{" "}
+                Clock Out{" "}
               </h1>
               <button
                 onClick={close}

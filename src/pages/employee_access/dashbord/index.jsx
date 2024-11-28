@@ -107,7 +107,7 @@ useEffect(() => {
             </Menu>}
               <div
                 onClick={handleClockIn}
-                className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue"
+                className="btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue"
               >
                 <Clock4 className="size-4" />
                 {clockin ? "Clock Out" : "Clock In"}

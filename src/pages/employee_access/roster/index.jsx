@@ -81,8 +81,8 @@ const EmployeeAccessRosterCalendar = () => {
           />
         </div>
         <Link
-          to="/employee_access/roster/teamroster"
-          className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
+          to="/employee-access/roster/teamroster"
+          className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
         >
           Team Roster
         </Link>

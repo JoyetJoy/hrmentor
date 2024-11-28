@@ -101,7 +101,7 @@ export default function BankDetailsEdit({
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Bank Name
                 </label>
                 <input
@@ -129,7 +129,7 @@ export default function BankDetailsEdit({
                 )}
               </div> */}
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Account Number
                 </label>
                 <input
@@ -143,7 +143,7 @@ export default function BankDetailsEdit({
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Sort Code
                 </label>
                 <input
@@ -157,7 +157,7 @@ export default function BankDetailsEdit({
                 )}
               </div>
               <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Acc. Holder Name
                 </label>
                 <input
