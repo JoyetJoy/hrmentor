@@ -118,6 +118,7 @@ const EmployeeAccessRosterCalendar = () => {
             isSearchable={true}
             onChange={handleYearChange}
             styles={customSelectStyles}
+            value={years.find((yearOption) => yearOption.value === dayjs(date).year())}
             placeholder={dayjs(date).format("YYYY")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -126,6 +127,7 @@ const EmployeeAccessRosterCalendar = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
+            value={months.find((monthOption) => monthOption.value === dayjs(date).month() + 1)} 
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
