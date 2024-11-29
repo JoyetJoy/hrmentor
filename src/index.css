@@ -246,7 +246,7 @@ select:focus {
   justify-content: center;
   align-items: center;
   height: 180px;
-  min-width: 180px;
+  min-width: 160px;
   min-height: 100px !important;
   width: 100px;
   box-sizing: border-box;

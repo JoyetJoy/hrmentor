@@ -137,3 +137,5 @@ export const CANDIDATE_INTERVIEW_START_STOP = "candidate-interview-start-stop";
 
 //EMPLOYEE CLOCKIN
 export const CLOCK_IN = "/employee-access/employee-clock-in";
+//ROASTER GET
+export const ROASTER_GET = "/employee-rosters";

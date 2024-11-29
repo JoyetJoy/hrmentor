@@ -2,8 +2,9 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { X } from 'lucide-react';
 import React from 'react'
 
-export default function ShiftDetailsView({popupOpen,setPopupOpen}) {
+export default function ShiftDetailsView({popupOpen,setPopupOpen,selectedField}) {
     // const [loader, setLoader] = useState(false);
+console.log(selectedField);
 
     function close() {
         setPopupOpen(false);
@@ -35,9 +36,9 @@ export default function ShiftDetailsView({popupOpen,setPopupOpen}) {
           <div className="grid grid-cols-2 gap-3 gap-y-7 justify-between">
             <div className="group col-span-2  flex flex-col space-y-1">
               <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                Afternoon shift
+                {selectedField?.shift}
               </label>
-              <p className="text-sm font-semibold "> 1:00pm-2:00pm</p>
+              <p className="text-sm font-semibold "> {selectedField?.time}</p>
             </div>
             <div className="group flex flex-col space-y-1">
               <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
