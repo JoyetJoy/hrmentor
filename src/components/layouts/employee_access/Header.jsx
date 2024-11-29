@@ -1,33 +1,45 @@
-import { employeeAccessActivityList, employeemenuitems } from '@/constants/dummyData';
-import { useUserStore } from '@/lib/slices/auth.slice';
-import { LayoutGrid, MessageSquareText } from 'lucide-react';
-import React from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import ProfileDropdown from '../employee_access/ProfileDropdown';
-import { Menu } from '@headlessui/react';
+import {
+  employeeAccessActivityList,
+  employeemenuitems,
+} from "@/constants/dummyData";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { LayoutGrid, MessageSquareText } from "lucide-react";
+import React, { useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import ProfileDropdown from "../employee_access/ProfileDropdown";
+import { Menu } from "@headlessui/react";
+import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
 
 export default function EmployeeAccessHeader() {
-    const { setUser, user } = useUserStore((state) => ({
-        setUser: state.setUser,
-        user: state.user,
-      }));
-    
-      const location = useLocation();
-      const navigate = useNavigate();
-    
-      const handleNavigation = (path) => {
-        if (path === "/logout") {
-          setUser({});
-          localStorage.removeItem("employee_token");
-          navigate("/login");
-        }
-        navigate(path);
-      };
-      const isActiveLink = (path) => location.pathname.includes(path);
+  const { setUser, user } = useUserStore((state) => ({
+    setUser: state.setUser,
+    user: state.user,
+  }));
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    if (path === "/logout") {
+      setUser({});
+      localStorage.removeItem("employee_token");
+      navigate("/login");
+    }
+    navigate(path);
+  };
+  const isActiveLink = (path) => location.pathname.includes(path);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const handleClick = () => {
+    setPopupOpen(true);
+  };
   return (
     <>
+      <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
-        <Link to="/employee_access/dashboard" className="flex flex-row gap-1 pl-3">
+        <Link
+          to="/employee_access/dashboard"
+          className="flex flex-row gap-1 pl-3"
+        >
           <div className="mr-2 h-9">
             <img
               src={"/logo.svg"}
@@ -37,8 +49,7 @@ export default function EmployeeAccessHeader() {
           </div>
           <span className="font-monorope text-base font-normal">
             Welcome,
-            <h1 className="-mt-0.5 text-base font-semibold">
-            {user?.name}</h1>
+            <h1 className="-mt-0.5 text-base font-semibold">{user?.name}</h1>
           </span>
         </Link>
         <div className="items flex gap-x-3">
@@ -67,16 +78,19 @@ export default function EmployeeAccessHeader() {
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
-          <Link to="/employee-access/chat" className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+          <div
+            onClick={handleClick}
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+          >
             <MessageSquareText className="size-5 text-hrmblue" />
-          </Link>
+          </div>
           <Menu as="div" className="relative inline-block text-left">
             <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100 p-3">
               <Menu.Button>
                 <LayoutGrid className="size-5 text-hrmblue" />
               </Menu.Button>
             </div>
-            <Menu.Items className="absolute  top-12 z-20 w-36 rounded-lg bg-white p-4 shadow-lg">
+            <Menu.Items className="absolute top-12 z-20 w-36 rounded-lg bg-white p-4 shadow-lg">
               <ul className="flex flex-col gap-5">
                 {employeeAccessActivityList.map((item, index) => (
                   <Menu.Item key={index}>
@@ -106,5 +120,5 @@ export default function EmployeeAccessHeader() {
         </div>
       </div>
     </>
-  )
+  );
 }
