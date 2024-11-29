@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
@@ -26,29 +26,36 @@ const EmployeeAccessRosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
-
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
 
-  const { data: events = [] } = useQuery({
+  const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year],
     queryFn: () =>
       newRequest.get(ROASTER_GET, {
-        params: {
-          month: month,
-          year: year,
-        },
+        params: { month, year },
       }).then((res) => res.data),
-    enabled: !!date,
+    enabled: false, // Prevent the query from auto-fetching on mount
   });
+
+  useEffect(() => {
+    // Refetch data whenever the `date` changes
+    refetch();
+  }, [date, refetch]);
+
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
-    const updatedDate = dayjs(date).month(selectedOption.value - 1).toDate();
-    handleDateChange(updatedDate);
+    const currentDay = dayjs(date).date();
+  const updatedDate = dayjs(date)
+    .month(selectedOption.value - 1) // Update the month
+    .date(1) // Temporarily set the date to the first day of the month
+    .date(Math.min(currentDay, dayjs(date).month(selectedOption.value - 1).daysInMonth())) // Ensure the date stays valid
+    .toDate();
+  handleDateChange(updatedDate);
   };
 
   const handleYearChange = (selectedOption) => {
@@ -133,6 +140,7 @@ const EmployeeAccessRosterCalendar = () => {
 
       <div className="mb-10 mt-7 w-full max-w-8xl">
         <Calendar
+          key={date} // Force re-render whenever date changes
           onChange={handleDateChange}
           value={date}
           showNavigation={false}
