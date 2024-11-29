@@ -32,6 +32,8 @@ import CandidateInterviews from "@/pages/admin/menu/recruiter/candidate/details/
 import CandidateDocuments from "@/pages/admin/menu/recruiter/candidate/details/CandidateDocuments";
 import CandidateHistoryTimeline from "@/pages/admin/menu/recruiter/candidate/details/CandidateHistory";
 import RecInterviews from "@/pages/admin/menu/recruiter/interview/RecInterviews";
+import RecViewJobPromote from "@/pages/admin/menu/recruiter/jobs/view/Promote";
+import RecViewJobRefer from "@/pages/admin/menu/recruiter/jobs/view/Refer";
 
 export const RecruiterRoutes = [
   {
@@ -53,6 +55,14 @@ export const RecruiterRoutes = [
       {
         path: "view",
         element: <RecViewJobDetail />,
+      },
+      {
+        path: "promote",
+        element: <RecViewJobPromote />,
+      },
+      {
+        path: "refer",
+        element: <RecViewJobRefer />,
       },
       {
         path: "application-question",

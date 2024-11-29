@@ -295,32 +295,15 @@ export const adminItems = [
 ];
 
 export const setupItems = [
+  
   {
     id: 1,
-    name: "Attendance",
-    active: "attendance",
-    path: "",
-  },
-  {
-    id: 2,
-    name: "Shift",
-    active: "shift",
-    path: "/",
-  },
-  {
-    id: 3,
-    name: "Roster",
-    active: "roster",
-    path: "",
-  },
-  {
-    id: 4,
     name: "Email",
     active: "email",
     path: "/admin/setup/email",
   },
   {
-    id: 5,
+    id: 1,
     name: "Basic Settings",
     active: "basic settings",
     path: "/admin/setup/basic-settings",
