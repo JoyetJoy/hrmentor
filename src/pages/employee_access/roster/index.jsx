@@ -12,8 +12,8 @@ import { ROASTER_GET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i + 1, 
-  label: dayjs().month(i).format("MMMM")
+  value: i + 1,
+  label: dayjs().month(i).format("MMMM"),
 }));
 
 const years = Array.from({ length: 11 }, (_, i) => ({
@@ -64,9 +64,13 @@ const EmployeeAccessRosterCalendar = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    return events.filter((event) =>
-      event.date_range.includes(formattedDate) || event.holidays.includes(formattedDate)
+    const holidayEvents = events.filter((event) =>
+      event?.holidays?.includes(formattedDate)
     );
+    const shiftEvents = events.filter((event) =>
+      event?.date_range?.includes(formattedDate)
+    );
+    return { holidayEvents, shiftEvents };
   };
 
   const handleClick = (event) => {
@@ -75,6 +79,15 @@ const EmployeeAccessRosterCalendar = () => {
       setPopupOpen(true);
     }
   };
+
+  function convertToHourMinutes(time) {
+    if (time) {
+      const [hours, minutes] = time.split(":");
+      return `${hours}:${minutes}`;
+    } else {
+      return "";
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -124,42 +137,38 @@ const EmployeeAccessRosterCalendar = () => {
           value={date}
           showNavigation={false}
           className="w-full font-monorope"
+          locale="en-US"
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const eventsForDay = findEvents(date);
-              if (eventsForDay.length > 0) {
-                return (
-                  <div className="flex flex-col gap-2">
-                    {eventsForDay.map((event, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleClick(event)}
-                        className={`mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm ${
-                          event.isHoliday
-                            ? "bg-[#fbe8f2] border-[#cf127a]"
-                            : getTileClass(date)
-                        } text-gray-800 justify-center`}
-                      >
-                        {event.isHoliday ? (
-                          <span className="font-semibold flex float-start">
-                            Holiday
-                          </span>
-                        ) : (
-                          <>
-                            <span className="font-semibold flex float-start">
-                              {event.shift_name}
-                            </span>
-                            <span className="flex float-start">
-                              {event.shift.start_time}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                );
-              }
+              const { holidayEvents, shiftEvents } = findEvents(date);
+              return (
+                <div className="flex flex-col gap-2">
+                  {holidayEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
+                    >
+                      <span className="font-semibold flex float-start">Holiday</span>
+                    </div>
+                  ))}
+                  {shiftEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleClick(event)}
+                      className={`mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm ${
+                        getTileClass(date)
+                      } text-gray-800 justify-center`}
+                    >
+                      <span className="font-semibold flex float-start">{event.shift_name}</span>
+                      <span className="flex float-start">
+                        {convertToHourMinutes(event?.shift?.start_time)}-
+                        {convertToHourMinutes(event?.shift?.end_time)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
             }
             return null;
           }}
