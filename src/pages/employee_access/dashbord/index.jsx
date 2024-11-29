@@ -22,6 +22,7 @@ export const EmployeeDashboard = () => {
   const [clockInpopupOpen, setClockInPopupOpen] = useState(false);
   const [loggedTime, setLoggedTime] = useState("00:00:00");
   const [clockInTime, setClockInTime] = useState(null);
+  const [timer, setTimer] = useState('');
 
   // Fetch dashboard data
   const { data: dashboard } = useQuery({
@@ -30,9 +31,10 @@ export const EmployeeDashboard = () => {
   });
 
   // Fetch clock-in data
-  const { data: clockin } = useQuery({
-    queryKey: ["clockin",clockInpopupOpen],
+  const { data: clockin} = useQuery({
+    queryKey: ["clockin",clockInpopupOpen,timer],
     queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data),
+    enabled:!timer,
   });
 
   // Update logged time dynamically
@@ -99,6 +101,7 @@ export const EmployeeDashboard = () => {
         api={CLOCK_IN}
         clockindata={clockin}
         data={dashboard?.rosterOrShift}
+        setTimer={setTimer}
       />
       <StopBreak
         breakpopupOpen={breakpopupOpen}
@@ -122,7 +125,7 @@ export const EmployeeDashboard = () => {
               )}
               <div
                 onClick={handleClockIn}
-                className="btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue"
+                className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ?'bg-[#2B2B2B] hover:bg-hrmdarkblue':'bg-hrmprimaryorange hover:bg-hrmprimaryorange'}`}
               >
                 <Clock4 className="size-4" />
                 {clockin?.clock_in_time ? "Clock Out" : "Clock In"}

@@ -3,17 +3,18 @@ import { X } from "lucide-react";
 import React from "react";
 
 export default function TeamRosterShiftView({
-  teamShiftViewPopupOpen,
-  setTeamShiftViewPopupOpen,
+  popupOpen,
+  setPopupOpen,
+  selectedField,
 }) {
   // const [loader, setLoader] = useState(false);
 
   function close() {
-    setTeamShiftViewPopupOpen(false);
+    setPopupOpen(false);
   }
   return (
     <Dialog
-      open={teamShiftViewPopupOpen}
+      open={popupOpen}
       as="div"
       className="relative z-10 focus:outline-none"
       onClose={close}
@@ -37,16 +38,19 @@ export default function TeamRosterShiftView({
             </div>
             <div className="grid grid-cols-2 justify-between gap-3 gap-y-7">
               <div className="group col-span-2 flex items-center justify-between space-y-1 border border-b border-gray-darklight">
-                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  <div className="rounded-full bg-gray-darklight p-2">
+                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E] flex">
+                  <div className="w-7 h-7 mt-1 flex items-center justify-center mr-2 rounded-full bg-[#e9e9e9] p-2">
                     <img
                       src="/assets/icons/setup/re-box.svg"
                       alt="icons"
                       className="h-4 w-4"
                     />
                   </div>
+                  <div>
+                  <p>Afternoon shift</p>
                   <p className="text-sm font-semibold"> 1:00pm-2:00pm</p>
-                  Afternoon shift
+                  </div>
+                  
                 </label>
                 <div className="cursor-pointer rounded-full bg-gray-darklight p-2">
                   <img
@@ -90,24 +94,24 @@ export default function TeamRosterShiftView({
                 <label className="label-text">Created by</label>
                 <p className="text-sm font-semibold">krishna</p>
               </div>
-              <div className="overflow-y-min flex flex-col overflow-y-scroll">
-                <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-                  <div className="rounded-full bg-gray-dark p-4"></div>
-                  <div>
-                    <p className="text-sm font-medium">kp</p>
-                    <p className="text-xs font-medium text-darkblack">
-                      UI/UX Design Intern
-                    </p>
-                  </div>
+            </div>
+            <div className="overflow-y-min mt-5 flex flex-col gap-2 overflow-y-scroll">
+              <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
+                <div className="rounded-full bg-gray-dark p-4"></div>
+                <div>
+                  <p className="text-sm font-medium">kp</p>
+                  <p className="text-xs font-medium text-darkblack">
+                    UI/UX Design Intern
+                  </p>
                 </div>
-                <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-                  <div className="rounded-full bg-gray-dark p-4"></div>
-                  <div>
-                    <p className="text-sm font-medium">kp</p>
-                    <p className="text-xs font-medium text-darkblack">
-                      UI/UX Design Intern
-                    </p>
-                  </div>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
+                <div className="rounded-full bg-gray-dark p-4"></div>
+                <div>
+                  <p className="text-sm font-medium">kp</p>
+                  <p className="text-xs font-medium text-darkblack">
+                    UI/UX Design Intern
+                  </p>
                 </div>
               </div>
             </div>

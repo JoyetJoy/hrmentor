@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
@@ -8,12 +8,12 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import { Link } from "react-router-dom";
 import ShiftDetailsView from "@/components/popups/employee_access/roster/ShiftDetailsView";
 import RequestClaimshift from "@/components/popups/employee_access/roster/RequestClaimshift";
-import { ROASTER_GET,newRequest } from "@/api/master";
+import { ROASTER_GET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i,
-  label: dayjs().month(i).format("MMMM"),
+  value: i + 1, 
+  label: dayjs().month(i).format("MMMM")
 }));
 
 const years = Array.from({ length: 11 }, (_, i) => ({
@@ -23,50 +23,31 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 
 const EmployeeAccessRosterCalendar = () => {
   const [date, setDate] = useState(new Date());
-  const [filteredEvents, setFilteredEvents] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
 
-  const { data: events } = useQuery({
-    queryKey: ["events"],
-    queryFn: () => newRequest.get(ROASTER_GET).then((res) => res.data),
+  const year = dayjs(date).year();
+  const month = dayjs(date).month() + 1;
+
+  const { data: events = [] } = useQuery({
+    queryKey: ["events", month, year],
+    queryFn: () =>
+      newRequest.get(ROASTER_GET, {
+        params: {
+          month: month,
+          year: year,
+        },
+      }).then((res) => res.data),
+    enabled: !!date,
   });
-  
-  // Preprocess events to map each date to its event, checking if it's a holiday
-  useEffect(() => {
-    const dateEventMap = {};
-
-    // Map all events to their respective dates
-    events?.forEach((event) => {
-        // Map regular shift dates
-        event?.date_range.forEach((eventDate) => {
-            const formattedDate = dayjs(eventDate).format("YYYY-MM-DD");
-            dateEventMap[formattedDate] = {
-                ...event,
-                isHoliday: false, // Default as not a holiday
-            };
-        });
-
-        // Mark holidays
-        event?.holidays.forEach((holidayDate) => {
-            const formattedHolidayDate = dayjs(holidayDate).format("YYYY-MM-DD");
-            dateEventMap[formattedHolidayDate] = {
-                ...event,
-                isHoliday: true, // Mark as holiday
-            };
-        });
-    });
-
-    setFilteredEvents(dateEventMap);
-}, [events]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
-    const updatedDate = dayjs(date).month(selectedOption.value).toDate();
+    const updatedDate = dayjs(date).month(selectedOption.value - 1).toDate();
     handleDateChange(updatedDate);
   };
 
@@ -83,22 +64,22 @@ const EmployeeAccessRosterCalendar = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    return filteredEvents[formattedDate] ? [filteredEvents[formattedDate]] : [];
+    return events.filter((event) =>
+      event.date_range.includes(formattedDate) || event.holidays.includes(formattedDate)
+    );
   };
 
   const handleClick = (event) => {
-    if (event?.isHoliday) {
+    if (!event?.isHoliday) {
       setSelectedField(event);
       setPopupOpen(true);
-    } else {
-      setSelectedField(event);
-      setClaimPopup(true);
     }
   };
 
   return (
     <div className="flex flex-col">
       <ShiftDetailsView
+        date={date}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
@@ -154,14 +135,24 @@ const EmployeeAccessRosterCalendar = () => {
                       <div
                         key={index}
                         onClick={() => handleClick(event)}
-                        className={`mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm ${event.isHoliday?'bg-[#fbe8f2] border-[#cf127a]':getTileClass(date)} text-gray-800 justify-center`}
+                        className={`mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm ${
+                          event.isHoliday
+                            ? "bg-[#fbe8f2] border-[#cf127a]"
+                            : getTileClass(date)
+                        } text-gray-800 justify-center`}
                       >
                         {event.isHoliday ? (
-                          <span className="font-semibold flex float-start">Holiday</span>
+                          <span className="font-semibold flex float-start">
+                            Holiday
+                          </span>
                         ) : (
                           <>
-                          <span className="font-semibold flex float-start">{event.shift_name}</span>
-                          <span className="flex float-start">{event.shift.start_time}</span>
+                            <span className="font-semibold flex float-start">
+                              {event.shift_name}
+                            </span>
+                            <span className="flex float-start">
+                              {event.shift.start_time}
+                            </span>
                           </>
                         )}
                       </div>

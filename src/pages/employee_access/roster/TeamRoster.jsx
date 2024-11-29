@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
@@ -8,107 +8,11 @@ import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import { Link } from "react-router-dom";
 import RosterItemList from "@/components/sidebars/employee_access/roster/RosterSideBar";
-
-const events = [
-  {
-    date: "2024-10-01",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-02",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-03",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-04",
-    clockIn: "09:15 AM",
-    clockOut: "05:45 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-05",
-    clockIn: "08:45 AM",
-    clockOut: "05:15 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-06",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-07",
-    clockIn: "09:10 AM",
-    clockOut: "05:40 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-08",
-    clockIn: "08:50 AM",
-    clockOut: "05:20 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-09",
-    clockIn: "09:05 AM",
-    clockOut: "05:35 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-10",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-11",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-12",
-    clockIn: "09:20 AM",
-    clockOut: "05:50 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-13",
-    clockIn: "09:10 AM",
-    clockOut: "05:40 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-14",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-];
+import { ROASTER_GET,newRequest } from "@/api/master";
+import { useQuery } from "@tanstack/react-query";
+import ShiftDetailsView from "@/components/popups/employee_access/roster/ShiftDetailsView";
+import RequestClaimshift from "@/components/popups/employee_access/roster/RequestClaimshift";
+import TeamRosterShiftView from "@/components/popups/employee_access/roster/team/TeamRosterShiftView";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
@@ -122,6 +26,43 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 
 const EmployeeAccessTeamRoster = () => {
   const [date, setDate] = useState(new Date());
+  const [filteredEvents, setFilteredEvents] = useState({});
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedField, setSelectedField] = useState("");
+  const [claimPopup, setClaimPopup] = useState(false);
+
+  const { data: events } = useQuery({
+    queryKey: ["events"],
+    queryFn: () => newRequest.get(ROASTER_GET).then((res) => res.data),
+  });
+  
+  // Preprocess events to map each date to its event, checking if it's a holiday
+  useEffect(() => {
+    const dateEventMap = {};
+
+    // Map all events to their respective dates
+    events?.forEach((event) => {
+        // Map regular shift dates
+        event?.date_range.forEach((eventDate) => {
+            const formattedDate = dayjs(eventDate).format("YYYY-MM-DD");
+            dateEventMap[formattedDate] = {
+                ...event,
+                isHoliday: false, // Default as not a holiday
+            };
+        });
+
+        // Mark holidays
+        event?.holidays.forEach((holidayDate) => {
+            const formattedHolidayDate = dayjs(holidayDate).format("YYYY-MM-DD");
+            dateEventMap[formattedHolidayDate] = {
+                ...event,
+                isHoliday: true, // Mark as holiday
+            };
+        });
+    });
+
+    setFilteredEvents(dateEventMap);
+}, [events]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -129,19 +70,52 @@ const EmployeeAccessTeamRoster = () => {
 
   const handleMonthChange = (selectedOption) => {
     const updatedDate = dayjs(date).month(selectedOption.value).toDate();
-    setDate(updatedDate);
-  };
-  const handleYearChange = (selectedOption) => {
-    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    setDate(updatedDate);
+    handleDateChange(updatedDate);
   };
 
-  const findEvent = (date) => {
-    return events.find((event) => dayjs(event.date).isSame(date, "day"));
+  const handleYearChange = (selectedOption) => {
+    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
+    handleDateChange(updatedDate);
   };
+
+  const getTileClass = (date) => {
+    if (dayjs(date).isSame(dayjs(), "day")) return "bg-green-200 border-green-500";
+    if (dayjs(date).isBefore(dayjs(), "day")) return "bg-blue-200 border-blue-500";
+    return "bg-yellow-200 border-yellow-500";
+  };
+
+  const findEvents = (date) => {
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    return filteredEvents[formattedDate] ? [filteredEvents[formattedDate]] : [];
+  };
+
+  const handleClick = (event) => {
+    if (!event?.isHoliday) {
+      setSelectedField(event);
+      setPopupOpen(true);
+    } 
+  };
+
+  const employee=[
+    { value: 'emergency', label: 'Emergency Department' },
+    { value: 'cardiology', label: 'Cardiology' },
+    { value: 'radiology', label: 'Radiology' },
+    { value: 'pediatrics', label: 'Pediatrics' },
+    { value: 'oncology', label: 'Oncology' },
+  ];
 
   return (
     <div className="flex flex-col">
+      <TeamRosterShiftView
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+      />
+      <RequestClaimshift
+        popupOpen={claimPopup}
+        setPopupOpen={setClaimPopup}
+        selectedField={selectedField}
+      />
       {/* <RequestCalimshift popupOpen={popupOpen} setPopupOpen={setPopupOpen}/> */}
       <MenuHeaderEmployeeAccess
         pathlink={""}
@@ -168,11 +142,20 @@ const EmployeeAccessTeamRoster = () => {
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
+        <div className="flex gap-3">
+        <Select
+              options={employee}
+              isSearchable={true}
+              styles={customSelectStyles}
+              placeholder={'All employee'}
+              className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
+            />
         <Link
         to="" 
         className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
           My Roster
         </Link>
+        </div>
       </div>
       <div className="mb-10 mt-2 w-full max-w-8xl flex gap-3">
         <RosterItemList/>
@@ -184,42 +167,31 @@ const EmployeeAccessTeamRoster = () => {
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const event = findEvent(date);
-              return event ? (
-                <div className="flex w-full flex-col gap-2">
-                  <div className="relative flex justify-between p-1">
-                    {event.status === "L" ? (
-                      <img
-                        className="h-5 object-contain"
-                        src="/assets/icons/tort.svg"
-                        alt="late"
-                      />
-                    ) : null}
-                    <div
-                      className={`absolute -top-4 right-1 flex h-7 w-7 items-center justify-center rounded-full font-extrabold ${event.status === "P" ? "bg-[#00B448] text-white" : "hidden"}`}
-                    >
-                      {event.status}
-                    </div>
+              const eventsForDay = findEvents(date);
+              if (eventsForDay.length > 0) {
+                return (
+                  <div className="flex flex-col gap-2">
+                    {eventsForDay.map((event, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleClick(event)}
+                        className={`mt-2 flex flex-col h-14 w-32 xl:w-[9.5rem] px-3 text-sm border-l-4 rounded-sm ${event.isHoliday?'bg-[#fbe8f2] border-[#cf127a]':getTileClass(date)} text-gray-800 justify-center`}
+                      >
+                        {event.isHoliday ? (
+                          <span className="font-semibold flex float-start">Holiday</span>
+                        ) : (
+                          <>
+                          <span className="font-semibold flex float-start">{event.shift_name}</span>
+                          <span className="flex float-start">{event.shift.start_time}</span>
+                          </>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <span className="font-bold">Clock In</span>{" "}
-                    <span>{event.clockIn}</span>
-                  </div>
-                  <div className="c-af flex h-7 w-full items-center justify-between bg-mediumblack  px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <span className="font-bold">Clock Out</span>{" "}
-                    <span>{event.clockIn}</span>
-                  </div>
-                  <div className="flex h-7 w-full items-center justify-between bg-mediumblack  px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <span className="font-bold">Time In</span>{" "}
-                    <span
-                      className={`font-semibold ${event.status === "L" ? "text-red-500" : ""}`}
-                    >
-                      {event.totalTime}
-                    </span>
-                  </div>
-                </div>
-              ) : null;
+                );
+              }
             }
+            return null;
           }}
         />
       </div>

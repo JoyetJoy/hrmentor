@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { newRequest } from "@/api/master";
 import moment from 'moment';
 
-export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data, clockindata }) {
+export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data, clockindata, setTimer }) {
   const [loader, setLoader] = useState(false);
   const [selected, setSelected] = useState(null);
 
@@ -33,6 +33,12 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
       };
 
       const response = await newRequest.post(api, payload);
+      if (response.status === 200) {
+        setTimer(response.data.timer);
+        setClockInPopupOpen(false);
+        toast.success('Clockin Successfull');
+      }
+
       close();
     } catch (error) {
       console.error("Error:", error);
