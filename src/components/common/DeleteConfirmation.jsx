@@ -25,8 +25,6 @@ export default function DeleteConfirmation({
 
         const res = await newRequest.delete(`${api}/${id}`);
 
-        console.log(res.data, "asasa");
-
         if (res?.data?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
           setLoader(false);

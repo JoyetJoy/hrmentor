@@ -1,8 +1,9 @@
+import { emailMenu } from "@/constants/menus/setup";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function SetUpHeader({ currentPage }) {
+export default function SetUpHeader({ page,currentPage }) {
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
@@ -23,7 +24,21 @@ export default function SetUpHeader({ currentPage }) {
             {currentPage}
           </Link>
         </div>
-        <div className="flex items-center gap-5 text-sm font-semibold"></div>
+        <div className="flex items-center gap-5 text-sm font-semibold">
+          {emailMenu.map((item) => (
+            <Link
+              key={item?.id}
+              to={item?.link}
+              className={`px-2 py-1 text-sm ${
+                page === item?.id
+                  ? "active-menu font-extrabold text-hrmprimaryorange before:bg-hrmprimaryorange"
+                  : "font-normal text-hrmblue"
+              }`}
+            >
+              {item?.name}
+            </Link>
+          ))}
+        </div>
       </div>
     </>
   );
