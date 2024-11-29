@@ -142,7 +142,7 @@ function CandidatesList() {
       <div className="ml-3 mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2 font-semibold text-white">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
-            <ArrowLeft className="size-4" />
+            {/* <ArrowLeft className="size-4" /> */}
             All candidates
           </div>
           <label className="input flex h-9 min-h-9 min-w-72 items-center gap-2 border-none outline-none">
