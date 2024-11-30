@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { Controller,useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import RosterHeader from "@/components/common/RosterHeader";
+import { useNavigate } from "react-router-dom";
 
 
 const events = [
@@ -123,6 +124,7 @@ const events = [
         resolver: yupResolver(),
       });
     const [date, setDate] = useState(new Date());
+    const navigate = useNavigate();
   
     const handleDateChange = (newDate) => {
       setDate(newDate);
@@ -140,6 +142,10 @@ const events = [
     const findEvents = (date) => {
       return events.filter((event) => dayjs(event.date).isSame(date, "day"));
     };
+
+    const handleClick =()=>{
+      navigate('/admin/roster/calendarview')
+    }
   
     return (
       <>
@@ -192,6 +198,7 @@ const events = [
                     {dailyEvents.map((event, index) => (
                       <div
                         key={index}
+                        onClick={() => handleClick(event)}
                         className={`mt-2 flex flex-col h-14 w-full px-3 text-[0.7rem] font-medium border-l-4 rounded-sm ${
                           event.totalCount === event.count
                             ? "bg-[#2832770D] border-l-[#e95d39] text-[#2C2C2C]"

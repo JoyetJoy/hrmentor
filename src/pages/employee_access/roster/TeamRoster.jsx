@@ -15,7 +15,7 @@ import RequestClaimshift from "@/components/popups/employee_access/roster/Reques
 import TeamRosterShiftView from "@/components/popups/employee_access/roster/team/TeamRosterShiftView";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i,
+  value: i + 1,
   label: dayjs().month(i).format("MMMM"),
 }));
 
@@ -31,46 +31,36 @@ const EmployeeAccessTeamRoster = () => {
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
 
-  const { data: events } = useQuery({
-    queryKey: ["events"],
-    queryFn: () => newRequest.get(ROASTER_GET).then((res) => res.data),
+  const year = dayjs(date).year();
+  const month = dayjs(date).month() + 1;
+
+  const { data: events = [], refetch } = useQuery({
+    queryKey: ["events", month, year],
+    queryFn: () =>
+      newRequest.get(ROASTER_GET, {
+        params: { month, year },
+      }).then((res) => res.data),
+    enabled: false, // Prevent the query from auto-fetching on mount
   });
-  
-  // Preprocess events to map each date to its event, checking if it's a holiday
+
   useEffect(() => {
-    const dateEventMap = {};
-
-    // Map all events to their respective dates
-    events?.forEach((event) => {
-        // Map regular shift dates
-        event?.date_range.forEach((eventDate) => {
-            const formattedDate = dayjs(eventDate).format("YYYY-MM-DD");
-            dateEventMap[formattedDate] = {
-                ...event,
-                isHoliday: false, // Default as not a holiday
-            };
-        });
-
-        // Mark holidays
-        event?.holidays.forEach((holidayDate) => {
-            const formattedHolidayDate = dayjs(holidayDate).format("YYYY-MM-DD");
-            dateEventMap[formattedHolidayDate] = {
-                ...event,
-                isHoliday: true, // Mark as holiday
-            };
-        });
-    });
-
-    setFilteredEvents(dateEventMap);
-}, [events]);
-
+    // Refetch data whenever the `date` changes
+    refetch();
+  }, [date, refetch]);
+  
+  
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
-    const updatedDate = dayjs(date).month(selectedOption.value).toDate();
-    handleDateChange(updatedDate);
+    const currentDay = dayjs(date).date();
+  const updatedDate = dayjs(date)
+    .month(selectedOption.value - 1) // Update the month
+    .date(1) // Temporarily set the date to the first day of the month
+    .date(Math.min(currentDay, dayjs(date).month(selectedOption.value - 1).daysInMonth())) // Ensure the date stays valid
+    .toDate();
+  handleDateChange(updatedDate);
   };
 
   const handleYearChange = (selectedOption) => {
@@ -86,15 +76,30 @@ const EmployeeAccessTeamRoster = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    return filteredEvents[formattedDate] ? [filteredEvents[formattedDate]] : [];
+    const holidayEvents = events.filter((event) =>
+      event?.holidays?.includes(formattedDate)
+    );
+    const shiftEvents = events.filter((event) =>
+      event?.date_range?.includes(formattedDate)
+    );
+    return { holidayEvents, shiftEvents };
   };
 
   const handleClick = (event) => {
     if (!event?.isHoliday) {
       setSelectedField(event);
       setPopupOpen(true);
-    } 
+    }
   };
+
+  function convertToHourMinutes(time) {
+    if (time) {
+      const [hours, minutes] = time.split(":");
+      return `${hours}:${minutes}`;
+    } else {
+      return "";
+    }
+  }
 
   const employee=[
     { value: 'emergency', label: 'Emergency Department' },
@@ -130,6 +135,7 @@ const EmployeeAccessTeamRoster = () => {
             isSearchable={true}
             onChange={handleYearChange}
             styles={customSelectStyles}
+            value={years.find((yearOption) => yearOption.value === dayjs(date).year())}
             placeholder={dayjs(date).format("YYYY")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -138,6 +144,7 @@ const EmployeeAccessTeamRoster = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
+            value={months.find((monthOption) => monthOption.value === dayjs(date).month() + 1)} 
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -160,36 +167,43 @@ const EmployeeAccessTeamRoster = () => {
       <div className="mb-10 mt-2 w-full max-w-8xl flex gap-3">
         <RosterItemList/>
         <Calendar
+          key={date}
           onChange={handleDateChange}
           value={date}
           showNavigation={false}
           className="w-full font-monorope"
+          locale="en-US"
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const eventsForDay = findEvents(date);
-              if (eventsForDay.length > 0) {
-                return (
-                  <div className="flex flex-col gap-2">
-                    {eventsForDay.map((event, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleClick(event)}
-                        className={`mt-2 flex flex-col h-14 w-32 xl:w-[9.5rem] px-3 text-sm border-l-4 rounded-sm ${event.isHoliday?'bg-[#fbe8f2] border-[#cf127a]':getTileClass(date)} text-gray-800 justify-center`}
-                      >
-                        {event.isHoliday ? (
-                          <span className="font-semibold flex float-start">Holiday</span>
-                        ) : (
-                          <>
-                          <span className="font-semibold flex float-start">{event.shift_name}</span>
-                          <span className="flex float-start">{event.shift.start_time}</span>
-                          </>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                );
-              }
+              const { holidayEvents, shiftEvents } = findEvents(date);
+              return (
+                <div className="flex flex-col gap-2">
+                  {holidayEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex flex-col h-14 w-auto lg:w-28 xl:w-36 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
+                    >
+                      <span className="font-semibold flex float-start">Holiday</span>
+                    </div>
+                  ))}
+                  {shiftEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleClick(event)}
+                      className={`mt-2 flex flex-col h-14 w-auto lg:w-28 xl:w-36 px-3 text-sm border-l-4 rounded-sm ${
+                        getTileClass(date)
+                      } text-gray-800 justify-center`}
+                    >
+                      <span className="font-semibold flex float-start">{event.shift_name}</span>
+                      <span className="flex float-start">
+                        {convertToHourMinutes(event?.shift?.start_time)}-
+                        {convertToHourMinutes(event?.shift?.end_time)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
             }
             return null;
           }}
