@@ -1,5 +1,5 @@
 import { EMPLOYEE, newRequest } from "@/api";
-import { ROSTER_LIST,DELETE_ROSTER } from "@/api/setup";
+import { ROSTER_LIST, DELETE_ROSTER } from "@/api/setup";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import {
   Plus,
   Search,
   Trash2,
-  Files
+  Files,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -137,7 +137,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
             <button
               type="button"
               onClick={() => {
-                handleCopy(row.original?.roster_details)
+                handleCopy(row.original?.roster_details);
               }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
@@ -175,16 +175,10 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         onCancel={setDeletePopup}
         id={selectedField}
         qrkey={"rosterDetailss"}
-        type={'rosterdelete'}
+        type={"rosterdelete"}
         api={DELETE_ROSTER}
       />
-      <NewRoster
-        popupOpen={popupOpen}
-        setPopupOpen={setPopupOpen}
-        selectedRoster={selectedRoster}
-        rosterDetails={rosterDetails}
-        setRosterDetails={setRosterDetails}
-      />
+      <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <EditRoster
         editpopupOpen={editpopupOpen}
         setEditPopupOpen={setEditPopupOpen}
@@ -195,7 +189,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
 
       <RosterHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
-      <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
+        <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
           <Search className="size-4 object-contain text-gray-dark" />
           <input
             type="text"
@@ -209,7 +203,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
 
         <div className="flex items-center gap-3">
           <Link
-            to={'/admin/roster/calendar'}
+            to={"/admin/roster/calendar"}
             className="flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black"
           >
             <Calendar className="size-4 text-black" />
@@ -251,8 +245,15 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                     {selectedRoster?.shift_details?.name || ""}
                   </h3>
                   <p className="text-sm">
-                  {moment(selectedRoster.shift_details.start_time, "HH:mm:ss").format("hh:mm A")} -{" "}
-                  {moment(selectedRoster.shift_details.end_time, "HH:mm:ss").format("hh:mm A")}
+                    {moment(
+                      selectedRoster.shift_details.start_time,
+                      "HH:mm:ss",
+                    ).format("hh:mm A")}{" "}
+                    -{" "}
+                    {moment(
+                      selectedRoster.shift_details.end_time,
+                      "HH:mm:ss",
+                    ).format("hh:mm A")}
                   </p>
                 </div>
               </div>
@@ -281,20 +282,25 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               <div>
                 <p className="text-black">End Date</p>
                 <p className="font-semibold">
-                  {moment(selectedRoster?.end_date).format("YYYY-MM-DD") ||
-                    ""}
+                  {moment(selectedRoster?.end_date).format("YYYY-MM-DD") || ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">Start Time</p>
                 <p className="font-semibold">
-                {moment(selectedRoster.shift_details.start_time, "HH:mm:ss").format("hh:mm A")||''}
+                  {moment(
+                    selectedRoster.shift_details.start_time,
+                    "HH:mm:ss",
+                  ).format("hh:mm A") || ""}
                 </p>
               </div>
               <div>
                 <p className="text-black">End Time</p>
                 <p className="font-semibold">
-                {moment(selectedRoster.shift_details.end_time, "HH:mm:ss").format("hh:mm A")||''}
+                  {moment(
+                    selectedRoster.shift_details.end_time,
+                    "HH:mm:ss",
+                  ).format("hh:mm A") || ""}
                 </p>
               </div>
               <div>
@@ -343,24 +349,31 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               </div>
             </div>
 
-            {selectedRoster?.employees &&selectedRoster?.employees?.map((item) => {
-              return (
-                <div key={item?.id} className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-                  <div className=" w-11 h-11 rounded-full bg-gray-dark p-1">
-                    <img className="" src={item?.profile_image} alt="employee image" />
+            {selectedRoster?.employees &&
+              selectedRoster?.employees?.map((item) => {
+                return (
+                  <div
+                    key={item?.id}
+                    className="flex items-center gap-3 rounded-lg bg-gray-100 p-3"
+                  >
+                    <div className="h-11 w-11 rounded-full bg-gray-dark p-1">
+                      <img
+                        className=""
+                        src={item?.profile_image}
+                        alt="employee image"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">
+                        {item?.first_name || ""}
+                      </p>
+                      <p className="text-xs font-medium text-darkblack">
+                        {item?.designation || ""}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium">
-                      {item?.first_name || ""}
-                    </p>
-                    <p className="text-xs font-medium text-darkblack">
-                    {item?.designation || ""}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-
+                );
+              })}
           </div>
         )}
       </div>

@@ -2,12 +2,14 @@ import { adminItems } from "@/constants/dummyData";
 import { Menu } from "@headlessui/react";
 
 export default function ProfileDropdown({ handleNavigation, user }) {
+  console.log(user);
+
   return (
     <div className="relative flex flex-col items-center gap-3">
       <Menu>
         <Menu.Button className="flex cursor-pointer flex-row items-center gap-3">
-          <div className="flex h-10 w-10 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/20 text-sm font-bold uppercase">
-            {`${user?.first_name?.charAt(0)} ${user?.sur_name?.charAt(0)}`}
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border bg-[#f3f4f6] bg-hrmprimaryorange/20 text-sm font-bold uppercase">
+            <img className="h-full w-full" src={user?.profile_image} alt="" />
           </div>
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
             {user.first_name} {user.sur_name}
@@ -16,7 +18,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
             </span>
           </h1>
         </Menu.Button>
-        <Menu.Items className="absolute top-12 z-20 w-48  ml-7 rounded-lg bg-white p-4 shadow-lg">
+        <Menu.Items className="absolute top-12 z-20 ml-7 w-48 rounded-lg bg-white p-4 shadow-lg">
           <ul className="flex flex-col gap-4">
             {adminItems.map((item, index) => (
               <Menu.Item key={index}>
@@ -27,7 +29,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
                       active ? "" : ""
                     }`}
                   >
-                    <div className="h-4 w-4 ">
+                    <div className="h-4 w-4">
                       <img
                         src={item.icon}
                         alt={`${item.label} icon`}
