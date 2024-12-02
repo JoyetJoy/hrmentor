@@ -232,7 +232,7 @@ export default function DbsEditForm({
                 </div>
                 <div className="group flex flex-col gap-1.5">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Document(optional)
+                    Document (optional)
                   </label>
                   <label
                     htmlFor="employee-profile-pic"
