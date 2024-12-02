@@ -23,13 +23,13 @@ export default function ChatBoxList({ popupOpen, setPopupOpen }) {
       className="relative z-10"
       onClose={close}
     >
-      <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto bg-black/20">
+      <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto bg-black/10">
         <div className="flex min-h-full items-left justify-end">
           <DialogPanel className="w-full max-w-sm rounded bg-white px-10 py-10">
             <div className="mb-5 flex justify-between">
               <h1 className="text-base font-bold">Chat</h1>
               <button onClick={close}>
-                <X />
+                <X  className='text-black/50'/>
               </button>
             </div>
             <div className=" bg-white shadow-sm flex flex-col gap-6">

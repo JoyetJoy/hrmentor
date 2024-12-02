@@ -123,7 +123,7 @@ export default function TeamTimeSheetSideBar() {
             <label className=" label-text">Search employee</label>
 
             <label className=" flex h-10 min-h-10 items-center gap-2 rounded-md border border-[#A7A7A7] pr-28 outline-none">
-              <Search className="size-4 object-contain text-gray-dark" />
+              <Search className="size-4 object-contain text-[#A7A7A7]" />
               <input
                 type="text"
                 className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none "

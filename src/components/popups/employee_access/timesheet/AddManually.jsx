@@ -35,7 +35,7 @@ export default function AddManually({ popupOpen, setPopupOpen }) {
             <div className="grid grid-cols-2 justify-between gap-2 ">
               <div className="group col-span-2 flex flex-col gap-1">
                 <label className="label-text">Date</label>
-                <input autoComplete="off" type="date" className="input-box" />
+                <input autoComplete="off" type="date" className="input-box pr-2" />
                 {/* {errors.date && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.date?.message}
