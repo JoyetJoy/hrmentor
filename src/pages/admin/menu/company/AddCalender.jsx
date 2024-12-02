@@ -76,10 +76,7 @@ export default function CompanyAddCalender() {
   }));
   const { id } = useParams();
   const { popupOpens } = useParams();
-  const { selectIds} = useParams();
-
-  console.log(popupOpens,"popupOpenspopupOpenspopupOpens");
-  
+  const { selectIds } = useParams();
 
   const {
     register,
@@ -247,8 +244,7 @@ export default function CompanyAddCalender() {
     }
   }, [selectIds, companyCalenderDetails]);
 
-  console.log(companyCalenderDetails,popupOpen,"popupOpenpopupOpenpopupOpen");
-  
+  console.log(companyCalenderDetails, popupOpen, "popupOpenpopupOpenpopupOpen");
 
   return (
     <>

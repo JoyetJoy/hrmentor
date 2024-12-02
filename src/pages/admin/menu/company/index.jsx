@@ -279,13 +279,9 @@ export default function CompanyGeneral() {
           selectedLogoBlob, // Blob or File object
           selectedLogo, // Filename
         );
-      } else {
-        formData.append("upload_company_logo", null);
       }
       if (letterHead) {
         formData.append("upload_letter_head", letterHead);
-      } else {
-        formData.append("upload_letter_head", null);
       }
       formData.append("address_one", companyBasic.address_one);
       formData.append("address_two", companyBasic.address_two);
