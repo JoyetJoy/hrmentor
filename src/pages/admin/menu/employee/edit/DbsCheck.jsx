@@ -3,7 +3,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_EXPERIENCE, newRequest } from "@/api";
 import DbsEditForm from "@/components/popups/employees/edit/DbsEditForm";
@@ -55,8 +55,8 @@ export default function EmployeeDbsCheckEdit() {
     () =>
       [
         {
-          header: "Sl No",
-          accessorKey: "sno",
+          header: "Type",
+          accessorKey: "type",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -66,15 +66,15 @@ export default function EmployeeDbsCheckEdit() {
           },
         },
         {
-          header: "Reference",
-          accessorKey: "job_role",
+          header: "Date of issue",
+          accessorKey: "date",
         },
         {
-          header: "Comments",
-          accessorKey: "employer",
+          header: "Subscription",
+          accessorKey: "subscription",
         },
         {
-          header: "Start Date",
+          header: "DBS Number",
           accessorKey: "end_date",
           Cell: ({ row }) => {
             return <div className="flex px-2">{row.original?.start_date}</div>;
@@ -82,32 +82,22 @@ export default function EmployeeDbsCheckEdit() {
         },
         {
           header: "Status",
-          accessorKey: "end_date",
+          accessorKey: "status",
           Cell: ({ row }) => {
-            return <div className="flex px-2">{row.original?.end_date}</div>;
+            return <div className="flex px-2">{}</div>;
           },
-        },
-        {
-          header: "Document",
-          accessorKey: "document",
-          cell: ({ row }) => (
-            <div className="flex">
-              <Link
-                href={row.original?.document}
-                target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
-                rel="noopener noreferrer"
-              >
-                document
-              </Link>
-            </div>
-          ),
         },
         {
           header: "Action",
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              <button
+                type="button"
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+              >
+                <Eye className="size-3" />
+              </button>
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -167,12 +157,12 @@ export default function EmployeeDbsCheckEdit() {
               <div className="my-4 flex items-center justify-between">
                 <div className="flex items-center gap-7">
                   <h5 className="text-lg font-bold">DBS Check</h5>
-                  <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
-                    <Search className="size-4 text-dark" />
+                  <div className="input flex h-10 min-h-10 w-80 items-center gap-2 border border-gray-platinum text-sm outline-none placeholder:text-black hover:border-gray-platinum">
+                    <Search className="text-dark size-4" />
                     <input
                       type="text"
                       onChange={(e) => setKeyword(e.target.value)}
-                      className="h-full w-full placeholder:text-dark"
+                      className="placeholder:text-dark h-full w-full"
                       placeholder="Search"
                     />
                   </div>

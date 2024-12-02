@@ -15,13 +15,13 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
       <Dialog
         open={chatPopupOpen}
         as="div"
-        className="relative z-10"
+        className="relative z-10 "
         onClose={close}
       >
         <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto">
           <div className="flex min-h-full items-end justify-center">
-            <DialogPanel className="w-full max-w-xl rounded bg-white px-7 pb-7 pt-10">
-              <div className="mb-5 flex justify-between">
+            <DialogPanel className="w-full max-w-md rounded bg-white px-7 pb-3 pt-6 ml-64">
+              <div className="mb-3 flex justify-between">
                 <div className="flex items-center gap-1">
                   <div className="h-9 w-10 rounded-full">
                     <img
@@ -32,17 +32,15 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
                   <h3 className="text-sm font-medium">KP</h3>
                 </div>
                 <button onClick={close}>
-                  <X />
+                  <X  className="text-black/50"/>
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <div className="flex-1 overflow-y-auto rounded-md border p-4">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center justify-start gap-3 w-full">
-                      <p className="max-w-sm rounded-lg bg-bluesoft p-3 text-sm shadow-sm">
+                      <p className="max-w-xs rounded-lg bg-bluesoft p-3 text-sm shadow-sm">
                         Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry’s standard dummy text ever since the 1500s.
                         <span className="mt-1 block text-end text-xs text-gray-500">
                           Today | 03:22
                         </span>
@@ -60,10 +58,8 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
                       </div>
                     </div>
                     <div className="flex justify-end">
-                      <p className="max-w-sm rounded-lg bg-gray-200 p-3 text-sm shadow-sm">
+                      <p className="max-w-xs rounded-lg bg-gray-200 p-3 text-sm shadow-sm">
                         Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry’s standard dummy text ever since the 1500s.
                         <span className="mt-1 block text-end text-xs text-gray-500">
                           Today | 03:22
                         </span>
@@ -87,9 +83,8 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
                         onClick={() => setReplay(false)} 
                       />
                     </div>
-                    <p className="max-w-sm text-sm">
+                    <p className="max-w-xs text-sm">
                       Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
                     </p>
                   </div>
                 )}

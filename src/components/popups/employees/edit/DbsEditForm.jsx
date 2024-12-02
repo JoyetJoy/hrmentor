@@ -4,10 +4,12 @@ import { dbsSchema } from "@/schema/dashboard/employee/form/dbs.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { UploadCloud, X } from "lucide-react";
+import { ArrowUpFromLine, Eye, UploadCloud, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
 import toast from "react-hot-toast";
+import { customSelectStyles } from "@/utils/customStyles";
 
 export default function DbsEditForm({
   popupOpen,
@@ -23,6 +25,7 @@ export default function DbsEditForm({
   const {
     register,
     handleSubmit,
+    control,
     reset,
     setValue,
     formState: { errors },
@@ -75,7 +78,7 @@ export default function DbsEditForm({
       formData.append("status", data.status);
       imageFile && formData.append("certificate", imageFile);
       console.log(formData);
-      
+
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
@@ -105,11 +108,11 @@ export default function DbsEditForm({
       className="relative z-10 focus:outline-none"
       onClose={close}
     >
-      <div className="fixed inset-0 z-10 w-screen bg-black/20 overflow-y-auto">
-        <div className="flex min-h-full  items-center justify-center p-4">
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+        <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-2xl rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
@@ -129,16 +132,24 @@ export default function DbsEditForm({
               </div>
             ) : (
               <form
-                className="grid grid-cols-1 gap-3"
-                onSubmit={handleSubmit(onSubmit)}
+                className="grid grid-cols-2 gap-3"
+                //   onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="label-text">Candidate Name </label>
-                  <input
-                    {...register("name", { required: true })}
-                    type="text"
-                    placeholder="Enter candidate name"
-                    className="input-box h-10 w-full"
+                  <label className="label-text">DBS Type</label>
+                  <Controller
+                    name="db_type"
+                    control={control}
+                    // rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Type"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
                   />
                   {errors.name && (
                     <span className="text-xs font-medium text-red-500">
@@ -149,13 +160,22 @@ export default function DbsEditForm({
 
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Status
+                    Subscription
                   </label>
-                  <select {...register("status")} className="input-box w-full">
-                    <option value="">Select status</option>
-                    <option value="applied">Applied</option>
-                    <option value="received">Received</option>
-                </select>
+                  <Controller
+                    name="account_type"
+                    control={control}
+                    // rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Type"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
                   {errors.status && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.status?.message}
@@ -165,12 +185,12 @@ export default function DbsEditForm({
 
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Start Date
+                    Renewal
                   </label>
                   <input
                     {...register("start_date", { required: true })}
                     type="date"
-                    className="input-box h-10 w-full"
+                    className="input-box h-10 w-full pr-2"
                   />
                   {errors.start_date && (
                     <span className="text-xs font-medium text-red-500">
@@ -181,7 +201,7 @@ export default function DbsEditForm({
 
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Reference
+                    DBS Number
                   </label>
                   <input
                     {...register("reference", { required: true })}
@@ -195,15 +215,72 @@ export default function DbsEditForm({
                     </span>
                   )}
                 </div>
-
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Comments
+                    Date of issue
+                  </label>
+                  <input
+                    {...register("start_date", { required: true })}
+                    type="date"
+                    className="input-box h-10 w-full pr-2"
+                  />
+                  {errors.start_date && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.start_date?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Document(optional)
+                  </label>
+                  <label
+                    htmlFor="employee-profile-pic"
+                    className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md border border-dashed bg-gray-soft px-2"
+                  >
+                    <div className="flex items-center justify-between gap-32">
+                      <span className="flex items-center whitespace-nowrap text-xs font-semibold text-black/50">
+                        <ArrowUpFromLine className="size-4" />
+                        Upload Certificate
+                      </span>
+                      <Eye className="size-4" />
+                    </div>
+                    <input
+                      id="employee-profile-pic"
+                      onChange={handleImageChange}
+                      type="file"
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <div className="group flex w-full flex-col gap-1">
+                  <label className="label-text">Status</label>
+                  <Controller
+                    name="status"
+                    control={control}
+                    // rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.name && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.name?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group col-span-2 flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Note
                   </label>
                   <textarea
                     {...register("comments", { required: true })}
-                    placeholder="Enter comments"
-                    className="input-box h-14 w-full pt-1 placeholder:text-[0.8rem]"
+                    className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
                   {errors.employer_details && (
                     <span className="text-xs font-medium text-red-500">
@@ -211,43 +288,24 @@ export default function DbsEditForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col gap-1.5">
-                  {image ? (
-                    <div className="relative">
-                      <img
-                        src={image}
-                        alt="Uploaded"
-                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
-                      />
-                      <X
-                        onClick={clearImage}
-                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                      />
-                    </div>
-                  ) : (
-                    <label
-                      htmlFor="employee-profile-pic"
-                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
-                    >
-                      <div className="flex items-center gap-2">
-                        <UploadCloud />
-                        <span className="font-semibold text-[#2C2C2C]">
-                          Upload Certificate
-                        </span>
-                      </div>
-                      <input
-                        id="employee-profile-pic"
-                        onChange={handleImageChange}
-                        type="file"
-                        className="hidden"
-                      />
-                    </label>
+                <div className="group col-span-2 flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Self Declaration
+                  </label>
+                  <textarea
+                    {...register("comments", { required: true })}
+                    className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
+                  />
+                  {errors.employer_details && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.employer_details?.message}
+                    </span>
                   )}
                 </div>
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
-                    className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange text-sm font-normal text-white focus:outline-none"
                     disabled={loader}
                   >
                     {loader ? (
@@ -256,7 +314,7 @@ export default function DbsEditForm({
                         {selectedField ? "Updating" : "Saving"}
                       </div>
                     ) : (
-                      <span>{selectedField ? "Update" : "Save"}</span>
+                      <span>{selectedField ? "Add" : "Save"}</span>
                     )}
                   </button>
                   <button

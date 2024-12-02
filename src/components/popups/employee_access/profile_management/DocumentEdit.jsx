@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import Select from "react-select"
 
 export default function DocumentEdit({
   popupOpen,
