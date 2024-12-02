@@ -2,7 +2,7 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import ReferenceEdit from "@/components/popups/employee_access/profile_management/ReferenceEdit";
 import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 
 export default function Reference() {
@@ -12,8 +12,8 @@ export default function Reference() {
     () =>
       [
         {
-          header: "Sl No",
-          accessorKey: "sno",
+          header: "Type",
+          accessorKey: "type",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -23,42 +23,44 @@ export default function Reference() {
           },
         },
         {
-          header: "Reference No",
-          accessorKey: "reference_no",
+          header: "Name",
+          accessorKey: "name",
         },
         {
-          header: "Condition",
-          accessorKey: "condtion",
+          header: "Personal Email",
+          accessorKey: "personal-email",
         },
         {
-          header: "Expiry Date",
-          accessorKey: "expiry_date",
+          header: "Company Name ",
+          accessorKey: "company-name",
         },
         {
-          header: "Reviewed by",
-          accessorKey: "reviewedBy",
+          header: "Designation",
+          accessorKey: "designation",
         },
         {
-          header: "Document",
-          accessorKey: "document",
-          cell: ({ row }) => (
-            <div className="flex">
-              <Link
-                href={row.original?.document}
-                target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
-                rel="noopener noreferrer"
-              >
-                document
-              </Link>
-            </div>
-          ),
+          header: "Company Email",
+          accessorKey: "company-email",
+        },
+        {
+          header: "Conatct Number",
+          accessorKey: "conatct-number",
+        },
+        {
+          header: "Verification Status",
+          accessorKey: "company-email",
         },
         {
           header: "Action",
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+               <button
+                type="button"
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+              >
+                <Eye className="size-3" />
+              </button>
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -96,7 +98,6 @@ export default function Reference() {
       />
       <div className="flex gap-x-3">
         <ProfileSidebar />
-
         <div className="flex w-full flex-col">
           <div className="w-full  h-screen rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">

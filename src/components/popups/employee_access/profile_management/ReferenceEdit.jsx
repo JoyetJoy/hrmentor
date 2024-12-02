@@ -1,10 +1,10 @@
-import useImageUpload from "@/hooks/useImageUpload";
+import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { X } from "lucide-react";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import ReactQuill from "react-quill";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select"
 
 export default function ReferenceEdit({
   popupOpen,
@@ -29,8 +29,7 @@ export default function ReferenceEdit({
 
   const [isLoading, setIsLoading] = useState();
   const [loader, setLoder] = useState();
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
-    useImageUpload();
+ 
   return (
     <Dialog
       open={popupOpen}
@@ -42,7 +41,7 @@ export default function ReferenceEdit({
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-2xl rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-7 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
@@ -65,17 +64,23 @@ export default function ReferenceEdit({
                 className="grid grid-cols-1 gap-3"
                 //   onSubmit={handleSubmit(onSubmit)}
               >
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 ">
                   <div className="group flex w-full flex-col gap-1">
-                    <label className="label-text">Type</label>
-                    <select
-                      {...register("status")}
-                      className="input-box w-full"
-                    >
-                      <option value="">Select status</option>
-                      <option value="personal">Personal</option>
-                      <option value="inactive">Work</option>
-                    </select>
+                    <label className="label-text ">Type</label>
+                    <Controller
+                    name="document_type_id"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        placeholder="Select Type"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
                     {errors.type && (
                       <span className="text-xs font-medium text-red-500">
                         {errors.type?.message}
@@ -98,7 +103,7 @@ export default function ReferenceEdit({
                   </div>
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Email Address
+                      Personal Email Address
                     </label>
                     <input
                       {...register("email", { required: true })}
@@ -110,59 +115,22 @@ export default function ReferenceEdit({
                       </span>
                     )}
                   </div>
-                  <div className="group flex w-full flex-col gap-1">
-                    <label className="label-text">Template</label>
-                    <select
-                      {...register("status")}
-                      className="input-box w-full"
-                    >
-                      <option value="">Select template</option>
-                      <option value="personal">Personal</option>
-                      <option value="inactive">Inactive</option>
-                    </select>
-                    {errors.type && (
+                  <div className="group flex flex-col space-y-1">
+                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Contact Number
+                    </label>
+                    <input
+                      {...register("contact_number", { required: true })}
+                      className="input-box h-10 w-full"
+                    />
+                    {errors.contact_number && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.type?.message}
+                        {errors.contact_number?.message}
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="label-text">
-                    Description-Professionals
-                  </label>
-                  <div className="relative min-h-52 w-full flex-grow overflow-hidden rounded-md border border-black/10">
-                    {/* Background Image with Blur */}
-                    {image && (
-                      <div
-                        className="absolute inset-0 z-0"
-                        style={{
-                          backgroundImage: `url(${image})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          filter: "blur(1px)", // Adjust the blur level as needed
-                        }}
-                      />
-                    )}
-                    <ReactQuill
-                      theme="snow"
-                      // value={description}
-                      // onChange={setDescription}
-                      placeholder={"Type here.."}
-                      className="relative z-10 h-full w-full rounded-md border border-transparent"
-                      style={{
-                        backgroundColor: "rgba(255, 255, 255, 0.8)", // White background with transparency for readability
-                      }}
-                    />
-                  </div>
-                  {errors?.description && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.description?.message}
-                    </span>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2">
+                <div className="grid grid-cols-1">
                   <div className="mt-7 flex flex-row items-center justify-center gap-3">
                     <button
                       type="submit"

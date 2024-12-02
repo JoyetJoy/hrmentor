@@ -32,7 +32,7 @@ export default function EmployeeAccessLayouts() {
   if (location.pathname === "/employee_access") {
     return <Navigate to="/employee_access/dashboard" replace />;
   }
-  return (
+  return token?(
     <>
       <ScrollBack />
       <div className="w-full bg-gray-100 px-12 py-4">
@@ -40,5 +40,7 @@ export default function EmployeeAccessLayouts() {
         <Outlet />
       </div>
     </>
+  ): (
+    <Navigate to="/login" />
   );
 }

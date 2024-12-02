@@ -141,12 +141,12 @@ export const RecRequestRefferal = () => {
         <div className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
             <h1 className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black">
-              <ArrowLeft
+              {/* <ArrowLeft
                 onClick={() => {
                   history.back();
                 }}
                 className="size-4 cursor-pointer"
-              />
+              /> */}
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-textcolor-darkCharcoal">Refer</span>
             </h1>

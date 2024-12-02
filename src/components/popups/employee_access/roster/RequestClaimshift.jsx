@@ -2,8 +2,9 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { X } from 'lucide-react';
 import React from 'react'
 
-export default function RequestCalimshift({popupOpen,setPopupOpen}) {
+export default function RequestClaimshift({popupOpen,setPopupOpen,selectedField}) {
     // const [loader, setLoader] = useState(false);
+console.log(selectedField);
 
     function close() {
         setPopupOpen(false);
@@ -37,17 +38,20 @@ export default function RequestCalimshift({popupOpen,setPopupOpen}) {
               <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                 Request Shift
               </label>
-              <p className="text-sm font-semibold ">Morning Shift</p>
+              <p className="text-sm font-semibold ">{selectedField?.shift}</p>
             </div>
             <div className="group flex flex-col space-y-1">
               <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                 Shift Time
               </label>
-              <p className="text-sm font-semibold">11:00pm</p>
+              <p className="text-sm font-semibold">{selectedField?.time}</p>
             </div>
             <div className="group flex w-full col-span-2  flex-col gap-1">
-              <label className="label-text">Note</label>
-              <input type="text" className='h-20 border rounded-md border-gray-muted' />
+            <label className="label-text">Note</label>
+            <textarea
+              className="h-20 border rounded-md border-gray-muted w-full p-2"
+              rows="4"
+            />
             </div>
             <div className="mt-2 flex w-full items-center justify-between gap-3">
               <button

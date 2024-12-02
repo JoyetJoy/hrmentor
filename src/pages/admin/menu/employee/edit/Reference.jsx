@@ -55,8 +55,8 @@ export default function EmployeeReferenceEdit() {
     () =>
       [
         {
-          header: "Sl No",
-          accessorKey: "sno",
+          header: "Type",
+          accessorKey: "type",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -66,34 +66,38 @@ export default function EmployeeReferenceEdit() {
           },
         },
         {
-          header: "Reference No",
-          accessorKey: "reference_no",
+          header: "Personal Email",
+          accessorKey: "personal-email",
         },
         {
-          header: "Condition",
+          header: "Company Name",
           accessorKey: "condtion",
         },
         {
-          header: "Expiry Date",
-          accessorKey: "expiry_date",
+          header: "Designation",
+          accessorKey: "designation",
         },
         {
-          header: "Reviewed by",
-          accessorKey: "reviewedBy",
+          header: "Company Name",
+          accessorKey: "company name",
         },
         {
-          header: "Document",
+          header: "Contact Number",
           accessorKey: "document",
+        },
+        {
+          header: "Verification status",
+          accessorKey: "status",
           cell: ({ row }) => (
-            <div className="flex">
-              <Link
-                href={row.original?.document}
-                target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
-                rel="noopener noreferrer"
-              >
-                document
-              </Link>
+            <div
+              style={{
+                backgroundColor:
+                  row?.original?.employee?.employment_status?.background_color,
+                color: row?.original?.employee?.employment_status?.text_color,
+              }}
+              className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
+            >
+              {row?.original?.employee?.employment_status?.status_name}
             </div>
           ),
         },
@@ -161,7 +165,7 @@ export default function EmployeeReferenceEdit() {
               <div className="my-4 flex items-center justify-between">
                 <div className="flex items-center gap-7">
                   <h5 className="text-lg font-bold">Reference</h5>
-                  <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
+                  <div className="input flex h-10 min-h-10 w-80 items-center gap-2 border border-gray-platinum text-sm outline-none placeholder:text-black hover:border-gray-platinum">
                     <Search className="size-4 text-gray-dark" />
                     <input
                       type="text"

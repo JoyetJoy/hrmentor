@@ -12,7 +12,7 @@ export const AdminDashboard = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-black">Dashboard</h1>
           <div className="flex items-center gap-3">
-            <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-[#2B2B2B] px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
+            <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-neutralmedium px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
               <Clock4 className="size-4" />
               Clock in
             </div>

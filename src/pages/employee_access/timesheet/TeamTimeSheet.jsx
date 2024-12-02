@@ -1,6 +1,6 @@
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { Eye, PlusIcon } from "lucide-react";
+import { ChevronRight, Eye, PlusIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
@@ -8,6 +8,7 @@ import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import TeamTimeTracker from "@/components/popups/employee_access/timesheet/team/TeamTimeTracker";
 import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timesheet/TeamTimeSheetSideBar";
+import TeamAddManually from "@/components/popups/employee_access/timesheet/team/AddManually";
 
 export default function TeamTimeSheet() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +17,7 @@ export default function TeamTimeSheet() {
   const pageLimit = 10;
   const [teamTimeTrackerPopupOpen, setTeamTimeTrackerPopupOpen] =
     useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
 
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: i,
@@ -41,7 +43,7 @@ export default function TeamTimeSheet() {
         accessorKey: "sno",
         cell: ({ row }) => {
           return (
-            <div className=" px-3 py-2">
+            <div className="px-3 py-2">
               NA
               {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
             </div>
@@ -132,6 +134,9 @@ export default function TeamTimeSheet() {
     [],
   );
   const handleClick = () => {
+    setTeamTimeTrackerPopupOpen(true);
+  };
+  const handleAddClick = () => {
     setPopupOpen(true);
   };
   return (
@@ -140,7 +145,13 @@ export default function TeamTimeSheet() {
         teamTimeTrackerPopupOpen={teamTimeTrackerPopupOpen}
         setTeamTimeTrackerPopupOpen={setTeamTimeTrackerPopupOpen}
       />
-      <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Time Sheet"} />
+      <TeamAddManually popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <MenuHeaderEmployeeAccess
+        pathlink={""}
+        subMenu={"Time Sheet"}
+        icon={<ChevronRight className="size-3" />}
+        currentpage={" My Time Sheet"}
+      />
       <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           <h5 className="text-md font-bold">My Team Sheet</h5>
@@ -162,8 +173,8 @@ export default function TeamTimeSheet() {
         <div className="flex items-center gap-3">
           <Link
             to=""
-            onClick={handleClick}
-            className="flex w-fit whitespace-nowrap items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+            onClick={handleAddClick}
+            className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
           >
             <PlusIcon />
             Add Manually

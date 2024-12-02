@@ -2,7 +2,7 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import DbsEdit from "@/components/popups/employee_access/profile_management/DbsEdit";
 import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -11,8 +11,8 @@ export default function DbsCheck() {
     () =>
       [
         {
-          header: "Sl No",
-          accessorKey: "sno",
+          header: "Type",
+          accessorKey: "type",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -22,18 +22,18 @@ export default function DbsCheck() {
           },
         },
         {
-          header: "Reference",
-          accessorKey: "job_role",
+          header: "Date of issue",
+          accessorKey: "date of issue",
         },
         {
-          header: "Comments",
-          accessorKey: "employer",
+          header: "Subscription",
+          accessorKey: "subscription",
         },
         {
-          header: "Start Date",
-          accessorKey: "end_date",
+          header: "DBS Number",
+          accessorKey: "dbs_number",
           Cell: ({ row }) => {
-            return <div className="flex px-2">{row.original?.start_date}</div>;
+            return <div className="flex px-2 text-blue-500 underline">{row.original?.start_date}</div>;
           },
         },
         {
@@ -42,22 +42,6 @@ export default function DbsCheck() {
           Cell: ({ row }) => {
             return <div className="flex px-2">{row.original?.end_date}</div>;
           },
-        },
-        {
-          header: "Document",
-          accessorKey: "document",
-          cell: ({ row }) => (
-            <div className="flex">
-              <Link
-                href={row.original?.document}
-                target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
-                rel="noopener noreferrer"
-              >
-                document
-              </Link>
-            </div>
-          ),
         },
         {
           header: "Action",

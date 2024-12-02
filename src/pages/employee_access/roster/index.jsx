@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
@@ -6,18 +6,13 @@ import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
-
-const events = [
-  { date: "2024-11-01", shift: "Morning Shift", time: "06:00-12:00" },
-  { date: "2024-11-01", shift: "Evening Shift", time: "06:00-12:00" },
-  { date: "2024-11-03", shift: "Morning Shift", time: "06:00-12:00" },
-  { date: "2024-11-03", shift: "Evening Shift", time: "06:00-12:00" },
-  // Add more events as needed
-];
+import ShiftDetailsView from "@/components/popups/employee_access/roster/ShiftDetailsView";
+import RequestClaimshift from "@/components/popups/employee_access/roster/RequestClaimshift";
+import { ROASTER_GET, newRequest } from "@/api/master";
+import { useQuery } from "@tanstack/react-query";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i,
+  value: i + 1,
   label: dayjs().month(i).format("MMMM"),
 }));
 
@@ -28,37 +23,92 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 
 const EmployeeAccessRosterCalendar = () => {
   const [date, setDate] = useState(new Date());
-  const [filteredEvents, setFilteredEvents] = useState(events);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedField, setSelectedField] = useState("");
+  const [claimPopup, setClaimPopup] = useState(false);
+  const year = dayjs(date).year();
+  const month = dayjs(date).month() + 1;
+
+  const { data: events = [], refetch } = useQuery({
+    queryKey: ["events", month, year],
+    queryFn: () =>
+      newRequest.get(ROASTER_GET, {
+        params: { month, year },
+      }).then((res) => res.data),
+    enabled: false, // Prevent the query from auto-fetching on mount
+  });
 
   useEffect(() => {
-    // Filter events based on selected year and month
-    const filtered = events.filter(
-      (event) =>
-        dayjs(event.date).isSame(date, "month") && dayjs(event.date).isSame(date, "year")
-    );
-    setFilteredEvents(filtered);
-  }, [date]);
+    // Refetch data whenever the `date` changes
+    refetch();
+  }, [date, refetch]);
+
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
-    const updatedDate = dayjs(date).month(selectedOption.value).toDate();
-    setDate(updatedDate);
+    const currentDay = dayjs(date).date();
+  const updatedDate = dayjs(date)
+    .month(selectedOption.value - 1) // Update the month
+    .date(1) // Temporarily set the date to the first day of the month
+    .date(Math.min(currentDay, dayjs(date).month(selectedOption.value - 1).daysInMonth())) // Ensure the date stays valid
+    .toDate();
+  handleDateChange(updatedDate);
   };
 
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    setDate(updatedDate);
+    handleDateChange(updatedDate);
+  };
+
+  const getTileClass = (date) => {
+    if (dayjs(date).isSame(dayjs(), "day")) return "bg-green-200 border-green-500";
+    if (dayjs(date).isBefore(dayjs(), "day")) return "bg-blue-200 border-blue-500";
+    return "bg-yellow-200 border-yellow-500";
   };
 
   const findEvents = (date) => {
-    return filteredEvents.filter((event) => dayjs(event.date).isSame(date, "day"));
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    const holidayEvents = events.filter((event) =>
+      event?.holidays?.includes(formattedDate)
+    );
+    const shiftEvents = events.filter((event) =>
+      event?.date_range?.includes(formattedDate)
+    );
+    return { holidayEvents, shiftEvents };
   };
+
+  const handleClick = (event) => {
+    if (!event?.isHoliday) {
+      setSelectedField(event);
+      setPopupOpen(true);
+    }
+  };
+
+  function convertToHourMinutes(time) {
+    if (time) {
+      const [hours, minutes] = time.split(":");
+      return `${hours}:${minutes}`;
+    } else {
+      return "";
+    }
+  }
 
   return (
     <div className="flex flex-col">
+      <ShiftDetailsView
+        date={date}
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+      />
+      <RequestClaimshift
+        popupOpen={claimPopup}
+        setPopupOpen={setClaimPopup}
+        selectedField={selectedField}
+      />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Roster"} />
       <div className="flex items-center justify-between px-4 py-2 w-full">
         <div className="flex items-center gap-4">
@@ -68,6 +118,7 @@ const EmployeeAccessRosterCalendar = () => {
             isSearchable={true}
             onChange={handleYearChange}
             styles={customSelectStyles}
+            value={years.find((yearOption) => yearOption.value === dayjs(date).year())}
             placeholder={dayjs(date).format("YYYY")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -76,6 +127,7 @@ const EmployeeAccessRosterCalendar = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
+            value={months.find((monthOption) => monthOption.value === dayjs(date).month() + 1)} 
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -90,41 +142,45 @@ const EmployeeAccessRosterCalendar = () => {
 
       <div className="mb-10 mt-7 w-full max-w-8xl">
         <Calendar
+          key={date} // Force re-render whenever date changes
           onChange={handleDateChange}
           value={date}
           showNavigation={false}
           className="w-full font-monorope"
+          locale="en-US"
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const eventsForDay = findEvents(date);
-              if (eventsForDay.length > 0) {
-                return (
-                  <div className="flex w-full flex-col gap-2">
-                    {eventsForDay.map((event, index) => (
-                      <div
+              const { holidayEvents, shiftEvents } = findEvents(date);
+              return (
+                <div className="flex flex-col gap-2">
+                  {holidayEvents.map((event, index) => (
+                    <div
                       key={index}
-                      onClick={()=>toast.success(event.id)}
-                      className={`mt-2 flex flex-col h-14 w-full px-3 text-[0.7rem] font-medium border-l-4 rounded-sm bg-[#2832770D] border-l-[#e95d39] text-[#2C2C2C] justify-center `}
+                      className="mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
                     >
-                      <span
-                        className={`flex float-start font-semibold text-[0.8rem] text-[#2C2C2C]`}
-                      >
-                        {event.shift}
-                      </span>
-                      <span
-                        className={`flex float-start text-[#2C2C2C]`}
-                      >
-                        {event.time}
+                      <span className="font-semibold flex float-start">Holiday</span>
+                    </div>
+                  ))}
+                  {shiftEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleClick(event)}
+                      className={`mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm ${
+                        getTileClass(date)
+                      } text-gray-800 justify-center`}
+                    >
+                      <span className="font-semibold flex float-start">{event.shift_name}</span>
+                      <span className="flex float-start">
+                        {convertToHourMinutes(event?.shift?.start_time)}-
+                        {convertToHourMinutes(event?.shift?.end_time)}
                       </span>
                     </div>
-                    ))}
-                  </div>
-                );
-              } else {
-                return <div className="h-16 w-16 bg-transparent"></div>;
-              }
+                  ))}
+                </div>
+              );
             }
+            return null;
           }}
         />
       </div>

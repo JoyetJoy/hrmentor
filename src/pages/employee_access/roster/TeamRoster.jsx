@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
@@ -8,110 +8,15 @@ import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import { Link } from "react-router-dom";
 import RosterItemList from "@/components/sidebars/employee_access/roster/RosterSideBar";
-
-const events = [
-  {
-    date: "2024-10-01",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-02",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-03",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-04",
-    clockIn: "09:15 AM",
-    clockOut: "05:45 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-05",
-    clockIn: "08:45 AM",
-    clockOut: "05:15 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-06",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-07",
-    clockIn: "09:10 AM",
-    clockOut: "05:40 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-08",
-    clockIn: "08:50 AM",
-    clockOut: "05:20 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-09",
-    clockIn: "09:05 AM",
-    clockOut: "05:35 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-10",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-11",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-12",
-    clockIn: "09:20 AM",
-    clockOut: "05:50 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-13",
-    clockIn: "09:10 AM",
-    clockOut: "05:40 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-14",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-];
+import { TEAM_ROSTER_GET,newRequest } from "@/api/master";
+import { useQuery } from "@tanstack/react-query";
+import ShiftDetailsView from "@/components/popups/employee_access/roster/ShiftDetailsView";
+import RequestClaimshift from "@/components/popups/employee_access/roster/RequestClaimshift";
+import TeamRosterShiftView from "@/components/popups/employee_access/roster/team/TeamRosterShiftView";
+import { ACTIVE_EMPLOYEE } from "@/api";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i,
+  value: i + 1,
   label: dayjs().month(i).format("MMMM"),
 }));
 
@@ -122,26 +27,110 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 
 const EmployeeAccessTeamRoster = () => {
   const [date, setDate] = useState(new Date());
+  const [filteredEvents, setFilteredEvents] = useState({});
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedField, setSelectedField] = useState("");
+  const [claimPopup, setClaimPopup] = useState(false);
+  const [activeDepartment, setActiveDepartment] = useState('');
+  const [activeWorkArea, setActiveWorkArea] = useState('');
+  const [activeLocation, setActiveLocation] = useState('');
+  const [activeEmployee,setActiveEmployee] = useState('');
 
+  const year = dayjs(date).year();
+  const month = dayjs(date).month() + 1;
+
+  const { data:employee } = useQuery({
+    queryKey: ["employee"],
+    queryFn: () =>
+      newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
+  });
+
+  const { data: events = [], refetch } = useQuery({
+    queryKey: ["events", month, year],
+    queryFn: () =>
+      newRequest.get(TEAM_ROSTER_GET, {
+        params: { 
+          month:month, 
+          year:year,
+          employee:activeEmployee,
+          department:activeDepartment,
+          location:activeLocation,
+          work_area:activeWorkArea
+         },
+      }).then((res) => res.data),
+    enabled: false, // Prevent the query from auto-fetching on mount
+  });
+
+  useEffect(() => {
+    // Refetch data whenever the `date` changes
+    refetch();
+  }, [date, refetch]);
+  
+  
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
-    const updatedDate = dayjs(date).month(selectedOption.value).toDate();
-    setDate(updatedDate);
-  };
-  const handleYearChange = (selectedOption) => {
-    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    setDate(updatedDate);
+    const currentDay = dayjs(date).date();
+  const updatedDate = dayjs(date)
+    .month(selectedOption.value - 1) // Update the month
+    .date(1) // Temporarily set the date to the first day of the month
+    .date(Math.min(currentDay, dayjs(date).month(selectedOption.value - 1).daysInMonth())) // Ensure the date stays valid
+    .toDate();
+  handleDateChange(updatedDate);
   };
 
-  const findEvent = (date) => {
-    return events.find((event) => dayjs(event.date).isSame(date, "day"));
+  const handleYearChange = (selectedOption) => {
+    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
+    handleDateChange(updatedDate);
   };
+
+  const getTileClass = (date) => {
+    if (dayjs(date).isSame(dayjs(), "day")) return "bg-green-200 border-green-500";
+    if (dayjs(date).isBefore(dayjs(), "day")) return "bg-blue-200 border-blue-500";
+    return "bg-yellow-200 border-yellow-500";
+  };
+
+  const findEvents = (date) => {
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    const holidayEvents = events.filter((event) =>
+      event?.holidays?.includes(formattedDate)
+    );
+    const shiftEvents = events.filter((event) =>
+      event?.date_range?.includes(formattedDate)
+    );
+    return { holidayEvents, shiftEvents };
+  };
+
+  const handleClick = (event) => {
+    if (!event?.isHoliday) {
+      setSelectedField(event);
+      setPopupOpen(true);
+    }
+  };
+
+  function convertToHourMinutes(time) {
+    if (time) {
+      const [hours, minutes] = time.split(":");
+      return `${hours}:${minutes}`;
+    } else {
+      return "";
+    }
+  }
 
   return (
     <div className="flex flex-col">
+      <TeamRosterShiftView
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+      />
+      <RequestClaimshift
+        popupOpen={claimPopup}
+        setPopupOpen={setClaimPopup}
+        selectedField={selectedField}
+      />
       {/* <RequestCalimshift popupOpen={popupOpen} setPopupOpen={setPopupOpen}/> */}
       <MenuHeaderEmployeeAccess
         pathlink={""}
@@ -156,6 +145,7 @@ const EmployeeAccessTeamRoster = () => {
             isSearchable={true}
             onChange={handleYearChange}
             styles={customSelectStyles}
+            value={years.find((yearOption) => yearOption.value === dayjs(date).year())}
             placeholder={dayjs(date).format("YYYY")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -164,62 +154,76 @@ const EmployeeAccessTeamRoster = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
+            value={months.find((monthOption) => monthOption.value === dayjs(date).month() + 1)} 
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
+        <div className="flex gap-3">
+        <Select
+              options={employee}
+              isSearchable={true}
+              onChange={(option) => setActiveEmployee(option?.id || "")}
+              styles={customSelectStyles}
+              placeholder={'All employee'}
+              className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
+            />
         <Link
         to="" 
         className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
           My Roster
         </Link>
+        </div>
       </div>
       <div className="mb-10 mt-2 w-full max-w-8xl flex gap-3">
-        <RosterItemList/>
+        <RosterItemList
+        activeDepartment={activeDepartment}
+        setActiveDepartment={setActiveDepartment}
+        activeLocation={activeLocation}
+        setActiveLocation={setActiveLocation}
+        activeWorkArea={activeWorkArea}
+        setActiveWorkArea={setActiveWorkArea}
+        />
         <Calendar
+          key={date}
           onChange={handleDateChange}
           value={date}
           showNavigation={false}
           className="w-full font-monorope"
+          locale="en-US"
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const event = findEvent(date);
-              return event ? (
-                <div className="flex w-full flex-col gap-2">
-                  <div className="relative flex justify-between p-1">
-                    {event.status === "L" ? (
-                      <img
-                        className="h-5 object-contain"
-                        src="/assets/icons/tort.svg"
-                        alt="late"
-                      />
-                    ) : null}
+              const { holidayEvents, shiftEvents } = findEvents(date);
+              return (
+                <div className="flex flex-col gap-2">
+                  {holidayEvents.map((event, index) => (
                     <div
-                      className={`absolute -top-4 right-1 flex h-7 w-7 items-center justify-center rounded-full font-extrabold ${event.status === "P" ? "bg-[#00B448] text-white" : "hidden"}`}
+                      key={index}
+                      className="mt-2 flex flex-col h-14 w-auto lg:w-28 xl:w-36 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
                     >
-                      {event.status}
+                      <span className="font-semibold flex float-start">Holiday</span>
                     </div>
-                  </div>
-                  <div className="c-af mt-2 flex h-7 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <span className="font-bold">Clock In</span>{" "}
-                    <span>{event.clockIn}</span>
-                  </div>
-                  <div className="c-af flex h-7 w-full items-center justify-between bg-mediumblack  px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <span className="font-bold">Clock Out</span>{" "}
-                    <span>{event.clockIn}</span>
-                  </div>
-                  <div className="flex h-7 w-full items-center justify-between bg-mediumblack  px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <span className="font-bold">Time In</span>{" "}
-                    <span
-                      className={`font-semibold ${event.status === "L" ? "text-red-500" : ""}`}
+                  ))}
+                  {shiftEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleClick(event)}
+                      className={`mt-2 flex flex-col h-14 w-auto lg:w-28 xl:w-36 px-3 text-sm border-l-4 rounded-sm ${
+                        getTileClass(date)
+                      } text-gray-800 justify-center`}
                     >
-                      {event.totalTime}
-                    </span>
-                  </div>
+                      <span className="font-semibold flex float-start">{event.shift_name}</span>
+                      <span className="flex float-start">
+                        {convertToHourMinutes(event?.shift?.start_time)}-
+                        {convertToHourMinutes(event?.shift?.end_time)}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ) : null;
+              );
             }
+            return null;
           }}
         />
       </div>

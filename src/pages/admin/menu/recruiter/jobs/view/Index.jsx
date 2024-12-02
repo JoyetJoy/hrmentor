@@ -6,7 +6,7 @@ import QueryTable from "@/components/table/QueryTable";
 import Loader from "@/components/ui/Loader";
 import { jobSubList } from "@/constants/dummyData";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpFromLine, Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -123,13 +123,14 @@ function RecViewJobDetail() {
       />
       <div className="my-4 flex flex-row items-center justify-between">
         <h1 className="flex items-center gap-1 text-base font-bold capitalize text-textcolor-darkCharcoal">
-          <ArrowLeft
+          {/* <ArrowLeft
             onClick={() => {
               history.back();
             }}
             className="size-4 cursor-pointer"
-          />
-          {jobDetailView?.jobDetail?.job_title}
+          /> */}
+          {/* {jobDetailView?.jobDetail?.job_title} */}
+          Project Manager
         </h1>
         <div className="flex items-center gap-7 text-sm">
           <Link
@@ -139,14 +140,14 @@ function RecViewJobDetail() {
             Candidates
           </Link>
           <Link
-            to="/admin/recruiter/jobs/view"
-            className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
+            to="/admin/recruiter/jobs/promote"
+            className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Promote
           </Link>
           <Link
-            to=""
-            className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
+            to="/admin/recruiter/jobs/refer"
+            className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Refer
           </Link>
@@ -154,7 +155,42 @@ function RecViewJobDetail() {
       </div>
       <div className="my-3 flex flex-row gap-2">
         <RecruiterSideBar jid={jid} jobDetailView={jobDetailView} />
-        <div className="w-full">
+        <div className="w-full rounded-md bg-white p-7">
+          <div className="flex items-center justify-between">
+            <h1 className="text-base font-bold">Candidate</h1>
+            <div className="flex items-center gap-3">
+              <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
+                <Search
+                  className="size-4 object-contain text-gray-dark"
+                  strokeWidth={2}
+                />
+                <input
+                  type="text"
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                  }}
+                  value={keyword}
+                  className="grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
+                  placeholder="Search"
+                />
+              </label>
+              <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
+                <Filter
+                  className="stroke size-4 font-medium text-black"
+                  strokeWidth={2}
+                />
+              </div>
+              <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
+                <Plus className="size-5" />
+                Add Candidate
+              </div>
+              <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-neutralmedium px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
+                <ArrowUpFromLine className="size-4" />
+                Export
+              </div>
+            </div>
+          </div>
+
           {isLoading ? (
             <Loader />
           ) : (

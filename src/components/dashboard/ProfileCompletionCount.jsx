@@ -13,11 +13,6 @@ export default function ProfileCompletionCount() {
       <div className="bg-hrmprimaryorange flex h-7 w-fit items-center justify-center rounded-lg px-5 text-sm font-semibold text-white">
         43%
       </div>
-      <img
-        className="absolute right-0 top-0"
-        src="/assets/images/dashboard/group.svg"
-        alt="svg"
-      />
     </div>
   );
 }
