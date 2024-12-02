@@ -135,7 +135,7 @@ select:focus {
 
 @layer components {
   .input-box {
-    @apply h-10 w-full rounded-md border border-[#A7A7A7] border-opacity-60 text-sm  text-zinc-500 placeholder:text-sm placeholder:text-[#7F7F7F] focus:border-[#2E2E2E];
+    @apply h-10 w-full rounded-md border border-[#A7A7A7] border-opacity-60 text-sm  text-zinc-500 placeholder:text-sm placeholder:text-[#7F7F7F];
     text-indent: 0.5rem; /* Adjust the value as needed */
   }
 

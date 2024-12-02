@@ -40,7 +40,7 @@ export default function DbsEdit({ popupOpen, setPopupOpen, selectedField }) {
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-2xl rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-2xl rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
@@ -145,7 +145,7 @@ export default function DbsEdit({ popupOpen, setPopupOpen, selectedField }) {
                 </div>
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Renewal
+                  Date of issue
                   </label>
                   <input
                     {...register("start_date", { required: true })}
@@ -166,7 +166,7 @@ export default function DbsEdit({ popupOpen, setPopupOpen, selectedField }) {
                     htmlFor="employee-profile-pic"
                     className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md bg-gray-soft border border-dashed px-2"
                   >
-                    <div className="flex items-center justify-between gap-36 ">
+                    <div className="flex items-center justify-between gap-32 ">
                       <span className="flex items-center text-xs font-semibold whitespace-nowrap text-black/50">
                       <ArrowUpFromLine className="size-4" />
                         Upload Certificate

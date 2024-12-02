@@ -2,7 +2,7 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import DbsEdit from "@/components/popups/employee_access/profile_management/DbsEdit";
 import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
