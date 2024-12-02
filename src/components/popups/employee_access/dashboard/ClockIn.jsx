@@ -1,16 +1,26 @@
 import { Dialog, DialogPanel, Radio, RadioGroup } from "@headlessui/react";
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { newRequest } from "@/api/master";
-import moment from 'moment';
+import moment from "moment";
 
-export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, data, clockindata, setTimer }) {
+export default function ClockIn({
+  clockInpopupOpen,
+  setClockInPopupOpen,
+  api,
+  data,
+  clockindata,
+  setTimer,
+}) {
   const [loader, setLoader] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [note, setNote] = useState("");
+  const [error, setError] = useState(null);
 
   function close() {
     setClockInPopupOpen(false);
-  } 
+  }
 
   function formatTime(time) {
     if (!time) return "";
@@ -20,28 +30,51 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
 
+  const isBeforeCurrentTime = (startTime) => {
+    const currentTimeUTC = new Date().getTime();
+    const clockInTimeUTC = new Date(
+      `${moment().format("YYYY-MM-DD")}T${startTime}Z`
+    ).getTime();
+    return clockInTimeUTC > currentTimeUTC;
+  };
+
+  useEffect(() => {
+    if (!selected?.start_time) return;
+    setNoteOpen(isBeforeCurrentTime(selected.start_time));
+  }, [selected?.start_time]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error
+
+    if (!selected) {
+      setError("Please select a shift to proceed.");
+      return;
+    }
+
+    if (noteOpen && !note) {
+      setError("Please provide a reason for starting late.");
+      return;
+    }
 
     try {
-      if(!selected){
-        return;
-      }
+      setLoader(true);
       const payload = {
         shift_id: selected?.shift_id,
         roster_id: selected?.id,
+        reason_for_late_clock_in: noteOpen ? note : undefined,
       };
 
       const response = await newRequest.post(api, payload);
       if (response.status === 200) {
+        setNote('')
+        localStorage.setItem('shiftid', selected?.shift_id);
         setTimer(response.data.timer);
         setClockInPopupOpen(false);
-        toast.success('Clockin Successfull');
+        toast.success("Clock-in Successful");
       }
-
-      close();
     } catch (error) {
-      console.error("Error:", error);
+      setError("An error occurred. Please try again.");
     } finally {
       setLoader(false);
     }
@@ -61,7 +94,9 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
             className="data-[closed]:transform-[scale(95%)] w-full max-w-md rounded bg-white/90 px-14 py-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
-              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">{clockindata?.clock_in_time?'Clock Out':'Clock In'}</h1>
+              <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">
+                {clockindata?.clock_in_time ? "Clock Out" : "Clock In"}
+              </h1>
               <button
                 onClick={close}
                 className="text-xl font-extrabold text-textcolor-darkCharcoal"
@@ -83,42 +118,50 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                       aria-label="Time Slots"
                       className="space-y-4"
                     >
-                      {clockindata?.shift_detail?(
-                        <>
-                          <RadioGroup.Option
-                            key={clockindata?.shift_detail?.name}
-                            value={{ id: clockindata?.shift_detail?.id, shift_id: clockindata?.shift_id }}
-                            className="group cursor-pointer"
-                            aria-label={`Select ${clockindata?.shift_detail?.name}`}
-                            disabled
-                          >
-                            {({ checked }) => (
-                              <div
-                                className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
-                                  clockindata
-                                    ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                                    : "border-gray-300 bg-white"
-                                }`}
-                              >
-                                <p className="font-medium text-textcolor-darkCharcoal">
-                                  {clockindata?.shift_detail?.name || "Unnamed Shift"}
-                                </p>
-                                <p className="font-bold text-textcolor-darkCharcoal">
-                                  {formatTime(clockindata?.shift_detail?.start_time)} - {formatTime(clockindata?.shift_detail?.end_time)}
-                                </p>
-                              </div>
-                            )}
-                          </RadioGroup.Option>
-                        
-                      
-                        </>
-                      ):(
-                        <>
-                        {data?.map((times) => {
-                        return (
+                      {clockindata?.shift_detail ? (
+                        <RadioGroup.Option
+                          key={clockindata?.shift_detail?.name}
+                          value={{
+                            id: clockindata?.shift_detail?.id,
+                            shift_id: clockindata?.shift_id,
+                          }}
+                          className="group cursor-pointer"
+                          aria-label={`Select ${clockindata?.shift_detail?.name}`}
+                          disabled
+                        >
+                          {({ checked }) => (
+                            <div
+                              className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                                clockindata
+                                  ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                  : "border-gray-300 bg-white"
+                              }`}
+                            >
+                              <p className="font-medium text-textcolor-darkCharcoal">
+                                {clockindata?.shift_detail?.name ||
+                                  "Unnamed Shift"}
+                              </p>
+                              <p className="font-bold text-textcolor-darkCharcoal">
+                                {formatTime(
+                                  clockindata?.shift_detail?.start_time
+                                )}{" "}
+                                -{" "}
+                                {formatTime(
+                                  clockindata?.shift_detail?.end_time
+                                )}
+                              </p>
+                            </div>
+                          )}
+                        </RadioGroup.Option>
+                      ) : (
+                        data?.map((times) => (
                           <RadioGroup.Option
                             key={times?.shift?.name}
-                            value={{ id: times?.id, shift_id: times?.shift_id }}
+                            value={{
+                              id: times?.id,
+                              shift_id: times?.shift_id,
+                              start_time: times?.shift?.start_time,
+                            }}
                             className="group cursor-pointer"
                             aria-label={`Select ${times?.shift?.name}`}
                           >
@@ -139,16 +182,33 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                                   {formatTime(times?.shift?.start_time)} -{" "}
                                   {formatTime(times?.shift?.end_time)}
                                 </p>
-                                
                               </div>
                             )}
                           </RadioGroup.Option>
-                        );
-                      })}
-                        </>
+                        ))
                       )}
                     </RadioGroup>
                   </div>
+                  {noteOpen && (
+                    <div className="mt-2 border text-sm rounded-lg overflow-hidden">
+                      <textarea
+                        id="note"
+                        placeholder="Enter reason"
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        aria-required="true"
+                        tabIndex={0}
+                        style={{
+                          width: "100%",
+                          height: "100px",
+                          padding: "8px",
+                        }}
+                      ></textarea>
+                    </div>
+                  )}
+                  {error && (
+                  <p className="text-red-500 text-sm mt-2">{error}</p>
+                )}
                 </div>
                 <div className="col-span-2 mt-6 flex w-full flex-row items-center justify-center gap-3">
                   <button
@@ -173,7 +233,9 @@ export default function ClockIn({ clockInpopupOpen, setClockInPopupOpen, api, da
                         Starting...
                       </div>
                     ) : (
-                      <span>{clockindata?.clock_in_time?'Clock Out':'Start'}</span>
+                      <span>
+                        {clockindata?.clock_in_time ? "Clock Out" : "Start"}
+                      </span>
                     )}
                   </button>
                 </div>

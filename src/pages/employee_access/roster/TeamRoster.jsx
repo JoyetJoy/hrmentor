@@ -8,11 +8,12 @@ import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import { Link } from "react-router-dom";
 import RosterItemList from "@/components/sidebars/employee_access/roster/RosterSideBar";
-import { ROASTER_GET,newRequest } from "@/api/master";
+import { TEAM_ROSTER_GET,newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 import ShiftDetailsView from "@/components/popups/employee_access/roster/ShiftDetailsView";
 import RequestClaimshift from "@/components/popups/employee_access/roster/RequestClaimshift";
 import TeamRosterShiftView from "@/components/popups/employee_access/roster/team/TeamRosterShiftView";
+import { ACTIVE_EMPLOYEE } from "@/api";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i + 1,
@@ -30,15 +31,32 @@ const EmployeeAccessTeamRoster = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
+  const [activeDepartment, setActiveDepartment] = useState('');
+  const [activeWorkArea, setActiveWorkArea] = useState('');
+  const [activeLocation, setActiveLocation] = useState('');
+  const [activeEmployee,setActiveEmployee] = useState('');
 
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
 
+  const { data:employee } = useQuery({
+    queryKey: ["employee"],
+    queryFn: () =>
+      newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
+  });
+
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year],
     queryFn: () =>
-      newRequest.get(ROASTER_GET, {
-        params: { month, year },
+      newRequest.get(TEAM_ROSTER_GET, {
+        params: { 
+          month:month, 
+          year:year,
+          employee:activeEmployee,
+          department:activeDepartment,
+          location:activeLocation,
+          work_area:activeWorkArea
+         },
       }).then((res) => res.data),
     enabled: false, // Prevent the query from auto-fetching on mount
   });
@@ -101,14 +119,6 @@ const EmployeeAccessTeamRoster = () => {
     }
   }
 
-  const employee=[
-    { value: 'emergency', label: 'Emergency Department' },
-    { value: 'cardiology', label: 'Cardiology' },
-    { value: 'radiology', label: 'Radiology' },
-    { value: 'pediatrics', label: 'Pediatrics' },
-    { value: 'oncology', label: 'Oncology' },
-  ];
-
   return (
     <div className="flex flex-col">
       <TeamRosterShiftView
@@ -153,6 +163,7 @@ const EmployeeAccessTeamRoster = () => {
         <Select
               options={employee}
               isSearchable={true}
+              onChange={(option) => setActiveEmployee(option?.id || "")}
               styles={customSelectStyles}
               placeholder={'All employee'}
               className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
@@ -165,7 +176,14 @@ const EmployeeAccessTeamRoster = () => {
         </div>
       </div>
       <div className="mb-10 mt-2 w-full max-w-8xl flex gap-3">
-        <RosterItemList/>
+        <RosterItemList
+        activeDepartment={activeDepartment}
+        setActiveDepartment={setActiveDepartment}
+        activeLocation={activeLocation}
+        setActiveLocation={setActiveLocation}
+        activeWorkArea={activeWorkArea}
+        setActiveWorkArea={setActiveWorkArea}
+        />
         <Calendar
           key={date}
           onChange={handleDateChange}

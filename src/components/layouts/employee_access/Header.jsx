@@ -95,8 +95,8 @@ export default function EmployeeAccessHeader() {
                 {employeeAccessActivityList.map((item, index) => (
                   <Menu.Item key={index}>
                     {({ active }) => (
-                      <button
-                        onClick={() => handleNavigation(item.path)}
+                      <Link
+                        to={item?.path}
                         className={`flex cursor-pointer items-center gap-3 whitespace-nowrap text-xs font-semibold ${
                           active ? "" : ""
                         }`}
@@ -109,7 +109,7 @@ export default function EmployeeAccessHeader() {
                           />
                         </div>
                         {item.label}
-                      </button>
+                      </Link>
                     )}
                   </Menu.Item>
                 ))}
