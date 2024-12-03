@@ -10,6 +10,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { DASHBOARD, CLOCKIN, RUNNINGBREAK } from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
 import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
+import { toast } from "react-hot-toast";
 
 export const EmployeeDashboard = () => {
   const queryClient = useQueryClient();
@@ -28,30 +29,26 @@ export const EmployeeDashboard = () => {
   });
 
   // Fetch clock-in data
-  const { data: clockin } = useQuery({
+  const { data: clockin, refetch } = useQuery({
     queryKey: ["clockin", timer],
     queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data),
-    enabled: !timer,
   });
+  
 
   // Update logged time dynamically
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
-
+  
     const calculateLoggedTime = () => {
-      const clockInDateUTC = new Date(
-        `${clockin?.clock_in_time.replace(" ", "T")}Z`,
-      ).getTime();
+      const clockInDateUTC = new Date(`${clockin?.clock_in_time.replace(" ", "T")}Z`).getTime();
       const elapsedTime = Date.now() - clockInDateUTC;
-      return new Date(elapsedTime).toISOString().substr(11, 8); // HH:mm:ss format
+      return new Date(elapsedTime).toISOString().substr(11, 8);
     };
-
-    const interval = setInterval(
-      () => setLoggedTime(calculateLoggedTime()),
-      1000,
-    );
+  
+    const interval = setInterval(() => setLoggedTime(calculateLoggedTime()), 1000);
     return () => clearInterval(interval);
-  }, [clockin]);
+  }, [clockin?.clock_in_time]);
+  
 
   const handleClockIn = async (toOpen) => {
     if (!dashboard) {
@@ -65,17 +62,19 @@ export const EmployeeDashboard = () => {
         const res = await newRequest.post(CLOCK_IN, formData);
 
         if (res?.status === 200) {
-          toast.success("Saved roster details successfully");
-          queryClient.invalidateQueries(["dashboard"]);
+          toast.success("Clockin successfully");
+          refetch(); 
+          setTimer(res.data);
           setPopupOpen(false);
+         
         } else {
           setPopupOpen(false);
-          toast.error("Failed to save roster.");
+          toast.error("Failed to clock in, Try again.");
         }
       } catch (error) {
-        console.error("Failed to save roster:", error);
+        console.error("Failed to clock in:", error);
         setPopupOpen(false);
-        toast.error("Failed to save roster.");
+        toast.error("Failed to clock in, Try again.");
       }
     }
   };
@@ -88,8 +87,6 @@ export const EmployeeDashboard = () => {
         queryClient.invalidateQueries(["runninbreak"]);
         setBreakdata(res?.data)
         if (res?.data?.id) {
-          console.log(res?.data);
-
           setBreakPopupOpen(true);
         } else {
           setRunningbreak(true);
@@ -99,10 +96,9 @@ export const EmployeeDashboard = () => {
       }
     } catch (error) {
       console.error("Failed to fetch running break:", error);
-      toast.error("Failed to fetch running break.");
     }
   };
-  console.log(breakdata);
+  console.log(clockin);
 
   return (
     <>
@@ -116,9 +112,11 @@ export const EmployeeDashboard = () => {
       />
       <ClockOut
         loggedTime={loggedTime}
+        setLoggedTime={setLoggedTime}
         clockindata={clockin}
         clockOutPopupOpen={clockOutPopupOpen}
         setClockOutPopupOpen={setClockOutPopupOpen}
+        setTimer={setTimer}
       />
       <StartBreak
         attendanceId={clockin?.id}
@@ -136,7 +134,7 @@ export const EmployeeDashboard = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
             <div className="flex items-center gap-3">
-              {clockin?.clock_in_time && (
+              {clockin?.clock_in_time && dashboard?.rosterOrShift && (
                 <Menu as="div" className="relative inline-block text-left">
                   <div
                     onClick={() => BreakClick()}

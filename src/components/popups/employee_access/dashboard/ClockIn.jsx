@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { newRequest } from "@/api/master";
 import moment from "moment";
+import { toast } from "react-hot-toast";
 
 export default function ClockIn({
   clockInpopupOpen,
@@ -46,7 +47,7 @@ export default function ClockIn({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error
+    setError(null);
 
     if (!selected) {
       setError("Please select a shift to proceed.");
@@ -75,15 +76,15 @@ export default function ClockIn({
         );
         setTimer(response.data.timer);
         setClockInPopupOpen(false);
-        toast.success("Clock-in Successful");
+        toast.success("Clock-in Successfully");
       }
     } catch (error) {
+      toast.error("Failed to Clock-in, Please try again");
       setError("An error occurred. Please try again.");
     } finally {
       setLoader(false);
     }
   };
-  console.log(data);
 
   return (
     <Dialog

@@ -2,12 +2,15 @@ import { CLOCKOUT, newRequest } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 export default function ClockOut({
   clockOutPopupOpen,
   setClockOutPopupOpen,
   clockindata,
   loggedTime,
+  setTimer,
+  setLoggedTime
 }) {
   const [overtime, setOvertime] = useState("00:00:00");
   function close() {
@@ -40,18 +43,20 @@ export default function ClockOut({
   }, [clockindata]);
 
   const handleSubmit = async () => {
-    setLoader(true);
+    const formData={
+      attendence_id:clockindata?.id
+    }
     try {
-      const response = await newRequest.post(CLOCKOUT);
+      const response = await newRequest.post(CLOCKOUT,formData);
       if (response.status === 200) {
-        setBreakPopupOpen(false);
-        toast.success("Break Ended Successfully");
+        setLoggedTime("00:00:00");
+        setTimer(response.data.timer);
+        setClockOutPopupOpen(false);
+        toast.success("Clock Out Successfully");
       }
     } catch (error) {
       toast.error("Failed to end break. Please try again.");
-    } finally {
-      setLoader(false);
-    }
+    } 
   };
 
   return (

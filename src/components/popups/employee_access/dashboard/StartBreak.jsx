@@ -3,6 +3,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 
 export default function StartBreak({
   breakpopupOpen,
@@ -37,7 +38,6 @@ export default function StartBreak({
       setError("Please select a break time.");
       return;
     }
-    setLoader(true);
     const payload = {
       shift_id: shiftData?.id,
       roster_id: shiftData?.rosterid,
@@ -49,8 +49,10 @@ export default function StartBreak({
     if (response.status === 200) {
       setBreakPopupOpen(false);
       toast.success("Start break successfully");
+    } else {
+      setBreakPopupOpen(false);
+      toast.error("Failed to start break, Try again.");
     }
-    setLoader(false);
   };
 
   return (

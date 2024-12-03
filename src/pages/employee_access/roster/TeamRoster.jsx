@@ -46,7 +46,7 @@ const EmployeeAccessTeamRoster = () => {
   });
 
   const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year],
+    queryKey: ["events", month, year, activeEmployee, activeDepartment, activeLocation, activeWorkArea],
     queryFn: () =>
       newRequest.get(TEAM_ROSTER_GET, {
         params: { 
@@ -64,7 +64,7 @@ const EmployeeAccessTeamRoster = () => {
   useEffect(() => {
     // Refetch data whenever the `date` changes
     refetch();
-  }, [date, refetch]);
+  }, [date, refetch, activeEmployee, activeDepartment, activeLocation, activeWorkArea]);
   
   
   const handleDateChange = (newDate) => {
