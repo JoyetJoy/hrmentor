@@ -26,15 +26,18 @@ export const EmployeeDashboard = () => {
   const { data: dashboard } = useQuery({
     queryKey: ["dashboard"],
     queryFn: () => newRequest.get(DASHBOARD).then((res) => res.data),
+    enabled: true,      
+    staleTime: 0,
   });
 
   // Fetch clock-in data
   const { data: clockin, refetch } = useQuery({
     queryKey: ["clockin", timer],
     queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data),
+    enabled: true,      
+    staleTime: 0,
   });
   
-
   // Update logged time dynamically
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
@@ -48,7 +51,6 @@ export const EmployeeDashboard = () => {
     const interval = setInterval(() => setLoggedTime(calculateLoggedTime()), 1000);
     return () => clearInterval(interval);
   }, [clockin?.clock_in_time]);
-  
 
   const handleClockIn = async (toOpen) => {
     if (!dashboard) {
@@ -65,24 +67,17 @@ export const EmployeeDashboard = () => {
           toast.success("Clockin successfully");
           refetch(); 
           setTimer(res.data);
-          setPopupOpen(false);
          
-        } else {
-          setPopupOpen(false);
-          toast.error("Failed to clock in, Try again.");
         }
       } catch (error) {
         console.error("Failed to clock in:", error);
-        setPopupOpen(false);
-        toast.error("Failed to clock in, Try again.");
+        toast.error(error?.response?.data?.message || "Failed to clock in, Try again.");
       }
     }
   };
   const BreakClick = async () => {
     try {
       const res = await newRequest.get(RUNNINGBREAK);
-      console.log(res);
-
       if (res?.status === 200) {
         queryClient.invalidateQueries(["runninbreak"]);
         setBreakdata(res?.data)
@@ -98,7 +93,6 @@ export const EmployeeDashboard = () => {
       console.error("Failed to fetch running break:", error);
     }
   };
-  console.log(clockin);
 
   return (
     <>

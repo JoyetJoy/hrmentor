@@ -43,7 +43,6 @@ export default function ClockIn({
     if (!selected?.start_time) return;
     setNoteOpen(isBeforeCurrentTime(selected.start_time));
   }, [selected?.start_time]);
-  console.log(selected);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,10 +76,12 @@ export default function ClockIn({
         setTimer(response.data.timer);
         setClockInPopupOpen(false);
         toast.success("Clock-in Successfully");
+      }else {
+        const errorMessage = res?.data?.message || "Failed to clock in, Try again."; 
+        toast.error(errorMessage);
       }
     } catch (error) {
-      toast.error("Failed to Clock-in, Please try again");
-      setError("An error occurred. Please try again.");
+      toast.error(error?.response?.data?.message || "Failed to Clock-in, Please try again");
     } finally {
       setLoader(false);
     }

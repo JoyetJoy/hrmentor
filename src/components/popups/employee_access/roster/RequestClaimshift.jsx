@@ -2,9 +2,7 @@ import { Dialog, DialogPanel } from '@headlessui/react';
 import { X } from 'lucide-react';
 import React from 'react'
 
-export default function RequestClaimshift({popupOpen,setPopupOpen,selectedField}) {
-    // const [loader, setLoader] = useState(false);
-console.log(selectedField);
+export default function RequestClaimshift({popupOpen,setPopupOpen,selectedField,convertTo12HourFormat}) {
 
     function close() {
         setPopupOpen(false);
@@ -36,20 +34,20 @@ console.log(selectedField);
           <div className="grid grid-cols-2 gap-3 gap-y-7 justify-between">
             <div className="group  flex flex-col space-y-1">
               <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                Request Shift
+                Requesting Shift
               </label>
-              <p className="text-sm font-semibold ">{selectedField?.shift}</p>
+              <p className="text-sm font-semibold ">{selectedField?.slot?.shift?.name}</p>
             </div>
             <div className="group flex flex-col space-y-1">
               <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                 Shift Time
               </label>
-              <p className="text-sm font-semibold">{selectedField?.time}</p>
+              <p className="text-sm font-semibold">{convertTo12HourFormat(selectedField?.slot?.shift?.start_time||'')}-{convertTo12HourFormat(selectedField?.slot?.shift?.end_time||'')}</p>
             </div>
             <div className="group flex w-full col-span-2  flex-col gap-1">
             <label className="label-text">Note</label>
             <textarea
-              className="h-20 border rounded-md border-gray-muted w-full p-2"
+              className="h-20 border rounded-md border-gray-muted w-full text-sm p-2"
               rows="4"
             />
             </div>

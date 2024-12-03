@@ -71,14 +71,20 @@ const EmployeeAccessRosterCalendar = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const holidayEvents = events.filter((event) =>
+    const holidayEvents = events?.result?.filter((event) =>
       event?.holidays?.includes(formattedDate)
     );
-    const shiftEvents = events.filter((event) =>
+    const shiftEvents = events?.result?.filter((event) =>
       event?.date_range?.includes(formattedDate)
     );
-    return { holidayEvents, shiftEvents };
-  };
+
+  const availableSlots = events?.available_slots_filtered?.filter(
+    (slot) => dayjs(slot.date).isSame(dayjs(date), "day")
+  );
+  
+
+  return { holidayEvents, shiftEvents, availableSlots };
+};
 
   const handleClick = (event) => {
     if (!event?.isHoliday) {
@@ -87,13 +93,11 @@ const EmployeeAccessRosterCalendar = () => {
     }
   };
 
-  function convertToHourMinutes(time) {
-    if (time) {
-      const [hours, minutes] = time.split(":");
-      return `${hours}:${minutes}`;
-    } else {
-      return "";
-    }
+  function convertTo12HourFormat(time) {
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = ((hours % 12) || 12); 
+    return `${formattedHours}:${minutes} ${period}`;
   }
 
   return (
@@ -103,11 +107,13 @@ const EmployeeAccessRosterCalendar = () => {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
+        convertTo12HourFormat={convertTo12HourFormat}
       />
       <RequestClaimshift
         popupOpen={claimPopup}
         setPopupOpen={setClaimPopup}
         selectedField={selectedField}
+        convertTo12HourFormat={convertTo12HourFormat}
       />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Roster"} />
       <div className="flex items-center justify-between px-4 py-2 w-full">
@@ -151,10 +157,10 @@ const EmployeeAccessRosterCalendar = () => {
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const { holidayEvents, shiftEvents } = findEvents(date);
+              const { holidayEvents, shiftEvents, availableSlots } = findEvents(date);
               return (
                 <div className="flex flex-col gap-2">
-                  {holidayEvents.map((event, index) => (
+                  {holidayEvents?.map((event, index) => (
                     <div
                       key={index}
                       className="mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
@@ -162,7 +168,7 @@ const EmployeeAccessRosterCalendar = () => {
                       <span className="font-semibold flex float-start">Holiday</span>
                     </div>
                   ))}
-                  {shiftEvents.map((event, index) => (
+                  {shiftEvents?.map((event, index) => (
                     <div
                       key={index}
                       onClick={() => handleClick(event)}
@@ -172,9 +178,22 @@ const EmployeeAccessRosterCalendar = () => {
                     >
                       <span className="font-semibold flex float-start">{event.shift_name}</span>
                       <span className="flex float-start">
-                        {convertToHourMinutes(event?.shift?.start_time)}-
-                        {convertToHourMinutes(event?.shift?.end_time)}
+                        {convertTo12HourFormat(event?.shift?.start_time)}-
+                        {convertTo12HourFormat(event?.shift?.end_time)}
                       </span>
+                    </div>
+                  ))}
+                  {/* Available Slots */}
+                  {availableSlots?.map((slot, index) => (
+                    <div
+                      key={`available-slot-${index}`}
+                      onClick={()=>{
+                        setClaimPopup(true)
+                        setSelectedField(slot)
+                      }}
+                      className="mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm  rounded-sm bg-[#a3d8f4] text-gray-800 justify-center"
+                    >
+                      <span className="font-semibold">Available Slot</span>
                     </div>
                   ))}
                 </div>
