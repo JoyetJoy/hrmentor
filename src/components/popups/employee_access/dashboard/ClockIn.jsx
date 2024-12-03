@@ -33,7 +33,7 @@ export default function ClockIn({
   const isBeforeCurrentTime = (startTime) => {
     const currentTimeUTC = new Date().getTime();
     const clockInTimeUTC = new Date(
-      `${moment().format("YYYY-MM-DD")}T${startTime}Z`
+      `${moment().format("YYYY-MM-DD")}T${startTime}Z`,
     ).getTime();
     return clockInTimeUTC > currentTimeUTC;
   };
@@ -42,6 +42,7 @@ export default function ClockIn({
     if (!selected?.start_time) return;
     setNoteOpen(isBeforeCurrentTime(selected.start_time));
   }, [selected?.start_time]);
+  console.log(selected);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,8 +68,11 @@ export default function ClockIn({
 
       const response = await newRequest.post(api, payload);
       if (response.status === 200) {
-        setNote('')
-        localStorage.setItem('shiftid', selected?.shift_id);
+        setNote("");
+        localStorage.setItem(
+          "shiftid",
+          JSON.stringify({ id: selected?.shift_id, rosterid: selected?.id }),
+        );
         setTimer(response.data.timer);
         setClockInPopupOpen(false);
         toast.success("Clock-in Successful");
@@ -79,6 +83,7 @@ export default function ClockIn({
       setLoader(false);
     }
   };
+  console.log(data);
 
   return (
     <Dialog
@@ -95,7 +100,7 @@ export default function ClockIn({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-lg font-bold leading-7 text-textcolor-darkCharcoal">
-                {clockindata?.clock_in_time ? "Clock Out" : "Clock In"}
+                Clock In
               </h1>
               <button
                 onClick={close}
@@ -143,11 +148,11 @@ export default function ClockIn({
                               </p>
                               <p className="font-bold text-textcolor-darkCharcoal">
                                 {formatTime(
-                                  clockindata?.shift_detail?.start_time
+                                  clockindata?.shift_detail?.start_time,
                                 )}{" "}
                                 -{" "}
                                 {formatTime(
-                                  clockindata?.shift_detail?.end_time
+                                  clockindata?.shift_detail?.end_time,
                                 )}
                               </p>
                             </div>
@@ -169,10 +174,10 @@ export default function ClockIn({
                               <div
                                 className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
                                   disabled
-                                    ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                                    ? "cursor-not-allowed border-gray-300 bg-gray-100 text-gray-500"
                                     : checked
-                                    ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                                    : "border-gray-300 bg-white"
+                                      ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                      : "border-gray-300 bg-white"
                                 }`}
                               >
                                 <p className="font-medium text-textcolor-darkCharcoal">
@@ -190,7 +195,7 @@ export default function ClockIn({
                     </RadioGroup>
                   </div>
                   {noteOpen && (
-                    <div className="mt-2 border text-sm rounded-lg overflow-hidden">
+                    <div className="mt-2 overflow-hidden rounded-lg border text-sm">
                       <textarea
                         id="note"
                         placeholder="Enter reason"
@@ -207,8 +212,8 @@ export default function ClockIn({
                     </div>
                   )}
                   {error && (
-                  <p className="text-red-500 text-sm mt-2">{error}</p>
-                )}
+                    <p className="mt-2 text-sm text-red-500">{error}</p>
+                  )}
                 </div>
                 <div className="col-span-2 mt-6 flex w-full flex-row items-center justify-center gap-3">
                   <button
@@ -222,7 +227,7 @@ export default function ClockIn({
                     type="submit"
                     className={`flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md ${
                       loader
-                        ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                        ? "cursor-not-allowed bg-gray-400 text-gray-200"
                         : "bg-hrmblack text-white"
                     } text-sm font-normal focus:outline-none`}
                     disabled={loader}
@@ -233,9 +238,7 @@ export default function ClockIn({
                         Starting...
                       </div>
                     ) : (
-                      <span>
-                        {clockindata?.clock_in_time ? "Clock Out" : "Start"}
-                      </span>
+                      <span>Start</span>
                     )}
                   </button>
                 </div>

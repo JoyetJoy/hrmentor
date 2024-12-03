@@ -6,15 +6,20 @@ import { Menu } from "@headlessui/react";
 import StopBreak from "@/components/popups/employee_access/dashboard/StopBreak";
 import ClockIn from "@/components/popups/employee_access/dashboard/ClockIn";
 import { newRequest, CLOCK_IN } from "@/api/master";
-import { useQuery } from "@tanstack/react-query";
-import { DASHBOARD, CLOCKIN } from "@/api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { DASHBOARD, CLOCKIN, RUNNINGBREAK } from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
+import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
 
 export const EmployeeDashboard = () => {
+  const queryClient = useQueryClient();
   const [breakpopupOpen, setBreakPopupOpen] = useState(false);
   const [clockInpopupOpen, setClockInPopupOpen] = useState(false);
   const [loggedTime, setLoggedTime] = useState("00:00:00");
   const [timer, setTimer] = useState("");
+  const [runningbreak, setRunningbreak] = useState(false);
+  const [clockOutPopupOpen, setClockOutPopupOpen] = useState(false);
+  const [breakdata,setBreakdata] = useState('');
 
   // Fetch dashboard data
   const { data: dashboard } = useQuery({
@@ -34,33 +39,18 @@ export const EmployeeDashboard = () => {
     if (!clockin?.clock_in_time) return;
 
     const calculateLoggedTime = () => {
-      const currentTimeUTC = new Date().getTime(); // Current time in milliseconds UTC
-      const clockInISOFormat = clockin?.clock_in_time.replace(" ", "T");
-      const clockInDateUTC = new Date(`${clockInISOFormat}Z`).getTime(); // Clock-in time in milliseconds UTC
-
-      if (clockInDateUTC) {
-        const elapsedTime = currentTimeUTC - clockInDateUTC;
-
-        const hours = String(
-          Math.floor((elapsedTime / (1000 * 60 * 60)) % 24),
-        ).padStart(2, "0");
-        const minutes = String(
-          Math.floor((elapsedTime / (1000 * 60)) % 60),
-        ).padStart(2, "0");
-        const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(
-          2,
-          "0",
-        );
-
-        setLoggedTime(`${hours}:${minutes}:${seconds}`);
-      }
+      const clockInDateUTC = new Date(
+        `${clockin?.clock_in_time.replace(" ", "T")}Z`,
+      ).getTime();
+      const elapsedTime = Date.now() - clockInDateUTC;
+      return new Date(elapsedTime).toISOString().substr(11, 8); // HH:mm:ss format
     };
 
-    calculateLoggedTime(); // Run the calculation immediately
-
-    const interval = setInterval(calculateLoggedTime, 1000); // Update every second
-
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    const interval = setInterval(
+      () => setLoggedTime(calculateLoggedTime()),
+      1000,
+    );
+    return () => clearInterval(interval);
   }, [clockin]);
 
   const handleClockIn = async (toOpen) => {
@@ -89,6 +79,30 @@ export const EmployeeDashboard = () => {
       }
     }
   };
+  const BreakClick = async () => {
+    try {
+      const res = await newRequest.get(RUNNINGBREAK);
+      console.log(res);
+
+      if (res?.status === 200) {
+        queryClient.invalidateQueries(["runninbreak"]);
+        setBreakdata(res?.data)
+        if (res?.data?.id) {
+          console.log(res?.data);
+
+          setBreakPopupOpen(true);
+        } else {
+          setRunningbreak(true);
+        }
+      } else {
+        toast.error("Unexpected error occurred while fetching break.");
+      }
+    } catch (error) {
+      console.error("Failed to fetch running break:", error);
+      toast.error("Failed to fetch running break.");
+    }
+  };
+  console.log(breakdata);
 
   return (
     <>
@@ -100,15 +114,23 @@ export const EmployeeDashboard = () => {
         data={dashboard?.rosterOrShift}
         setTimer={setTimer}
       />
-      <StartBreak
-         breakpopupOpen={breakpopupOpen}
-         setBreakPopupOpen={setBreakPopupOpen}
+      <ClockOut
+        loggedTime={loggedTime}
+        clockindata={clockin}
+        clockOutPopupOpen={clockOutPopupOpen}
+        setClockOutPopupOpen={setClockOutPopupOpen}
       />
-      {/* <StopBreak
+      <StartBreak
+        attendanceId={clockin?.id}
+        breakpopupOpen={runningbreak}
+        setBreakPopupOpen={setRunningbreak}
+      />
+      <StopBreak
+        breakdata={breakdata}
         breakpopupOpen={breakpopupOpen}
         setBreakPopupOpen={setBreakPopupOpen}
         loggedTime={loggedTime}
-      /> */}
+      />
       <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
         <aside className="flex min-w-[70%] flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -117,20 +139,30 @@ export const EmployeeDashboard = () => {
               {clockin?.clock_in_time && (
                 <Menu as="div" className="relative inline-block text-left">
                   <div
-                    onClick={() => setBreakPopupOpen(true)}
+                    onClick={() => BreakClick()}
                     className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmprimaryorange"
                   >
                     <Menu.Button>Break</Menu.Button>
                   </div>
                 </Menu>
               )}
-              <div
+              {clockin?.clock_in_time ? (
+                <div
+                onClick={() => setClockOutPopupOpen(true)}
+                  className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
+                >
+                  <Clock4 className="size-4" />
+                  Clock Out
+                </div>
+              ) : (
+                <div
                 onClick={handleClockIn}
-                className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
-              >
-                <Clock4 className="size-4" />
-                {clockin?.clock_in_time ? "Clock Out" : "Clock In"}
-              </div>
+                  className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
+                >
+                  <Clock4 className="size-4" />
+                  Clock In
+                </div>
+              )}
               <p className="w-36 text-xs font-semibold text-hrmprimaryorange">
                 Logged Time: {loggedTime || "00:00:00"}
               </p>
