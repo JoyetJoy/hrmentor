@@ -37,7 +37,7 @@ export default function EmployeeAccessHeader() {
       <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link
-          to="/employee_access/dashboard"
+          to="/employee-access/dashboard"
           className="flex flex-row gap-1 pl-3"
         >
           <div className="mr-2 h-9">
