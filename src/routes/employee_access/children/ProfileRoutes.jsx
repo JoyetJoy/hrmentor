@@ -3,7 +3,7 @@ import DbsCheck from "@/pages/employee_access/profile_mangement/DbsCheck";
 import Documents from "@/pages/employee_access/profile_mangement/Documents";
 import EmergencyContact from "@/pages/employee_access/profile_mangement/EmergencyContact";
 import Experience from "@/pages/employee_access/profile_mangement/Experience";
-import PaySlip from "@/pages/employee_access/profile_mangement/PaySlip";
+import PaySlip from "@/pages/employee_access/profile_mangement/paySlip";
 import PayOff from "@/pages/employee_access/profile_mangement/paySlip/PayOff";
 import PayOffView from "@/pages/employee_access/profile_mangement/paySlip/PayOffView";
 import PaySlipView from "@/pages/employee_access/profile_mangement/paySlip/PaySlipView";

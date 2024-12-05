@@ -23,3 +23,15 @@ export const AccountManngerMenu = [
     link: "/admin/subscription",
   },
 ];
+export const PaysilpMenu = [
+  {
+    id: 1,
+    name: "PayOff",
+    link: "/admin/employee/payslip/payoff",
+  },
+  {
+    id: 2,
+    name: "PaySlip",
+    link: "/admin/employee/payslip",
+  },
+];
