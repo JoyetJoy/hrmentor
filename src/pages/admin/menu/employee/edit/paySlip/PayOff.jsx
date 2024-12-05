@@ -128,8 +128,8 @@ export default function AdminPayOff() {
                 />
               </div>
             </div>
-            <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white pb-7">
-              <QueryTable columns={columns} list={""} />
+            <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white p-7">
+              <QueryTable columns={columns} list={"NA"} />
             </div>
           </>
         </div>

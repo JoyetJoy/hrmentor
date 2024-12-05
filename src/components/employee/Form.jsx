@@ -650,8 +650,8 @@ export default function SaveEmployeeForm({ formtype }) {
                     placeholder="Enter Post Code"
                     onKeyPress={(event) => {
                       if (
-                        !/^[a-zA-Z0-9]$/.test(event.key) ||
-                        event.target.value.length >= 6
+                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                        event.target.value.replace(/\s/g, "").length >= 6
                       ) {
                         event.preventDefault();
                       }
