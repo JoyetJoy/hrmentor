@@ -29,6 +29,8 @@ function Login() {
       const res = await basicXFormRequest.post(LOGIN, formData);
       if (res?.data?.success === true) {
         toast.success("Login successful");
+        console.log(res?.data?.data);
+        
         if(res?.data?.data?.roles?.length===1){
           if(res?.data?.data?.roles?.includes(1)){
             localStorage.removeItem('employee_token')
@@ -46,6 +48,8 @@ function Login() {
             navigate("/employee-access/dashboard");
           }
         }else{
+          console.log('lpp');
+          
           if(res?.data?.data?.roles?.includes(1)){
             localStorage.setItem("super_token", res?.data?.data?.token);
             navigate("/admin/dashboard");

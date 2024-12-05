@@ -21,14 +21,6 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
   const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
   const { data: location } = useFetchData("location", EMPLOYEE_WORK_LOCATION_LIST);  
 
-  useEffect(() => {
-    if (department && work_area && location) {
-      setActiveDepartment(department[0]?.id);
-      setActiveWorkArea(work_area?.data?.original?.data[0]?.id);
-      setActiveLocation(location[0]?.id);
-    }
-  }, [department, work_area, location]);
-
   const handleClick = (setter, itemName, currentActive) => {
     setter(currentActive === itemName ? null : itemName);
   };

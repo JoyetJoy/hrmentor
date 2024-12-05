@@ -141,3 +141,13 @@ export const DASHBOARD = "employee-access/dashboard";
 export const CLOCKIN = "employee-current-running-shift";
 //BREAKLIST
 export const BREAKLIST = "employee-shift-break-times";
+//RUNNINGBREAK
+export const RUNNINGBREAK = "employee-running-break";
+//STARTBREAK
+export const STARTBREAK = "employee-start-break";
+//ENDBREAK
+export const ENDBREAK = "employee-running-break-stop";
+//CLOCKOUT
+export const CLOCKOUT = "employee-access/employee-clock-out";
+//AVAILABLE SLOT
+export const AVAILABLE_SLOT = "shift-claim-request";

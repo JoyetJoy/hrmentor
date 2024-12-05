@@ -46,7 +46,7 @@ const EmployeeAccessTeamRoster = () => {
   });
 
   const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year],
+    queryKey: ["events", month, year, activeEmployee, activeDepartment, activeLocation, activeWorkArea],
     queryFn: () =>
       newRequest.get(TEAM_ROSTER_GET, {
         params: { 
@@ -64,7 +64,7 @@ const EmployeeAccessTeamRoster = () => {
   useEffect(() => {
     // Refetch data whenever the `date` changes
     refetch();
-  }, [date, refetch]);
+  }, [date, refetch, activeEmployee, activeDepartment, activeLocation, activeWorkArea]);
   
   
   const handleDateChange = (newDate) => {
@@ -110,14 +110,13 @@ const EmployeeAccessTeamRoster = () => {
     }
   };
 
-  function convertToHourMinutes(time) {
-    if (time) {
-      const [hours, minutes] = time.split(":");
-      return `${hours}:${minutes}`;
-    } else {
-      return "";
-    }
+  function convertTo12HourFormat(time) {
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = ((hours % 12) || 12);  // Convert hours to 12-hour format
+    return `${formattedHours}:${minutes} ${period}`;
   }
+
 
   return (
     <div className="flex flex-col">
@@ -130,6 +129,7 @@ const EmployeeAccessTeamRoster = () => {
         popupOpen={claimPopup}
         setPopupOpen={setClaimPopup}
         selectedField={selectedField}
+        convertTo12HourFormat={convertTo12HourFormat}
       />
       {/* <RequestCalimshift popupOpen={popupOpen} setPopupOpen={setPopupOpen}/> */}
       <MenuHeaderEmployeeAccess
@@ -169,7 +169,7 @@ const EmployeeAccessTeamRoster = () => {
               className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
             />
         <Link
-        to="" 
+        to="/employee-access/roster" 
         className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
           My Roster
         </Link>
@@ -215,8 +215,8 @@ const EmployeeAccessTeamRoster = () => {
                     >
                       <span className="font-semibold flex float-start">{event.shift_name}</span>
                       <span className="flex float-start">
-                        {convertToHourMinutes(event?.shift?.start_time)}-
-                        {convertToHourMinutes(event?.shift?.end_time)}
+                      {convertTo12HourFormat(event?.shift?.start_time)}-
+                      {convertTo12HourFormat(event?.shift?.end_time)}
                       </span>
                     </div>
                   ))}

@@ -1,24 +1,27 @@
-import { BREAKLIST, newRequest } from "@/api";
+import { BREAKLIST, newRequest, STARTBREAK } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 
-export default function StartBreak({ breakpopupOpen, setBreakPopupOpen }) {
+export default function StartBreak({
+  breakpopupOpen,
+  setBreakPopupOpen,
+  attendanceId,
+}) {
   const [selectedBreak, setSelectedBreak] = useState(null);
-  const [note, setNote] = useState("");
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState("");
-  const shiftid = localStorage.getItem('shiftid');
+  const shiftData = JSON.parse(localStorage.getItem("shiftid"));
 
-  // Fetch break list when the popup opens
   const { data: breaklist, refetch } = useQuery({
-    queryKey: ["breaklist", shiftid],
-    queryFn: () => newRequest.get(`${BREAKLIST}/${shiftid}`).then((res) => res.data),
-    enabled: false, // Disabled by default, so it doesn't run on initial render
+    queryKey: ["breaklist", shiftData],
+    queryFn: () =>
+      newRequest.get(`${BREAKLIST}/${shiftData?.id}`).then((res) => res.data),
+    enabled: false,
   });
 
-  // Trigger refetch when the popup is opened
   useEffect(() => {
     if (breakpopupOpen) {
       refetch();
@@ -29,15 +32,27 @@ export default function StartBreak({ breakpopupOpen, setBreakPopupOpen }) {
     setBreakPopupOpen(false);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedBreak) {
       setError("Please select a break time.");
       return;
     }
-    setError("");
-    setLoader(true);
-    // Add form submission logic here
+    const payload = {
+      shift_id: shiftData?.id,
+      roster_id: shiftData?.rosterid,
+      break_id: selectedBreak?.id,
+      attendance_id: attendanceId,
+    };
+
+    const response = await newRequest.post(STARTBREAK, payload);
+    if (response.status === 200) {
+      setBreakPopupOpen(false);
+      toast.success("Start break successfully");
+    } else {
+      setBreakPopupOpen(false);
+      toast.error("Failed to start break, Try again.");
+    }
   };
 
   return (
@@ -69,29 +84,32 @@ export default function StartBreak({ breakpopupOpen, setBreakPopupOpen }) {
                 <div className="mx-auto w-full max-w-md">
                   <div className="space-y-4">
                     {(breaklist || []).map((breakTime) => (
-                      <div
-                        key={breakTime.id}
-                        onClick={() => setSelectedBreak(breakTime)}
-                        className={`cursor-pointer flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
-                          selectedBreak?.id === breakTime.id
-                            ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                            : "border-gray-300 bg-white"
-                        }`}
-                      >
-                        <p className="font-medium text-textcolor-darkCharcoal">
-                          {breakTime.type_name}
-                        </p>
-                        <p className="font-bold text-textcolor-darkCharcoal">
-                          Duration :{breakTime.break_time_duration}
-                        </p>
-                      </div>
+                      <button
+                      key={breakTime.id}
+                      type="button"
+                      onClick={() => setSelectedBreak(breakTime)}
+                      disabled={!breakTime?.break_status}
+                      className={`flex w-full cursor-pointer flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                        selectedBreak?.id === breakTime.id
+                          ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                          : "border-gray-300 bg-white"
+                      } ${!breakTime?.break_status ? "opacity-50 cursor-not-allowed" : ""}`}
+                    >
+                      <p className="font-medium text-textcolor-darkCharcoal">
+                        {breakTime.type_name}
+                      </p>
+                      <p className="font-bold text-textcolor-darkCharcoal">
+                        Duration : {breakTime.break_time_duration}
+                      </p>
+                      {!breakTime?.break_status && (
+                        <p className="text-xs text-red-500">Not Available</p>
+                      )}
+                    </button>
                     ))}
                   </div>
-                </div>          
+                </div>
 
-                {error && (
-                  <p className="text-red-500 text-sm mt-2">{error}</p>
-                )}
+                {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
               </div>
 
               <div className="col-span-2 mt-6 flex w-full flex-row items-center justify-center gap-3">
@@ -106,7 +124,7 @@ export default function StartBreak({ breakpopupOpen, setBreakPopupOpen }) {
                   type="submit"
                   className={`flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md ${
                     loader
-                      ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                      ? "cursor-not-allowed bg-gray-400 text-gray-200"
                       : "bg-hrmblack text-white"
                   } text-sm font-normal focus:outline-none`}
                   disabled={loader}

@@ -32,10 +32,13 @@ const EmployeeAccessRosterCalendar = () => {
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year],
     queryFn: () =>
-      newRequest.get(ROASTER_GET, {
-        params: { month, year },
-      }).then((res) => res.data),
-    enabled: false, // Prevent the query from auto-fetching on mount
+      newRequest
+        .get(ROASTER_GET, {
+          params: { month, year },
+        })
+        .then((res) => res.data),
+        enabled: true,      
+        staleTime: 0,
   });
 
   useEffect(() => {
@@ -43,19 +46,25 @@ const EmployeeAccessRosterCalendar = () => {
     refetch();
   }, [date, refetch]);
 
-
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
     const currentDay = dayjs(date).date();
-  const updatedDate = dayjs(date)
-    .month(selectedOption.value - 1) // Update the month
-    .date(1) // Temporarily set the date to the first day of the month
-    .date(Math.min(currentDay, dayjs(date).month(selectedOption.value - 1).daysInMonth())) // Ensure the date stays valid
-    .toDate();
-  handleDateChange(updatedDate);
+    const updatedDate = dayjs(date)
+      .month(selectedOption.value - 1)
+      .date(1)
+      .date(
+        Math.min(
+          currentDay,
+          dayjs(date)
+            .month(selectedOption.value - 1)
+            .daysInMonth(),
+        ),
+      )
+      .toDate();
+    handleDateChange(updatedDate);
   };
 
   const handleYearChange = (selectedOption) => {
@@ -64,20 +73,31 @@ const EmployeeAccessRosterCalendar = () => {
   };
 
   const getTileClass = (date) => {
-    if (dayjs(date).isSame(dayjs(), "day")) return "bg-green-200 border-green-500";
-    if (dayjs(date).isBefore(dayjs(), "day")) return "bg-blue-200 border-blue-500";
+    if (dayjs(date).isSame(dayjs(), "day"))
+      return "bg-green-200 border-green-500";
+    if (dayjs(date).isBefore(dayjs(), "day"))
+      return "bg-blue-200 border-blue-500";
     return "bg-yellow-200 border-yellow-500";
   };
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const holidayEvents = events.filter((event) =>
-      event?.holidays?.includes(formattedDate)
+    const holidayEvents = events?.result?.filter((event) =>
+      event?.holidays?.includes(formattedDate),
     );
-    const shiftEvents = events.filter((event) =>
-      event?.date_range?.includes(formattedDate)
+    const shiftEvents = events?.result?.filter((event) =>
+      event?.date_range?.includes(formattedDate),
     );
-    return { holidayEvents, shiftEvents };
+
+    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
+
+    const requestedSlots = events?.requested_details?.filter((slot)=>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    )
+
+    return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
 
   const handleClick = (event) => {
@@ -87,13 +107,11 @@ const EmployeeAccessRosterCalendar = () => {
     }
   };
 
-  function convertToHourMinutes(time) {
-    if (time) {
-      const [hours, minutes] = time.split(":");
-      return `${hours}:${minutes}`;
-    } else {
-      return "";
-    }
+  function convertTo12HourFormat(time) {
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${period}`;
   }
 
   return (
@@ -103,14 +121,17 @@ const EmployeeAccessRosterCalendar = () => {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
+        convertTo12HourFormat={convertTo12HourFormat}
       />
       <RequestClaimshift
         popupOpen={claimPopup}
+        refetch={refetch}
         setPopupOpen={setClaimPopup}
         selectedField={selectedField}
+        convertTo12HourFormat={convertTo12HourFormat}
       />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Roster"} />
-      <div className="flex items-center justify-between px-4 py-2 w-full">
+      <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           <h5 className="text-md font-bold">My Roster</h5>
           <Select
@@ -118,7 +139,9 @@ const EmployeeAccessRosterCalendar = () => {
             isSearchable={true}
             onChange={handleYearChange}
             styles={customSelectStyles}
-            value={years.find((yearOption) => yearOption.value === dayjs(date).year())}
+            value={years.find(
+              (yearOption) => yearOption.value === dayjs(date).year(),
+            )}
             placeholder={dayjs(date).format("YYYY")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -127,22 +150,24 @@ const EmployeeAccessRosterCalendar = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
-            value={months.find((monthOption) => monthOption.value === dayjs(date).month() + 1)} 
+            value={months.find(
+              (monthOption) => monthOption.value === dayjs(date).month() + 1,
+            )}
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
         <Link
           to="/employee-access/roster/teamroster"
-          className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
+          className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
         >
           Team Roster
         </Link>
       </div>
 
-      <div className="mb-10 mt-7 w-full max-w-8xl">
+      <div className="max-w-8xl mb-10 mt-7 w-full">
         <Calendar
-          key={date} // Force re-render whenever date changes
+          key={date}
           onChange={handleDateChange}
           value={date}
           showNavigation={false}
@@ -151,29 +176,60 @@ const EmployeeAccessRosterCalendar = () => {
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const { holidayEvents, shiftEvents } = findEvents(date);
+              const { holidayEvents, shiftEvents, availableSlots, requestedSlots } =
+                findEvents(date);
               return (
-                <div className="flex flex-col gap-2">
-                  {holidayEvents.map((event, index) => (
+                <div className="flex flex-col gap-2 h-full overflow-y-auto overflow-y-min ">
+                  {holidayEvents?.map((event, index) => (
                     <div
                       key={index}
-                      className="mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
+                      className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 text-sm text-gray-800 lg:w-36 xl:w-44"
                     >
-                      <span className="font-semibold flex float-start">Holiday</span>
+                      <span className="float-start flex font-semibold ">
+                        Holiday
+                      </span>
                     </div>
                   ))}
-                  {shiftEvents.map((event, index) => (
+                  {shiftEvents?.map((event, index) => (
                     <div
                       key={index}
                       onClick={() => handleClick(event)}
-                      className={`mt-2 flex flex-col h-14 w-auto lg:w-36 xl:w-44 px-3 text-sm border-l-4 rounded-sm ${
-                        getTileClass(date)
-                      } text-gray-800 justify-center`}
+                      className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 text-sm lg:w-36 xl:w-44 ${getTileClass(
+                        date,
+                      )} justify-center text-gray-800`}
                     >
-                      <span className="font-semibold flex float-start">{event.shift_name}</span>
-                      <span className="flex float-start">
-                        {convertToHourMinutes(event?.shift?.start_time)}-
-                        {convertToHourMinutes(event?.shift?.end_time)}
+                      <span className="float-start flex font-semibold">
+                        {event.shift_name}
+                      </span>
+                      <span className="float-start flex">
+                        {convertTo12HourFormat(event?.shift?.start_time)}-
+                        {convertTo12HourFormat(event?.shift?.end_time)}
+                      </span>
+                    </div>
+                  ))}
+                  {/* Available Slots */}
+                  {availableSlots?.map((slot, index) => (
+                    <div
+                      key={`available-slot-${index}`}
+                      onClick={() => {
+                        setClaimPopup(true);
+                        setSelectedField(slot);
+                      }}
+                      className="mt-2 mb-2 flex h-14 w-auto flex-col justify-center rounded-sm bg-[#a3d8f4] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
+                    >
+                      <span className="font-semibold">Available Slot</span>
+                    </div>
+                  ))}
+                  {requestedSlots?.map((event, index) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
+                    >
+                      <span className="float-start flex font-semibold ">
+                        Requested Slot
+                      </span>
+                      <span className="float-start flex">
+                        Status : {event?.requests[0]?.request_status?.status_name}
                       </span>
                     </div>
                   ))}

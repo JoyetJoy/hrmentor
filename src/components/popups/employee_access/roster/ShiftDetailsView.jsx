@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { ROASTER_GET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 
-export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedField }) {
+export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedField, convertTo12HourFormat }) {
 
   const { data, refetch } = useQuery({
     queryKey: ['shiftDetails', selectedField?.id], // Array of query keys
     queryFn: () => newRequest.get(`${ROASTER_GET}/${selectedField?.id}`).then((res) => res.data),
     enabled: !!selectedField,  // Only run query if selectedField is defined
   });
+  
 
   useEffect(() => {
     if (popupOpen && selectedField?.id) {
@@ -26,14 +27,6 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
     const [hours, minutes] = time.split(":");
     return `${hours}:${minutes}`;
   }
-
-  function convertTo12HourFormat(time) {
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = ((hours % 12) || 12);  // Convert hours to 12-hour format
-    return `${formattedHours}:${minutes} ${period}`;
-  }
-  
 
   return (
     <Dialog

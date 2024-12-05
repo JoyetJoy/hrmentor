@@ -6,62 +6,51 @@ import { Menu } from "@headlessui/react";
 import StopBreak from "@/components/popups/employee_access/dashboard/StopBreak";
 import ClockIn from "@/components/popups/employee_access/dashboard/ClockIn";
 import { newRequest, CLOCK_IN } from "@/api/master";
-import { useQuery } from "@tanstack/react-query";
-import { DASHBOARD, CLOCKIN } from "@/api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { DASHBOARD, CLOCKIN, RUNNINGBREAK } from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
+import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
+import { toast } from "react-hot-toast";
 
 export const EmployeeDashboard = () => {
+  const queryClient = useQueryClient();
   const [breakpopupOpen, setBreakPopupOpen] = useState(false);
   const [clockInpopupOpen, setClockInPopupOpen] = useState(false);
   const [loggedTime, setLoggedTime] = useState("00:00:00");
   const [timer, setTimer] = useState("");
+  const [runningbreak, setRunningbreak] = useState(false);
+  const [clockOutPopupOpen, setClockOutPopupOpen] = useState(false);
+  const [breakdata,setBreakdata] = useState('');
 
   // Fetch dashboard data
   const { data: dashboard } = useQuery({
     queryKey: ["dashboard"],
     queryFn: () => newRequest.get(DASHBOARD).then((res) => res.data),
+    enabled: true,      
+    staleTime: 0,
   });
 
   // Fetch clock-in data
-  const { data: clockin } = useQuery({
+  const { data: clockin, refetch } = useQuery({
     queryKey: ["clockin", timer],
     queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data),
-    enabled: !timer,
+    enabled: true,      
+    staleTime: 0,
   });
-
+  
   // Update logged time dynamically
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
-
+  
     const calculateLoggedTime = () => {
-      const currentTimeUTC = new Date().getTime(); // Current time in milliseconds UTC
-      const clockInISOFormat = clockin?.clock_in_time.replace(" ", "T");
-      const clockInDateUTC = new Date(`${clockInISOFormat}Z`).getTime(); // Clock-in time in milliseconds UTC
-
-      if (clockInDateUTC) {
-        const elapsedTime = currentTimeUTC - clockInDateUTC;
-
-        const hours = String(
-          Math.floor((elapsedTime / (1000 * 60 * 60)) % 24),
-        ).padStart(2, "0");
-        const minutes = String(
-          Math.floor((elapsedTime / (1000 * 60)) % 60),
-        ).padStart(2, "0");
-        const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(
-          2,
-          "0",
-        );
-
-        setLoggedTime(`${hours}:${minutes}:${seconds}`);
-      }
+      const clockInDateUTC = new Date(`${clockin?.clock_in_time.replace(" ", "T")}Z`).getTime();
+      const elapsedTime = Date.now() - clockInDateUTC;
+      return new Date(elapsedTime).toISOString().substr(11, 8);
     };
-
-    calculateLoggedTime(); // Run the calculation immediately
-
-    const interval = setInterval(calculateLoggedTime, 1000); // Update every second
-
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, [clockin]);
+  
+    const interval = setInterval(() => setLoggedTime(calculateLoggedTime()), 1000);
+    return () => clearInterval(interval);
+  }, [clockin?.clock_in_time]);
 
   const handleClockIn = async (toOpen) => {
     if (!dashboard) {
@@ -75,18 +64,33 @@ export const EmployeeDashboard = () => {
         const res = await newRequest.post(CLOCK_IN, formData);
 
         if (res?.status === 200) {
-          toast.success("Saved roster details successfully");
-          queryClient.invalidateQueries(["dashboard"]);
-          setPopupOpen(false);
-        } else {
-          setPopupOpen(false);
-          toast.error("Failed to save roster.");
+          toast.success("Clockin successfully");
+          refetch(); 
+          setTimer(res.data);
+         
         }
       } catch (error) {
-        console.error("Failed to save roster:", error);
-        setPopupOpen(false);
-        toast.error("Failed to save roster.");
+        console.error("Failed to clock in:", error);
+        toast.error(error?.response?.data?.message || "Failed to clock in, Try again.");
       }
+    }
+  };
+  const BreakClick = async () => {
+    try {
+      const res = await newRequest.get(RUNNINGBREAK);
+      if (res?.status === 200) {
+        queryClient.invalidateQueries(["runninbreak"]);
+        setBreakdata(res?.data)
+        if (res?.data?.id) {
+          setBreakPopupOpen(true);
+        } else {
+          setRunningbreak(true);
+        }
+      } else {
+        toast.error("Unexpected error occurred while fetching break.");
+      }
+    } catch (error) {
+      console.error("Failed to fetch running break:", error);
     }
   };
 
@@ -100,37 +104,57 @@ export const EmployeeDashboard = () => {
         data={dashboard?.rosterOrShift}
         setTimer={setTimer}
       />
-      <StartBreak
-         breakpopupOpen={breakpopupOpen}
-         setBreakPopupOpen={setBreakPopupOpen}
+      <ClockOut
+        loggedTime={loggedTime}
+        setLoggedTime={setLoggedTime}
+        clockindata={clockin}
+        clockOutPopupOpen={clockOutPopupOpen}
+        setClockOutPopupOpen={setClockOutPopupOpen}
+        setTimer={setTimer}
       />
-      {/* <StopBreak
+      <StartBreak
+        attendanceId={clockin?.id}
+        breakpopupOpen={runningbreak}
+        setBreakPopupOpen={setRunningbreak}
+      />
+      <StopBreak
+        breakdata={breakdata}
         breakpopupOpen={breakpopupOpen}
         setBreakPopupOpen={setBreakPopupOpen}
         loggedTime={loggedTime}
-      /> */}
+      />
       <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
         <aside className="flex min-w-[70%] flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
             <div className="flex items-center gap-3">
-              {clockin?.clock_in_time && (
+              {clockin?.clock_in_time && dashboard?.rosterOrShift && (
                 <Menu as="div" className="relative inline-block text-left">
                   <div
-                    onClick={() => setBreakPopupOpen(true)}
+                    onClick={() => BreakClick()}
                     className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmprimaryorange"
                   >
                     <Menu.Button>Break</Menu.Button>
                   </div>
                 </Menu>
               )}
-              <div
+              {clockin?.clock_in_time ? (
+                <div
+                onClick={() => setClockOutPopupOpen(true)}
+                  className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
+                >
+                  <Clock4 className="size-4" />
+                  Clock Out
+                </div>
+              ) : (
+                <div
                 onClick={handleClockIn}
-                className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
-              >
-                <Clock4 className="size-4" />
-                {clockin?.clock_in_time ? "Clock Out" : "Clock In"}
-              </div>
+                  className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
+                >
+                  <Clock4 className="size-4" />
+                  Clock In
+                </div>
+              )}
               <p className="w-36 text-xs font-semibold text-hrmprimaryorange">
                 Logged Time: {loggedTime || "00:00:00"}
               </p>
