@@ -188,8 +188,8 @@ export default function AdminPayOffView() {
                   </p>
                   <div className="h-px w-full bg-gray-light"></div>
                 </DisclosureButton>
-                <DisclosurePanel className="my-4 text-sm/5 text-black/50">
-                  <QueryTable columns={columns} list="" />
+                <DisclosurePanel className="my-4 text-sm/5 text-black/50 p-7">
+                  <QueryTable columns={columns} list={"NA"} />
                 </DisclosurePanel>
               </Disclosure>
             </div>

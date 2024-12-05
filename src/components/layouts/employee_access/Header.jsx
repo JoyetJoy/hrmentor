@@ -3,7 +3,7 @@ import {
   employeemenuitems,
 } from "@/constants/dummyData";
 import { useUserStore } from "@/lib/slices/auth.slice";
-import { LayoutGrid, MessageSquareText } from "lucide-react";
+import { Bell, LayoutGrid, MessageSquareText } from "lucide-react";
 import React, { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import ProfileDropdown from "../employee_access/ProfileDropdown";
@@ -78,6 +78,9 @@ export default function EmployeeAccessHeader() {
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+            <Bell className="size-5 text-hrmblue" />
+          </div>
           <div
             onClick={handleClick}
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"

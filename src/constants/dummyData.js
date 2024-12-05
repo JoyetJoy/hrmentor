@@ -525,7 +525,7 @@ export const employeemenuitems = [
     id: 5,
     iconType: "image",
     iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
-    iconSrcActive: "/assets/icons/employee_access/header/leave-color.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/leaveColor.svg",
     name: "Leave",
     path: "/employee-access/leave",
     active: "leave",

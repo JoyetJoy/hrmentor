@@ -29,11 +29,7 @@ export default function AdminPaySlip() {
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => (
-          <div className="flex px-2">
-            {row.index + 1}
-          </div>
-        ),
+        cell: ({ row }) => <div className="flex px-2">{row.index + 1}</div>,
       },
       {
         header: "Month",
@@ -44,17 +40,23 @@ export default function AdminPaySlip() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link to="/admin/employee/payslip/payslip-view" className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+            <Link
+              to="/admin/employee/payslip/payslip-view"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
               <Eye className="size-3" />
             </Link>
-            <Link t0="/admin/employee/payslip/payslip-view" className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+            <Link
+              t0="/admin/employee/payslip/payslip-view"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
               <ArrowDownToLine className="size-3" />
             </Link>
           </div>
         ),
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -68,7 +70,7 @@ export default function AdminPaySlip() {
         page={2}
       />
       <div className="flex gap-x-3">
-      <EmployeesSidebar />
+        <EmployeesSidebar />
         <div className="mt-2 w-full">
           <div className="flex items-center justify-between">
             <h5 className="text-lg font-bold">PaySlip</h5>
@@ -97,8 +99,8 @@ export default function AdminPaySlip() {
           </div>
 
           {/* Table */}
-          <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white pb-7">
-            <QueryTable columns={columns} list="" />
+          <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white p-7">
+            <QueryTable columns={columns} list={"NA"} />
           </div>
         </div>
       </div>

@@ -29,11 +29,7 @@ export default function PaySlip() {
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => (
-          <div className="flex px-2">
-            {row.index + 1}
-          </div>
-        ),
+        cell: ({ row }) => <div className="flex px-2 text-end">{row.index + 1}</div>,
       },
       {
         header: "Month",
@@ -43,18 +39,24 @@ export default function PaySlip() {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <Link to="/employee-access/profile/payslip/payslip-view" className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+          <div className="flex items-end gap-2 text-xs">
+            <Link
+              to="/employee-access/profile/payslip/payslip-view"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
               <Eye className="size-3" />
             </Link>
-            <Link to="/employee-access/profile/payslip/payslip-view" className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+            <Link
+              to="/employee-access/profile/payslip/payslip-view"
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
               <ArrowDownToLine className="size-3" />
             </Link>
           </div>
         ),
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -96,8 +98,8 @@ export default function PaySlip() {
           </div>
 
           {/* Table */}
-          <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white pb-7">
-            <QueryTable columns={columns} list="" />
+          <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white p-7">
+            <QueryTable columns={columns} list={"NA"} />
           </div>
         </div>
       </div>

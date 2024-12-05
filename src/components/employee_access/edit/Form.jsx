@@ -39,11 +39,11 @@ export default function ProfileManagmentForm() {
         </div>
         <div className="grid w-full gap-x-3 py-2 lg:grid-cols-2">
           <div
-            className={`flex w-full  flex-col rounded-md border border-gray-soft bg-white px-6 py-6`}
+            className={`flex w-full flex-col rounded-md border border-gray-soft bg-white px-6 py-6`}
           >
             <div className="flex flex-col items-start justify-between gap-7">
               <h1 className="px-3 text-[1.1rem] font-bold">Basic Details</h1>
-              <div className="items-left col-span-4 flex items-center gap-5 space-y-3">
+              <div className="items-left col-span-4 flex items-center gap-2 space-y-3">
                 <div className="h-36 w-36 overflow-hidden rounded-full border-2">
                   <img
                     className="h-full w-full bg-gray-neutral object-cover"
@@ -57,8 +57,8 @@ export default function ProfileManagmentForm() {
               </div>
             </div>
             <div className="mt-4 grid w-full lg:grid-cols-2">
-              <div className="group flex flex-col col-span-2 w-1/2 gap-1.5 px-3 py-2">
-                <label className=" label-text">Gender</label>
+              <div className="group col-span-2 flex w-1/2 flex-col gap-1.5 px-3 py-2">
+                <label className="label-text">Gender</label>
                 <Controller
                   name="gender"
                   className=""
@@ -82,7 +82,7 @@ export default function ProfileManagmentForm() {
               </div>
 
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Date of birth</label>
+                <label className="label-text">Date of birth</label>
                 <input
                   {...register("dob", { required: true })}
                   autoComplete="off"
@@ -96,7 +96,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Blood Group</label>
+                <label className="label-text">Blood Group</label>
                 <Controller
                   name="blood_group"
                   control={control}
@@ -118,7 +118,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Nationality</label>
+                <label className="label-text">Nationality</label>
                 <Controller
                   name="nationality_id"
                   control={control}
@@ -164,7 +164,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">County</label>
+                <label className="label-text">County</label>
                 <Controller
                   name="state_id"
                   control={control}
@@ -175,7 +175,7 @@ export default function ProfileManagmentForm() {
                       placeholder="Search ..."
                       //   loadOptions={loadStatesOptions}
                       isSearchable={true}
-                      noOptionsMessage={() => "type state name"}
+                      noOptionsMessage={() => "type and search"}
                       className="input-box"
                     />
                   )}
@@ -187,7 +187,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Citytown</label>
+                <label className="label-text">Citytown</label>
                 <Controller
                   name="city_id"
                   control={control}
@@ -198,7 +198,7 @@ export default function ProfileManagmentForm() {
                       placeholder="Search ..."
                       //   loadOptions={loadCitiesOptions}
                       isSearchable={true}
-                      noOptionsMessage={() => "type city name"}
+                      noOptionsMessage={() => "type and search"}
                       className="input-box"
                     />
                   )}
@@ -210,21 +210,21 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Post Code</label>
+                <label className="label-text">Post Code</label>
                 <input
                   {...register("post_code", { required: true })}
                   autoComplete="off"
                   type="text"
                   placeholder="Enter Post Code"
+                  className="input-box"
                   onKeyPress={(event) => {
                     if (
-                      !/^[0-9]$/.test(event.key) ||
-                      event.target.value.length >= 6
+                      !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                      event.target.value.replace(/\s/g, "").length >= 6
                     ) {
                       event.preventDefault();
                     }
                   }}
-                  className="input-box"
                 />
                 {errors.post_code && (
                   <span className="text-xs font-medium text-red-500">
@@ -234,9 +234,7 @@ export default function ProfileManagmentForm() {
               </div>
 
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">
-                  National Insurance Number
-                </label>
+                <label className="label-text">National Insurance Number</label>
                 <input
                   {...register("national_insurance_number", {
                     required: true,
@@ -253,7 +251,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className={` label-text`}>Home Address</label>
+                <label className={`label-text`}>Home Address</label>
                 <textarea
                   autoComplete="off"
                   type="text"
@@ -270,7 +268,7 @@ export default function ProfileManagmentForm() {
                 <label
                   className={`label-text flex flex-row items-center justify-between`}
                 >
-                  <p className=" whitespace-nowrap">Communication Address</p>
+                  <p className="whitespace-nowrap">Communication Address</p>
                   <div className="flex gap-1.5">
                     <input
                       type="checkbox"
@@ -327,7 +325,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Role</label>
+                <label className="label-text">Role</label>
                 <Controller
                   name="role_id"
                   className=""
@@ -376,7 +374,7 @@ export default function ProfileManagmentForm() {
               </div>
 
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Date of Joining</label>
+                <label className="label-text">Date of Joining</label>
                 <input
                   {...register("date_of_joining", { required: true })}
                   autoComplete="off"
@@ -447,7 +445,7 @@ export default function ProfileManagmentForm() {
                   onKeyPress={(event) => {
                     if (
                       !/^[0-9]$/.test(event.key) ||
-                      event.target.value.length >= 10
+                      event.target.value.length >= 11
                     ) {
                       event.preventDefault();
                     }
@@ -461,7 +459,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">Marital Status</label>
+                <label className="label-text">Marital Status</label>
                 <Controller
                   name="marital_status"
                   control={control}
@@ -483,9 +481,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">
-                  Personal Email Address{" "}
-                </label>
+                <label className="label-text">Personal Email Address </label>
                 <input
                   {...register("personal_email", { required: true })}
                   autoComplete="off"
@@ -515,9 +511,7 @@ export default function ProfileManagmentForm() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
-                <label className=" label-text">
-                  Pension subscription
-                </label>
+                <label className="label-text">Pension subscription</label>
                 <Controller
                   name="pention_status"
                   control={control}

@@ -478,7 +478,7 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadStatesOptions}
                     isSearchable={true}
-                    noOptionsMessage={() => "type state name"}
+                    noOptionsMessage={() => "type and search"}
                     className="input-box"
                   />
                 )}
@@ -503,7 +503,7 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadCitiesOptions}
                     isSearchable={true}
-                    noOptionsMessage={() => "type city name"}
+                    noOptionsMessage={() => "type and search"}
                     className="input-box"
                   />
                 )}
@@ -524,8 +524,8 @@ export default function RecSaveFormCandidate({ type }) {
                 className="input-box"
                 onKeyPress={(event) => {
                   if (
-                    !/^[a-zA-Z0-9]$/.test(event.key) ||
-                    event.target.value.length >= 6
+                    !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                    event.target.value.replace(/\s/g, "").length >= 6
                   ) {
                     event.preventDefault();
                   }
