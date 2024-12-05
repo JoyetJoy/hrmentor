@@ -18,11 +18,10 @@ function ProfileSidebar({ sidebarList = profileSidebarList }) {
                 "whitespace-nowrap font-bold text-hrmprimaryorange"
               }
             >
-              <Link to={item?.link} className="whitespace-nowrap ">
+              <Link to={item?.link} className="whitespace-nowrap">
                 {item?.name}
               </Link>
             </li>
-           
           );
         })}
       </ul>

@@ -17,19 +17,22 @@ export default function ReferenceEdit({
     control,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(),
   });
 
+  const selectedType = watch("document_type_id");
+
   function close() {
     setPopupOpen(false);
   }
 
   const [isLoading, setIsLoading] = useState();
-  const [loader, setLoder] = useState();
- 
+  const [loader, setLoader] = useState();
+
   return (
     <Dialog
       open={popupOpen}
@@ -66,27 +69,34 @@ export default function ReferenceEdit({
               >
                 <div className="grid grid-cols-1 gap-3 ">
                   <div className="group flex w-full flex-col gap-1">
-                    <label className="label-text ">Type</label>
+                    <label className="label-text">Type</label>
                     <Controller
-                    name="document_type_id"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={true}
-                        styles={customSelectStyles}
-                        placeholder="Select Type"
-                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                      />
-                    )}
-                  />
+                      name="document_type_id"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={[
+                            { label: "Personal", value: "personal" },
+                            { label: "Work", value: "work" },
+                            ,
+                          ]}
+                          placeholder="Select Type"
+                          className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        />
+                      )}
+                    />
                     {errors.type && (
                       <span className="text-xs font-medium text-red-500">
                         {errors.type?.message}
                       </span>
                     )}
                   </div>
+
+                  {/* Always Displayed Fields */}
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Name of the reference
@@ -101,6 +111,7 @@ export default function ReferenceEdit({
                       </span>
                     )}
                   </div>
+
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Personal Email Address
@@ -115,6 +126,55 @@ export default function ReferenceEdit({
                       </span>
                     )}
                   </div>
+
+                  {/* Conditionally Displayed Fields */}
+                  {selectedType?.value === "work" && (
+                    <>
+                      <div className="group flex flex-col space-y-1">
+                        <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                          Company Name
+                        </label>
+                        <input
+                          {...register("company_name", { required: true })}
+                          className="input-box h-10 w-full"
+                        />
+                        {errors.company_name && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.company_name?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="group flex flex-col space-y-1">
+                        <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                          Designation
+                        </label>
+                        <input
+                          {...register("designation", { required: true })}
+                          className="input-box h-10 w-full"
+                        />
+                        {errors.designation && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.designation?.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className="group flex flex-col space-y-1">
+                        <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                          Company Email Address
+                        </label>
+                        <input
+                          {...register("company_email", { required: true })}
+                          className="input-box h-10 w-full"
+                        />
+                        {errors.company_email && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors.company_email?.message}
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  )}
+
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Contact Number
