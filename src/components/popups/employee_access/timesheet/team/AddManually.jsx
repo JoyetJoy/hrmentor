@@ -47,15 +47,6 @@ export default function TeamAddManually({ popupOpen, setPopupOpen }) {
                   </span>
                 )} */}
                 </div>
-                <div className="group col-span-2 flex flex-col gap-1">
-                  <label className="label-text">Total working Hours</label>
-                  <input autoComplete="off" type="text" className="input-box" />
-                  {/* {errors.total_hr && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.total_hr?.message}
-                  </span>
-                )} */}
-                </div>
                 <div className="group flex flex-col gap-1">
                   <label className="label-text">Clock in</label>
                   <input autoComplete="off" type="text" className="input-box" />
@@ -75,6 +66,15 @@ export default function TeamAddManually({ popupOpen, setPopupOpen }) {
                 )} */}
                 </div>
                 <div className="group col-span-2 flex flex-col gap-1">
+                  <label className="label-text">Total working Hours</label>
+                  <input autoComplete="off" type="text" className="input-box" />
+                  {/* {errors.total_hr && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.total_hr?.message}
+                  </span>
+                )} */}
+                </div>
+                <div className="group col-span-2 flex flex-col gap-1">
                   <label className="label-text">Overtime</label>
                   <input autoComplete="off" type="text" className="input-box" />
                   {/* {errors.overtime && (
@@ -82,20 +82,6 @@ export default function TeamAddManually({ popupOpen, setPopupOpen }) {
                     {errors.overtime?.message}
                   </span>
                 )} */}
-                </div>
-                <div className="group col-span-2 flex flex-col gap-1">
-                  <label className="label-text">Break Time(Duration)</label>
-                  <input autoComplete="off" type="text" className="input-box" />
-                  {/* {errors.overtime && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.overtime?.message}
-                  </span>
-                )} */}
-                </div>
-                <div className="col-span-2 my-2 flex items-center gap-2">
-                  <p className="w-full border border-b"></p>
-                  <p className="text-xs text-textcolor-darkCharcoal">or</p>
-                  <p className="border-b-1 w-full border"></p>
                 </div>
                 <div className="group flex flex-col gap-1">
                   <label className="label-text">Break Time start</label>
@@ -112,6 +98,20 @@ export default function TeamAddManually({ popupOpen, setPopupOpen }) {
                   {/* {errors.time_end && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.time_end?.message}
+                  </span>
+                )} */}
+                </div>
+                <div className="col-span-2 my-2 flex items-center gap-2">
+                  <p className="w-full border border-b"></p>
+                  <p className="text-xs text-textcolor-darkCharcoal">or</p>
+                  <p className="border-b-1 w-full border"></p>
+                </div>
+                <div className="group col-span-2 flex flex-col gap-1">
+                  <label className="label-text">Break Time(Duration)</label>
+                  <input autoComplete="off" type="text" className="input-box" />
+                  {/* {errors.overtime && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.overtime?.message}
                   </span>
                 )} */}
                 </div>
@@ -132,10 +132,10 @@ export default function TeamAddManually({ popupOpen, setPopupOpen }) {
                   </button>
                 </div>
               </div>
-              <div className=" flex flex-col gap-4">
-                <div className=" flex flex-col gap-1">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
                   <label className="label-text">Search employee</label>
-                  <label className="input-box flex  items-center gap-2 rounded-md bg-white px-4 outline-none">
+                  <label className="input-box flex items-center gap-2 rounded-md bg-white px-4 outline-none">
                     <Search className="size-4 object-contain text-[#A7A7A7]" />
                     <input
                       type="text"

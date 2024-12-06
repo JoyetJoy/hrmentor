@@ -10,8 +10,8 @@ export default function StatsCard() {
           key={index}
           className="flex w-full flex-col items-start rounded-md border border-black/10 bg-white px-5 py-4"
         >
-          <div className="mb-4 flex items-center gap-2 flex-wrap">
-            <h2 className="min-w-fit  flex text-sm font-semibold text-black">
+          <div className="mb-4 flex items-center gap-2">
+            <h2 className="flex text-sm font-semibold text-black flex-wrap">
               {stat.title}
             </h2>
             <span
