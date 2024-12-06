@@ -190,7 +190,7 @@ const EmployeeAccessRosterCalendar = () => {
                       </span>
                     </div>
                   ))}
-                  {shiftEvents?.map((event, index) => (
+                  {shiftEvents?.slice(0, 2)?.map((event, index) => (
                     <div
                       key={index}
                       onClick={() => handleClick(event)}
@@ -207,6 +207,20 @@ const EmployeeAccessRosterCalendar = () => {
                       </span>
                     </div>
                   ))}
+
+                  {/* "Count More" Button */}
+                  {shiftEvents?.length > 2 && (
+                    <button
+                      onClick={() => {
+                        setSelectedField({ date, shiftEvents });
+                        setPopupOpen(true);
+                      }}
+                      className="mt-2 flex h-10 items-center justify-center rounded-sm bg-gray-200 px-3 py-1 text-sm text-gray-800 hover:bg-gray-300"
+                    >
+                      +{shiftEvents.length - 2} More
+                    </button>
+                  )}
+
                   {/* Available Slots */}
                   {availableSlots?.map((slot, index) => (
                     <div
@@ -220,6 +234,7 @@ const EmployeeAccessRosterCalendar = () => {
                       <span className="font-semibold">Available Slot</span>
                     </div>
                   ))}
+                  
                   {requestedSlots?.map((event, index) => (
                     <div
                       key={index}
