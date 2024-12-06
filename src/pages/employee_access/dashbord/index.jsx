@@ -123,8 +123,8 @@ export const EmployeeDashboard = () => {
         setBreakPopupOpen={setBreakPopupOpen}
         loggedTime={loggedTime}
       />
-      <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
-        <aside className="flex min-w-[70%] flex-col gap-3">
+      <div className="my-3 flex items-baseline justify-between  rounded-md">
+        <aside className="flex min-w-[72%] flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
             <div className="flex items-center gap-3">
@@ -168,7 +168,7 @@ export const EmployeeDashboard = () => {
               </label>
             </div>
           </div>
-          <div className="ml-4 grid grid-cols-2 items-center justify-center gap-4">
+          <div className="grid grid-cols-2 items-center justify-center gap-4">
             <div className="flex flex-col gap-2 rounded-md bg-white p-9">
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">
@@ -449,9 +449,9 @@ export const EmployeeDashboard = () => {
             </div>
           </div>
         </aside>
-        <aside className="flex w-[27%] flex-col">
+        <aside className="flex w-[27%] flex-col gap-4">
           <LeaveAvailability />
-          <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
+          <div className=" rounded-md bg-white p-6 shadow-sm">
             <h1 className="mb-4 text-lg font-semibold text-black">
               News & Events
             </h1>

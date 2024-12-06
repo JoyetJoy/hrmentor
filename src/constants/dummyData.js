@@ -525,7 +525,7 @@ export const employeemenuitems = [
     id: 5,
     iconType: "image",
     iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
-    iconSrcActive: "/assets/icons/employee_access/header/leave-color.svg",
+    iconSrcActive: "/assets/icons/employee_access/header/leaveColor.svg",
     name: "Leave",
     path: "/employee-access/leave",
     active: "leave",
@@ -538,7 +538,7 @@ export const employeemenuitems = [
 export const employeeAccessActivityList =[
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
-  { icon: "/assets/icons/admin/project.svg", label: "Payroll", path: "/employee-access/payroll",},
+  { icon: "/assets/icons/admin/project.svg", label: "Payroll", path: "/employee-access/payroll/dashboard",},
 ] 
 export const employeeaccessItems = [
   {

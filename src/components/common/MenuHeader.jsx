@@ -2,6 +2,8 @@ import { recruiterMenu } from "@/constants/menus/recruiter";
 import { leaveMenu } from "@/constants/menus/leave";
 import { employeeMenu } from "@/constants/menus/employee";
 import { AccountManngerMenu } from "@/constants/menus/employee";
+import { PaysilpMenu } from "@/constants/menus/employee";
+
 import { ArrowLeft, ChevronRight, User } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -21,15 +23,17 @@ MenuHeader(props) {
     centertext,
   } = props;
 
-  const currentMenu = location.pathname.includes("/admin/recruiter")
+  const currentMenu = location.pathname.includes("/admin/employee/payslip")
+    ? PaysilpMenu 
+    : location.pathname.includes("/admin/recruiter")
     ? recruiterMenu
     : location.pathname.includes("/admin/employee")
-      ? employeeMenu
-      : ["/admin/role", "/admin/subscription"].some((path) =>
-            location.pathname.includes(path),
-          )
-        ? AccountManngerMenu
-        : [];
+    ? employeeMenu
+    : ["/admin/role", "/admin/subscription"].some((path) =>
+        location.pathname.includes(path),
+      )
+    ? AccountManngerMenu
+    : [];
 
   const menuItem = currentMenu.find((item) => item.name === activeSubMenu);
   const defaultActiveMenu = activeSubMenu;
@@ -42,6 +46,8 @@ MenuHeader(props) {
     "Add Employee",
     "Employee Detail",
     "Roster List",
+    "PaySlip",
+    "PayOff"
   ].includes(currentpath);
 
   return (
@@ -52,14 +58,12 @@ MenuHeader(props) {
         <div
           className={`flex items-center justify-between text-sm font-semibold text-textcolor-blue`}
         >
-          
             <ArrowLeft
               onClick={() => {
                 history.back();
               }}
               className="mr-2 size-4 cursor-pointer"
             />
-          
           {menu}
           <ChevronRight className="size-3" />
           <Link className="capitalize" to={`/admin/${subMenu}`}>

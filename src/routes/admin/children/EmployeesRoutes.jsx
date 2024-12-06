@@ -21,8 +21,11 @@ import { EmployeeEeoCategory } from "@/pages/admin/menu/employee/settings/EeoCat
 import { EmployeeEthncity } from "@/pages/admin/menu/employee/settings/Ethnicity";
 import { EmployeeWorkLocation } from "@/pages/admin/menu/employee/settings/WorkLocation";
 import EmployeeDetails from "@/pages/admin/menu/employee/view/Detail";
-import { Payslip } from "@/pages/admin/menu/employee/view/Payslip";
 import EmployeeActivitylogDetails from "@/pages/admin/menu/employee/view/Activitylog";
+import AdminPaySlip from "@/pages/admin/menu/employee/edit/paySlip";
+import AdminPayOff from "@/pages/admin/menu/employee/edit/paySlip/PayOff";
+import AdminPayOffView from "@/pages/admin/menu/employee/edit/paySlip/PayOffView";
+import AdminPaySlipView from "@/pages/admin/menu/employee/edit/paySlip/PaySlipView";
 
 export const EmployeeRoutes = [
   {
@@ -91,7 +94,24 @@ export const EmployeeRoutes = [
   },
   {
     path: "payslip",
-    element: <Payslip />,
+    children: [
+      {
+        path: "",
+        element: <AdminPaySlip />,
+      },
+      {
+        path: "payoff",
+        element: <AdminPayOff />,
+      },
+      {
+        path: "payoff-view",
+        element: <AdminPayOffView />,
+      },
+      {
+        path: "payslip-view",
+        element: <AdminPaySlipView />,
+      },
+    ],
   },
   {
     path: "settings",

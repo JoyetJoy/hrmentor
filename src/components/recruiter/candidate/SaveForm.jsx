@@ -60,13 +60,16 @@ export default function RecSaveFormCandidate({ type }) {
       }),
     enabled: type == "update",
   });
- console.log(candidateDetails?.data);
- 
-  useEffect(()=>{
-    if(candidateDetails){
-      localStorage.setItem("candidateDetails", JSON.stringify(candidateDetails?.data));
+  console.log(candidateDetails?.data);
+
+  useEffect(() => {
+    if (candidateDetails) {
+      localStorage.setItem(
+        "candidateDetails",
+        JSON.stringify(candidateDetails?.data),
+      );
     }
-  },[])
+  }, []);
 
   const [sameAsHome, setSameAsHome] = useState(false);
   const { country_id, state_or_province, home_address } = watch();
@@ -369,7 +372,7 @@ export default function RecSaveFormCandidate({ type }) {
                 onKeyPress={(event) => {
                   if (
                     !/^[0-9]$/.test(event.key) ||
-                    event.target.value.length >= 10
+                    event.target.value.length >= 11
                   ) {
                     event.preventDefault();
                   }
@@ -429,7 +432,7 @@ export default function RecSaveFormCandidate({ type }) {
                 {...register("date_of_birth", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box"
+                className="input-box pr-2"
               />
               {errors.date_of_birth && (
                 <span className="text-xs font-medium text-red-500">
@@ -475,7 +478,7 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadStatesOptions}
                     isSearchable={true}
-                    noOptionsMessage={() => "type state name"}
+                    noOptionsMessage={() => "type and search"}
                     className="input-box"
                   />
                 )}
@@ -500,7 +503,7 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadCitiesOptions}
                     isSearchable={true}
-                    noOptionsMessage={() => "type city name"}
+                    noOptionsMessage={() => "type and search"}
                     className="input-box"
                   />
                 )}
@@ -518,15 +521,15 @@ export default function RecSaveFormCandidate({ type }) {
                 autoComplete="off"
                 type="text"
                 placeholder="Enter Post Code"
+                className="input-box"
                 onKeyPress={(event) => {
                   if (
-                    !/^[0-9]$/.test(event.key) ||
-                    event.target.value.length >= 6
+                    !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                    event.target.value.replace(/\s/g, "").length >= 6
                   ) {
                     event.preventDefault();
                   }
                 }}
-                className="input-box"
               />
               {errors.post_code && (
                 <span className="text-xs font-medium text-red-500">
@@ -680,7 +683,7 @@ export default function RecSaveFormCandidate({ type }) {
                 {...register("date_applied", { required: true })}
                 autoComplete="off"
                 type="date"
-                className="input-box"
+                className="input-box pr-2"
               />
               {errors.date_applied && (
                 <span className="text-xs font-medium text-red-500">

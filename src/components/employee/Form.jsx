@@ -292,7 +292,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const onSubmit = (data) => {
     setLoader(true);
     console.log(data.role_id);
-    
+
     handleEmployee(data);
   };
 
@@ -517,7 +517,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("dob", { required: true })}
                     autoComplete="off"
                     type="date"
-                    className="input-box"
+                    className="input-box pr-2"
                   />
                   {errors.dob && (
                     <span className="text-xs font-medium text-red-500">
@@ -650,8 +650,8 @@ export default function SaveEmployeeForm({ formtype }) {
                     placeholder="Enter Post Code"
                     onKeyPress={(event) => {
                       if (
-                        !/^[0-9]$/.test(event.key) ||
-                        event.target.value.length >= 6
+                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                        event.target.value.replace(/\s/g, "").length >= 6
                       ) {
                         event.preventDefault();
                       }
@@ -894,7 +894,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("date_of_joining", { required: true })}
                     autoComplete="off"
                     type="date"
-                    className="input-box"
+                    className="input-box pr-2"
                   />
                   {errors.date_of_joining && (
                     <span className="text-xs font-medium text-red-500">
@@ -978,7 +978,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     onKeyPress={(event) => {
                       if (
                         !/^[0-9]$/.test(event.key) ||
-                        event.target.value.length >= 10
+                        event.target.value.length >= 11
                       ) {
                         event.preventDefault();
                       }

@@ -847,6 +847,14 @@ function RecruiterJobPost() {
                     autoComplete="off"
                     type="text"
                     className="input-box"
+                    onKeyPress={(event) => {
+                      if (
+                        !/^[a-zA-Z0-9]$/.test(event.key) ||
+                        event.target.value.length >= 6
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
                   />
                   {errors.postal_code && (
                     <span className="text-xs font-medium text-red-500">
@@ -923,7 +931,7 @@ function RecruiterJobPost() {
                           type="button"
                           disabled={job_code}
                           onClick={generateJobCode}
-                          className="w-fit text-[0.8rem] font-medium text-hrmprimaryorange"
+                          className="w-fit text-[0.8rem] font-medium text-hrmprimaryorange pr-2"
                         >
                           Generate
                         </button>
