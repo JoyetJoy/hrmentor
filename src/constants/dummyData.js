@@ -337,7 +337,9 @@ export const rosterHeaderList = [
 export const activityItems = [
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
-  { icon: "/assets/icons/admin/payroll.svg", label: "Payroll" ,path: "/admin/payroll/dashboard"},
+  { icon: "/assets/icons/admin/payroll.svg", 
+    label: "Payroll" ,
+    path: "/admin/payroll"},
   {
     icon: "/assets/icons/admin/leaveday.svg",
     label: "Leave",

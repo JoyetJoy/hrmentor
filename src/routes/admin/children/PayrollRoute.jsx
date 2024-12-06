@@ -5,7 +5,7 @@ import PayrollSettings from "@/pages/admin/Payroll/payroll_settings";
 
 export const PayrollRoute = [
   {
-    path: "dashboard",
+    path: "",
     element: <Payroll />,
   },
   {
