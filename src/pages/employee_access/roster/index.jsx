@@ -37,8 +37,8 @@ const EmployeeAccessRosterCalendar = () => {
           params: { month, year },
         })
         .then((res) => res.data),
-        enabled: true,      
-        staleTime: 0,
+    enabled: true,
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -93,9 +93,9 @@ const EmployeeAccessRosterCalendar = () => {
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
 
-    const requestedSlots = events?.requested_details?.filter((slot)=>
+    const requestedSlots = events?.requested_details?.filter((slot) =>
       dayjs(slot.date).isSame(dayjs(date), "day"),
-    )
+    );
 
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
@@ -157,12 +157,28 @@ const EmployeeAccessRosterCalendar = () => {
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
-        <Link
-          to="/employee-access/roster/teamroster"
-          className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
-        >
-          Team Roster
-        </Link>
+        <div className="flex items-center gap-14">
+          <div className="flex items-center gap-5">
+            <div className="flex items-center gap-2 text-sm">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white">
+                A
+              </p>
+              <p>Available slot</p>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#db0000] pt-[0.02rem] font-extrabold text-white">
+                R
+              </p>
+              <p>Requested slot</p>
+            </div>
+          </div>
+          <Link
+            to="/employee-access/roster/teamroster"
+            className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
+          >
+            Team Roster
+          </Link>
+        </div>
       </div>
 
       <div className="max-w-8xl mb-10 mt-7 w-full">
@@ -176,37 +192,46 @@ const EmployeeAccessRosterCalendar = () => {
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
-              const { holidayEvents, shiftEvents, availableSlots, requestedSlots } =
-                findEvents(date);
+              const {
+                holidayEvents,
+                shiftEvents,
+                availableSlots,
+                requestedSlots,
+              } = findEvents(date);
               return (
-                <div className="flex flex-col h-full overflow-y-auto overflow-y-min ">
-                  {holidayEvents?.map((event, index) => (
-                    <div
-                      key={index}
-                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 text-[12px] text-gray-800 lg:w-36 xl:w-44"
-                    >
-                      <span className="float-start flex font-semibold">
-                        Holiday
-                      </span>
+                <div className="overflow-y-min flex h-full flex-col overflow-y-auto">
+                  <>
+                    <div className="flex flex-col items-end">
+                      {holidayEvents?.length === 0 && (
+                        <p
+                          className={`flex min-h-7 w-7 items-center justify-center rounded-full pl-[0.10rem] pt-[0.15rem] font-extrabold text-white ${
+                            requestedSlots?.length > 0
+                              ? "bg-[#db0000]"
+                              : "bg-[#00B448]"
+                          }`}
+                        >
+                          {requestedSlots?.length > 0 ? "R" : "A"}
+                        </p>
+                      )}
                     </div>
-                  ))}
-                  {shiftEvents?.slice(0, 2)?.map((event, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleClick(event)}
-                      className={`mt-2 flex h-11 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
-                        date,
-                      )} justify-center text-gray-800`}
-                    >
-                      <span className="float-start flex font-semibold text-[12px]">
-                        {event.shift_name}
-                      </span>
-                      <span className="float-start flex text-[10px]">
-                        {convertTo12HourFormat(event?.shift?.start_time)}-
-                        {convertTo12HourFormat(event?.shift?.end_time)}
-                      </span>
-                    </div>
-                  ))}
+                    {shiftEvents?.slice(0, 2)?.map((event, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleClick(event)}
+                        className={`mt-2 flex h-11 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                          date,
+                        )} justify-center text-gray-800`}
+                      >
+                        <span className="float-start flex text-[12px] font-semibold">
+                          {event.shift_name}
+                        </span>
+                        <span className="float-start flex text-[10px]">
+                          {convertTo12HourFormat(event?.shift?.start_time)}-
+                          {convertTo12HourFormat(event?.shift?.end_time)}
+                        </span>
+                      </div>
+                    ))}
+                  </>
 
                   {/* "Count More" Button */}
                   {/* {shiftEvents?.length > 2 && (
@@ -222,6 +247,18 @@ const EmployeeAccessRosterCalendar = () => {
                   )} */}
 
                   {/* Available Slots */}
+
+                  {holidayEvents?.map((event, index) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 text-[12px] text-gray-800 lg:w-36 xl:w-44"
+                    >
+                      <span className="float-start flex font-semibold">
+                        Holiday
+                      </span>
+                    </div>
+                  ))}
+
                   {availableSlots?.map((slot, index) => (
                     <div
                       key={`available-slot-${index}`}
@@ -229,22 +266,23 @@ const EmployeeAccessRosterCalendar = () => {
                         setClaimPopup(true);
                         setSelectedField(slot);
                       }}
-                      className="mt-2 mb-2 flex h-11 w-auto flex-col justify-center rounded-sm bg-[#a3d8f4] px-3 py-4 text-[12px] text-gray-800 lg:w-36 xl:w-44"
+                      className="mb-2 mt-2 flex h-11 w-auto items-center justify-between rounded-sm bg-[#a3d8f4] px-3 py-4 text-left text-[12px] text-gray-800 lg:w-36 xl:w-44"
                     >
                       <span className="font-semibold">Available Slot</span>
                     </div>
                   ))}
-                  
+
                   {requestedSlots?.map((event, index) => (
                     <div
                       key={index}
                       className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
                     >
-                      <span className="float-start flex font-semibold text-[12px] ">
+                      <span className="float-start flex text-[12px] font-semibold">
                         Requested Slot
                       </span>
                       <span className="float-start flex text-[10px]">
-                        Status : {event?.requests[0]?.request_status?.status_name}
+                        Status :{" "}
+                        {event?.requests[0]?.request_status?.status_name}
                       </span>
                     </div>
                   ))}
