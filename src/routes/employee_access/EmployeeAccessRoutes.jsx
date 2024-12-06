@@ -6,7 +6,7 @@ import { RosterRoutes } from "./children/RosterRoute";
 import { TimeSheetRoutes } from "./children/TimeSheetRoute";
 import { LeaveRoute } from "./children/LeaveRoute";
 import { ProfileRoutes } from "./children/ProfileRoutes";
-import { PayrollRoute } from "./children/PayrollRoute";
+import { PayrollRoute } from "../admin/children/PayrollRoute";
 
 
 
@@ -34,10 +34,6 @@ export const EmployeeAccessRoutes = [
   {
     path: "profile",
     children: ProfileRoutes,
-  },
-  {
-    path: "payroll",
-    children: PayrollRoute,
   },
   {
     path: "*",

@@ -179,13 +179,13 @@ const EmployeeAccessRosterCalendar = () => {
               const { holidayEvents, shiftEvents, availableSlots, requestedSlots } =
                 findEvents(date);
               return (
-                <div className="flex flex-col gap-2 h-full overflow-y-auto overflow-y-min ">
+                <div className="flex flex-col h-full overflow-y-auto overflow-y-min ">
                   {holidayEvents?.map((event, index) => (
                     <div
                       key={index}
-                      className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 text-sm text-gray-800 lg:w-36 xl:w-44"
+                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 text-[12px] text-gray-800 lg:w-36 xl:w-44"
                     >
-                      <span className="float-start flex font-semibold ">
+                      <span className="float-start flex font-semibold">
                         Holiday
                       </span>
                     </div>
@@ -194,14 +194,14 @@ const EmployeeAccessRosterCalendar = () => {
                     <div
                       key={index}
                       onClick={() => handleClick(event)}
-                      className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 text-sm lg:w-36 xl:w-44 ${getTileClass(
+                      className={`mt-2 flex h-11 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
                         date,
                       )} justify-center text-gray-800`}
                     >
-                      <span className="float-start flex font-semibold">
+                      <span className="float-start flex font-semibold text-[12px]">
                         {event.shift_name}
                       </span>
-                      <span className="float-start flex">
+                      <span className="float-start flex text-[10px]">
                         {convertTo12HourFormat(event?.shift?.start_time)}-
                         {convertTo12HourFormat(event?.shift?.end_time)}
                       </span>
@@ -209,7 +209,7 @@ const EmployeeAccessRosterCalendar = () => {
                   ))}
 
                   {/* "Count More" Button */}
-                  {shiftEvents?.length > 2 && (
+                  {/* {shiftEvents?.length > 2 && (
                     <button
                       onClick={() => {
                         setSelectedField({ date, shiftEvents });
@@ -219,7 +219,7 @@ const EmployeeAccessRosterCalendar = () => {
                     >
                       +{shiftEvents.length - 2} More
                     </button>
-                  )}
+                  )} */}
 
                   {/* Available Slots */}
                   {availableSlots?.map((slot, index) => (
@@ -229,7 +229,7 @@ const EmployeeAccessRosterCalendar = () => {
                         setClaimPopup(true);
                         setSelectedField(slot);
                       }}
-                      className="mt-2 mb-2 flex h-14 w-auto flex-col justify-center rounded-sm bg-[#a3d8f4] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
+                      className="mt-2 mb-2 flex h-11 w-auto flex-col justify-center rounded-sm bg-[#a3d8f4] px-3 py-4 text-[12px] text-gray-800 lg:w-36 xl:w-44"
                     >
                       <span className="font-semibold">Available Slot</span>
                     </div>
@@ -238,12 +238,12 @@ const EmployeeAccessRosterCalendar = () => {
                   {requestedSlots?.map((event, index) => (
                     <div
                       key={index}
-                      className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
+                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
                     >
-                      <span className="float-start flex font-semibold ">
+                      <span className="float-start flex font-semibold text-[12px] ">
                         Requested Slot
                       </span>
-                      <span className="float-start flex">
+                      <span className="float-start flex text-[10px]">
                         Status : {event?.requests[0]?.request_status?.status_name}
                       </span>
                     </div>

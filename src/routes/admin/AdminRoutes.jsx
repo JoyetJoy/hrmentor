@@ -11,6 +11,7 @@ import ProfileManagement from "@/pages/admin/dashboard/profile-management";
 import { SetupRoutes } from "./children/SetupRoutes";
 import { ShiftRoutes } from "./children/ShiftRoutes";
 import { RosterRoutes } from "./children/RosterRoutes";
+import { PayrollRoute } from "./children/PayrollRoute";
 
 export const AdminRoutes = [
   {
@@ -64,6 +65,10 @@ export const AdminRoutes = [
   {
     path:"/admin/roster",
     children:RosterRoutes
+  },
+  {
+    path: "/admin/payroll",
+    children: PayrollRoute,
   },
 
 ];
