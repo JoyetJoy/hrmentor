@@ -156,7 +156,7 @@ function RecViewJobDetail() {
       <div className="my-3 flex flex-row gap-2">
         <RecruiterSideBar jid={jid} jobDetailView={jobDetailView} />
         <div className="w-full rounded-md bg-white p-7">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-3">
             <h1 className="text-base font-bold">Candidate</h1>
             <div className="flex items-center gap-3">
               <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">

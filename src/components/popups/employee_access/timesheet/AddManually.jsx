@@ -36,20 +36,6 @@ export default function AddManually({ popupOpen, setPopupOpen }) {
               <div className="group col-span-2 flex flex-col gap-1">
                 <label className="label-text">Date</label>
                 <input autoComplete="off" type="date" className="input-box pr-2" />
-                {/* {errors.date && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.date?.message}
-                  </span>
-                )} */}
-              </div>
-              <div className="group col-span-2 flex flex-col gap-1 ">
-                <label className="label-text">Total working Hours</label>
-                <input autoComplete="off" type="text" className="input-box" />
-                {/* {errors.total_hr && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.total_hr?.message}
-                  </span>
-                )} */}
               </div>
               <div className="group flex flex-col gap-1">
                 <label className="label-text">Clock in</label>
@@ -69,6 +55,15 @@ export default function AddManually({ popupOpen, setPopupOpen }) {
                   </span>
                 )} */}
               </div>
+              <div className="group col-span-2 flex flex-col gap-1 ">
+                <label className="label-text">Total working Hours</label>
+                <input autoComplete="off" type="text" className="input-box" />
+                {/* {errors.total_hr && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.total_hr?.message}
+                  </span>
+                )} */}
+              </div>
               <div className="group col-span-2 flex flex-col gap-1">
                 <label className="label-text">Overtime</label>
                 <input autoComplete="off" type="text" className="input-box" />
@@ -77,20 +72,6 @@ export default function AddManually({ popupOpen, setPopupOpen }) {
                     {errors.overtime?.message}
                   </span>
                 )} */}
-              </div>
-              <div className="group col-span-2 flex flex-col gap-1">
-                <label className="label-text">Break Time(Duration)</label>
-                <input autoComplete="off" type="text" className="input-box" />
-                {/* {errors.overtime && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.overtime?.message}
-                  </span>
-                )} */}
-              </div>
-              <div className="flex col-span-2 items-center gap-2 my-2">
-                <p className="border border-b w-full "></p>
-                <p className="text-xs text-textcolor-darkCharcoal">or</p>
-                <p className="border border-b-1 w-full "></p>
               </div>
               <div className="group flex flex-col gap-1">
                 <label className="label-text">Break Time start</label>
@@ -107,6 +88,20 @@ export default function AddManually({ popupOpen, setPopupOpen }) {
                 {/* {errors.time_end && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.time_end?.message}
+                  </span>
+                )} */}
+              </div>
+              <div className="flex col-span-2 items-center gap-2 my-2">
+                <p className="border border-b w-full "></p>
+                <p className="text-xs text-textcolor-darkCharcoal">or</p>
+                <p className="border border-b-1 w-full "></p>
+              </div>
+              <div className="group col-span-2 flex flex-col gap-1">
+                <label className="label-text">Break Time(Duration)</label>
+                <input autoComplete="off" type="text" className="input-box" />
+                {/* {errors.overtime && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.overtime?.message}
                   </span>
                 )} */}
               </div>
