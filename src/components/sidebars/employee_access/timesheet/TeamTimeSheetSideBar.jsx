@@ -4,8 +4,9 @@ import Select from "react-select";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Search } from "lucide-react";
+import dayjs from "dayjs";
 
-export default function TeamTimeSheetSideBar() {
+export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChange,selectedWeek,handleMonthChange,date,handleYearChange}) {
   const {
     register,
     handleSubmit,
@@ -20,6 +21,8 @@ export default function TeamTimeSheetSideBar() {
     reValidateMode: "onChange",
     resolver: yupResolver(),
   });
+  console.log(years,date);
+  
   return (
     <div className="min-h-full min-w-64 rounded-md bg-white">
       <div className="w-full rounded-md bg-white px-5 py-7">
@@ -29,72 +32,45 @@ export default function TeamTimeSheetSideBar() {
         <div>
           <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className="label-text">Year</label>
-            <Controller
-              name="year"
-              className=""
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  isSearchable={true}
-                  styles={customSelectStyles}
-                  placeholder="Select"
-                  className="input-box"
-                />
+            <Select
+              options={years}
+              isSearchable={true}
+              onChange={handleYearChange}
+              styles={customSelectStyles}
+              value={years.find(
+                (yearOption) => yearOption.value === dayjs(date).year(),
               )}
+              placeholder={dayjs(date).format("YYYY")}
+              className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
             />
-            {errors.year && (
-              <span className="text-xs font-medium text-red-500">
-                {errors.year.message}
-              </span>
-            )}
           </div>
           <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className=" label-text">Month</label>
-            <Controller
-              name="month"
-              className=""
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  isSearchable={true}
-                  styles={customSelectStyles}
-                  placeholder="Select"
-                  className="input-box"
-                />
+            <Select
+              options={months}
+              isSearchable={true}
+              onChange={handleMonthChange}
+              styles={customSelectStyles}
+              value={months.find(
+                (monthOption) => monthOption.value === dayjs(date).month(),
               )}
+              placeholder={dayjs(date).format("MMMM")}
+              className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
             />
-            {errors.month && (
-              <span className="text-xs font-medium text-red-500">
-                {errors.month.message}
-              </span>
-            )}
           </div>
           <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className=" label-text">Week</label>
-            <Controller
-              name="week"
-              className=""
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  isSearchable={true}
-                  styles={customSelectStyles}
-                  placeholder="Select"
-                  className="input-box"
-                />
+            <Select
+              options={weeks}
+              isSearchable={true}
+              onChange={handleWeekChange}
+              styles={customSelectStyles}
+              value={weeks.find(
+                (weekOption) => weekOption.value === selectedWeek,
               )}
+              placeholder={`Week ${selectedWeek}`}
+              className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
             />
-            {errors.week && (
-              <span className="text-xs font-medium text-red-500">
-                {errors.week.message}
-              </span>
-            )}
           </div>
           <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className=" label-text">Designation</label>

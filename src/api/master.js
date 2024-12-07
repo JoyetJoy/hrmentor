@@ -143,3 +143,5 @@ export const ROASTER_GET = "/employee-rosters";
 export const TEAM_ROSTER_GET = "/employee-team-rosters";
 // TIME SHEET
 export const TIME_SHEET = "/employee-time-sheets";
+//ATTENDANCE
+export const ATTENDANCE = "/employee-attendances";

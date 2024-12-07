@@ -596,29 +596,6 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">County</label>
-                  <Controller
-                    name="state_id"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <AsyncSelect
-                        {...field}
-                        placeholder="Search ..."
-                        loadOptions={loadStatesOptions}
-                        isSearchable={true}
-                        noOptionsMessage={() => "type state name"}
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.state_id && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.state_id?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">City</label>
                   <Controller
                     name="city_id"
@@ -642,22 +619,54 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  <label className="label-text">County</label>
+                  <Controller
+                    name="state_id"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <AsyncSelect
+                        {...field}
+                        placeholder="Search ..."
+                        loadOptions={loadStatesOptions}
+                        isSearchable={true}
+                        noOptionsMessage={() => "type state name"}
+                        className="input-box overflow-hidden"
+                      />
+                    )}
+                  />
+                  {errors.state_id && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.state_id?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Post Code</label>
                   <input
-                    {...register("post_code", { required: true })}
+                    {...register("post_code", {
+                      required: true,
+                      minLength: 5,
+                      maxLength: 7,
+                    })}
                     autoComplete="off"
                     type="text"
                     placeholder="Enter Post Code"
                     onKeyPress={(event) => {
+                      const valueWithoutSpaces = event.target.value.replace(
+                        /\s/g,
+                        "",
+                      );
                       if (
-                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
-                        event.target.value.replace(/\s/g, "").length >= 6
+                        !/^[a-zA-Z0-9]$/.test(event.key) || // Allow only alphanumeric characters
+                        valueWithoutSpaces.length >= 7 // Prevent more than 7 characters
                       ) {
                         event.preventDefault();
                       }
                     }}
                     className="input-box"
                   />
+
                   {errors.post_code && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.post_code?.message}
@@ -856,7 +865,7 @@ export default function SaveEmployeeForm({ formtype }) {
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
-                    <span className="required">Designation</span>
+                    <span>Designation</span>
                     <div
                       onClick={() => {
                         handleOpenSaveMaster("designation");

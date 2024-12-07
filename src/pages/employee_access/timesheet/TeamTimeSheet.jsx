@@ -1,7 +1,7 @@
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { ChevronRight, Eye, PlusIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import Select from "react-select";
@@ -9,6 +9,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import TeamTimeTracker from "@/components/popups/employee_access/timesheet/team/TeamTimeTracker";
 import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timesheet/TeamTimeSheetSideBar";
 import TeamAddManually from "@/components/popups/employee_access/timesheet/team/AddManually";
+import { useQuery } from "@tanstack/react-query";
 
 export default function TeamTimeSheet() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,8 +18,13 @@ export default function TeamTimeSheet() {
   const pageLimit = 10;
   const [teamTimeTrackerPopupOpen, setTeamTimeTrackerPopupOpen] =
     useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
 
+  const [date, setDate] = useState(new Date());
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedWeek, setSelectedWeek] = useState(1);
+  const [weeks, setWeeks] = useState([]);
+
+  // Calculate months and years
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: i,
     label: dayjs().month(i).format("MMMM"),
@@ -28,14 +34,90 @@ export default function TeamTimeSheet() {
     value: 2020 + i,
     label: (2020 + i).toString(),
   }));
+
+  // Calculate weeks based on selected month and year
+  useEffect(() => {
+    const daysInMonth = dayjs(date).daysInMonth();
+    const newWeeks = Array.from(
+      { length: Math.ceil(daysInMonth / 7) },
+      (_, i) => ({
+        value: i + 1,
+        label: `Week ${i + 1}`,
+      }),
+    );
+    setWeeks(newWeeks);
+  }, [date]);
+
+  // Handle month change
   const handleMonthChange = (selectedOption) => {
     const updatedDate = dayjs(date).month(selectedOption.value).toDate();
     setDate(updatedDate);
+    setSelectedWeek(1); // Reset to the 1st week on month change
   };
+
+  // Handle year change
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
     setDate(updatedDate);
+    setSelectedWeek(1); // Reset to the 1st week on year change
   };
+
+  // Handle week change
+  const handleWeekChange = (selectedOption) => {
+    setSelectedWeek(selectedOption.value);
+  };
+
+  // Calculate the start and end dates for the selected week
+  const getStartAndEndOfWeek = () => {
+    const startOfWeek = dayjs(date)
+      .startOf("month")
+      .add((selectedWeek - 1) * 7, "day");
+    const endOfWeek = startOfWeek.add(6, "day");
+    return {
+      start: startOfWeek.format("YYYY-MM-DD"),
+      end: endOfWeek.format("YYYY-MM-DD"),
+    };
+  };
+
+  // Calculate week dates for the selected week
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    // Calculate the start of the week (Monday)
+    const startOfWeek = dayjs(date)
+      .startOf("month") // Start of the month
+      .add((selectedWeek - 1) * 7, "day") // Adjust for the selected week
+      .startOf("week") // Start of the week (Sunday by default)
+      .add(1, "day") // Adjust to Monday (add one day)
+      .add(i, "day"); // Add days to get Monday to Sunday
+
+    return {
+      day: startOfWeek.format("ddd"), // Abbreviated day (Mon, Tue, ...)
+      date: startOfWeek.format("MMM DD"), // Display the date (e.g., Jan 01)
+      fullDate: startOfWeek.format("YYYY-MM-DD"),
+    };
+  });
+
+  const { end } = getStartAndEndOfWeek();
+
+  // Fetch the data for the selected week
+  const { data: events, refetch } = useQuery({
+    queryKey: ["events", selectedWeek, date], // Unique query key
+    queryFn: () =>
+      newRequest.get(`${TIME_SHEET}/${end}`).then((res) => res.data),
+  });
+
+  // Trigger the query on mount and when selectedWeek > 0
+  useEffect(() => {
+    if (selectedWeek > 0) {
+      refetch();
+    }
+  }, [selectedWeek, refetch]);
+
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(":"); // Split the time into hours, minutes, and seconds
+    return `${hours} hr ${minutes} min`;
+  };
+  console.log(date);
+
   const columns = React.useMemo(
     () => [
       {
@@ -43,9 +125,7 @@ export default function TeamTimeSheet() {
         accessorKey: "mon",
         cell: ({ row }) => (
           <div className="bg-blurecool px-3 py-2">
-            <p>
-              {row?.original?.first_name||"NA"}
-            </p>
+            <p>{row?.original?.first_name || "NA"}</p>
             <p>
               #{row?.original?.first_name} {row?.original?.sur_name || "NA"}
             </p>
@@ -53,83 +133,32 @@ export default function TeamTimeSheet() {
         ),
       },
       {
-        header: "Total Worked hours",
+        header: "Total Worked Hours",
         accessorKey: "sno",
-        cell: ({ row }) => {
-          return (
-            <div className="px-3 py-2">
-              NA
-              {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
-            </div>
-          );
-        },
-      },
-      {
-        header: "Mon",
-        accessorKey: "mon",
         cell: ({ row }) => (
-          <div className="bg-blurecool px-3 py-2">
-            <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
-            </p>
+          <div className="px-3 py-2">
+            {/* Replace "NA" with the actual calculation */}
+            NA
           </div>
         ),
       },
-      {
-        header: "Tue",
-        accessorKey: "tue",
-        cell: ({ row }) => (
-          <p className="bg-blurecool px-3 py-2">
-            {row?.original?.employee?.unique_id || "NA"}
-          </p>
-        ),
-      },
-      {
-        header: "Wen",
-        accessorKey: "wed",
-        cell: ({ row }) => (
-          <p className="bg-blurecool px-3 py-2">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
-        ),
-      },
-      {
-        header: "Thue",
-        accessorKey: "thue",
-        cell: ({ row }) => (
-          <p className="bg-blurecool px-3 py-2">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
-        ),
-      },
-      {
-        header: "Fri",
-        accessorKey: "fri",
-        cell: ({ row }) => (
-          <p className="bg-blurecool px-3 py-2">
-            {row?.original?.employee?.department?.department_name || "NA"}
-          </p>
-        ),
-      },
-      {
-        header: "Sat",
-        accessorKey: "sat",
-        cell: ({ row }) => (
-          <p className="bg-blurecool px-3 py-2">
-            {row?.original?.employee?.work_location?.work_location_name || "NA"}
-          </p>
-        ),
-      },
-      {
-        header: "Sun",
-        accessorKey: "sun",
-        cell: ({ row }) => (
-          <div className="whitespace-nowrap bg-blurecool px-3 py-2">
-            {row?.original?.employee?.employment_status?.status_name || "NA"}
+      ...weekDays.map((dayObj) => ({
+        header: (
+          <div className="text-center">
+            <span className="text-sm font-bold capitalize text-gray-darkpale">
+              {dayObj.day}
+            </span>
+            <p className="font-medium">{dayObj.date}</p>
           </div>
         ),
-      },
+        accessorKey: dayObj.fullDate, // Unique key for each day
+        cell: ({ row }) => (
+          <div className="text-sm font-bold capitalize text-gray-darkpale">
+            {/* You can customize this to show the respective data */}
+            {row?.original?.[dayObj.fullDate] || "NA"}
+          </div>
+        ),
+      })),
       {
         header: "",
         accessorKey: "action",
@@ -145,8 +174,9 @@ export default function TeamTimeSheet() {
         ),
       },
     ],
-    [],
+    [weekDays],
   );
+
   const handleClick = () => {
     setTeamTimeTrackerPopupOpen(true);
   };
@@ -169,20 +199,6 @@ export default function TeamTimeSheet() {
       <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           <h5 className="text-md font-bold">My Team Sheet</h5>
-          <Select
-            options={years}
-            isSearchable={true}
-            onChange={handleYearChange}
-            styles={customSelectStyles}
-            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-          />
-          <Select
-            options={months}
-            isSearchable={true}
-            onChange={handleMonthChange}
-            styles={customSelectStyles}
-            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-          />
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -202,7 +218,16 @@ export default function TeamTimeSheet() {
         </div>
       </div>
       <div className="max-w-8xl mb-10 mt-2 flex w-full gap-3">
-        <TeamTimeSheetSideBar />
+        <TeamTimeSheetSideBar
+          years={years}
+          months={months}
+          weeks={weeks}
+          handleWeekChange={handleWeekChange}
+          selectedWeek={selectedWeek}
+          handleMonthChange={handleMonthChange}
+          date={date}
+          handleYearChange={handleYearChange}
+        />
         <QueryTable
           columns={columns}
           list={"NA"}

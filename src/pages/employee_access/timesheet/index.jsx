@@ -14,19 +14,6 @@ export default function TimeSheet() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [weeks, setWeeks] = useState([]);
-  const [tableData, setTableData] = useState([
-    {
-      sno: 1,
-      mon: "8 hours",
-      tue: "7 hours",
-      wed: "9 hours",
-      thu: "6 hours",
-      fri: "8 hours",
-      sat: "NA",
-      sun: "NA",
-    },
-    // Add more sample data here
-  ]);
 
   // Calculate months and years
   const months = Array.from({ length: 12 }, (_, i) => ({
@@ -117,7 +104,7 @@ export default function TimeSheet() {
   }, [selectedWeek, refetch]);
 
   const formatTime = (time) => {
-    const [hours, minutes] = time.split(":"); // Split the time into hours, minutes, and seconds
+    const [hours, minutes] = time.split(":");
     return `${hours} hr ${minutes} min`;
   };
 
@@ -205,7 +192,9 @@ export default function TimeSheet() {
               <tbody>
                 <tr className="borde-b-2 borde-[#C0C0C0] text-left last:border-none">
                   <td className="justify-end text-[0.8rem] font-medium capitalize text-gray-darkpale">
-                    {formatTime(events?.total_working_hours || "00 Hr 00 Min")}
+                    {events?.days_hours?.length > 0
+                      ? formatTime(events?.total_working_hours)
+                      : "00Hr 00Min"}
                   </td>
                   {weekDays.map((dayObj, index) => {
                     // Convert weekDays date to match the format in events.days_hours
@@ -240,12 +229,12 @@ export default function TimeSheet() {
                         ) : (
                           <>
                             <span className="flex gap-4">00 Hr 00 Min</span>
-                            <span className="text-[0.75rem] font-medium">
+                            {/* <span className="text-[0.75rem] font-medium">
                               BT: 00 Hr 00 Min
                             </span>
                             <p className="text-[0.75rem] font-medium text-red-500">
                               [OT:00 Hr 00 Min]
-                            </p>
+                            </p> */}
                           </>
                         )}
                       </td>

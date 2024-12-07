@@ -74,10 +74,10 @@ const EmployeeAccessRosterCalendar = () => {
 
   const getTileClass = (date) => {
     if (dayjs(date).isSame(dayjs(), "day"))
-      return "bg-green-200 border-green-500";
+      return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
     if (dayjs(date).isBefore(dayjs(), "day"))
-      return "bg-blue-200 border-blue-500";
-    return "bg-yellow-200 border-yellow-500";
+      return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
+    return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
   };
 
   const findEvents = (date) => {
@@ -158,7 +158,7 @@ const EmployeeAccessRosterCalendar = () => {
           />
         </div>
         <div className="flex items-center gap-14">
-          <div className="flex items-center gap-5">
+          {/* <div className="flex items-center gap-5">
             <div className="flex items-center gap-2 text-sm">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white">
                 A
@@ -171,7 +171,7 @@ const EmployeeAccessRosterCalendar = () => {
               </p>
               <p>Requested slot</p>
             </div>
-          </div>
+          </div> */}
           <Link
             to="/employee-access/roster/teamroster"
             className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
@@ -181,7 +181,7 @@ const EmployeeAccessRosterCalendar = () => {
         </div>
       </div>
 
-      <div className="max-w-8xl mb-10 mt-7 w-full">
+      <div className="max-w-8xl mb-10 mt-7 w-full hover:bg-white active:bg-white">
         <Calendar
           key={date}
           onChange={handleDateChange}
@@ -199,33 +199,42 @@ const EmployeeAccessRosterCalendar = () => {
                 requestedSlots,
               } = findEvents(date);
               return (
-                <div className="overflow-y-min flex h-full flex-col overflow-y-auto">
+                <div className="relative flex h-full flex-col overflow-visible">
                   <>
-                    <div className="flex flex-col items-end">
-                      {holidayEvents?.length === 0 && (
+                    <div className="absolute -top-6 right-0 flex flex-col items-end">
+                      {availableSlots?.map((slot, index) => (
                         <p
-                          className={`flex min-h-7 w-7 items-center justify-center rounded-full pl-[0.10rem] pt-[0.15rem] font-extrabold text-white ${
-                            requestedSlots?.length > 0
-                              ? "bg-[#db0000]"
-                              : "bg-[#00B448]"
-                          }`}
+                          key={`available-slot-${index}`}
+                          onClick={() => {
+                            setClaimPopup(true);
+                            setSelectedField(slot);
+                          }}
+                          className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
                         >
-                          {requestedSlots?.length > 0 ? "R" : "A"}
+                          A
                         </p>
-                      )}
+                      ))}
+                      {requestedSlots?.map((slot, index) => (
+                        <p
+                          key={index}
+                          className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#db0000] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
+                        >
+                          R
+                        </p>
+                      ))}
                     </div>
                     {shiftEvents?.slice(0, 2)?.map((event, index) => (
                       <div
                         key={index}
                         onClick={() => handleClick(event)}
-                        className={`mt-2 flex h-11 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                        className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
                           date,
                         )} justify-center text-gray-800`}
                       >
-                        <span className="float-start flex text-[12px] font-semibold">
+                        <span className="float-start flex text-[0.8rem] font-semibold">
                           {event.shift_name}
                         </span>
-                        <span className="float-start flex text-[10px]">
+                        <span className="float-start flex text-[12px]">
                           {convertTo12HourFormat(event?.shift?.start_time)}-
                           {convertTo12HourFormat(event?.shift?.end_time)}
                         </span>
@@ -251,7 +260,7 @@ const EmployeeAccessRosterCalendar = () => {
                   {holidayEvents?.map((event, index) => (
                     <div
                       key={index}
-                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 text-[12px] text-gray-800 lg:w-36 xl:w-44"
+                      className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
                     >
                       <span className="float-start flex font-semibold">
                         Holiday
@@ -259,7 +268,7 @@ const EmployeeAccessRosterCalendar = () => {
                     </div>
                   ))}
 
-                  {availableSlots?.map((slot, index) => (
+                  {/* {availableSlots?.map((slot, index) => (
                     <div
                       key={`available-slot-${index}`}
                       onClick={() => {
@@ -285,7 +294,7 @@ const EmployeeAccessRosterCalendar = () => {
                         {event?.requests[0]?.request_status?.status_name}
                       </span>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               );
             }

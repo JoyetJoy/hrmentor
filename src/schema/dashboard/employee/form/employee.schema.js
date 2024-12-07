@@ -1,3 +1,4 @@
+// import { min } from "moment";
 import * as Yup from "yup";
 
 export const EmployeeSchema = Yup.object({
@@ -9,10 +10,11 @@ export const EmployeeSchema = Yup.object({
   blood_group: Yup.object({
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "Blood group is required", function (value) {
-    return value?.value && value?.label;
   }),
-  post_code: Yup.string().required("Postal code is required"),
+  post_code: Yup.string()
+    .required("Postal code is required")
+    .min(5, "Postal code must be at least 5 characters")
+    .max(7, "Postal code must not exceed 7 characters"),
   dob: Yup.string().required("Date of birth is required"),
   nationality_id: Yup.object({
     value: Yup.string(),
@@ -67,8 +69,6 @@ export const EmployeeSchema = Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "Designation is required", function (value) {
-    return value?.value && value?.label;
   }),
 
   worklocation_id: Yup.object({
@@ -94,7 +94,7 @@ export const EmployeeSchema = Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "Country is required", function (value) {
+  }).test(function (value) {
     return value?.value && value?.label;
   }),
 
@@ -102,8 +102,6 @@ export const EmployeeSchema = Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "County is required", function (value) {
-    return value?.value && value?.label;
   }),
 
   city_id: Yup.object({

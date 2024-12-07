@@ -49,6 +49,7 @@ export const bloodGroups = [
   { id: 6, label: "B-", value: "B-" },
   { id: 7, label: "AB+", value: "AB+" },
   { id: 8, label: "AB-", value: "AB-" },
+  { id: 9, label: "Not aware", value: "not_aware" },
 ];
 
 export const hiringMemberRole = [
@@ -83,4 +84,3 @@ export const pentionStatuses = [
   { id: 1, label: "Opt-in", value: "optin" },
   { id: 2, label: "Opt-out", value: "optout" },
 ];
-
