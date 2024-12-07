@@ -131,10 +131,14 @@ export default function SaveMasterShift({ formtype, sid }) {
   const onSubmit = async (data) => {
     if (recurrencePattern === "weekly") {
       if (validateInputs()) {
-        if (data.fullday === "" && data.halfday === "") {
-          toast.error("Either full day or half day is required");
-        } else {
+        if(calculationType === "perhour"){
           await handleShift(data);
+        }else{
+          if (data.fullday === "" && data.halfday === "") {
+            toast.error("Either full day or half day is required");
+          } else {
+            await handleShift(data);
+          }
         }
       } else {
         toast.error("Please enter the count for the selected days");

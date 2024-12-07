@@ -8,7 +8,7 @@ export const RecruiterSettingMinimumExperience = () => {
       api={MINIMUM_Experience}
       qryKey={"recMinimumExperienceList"}
       colKeys={recColumnKeysForMinimumExperience}
-      type={"Minimum Experience"}
+      type={"Experience"}
     />
   );
 };

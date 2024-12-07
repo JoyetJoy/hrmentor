@@ -39,6 +39,20 @@ export default function TeamTimeSheet() {
   const columns = React.useMemo(
     () => [
       {
+        header: "Employee Name",
+        accessorKey: "mon",
+        cell: ({ row }) => (
+          <div className="bg-blurecool px-3 py-2">
+            <p>
+              {row?.original?.first_name||"NA"}
+            </p>
+            <p>
+              #{row?.original?.first_name} {row?.original?.sur_name || "NA"}
+            </p>
+          </div>
+        ),
+      },
+      {
         header: "Total Worked hours",
         accessorKey: "sno",
         cell: ({ row }) => {
@@ -180,7 +194,7 @@ export default function TeamTimeSheet() {
             Add Manually
           </Link>
           <Link
-            to=""
+            to="/employee-access/timesheet"
             className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
           >
             My Team Sheet

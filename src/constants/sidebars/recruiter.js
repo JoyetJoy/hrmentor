@@ -66,7 +66,7 @@ export const recruiterSetting = [
   },
   {
     id: 6,
-    name: "Minimum Experience",
+    name: "Experience",
     link: "/admin/recruiter/settings/minimum-experience",
     icon: `<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_1510_12763)">

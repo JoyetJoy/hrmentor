@@ -141,3 +141,5 @@ export const CLOCK_IN = "/employee-access/employee-clock-in";
 export const ROASTER_GET = "/employee-rosters";
 // TEAM ROSTER GET
 export const TEAM_ROSTER_GET = "/employee-team-rosters";
+// TIME SHEET
+export const TIME_SHEET = "/employee-time-sheets";

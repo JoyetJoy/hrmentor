@@ -50,7 +50,7 @@ export const recColumnKeysForInterviewType = {
 export const recColumnKeysForMinimumExperience = {
   field1: {
     key: "minimum_experience_type_name",
-    label: "Minimum Experience Name",
+    label: "Experience",
   },
   field2: { key: "status", label: "Status" },
 };
