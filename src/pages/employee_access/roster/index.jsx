@@ -42,7 +42,6 @@ const EmployeeAccessRosterCalendar = () => {
   });
 
   useEffect(() => {
-    // Refetch data whenever the `date` changes
     refetch();
   }, [date, refetch]);
 
@@ -199,7 +198,7 @@ const EmployeeAccessRosterCalendar = () => {
                 requestedSlots,
               } = findEvents(date);
               return (
-                <div className="relative flex h-full flex-col overflow-visible">
+                <div className="relative flex h-full w-full flex-col overflow-visible">
                   <>
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
                       {availableSlots?.map((slot, index) => (
@@ -262,7 +261,7 @@ const EmployeeAccessRosterCalendar = () => {
                       key={index}
                       className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
                     >
-                      <span className="float-start flex font-semibold">
+                      <span className="float-start w-full flex font-semibold">
                         Holiday
                       </span>
                     </div>

@@ -9,127 +9,6 @@ import EmployeeAttendance from "@/components/popups/employee_access/attendance/E
 import { useQuery } from "@tanstack/react-query";
 import { ATTENDANCE, newRequest, ROASTER_GET } from "@/api/master";
 
-const events = [
-  {
-    date: "2024-10-01",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-02",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-    latestatus: "true",
-  },
-  {
-    date: "2024-10-03",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "L",
-  },
-  {
-    date: "2024-10-04",
-    shift: "Morning Shift",
-    clockIn: "09:15 AM",
-    clockOut: "05:45 PM",
-    totalTime: "08:30:00",
-    status: "P",
-    latestatus: "true",
-  },
-  {
-    date: "2024-10-05",
-    shift: "Morning Shift",
-    clockIn: "08:45 AM",
-    clockOut: "05:15 PM",
-    totalTime: "08:30:00",
-    status: "P",
-    latestatus: "true",
-  },
-  {
-    date: "2024-10-06",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "A",
-  },
-  {
-    date: "2024-10-07",
-    shift: "Morning Shift",
-    clockIn: "09:10 AM",
-    clockOut: "05:40 PM",
-    totalTime: "08:30:00",
-    status: "P",
-    latestatus: "true",
-  },
-  {
-    date: "2024-10-08",
-    shift: "Morning Shift",
-    clockIn: "08:50 AM",
-    clockOut: "05:20 PM",
-    totalTime: "08:30:00",
-    status: "A",
-  },
-  {
-    date: "2024-10-09",
-    shift: "Morning Shift",
-    clockIn: "09:05 AM",
-    clockOut: "05:35 PM",
-    totalTime: "08:30:00",
-    status: "A",
-  },
-  {
-    date: "2024-10-10",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-    latestatus: "true",
-  },
-  {
-    date: "2024-10-11",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-12",
-    shift: "Morning Shift",
-    clockIn: "09:20 AM",
-    clockOut: "05:50 PM",
-    totalTime: "08:30:00",
-    status: "P",
-  },
-  {
-    date: "2024-10-13",
-    shift: "Morning Shift",
-    clockIn: "09:10 AM",
-    clockOut: "05:40 PM",
-    totalTime: "08:30:00",
-    status: "P",
-    latestatus: "true",
-  },
-  {
-    date: "2024-10-14",
-    shift: "Morning Shift",
-    clockIn: "09:00 AM",
-    clockOut: "05:30 PM",
-    totalTime: "08:30:00",
-    status: "A",
-  },
-];
-
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
   label: dayjs().month(i).format("MMMM"),
@@ -161,11 +40,18 @@ const EmployeeAccessAttendanceCalendar = () => {
   const handleClick = () => {
     setPopupOpen(true);
   };
+  useEffect(() => {
+    console.log("Initial fetch for:", { month, year });
+    refetch(); // Initial fetch when the component mounts
+  }, []);
 
   useEffect(() => {
-    // Refetch data whenever the `date` changes
-    refetch();
-  }, [date, refetch]);
+    if (month && year) {
+      console.log("Refetching events for:", { month, year });
+      refetch();
+    }
+  }, [date,month,year, refetch]);
+  
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -174,23 +60,23 @@ const EmployeeAccessAttendanceCalendar = () => {
   const handleMonthChange = (selectedOption) => {
     const currentDay = dayjs(date).date();
     const updatedDate = dayjs(date)
-      .month(selectedOption.value - 1)
+      .month(selectedOption.value)
       .date(1)
       .date(
         Math.min(
           currentDay,
           dayjs(date)
-            .month(selectedOption.value - 1)
+            .month(selectedOption.value)
             .daysInMonth(),
         ),
       )
       .toDate();
-    handleDateChange(updatedDate);
+    setDate(updatedDate); // Synchronize date state
   };
 
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    handleDateChange(updatedDate);
+    setDate(updatedDate); // Synchronize date state
   };
 
   const getTileClass = (date) => {
@@ -203,25 +89,34 @@ const EmployeeAccessAttendanceCalendar = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const holidayEvents = events?.result?.filter((event) =>
-      event?.holidays?.includes(formattedDate),
-    );
-    console.log(formattedDate);
-
-    const shiftEvents = events?.filter((event) =>
-      event?.attendance_date?.includes(formattedDate),
-    );
-
-    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
-    const requestedSlots = events?.requested_details?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
+    const holidayEvents = Array.isArray(events?.result)
+      ? events.result.filter((event) => event.holidays?.includes(formattedDate))
+      : [];
+    const shiftEvents = Array.isArray(events)
+      ? events.filter((event) =>
+          event.attendance_date?.includes(formattedDate),
+        )
+      : [];
+    const availableSlots = Array.isArray(events?.available_slots_filtered)
+      ? events.available_slots_filtered.filter((slot) =>
+          dayjs(slot.date).isSame(dayjs(date), "day"),
+        )
+      : [];
+    const requestedSlots = Array.isArray(events?.requested_details)
+      ? events.requested_details.filter((slot) =>
+          dayjs(slot.date).isSame(dayjs(date), "day"),
+        )
+      : [];
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
+
+  function convertTo12HourFormat(time) {
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${period}`;
+  }
+console.log(date);
 
   return (
     <div className="flex flex-col">
@@ -280,11 +175,13 @@ const EmployeeAccessAttendanceCalendar = () => {
       </div>
 
       <div className="max-w-8xl mb-10 mt-7 w-full">
-        <Calendar
+      <Calendar
+          key={date}
           onChange={handleDateChange}
           value={date}
           showNavigation={false}
           className="w-full font-monorope"
+          locale="en-US"
           formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
           tileContent={({ date, view }) => {
             if (view === "month") {
@@ -294,7 +191,9 @@ const EmployeeAccessAttendanceCalendar = () => {
                 availableSlots,
                 requestedSlots,
               } = findEvents(date);
-              return event ? (
+              console.log(shiftEvents);
+              
+              return events ? (
                 <div className="flex w-full flex-col gap-2">
                   {shiftEvents?.slice(0, 2)?.map((event, index) => (
                     <div
@@ -305,15 +204,18 @@ const EmployeeAccessAttendanceCalendar = () => {
                       )} justify-center text-gray-800`}
                     >
                       <span className="float-start flex text-[0.8rem] font-semibold">
-                        {event.shift_name}
+                        {event?.shift_detail?
+                          event.shift_detail?.name:'Present'
+                        }
                       </span>
                       <span className="float-start flex text-[12px]">
-                        {convertTo12HourFormat(event?.shift?.start_time)}-
-                        {convertTo12HourFormat(event?.shift?.end_time)}
+                        {event?.total_working_hour}
+                        {/* {convertTo12HourFormat(event?.shift?.start_time)}-
+                        {convertTo12HourFormat(event?.shift?.end_time)} */}
                       </span>
                     </div>
                   ))}
-                  <div className="c-af mt-2 flex h-14 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
+                  {/* <div className="c-af mt-2 flex h-14 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
                     <div className="flex flex-col justify-start">
                       <p className="text-[0.8rem] font-bold">{event.shift}</p>
                       <p className="float-start flex w-full">{event.clockIn}</p>
@@ -358,7 +260,7 @@ const EmployeeAccessAttendanceCalendar = () => {
                       </div>
                       <div>{event.clockOut}</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               ) : null;
             }
