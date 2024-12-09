@@ -1,36 +1,16 @@
-import { EMPLOYEE, newRequest } from "@/api";
-import { ROSTER_LIST, DELETE_ROSTER } from "@/api/setup";
-import NewRoster from "@/components/popups/master/roster/NewRoster";
+import { newRequest } from "@/api";
+import { ROSTER_LIST } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Calendar,
-  MoveDiagonal,
-  Plus,
-  Search,
-  Trash2,
-  Files,
-} from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import RosterHeader from "@/components/common/RosterHeader";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import EditRoster from "@/components/popups/master/roster/EditRoster";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 
 export default function Payroll() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [editpopupOpen, setEditPopupOpen] = useState(false);
-  const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const [rosterList, setRosterList] = useState("");
   const [selectedRoster, setSelectedRoster] = useState(null);
-  const [copy, setCopy] = useState(false);
   const pageLimit = 10;
+  const [keyword, setKeyword]= useState('')
 
   const { data: rosterDetailss } = useQuery({
     queryKey: ["rosterDetailss", currentPage, keyword],
@@ -49,10 +29,6 @@ export default function Payroll() {
   });
 
   useEffect(() => {
-    setRosterList(rosterDetailss);
-  }, [rosterDetailss]);
-
-  useEffect(() => {
     if (rosterDetailss) {
       setTotalPages(rosterDetailss?.last_page);
       if (!selectedRoster && rosterDetailss.listing?.length > 0) {
@@ -60,28 +36,6 @@ export default function Payroll() {
       }
     }
   }, [rosterDetailss, selectedRoster]);
-
-  const handleCreate = (toOpen) => {
-    setPopupOpen(true);
-  };
-
-  console.log(selectedRoster);
-
-  const handleView = (roster) => {
-    setSelectedRoster(roster);
-  };
-
-  const handleEdit = (roster) => {
-    console.log("Selected roster for editing:", roster);
-    setEditPopupOpen(true);
-  };
-  const handleCopy = (roster) => {
-    console.log("Selected roster for editing:", roster);
-    setCopy(true);
-    setEditPopupOpen(true);
-  };
-
-  console.log(rosterDetailss?.listing);
 
   const columns = React.useMemo(
     () => [
@@ -108,7 +62,6 @@ export default function Payroll() {
     ],
     [],
   );
-  console.log(selectedRoster);
   return (
     <>
       <PayrollHeader page={1} />
@@ -130,8 +83,8 @@ export default function Payroll() {
           <div className="mb-1 flex items-center justify-between">
             <h3 className="text-lg font-semibold">Transaction History</h3>
 
-            <div className="flex items-center gap-2 ">
-              <select className="ml-4 rounded-md border border-gray-300 bg-white px-4 py-1 text-sm text-gray-600 focus:outline-none w-50%">
+            <div className="flex items-center gap-2">
+              <select className="w-50% ml-4 rounded-md border border-gray-300 bg-white px-4 py-1 text-sm text-gray-600 focus:outline-none">
                 <option>Weekly</option>
                 <option>Monthly</option>
               </select>

@@ -80,7 +80,6 @@ export default function CompanyBankDetails() {
     company_profile_id: "",
   });
 
-  console.log(id, "idid");
 
   function close() {
     SetBankDetails({

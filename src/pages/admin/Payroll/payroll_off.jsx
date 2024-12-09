@@ -1,22 +1,7 @@
-import { EMPLOYEE, newRequest } from "@/api";
-import { ROSTER_LIST, DELETE_ROSTER } from "@/api/setup";
-import NewRoster from "@/components/popups/master/roster/NewRoster";
 import QueryTable from "@/components/table/QueryTable";
-import { useQuery } from "@tanstack/react-query";
-import {
-  Calendar,
-  MoveDiagonal,
-  Plus,
-  Search,
-  Trash2,
-  Files,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import RosterHeader from "@/components/common/RosterHeader";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import EditRoster from "@/components/popups/master/roster/EditRoster";
+import { Search } from "lucide-react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 
 const data = [
@@ -52,71 +37,10 @@ const data = [
   },
 ];
 
-const totalPages = 9;
-
 export default function PayrollOff() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [editpopupOpen, setEditPopupOpen] = useState(false);
-  const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const [rosterList, setRosterList] = useState("");
-  const [selectedRoster, setSelectedRoster] = useState(null);
-  const [copy, setCopy] = useState(false);
-  const pageLimit = 10;
-
-  const { data: rosterDetailss } = useQuery({
-    queryKey: ["rosterDetailss", currentPage, keyword],
-    queryFn: () =>
-      newRequest
-        .get(ROSTER_LIST, {
-          params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
-          },
-        })
-        .then((res) => {
-          return res?.data || { data: [], last_page: 1 };
-        }),
-  });
-
-  useEffect(() => {
-    setRosterList(rosterDetailss);
-  }, [rosterDetailss]);
-
-  useEffect(() => {
-    if (rosterDetailss) {
-      setTotalPages(rosterDetailss?.last_page);
-      if (!selectedRoster && rosterDetailss.listing?.length > 0) {
-        setSelectedRoster(rosterDetailss.listing[0]?.roster_details);
-      }
-    }
-  }, [rosterDetailss, selectedRoster]);
-
-  const handleCreate = (toOpen) => {
-    setPopupOpen(true);
-  };
-
-  console.log(selectedRoster);
-
-  const handleView = (roster) => {
-    setSelectedRoster(roster);
-  };
-
-  const handleEdit = (roster) => {
-    console.log("Selected roster for editing:", roster);
-    setEditPopupOpen(true);
-  };
-  const handleCopy = (roster) => {
-    console.log("Selected roster for editing:", roster);
-    setCopy(true);
-    setEditPopupOpen(true);
-  };
-
-  console.log(rosterDetailss?.listing);
+  const navigate = useNavigate();
 
   const columns = React.useMemo(
     () => [
@@ -155,7 +79,23 @@ export default function PayrollOff() {
 
       {
         header: "Action",
-        accessorKey: "",
+        accessorKey: "action",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              type="button"
+              onClick={() => {
+                navigate("/admin/payroll/payoffedit");
+              }}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+            >
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </button>
+          </div>
+        ),
       },
     ],
     [],

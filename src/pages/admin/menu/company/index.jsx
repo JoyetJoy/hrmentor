@@ -90,7 +90,6 @@ export default function CompanyGeneral() {
     resolver: yupResolver(CompanyBasicSchema),
   });
 
-  console.log(errors);
 
   function close() {
     SetCompanyBasic({
