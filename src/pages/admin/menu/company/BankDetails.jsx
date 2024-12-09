@@ -275,7 +275,7 @@ export default function CompanyBankDetails() {
                       </div>
                       <div className="group flex flex-col space-y-1 px-3 py-1">
                         <label className="required label-text">
-                          Account Holder Nmae
+                          Acc Holder Name
                         </label>
                         <input
                           autoComplete="off"
@@ -606,7 +606,7 @@ export default function CompanyBankDetails() {
                       </div>
                       <div className="group flex flex-col space-y-1 px-3 py-1">
                         <label className="required label-text">
-                          Account Holder Nmae
+                          Acc Holder Name
                         </label>
                         <input
                           autoComplete="off"

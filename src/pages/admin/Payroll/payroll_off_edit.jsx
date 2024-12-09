@@ -2,6 +2,7 @@ import QueryTable from "@/components/table/QueryTable";
 import React, { useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { ArrowLeft } from "@mui/icons-material";
+import { Check } from "lucide-react";
 
 const summaryData = [
   { label: "Total Working hours", value: "240 hr 00 min" },
@@ -21,12 +22,14 @@ const historyData = [
     description: "Team lead Approved",
     date: "12/11/2024",
     time: "10:30AM",
+    step: 1,
   },
   {
     title: "Team lead Add a note Against Disputed",
     description: "Test note",
     date: "12/11/2024",
     time: "10:30AM",
+    step: 2,
   },
   {
     title: "Disputed from Amal",
@@ -34,6 +37,7 @@ const historyData = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
     date: "12/11/2024",
     time: "10:30AM",
+    step: 3,
   },
 ];
 
@@ -57,6 +61,27 @@ const tableData = [
     totalWorked: "09 hr 0 min",
   },
 ];
+
+const mainSteps = [
+  { label: "Company profile", step: 1 },
+  { label: "Organisation bank and tax details", step: 2 },
+  { label: "Company signatory", step: 3 },
+  { label: "Calender settings", step: 4 },
+];
+
+// Sub-steps under
+const companySubSteps = [
+  { label: "General Details", step: 1.1 },
+  { label: "Address Details", step: 1.2 },
+];
+const bankSubSteps = [
+  { label: "Bank account details ", step: 2.1 },
+  { label: "Tax details", step: 2.2 },
+];
+const signatorySubSteps = [{ label: "company Signatory", step: 3.1 }];
+const calenderSubSteps = [{ label: "Add calender Settings", step: 1.1 }];
+
+const stepCounter = 4;
 
 export default function PayrollOffEdit() {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -199,43 +224,54 @@ export default function PayrollOffEdit() {
           <div className="history-section mt-4 rounded-md bg-white p-6 shadow">
             <h2 className="mb-3 text-lg font-bold">History</h2>
             <h6 className="mb-3 font-bold">12 October, 2023</h6>
-            <div className="history-list space-y-4">
-              {historyData.map((item, index) => (
-                <div
-                  key={index}
-                  className="history-item rounded-md bg-gray-50 p-4 shadow-sm"
-                >
-                  <div
-                    className="flex cursor-pointer items-center justify-between"
-                    onClick={() => toggleDetails(index)}
-                  >
-                    <div>
-                      <h3 className="font-semibold text-gray-800">
-                        {item.title}
-                      </h3>
-                      {expandedIndex === index && (
-                        <p className="text-sm text-gray-600">
-                          {item.description}
-                        </p>
-                      )}
-                    </div>
-                    <button className="text-gray-500">
-                      {expandedIndex === index ? "⌃" : "⌄"}
-                    </button>
-                  </div>
-                  {expandedIndex === index && (
-                    <div className="details mt-2 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <span>📅</span>
-                        <span>
-                          {item.date} | {item.time}
-                        </span>
+            <div className="flex w-full flex-col gap-3">
+              <div className="relative rounded-md bg-white p-5">
+                <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-hrmprimaryorange" />
+                <div className="flex flex-col gap-y-4">
+                  {/* Render Main Steps */}
+                  {historyData.map((item, index) => (
+                    <div key={index}>
+                      {/* Main Step */}
+                      <div className="flex  items-start gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]" style={{height:"80px"}}>
+                        <div
+                          className={`z-10 size-4 rounded-full border ${
+                            stepCounter >= item.step
+                              ? "border-hrmprimaryorange bg-hrmprimaryorange"
+                              : "border-textcolor-gray bg-textcolor-gray"
+                          }`}
+                        />
+                        <div className="flex flex-1 flex-col">
+                          {/* Title */}
+                          <h3
+                            className="cursor-pointer font-semibold text-gray-800"
+                            onClick={() => toggleDetails(index)}
+                          >
+                            {item.title}
+                          </h3>
+                          {/* Date */}
+                          <div className="text-xs text-gray-600">
+                            {item.date} | {item.time}
+                          </div>
+                          {/* Description */}
+                          {expandedIndex === index && (
+                            <div className="details mt-2 text-sm text-gray-800">
+                              <p>{item.description}</p>
+                            </div>
+                          )}
+                        </div>
+                        {/* Toggle Button */}
+                        <button
+                          className="ml-2 text-gray-500"
+                          onClick={() => toggleDetails(index)}
+                        >
+                          {expandedIndex === index ? "⌃" : "⌄"}
+                        </button>
                       </div>
-                      <p>{item.description}</p>
+                      {/* Conditionally render the description and other details */}
                     </div>
-                  )}
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>

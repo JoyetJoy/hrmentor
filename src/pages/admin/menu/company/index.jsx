@@ -350,7 +350,7 @@ export default function CompanyGeneral() {
                   <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                     <div className="grid w-1/2 grid-cols-2 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
                       <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
-                        <label className="label-text">Company Name</label>
+                        <label className="label-text">Client ID</label>
                         <input
                           autoComplete="off"
                           name="company_name"
@@ -470,7 +470,7 @@ export default function CompanyGeneral() {
                           type="date"
                           placeholder="Select date"
                           className="input-box"
-                          name="created_date"
+                          name="created_date pr-2"
                           value={companyBasic.created_date}
                           onChange={HandleCompanyBasic}
                         />
@@ -942,7 +942,7 @@ export default function CompanyGeneral() {
                   <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                     <div className="grid w-1/2 grid-cols-2 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
                       <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
-                        <label className="label-text">Company Name</label>
+                        <label className="label-text">Client ID</label>
                         <input
                           autoComplete="off"
                           name="company_name"
@@ -1061,7 +1061,7 @@ export default function CompanyGeneral() {
                           autoComplete="off"
                           type="date"
                           placeholder="Select date"
-                          className="input-box"
+                          className="input-box pr-2"
                           name="created_date"
                           value={companyBasic.created_date}
                           onChange={HandleCompanyBasic}
