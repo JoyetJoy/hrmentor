@@ -165,7 +165,7 @@ export default function PayrollListEdit() {
       </div>
       <div className="grid w-full grid-cols-12 gap-4 rounded-md bg-white px-6 py-4">
         {/* Summary Panel - col-span-4 */}
-        <div className="col-span-3 rounded-md p-4 shadow">
+        <div className="col-span-3 ">
           <div>
             <div className="summary-header mb-4">
               <h4 className="text-sm font-bold">
@@ -175,7 +175,7 @@ export default function PayrollListEdit() {
                 </button>
               </h4>
             </div>
-            <div className="summary-body">
+            <div className="summary-body rounded-md p-4 shadow">
               {summaryData.map((item, index) => (
                 <div
                   key={index}
