@@ -64,7 +64,7 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Clock in time
                 </label>
-                <p className="text-sm font-semibold">1:00pm </p>
+                <p className="text-sm font-semibold">{convertTo12HourFormat(data?.shift?.start_time||'')}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock Out</label>

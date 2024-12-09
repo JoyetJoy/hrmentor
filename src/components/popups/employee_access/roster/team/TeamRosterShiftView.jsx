@@ -1,4 +1,6 @@
+import { newRequest, ROASTER_GET, TEAMROSTER_EMPLOYEELIST } from "@/api/master";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
 
@@ -6,8 +8,29 @@ export default function TeamRosterShiftView({
   popupOpen,
   setPopupOpen,
   selectedField,
+  date,
+  convertTo12HourFormat,
 }) {
+  console.log(date);
+
   // const [loader, setLoader] = useState(false);
+  const { data, refetch } = useQuery({
+    queryKey: ["shiftDetails", selectedField?.id], // Array of query keys
+    queryFn: () =>
+      newRequest
+        .get(`${ROASTER_GET}/${selectedField?.id}`)
+        .then((res) => res.data),
+    enabled: !!selectedField, // Only run query if selectedField is defined
+  });
+  const { data: employeelist } = useQuery({
+    queryKey: ["employeeList", data?.shift_id], // Unique query key
+    queryFn: () =>
+      newRequest
+        .get(`${TEAMROSTER_EMPLOYEELIST}/${data?.shift_id}`)
+        .then((res) => res.data),
+    enabled: !!data?.shift_id, // Run only if data and shift_id exist
+  });
+  console.log(employeelist);
 
   function close() {
     setPopupOpen(false);
@@ -38,8 +61,8 @@ export default function TeamRosterShiftView({
             </div>
             <div className="grid grid-cols-2 justify-between gap-3 gap-y-7">
               <div className="group col-span-2 flex items-center justify-between space-y-1 border border-b border-gray-darklight">
-                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E] flex">
-                  <div className="w-7 h-7 mt-1 flex items-center justify-center mr-2 rounded-full bg-[#e9e9e9] p-2">
+                <label className="flex text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <div className="mr-2 mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#e9e9e9] p-2">
                     <img
                       src="/assets/icons/setup/re-box.svg"
                       alt="icons"
@@ -47,10 +70,13 @@ export default function TeamRosterShiftView({
                     />
                   </div>
                   <div>
-                  <p>Afternoon shift</p>
-                  <p className="text-sm font-semibold"> 1:00pm-2:00pm</p>
+                    <p>{data?.shift?.name}</p>
+                    <p className="text-sm font-semibold">
+                      {" "}
+                      {convertTo12HourFormat(data?.shift?.start_time || "")}-
+                      {convertTo12HourFormat(data?.shift?.end_time || "")}
+                    </p>
                   </div>
-                  
                 </label>
                 <div className="cursor-pointer rounded-full bg-gray-darklight p-2">
                   <img
@@ -72,19 +98,27 @@ export default function TeamRosterShiftView({
               </div>
               <div className="group col-span-2 flex w-full flex-col gap-1">
                 <label className="label-text">Members</label>
-                <p className="text-sm font-semibold">7</p>
+                <p className="text-sm font-semibold">
+                  {data?.shift?.people_required || "0"}
+                </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Department</label>
-                <p className="text-sm font-semibold">IT</p>
+                <p className="text-sm font-semibold">
+                  {data?.shift?.department?.department_name || ""}
+                </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Work Location</label>
-                <p className="text-sm font-semibold">TVM</p>
+                <p className="text-sm font-semibold">
+                  {data?.shift?.location?.work_location_name || ""}
+                </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Work Area</label>
-                <p className="text-sm font-semibold">HRD</p>
+                <p className="text-sm font-semibold">
+                  {data?.shift?.work_area?.name || ""}
+                </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Pay type</label>
@@ -95,25 +129,23 @@ export default function TeamRosterShiftView({
                 <p className="text-sm font-semibold">krishna</p>
               </div>
             </div>
-            <div className="overflow-y-min mt-5 flex flex-col gap-2 overflow-y-scroll">
-              <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-                <div className="rounded-full bg-gray-dark p-4"></div>
-                <div>
-                  <p className="text-sm font-medium">kp</p>
-                  <p className="text-xs font-medium text-darkblack">
-                    UI/UX Design Intern
-                  </p>
+            <div className="mt-5 flex max-h-48 flex-col gap-2 overflow-y-auto">
+              {employeelist?.map((employee) => (
+                <div
+                  key={employee.id}
+                  className="flex items-center gap-3 rounded-lg bg-gray-100 p-3"
+                >
+                  <div className="rounded-full bg-gray-dark p-4"></div>
+                  <div>
+                    <p className="text-sm font-medium">
+                      {employee.employee?.first_name || "N/A"}
+                    </p>
+                    <p className="text-xs font-medium text-darkblack">
+                      {employee.employee?.designation || "Role not available"}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-3 rounded-lg bg-gray-100 p-3">
-                <div className="rounded-full bg-gray-dark p-4"></div>
-                <div>
-                  <p className="text-sm font-medium">kp</p>
-                  <p className="text-xs font-medium text-darkblack">
-                    UI/UX Design Intern
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </DialogPanel>
         </div>
