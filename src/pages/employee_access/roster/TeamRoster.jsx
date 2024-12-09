@@ -94,13 +94,22 @@ const EmployeeAccessTeamRoster = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const holidayEvents = events.filter((event) =>
-      event?.holidays?.includes(formattedDate)
+    const holidayEvents = events?.result?.filter((event) =>
+      event?.holidays?.includes(formattedDate),
     );
-    const shiftEvents = events.filter((event) =>
-      event?.date_range?.includes(formattedDate)
+    const shiftEvents = events?.result?.filter((event) =>
+      event?.date_range?.includes(formattedDate),
     );
-    return { holidayEvents, shiftEvents };
+
+    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
+
+    const requestedSlots = events?.requested_details?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
+
+    return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
 
   const handleClick = (event) => {
@@ -121,9 +130,11 @@ const EmployeeAccessTeamRoster = () => {
   return (
     <div className="flex flex-col">
       <TeamRosterShiftView
+        date={date}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
+        convertTo12HourFormat={convertTo12HourFormat}
       />
       <RequestClaimshift
         popupOpen={claimPopup}
@@ -196,25 +207,26 @@ const EmployeeAccessTeamRoster = () => {
             if (view === "month") {
               const { holidayEvents, shiftEvents } = findEvents(date);
               return (
-                <div className="flex flex-col gap-2">
-                  {holidayEvents.map((event, index) => (
-                    <div
-                      key={index}
-                      className="mt-2 flex flex-col h-14 w-auto lg:w-28 xl:w-36 px-3 text-sm border-l-4 rounded-sm bg-[#fbe8f2] border-[#cf127a] text-gray-800 justify-center"
-                    >
-                      <span className="font-semibold flex float-start">Holiday</span>
-                    </div>
-                  ))}
-                  {shiftEvents.map((event, index) => (
+                <div className="relative flex w-full h-full overflow-x-hidden flex-col overflow-y-auto overflow-y-min">
+                  {shiftEvents?.length>=3 &&(
+                    <div className="absolute top-3 right-0 flex flex-col items-end">
+                    <p
+                        className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
+                      >
+                        {shiftEvents?.length}
+                      </p>
+                  </div>
+                  )}
+                  {shiftEvents?.map((event, index) => (
                     <div
                       key={index}
                       onClick={() => handleClick(event)}
-                      className={`mt-2 flex flex-col h-14 w-auto lg:w-28 xl:w-36 px-3 text-sm border-l-4 rounded-sm ${
+                      className={`mt-2 flex flex-col h-14 w-full lg:w-28 xl:w-36 px-3 py-1 text-sm border-l-4 rounded-sm ${
                         getTileClass(date)
                       } text-gray-800 justify-center`}
                     >
-                      <span className="font-semibold flex float-start">{event.shift_name}</span>
-                      <span className="flex float-start">
+                      <span className="text-[0.8rem] flex float-start font-semibold">{event.shift_name}</span>
+                      <span className="flex float-start text-[12px]">
                       {convertTo12HourFormat(event?.shift?.start_time)}-
                       {convertTo12HourFormat(event?.shift?.end_time)}
                       </span>

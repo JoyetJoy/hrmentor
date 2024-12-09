@@ -27,7 +27,8 @@ import AdminPayOff from "@/pages/admin/menu/employee/edit/paySlip/PayOff";
 import AdminPayOffView from "@/pages/admin/menu/employee/edit/paySlip/PayOffView";
 import AdminPaySlipView from "@/pages/admin/menu/employee/edit/paySlip/PaySlipView";
 
-export const EmployeeRoutes = [
+export const 
+EmployeeRoutes = [
   {
     path: "",
     element: <EmployeeLists />,

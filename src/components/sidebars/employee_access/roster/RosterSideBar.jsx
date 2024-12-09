@@ -21,8 +21,8 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
   const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
   const { data: location } = useFetchData("location", EMPLOYEE_WORK_LOCATION_LIST);  
 
-  const handleClick = (setter, itemName, currentActive) => {
-    setter(currentActive === itemName ? null : itemName);
+  const handleClick = (setter, item_id, currentActive) => {
+    setter(currentActive === item_id ? null : item_id);
   };
 
   return (
@@ -50,7 +50,7 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
           </DisclosurePanel>
         </Disclosure>
 
-        <Disclosure as="div" className="py-1" defaultOpen={false}>
+        {/* <Disclosure as="div" className="py-1" defaultOpen={false}>
           <DisclosureButton className="group flex w-full items-center justify-between">
             <p className="flex flex-row whitespace-nowrap text-sm font-bold text-black">
               Location
@@ -70,7 +70,7 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
               </p>
             ))}
           </DisclosurePanel>
-        </Disclosure>
+        </Disclosure> */}
 
         <Disclosure as="div" className="py-1" defaultOpen={false}>
           <DisclosureButton className="group flex w-full items-center justify-between">
