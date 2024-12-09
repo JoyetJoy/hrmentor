@@ -194,7 +194,8 @@ console.log(date);
               console.log(shiftEvents);
               
               return events ? (
-                <div className="flex w-full flex-col gap-2">
+                <div className="flex w-full h-full flex-col gap-2">
+                  <>
                   {shiftEvents?.slice(0, 2)?.map((event, index) => (
                     <div
                       key={index}
@@ -210,57 +211,9 @@ console.log(date);
                       </span>
                       <span className="float-start flex text-[12px]">
                         {event?.total_working_hour}
-                        {/* {convertTo12HourFormat(event?.shift?.start_time)}-
-                        {convertTo12HourFormat(event?.shift?.end_time)} */}
                       </span>
                     </div>
-                  ))}
-                  {/* <div className="c-af mt-2 flex h-14 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <div className="flex flex-col justify-start">
-                      <p className="text-[0.8rem] font-bold">{event.shift}</p>
-                      <p className="float-start flex w-full">{event.clockIn}</p>
-                    </div>
-                    <div>
-                      <div className="flex w-full items-end gap-1">
-                        {event.status === "P" && event.latestatus && (
-                          <img
-                            className="h-4 object-contain"
-                            src="/assets/icons/tort.svg"
-                            alt="late"
-                          />
-                        )}
-                        <p
-                          className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white ${event.status == "A" ? "ml-7 bg-[#db0000] pl-[0.03rem]" : event.status === "P" && event.latestatus ? "bg-[#00B448] pt-[0.01rem]" : "ml-7 bg-[#00B448] pt-[0.01rem]"} `}
-                        >
-                          {event.status}
-                        </p>
-                      </div>
-                      <div>{event.clockOut}</div>
-                    </div>
-                  </div>
-                  <div className="c-af mt-2 flex h-14 w-full items-center justify-between bg-mediumblack px-3 text-[0.7rem] font-medium text-textcolor-darkCharcoal">
-                    <div className="flex flex-col justify-start">
-                      <p className="text-[0.8rem] font-bold">{event.shift}</p>
-                      <p className="float-start flex w-full">{event.clockIn}</p>
-                    </div>
-                    <div className="">
-                      <div className="flex w-full items-end gap-1">
-                        {event.status === "P" && event.latestatus && (
-                          <img
-                            className="h-4 object-contain"
-                            src="/assets/icons/tort.svg"
-                            alt="late"
-                          />
-                        )}
-                        <p
-                          className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold text-white ${event.status == "A" ? "ml-7 bg-[#db0000] pl-[0.03rem]" : event.status === "P" && event.latestatus ? "bg-[#00B448] pt-[0.01rem]" : "ml-7 bg-[#00B448] pt-[0.01rem]"} `}
-                        >
-                          {event.status}
-                        </p>
-                      </div>
-                      <div>{event.clockOut}</div>
-                    </div>
-                  </div> */}
+                  ))}</>
                 </div>
               ) : null;
             }
