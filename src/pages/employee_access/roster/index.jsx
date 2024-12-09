@@ -157,7 +157,7 @@ const EmployeeAccessRosterCalendar = () => {
           />
         </div>
         <div className="flex items-center gap-14">
-          {/* <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5">
             <div className="flex items-center gap-2 text-sm">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white">
                 A
@@ -170,7 +170,7 @@ const EmployeeAccessRosterCalendar = () => {
               </p>
               <p>Requested slot</p>
             </div>
-          </div> */}
+          </div>
           <Link
             to="/employee-access/roster/teamroster"
             className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
@@ -261,7 +261,7 @@ const EmployeeAccessRosterCalendar = () => {
                       key={index}
                       className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
                     >
-                      <span className="float-start w-full flex font-semibold">
+                      <span className="float-start flex w-full font-semibold">
                         Holiday
                       </span>
                     </div>

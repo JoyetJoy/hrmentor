@@ -8,7 +8,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import { Link } from "react-router-dom";
 import RosterItemList from "@/components/sidebars/employee_access/roster/RosterSideBar";
-import { TEAM_ROSTER_GET,newRequest } from "@/api/master";
+import { TEAM_ROSTER_GET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 import ShiftDetailsView from "@/components/popups/employee_access/roster/ShiftDetailsView";
 import RequestClaimshift from "@/components/popups/employee_access/roster/RequestClaimshift";
@@ -31,54 +31,76 @@ const EmployeeAccessTeamRoster = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
-  const [activeDepartment, setActiveDepartment] = useState('');
-  const [activeWorkArea, setActiveWorkArea] = useState('');
-  const [activeLocation, setActiveLocation] = useState('');
-  const [activeEmployee,setActiveEmployee] = useState('');
+  const [activeDepartment, setActiveDepartment] = useState("");
+  const [activeWorkArea, setActiveWorkArea] = useState("");
+  const [activeLocation, setActiveLocation] = useState("");
+  const [activeEmployee, setActiveEmployee] = useState("");
 
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
 
-  const { data:employee } = useQuery({
+  const { data: employee } = useQuery({
     queryKey: ["employee"],
-    queryFn: () =>
-      newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
+    queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
   });
 
   const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year, activeEmployee, activeDepartment, activeLocation, activeWorkArea],
+    queryKey: [
+      "events",
+      month,
+      year,
+      activeEmployee,
+      activeDepartment,
+      activeLocation,
+      activeWorkArea,
+    ],
     queryFn: () =>
-      newRequest.get(TEAM_ROSTER_GET, {
-        params: { 
-          month:month, 
-          year:year,
-          employee:activeEmployee,
-          department:activeDepartment,
-          location:activeLocation,
-          work_area:activeWorkArea
-         },
-      }).then((res) => res.data),
+      newRequest
+        .get(TEAM_ROSTER_GET, {
+          params: {
+            month: month,
+            year: year,
+            employee: activeEmployee,
+            department: activeDepartment,
+            location: activeLocation,
+            work_area: activeWorkArea,
+          },
+        })
+        .then((res) => res.data),
     enabled: false, // Prevent the query from auto-fetching on mount
   });
 
   useEffect(() => {
     // Refetch data whenever the `date` changes
     refetch();
-  }, [date, refetch, activeEmployee, activeDepartment, activeLocation, activeWorkArea]);
-  
-  
+  }, [
+    date,
+    refetch,
+    activeEmployee,
+    activeDepartment,
+    activeLocation,
+    activeWorkArea,
+  ]);
+
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
     const currentDay = dayjs(date).date();
-  const updatedDate = dayjs(date)
-    .month(selectedOption.value - 1) // Update the month
-    .date(1) // Temporarily set the date to the first day of the month
-    .date(Math.min(currentDay, dayjs(date).month(selectedOption.value - 1).daysInMonth())) // Ensure the date stays valid
-    .toDate();
-  handleDateChange(updatedDate);
+    const updatedDate = dayjs(date)
+      .month(selectedOption.value - 1) // Update the month
+      .date(1) // Temporarily set the date to the first day of the month
+      .date(
+        Math.min(
+          currentDay,
+          dayjs(date)
+            .month(selectedOption.value - 1)
+            .daysInMonth(),
+        ),
+      ) // Ensure the date stays valid
+      .toDate();
+    handleDateChange(updatedDate);
   };
 
   const handleYearChange = (selectedOption) => {
@@ -87,8 +109,10 @@ const EmployeeAccessTeamRoster = () => {
   };
 
   const getTileClass = (date) => {
-    if (dayjs(date).isSame(dayjs(), "day")) return "bg-green-200 border-green-500";
-    if (dayjs(date).isBefore(dayjs(), "day")) return "bg-blue-200 border-blue-500";
+    if (dayjs(date).isSame(dayjs(), "day"))
+      return "bg-green-200 border-green-500";
+    if (dayjs(date).isBefore(dayjs(), "day"))
+      return "bg-blue-200 border-blue-500";
     return "bg-yellow-200 border-yellow-500";
   };
 
@@ -122,10 +146,9 @@ const EmployeeAccessTeamRoster = () => {
   function convertTo12HourFormat(time) {
     const [hours, minutes] = time.split(":");
     const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = ((hours % 12) || 12);  // Convert hours to 12-hour format
+    const formattedHours = hours % 12 || 12; // Convert hours to 12-hour format
     return `${formattedHours}:${minutes} ${period}`;
   }
-
 
   return (
     <div className="flex flex-col">
@@ -143,12 +166,8 @@ const EmployeeAccessTeamRoster = () => {
         convertTo12HourFormat={convertTo12HourFormat}
       />
       {/* <RequestCalimshift popupOpen={popupOpen} setPopupOpen={setPopupOpen}/> */}
-      <MenuHeaderEmployeeAccess
-        pathlink={""}
-        currentpage={"Roster"}
-
-      />
-      <div className="flex items-center justify-between px-4 py-2 w-full">
+      <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Roster"} />
+      <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           <h5 className="text-md font-bold">Team Roster</h5>
           <Select
@@ -156,7 +175,9 @@ const EmployeeAccessTeamRoster = () => {
             isSearchable={true}
             onChange={handleYearChange}
             styles={customSelectStyles}
-            value={years.find((yearOption) => yearOption.value === dayjs(date).year())}
+            value={years.find(
+              (yearOption) => yearOption.value === dayjs(date).year(),
+            )}
             placeholder={dayjs(date).format("YYYY")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -165,35 +186,38 @@ const EmployeeAccessTeamRoster = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
-            value={months.find((monthOption) => monthOption.value === dayjs(date).month() + 1)} 
+            value={months.find(
+              (monthOption) => monthOption.value === dayjs(date).month() + 1,
+            )}
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
         </div>
         <div className="flex gap-3">
-        <Select
-              options={employee}
-              isSearchable={true}
-              onChange={(option) => setActiveEmployee(option?.id || "")}
-              styles={customSelectStyles}
-              placeholder={'All employee'}
-              className="input-box h-10 w-52 rounded-md p-0 border-[#C2C1C1] focus:border-[#C2C1C1] caret-white"
-            />
-        <Link
-        to="/employee-access/roster" 
-        className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
-          My Roster
-        </Link>
+          <Select
+            options={employee}
+            isSearchable={true}
+            onChange={(option) => setActiveEmployee(option?.id || "")}
+            styles={customSelectStyles}
+            placeholder={"All employee"}
+            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 caret-white focus:border-[#C2C1C1]"
+          />
+          <Link
+            to="/employee-access/roster"
+            className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+          >
+            My Roster
+          </Link>
         </div>
       </div>
-      <div className="mb-10 mt-2 w-full max-w-8xl flex gap-3">
+      <div className="max-w-8xl mb-10 mt-2 flex w-full gap-3">
         <RosterItemList
-        activeDepartment={activeDepartment}
-        setActiveDepartment={setActiveDepartment}
-        activeLocation={activeLocation}
-        setActiveLocation={setActiveLocation}
-        activeWorkArea={activeWorkArea}
-        setActiveWorkArea={setActiveWorkArea}
+          activeDepartment={activeDepartment}
+          setActiveDepartment={setActiveDepartment}
+          activeLocation={activeLocation}
+          setActiveLocation={setActiveLocation}
+          activeWorkArea={activeWorkArea}
+          setActiveWorkArea={setActiveWorkArea}
         />
         <Calendar
           key={date}
@@ -207,28 +231,30 @@ const EmployeeAccessTeamRoster = () => {
             if (view === "month") {
               const { holidayEvents, shiftEvents } = findEvents(date);
               return (
-                <div className="relative flex w-full h-full overflow-x-hidden flex-col overflow-y-auto overflow-y-min">
-                  {shiftEvents?.length>=3 &&(
-                    <div className="absolute top-3 right-0 flex flex-col items-end">
-                    <p
+                <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
+                  {shiftEvents?.length >= 3 && (
+                    <div className="absolute right-0 top-3 flex flex-col items-end">
+                      <p
                         className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
                       >
                         {shiftEvents?.length}
                       </p>
-                  </div>
+                    </div>
                   )}
                   {shiftEvents?.map((event, index) => (
                     <div
                       key={index}
                       onClick={() => handleClick(event)}
-                      className={`mt-2 flex flex-col h-14 w-full lg:w-28 xl:w-36 px-3 py-1 text-sm border-l-4 rounded-sm ${
-                        getTileClass(date)
-                      } text-gray-800 justify-center`}
+                      className={`mt-2 flex h-14 w-full flex-col rounded-sm border-l-4 px-3 py-1 text-sm lg:w-28 xl:w-36 ${getTileClass(
+                        date,
+                      )} justify-center text-gray-800`}
                     >
-                      <span className="text-[0.8rem] flex float-start font-semibold">{event.shift_name}</span>
-                      <span className="flex float-start text-[12px]">
-                      {convertTo12HourFormat(event?.shift?.start_time)}-
-                      {convertTo12HourFormat(event?.shift?.end_time)}
+                      <span className="float-start flex text-[0.8rem] font-semibold">
+                        {event.shift_name}
+                      </span>
+                      <span className="float-start flex text-[12px]">
+                        {convertTo12HourFormat(event?.shift?.start_time)}-
+                        {convertTo12HourFormat(event?.shift?.end_time)}
                       </span>
                     </div>
                   ))}
@@ -244,4 +270,3 @@ const EmployeeAccessTeamRoster = () => {
 };
 
 export default EmployeeAccessTeamRoster;
-

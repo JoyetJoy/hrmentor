@@ -8,6 +8,7 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import EmployeeAttendance from "@/components/popups/employee_access/attendance/EmployeeAttendance";
 import { useQuery } from "@tanstack/react-query";
 import { ATTENDANCE, newRequest, ROASTER_GET } from "@/api/master";
+import { Link } from "react-router-dom";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
@@ -165,12 +166,12 @@ console.log(date);
               <p>Absent</p>
             </div>
           </div>
-          <button
-            onClick={handleClick}
+          <Link
+            to="/employee-access/attendance/team-attendance"
             className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
           >
             Team Attendance
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -204,11 +205,22 @@ console.log(date);
                         date,
                       )} justify-center text-gray-800`}
                     >
+                      <div>
                       <span className="float-start flex text-[0.8rem] font-semibold">
                         {event?.shift_detail?
                           event.shift_detail?.name:'Present'
                         }
                       </span>
+                      {event&&(
+                        <div className="flex gap-2 float-end text-sm">
+                        <img
+                          className="h-4 object-contain"
+                          src="/assets/icons/tort.svg"
+                          alt="late"
+                        />
+                      </div>
+                      )}
+                      </div>
                       <span className="float-start flex text-[12px]">
                         {event?.total_working_hour}
                       </span>
