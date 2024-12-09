@@ -285,7 +285,7 @@ export default function CompanyAddCalender() {
               </div>
               <div className="grid w-1/2 grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
                 <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Location</label>
+                  <label className="label-text font-normal">Location</label>
                   <div className="flex items-center gap-2">
                     <Controller
                       name="accural_monthly"
@@ -335,7 +335,7 @@ export default function CompanyAddCalender() {
                 {fiscalCalendar && (
                   <div className="grid grid-cols-2">
                     <div className="group flex flex-col space-y-1 px-3 py-1">
-                      <label className="label-text">From</label>
+                      <label className="label-text font-normal">From</label>
                       <Controller
                         name="accural_monthly"
                         control={control}
@@ -358,7 +358,7 @@ export default function CompanyAddCalender() {
                       />
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-1">
-                      <label className="label-text">To</label>
+                      <label className="label-text font-normal">To</label>
                       <Controller
                         name="accural_monthly"
                         control={control}
@@ -411,7 +411,7 @@ export default function CompanyAddCalender() {
                 {leaveYear && (
                   <div className="grid grid-cols-2">
                     <div className="group flex flex-col space-y-1 px-3 py-1">
-                      <label className="label-text">From</label>
+                      <label className="label-text font-normal">From</label>
                       <Controller
                         name="accural_monthly"
                         control={control}
@@ -434,7 +434,7 @@ export default function CompanyAddCalender() {
                       />
                     </div>
                     <div className="group flex flex-col space-y-1 px-3 py-1">
-                      <label className="label-text">To</label>
+                      <label className="label-text font-normal">To</label>
                       <Controller
                         name="accural_monthly"
                         control={control}
@@ -464,7 +464,7 @@ export default function CompanyAddCalender() {
                 </p>
                 <div className="grid grid-cols-2">
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">
+                    <label className="label-text font-normal">
                       Maximun working hours per day
                     </label>
                     <input
@@ -482,7 +482,7 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Week start on</label>
+                    <label className="label-text font-normal">Week start on</label>
                     <Controller
                       name="accural_monthly"
                       control={control}
@@ -505,7 +505,7 @@ export default function CompanyAddCalender() {
                     />
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Shift Start time</label>
+                    <label className="label-text font-normal">Shift Start time</label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -522,7 +522,7 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Shift end time</label>
+                    <label className="label-text font-normal">Shift end time</label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -539,7 +539,7 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Shift duration</label>
+                    <label className="label-text font-normal">Shift duration</label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -561,7 +561,7 @@ export default function CompanyAddCalender() {
                 </h1>
                 <div className="grid grid-cols-2">
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Full day</label>
+                    <label className="label-text font-normal">Full day</label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -579,7 +579,7 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Full day tolarance</label>
+                    <label className="label-text font-normal">Full day tolarance</label>
                     <input
                       autoComplete="off"
                       placeholder="HH:MM"
@@ -596,7 +596,7 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Half day </label>
+                    <label className="label-text font-normal">Half day </label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -613,7 +613,7 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">Half day tolarance</label>
+                    <label className="label-text font-normal">Half day tolarance</label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -647,7 +647,7 @@ export default function CompanyAddCalender() {
                     {headers.map((header, index) => (
                       <div
                         key={index}
-                        className="whitespace-nowrap text-sm font-normal"
+                        className="whitespace-nowrap font-normal text-xs "
                       >
                         {header}
                       </div>
@@ -659,7 +659,7 @@ export default function CompanyAddCalender() {
                       key={dayIndex}
                       className="my-7 grid grid-cols-8 items-center gap-28 text-center"
                     >
-                      <div className="text-left">{day}</div>
+                      <div className="text-left text-sm">{day}</div>
                       {headers.map((_, colIndex) => (
                         <input
                           key={colIndex}
@@ -709,7 +709,7 @@ export default function CompanyAddCalender() {
           <div className="w-full rounded-md bg-white px-5 py-7">
             <div className="grid w-1/2 grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
               <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
-                <label className="label-text">Location</label>
+                <label className="label-text font-normal ">Location</label>
                 <div className="flex items-center gap-2">
                   <Controller
                     name="accural_monthly"
@@ -735,7 +735,7 @@ export default function CompanyAddCalender() {
                 </div>
               </div>
               <div className="group col-span-2 flex items-center gap-4 space-y-1 px-3 py-1">
-                <h1 className="text-sm">Fiscal calender</h1>
+                <label className="text-sm font-normal">Fiscal calender</label>
                 <div
                   onClick={() => {
                     if (fiscalCalendar) {
@@ -759,7 +759,7 @@ export default function CompanyAddCalender() {
               {fiscalCalendar && (
                 <div className="grid grid-cols-2">
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">From</label>
+                    <label className="label-text font-normal">From</label>
                     <Controller
                       name="accural_monthly"
                       control={control}
@@ -782,7 +782,7 @@ export default function CompanyAddCalender() {
                     />
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">To</label>
+                    <label className="label-text font-normal">To</label>
                     <Controller
                       name="accural_monthly"
                       control={control}
@@ -835,7 +835,7 @@ export default function CompanyAddCalender() {
               {leaveYear && (
                 <div className="grid grid-cols-2">
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">From</label>
+                    <label className="label-text font-normal">From</label>
                     <Controller
                       name="accural_monthly"
                       control={control}
@@ -858,7 +858,7 @@ export default function CompanyAddCalender() {
                     />
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text">To</label>
+                    <label className="label-text font-normal">To</label>
                     <Controller
                       name="accural_monthly"
                       control={control}
@@ -888,7 +888,7 @@ export default function CompanyAddCalender() {
               </p>
               <div className="grid grid-cols-2">
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">
+                  <label className="label-text font-normal">
                     Maximun working hours per day
                   </label>
                   <input
@@ -906,7 +906,7 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Week start on</label>
+                  <label className="label-text font-normal">Week start on</label>
                   <Controller
                     name="accural_monthly"
                     control={control}
@@ -929,12 +929,12 @@ export default function CompanyAddCalender() {
                   />
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Shift Start time</label>
+                  <label className="label-text font-normal">Shift Start time</label>
                   <input
                     autoComplete="off"
                     type="time"
                     placeholder="HH:MM"
-                    className="input-box"
+                    className="input-box pr-2"
                     name="shift_start_time"
                     value={companyCalender.shift_start_time}
                     onChange={HandleCompanyCalender}
@@ -946,12 +946,12 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Shift end time</label>
+                  <label className="label-text font-normal">Shift end time</label>
                   <input
                     autoComplete="off"
                     type="time"
                     placeholder="HH:MM"
-                    className="input-box"
+                    className="input-box pr-2"
                     name="shift_end_time"
                     value={companyCalender.shift_end_time}
                     onChange={HandleCompanyCalender}
@@ -963,11 +963,11 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Shift duration</label>
+                  <label className="label-text font-normal">Shift duration</label>
                   <input
                     autoComplete="off"
                     type="time"
-                    className="input-box"
+                    className="input-box pr-2"
                     placeholder="HH:MM"
                     name="shift_duration"
                     value={companyCalender.shift_duration}
@@ -985,7 +985,7 @@ export default function CompanyAddCalender() {
               </h1>
               <div className="grid grid-cols-2">
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Full day</label>
+                  <label className="label-text font-normal">Full day</label>
                   <input
                     autoComplete="off"
                     type="time"
@@ -993,7 +993,7 @@ export default function CompanyAddCalender() {
                     name="full_day"
                     value={companyCalender.full_day}
                     onChange={HandleCompanyCalender}
-                    className="input-box"
+                    className="input-box pr-2"
                   />
 
                   {errors.full_day && (
@@ -1003,7 +1003,7 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Full day tolarance</label>
+                  <label className="label-text font-normal">Full day tolarance</label>
                   <input
                     autoComplete="off"
                     placeholder="HH:MM"
@@ -1011,7 +1011,7 @@ export default function CompanyAddCalender() {
                     name="full_tolarance"
                     value={companyCalender.full_tolarance}
                     onChange={HandleCompanyCalender}
-                    className="input-box"
+                    className="input-box pr-2"
                   />
                   {errors.full_tolarance && (
                     <span className="text-xs font-medium text-red-500">
@@ -1020,7 +1020,7 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Half day </label>
+                  <label className="label-text font-normal">Half day </label>
                   <input
                     autoComplete="off"
                     type="time"
@@ -1028,7 +1028,7 @@ export default function CompanyAddCalender() {
                     name="half_day"
                     value={companyCalender.half_day}
                     onChange={HandleCompanyCalender}
-                    className="input-box"
+                    className="input-box pr-2"
                   />
                   {errors.half_day && (
                     <span className="text-xs font-medium text-red-500">
@@ -1037,7 +1037,7 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text">Half day tolarance</label>
+                  <label className="label-text font-normal">Half day tolarance</label>
                   <input
                     autoComplete="off"
                     type="time"
@@ -1045,7 +1045,7 @@ export default function CompanyAddCalender() {
                     name="half_day_tolarance"
                     value={companyCalender.half_day_tolarance}
                     onChange={HandleCompanyCalender}
-                    className="input-box"
+                    className="input-box pr-2"
                   />
                   {errors.half_day_tolarance && (
                     <span className="text-xs font-medium text-red-500">
@@ -1071,7 +1071,7 @@ export default function CompanyAddCalender() {
                   {headers.map((header, index) => (
                     <div
                       key={index}
-                      className="whitespace-nowrap text-sm font-normal"
+                      className="whitespace-nowrap text-xs font-normal"
                     >
                       {header}
                     </div>
@@ -1083,12 +1083,12 @@ export default function CompanyAddCalender() {
                     key={dayIndex}
                     className="my-7 grid grid-cols-8 items-center gap-28 text-center"
                   >
-                    <div className="text-left">{day}</div>
+                    <div className="text-left text-xs">{day}</div>
                     {headers.map((_, colIndex) => (
                       <input
                         key={colIndex}
                         type="checkbox"
-                        className="h-5 w-5 rounded border-gray-400 focus:ring-hrmprimaryorange focus:ring-offset-0"
+                        className="h-4 w-4 rounded border-gray-400 focus:ring-hrmprimaryorange focus:ring-offset-0"
                         checked={weekendDefinition[day.toLowerCase()][colIndex]}
                         onChange={() =>
                           handleCheckboxChange(day.toLowerCase(), colIndex)

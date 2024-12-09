@@ -135,13 +135,15 @@ export default function TeamRosterShiftView({
                   key={employee.id}
                   className="flex items-center gap-3 rounded-lg bg-gray-100 p-3"
                 >
-                  <div className="rounded-full bg-gray-dark p-4"></div>
+                  <div className="rounded-full bg-gray-dark w-8 h-8 overflow-hidden">
+                    <img className="w-full h-full" src={employee?.employee?.profile_image} alt="" />
+                  </div>
                   <div>
                     <p className="text-sm font-medium">
-                      {employee.employee?.first_name || "N/A"}
+                      {employee?.employee?.first_name }
                     </p>
                     <p className="text-xs font-medium text-darkblack">
-                      {employee.employee?.designation || "Role not available"}
+                      {employee?.designation?.designation_name || "Role not available"}
                     </p>
                   </div>
                 </div>

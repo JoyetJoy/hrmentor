@@ -1,6 +1,6 @@
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Eye, PlusIcon } from "lucide-react";
+import { ChevronRight, Eye, LogIn, LogInIcon, PlusIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
@@ -54,6 +54,7 @@ export default function TeamTimeSheet() {
     setDate(updatedDate);
     setSelectedWeek(1); // Reset to the 1st week on month change
   };
+  console.log(date);
 
   // Handle year change
   const handleYearChange = (selectedOption) => {
