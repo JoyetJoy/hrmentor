@@ -359,7 +359,7 @@ export const activityItems = [
   {
     icon: "/assets/icons/admin/setup.svg",
     label: "Setup",
-    path: "/admin/setup",
+    path: "/admin/setup/email",
   },
 ];
 export const EmailData = [

@@ -102,14 +102,14 @@ export default function PayrollListEdit() {
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => {
-                setPopupOpen(true);
-              }}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              className="flex size-7 cursor-pointer items-center"
             >
               <img
                 src="/assets/icons/user_image.jpg"
                 className="w-full object-contain"
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
               />
             </button>
           </div>
@@ -165,12 +165,12 @@ export default function PayrollListEdit() {
       </div>
       <div className="grid w-full grid-cols-12 gap-4 rounded-md bg-white px-6 py-4">
         {/* Summary Panel - col-span-4 */}
-        <div className="col-span-3 ">
+        <div className="col-span-3">
           <div>
             <div className="summary-header mb-4">
               <h4 className="text-sm font-bold">
                 Monday, 11 Nov 2024 to Saturday, 15 Nov 2024{" "}
-                <button className="toggle-button text-sm text-gray-600">
+                <button className="toggle-button text-black-600 text-sm">
                   ⌃
                 </button>
               </h4>

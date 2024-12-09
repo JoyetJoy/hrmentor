@@ -7,6 +7,6 @@ export const emailMenu = [
     {
       id: 2,
       name: "Type",
-      link: "/admin/recruiter/jobs",
+      link: "/admin/setup/type",
     },
   ];
