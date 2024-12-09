@@ -529,7 +529,7 @@ export const employeemenuitems = [
     iconSrcBlack: "/assets/icons/employee_access/header/leave-black.svg",
     iconSrcActive: "/assets/icons/employee_access/header/leaveColor.svg",
     name: "Leave",
-    path: "/employee-access/leave",
+    path: "/employee-access/leave/request",
     active: "leave",
   },
  
