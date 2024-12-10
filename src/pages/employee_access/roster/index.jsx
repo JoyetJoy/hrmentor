@@ -160,7 +160,7 @@ const EmployeeAccessRosterCalendar = () => {
           <div className="flex items-center gap-5">
             <div className="flex items-center gap-2 text-sm">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white">
-                A
+                L
               </p>
               <p>Available slot</p>
             </div>

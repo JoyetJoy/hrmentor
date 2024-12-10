@@ -51,8 +51,7 @@ const EmployeeAccessAttendanceCalendar = () => {
       console.log("Refetching events for:", { month, year });
       refetch();
     }
-  }, [date,month,year, refetch]);
-  
+  }, [date, month, year, refetch]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -66,9 +65,7 @@ const EmployeeAccessAttendanceCalendar = () => {
       .date(
         Math.min(
           currentDay,
-          dayjs(date)
-            .month(selectedOption.value)
-            .daysInMonth(),
+          dayjs(date).month(selectedOption.value).daysInMonth(),
         ),
       )
       .toDate();
@@ -94,9 +91,7 @@ const EmployeeAccessAttendanceCalendar = () => {
       ? events.result.filter((event) => event.holidays?.includes(formattedDate))
       : [];
     const shiftEvents = Array.isArray(events)
-      ? events.filter((event) =>
-          event.attendance_date?.includes(formattedDate),
-        )
+      ? events.filter((event) => event.attendance_date?.includes(formattedDate))
       : [];
     const availableSlots = Array.isArray(events?.available_slots_filtered)
       ? events.available_slots_filtered.filter((slot) =>
@@ -117,7 +112,7 @@ const EmployeeAccessAttendanceCalendar = () => {
     const formattedHours = hours % 12 || 12;
     return `${formattedHours}:${minutes} ${period}`;
   }
-console.log(date);
+  console.log(date);
 
   return (
     <div className="flex flex-col">
@@ -176,7 +171,7 @@ console.log(date);
       </div>
 
       <div className="max-w-8xl mb-10 mt-7 w-full">
-      <Calendar
+        <Calendar
           key={date}
           onChange={handleDateChange}
           value={date}
@@ -193,39 +188,45 @@ console.log(date);
                 requestedSlots,
               } = findEvents(date);
               console.log(shiftEvents);
-              
+
               return events ? (
-                <div className="flex w-full h-full flex-col gap-2">
+                <div className="flex h-full w-full flex-col gap-2">
                   <>
-                  {shiftEvents?.slice(0, 2)?.map((event, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleClick(event)}
-                      className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
-                        date,
-                      )} justify-center text-gray-800`}
-                    >
-                      <div>
-                      <span className="float-start flex text-[0.8rem] font-semibold">
-                        {event?.shift_detail?
-                          event.shift_detail?.name:'Present'
-                        }
-                      </span>
-                      {event&&(
-                        <div className="flex gap-2 float-end text-sm">
-                        <img
-                          className="h-4 object-contain"
-                          src="/assets/icons/tort.svg"
-                          alt="late"
-                        />
+                    {shiftEvents?.slice(0, 2)?.map((event, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleClick(event)}
+                        className={`flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                          date,
+                        )} justify-center text-gray-800`}
+                      >
+                        <div className="flex items-center w-full justify-between">
+                          <span className="float-start flex text-[0.8rem] font-semibold ">
+                            {event?.shift_detail
+                              ? event.shift_detail?.name
+                              : "Present"}
+                          </span>
+                          {event && (
+                            <div className="float-end flex items-center gap-2 text-sm">
+                              <img
+                                className="h-4 object-contain"
+                                src="/assets/icons/tort.svg"
+                                alt="late"
+                              />
+                              <div className="flex items-center gap-2 text-sm">
+                                <p className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-bold text-white">
+                                  P
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <span className="float-start flex text-[12px]">
+                          {event?.total_working_hour}
+                        </span>
                       </div>
-                      )}
-                      </div>
-                      <span className="float-start flex text-[12px]">
-                        {event?.total_working_hour}
-                      </span>
-                    </div>
-                  ))}</>
+                    ))}
+                  </>
                 </div>
               ) : null;
             }

@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,7 +11,13 @@ import Select from "react-select"; // Import React Select instead of MUI's Selec
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { customSelectStyles } from "@/utils/customStyles";
-import { EMAIL_FOLDER, EMAIL_TOKENS, EMAIL_TYPE } from "@/api/setup";
+import {
+  ACTIVE_EMAIL_FOLDER,
+  EMAIL_FOLDER,
+  EMAIL_TEMPLATE,
+  EMAIL_TOKENS,
+  EMAIL_TYPE,
+} from "@/api/setup";
 import { newRequest } from "@/api";
 
 const EmailSchema = Yup.object({
@@ -20,8 +26,11 @@ const EmailSchema = Yup.object({
 });
 
 export default function EmailSetupSave() {
-  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const label = searchParams.get("label");
   const { user } = useUserStore((state) => ({ user: state.user }));
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
   const [emailTemplateId, setEmailTemplateId] = useState("");
@@ -32,6 +41,8 @@ export default function EmailSetupSave() {
     Dear [Candidate First and Last Name],<br><br>
     Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.
   `);
+
+  console.log(id, "ididid");
 
   const {
     register,
@@ -74,7 +85,7 @@ export default function EmailSetupSave() {
     queryKey: ["emailFolderList", user?.id],
     queryFn: () =>
       newRequest
-        .get(EMAIL_FOLDER, { params: { user_id: user?.id } })
+        .get(ACTIVE_EMAIL_FOLDER, { params: { user_id: user?.id } })
         .then((res) => res.data),
     enabled: !!user?.id,
   });
@@ -95,34 +106,36 @@ export default function EmailSetupSave() {
     }
   }, [emailTypeId, user?.id]);
 
+  
   const onSubmit = async () => {
     setLoader(true);
     try {
       const formData = {
         subject: saveEmail.subject,
-        template_name: saveEmail.template_name,
-        is_default: isDefault,
+        templete_name: saveEmail.template_name,
+        is_default: isDefault === true ? 1 : 0,
         folder_id: emailTemplateId,
-        type_id: emailTypeId,
-        content_note: content,
+        email_type_id: emailTypeId,
+        content: content,
         token_id: tokenId,
       };
 
-      console.log(formData, "formDataformData");
-
-      // const res = await newRequest.post(
-      //   `${COMPANY_CALENDER}`, // URL with dynamic ID
-      //   formData, // formData should be the second argument, which is the request body
-      //   {
-      //     params: {
-      //       user_id: user?.id,
-      //     },
-      //   },
-      // );
-      // if (res) {
-      //   toast.success(res?.data?.message);
-      //   close();
-      // }
+      const res = await newRequest.post(
+        `${EMAIL_TEMPLATE}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
+      if (res) {
+        toast.success(res?.data?.message);
+        navigate(
+          `/admin/setup/folder/view?id=${id}&label=${encodeURIComponent(label)}`,
+        );
+        close();
+      }
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.error);

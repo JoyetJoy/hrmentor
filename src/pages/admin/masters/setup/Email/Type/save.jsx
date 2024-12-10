@@ -1,5 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,7 +16,7 @@ import Select from "react-select"; // Import React Select instead of MUI's Selec
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { customSelectStyles } from "@/utils/customStyles";
-import { EMAIL_FOLDER, EMAIL_TOKENS, EMAIL_TYPE } from "@/api/setup";
+import { ALL_TOKEN_LIST, EMAIL_TYPE, UPDATE_EMAIL_TYPE } from "@/api/setup";
 import { newRequest } from "@/api";
 
 const EmailSchema = Yup.object({
@@ -20,18 +25,14 @@ const EmailSchema = Yup.object({
 });
 
 export default function EmailTypeSave() {
-  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const label = searchParams.get("label");
+  const navigate = useNavigate();
+
   const { user } = useUserStore((state) => ({ user: state.user }));
   const [loader, setLoader] = useState(false);
-  const [isDefault, setIsDefault] = useState(false);
-  const [emailTemplateId, setEmailTemplateId] = useState("");
-  const [emailTypeId, setEmailTypeId] = useState("");
-  const [tokenId, setTokenId] = useState("");
   const [tokens, setTokens] = useState([]);
-  const [content, setContent] = useState(`
-    Dear [Candidate First and Last Name],<br><br>
-    Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.
-  `);
 
   const {
     register,
@@ -44,85 +45,38 @@ export default function EmailTypeSave() {
     resolver: yupResolver(EmailSchema),
   });
 
-  const queryClient = useQueryClient();
-
-  const [saveEmail, SetSaveEmail] = useState({
-    template_name: "",
-    subject: "",
-  });
-
-  const HandleSaveEmail = (e) => {
-    SetSaveEmail({
-      ...saveEmail,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleContentChange = (value) => {
-    setContent(value);
-  };
-
-  const { data: emailTypeList = [] } = useQuery({
-    queryKey: ["emailTypeList", user?.id],
+  const { data: tokenList } = useQuery({
+    queryKey: ["tokenList", user?.id],
     queryFn: () =>
       newRequest
-        .get(EMAIL_TYPE, { params: { user_id: user?.id } })
+        .get(ALL_TOKEN_LIST, { params: { user_id: user?.id } })
         .then((res) => res.data),
     enabled: !!user?.id,
   });
-
-  const { data: emailFolderList = [] } = useQuery({
-    queryKey: ["emailFolderList", user?.id],
-    queryFn: () =>
-      newRequest
-        .get(EMAIL_FOLDER, { params: { user_id: user?.id } })
-        .then((res) => res.data),
-    enabled: !!user?.id,
-  });
-
-  useEffect(() => {
-    if (emailTypeId) {
-      newRequest
-        .get(`/${EMAIL_TOKENS}/${emailTypeId}`, {
-          params: { user_id: user?.id },
-        })
-        .then((res) => {
-          const formattedTokens = res.data.map((token) => ({
-            value: token.id,
-            label: token.token,
-          }));
-          setTokens(formattedTokens);
-        });
-    }
-  }, [emailTypeId, user?.id]);
 
   const onSubmit = async () => {
     setLoader(true);
     try {
+      const ids = tokens.map((item) => item.id);
       const formData = {
-        subject: saveEmail.subject,
-        template_name: saveEmail.template_name,
-        is_default: isDefault,
-        folder_id: emailTemplateId,
-        type_id: emailTypeId,
-        content_note: content,
-        token_id: tokenId,
+        tokens: ids,
       };
 
-      console.log(formData, "formDataformData");
-
-      // const res = await newRequest.post(
-      //   `${COMPANY_CALENDER}`, // URL with dynamic ID
-      //   formData, // formData should be the second argument, which is the request body
-      //   {
-      //     params: {
-      //       user_id: user?.id,
-      //     },
-      //   },
-      // );
-      // if (res) {
-      //   toast.success(res?.data?.message);
-      //   close();
-      // }
+      const res = await newRequest.post(
+        `${UPDATE_EMAIL_TYPE}/${id}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
+      if (res) {
+        toast.success(res?.data?.message);
+        navigate(
+          `/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`,
+        );
+      }
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.error);
@@ -147,7 +101,7 @@ export default function EmailTypeSave() {
       </div>
 
       <div className="mx-auto h-full w-[98%] rounded-md bg-white px-3 py-4">
-        <form className="grid w-full max-w-5xl grid-cols-12 gap-16 p-3" >
+        <form className="grid w-full max-w-5xl grid-cols-12 gap-16 p-3">
           <div className="col-span-8 grid w-full grid-cols-1 gap-3">
             <h6 className="text-lg font-semibold">Edit Email Type</h6>
 
@@ -157,12 +111,11 @@ export default function EmailTypeSave() {
               style={{ width: "300px" }}
             >
               <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                Template Name
+                Name
               </label>
               <input
-                name="template_name"
-                value={saveEmail.template_name}
-                onChange={HandleSaveEmail}
+                name="name"
+                value={label}
                 type="text"
                 placeholder="Template Name"
                 className="input-box h-10 w-full rounded border border-black/10 px-2 text-sm"
@@ -171,7 +124,7 @@ export default function EmailTypeSave() {
 
             <div className="group flex flex-col" style={{ width: "600px" }}>
               <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                Folder
+                Subject
               </label>
               <Controller
                 name="emailTemplateId"
@@ -180,14 +133,13 @@ export default function EmailTypeSave() {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={emailFolderList}
+                    options={tokenList}
                     styles={customSelectStyles}
                     isMulti
                     placeholder="Select Email Folder"
                     className="input-box"
                     onChange={(selectedOption) => {
-                      field.onChange(selectedOption.id);
-                      setEmailTemplateId(selectedOption.id);
+                      setTokens(selectedOption);
                     }}
                   />
                 )}
@@ -198,8 +150,8 @@ export default function EmailTypeSave() {
                 </span>
               )}
             </div>
-            <div style={{height:"150px",color:"white"}}>
-                <p></p>
+            <div style={{ height: "150px", color: "white" }}>
+              <p></p>
             </div>
           </div>
         </form>
