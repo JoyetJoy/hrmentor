@@ -11,7 +11,7 @@ export default function TeamRosterShiftView({
   date,
   convertTo12HourFormat,
 }) {
-  console.log(date);
+  console.log(selectedField);
 
   // const [loader, setLoader] = useState(false);
   const { data, refetch } = useQuery({
@@ -23,14 +23,14 @@ export default function TeamRosterShiftView({
     enabled: !!selectedField, // Only run query if selectedField is defined
   });
   const { data: employeelist } = useQuery({
-    queryKey: ["employeeList", data?.shift_id], // Unique query key
+    queryKey: ["employeeList", selectedField?.id], // Unique query key
     queryFn: () =>
       newRequest
         .get(`${TEAMROSTER_EMPLOYEELIST}/${data?.shift_id}`)
         .then((res) => res.data),
     enabled: !!data?.shift_id, // Run only if data and shift_id exist
   });
-  console.log(employeelist);
+  console.log(data);
 
   function close() {
     setPopupOpen(false);

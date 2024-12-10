@@ -10,6 +10,7 @@ import TeamTimeTracker from "@/components/popups/employee_access/timesheet/team/
 import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timesheet/TeamTimeSheetSideBar";
 import TeamAddManually from "@/components/popups/employee_access/timesheet/team/AddManually";
 import { useQuery } from "@tanstack/react-query";
+import { newRequest, TEAM_TIMESHEET_EMPLOYEELIST } from "@/api/master";
 
 export default function TeamTimeSheet() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +24,22 @@ export default function TeamTimeSheet() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [weeks, setWeeks] = useState([]);
+
+  // Fetch the data for the selected week
+  const { data: employeelist, refetch } = useQuery({
+    queryKey: ["employeelist", selectedWeek, date], // Unique query key
+    queryFn: () =>
+      newRequest.get(TEAM_TIMESHEET_EMPLOYEELIST).then((res) => res.data),
+  });
+  console.log(employeelist);
+  
+
+  // Trigger the query on mount and when selectedWeek > 0
+  useEffect(() => {
+    if (selectedWeek > 0) {
+      refetch();
+    }
+  }, [selectedWeek, refetch]);
 
   // Calculate months and years
   const months = Array.from({ length: 12 }, (_, i) => ({
@@ -98,20 +115,6 @@ export default function TeamTimeSheet() {
   });
 
   const { end } = getStartAndEndOfWeek();
-
-  // Fetch the data for the selected week
-  const { data: events, refetch } = useQuery({
-    queryKey: ["events", selectedWeek, date], // Unique query key
-    queryFn: () =>
-      newRequest.get(`${TIME_SHEET}/${end}`).then((res) => res.data),
-  });
-
-  // Trigger the query on mount and when selectedWeek > 0
-  useEffect(() => {
-    if (selectedWeek > 0) {
-      refetch();
-    }
-  }, [selectedWeek, refetch]);
 
   const formatTime = (time) => {
     const [hours, minutes] = time.split(":"); // Split the time into hours, minutes, and seconds
@@ -228,6 +231,7 @@ export default function TeamTimeSheet() {
           handleMonthChange={handleMonthChange}
           date={date}
           handleYearChange={handleYearChange}
+          employeelist={employeelist}
         />
         <QueryTable
           columns={columns}

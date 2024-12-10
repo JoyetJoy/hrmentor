@@ -230,10 +230,11 @@ const EmployeeAccessTeamRoster = () => {
           tileContent={({ date, view }) => {
             if (view === "month") {
               const { holidayEvents, shiftEvents } = findEvents(date);
+              console.log(shiftEvents);
               return (
-                <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
+                <div className={`relative flex h-full w-full flex-col overflow-visible ${shiftEvents?.length >= 3 ? 'pt-[0.6rem]' : ''}`}>
                   {shiftEvents?.length >= 3 && (
-                    <div className="absolute right-0 top-3 flex flex-col items-end">
+                    <div className="absolute right-0 -top-[0.9rem] flex flex-col items-end">
                       <p
                         className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
                       >
@@ -241,6 +242,7 @@ const EmployeeAccessTeamRoster = () => {
                       </p>
                     </div>
                   )}
+                 <div className=" overflow-y-auto overflow-y-min overflow-x-hidden">
                   {shiftEvents?.map((event, index) => (
                     <div
                       key={index}
@@ -258,6 +260,7 @@ const EmployeeAccessTeamRoster = () => {
                       </span>
                     </div>
                   ))}
+                 </div>
                 </div>
               );
             }
