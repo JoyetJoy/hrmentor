@@ -106,6 +106,7 @@ export default function EmailSetupSave() {
     }
   }, [emailTypeId, user?.id]);
 
+  
   const onSubmit = async () => {
     setLoader(true);
     try {
