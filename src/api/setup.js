@@ -5,9 +5,9 @@ export const UPDATE_SHIFT_ = "employee-shift-area";
 //BREAK TIME
 export const SHIFT_BREAK_TIME = "employee-shift-break-time";
 // ROSTER LIST
-export const ROSTER_LIST ="employee-roster-list"
+export const ROSTER_LIST = "employee-roster-list";
 // DELETE ROSTER
-export const DELETE_ROSTER = "employee-roster-details"
+export const DELETE_ROSTER = "employee-roster-details";
 //ROSTER EMP
 // export const ROSTER_EMPLIST = "getEmployeeeDetails";
 // export const UPDATE_ROSTER_LIST = "employee-roster-list ";
@@ -16,11 +16,24 @@ export const DELETE_ROSTER = "employee-roster-details"
 // EMAIL TYPE
 export const EMAIL_TYPE = "active-email-types";
 
+// EMAIL TYPE
+export const UPDATE_EMAIL_TYPE = "update-email-types";
+
 // EMAIL FOLDER
-export const EMAIL_FOLDER = "active-email-folders";
+export const ACTIVE_EMAIL_FOLDER = "active-email-folders";
+
+// EMAIL FOLDER
+export const EMAIL_FOLDER = "email-folders";
 
 // EMAIL TOKENS
 export const EMAIL_TOKENS = "email-type-tokens";
+
+//  ALL TOKEN LIST
+export const ALL_TOKEN_LIST ="all-tokens-list"
+
+// Email Template
+export const EMAIL_TEMPLATE = "email-templates";
+
 export const ROSTER_EMPLIST = "get-employee-details";
 export const UPDATE_ROSTER_LIST = "employee-roster-list ";
 //
