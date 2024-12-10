@@ -47,7 +47,7 @@ export default function EmailTypeSave() {
   const queryClient = useQueryClient();
 
   const [saveEmail, SetSaveEmail] = useState({
-    template_name: "",
+    name: "",
     subject: "",
   });
 
@@ -147,7 +147,7 @@ export default function EmailTypeSave() {
       </div>
 
       <div className="mx-auto h-full w-[98%] rounded-md bg-white px-3 py-4">
-        <form className="grid w-full max-w-5xl grid-cols-12 gap-16 p-3" >
+        <form className="grid w-full max-w-5xl grid-cols-12 gap-16 p-3">
           <div className="col-span-8 grid w-full grid-cols-1 gap-3">
             <h6 className="text-lg font-semibold">Edit Email Type</h6>
 
@@ -157,11 +157,11 @@ export default function EmailTypeSave() {
               style={{ width: "300px" }}
             >
               <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                Template Name
+                Name
               </label>
               <input
-                name="template_name"
-                value={saveEmail.template_name}
+                name="name"
+                value={saveEmail.name}
                 onChange={HandleSaveEmail}
                 type="text"
                 placeholder="Template Name"
@@ -171,7 +171,7 @@ export default function EmailTypeSave() {
 
             <div className="group flex flex-col" style={{ width: "600px" }}>
               <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                Folder
+                Subject
               </label>
               <Controller
                 name="emailTemplateId"
@@ -198,8 +198,8 @@ export default function EmailTypeSave() {
                 </span>
               )}
             </div>
-            <div style={{height:"150px",color:"white"}}>
-                <p></p>
+            <div style={{ height: "150px", color: "white" }}>
+              <p></p>
             </div>
           </div>
         </form>

@@ -1,7 +1,11 @@
+import { newRequest } from "@/api";
+import { EMAIL_TYPE } from "@/api/setup";
 import MenuHeader from "@/components/common/MenuHeader";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { useQuery } from "@tanstack/react-query";
 import { Eye, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,27 +17,29 @@ export default function EmailType() {
   const [totalPages, setTotalPages] = useState();
   const [pageLimit, setPageLimit] = useState(10);
   const navigate = useNavigate();
-
-  const List = [
-    {
-      id: 1,
-      business_name: "deded@gmail.com",
-    },
-    {
-      id: 2,
-      business_name: "example@gmail.com",
-    },
-    {
-      id: 3,
-      business_name: "test@gmail.com",
-    },
-  ];
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  const { data: emailType } = useQuery({
+    queryKey: ["emailType", user?.id, currentPage, pageLimit],
+    queryFn: () =>
+      newRequest
+        .get(EMAIL_TYPE, {
+          params: {
+            user_id: user?.id,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id, // Ensure the query only runs if both `user.id` and `country_id` are available
+  });
 
   const columns = React.useMemo(
     () => [
       {
         header: "Email Type",
-        accessorKey: "leave_name",
+        accessorKey: "label",
       },
 
       {
@@ -66,7 +72,7 @@ export default function EmailType() {
         ),
       },
     ],
-    [List],
+    [emailType, pageLimit],
   );
 
   return (
@@ -88,7 +94,7 @@ export default function EmailType() {
           <div className="space-between flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">
             <QueryTable
               columns={columns}
-              list={List} // Corrected here
+              list={emailType} // Corrected here
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               totalPages={totalPages}
