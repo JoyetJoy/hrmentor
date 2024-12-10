@@ -124,7 +124,7 @@ console.log(date);
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Attendance"} />
       <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
-          <h5 className="text-md font-bold">My Attendance</h5>
+          <h5 className="text-md font-bold">Team Attendance</h5>
           <Select
             options={years}
             isSearchable={true}
@@ -166,10 +166,14 @@ console.log(date);
             </div>
           </div>
           <button
-            onClick={handleClick}
             className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
           >
-            Team Attendance
+            Attendance
+          </button>
+          <button
+            className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+          >
+            Export
           </button>
         </div>
       </div>
