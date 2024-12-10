@@ -133,7 +133,7 @@ export default function EmailSetupSave() {
 
   return (
     <>
-      <SetUpHeader currentPage={"Email"} />
+      <SetUpHeader menu="Menu" currentpath="Folder" page={1} />
       <div className="mx-auto mb-3 flex h-full w-[98%] items-center justify-between">
         <label>
           <b>Email Template</b>
