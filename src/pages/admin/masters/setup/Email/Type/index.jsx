@@ -47,27 +47,34 @@ export default function EmailType() {
         accessorKey: "location",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <button
+            {/* <button
               type="button"
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
               <Eye className="size-3" />
-            </button>
+            </button> */}
             <button
               type="button"
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              onClick={() => {
+                const id = row.original.id;
+                const label = row.original.label;
+                navigate(
+                  `/admin/setup/type/view?id=${id}&label=${encodeURIComponent(label)}`,
+                );
+              }}
             >
               <img
                 src="/assets/icons/admin/marker.svg"
                 className="w-full object-contain"
               />
             </button>
-            <button
+            {/* <button
               type="button"
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
-            </button>
+            </button> */}
           </div>
         ),
       },
@@ -80,13 +87,13 @@ export default function EmailType() {
       <SetUpHeader menu="Menu" currentpath="Folder" page={2} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <label></label>
-        <Link
+        {/* <Link
           to="/admin/setup/type/view"
           className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white hover:bg-hrmdarkblue/70 focus:outline-none"
         >
           <Plus className="size-4" />
           Add Type
-        </Link>
+        </Link> */}
       </div>
       <div className="flex gap-4">
         <Setup />
