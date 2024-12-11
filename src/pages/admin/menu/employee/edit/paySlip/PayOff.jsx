@@ -7,6 +7,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import dayjs from "dayjs";
 import { ArrowDownToLine, ChevronRight, Eye, Search } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 import Select from "react-select";
 
 export default function AdminPayOff() {
@@ -26,11 +27,7 @@ export default function AdminPayOff() {
           header: "Sl No",
           accessorKey: "sno",
           cell: ({ row }) => {
-            return (
-              <div className="flex px-2">
-                {row.index + 1 + (currentPage - 1) * pageLimit}
-              </div>
-            );
+            return <div className="flex px-2"></div>;
           },
         },
         {
@@ -100,6 +97,7 @@ export default function AdminPayOff() {
         menu="Menu"
         subMenu="Employee"
         icon={<ChevronRight className="size-3" />}
+        activeSubMenu="PayOff"
         page={2}
       />
       <div className="flex gap-x-3">
