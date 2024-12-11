@@ -9,7 +9,6 @@ import EmployeeAttendance from "@/components/popups/employee_access/attendance/E
 import { useQuery } from "@tanstack/react-query";
 import { ATTENDANCE, newRequest, ROASTER_GET } from "@/api/master";
 import TeamAttendanceSideBar from "@/components/sidebars/employee_access/attendance/TeamAttendanceSideBar";
-import { ATTENDANCE, newRequest, ROASTER_GET, TEAM_TIMESHEET_EMPLOYEELIST } from "@/api/master";
 import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timesheet/TeamTimeSheetSideBar";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
@@ -236,7 +235,7 @@ const TeamAttendanceCalendar = () => {
       </div>
       <div className="max-w-8xl mb-10 mt-3 flex w-full gap-3">
         <TeamAttendanceSideBar/>
-        <Calendar
+        <Calendar/>
 
       <div className="flex gap-3 max-w-8xl mb-10 mt-7 w-full">
       <TeamTimeSheetSideBar
@@ -297,7 +296,7 @@ const TeamAttendanceCalendar = () => {
           }}
         />
       </div>
-      
+      /</div>
     </div>
   );
 };
