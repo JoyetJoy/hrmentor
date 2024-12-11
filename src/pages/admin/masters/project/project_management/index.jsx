@@ -428,7 +428,7 @@ export default function ProjectManagement() {
                   </label>
                   <label
                     htmlFor="profile_image"
-                    className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    className="input-box bg-gray-300 flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
                   >
                     <div className="flex items-center gap-2">
                       <UploadCloud />

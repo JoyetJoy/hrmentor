@@ -444,7 +444,7 @@ export default function TaskManagement() {
                     </label>
                     <label
                       htmlFor="profile_image"
-                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed bg-gray-300"
                     >
                       <div className="flex items-center gap-2">
                         <UploadCloud />

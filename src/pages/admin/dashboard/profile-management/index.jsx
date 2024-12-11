@@ -17,6 +17,7 @@ export default function ProfileManagement() {
   const [loader, setLoader] = useState(false);
   const [id, setId] = useState("");
   const [imageFile, setImageFile] = useState({});
+  const [imageURL, setImageURL] = useState(null);
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
@@ -41,7 +42,11 @@ export default function ProfileManagement() {
   });
 
   const handleImageChange = (event) => {
-    setImageFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImageURL(URL.createObjectURL(file));
+    }
   };
 
   useEffect(() => {
@@ -205,6 +210,14 @@ export default function ProfileManagement() {
                           className="hidden"
                         />
                       </label>
+
+                      <div className="flex items-center gap-2">
+                        <img
+                          className="h-40 w-40 rounded-md object-cover"
+                          src={imageURL ?? profileManagement?.profile_image}
+                          alt="Preview"
+                        />
+                      </div>
                     </div>
                     <div className="col-span-2 flex justify-start space-x-3 pt-5">
                       <button
