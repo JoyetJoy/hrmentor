@@ -12,7 +12,11 @@ import { SetupRoutes } from "./children/SetupRoutes";
 import { ShiftRoutes } from "./children/ShiftRoutes";
 import { RosterRoutes } from "./children/RosterRoutes";
 import { PayrollRoute } from "./children/PayrollRoute";
+<<<<<<< HEAD
 import { ProjectRoutes } from "./children/ProjectRoute";
+=======
+import { NewsEventRoute } from "./children/NewsEventRoute";
+>>>>>>> a725670b568106bea098ab1bade0fae95d758b0e
 
 export const AdminRoutes = [
   {
@@ -75,4 +79,9 @@ export const AdminRoutes = [
     path: "/admin/payroll",
     children: PayrollRoute,
   },
+  {
+    path: "/admin/news",
+    children: NewsEventRoute,
+  },
+
 ];
