@@ -342,8 +342,8 @@ export const activityItems = [
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
   {
     icon: "/assets/icons/admin/task.svg",
-    label: "New & Event ",
-    path: "/admin/news",
+    label: "News & Event ",
+    path: "admin/news-event/news",
   },
 
   {
