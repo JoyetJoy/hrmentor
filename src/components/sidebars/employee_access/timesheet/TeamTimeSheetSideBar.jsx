@@ -6,21 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Search } from "lucide-react";
 import dayjs from "dayjs";
 
-export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChange,selectedWeek,handleMonthChange,date,handleYearChange,employeelist}) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    setError,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm({
-    mode: "on",
-    reValidateMode: "onChange",
-    resolver: yupResolver(),
-  });
+export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChange,selectedWeek,handleMonthChange,date,handleYearChange,employeelist,type}) {
   console.log(years,date);
   
   return (
@@ -58,7 +44,8 @@ export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChang
               className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
             />
           </div>
-          <div className="group flex flex-col gap-1.5 px-3 py-2">
+          {type==='timesheet' && (
+            <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className=" label-text">Week</label>
             <Select
               options={weeks}
@@ -72,7 +59,9 @@ export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChang
               className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
             />
           </div>
-          <div className="group flex flex-col gap-1.5 px-3 py-2">
+          )}
+          
+          {/* <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className=" label-text">Designation</label>
             <Controller
               name="designation"
@@ -94,7 +83,7 @@ export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChang
                 {errors.designation.message}
               </span>
             )}
-          </div>
+          </div> */}
           <div className="group flex flex-col gap-1.5 px-3 py-2">
             <label className=" label-text">Search employee</label>
 

@@ -122,6 +122,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const [colKeys, setColKeys] = useState(null);
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [state,setState]=useState();
 
   useEffect(() => {
     if (employeeDetails) {
@@ -207,18 +208,7 @@ export default function SaveEmployeeForm({ formtype }) {
     "nationalityList",
   );
 
-  const { country_id, state_id, home_address } = watch();
-
-  // GET STATTE BY COUNTRY ID AND SEARCH KEY
-  const loadStatesOptions = async (inputValue) => {
-    if (inputValue?.length < 3) {
-      return [];
-    }
-    const response = await newRequest.get(STATE_COUNTRY, {
-      params: { country_id: parseInt(country_id?.id), search: inputValue },
-    });
-    return response?.data;
-  };
+  const { country_id, state_id, home_address, city_id} = watch();
 
   // GET CITY BY STATE ID AND SEARCH KEY
   const loadCitiesOptions = async (inputValue) => {
@@ -230,6 +220,17 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     return response?.data;
   };
+ 
+  // Function to display state of the selected city
+const handleCitySelect = (selectedCity) => {
+  
+  // Assuming selectedCity has a state_name attribute
+  if (selectedCity?.state_name) {
+    setState(selectedCity.state_name);
+    // Update the state display based on the selected city
+    setValue('state_id', { label: selectedCity.state_name, value: selectedCity.state_id });
+  }
+};
 
   // DEPARTMENT LISTING
   const { data: departmentListing } = useEmployeeMaster(
@@ -603,13 +604,14 @@ export default function SaveEmployeeForm({ formtype }) {
                     rules={{ required: true }}
                     render={({ field }) => (
                       <AsyncSelect
-                        {...field}
-                        placeholder="Search ..."
-                        loadOptions={loadCitiesOptions}
-                        isSearchable={true}
-                        noOptionsMessage={() => "type city name"}
-                        className="input-box"
-                      />
+                      {...field}
+                      placeholder="Search ..."
+                      loadOptions={loadCitiesOptions}
+                      isSearchable={true}
+                      noOptionsMessage={() => "Type city name"}
+                      onChange={handleCitySelect}  // Handle city selection
+                      className="input-box"
+                    />
                     )}
                   />
                   {errors.city_id && (
@@ -620,21 +622,10 @@ export default function SaveEmployeeForm({ formtype }) {
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="label-text">County</label>
-                  <Controller
-                    name="state_id"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <AsyncSelect
-                        {...field}
-                        placeholder="Search ..."
-                        loadOptions={loadStatesOptions}
-                        isSearchable={true}
-                        noOptionsMessage={() => "type state name"}
-                        className="input-box overflow-hidden"
-                      />
-                    )}
-                  />
+                  {/* Show the selected state's name if a city is selected */}
+                  <span className="border border-[#cacaca] h-10 rounded-md p-2 text-sm font-thin">
+                    {state || ""}
+                  </span>
                   {errors.state_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.state_id?.message}
@@ -967,7 +958,7 @@ export default function SaveEmployeeForm({ formtype }) {
                         styles={customSelectStyles}
                         options={employeeTypeList}
                         placeholder="Select Employement Type"
-                        className="input-box"
+                        className="input-box overflow-hidden"
                       />
                     )}
                   />

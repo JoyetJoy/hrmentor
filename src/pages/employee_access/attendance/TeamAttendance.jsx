@@ -7,7 +7,8 @@ import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import EmployeeAttendance from "@/components/popups/employee_access/attendance/EmployeeAttendance";
 import { useQuery } from "@tanstack/react-query";
-import { ATTENDANCE, newRequest, ROASTER_GET } from "@/api/master";
+import { ATTENDANCE, newRequest, ROASTER_GET, TEAM_TIMESHEET_EMPLOYEELIST } from "@/api/master";
+import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timesheet/TeamTimeSheetSideBar";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
@@ -24,6 +25,7 @@ const TeamAttendanceCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
+  const [weeks, setWeeks] = useState([]);
 
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year],
@@ -36,6 +38,63 @@ const TeamAttendanceCalendar = () => {
     enabled: true,
     staleTime: 0,
   });
+
+  const employeelist={
+    "employee_data": [
+        {
+            "employee_detail": {
+                "id": 14,
+                "user_id": 54,
+                "first_name": "Harshal",
+                "middle_name": null,
+                "sur_name": "D",
+                "unique_id": "7",
+                "formatted_date_of_joining": null
+            },
+            "total_working_hours": "00:00",
+            "total_over_time_hours": "00:00",
+            "total_break_time_hours": "00:00",
+            "days_hours": []
+        },
+        {
+            "employee_detail": {
+                "id": 17,
+                "user_id": 57,
+                "first_name": "Kiran",
+                "middle_name": "K",
+                "sur_name": "G",
+                "unique_id": "15",
+                "formatted_date_of_joining": null
+            },
+            "total_working_hours": "00:06",
+            "total_over_time_hours": "00:00",
+            "total_break_time_hours": "00:00",
+            "days_hours": [
+                {
+                    "date": "2024-12-09",
+                    "working_hours": "00:06",
+                    "over_time": "00:00",
+                    "break_time": "00:00"
+                }
+            ]
+        },
+        {
+            "employee_detail": {
+                "id": 19,
+                "user_id": 59,
+                "first_name": "Abhijith",
+                "middle_name": "G",
+                "sur_name": "G",
+                "unique_id": "19",
+                "formatted_date_of_joining": null
+            },
+            "total_working_hours": "00:00",
+            "total_over_time_hours": "00:00",
+            "total_break_time_hours": "00:00",
+            "days_hours": []
+        }
+    ]
+}
 
   const handleClick = () => {
     setPopupOpen(true);
@@ -122,7 +181,7 @@ console.log(date);
     <div className="flex flex-col">
       <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Attendance"} />
-      <div className="flex w-full items-center justify-between px-4 py-2">
+        <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
           <h5 className="text-md font-bold">My Attendance</h5>
           <Select
@@ -174,7 +233,19 @@ console.log(date);
         </div>
       </div>
 
-      <div className="max-w-8xl mb-10 mt-7 w-full">
+      <div className="flex gap-3 max-w-8xl mb-10 mt-7 w-full">
+      <TeamTimeSheetSideBar
+          years={years}
+          months={months}
+          // weeks={weeks}
+          // handleWeekChange={handleWeekChange}
+          // selectedWeek={selectedWeek}
+          handleMonthChange={handleMonthChange}
+          date={date}
+          handleYearChange={handleYearChange}
+          employeelist={employeelist}
+          type='attendance'
+        />
       <Calendar
           key={date}
           onChange={handleDateChange}
@@ -220,6 +291,7 @@ console.log(date);
           }}
         />
       </div>
+      
     </div>
   );
 };

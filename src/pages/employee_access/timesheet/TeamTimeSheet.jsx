@@ -26,12 +26,12 @@ export default function TeamTimeSheet() {
   const [weeks, setWeeks] = useState([]);
 
   // Fetch the data for the selected week
-  const { data: employeelist, refetch } = useQuery({
-    queryKey: ["employeelist", selectedWeek, date], // Unique query key
+  const { data: timesheetlist, refetch } = useQuery({
+    queryKey: ["timesheetlist", selectedWeek, date], // Unique query key
     queryFn: () =>
       newRequest.get(TEAM_TIMESHEET_EMPLOYEELIST).then((res) => res.data),
   });
-  console.log(employeelist);
+  // console.log(employeelist);
   
 
   // Trigger the query on mount and when selectedWeek > 0
@@ -129,9 +129,9 @@ export default function TeamTimeSheet() {
         accessorKey: "mon",
         cell: ({ row }) => (
           <div className="bg-blurecool px-3 py-2">
-            <p>{row?.original?.first_name || "NA"}</p>
+            <p>{row?.original?.employee_detail?.first_name || "NA"}</p>
             <p>
-              #{row?.original?.first_name} {row?.original?.sur_name || "NA"}
+              #{row?.original?.employee_detail?.id}
             </p>
           </div>
         ),
@@ -141,8 +141,7 @@ export default function TeamTimeSheet() {
         accessorKey: "sno",
         cell: ({ row }) => (
           <div className="px-3 py-2">
-            {/* Replace "NA" with the actual calculation */}
-            NA
+            {row?.original?.total_working_hours}
           </div>
         ),
       },
@@ -156,12 +155,16 @@ export default function TeamTimeSheet() {
           </div>
         ),
         accessorKey: dayObj.fullDate, // Unique key for each day
-        cell: ({ row }) => (
-          <div className="text-sm font-bold capitalize text-gray-darkpale">
-            {/* You can customize this to show the respective data */}
-            {row?.original?.[dayObj.fullDate] || "NA"}
-          </div>
-        ),
+        cell: ({ row }) => {
+           const dayData = row?.original?.days_hours?.find((data) => data.date == dayObj.fullDate);
+           console.log(dayData);
+           
+           return (
+             <div className="text-sm font-bold capitalize text-gray-darkpale">
+               {dayData?.working_hours || "NA"}
+             </div>
+           );
+        },        
       })),
       {
         header: "",
@@ -230,12 +233,13 @@ export default function TeamTimeSheet() {
           selectedWeek={selectedWeek}
           handleMonthChange={handleMonthChange}
           date={date}
+          type={'timesheet'}
           handleYearChange={handleYearChange}
-          employeelist={employeelist}
+          employeelist={timesheetlist}
         />
         <QueryTable
           columns={columns}
-          list={"NA"}
+          list={timesheetlist?.employee_data}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}
