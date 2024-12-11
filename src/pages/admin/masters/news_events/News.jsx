@@ -116,7 +116,7 @@ export default function News() {
             <Filter className="size-4" />
           </div>
           <Link
-            to={""}
+            to={"/admin/news-event/create-news"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-4" />

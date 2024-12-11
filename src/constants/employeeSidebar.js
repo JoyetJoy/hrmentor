@@ -61,7 +61,7 @@ export const employeeSidebarList = [
   },
   {
     id: 13,
-    link: "/admin/employee/payslip",
+    link: "/admin/employee/payslip/payoff",
     name: "Payslip",
   },
 ];

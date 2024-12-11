@@ -563,8 +563,11 @@ export const employeeaccessItems = [
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
 ];
 
+
+
 //ADMIN NEWS & EVENT HEADER
 export const newsEventHeaderList = [
-  { id: 1, name: "News", link: "/admin/news" },
-  { id: 2, name: "Event", link: "/admin/event" },
+  { id: 1, name: "News", link: "/admin/news-event/news" },
+  { id: 2, name: "Event", link: "/admin/news-event/event" },
+ 
 ];
