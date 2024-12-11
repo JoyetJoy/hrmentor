@@ -67,7 +67,8 @@ export default function AdminPaySlip() {
         menu="Menu"
         subMenu="Employee"
         icon={<ChevronRight className="size-3" />}
-        page={2}
+        activeSubMenu="PaySlip"
+        page={1}
       />
       <div className="flex gap-x-3">
         <EmployeesSidebar />
