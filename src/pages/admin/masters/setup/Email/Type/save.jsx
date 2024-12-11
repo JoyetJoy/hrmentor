@@ -1,10 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,11 +7,10 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
-import Select from "react-select"; // Import React Select instead of MUI's Select
-import ReactQuill from "react-quill";
+import Select from "react-select";
 import "react-quill/dist/quill.snow.css";
 import { customSelectStyles } from "@/utils/customStyles";
-import { ALL_TOKEN_LIST, EMAIL_TYPE, UPDATE_EMAIL_TYPE } from "@/api/setup";
+import { ALL_TOKEN_LIST, EMAIL_TOKENS, UPDATE_EMAIL_TYPE } from "@/api/setup";
 import { newRequest } from "@/api";
 
 const EmailSchema = Yup.object({
@@ -53,6 +47,22 @@ export default function EmailTypeSave() {
         .then((res) => res.data),
     enabled: !!user?.id,
   });
+
+  useEffect(() => {
+    if (id) {
+      newRequest
+        .get(`/${EMAIL_TOKENS}/${id}`, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => {
+          const formattedTokens = res.data.map((token) => ({
+            value: token.id,
+            label: token.token,
+          }));
+          setTokens(formattedTokens);
+        });
+    }
+  }, [id, user?.id]);
 
   const onSubmit = async () => {
     setLoader(true);
@@ -138,6 +148,7 @@ export default function EmailTypeSave() {
                     isMulti
                     placeholder="Select Email Folder"
                     className="input-box"
+                    value={tokens}
                     onChange={(selectedOption) => {
                       setTokens(selectedOption);
                     }}

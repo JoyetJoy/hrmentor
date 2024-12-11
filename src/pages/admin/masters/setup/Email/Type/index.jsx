@@ -1,14 +1,12 @@
 import { newRequest } from "@/api";
 import { EMAIL_TYPE } from "@/api/setup";
-import MenuHeader from "@/components/common/MenuHeader";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
-import { Eye, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function EmailType() {
   const [keyword, setKeyword] = useState("");

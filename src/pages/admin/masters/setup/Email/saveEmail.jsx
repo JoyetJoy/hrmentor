@@ -1,5 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,8 +37,8 @@ export default function EmailSetupSave() {
   const { user } = useUserStore((state) => ({ user: state.user }));
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
-  const [isDefault, setIsDefault] = useState(false);
   const [emailTemplateId, setEmailTemplateId] = useState("");
+  const [isDefault, setIsDefault] = useState(false);
   const [emailTypeId, setEmailTypeId] = useState("");
   const [tokenId, setTokenId] = useState("");
   const [tokens, setTokens] = useState([]);
@@ -42,7 +47,6 @@ export default function EmailSetupSave() {
     Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.
   `);
 
-  console.log(id, "ididid");
 
   const {
     register,
@@ -106,7 +110,6 @@ export default function EmailSetupSave() {
     }
   }, [emailTypeId, user?.id]);
 
-  
   const onSubmit = async () => {
     setLoader(true);
     try {
