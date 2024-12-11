@@ -12,6 +12,7 @@ import { SetupRoutes } from "./children/SetupRoutes";
 import { ShiftRoutes } from "./children/ShiftRoutes";
 import { RosterRoutes } from "./children/RosterRoutes";
 import { PayrollRoute } from "./children/PayrollRoute";
+import { NewsEventRoute } from "./children/NewsEventRoute";
 
 export const AdminRoutes = [
   {
@@ -69,6 +70,10 @@ export const AdminRoutes = [
   {
     path: "/admin/payroll",
     children: PayrollRoute,
+  },
+  {
+    path: "/admin/news",
+    children: NewsEventRoute,
   },
 
 ];

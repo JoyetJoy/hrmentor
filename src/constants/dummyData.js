@@ -337,6 +337,11 @@ export const rosterHeaderList = [
 export const activityItems = [
   { icon: "/assets/icons/admin/project.svg", label: "Project" },
   { icon: "/assets/icons/admin/task.svg", label: "Task" },
+  { icon: "/assets/icons/admin/task.svg", label: "New & Event ",
+    path:"/admin/news"
+
+   },
+
   { icon: "/assets/icons/admin/payroll.svg", 
     label: "Payroll" ,
     path: "/admin/payroll"},
@@ -551,3 +556,10 @@ export const employeeaccessItems = [
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
 
 ]
+
+//ADMIN NEWS & EVENT HEADER
+export const newsEventHeaderList = [
+  { id: 1, name: "News", link: "/admin/news" },
+  { id: 2, name: "Event", link: "/admin/event" },
+ 
+];
