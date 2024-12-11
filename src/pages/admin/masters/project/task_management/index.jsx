@@ -129,7 +129,7 @@ export default function TaskManagement() {
       "Not started": "bg-yellow-100 text-yellow-600",
       "In progress": "bg-blue-100 text-blue-600",
       Canceled: "bg-purple-100 text-purple-600",
-      "On hold": "bg-orange-100 text-orange-600",
+      "On hold": "bg-red-100 text-red-600",
       Finished: "bg-green-100 text-green-600",
     };
     return (
@@ -178,14 +178,15 @@ export default function TaskManagement() {
       {
         header: "Assigned To",
         accessorKey: "assignedTo",
+
         cell: ({ row }) => (
-          <div className="d-flex">
+          <div className="flex items-center">
             {row.original.assignedTo.map((member, idx) => (
               <img
                 key={idx}
                 src={member}
-                alt="Member"
-                className="rounded-circle"
+                alt={`Member ${idx + 1}`}
+                className="rounded-full"
                 style={{
                   width: "30px",
                   height: "30px",
