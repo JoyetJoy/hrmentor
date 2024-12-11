@@ -34,6 +34,10 @@ export const ALL_TOKEN_LIST ="all-tokens-list"
 // Email Template
 export const EMAIL_TEMPLATE = "email-templates";
 
+// UPDATE EMAIL TEMPLETE
+
+export const UPDATE_EMAIL_TEMPLATE ="update-email-template"
+
 export const ROSTER_EMPLIST = "get-employee-details";
 export const UPDATE_ROSTER_LIST = "employee-roster-list ";
 //

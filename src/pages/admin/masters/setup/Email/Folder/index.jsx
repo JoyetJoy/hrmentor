@@ -1,7 +1,5 @@
 import { newRequest } from "@/api";
 import { EMAIL_FOLDER } from "@/api/setup";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import MenuHeader from "@/components/common/MenuHeader";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";

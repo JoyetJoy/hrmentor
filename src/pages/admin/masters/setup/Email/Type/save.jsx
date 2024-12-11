@@ -10,12 +10,7 @@ import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Select from "react-select";
 import "react-quill/dist/quill.snow.css";
 import { customSelectStyles } from "@/utils/customStyles";
-import {
-  ALL_TOKEN_LIST,
-  EMAIL_TOKENS,
-  EMAIL_TYPE,
-  UPDATE_EMAIL_TYPE,
-} from "@/api/setup";
+import { ALL_TOKEN_LIST, EMAIL_TOKENS, UPDATE_EMAIL_TYPE } from "@/api/setup";
 import { newRequest } from "@/api";
 
 const EmailSchema = Yup.object({

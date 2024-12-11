@@ -1,6 +1,5 @@
 import { newRequest } from "@/api";
 import { EMAIL_TEMPLATE } from "@/api/setup";
-import MenuHeader from "@/components/common/MenuHeader";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
@@ -9,25 +8,15 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Eye, Plus, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function EmailFolders() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const label = searchParams.get("label");
-
-  const [keyword, setKeyword] = useState("");
-  const [loading, setLoading] = useState("");
   const [loader, setLoader] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
-  const [pageLimit, setPageLimit] = useState(10);
   const [deletePopup, setDeletePopup] = useState(false);
   const [templeteId, setTempleteId] = useState(null);
 
@@ -68,6 +57,10 @@ export default function EmailFolders() {
             <button
               type="button"
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/setup/templete/edit?id=${id}`);
+              }}
             >
               <img
                 src="/assets/icons/admin/marker.svg"

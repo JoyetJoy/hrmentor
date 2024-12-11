@@ -1,6 +1,7 @@
 import SetupList from "@/pages/admin/masters/setup";
 import EmailSetup from "@/pages/admin/masters/setup/Email/Folder";
 import EmailFolders from "@/pages/admin/masters/setup/Email/Folder/edit_folder";
+import EmailTempleteEdit from "@/pages/admin/masters/setup/Email/Folder/edit_templete";
 import EmailTemplete from "@/pages/admin/masters/setup/Email/Folder/view_templete";
 import EmailSetupSave from "@/pages/admin/masters/setup/Email/saveEmail";
 import EmailType from "@/pages/admin/masters/setup/Email/Type";
@@ -36,5 +37,9 @@ export const SetupRoutes = [
   {
     path: "/admin/setup/templete/view",
     element: <EmailTemplete />,
+  },
+  {
+    path: "/admin/setup/templete/edit",
+    element: <EmailTempleteEdit />,
   },
 ];
