@@ -25,6 +25,7 @@ const EmployeeAccessAttendanceCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
+  const [selected, setSelected] = useState('');
 
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year],
@@ -38,7 +39,8 @@ const EmployeeAccessAttendanceCalendar = () => {
     staleTime: 0,
   });
 
-  const handleClick = () => {
+  const handleClick = (event) => {
+    setSelected(event);
     setPopupOpen(true);
   };
   useEffect(() => {
@@ -105,18 +107,11 @@ const EmployeeAccessAttendanceCalendar = () => {
       : [];
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
-
-  function convertTo12HourFormat(time) {
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
-  }
   console.log(date);
 
   return (
     <div className="flex flex-col">
-      <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen} selected= {selected} />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Attendance"} />
       <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">

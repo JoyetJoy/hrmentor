@@ -11,11 +11,14 @@ export default function DeleteConfirmation({
   type,
   setNew_break,
   setSelectedEmployees,
+  selectedId,
   qrkey,
   api,
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
+  console.log();
+  
 
   const handleDelete = async () => {
     try {

@@ -6,17 +6,21 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Share2 } from "lucide-react";
+import { ChevronRight, Eye, Share2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import MonthlyCalendarPicker from "@/components/common/MonthPicker";
 import { useState } from "react";
 import dayjs from "dayjs";
 import Reschedule from "@/components/popups/employees/view/Reschedule";
+import Share from "@/components/popups/employees/view/Share";
 
 export default function EmployeeDetails() {
-  const [type, setType] = useState('');
-  const [popupOpen,setPopupOpen] = useState(false)
+  const [type, setType] = useState("");
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [sharePopupOpen, setSharePopupOpen] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [active, setActive] = useState();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
@@ -40,9 +44,13 @@ export default function EmployeeDetails() {
         activeMenu={"Employee"}
       />
       <Reschedule
-      popupOpen={popupOpen}
-      setPopupOpen={setPopupOpen}
-      type={type}
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        type={type}
+      />
+      <Share
+        sharePopupOpen={sharePopupOpen}
+        setSharePopupOpen={setSharePopupOpen}
       />
       {isLoading ? (
         <div className="flex min-h-96 w-full items-center justify-center bg-white">
@@ -55,9 +63,18 @@ export default function EmployeeDetails() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
+                onClick={() => {
+                  if (employeeViewDetails?.basic_details?.status == "active") {
+                    setSharePopupOpen(true);
+                  }
+                }}
                 className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none hover:bg-paleblue"
               >
-                <Share2 className="size-4" color="black" />
+                {employeeViewDetails?.basic_details?.status === active ? (
+                  <Eye className="size-4" color="black" />
+                ) : (
+                  <Share2 className="size-4" color="black" />
+                )}
                 Onboarding Form
               </button>
               <Link
@@ -90,113 +107,93 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                <div 
-                onClick={()=>{
-                  setPopupOpen(true)
-                setType('status')}}
-                className="ml-5 flex h-7 items-center cursor-pointer rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold text-mediumred">
-                  On Leave
-                </div>
+                {employeeViewDetails?.basic_details?.status !== "active" ? (
+                  <div className="ml-5 flex h-7 cursor-default items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]">
+                    Active
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => {
+                      setPopupOpen(true);
+                      setType("status");
+                    }}
+                    className="ml-5 flex h-7 items-center rounded bg-gray-200 px-3 text-[0.8rem] font-bold text-gray-400"
+                  >
+                    Active
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-3">
-                <div className="text-xs">
-                  <p>Date of joining</p>
-                  <p className="font-semibold">Oct 10,2024</p>
-                </div>
-              <button 
-              onClick={()=>{
-                setPopupOpen(true)
-                setType('reschedule')
-              }}
-              className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 text-xs font-bold bg-[#e0e2f3] rounded-md text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
-                  Reschedule
-                </button>
-                <Link 
-                to={`/admin/employee/activitylog/?uid=${uid}`}
-                className="flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-pale px-6 bg-[#e0e2f3] rounded-md text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]">
-                  Activity Log
-                </Link>
-                <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
-                  Exit Process
-                </Link>
+                {employeeViewDetails?.basic_details?.status === active ? (
+                  <>
+                    {" "}
+                    <Link
+                      to={`/admin/employee/activitylog/?uid=${uid}`}
+                      className="bg-pale flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 rounded-md bg-[#e0e2f3] px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]"
+                    >
+                      Activity Log
+                    </Link>
+                    <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
+                      Exit Process
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-xs">
+                      <p>Date of joining</p>
+                      <p className="font-semibold">Oct 10,2024</p>
+                    </div>
+
+                    <Link
+                      to={`/admin/employee/activitylog/?uid=${uid}`}
+                      className="bg-pale flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 rounded-md bg-[#e0e2f3] px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]"
+                    >
+                      Activity Log
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setPopupOpen(true);
+                        setType("reschedule");
+                      }}
+                      className="bg-pale flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 rounded-md bg-[#e0e2f3] px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]"
+                    >
+                      Reschedule
+                    </button>
+                  </>
+                )}
               </div>
             </div>
-            <div className="grid w-full grid-cols-4 gap-3">
-              <div className="col-span-2 py-7">
-                <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
-                  <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
-                    <p className="w-fit">Basic Details</p>
-                    <div className="flex size-7 items-center justify-center rounded-full bg-gray-darklight">
-                      <ChevronRight className="size-5 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                    </div>
-                  </DisclosureButton>
-                  <DisclosurePanel className="my-4 w-full text-sm/5 text-black/80">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">First Name:</p>
-                        <p>{employeeViewDetails?.basic_details?.first_name}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">Last Name:</p>
-                        <p>{employeeViewDetails?.basic_details?.sur_name}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">Email:</p>
-                        <p>{employeeViewDetails?.basic_details?.email}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">Phone:</p>
-                        <p>{employeeViewDetails?.basic_details?.phone}</p>
-                      </div>
-                    </div>
-                  </DisclosurePanel>
-                </Disclosure>
-                <Disclosure as="div" className="w-full p-5" defaultOpen={false}>
-                  <DisclosureButton className="group flex w-full items-center justify-between gap-x-2 font-bold">
-                    <p className="w-fit">Work Information</p>
-                    <div className="flex size-7 items-center justify-center rounded-full bg-gray-darklight">
-                      <ChevronRight className="size-5 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                    </div>
-                  </DisclosureButton>
-                  <DisclosurePanel className="my-4 w-full text-sm/5 text-black/80">
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">First Name:</p>
-                        <p>{employeeViewDetails?.basic_details?.first_name}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">Last Name:</p>
-                        <p>{employeeViewDetails?.basic_details?.sur_name}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">Email:</p>
-                        <p>{employeeViewDetails?.basic_details?.email}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-bold">Phone:</p>
-                        <p>{employeeViewDetails?.basic_details?.phone}</p>
-                      </div>
-                    </div>
-                  </DisclosurePanel>
-                </Disclosure>
+            <div className="mt-7 grid w-full grid-cols-4 gap-3">
+              <div className="col-span-2 flex flex-col gap-3">
+                <Link
+                  to={`/admin/employee/primary/?uid=${uid}`}
+                  className="group flex items-center justify-between gap-x-2 rounded-md bg-gray-darklight px-6 py-4 font-bold"
+                >
+                  Basic Details
+                </Link>
+                <Link
+                  to={`/admin/employee/primary/?uid=${uid}`}
+                  className="group flex items-center justify-between gap-x-2 rounded-md bg-gray-darklight px-6 py-4 font-bold"
+                >
+                  Work Information
+                </Link>
               </div>
-              <div className="border rounded-md">
-              <MonthlyCalendarPicker
+              <div className="mr-4 rounded-md border">
+                <MonthlyCalendarPicker
                   selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
                 />
               </div>
-              <div className="px-3 flex flex-col gap-2">
-                <div className="bg-[#f8f7f7] text-sm font-medium p-4 rounded-md">
+              <div
+                className={`flex flex-col gap-2 px-3 ${employeeViewDetails?.basic_details?.status === active ? "flex" : "hidden"} `}
+              >
+                <div className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
                   Clock In - 05:10 am
                 </div>
-                <div className="bg-[#f8f7f7] text-sm font-medium p-4 rounded-md">
+                <div className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
                   Clock Out - 06:00 pm
                 </div>
-
               </div>
-
-              {/* log */}
             </div>
           </div>
         </>

@@ -122,7 +122,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const [colKeys, setColKeys] = useState(null);
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [state,setState]=useState();
+  const [state, setState] = useState();
 
   useEffect(() => {
     if (employeeDetails) {
@@ -208,7 +208,7 @@ export default function SaveEmployeeForm({ formtype }) {
     "nationalityList",
   );
 
-  const { country_id, state_id, home_address, city_id} = watch();
+  const { country_id, state_id, home_address, city_id } = watch();
 
   // GET CITY BY STATE ID AND SEARCH KEY
   const loadCitiesOptions = async (inputValue) => {
@@ -220,17 +220,19 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     return response?.data;
   };
- 
+
   // Function to display state of the selected city
-const handleCitySelect = (selectedCity) => {
-  
-  // Assuming selectedCity has a state_name attribute
-  if (selectedCity?.state_name) {
-    setState(selectedCity.state_name);
-    // Update the state display based on the selected city
-    setValue('state_id', { label: selectedCity.state_name, value: selectedCity.state_id });
-  }
-};
+  const handleCitySelect = (selectedCity) => {
+    // Assuming selectedCity has a state_name attribute
+    if (selectedCity?.state_name) {
+      setState(selectedCity.state_name);
+      // Update the state display based on the selected city
+      setValue("state_id", {
+        label: selectedCity.state_name,
+        value: selectedCity.state_id,
+      });
+    }
+  };
 
   // DEPARTMENT LISTING
   const { data: departmentListing } = useEmployeeMaster(
@@ -360,6 +362,7 @@ const handleCitySelect = (selectedCity) => {
       setLoader(false);
     }
   };
+  console.log(employeeTypeList);
 
   return (
     <>
@@ -601,17 +604,20 @@ const handleCitySelect = (selectedCity) => {
                   <Controller
                     name="city_id"
                     control={control}
-                    rules={{ required: true }}
+                    rules={{ required: "City is required" }} // Custom error message
                     render={({ field }) => (
                       <AsyncSelect
-                      {...field}
-                      placeholder="Search ..."
-                      loadOptions={loadCitiesOptions}
-                      isSearchable={true}
-                      noOptionsMessage={() => "Type city name"}
-                      onChange={handleCitySelect}  // Handle city selection
-                      className="input-box"
-                    />
+                        {...field}
+                        placeholder="Search ..."
+                        loadOptions={loadCitiesOptions}
+                        isSearchable={true}
+                        noOptionsMessage={() => "Type city name"}
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption); // Update form state
+                        }}
+                        value={field.value} // Ensure the value is controlled
+                        className="input-box"
+                      />
                     )}
                   />
                   {errors.city_id && (
@@ -620,10 +626,11 @@ const handleCitySelect = (selectedCity) => {
                     </span>
                   )}
                 </div>
+
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="label-text">County</label>
                   {/* Show the selected state's name if a city is selected */}
-                  <span className="border border-[#cacaca] h-10 rounded-md p-2 text-sm font-thin">
+                  <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
                     {state || ""}
                   </span>
                   {errors.state_id && (
@@ -958,7 +965,7 @@ const handleCitySelect = (selectedCity) => {
                         styles={customSelectStyles}
                         options={employeeTypeList}
                         placeholder="Select Employement Type"
-                        className="input-box overflow-hidden"
+                        className="input-box"
                       />
                     )}
                   />

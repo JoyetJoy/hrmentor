@@ -2,12 +2,28 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
 import React from "react";
 
-export default function EmployeeAttendance({ popupOpen, setPopupOpen }) {
-  // const [loader, setLoader] = useState(false);
+export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected}) {  
 
   function close() {
     setPopupOpen(false);
   }
+
+  function convertTo12HourFormat(time) {
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${period}`;
+  }
+ let clockin
+ let clockout
+  if(selected){
+    clockin= selected?.clock_in_time.split(" ")[1];
+    clockout= selected?.clock_out_time.split(" ")[1];
+  }else{
+    clockin = '00:00'
+    clockout = '00:00'
+  }
+
   return (
     <Dialog
       open={popupOpen}
@@ -33,52 +49,35 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen }) {
               </button>
             </div>
             <div className="grid grid-cols-2 justify-between gap-3 gap-y-7">
-              <div className="group flex flex-col space-y-1">
-                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Status
-                </label>
-                <p className="text-sm font-semibold text-textcolor-green">
-                  {" "}
-                  present
+              <div className="group flex w-full flex-col gap-1">
+                <label className="label-text">Shift</label>
+                <p className="text-sm font-semibold">{selected?.shift_detail ? selected?.shift_detail?.name : 'Present'} <br/>
+                  {selected?.shift_detail && (
+                    <span>({selected?convertTo12HourFormat(selected?.shift_start_time):' 00:00'}-{selected?convertTo12HourFormat(selected?.shift_end_time):' 00:00'})</span>
+                  )}
                 </p>
               </div>
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Date
+                Shift duration
                 </label>
-                <p className="text-sm font-semibold">Oct 3,2024 </p>
+                <p className="text-sm font-semibold">{selected?.shift_duration} </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Day</label>
-                <p className="text-sm font-semibold">Monday</p>
+                <label className="label-text">Clock-in time</label>
+                <p className="text-sm font-semibold">{convertTo12HourFormat(clockin)}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Total in-time</label>
-                <p className="text-sm font-semibold">08:00Hr</p>
+                <label className="label-text">Clock-out time</label>
+                <p className="text-sm font-semibold">{convertTo12HourFormat(clockout)}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Shift</label>
-                <p className="text-sm font-semibold">Morning Shift(07:55:00)</p>
-              </div>
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Over time</label>
+                <label className="label-text">Total Working Hours</label>
                 <p className="text-sm font-semibold">03:76:00</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Break Time</label>
+                <label className="label-text">Overtime</label>
                 <p className="text-sm font-semibold">76 Min</p>
-              </div>
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Location</label>
-                <p className="text-sm font-semibold">Trivandrum</p>
-              </div>
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Day start on</label>
-                <p className="text-sm font-semibold">Oct 3,2024,12:00Am</p>
-              </div>
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">Day end on</label>
-                <p className="text-sm font-semibold">Oct 10,2024,12:00Pm</p>
               </div>
               <div className="mt-2 flex w-full items-center justify-between gap-3">
                 <button

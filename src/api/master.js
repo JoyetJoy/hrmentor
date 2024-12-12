@@ -54,6 +54,9 @@ export const EMPLOYEE_DOCUMENT_TYPE_LIST = "active-employee-document-types";
 export const EMPLOYEE_ETHNICITY = "ethnicity";
 // listing
 export const EMPLOYEE_ETHNICITY_LIST = "active-ethnicity";
+//employee religious/sexual orientation
+export const EMPLOYEE_RELIGIOUS_AND_SEXUAL = "sexual-orientations";
+
 
 // employee EeoJobCategoryType
 export const EMPLOYEE_EEO_CATEGORY = "EeoJobCategoryType";
@@ -145,10 +148,14 @@ export const TEAM_ROSTER_GET = "/employee-team-rosters";
 export const TIME_SHEET = "/employee-time-sheets";
 //ATTENDANCE
 export const ATTENDANCE = "/employee-attendances";
+// TEAM ATTENDANCE
+export const TEAM_ATTENDANCE = "/employee-attendances";
 //SHIFT EMPLOYEE DETAILS
 export const TEAMROSTER_EMPLOYEELIST = "/roster-employee-list";
 //EMPLOYEE TEAM TIMESHEET LIST
 export const TEAM_TIMESHEET_EMPLOYEELIST = "/employee-team-time-sheets"
+// EMPLOYEE LIST
+export const EMPLOYEE_LIST = "/team-employees";
 
 //  LEAVE REQUEST LIST
 export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests"

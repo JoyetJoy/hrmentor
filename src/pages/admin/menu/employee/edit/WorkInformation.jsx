@@ -18,6 +18,7 @@ import { useLocation } from "react-router-dom";
 import {
   EMPLOYEE_EEO_CATEGORY_LIST,
   EMPLOYEE_ETHNICITY_LIST,
+  EMPLOYEE_RELIGIOUS_AND_SEXUAL,
 } from "@/api/master";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -51,7 +52,7 @@ export const WorkInformation = () => {
       }),
     enabled: !!uid,
   });
-
+  console.log(empWorkInfoDetail);
   useEffect(() => {
     if (empWorkInfoDetail) {
       setValue("hiring_manager_id", empWorkInfoDetail?.hiringManager);
@@ -60,6 +61,11 @@ export const WorkInformation = () => {
       setValue("eeo_job_category_id", empWorkInfoDetail?.eeoJobCategory);
       setValue("notice_period", empWorkInfoDetail?.notice_period);
       setValue("probation_period", empWorkInfoDetail?.probation_period);
+      setValue("relegion_belief_id", empWorkInfoDetail?.relegion_belief_id);
+      setValue(
+        "sexual_orientation_id",
+        empWorkInfoDetail?.sexual_orientation_id,
+      );
     }
   }, [empWorkInfoDetail, setValue]);
 
@@ -83,6 +89,8 @@ export const WorkInformation = () => {
     formData.append("reporting_manager_id", data.reporting_manager_id?.id ?? 0);
     formData.append("ethinicity_id", data.ethinicity_id?.id);
     formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
+    formData.append("relegion_belief_id", data.relegion_belief_id?.id);
+    formData.append("sexual_orientation_id", data.sexual_orientation_id?.id);
     formData.append("age", data.age);
     formData.append("religious", data.religious);
     formData.append("dosent_reporting", reportNotRequired ? 1 : 0);
@@ -118,6 +126,12 @@ export const WorkInformation = () => {
   const { data: eeoJobCategoryList } = useEmployeeMaster(
     EMPLOYEE_EEO_CATEGORY_LIST,
     "eeoJobCategoryList",
+  );
+
+  // Religious and sexual orientation list
+  const { data: religiousSexualList } = useEmployeeMaster(
+    EMPLOYEE_RELIGIOUS_AND_SEXUAL,
+    "religiousSexualList",
   );
 
   return (
@@ -185,7 +199,7 @@ export const WorkInformation = () => {
                             isSearchable={true}
                             styles={customSelectStyles}
                             options={activeEmployeeList}
-                            placeholder="Select reporting manager"
+                            placeholder="Select"
                             className="input-box"
                           />
                         )}
@@ -230,7 +244,7 @@ export const WorkInformation = () => {
                     <input
                       autoComplete="off"
                       type="number"
-                      placeholder="Enter Probation Period"
+                      placeholder="Enter"
                       {...register("age", { required: true })}
                       onKeyPress={(event) => {
                         if (
@@ -260,7 +274,7 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={eeoJobCategoryList}
-                          placeholder="Select EEO Job Category"
+                          placeholder="Select"
                           className="input-box"
                         />
                       )}
@@ -283,7 +297,7 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={ethinicityList}
-                          placeholder="Select ethinicity"
+                          placeholder="Select"
                           className="input-box"
                         />
                       )}
@@ -296,16 +310,24 @@ export const WorkInformation = () => {
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Religious belief</label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      placeholder="Enter Details"
-                      {...register("religious", { required: true })}
-                      className="input-box placeholder:text-[0.8rem]"
+                    <Controller
+                      name="relegion_belief_id"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={religiousSexualList?.religious}
+                          placeholder="Select"
+                          className="input-box"
+                        />
+                      )}
                     />
-                    {errors.religious && (
+                    {errors.relegion_belief_id && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.religious?.message}
+                        {errors.relegion_belief_id?.message}
                       </span>
                     )}
                   </div>
@@ -321,7 +343,7 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={genders}
-                          placeholder="Select a gender"
+                          placeholder="Select"
                           className="input-box"
                         />
                       )}
@@ -334,15 +356,24 @@ export const WorkInformation = () => {
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Sexual orientation</label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("sexualorientation", { required: true })}
-                      className="input-box placeholder:text-[0.8rem]"
+                    <Controller
+                      name="sexual_orientation_id"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={religiousSexualList?.sexualOrientations}
+                          placeholder="Select"
+                          className="input-box"
+                        />
+                      )}
                     />
-                    {errors.sexualorientation && (
+                    {errors.sexual_orientation_id && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.sexualorientation?.message}
+                        {errors.sexual_orientation_id?.message}
                       </span>
                     )}
                   </div>
@@ -358,7 +389,7 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={maritalStatuses}
-                          placeholder="Select a status"
+                          placeholder="Select"
                           className="input-box"
                         />
                       )}
@@ -371,11 +402,20 @@ export const WorkInformation = () => {
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Pregnancy & maternity</label>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      {...register("pregnancy", { required: true })}
-                      className="input-box placeholder:text-[0.8rem]"
+                    <Controller
+                      name="pregnancy"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={successStatus}
+                          placeholder="Select"
+                          className="input-box"
+                        />
+                      )}
                     />
                     {errors.pregnancy && (
                       <span className="text-xs font-medium text-red-500">
@@ -397,7 +437,7 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={successStatus}
-                          placeholder="Yes/ No"
+                          placeholder="Select"
                           className="input-box"
                         />
                       )}
