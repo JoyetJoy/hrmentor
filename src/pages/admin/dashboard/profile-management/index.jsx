@@ -17,7 +17,7 @@ export default function ProfileManagement() {
   const [loader, setLoader] = useState(false);
   const [id, setId] = useState("");
   const [imageFile, setImageFile] = useState({});
-  const [imageURL, setImageURL] = useState(null);
+  const [imageURL, setImageURL] = useState({});
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
@@ -63,6 +63,11 @@ export default function ProfileManagement() {
       setId(profileManagement.id);
     }
   }, [profileManagement, reset]);
+
+  function clearImage() {
+    setImageFile({});
+    setImageURL({});
+  }
 
   const onSubmit = async (data) => {
     setLoader(true);
