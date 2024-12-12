@@ -7,6 +7,7 @@ import { TimeSheetRoutes } from "./children/TimeSheetRoute";
 import { LeaveRoute } from "./children/LeaveRoute";
 import { ProfileRoutes } from "./children/ProfileRoutes";
 import { PayrollRoute } from "../admin/children/PayrollRoute";
+import { NewsEventsRoutes } from "./children/NewsEventsRoutes";
 
 
 
@@ -34,6 +35,10 @@ export const EmployeeAccessRoutes = [
   {
     path: "profile",
     children: ProfileRoutes,
+  },
+  {
+    path: "news-events",
+    children: NewsEventsRoutes,
   },
   {
     path: "*",

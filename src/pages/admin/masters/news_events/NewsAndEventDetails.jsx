@@ -37,10 +37,7 @@ export default function NewsAndEventDetails() {
           <div className="flex flex-col bg-white p-6">
             <div className="space-y-6">
               {newsItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-start gap-2 py-4"
-                >
+                <div key={index} className="flex flex-col items-start gap-2">
                   <div className="flex flex-col gap-2">
                     <h3 className="text-xl font-semibold">{item.title}</h3>
                     <p className="text-sm italic text-gray-500">
@@ -66,29 +63,47 @@ export default function NewsAndEventDetails() {
                       className="object-containe h-full w-full object-cover"
                     />
                   </div>
-                  {/* <p className="text-sm italic text-gray-500">
-                  Our company is proud to announce the launch of an innovative HRMS platform that promises to revolutionize the way organizations manage their human resources. This new platform is engineered to streamline HR processes, from recruitment and onboarding to performance management and payroll processing.
-
-Key features of the HRMS platform include:
-- **Automated Payroll:** Simplifies payroll processing with automated calculations and compliance checks.
-- **Performance Tracking:** Provides comprehensive tools for tracking employee performance and setting goals.
-- **Employee Self-Service Portals:** Empowers employees to access and update their information, reducing administrative workload.
-- **Customizable Reporting Tools:** Offers powerful analytics and reporting tools to help HR teams make data-driven decisions.
-
-The platform was unveiled during a launch event on November 30, 2024, which featured live demonstrations and testimonials from early adopters who praised its effectiveness and ease of use. In her keynote address, CEO Jane Smith highlighted the company's dedication to innovation and supporting businesses in their digital transformation journeys.
-
-"With this new HRMS platform, we aim to shift the focus of HR departments from routine administrative tasks to strategic initiatives that drive growth and improve employee satisfaction," said Jane Smith. "Our platform is designed to enhance the employee experience, foster engagement, and ultimately contribute to the success of the organization."
-
-The HRMS platform is now available for demo and purchase on our website. For more information, visit the [product page](https://example.com/new-hrms-platform) or contact our sales team.
-
-                    </p> */}
+                  <p className="text-xs italic leading-relaxed tracking-wide text-black">
+                    Our company is proud to announce the launch of an innovative
+                    HRMS platform that promises to revolutionize the way
+                    organizations manage their human resources. This new
+                    platform is engineered to streamline HR processes, from
+                    recruitment and onboarding to performance management and
+                    payroll processing.
+                  </p>
+                  <h6 className="text-xs italic text-black">Key Point</h6>
+                  <div className="flex flex-col gap-4">
+                    <p className="text-xs italic leading-relaxed tracking-wide text-black">
+                      Our company is proud to announce the launch of an
+                      innovative HRMS platform that promises to revolutionize
+                      the way organizations manage their human resources. This
+                      new platform is engineered to streamline HR processes,
+                      from recruitment and onboarding to performance management
+                      and payroll processing.
+                    </p>
+                    <p className="text-xs italic leading-relaxed tracking-wide text-black">
+                      Our company is proud to announce the launch of an
+                      innovative HRMS platform that promises to revolutionize
+                      the way organizations manage their human resources. This
+                      new platform is engineered to streamline HR processes,
+                      from recruitment and onboarding to performance management
+                      and payroll processing.
+                    </p>
+                    <p className="text-xs italic leading-relaxed tracking-wide text-black">
+                      Our company is proud to announce the launch of an
+                      innovative HRMS platform that promises to revolutionize
+                      the way organizations manage their human resources. This
+                      new platform is engineered to streamline HR processes,
+                      from recruitment and onboarding to performance management
+                      and payroll processing.
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
-
-            {/* <Pagination/> */}
           </div>
           <div className="w-1/2 bg-white p-6">
+            <h2 className="mb-4 text-sm font-semibold">Related News</h2>
             <div className="space-y-6">
               {events.map((event, index) => (
                 <div key={index} className="items-star flex flex-col gap-3">
@@ -99,13 +114,24 @@ The HRMS platform is now available for demo and purchase on our website. For mor
                       className="w-full object-cover"
                     />
                   </div>
-
-                  <div>
+                  <div className="flex flex-col gap-2">
                     <h3 className="text-sm font-semibold">{event.title}</h3>
-                    <div className="mt-3 flex items-center gap-2 font-medium text-black">
-                      <p className="text-xs">{event.time}</p>
+                    <p className="text-xs italic text-gray-500">
+                      We are excited to introduce our next-generation HRMS
+                      solution, set to transform workforce management and drive
+                      digital innovation in the HR space.
+                    </p>
+                    <div className="flex items-center gap-2 font-medium text-black">
+                      <div className="">
+                        <img
+                          src="/assets/images/employee_access/pro.png"
+                          alt=""
+                          className=""
+                        />
+                      </div>
+                      <p className="text-xs">Jerome Bell</p>
                       <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
-                      <p className="text-xs">{event.date}</p>
+                      <p className="text-xs">12/12/25</p>
                     </div>
                   </div>
                 </div>
