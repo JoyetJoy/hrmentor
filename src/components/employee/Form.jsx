@@ -614,6 +614,7 @@ export default function SaveEmployeeForm({ formtype }) {
                         noOptionsMessage={() => "Type city name"}
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption); // Update form state
+                          handleCitySelect(selectedOption)
                         }}
                         value={field.value} // Ensure the value is controlled
                         className="input-box"
