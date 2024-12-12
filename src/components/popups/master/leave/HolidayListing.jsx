@@ -25,11 +25,11 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
     user: state.user,
   }));
 
-  useEffect(() => {
-    if (selectedField) {
-      setPopupOpen(true);
-    }
-  }, [selectedField]);
+  // useEffect(() => {
+  //   if (selectedField) {
+  //     setPopupOpen(true);
+  //   }
+  // }, [selectedField]);
 
   // Fetch List
   const { data, isLoading } = useQuery({
@@ -48,7 +48,6 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
           return res.data;
         }),
   });
-
 
   useEffect(() => {
     if (data) {
@@ -146,27 +145,27 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
       <LeaveRequest popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex flex-col">
         <LeaveHeader page={3} currentPage={"Settings"} />
-          <>
-            <LeaveSettingsHeader />
-            <div className="flex gap-x-3">
-              <SettingsSidebar sidebarList={SettingsList} active={type} />
-              <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
-                <div>
-                  {isLoading ? (
-                    <Loader />
-                  ) : (
-                    <QueryTable
-                      columns={columns}
-                      list={data?.original?.data ?? []}
-                      currentPage={currentPage}
-                      setCurrentPage={setCurrentPage}
-                      totalPages={totalPages}
-                    />
-                  )}
-                </div>
+        <>
+          <LeaveSettingsHeader />
+          <div className="flex gap-x-3">
+            <SettingsSidebar sidebarList={SettingsList} active={type} />
+            <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
+              <div>
+                {isLoading ? (
+                  <Loader />
+                ) : (
+                  <QueryTable
+                    columns={columns}
+                    list={data?.original?.data ?? []}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                  />
+                )}
               </div>
             </div>
-          </>
+          </div>
+        </>
       </div>
     </>
   );

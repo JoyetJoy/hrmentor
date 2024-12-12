@@ -1,6 +1,8 @@
 import React from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
 
 const Reschedule = ({ popupOpen, setPopupOpen, type }) => {
   const onClose = () => {
@@ -9,13 +11,14 @@ const Reschedule = ({ popupOpen, setPopupOpen, type }) => {
   };
 
   const options = [
-    "On Leave",
-    "Onboarding Pending",
-    "Active",
-    "Awaiting joining",
-    "Resigned",
-    "Terminated",
+    { label: "On Leave", value: "on_leave" },
+    { label: "Onboarding Pending", value: "onboarding_pending" },
+    { label: "Active", value: "active" },
+    { label: "Awaiting Joining", value: "awaiting_joining" },
+    { label: "Resigned", value: "resigned" },
+    { label: "Terminated", value: "terminated" },
   ];
+
   const handleSave = () => {
     setPopupOpen(false);
   };
@@ -62,16 +65,12 @@ const Reschedule = ({ popupOpen, setPopupOpen, type }) => {
                 >
                   Status
                 </label>
-                <select
-                  className="h-10 rounded border px-3 pr-2 text-sm mt-1"
-                  defaultValue="On Leave"
-                >
-                  {options.map((option, index) => (
-                    <option key={index} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  className="mt-1 h-10 rounded border pl-3 pr-2 text-sm"
+                  options={options}
+                  styles={customSelectStyles}
+                  defaultValue={options[0].value}
+                />
               </div>
             )}
             <div className="mt-5 flex gap-3">

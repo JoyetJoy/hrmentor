@@ -2,6 +2,7 @@ import NewsEventHeader from "@/components/common/NewsEventHeader";
 import Pagination from "@/components/table/Pagination";
 import { Filter } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function NewsAndEventsView() {
   const newsItems = [
@@ -22,7 +23,6 @@ export default function NewsAndEventsView() {
       time: "02:00 AM",
       image: "path_to_event_image1.jpg",
     },
-    
   ];
   return (
     <div className="h-full">
@@ -50,7 +50,12 @@ export default function NewsAndEventsView() {
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <h3 className="text-xl font-semibold">{item.title}</h3>
+                    <Link
+                      to="/admin/news-event/detail"
+                      className="text-xl font-semibold hover:text-blue-600 hover:underline"
+                    >
+                      {item.title}
+                    </Link>
                     <p className="text-sm italic text-gray-500">
                       {item.description}
                     </p>
@@ -82,7 +87,12 @@ export default function NewsAndEventsView() {
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <h3 className="text-xl font-semibold">{item.title}</h3>
+                    <Link
+                      to="/admin/news-event/detail"
+                      className="text-xl font-semibold hover:text-blue-600 hover:underline"
+                    >
+                      {item.title}
+                    </Link>
                     <p className="text-sm italic text-gray-500">
                       {item.description}
                     </p>
@@ -105,8 +115,8 @@ export default function NewsAndEventsView() {
             {/* <Pagination/> */}
           </div>
           <div className="w-1/2 bg-white p-6">
-            <div className="flex items-center justify-between mb-2">
-            <h2 className="mb-4 text-xl font-semibold">Events</h2>
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="mb-4 text-xl font-semibold">Events</h2>
               <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
                 <Filter className="size-4" />
               </div>

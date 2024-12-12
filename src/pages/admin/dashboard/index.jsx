@@ -1,9 +1,10 @@
 import React from "react";
-import { Clock4, LogIn, Search} from "lucide-react";
+import { Clock4, Eye, LogIn, Search } from "lucide-react";
 import { employeeDetails, meetings } from "@/constants/dummyData";
 import StatsCard from "@/components/dashboard/StatsCard";
 import ProfileCompletionCount from "@/components/dashboard/ProfileCompletionCount";
 import LeaveAvailability from "@/components/dashboard/LeaveAvailability";
+import { Link } from "react-router-dom";
 
 export const AdminDashboard = () => {
   return (
@@ -33,8 +34,11 @@ export const AdminDashboard = () => {
         <ProfileCompletionCount />
         <LeaveAvailability />
         <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
-          <h1 className="mb-4 text-lg font-semibold text-black">
+          <h1 className="mb-4 flex items-center justify-between text-lg font-semibold text-black">
             News & Events
+            <Link to="/admin/news-event/view" className="flex items-center cursor-pointer gap-2 text-xs font-medium text-gray-dark">
+              View <Eye className="size-4 text-black/70" />
+            </Link>
           </h1>
           <div className="flex flex-col gap-3">
             {meetings.map((meeting, index) => (

@@ -1,45 +1,61 @@
 import { BreakTimeSchema } from "@/schema/dashboard/masters/shift.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { X,ChevronDown } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
-import React,{useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import { LEAVE_REQUEST_LIST } from "@/api/master";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
-export default function LeaveRequest({
-  popupOpen,
-  setPopupOpen,
-  
-}) {
-    const [showLeaveList, setShowLeaveList] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState(null);
-    const [rejected,setRejected] = useState(false);
-  
-    const {
-      register,
-      handleSubmit,
-      reset,
-      formState: { errors },
-    } = useForm({
-      mode: "onChange",
-      resolver: yupResolver(BreakTimeSchema),
-    });
-  
-    const onSubmit = async (data) => {
-      await handleShift(data);
-      close();
-    };
-  
-    const handleShift = async (data) => {
-      
-    };
-  
-    function close() {
-      setPopupOpen(false);
-      reset();
+export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
+  const [showLeaveList, setShowLeaveList] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [reason, setReason] = useState(null);
+  const [rejected, setRejected] = useState(false);
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(BreakTimeSchema),
+  });
+
+  const { data: leaveDetails } = useQuery({
+    queryKey: ["leaveDetails", user?.id, id],
+    queryFn: () =>
+      newRequest
+        .get(`${LEAVE_REQUEST_LIST}/${id}`, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id && !!id,
+  });
+  useEffect(() => {
+    if (leaveDetails) {
+      setSelectedStatus(leaveDetails?.leave_status?.id);
     }
-  
+  }, [leaveDetails]);
+  const onSubmit = async (data) => {
+    await handleShift(data);
+    close();
+  };
+
+  const handleShift = async (data) => {};
+
+  function close() {
+    setPopupOpen(false);
+    reset();
+  }
+
   return (
     <Dialog
       open={popupOpen}
@@ -51,7 +67,7 @@ export default function LeaveRequest({
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-md h-full rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className="data-[closed]:transform-[scale(95%)] h-full w-full max-w-md rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
@@ -65,140 +81,174 @@ export default function LeaveRequest({
               </button>
             </div>
             <form
-              className="grid grid-cols-1n gap-1"
+              className="grid-cols-1n grid gap-1"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <div className="group flex flex-col space-y-1 mt-3 font-medium text-[0.85rem]">
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Mathew
+              <div className="group mt-3 flex flex-col space-y-1 text-[0.85rem] font-medium">
+                <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  {leaveDetails?.employee?.first_name}{" "}
+                  {leaveDetails?.employee?.middle_name}
                 </p>
-                <p >#12345</p>
+                <p>#{leaveDetails?.employee_id}</p>
                 <p>Department</p>
               </div>
-              <div className="group flex justify-between mt-5 font-medium text-[0.85rem]">
+              <div className="group mt-5 flex justify-between text-[0.85rem] font-medium">
                 <div className="flex flex-col">
-                <p >Start Date</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Oct 14, 2022
-                </p>
+                  <p>Start Date</p>
+                  <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    {leaveDetails?.from_date}
+                  </p>
                 </div>
                 <div>
-                <p >End Date</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Oct 14, 2022
-                </p>
+                  <p>End Date</p>
+                  <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    {leaveDetails?.to_date}
+                  </p>
                 </div>
               </div>
-              <div className="group flex justify-between space-y-1 mt-5 font-medium text-[0.85rem]">
+              <div className="group mt-5 flex justify-between space-y-1 text-[0.85rem] font-medium">
                 <div>
-                <p >Leave Type</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Sick Leave
-                </p>
+                  <p>Leave Type</p>
+                  <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    {leaveDetails?.leave_type?.leave_name}
+                  </p>
                 </div>
                 <div className="w-[25%]">
-                <p >Leave Count</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  1 Day
-                </p>
+                  <p>Leave Count</p>
+                  <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    {leaveDetails?.total_leave_days}
+                  </p>
                 </div>
               </div>
-              <div className="group flex justify-between space-y-1 mt-5 font-medium text-[0.85rem]">
+              <div className="group mt-5 flex justify-between space-y-1 text-[0.85rem] font-medium">
                 <div>
-                <p >Applied on</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Oct 14, 2022
-                </p>
+                  <p>Applied on</p>
+                  <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    {(() => {
+                      const formatDate = (dateString) => {
+                        if (!dateString) return "N/A"; // Handle cases where dateString is undefined
+                        const date = new Date(dateString);
+                        const day = String(date.getDate()).padStart(2, "0");
+                        const month = String(date.getMonth() + 1).padStart(
+                          2,
+                          "0",
+                        ); // Months are 0-indexed
+                        const year = date.getFullYear();
+                        return `${day}-${month}-${year}`;
+                      };
+
+                      return formatDate(leaveDetails?.created_at);
+                    })()}
+                  </p>
                 </div>
                 <div className="w-[25%]">
-                <p >LOP Days</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  1
-                </p>
+                  <p>LOP Days</p>
+                  <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    1
+                  </p>
                 </div>
               </div>
-              <div className="group flex flex-col justify-between space-y-1 mt-5 font-medium text-[0.85rem]">
-                <p >Description</p>
-                <p className=" font-extrabold text-[0.95rem] text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  This term is not commonly used in the UK. In other countries,casual leave is a general term including all holidays or annual leave, other than mandatory/leagally defined or statutory leave.
+              <div className="group mt-5 flex flex-col justify-between space-y-1 text-[0.85rem] font-medium">
+                <p>Description</p>
+                <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  {leaveDetails?.descriptions}
                 </p>
               </div>
-              <div className="group flex space-y-1 mt-5 items-center font-medium text-[0.85rem] text-[#030e5c] cursor-pointer"
-                onClick={() => setShowLeaveList((prev) => !prev)}>
-                <p >Available Leaves</p>
+              <div
+                className="group mt-5 flex cursor-pointer items-center space-y-1 text-[0.85rem] font-medium text-[#030e5c]"
+                onClick={() => setShowLeaveList((prev) => !prev)}
+              >
+                <p>Available Leaves</p>
                 <span>
-                    <ChevronDown size={24} color="#1f008f" strokeWidth={0.75} />
+                  <ChevronDown size={24} color="#1f008f" strokeWidth={0.75} />
                 </span>
               </div>
               {showLeaveList && (
-              <div className="group grid grid-cols-3 w-full p-3 justify-between space-y-1 gap-3 mt-5 font-medium text-[0.85rem] border border-[#cecdcd] rounded-md">
-                <div className="pt-1">
-                <p >Casual Leave</p>
-                <p>0/5</p>
+                <div className="group mt-5 grid w-full grid-cols-3 justify-between gap-3 space-y-1 rounded-md border border-[#cecdcd] p-3 text-[0.85rem] font-medium">
+                  <div className="pt-1">
+                    <p>Casual Leave</p>
+                    <p>0/5</p>
+                  </div>
+                  <div>
+                    <p>Sick Leave</p>
+                    <p>0/5</p>
+                  </div>
+                  <div>
+                    <p>Comp Off</p>
+                    <p>0/5</p>
+                  </div>
+                  <div>
+                    <p>Lop</p>
+                    <p>0/5</p>
+                  </div>
+                  <div>
+                    <p>Comp Off</p>
+                    <p>0/5</p>
+                  </div>
+                  <div>
+                    <p>Special Leave</p>
+                    <p>0/5</p>
+                  </div>
                 </div>
-                <div>
-                <p >Sick Leave</p>
-                <p>0/5</p>
-                </div>
-                <div>
-                <p >Comp Off</p>
-                <p>0/5</p>
-                </div>
-                <div>
-                <p >Lop</p>
-                <p>0/5</p>
-                </div>
-                <div>
-                <p >Comp Off</p>
-                <p>0/5</p>
-                </div>
-                <div>
-                <p >Special Leave</p>
-                <p>0/5</p>
-                </div>
-              </div>)}
-              <div className="group flex items-center gap-3 mt-5 font-medium text-[0.85rem]">
+              )}
+              <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <div className="flex items-center gap-2">
-                    <input
+                  <input
                     type="radio"
-                    name="leaveStatus" 
+                    name="leaveStatus"
                     value="pending"
-                    onClick={()=>setRejected(false)}
-                    className="radio-black " 
-                    defaultChecked
-                    />
-                    <label className="text-sm font-normal">Pending</label>
+                    onClick={() => {
+                      setRejected(false);
+                      setSelectedStatus(1);
+                    }}
+                    className="radio-black"
+                    checked={selectedStatus === 1}
+                  />
+                  <label className="text-sm font-normal">Pending</label>
                 </div>
                 <div className="flex items-center gap-2">
-                    <input
+                  <input
                     type="radio"
                     name="leaveStatus"
                     value="approved"
-                    onClick={()=>setRejected(false)}
-                    className="radio-black "
-                    />
-                    <label className="text-sm font-normal">Approved</label>
+                    onClick={() => {
+                      setRejected(false);
+                      setSelectedStatus(2);
+                    }}
+                    className="radio-black"
+                    checked={selectedStatus === 2}
+                  />
+                  <label className="text-sm font-normal">Approved</label>
                 </div>
                 <div className="flex items-center gap-2">
-                    <input
+                  <input
                     type="radio"
-                    name="leaveStatus" 
+                    name="leaveStatus"
                     value="rejected"
-                    onClick={()=>setRejected(true)}
-                    className="radio-black "
-                    />
-                    <label className="text-sm font-normal">Rejected</label>
+                    onClick={() => {
+                      setRejected(true);
+                      setSelectedStatus(3);
+                    }}
+                    className="radio-black"
+                    checked={selectedStatus === 3}
+                  />
+                  <label className="text-sm font-normal">Rejected</label>
                 </div>
               </div>
-              {rejected&&
-              <div className="font-medium text-[0.85rem] flex flex-col gap-2 mt-2 ">
-              <label >Reason for rejection</label>
-                <textarea className="w-full p-1 h-20 border border-[#cecdcd] rounded-md" placeholder="Enter your reason here..."></textarea>
-              </div>}
+              {rejected && (
+                <div className="mt-2 flex flex-col gap-2 text-[0.85rem] font-medium">
+                  <label>Reason for rejection</label>
+                  <textarea
+                    className="h-20 w-full rounded-md border border-[#cecdcd] p-1"
+                    placeholder="Enter your reason here..."
+                    onChange={(e) => setReason(e.target.value)}
+                  ></textarea>
+                </div>
+              )}
               <div className="mt-3 flex flex-row gap-3">
-              <button
+                <button
                   onClick={close}
-                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md  text-black text-sm font-normal border border-[#cecdcd] focus:outline-none"
+                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#cecdcd] text-sm font-normal text-black focus:outline-none"
                 >
                   <span>Cancel</span>
                 </button>

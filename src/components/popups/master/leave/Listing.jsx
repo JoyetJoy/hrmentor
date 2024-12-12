@@ -3,7 +3,7 @@ import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import LeaveHeader from "@/components/common/LeaveMenuHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { Eye,Filter, Search, Trash2 } from "lucide-react";
+import { Eye, Filter, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import LeaveRequest from "./LeaveRequest";
 import { LeaveList } from "@/constants/menus/leave";
@@ -66,23 +66,15 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         {
           header: colKeys?.field1?.label,
           accessorKey: colKeys?.field1?.key,
-          cell: ({ row, getValue }) => {
-            const fieldValue = getValue();
-            return (
-              <div className="flex max-w-xl items-center gap-3">
-                {fieldValue}
-                {row?.original?.is_default === "1" && (
-                  <div className="rounded-full border border-[#7F7F7F] px-2 py-0.5 font-semibold text-[#7F7F7F]">
-                    Default
-                  </div>
-                )}
-              </div>
-            );
-          },
+          cell: ({ row }) => (
+            <td>
+              {`${row.original.employee.first_name || ""} ${row.original.employee.middle_name || ""} & ${row.original.employee_id}`}
+            </td>
+          ),
         },
         colKeys.field2 && {
           header: colKeys?.field2?.label,
-          accessorKey: colKeys?.field2?.key,
+          accessorKey: "from_date",
           cell: ({ getValue }) => {
             const fieldValue = getValue();
             return (
@@ -95,7 +87,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         },
         colKeys.field3 && {
           header: colKeys?.field3?.label,
-          accessorKey: colKeys?.field3?.key,
+          accessorKey: "to_date",
           cell: ({ getValue }) => {
             const fieldValue = getValue();
             return (
@@ -109,60 +101,49 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         colKeys.field4 && {
           header: colKeys?.field4?.label,
           accessorKey: colKeys?.field4?.key,
-          cell: ({ getValue }) => {
-            const fieldValue = getValue();
-            return (
-              <div
-                className="!line-clamp-3 flex max-w-sm flex-col gap-1"
-                dangerouslySetInnerHTML={{ __html: fieldValue }}
-              />
-            );
-          },
+          cell: ({ row }) => (
+            <td>{`${row.original.leave_type.leave_name || ""}`}</td>
+          ),
         },
         colKeys.field5 && {
           header: colKeys?.field5?.label,
-          accessorKey: colKeys?.field5?.key,
-          cell: ({ getValue }) => {
-            const fieldValue = getValue();
-            return (
-              <div
-                className="!line-clamp-3 flex max-w-sm flex-col gap-1"
-                dangerouslySetInnerHTML={{ __html: fieldValue }}
-              />
-            );
-          },
+          accessorKey: "total_leave_days",
+          cell: ({ row }) => (
+            <td>{`${row.original.total_leave_days || "-"} `}</td>
+          ),
         },
         colKeys.field6 && {
           header: colKeys?.field6?.label,
           accessorKey: colKeys?.field6?.key,
-          cell: ({ getValue }) => {
-            const fieldValue = getValue();
-            return (
-              <div
-                className="!line-clamp-3 flex max-w-sm flex-col gap-1"
-                dangerouslySetInnerHTML={{ __html: fieldValue }}
-              />
-            );
+          cell: ({ row }) => {
+            const formatDate = (dateString) => {
+              const date = new Date(dateString);
+              const day = String(date.getDate()).padStart(2, "0");
+              const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+              const year = date.getFullYear();
+              return `${day}-${month}-${year}`;
+            };
+
+            return <td>{formatDate(row.original.created_at)}</td>;
           },
         },
         {
           header: colKeys?.field7?.label,
-          accessorKey: colKeys?.field7?.key,
           cell: ({ row }) => {
-            const fieldValue = row.original?.[colKeys?.field7?.key];
+            const leaveStatus = row.original?.leave_status;
+            const fieldValue = leaveStatus?.leave_status_name;
+
+            const leaveStatusStyles = {
+              backgroundColor: leaveStatus?.background_color,
+              color: leaveStatus?.text_color,
+            };
+
             return (
               <div
-                className={`flex h-8 w-28 items-center justify-center rounded-md px-3 font-semibold ${
-                  fieldValue === "pending"
-                    ? "bg-[#fbf0d3] text-[#ebb425]"
-                    : fieldValue === "approved"
-                    ? "bg-[#e6f8ed] text-[#00b448]"
-                    : "bg-[#f7eaea] text-[#db0000]"
-                }`}
+                className="flex h-8 w-28 items-center justify-center rounded-md px-3 font-semibold"
+                style={leaveStatusStyles}
               >
-                {fieldValue ==='pending' ? "Pending"  
-                  : fieldValue ==='approved' ? "Approved"
-                  : "Not approved" }
+                {fieldValue || "Not specified"}
               </div>
             );
           },
@@ -172,19 +153,22 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
-                <button
+              <button
                 type="button"
-                onClick={() => setSelectedField(row?.original?.id)}
+                onClick={() => {
+                  setSelectedId(row?.original?.id);
+                  setPopupOpen(true);
+                }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
-              <Eye className="size-3" />
-           
+                <Eye className="size-3" />
               </button>
               <button
                 type="button"
                 onClick={() => {
-                    setPopupOpen(true)
-                    setSelectedField(row?.original?.id)}}
+                  setPopupOpen(true);
+                  setSelectedId(row?.original?.id);
+                }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
                 <img
@@ -206,9 +190,9 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
           ),
         },
       ].filter(Boolean),
-    [currentPage, pageLimit, colKeys]
+    [currentPage, pageLimit, colKeys],
   );
-  
+
   return (
     <>
       <DeleteConfirmation
@@ -221,15 +205,15 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
       <LeaveRequest
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        
+        id={selectedId}
       />
       <div className="flex flex-col">
-        <LeaveHeader page={1} currentPage ={'Leave request'} />
+        <LeaveHeader page={1} currentPage={"Leave request"} />
         <div className="flex gap-x-3">
           <SettingsSidebar sidebarList={LeaveList} active={type} />
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-end gap-2">
-              <div className="input bg-[#f3f4f6] flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
+              <div className="input flex h-10 min-h-10 w-80 items-center gap-2 border border-gray-platinum bg-[#f3f4f6] text-sm outline-none placeholder:text-black hover:border-gray-platinum">
                 <Search className="size-4 text-[#7F7F7F]" />
                 <input
                   type="text"

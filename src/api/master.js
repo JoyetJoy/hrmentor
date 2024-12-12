@@ -157,3 +157,6 @@ export const TEAM_TIMESHEET_EMPLOYEELIST = "/employee-team-time-sheets"
 // EMPLOYEE LIST
 export const EMPLOYEE_LIST = "/team-employees";
 
+//  LEAVE REQUEST LIST
+export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests"
+
