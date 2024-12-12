@@ -104,6 +104,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
 
+  
   // GET DETAILS IN CASE OF UPDATE
   const { data: employeeDetails, isLoading } = useQuery({
     queryKey: ["employeeDetails", uid, formtype],
@@ -290,12 +291,9 @@ export default function SaveEmployeeForm({ formtype }) {
 
   // ROLES LIST
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
-  console.log(rolesList);
 
   const onSubmit = (data) => {
     setLoader(true);
-    console.log(data.role_id);
-
     handleEmployee(data);
   };
 
@@ -331,9 +329,10 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("state_id", data.state_id?.id);
+    formData.append("state_id", data.state_id?.value);
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
+    formData.append("pention_subscription",data.pention_status?.id)
 
     try {
       let res;
@@ -358,11 +357,10 @@ export default function SaveEmployeeForm({ formtype }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to save employee.");
+      toast.error(error?.response?.data?.errors||"Failed to save employee.");
       setLoader(false);
     }
   };
-  console.log(employeeTypeList);
 
   return (
     <>
@@ -476,8 +474,17 @@ export default function SaveEmployeeForm({ formtype }) {
                     autoComplete="off"
                     type="text"
                     placeholder="Enter First Name"
-                    {...register("first_name", { required: true })}
+                    {...register("first_name", {
+                      required: "First Name is required",
+                      pattern: {
+                        value: /^[A-Za-z]+$/,
+                        message: "Only alphabetic characters are allowed",
+                      },
+                    })}
                     className="input-box"
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                    }}
                   />
                   {errors.first_name && (
                     <span className="text-xs font-medium text-red-500">
@@ -485,14 +492,23 @@ export default function SaveEmployeeForm({ formtype }) {
                     </span>
                   )}
                 </div>
+
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="label-text">Middle Name</label>
                   <input
-                    {...register("middle_name")}
+                    {...register("middle_name", {
+                      pattern: {
+                        value: /^[A-Za-z]+$/,
+                        message: "Only alphabetic characters are allowed",
+                      },
+                    })}
                     autoComplete="off"
                     placeholder="Enter Middle Name"
                     type="text"
                     className="input-box"
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                    }}
                   />
                   {errors.middle_name && (
                     <span className="text-xs font-medium text-red-500">
@@ -503,11 +519,20 @@ export default function SaveEmployeeForm({ formtype }) {
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Surname</label>
                   <input
-                    {...register("sur_name")}
+                    {...register("sur_name", {
+                      required: "Surname is required",
+                      pattern: {
+                        value: /^[A-Za-z]+$/,
+                        message: "Only alphabetic characters are allowed",
+                      },
+                    })}
                     autoComplete="off"
                     placeholder="Enter Surname"
                     type="text"
                     className="input-box"
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                    }}
                   />
                   {errors.sur_name && (
                     <span className="text-xs font-medium text-red-500">
@@ -521,6 +546,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("dob", { required: true })}
                     autoComplete="off"
                     type="date"
+                    max={new Date().toISOString().split("T")[0]}
                     className="input-box pr-2"
                   />
                   {errors.dob && (
@@ -614,7 +640,7 @@ export default function SaveEmployeeForm({ formtype }) {
                         noOptionsMessage={() => "Type city name"}
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption); // Update form state
-                          handleCitySelect(selectedOption)
+                          handleCitySelect(selectedOption);
                         }}
                         value={field.value} // Ensure the value is controlled
                         className="input-box"
@@ -702,11 +728,17 @@ export default function SaveEmployeeForm({ formtype }) {
                   <input
                     {...register("national_insurance_number", {
                       required: true,
+                      maxLength: {
+                        value: 9,
+                        message: "National Insurance must not exceed 9 characters",
+                      },
                     })}
                     autoComplete="off"
                     type="text"
+                    maxLength={9}
                     placeholder="Enter National Insurance Number"
                     className="input-box"
+                    
                   />
                   {errors.national_insurance_number && (
                     <span className="text-xs font-medium text-red-500">
@@ -789,9 +821,21 @@ export default function SaveEmployeeForm({ formtype }) {
                       </div>
                       <input
                         id="employee-profile-pic"
-                        onChange={handleImageChange}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
+                            if (!allowedTypes.includes(file.type)) {
+                              toast.error('Invalid file type. Only images (JPEG, PNG, GIF) are allowed.');
+                              e.target.value = ''; // Clear the input
+                              return;
+                            }
+                            handleImageChange(e); // Proceed with the valid file
+                          }
+                        }}
                         type="file"
                         className="hidden"
+                        accept="image/jpeg, image/png, image/gif" // Restrict file types
                       />
                     </label>
                   )}

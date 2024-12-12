@@ -44,7 +44,8 @@ export const EmployeeSchema = Yup.object({
   ),
   national_insurance_number: Yup.string().required(
     "National Insurance is required",
-  ),
+  )
+  .max(9, "National Insurance must not exceed 9 characters"),
 
   department_id: Yup.object({
     id: Yup.string(),
@@ -81,7 +82,7 @@ export const EmployeeSchema = Yup.object({
   date_of_joining: Yup.string().required("Date of joining is required"),
 
   mobile_number: Yup.string()
-    .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
+    .matches(/^[0-9]{11}$/, "Mobile number must be 11 digits")
     .required("Mobile number is required"),
 
   personal_email: Yup.string()
@@ -116,6 +117,12 @@ export const EmployeeSchema = Yup.object({
     value: Yup.string(),
     label: Yup.string(),
   }).test("both-required", "Martial status is required", function (value) {
+    return value?.value && value?.label;
+  }),
+  pention_status: Yup.object({
+    value: Yup.string(),
+    label: Yup.string(),
+  }).test("both-required", "Pention status is required", function (value) {
     return value?.value && value?.label;
   }),
 });
