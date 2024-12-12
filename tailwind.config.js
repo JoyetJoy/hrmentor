@@ -1,3 +1,5 @@
+import { Italic } from 'lucide-react';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -11,6 +13,7 @@ export default {
       fontFamily: {
         monorope: ["Manrope"],
         poppins: ["Poppins"],
+        Italic:["Italic"],
       },
       colors: {
         gray: {

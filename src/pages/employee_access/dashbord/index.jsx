@@ -11,6 +11,7 @@ import { DASHBOARD, CLOCKIN, RUNNINGBREAK } from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
 import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 export const EmployeeDashboard = () => {
   const queryClient = useQueryClient();
@@ -20,13 +21,13 @@ export const EmployeeDashboard = () => {
   const [timer, setTimer] = useState("");
   const [runningbreak, setRunningbreak] = useState(false);
   const [clockOutPopupOpen, setClockOutPopupOpen] = useState(false);
-  const [breakdata,setBreakdata] = useState('');
+  const [breakdata, setBreakdata] = useState("");
 
   // Fetch dashboard data
   const { data: dashboard } = useQuery({
     queryKey: ["dashboard"],
     queryFn: () => newRequest.get(DASHBOARD).then((res) => res.data),
-    enabled: true,      
+    enabled: true,
     staleTime: 0,
   });
 
@@ -34,21 +35,26 @@ export const EmployeeDashboard = () => {
   const { data: clockin, refetch } = useQuery({
     queryKey: ["clockin", timer],
     queryFn: () => newRequest.get(CLOCKIN).then((res) => res.data),
-    enabled: true,      
+    enabled: true,
     staleTime: 0,
   });
-  
+
   // Update logged time dynamically
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
-  
+
     const calculateLoggedTime = () => {
-      const clockInDateUTC = new Date(`${clockin?.clock_in_time.replace(" ", "T")}Z`).getTime();
+      const clockInDateUTC = new Date(
+        `${clockin?.clock_in_time.replace(" ", "T")}Z`,
+      ).getTime();
       const elapsedTime = Date.now() - clockInDateUTC;
       return new Date(elapsedTime).toISOString().substr(11, 8);
     };
-  
-    const interval = setInterval(() => setLoggedTime(calculateLoggedTime()), 1000);
+
+    const interval = setInterval(
+      () => setLoggedTime(calculateLoggedTime()),
+      1000,
+    );
     return () => clearInterval(interval);
   }, [clockin?.clock_in_time]);
 
@@ -65,13 +71,14 @@ export const EmployeeDashboard = () => {
 
         if (res?.status === 200) {
           toast.success("Clockin successfully");
-          refetch(); 
+          refetch();
           setTimer(res.data);
-         
         }
       } catch (error) {
         console.error("Failed to clock in:", error);
-        toast.error(error?.response?.data?.message || "Failed to clock in, Try again.");
+        toast.error(
+          error?.response?.data?.message || "Failed to clock in, Try again.",
+        );
       }
     }
   };
@@ -80,7 +87,7 @@ export const EmployeeDashboard = () => {
       const res = await newRequest.get(RUNNINGBREAK);
       if (res?.status === 200) {
         queryClient.invalidateQueries(["runninbreak"]);
-        setBreakdata(res?.data)
+        setBreakdata(res?.data);
         if (res?.data?.id) {
           setBreakPopupOpen(true);
         } else {
@@ -123,7 +130,7 @@ export const EmployeeDashboard = () => {
         setBreakPopupOpen={setBreakPopupOpen}
         loggedTime={loggedTime}
       />
-      <div className="my-3 flex items-baseline justify-between  rounded-md">
+      <div className="my-3 flex items-baseline justify-between rounded-md">
         <aside className="flex min-w-[72%] flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
@@ -140,7 +147,7 @@ export const EmployeeDashboard = () => {
               )}
               {clockin?.clock_in_time ? (
                 <div
-                onClick={() => setClockOutPopupOpen(true)}
+                  onClick={() => setClockOutPopupOpen(true)}
                   className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
                 >
                   <Clock4 className="size-4" />
@@ -148,7 +155,7 @@ export const EmployeeDashboard = () => {
                 </div>
               ) : (
                 <div
-                onClick={handleClockIn}
+                  onClick={handleClockIn}
                   className={`btn flex h-10 min-h-10 items-center justify-center whitespace-nowrap rounded-md px-6 text-xs font-normal text-white ${clockin?.clock_in_time ? "bg-[#2B2B2B] hover:bg-hrmdarkblue" : "bg-hrmprimaryorange hover:bg-hrmprimaryorange"}`}
                 >
                   <Clock4 className="size-4" />
@@ -451,11 +458,16 @@ export const EmployeeDashboard = () => {
         </aside>
         <aside className="flex w-[27%] flex-col gap-4">
           <LeaveAvailability />
-          <div className=" rounded-md bg-white p-6 shadow-sm">
-            <h1 className="mb-4 text-lg font-semibold text-black flex items-center justify-between" >
-              News & Events 
-              <span className="flex items-center gap-2 text-xs font-medium text-gray-dark">View <Eye className="size-4 text-black/70" /></span>
-            </h1>
+          <div className="rounded-md bg-white p-6 shadow-sm">
+            <Link
+              to="/employee-access/news-events/view"
+              className="mb-4 flex items-center justify-between text-lg font-semibold text-black"
+            >
+              News & Events
+              <span className="flex cursor-pointer items-center gap-2 text-xs font-medium text-gray-dark">
+                View <Eye className="size-4 text-black/70" />
+              </span>
+            </Link>
             <div className="flex flex-col gap-3">
               {meetings.map((meeting, index) => (
                 <div
