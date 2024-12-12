@@ -452,8 +452,9 @@ export const EmployeeDashboard = () => {
         <aside className="flex w-[27%] flex-col gap-4">
           <LeaveAvailability />
           <div className=" rounded-md bg-white p-6 shadow-sm">
-            <h1 className="mb-4 text-lg font-semibold text-black">
-              News & Events
+            <h1 className="mb-4 text-lg font-semibold text-black flex items-center justify-between" >
+              News & Events 
+              <span className="flex items-center gap-2 text-xs font-medium text-gray-dark">View <Eye className="size-4 text-black/70" /></span>
             </h1>
             <div className="flex flex-col gap-3">
               {meetings.map((meeting, index) => (
