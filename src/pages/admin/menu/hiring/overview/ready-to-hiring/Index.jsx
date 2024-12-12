@@ -34,8 +34,6 @@ export const ReadyToHiring = () => {
         }),
   });
 
-  console.log(readyToHirings);
-
   useEffect(() => {
     if (readyToHirings) {
       setTotalPages(readyToHirings?.last_page);
@@ -71,6 +69,10 @@ export const ReadyToHiring = () => {
         accessorKey: "designation",
       },
       {
+        header: "Location",
+        accessorKey: "location",
+      },
+      {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
@@ -101,10 +103,10 @@ export const ReadyToHiring = () => {
               Send Offer Letter
             </button>
             <button
-              type={"button"}
-              className="flex w-fit items-center justify-center rounded bg-[#AB27271A]/10 px-2 py-1.5 text-xs text-[#AB2727]"
+              type="button"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-[#AB27271A]/10 text-[#AB2727]"
             >
-              Close <CircleX className="h-4" />
+              <CircleX className="h-5" />
             </button>
             <Link
               to={`/admin/hiring/view-candidate?cid=${row?.original?.id}`}
@@ -119,7 +121,8 @@ export const ReadyToHiring = () => {
     [readyToHirings, currentPage],
   );
 
-  console.log(readyToHirings);
+  console.log(readyToHirings,"readyToHiringsreadyToHiringsreadyToHirings");
+  
 
   return (
     <>

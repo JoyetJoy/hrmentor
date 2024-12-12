@@ -121,7 +121,7 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
       const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
 
       if (res.data.success === true) {
-        navigate(`admin/leave/settings/advancedsettings/${id}`);
+        navigate(`/admin/leave/settings/advancedsettings/${res.data.data.id}`);
       }
     } catch (error) {
       console.error("Error Details:", error);

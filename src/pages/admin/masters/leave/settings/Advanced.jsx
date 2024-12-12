@@ -1,5 +1,4 @@
 import LeaveHeader from "@/components/common/LeaveMenuHeader";
-import AvailabilitySettings from "@/components/popups/master/leave/settings/AvailabilitySettings";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import { LeaveSidebarList } from "@/constants/menus/leave";
 import AdvancedSettings from "@/components/popups/master/leave/settings/AdvancedSettings";

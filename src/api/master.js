@@ -150,3 +150,6 @@ export const TEAMROSTER_EMPLOYEELIST = "/roster-employee-list";
 //EMPLOYEE TEAM TIMESHEET LIST
 export const TEAM_TIMESHEET_EMPLOYEELIST = "/employee-team-time-sheets"
 
+//  LEAVE REQUEST LIST
+export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests"
+
