@@ -19,6 +19,8 @@ export const HiringDashboard = () => {
       }),
   });
 
+  console.log(hiringData, "hiringDatahiringData");
+
   const [selectedDate, setSelectedDate] = useState(dayjs());
   return (
     <>
