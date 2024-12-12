@@ -54,6 +54,9 @@ export const EMPLOYEE_DOCUMENT_TYPE_LIST = "active-employee-document-types";
 export const EMPLOYEE_ETHNICITY = "ethnicity";
 // listing
 export const EMPLOYEE_ETHNICITY_LIST = "active-ethnicity";
+//employee religious/sexual orientation
+export const EMPLOYEE_RELIGIOUS_AND_SEXUAL = "sexual-orientations";
+
 
 // employee EeoJobCategoryType
 export const EMPLOYEE_EEO_CATEGORY = "EeoJobCategoryType";

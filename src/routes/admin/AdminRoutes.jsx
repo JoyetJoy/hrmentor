@@ -77,8 +77,9 @@ export const AdminRoutes = [
     children: PayrollRoute,
   },
   {
-    path: "/admin/news",
+    path: "/admin/news-event",
     children: NewsEventRoute,
   },
+  
 
 ];

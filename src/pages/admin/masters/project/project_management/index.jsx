@@ -88,17 +88,21 @@ export default function ProjectManagement() {
     },
   ];
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case "Not started":
-        return <span className="text-dark badge bg-warning">Not started</span>;
-      case "In progress":
-        return <span className="badge bg-primary">In progress</span>;
-      case "Canceled":
-        return <span className="bg-danger badge">Canceled</span>;
-      default:
-        return null;
-    }
+  const renderStatusBadge = (status) => {
+    const statusColors = {
+      "Not started": "bg-yellow-100 text-yellow-600",
+      "In progress": "bg-blue-100 text-blue-600",
+      Canceled: "bg-purple-100 text-purple-600",
+      "On hold": "bg-red-100 text-red-600",
+      Finished: "bg-green-100 text-green-600",
+    };
+    return (
+      <span
+        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
+      >
+        {status}
+      </span>
+    );
   };
   const {
     register,
@@ -132,13 +136,13 @@ export default function ProjectManagement() {
         header: "Members",
         accessorKey: "members",
         cell: ({ row }) => (
-          <div className="d-flex">
+          <div className="flex items-center">
             {row.original.members.map((member, idx) => (
               <img
                 key={idx}
                 src={member}
-                alt="Member"
-                className="rounded-circle"
+                alt={`Member ${idx + 1}`}
+                className="rounded-full"
                 style={{
                   width: "30px",
                   height: "30px",
@@ -154,7 +158,7 @@ export default function ProjectManagement() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <td>{getStatusBadge(row.original.status)}</td> // Render badge based on status
+          <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
         ),
       },
       {
@@ -424,7 +428,7 @@ export default function ProjectManagement() {
                   </label>
                   <label
                     htmlFor="profile_image"
-                    className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    className="input-box bg-gray-300 flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
                   >
                     <div className="flex items-center gap-2">
                       <UploadCloud />
