@@ -80,10 +80,31 @@ export const WorkInfoSchema = (reportNotRequired) => {
           return value?.value && value?.label;
         },
       ),
+    relegion_belief_id: Yup.object({
+      id: Yup.string().nullable(),
+      value: Yup.string().nullable(),
+      label: Yup.string().nullable(),
+    })
+      .nullable()
+      .test("both-required", "Relegion Belief is required", function (value) {
+        return value?.value && value?.label;
+      }),
+    sexual_orientation_id: Yup.object({
+      id: Yup.string().nullable(),
+      value: Yup.string().nullable(),
+      label: Yup.string().nullable(),
+    })
+      .nullable()
+      .test(
+        "both-required",
+        "Sexual orientation is required",
+        function (value) {
+          return value?.value && value?.label;
+        },
+      ),
 
     age: Yup.string().required("Age is required"),
     religious: Yup.string().required("Religious belief is required"),
-    sexualorientation: Yup.string().required("Sexual orientation is required"),
     pregnancy: Yup.string().required("Pregnancy & maternity is required"),
   });
 };
