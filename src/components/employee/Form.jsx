@@ -124,6 +124,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState();
+  const [imageerror,setImageerror] = useState('');
 
   useEffect(() => {
     if (employeeDetails) {
@@ -293,11 +294,19 @@ export default function SaveEmployeeForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    setLoader(true);
+    if(imageFile){
+      setLoader(true);
     handleEmployee(data);
+    }else{
+      setImageerror('Image is required')
+      toast.error('Image is required')
+    }
+    
   };
 
   const handleEmployee = async (data) => {
+    
+    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -332,7 +341,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("state_id", data.state_id?.value);
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
-    formData.append("pention_subscription",data.pention_status?.id)
+    formData.append("pension_subscription",data.pention_status?.id)
 
     try {
       let res;
@@ -357,7 +366,7 @@ export default function SaveEmployeeForm({ formtype }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.errors||"Failed to save employee.");
+      toast.error(error?.response?.data?.message[0]||"Failed to save employee.");
       setLoader(false);
     }
   };
@@ -795,7 +804,12 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image</label>
+                  <label className="label-text required">Upload Image</label>
+                  {imageerror&&(
+                    <span className="text-xs font-medium text-red-500">
+                    {imageerror}
+                  </span>   
+                    )}
                   {image ? (
                     <div className="relative">
                       <img
@@ -838,6 +852,7 @@ export default function SaveEmployeeForm({ formtype }) {
                         accept="image/jpeg, image/png, image/gif" // Restrict file types
                       />
                     </label>
+                    
                   )}
                 </div>
               </div>
