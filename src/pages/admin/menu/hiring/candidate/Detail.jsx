@@ -103,7 +103,6 @@ export default function HiringCandidateDetails() {
     setLoader(true);
   };
 
-  console.log(candidateDetails,"candidateDetailscandidateDetails");
   
 
   return (

@@ -9,6 +9,9 @@ export const UPDATE_JOB = "Jobs-update";
 // CANDIDATES
 // get candidates
 export const GET_CANDIDATES = "candidates";
+
+// get candidates
+export const GET_CANDIDATES_VIEW = "hiring-candidates";
 // UPDATE CANDIDATE
 export const UPDATE_CANDIDATE = "candidate-update";
 // POST PROFILE QUESTION
