@@ -17,7 +17,7 @@ export default function DeleteConfirmation({
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
-  console.log();
+  console.log(api,id,"cddcd");
   
 
   const handleDelete = async () => {
@@ -27,7 +27,7 @@ export default function DeleteConfirmation({
         console.log("kp");
 
         const res = await newRequest.delete(`${api}/${id}`);
-
+ 
         if (res?.data?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
           setLoader(false);

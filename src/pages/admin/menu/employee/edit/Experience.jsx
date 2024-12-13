@@ -143,7 +143,7 @@ export default function EmployeeExperienceEdit() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeExperience"}
         api={EMPLOYEE_EXPERIENCE}
       />

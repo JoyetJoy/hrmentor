@@ -135,6 +135,7 @@ export default function SaveEmployeeForm({ formtype }) {
   function closeOnBoardPopup() {
     setOnBoardPopup(false);
   }
+  const [imageerror, setImageerror] = useState("");
 
   useEffect(() => {
     if (employeeDetails) {
@@ -304,8 +305,13 @@ export default function SaveEmployeeForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    setLoader(true);
-    handleEmployee(data);
+    if (imageFile) {
+      setLoader(true);
+      handleEmployee(data);
+    } else {
+      setImageerror("Image is required");
+      toast.error("Image is required");
+    }
   };
 
   const handleEmployee = async (data) => {
@@ -344,6 +350,7 @@ export default function SaveEmployeeForm({ formtype }) {
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pention_subscription", data.pention_status?.id);
+    formData.append("pension_subscription", data.pention_status?.id);
 
     try {
       let res;
@@ -368,31 +375,9 @@ export default function SaveEmployeeForm({ formtype }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.errors || "Failed to save employee.");
-      setLoader(false);
-    }
-  };
-
-  const handleShare = async () => {
-    try {
-      const res = await newRequest.post(
-        `${EMPLOYEE_ONBOARD_MAIL_SEND}/${uid}`,
-        {
-          params: {
-            user_id: user?.id,
-          },
-        },
+      toast.error(
+        error?.response?.data?.message[0] || "Failed to save employee.",
       );
-      if (res) {
-        console.log(res, "resres");
-
-        toast.success("Details Successfully Shared");
-        closeOnBoardPopup();
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error?.response?.data?.error);
-    } finally {
       setLoader(false);
     }
   };
@@ -827,7 +812,12 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Upload Image</label>
+                  <label className="required label-text">Upload Image</label>
+                  {imageerror && (
+                    <span className="text-xs font-medium text-red-500">
+                      {imageerror}
+                    </span>
+                  )}
                   {image ? (
                     <div className="relative">
                       <img
