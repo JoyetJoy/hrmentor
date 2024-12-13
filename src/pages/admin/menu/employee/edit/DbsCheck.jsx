@@ -5,7 +5,7 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { EMPLOYEE_EXPERIENCE, newRequest } from "@/api";
+import { EMPLOYEE_DBS_CHECK, newRequest } from "@/api";
 import DbsEditForm from "@/components/popups/employees/edit/DbsEditForm";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
@@ -29,11 +29,11 @@ export default function EmployeeDbsCheckEdit() {
   }, [selectedField]);
 
   // Fetch List
-  const { data: employeeExperience, isLoading } = useQuery({
-    queryKey: ["employeeExperience", currentPage, uid, keyword],
+  const { data: employeeDbCheck, isLoading } = useQuery({
+    queryKey: ["employeeDbCheck", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_EXPERIENCE}/${uid}`, {
+        .get(`${EMPLOYEE_DBS_CHECK}/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -44,19 +44,18 @@ export default function EmployeeDbsCheckEdit() {
           return res.data;
         }),
   });
-
   useEffect(() => {
-    if (employeeExperience) {
-      setTotalPages(employeeExperience?.last_page);
+    if (employeeDbCheck) {
+      setTotalPages(employeeDbCheck?.last_page);
     }
-  }, [employeeExperience]);
-
+  }, [employeeDbCheck]);
+  console.log(employeeDbCheck);
   const columns = React.useMemo(
     () =>
       [
         {
-          header: "Type",
-          accessorKey: "type",
+          header: "Sl No",
+          accessorKey: "sno",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -66,26 +65,41 @@ export default function EmployeeDbsCheckEdit() {
           },
         },
         {
+          header: "Type",
+          accessorKey: "type",
+          cell: ({ row }) => {
+            return <div className="flex px-2">{row.original?.dbs_type}</div>;
+          },
+        },
+        {
           header: "Date of issue",
           accessorKey: "date",
+          cell: ({ row }) => (
+            <div className="flex">{row.original?.issue_date}</div>
+          ),
         },
         {
           header: "Subscription",
           accessorKey: "subscription",
+          cell: ({ row }) => (
+            <div className="flex">{row.original?.subscription === 1? "Yes" : "No"}</div>
+          ),
         },
         {
           header: "DBS Number",
-          accessorKey: "end_date",
+          accessorKey: "dbs_number",
           Cell: ({ row }) => {
-            return <div className="flex px-2">{row.original?.start_date}</div>;
+            return <div className="flex px-2">{row?.original?.dbs_number}</div>;
           },
         },
         {
           header: "Status",
-          accessorKey: "status",
-          Cell: ({ row }) => {
-            return <div className="flex px-2">{}</div>;
-          },
+          accessorKey: "status", 
+          cell: ({ row }) => (
+            <div className="flex px-2">
+              {row.original?.status === 1 ? "Active" : "Inactive"}
+            </div>
+          ),
         },
         {
           header: "Action",
@@ -122,24 +136,24 @@ export default function EmployeeDbsCheckEdit() {
           ),
         },
       ].filter(Boolean),
-    [employeeExperience],
+    [employeeDbCheck],
   );
   return (
     <>
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
-        qrKey={"employeeExperience"}
-        api={EMPLOYEE_EXPERIENCE}
+        id={selectedId}
+        qrKey={"employeeDbCheck"}
+        api={EMPLOYEE_DBS_CHECK}
       />
       <DbsEditForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        qrKey={"employeeSkills"}
-        api={EMPLOYEE_EXPERIENCE}
+        qrKey={"employeeDbCheck"}
+        api={EMPLOYEE_DBS_CHECK}
         uid={uid}
       />
       <div className="flex min-h-screen flex-col">
@@ -185,7 +199,7 @@ export default function EmployeeDbsCheckEdit() {
                 ) : (
                   <QueryTable
                     columns={columns}
-                    list={employeeExperience?.listing ?? []}
+                    list={employeeDbCheck?.listing ?? []}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     totalPages={totalPages}

@@ -72,6 +72,10 @@ export const EMPLOYEE_WORK_INFO = "employee-work-informations";
 export const EMPLOYEE_SKILLS = "employee-skill-qualifications";
 // EXPERIENCE
 export const EMPLOYEE_EXPERIENCE = "employee-experiences";
+//DBS CHECK
+export const EMPLOYEE_DBS_CHECK ="employee-dbscheck";
+//REFERENCE 
+export const EMPLOYEE_REFERENCE ="employee-references"
 // MEMBERSHIP
 export const EMPLOYEE_MEMBERSHIP = "employee-registraion-membership";
 // MEMBERSHIP UPDATE
