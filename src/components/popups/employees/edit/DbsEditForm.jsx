@@ -10,6 +10,12 @@ import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import toast from "react-hot-toast";
 import { customSelectStyles } from "@/utils/customStyles";
+import {
+  dbsCheckType,
+  employeeMasterOptions,
+  successStatus,
+} from "@/constants/data";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function DbsEditForm({
   popupOpen,
@@ -22,6 +28,10 @@ export default function DbsEditForm({
 }) {
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
+  // const { setUser, user } = useUserStore((state) => ({
+  //   setUser: state.setUser,
+  //   user: state.user,
+  // }));
   const {
     register,
     handleSubmit,
@@ -38,55 +48,82 @@ export default function DbsEditForm({
   const [loader, setLoader] = useState(false);
 
   // Get selected data
-  const { data: employeeExperienceDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeExperienceDetailByid", api, selectedField],
+  const { data: employeeDbsCheckDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeDbsCheckDetailByid", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
-  useEffect(() => {
-    if (employeeExperienceDetailByid) {
-      setValue("name", employeeExperienceDetailByid.name);
-      setValue("start_date", employeeExperienceDetailByid.start_date);
-      setValue("reference", employeeExperienceDetailByid.reference);
-      setValue("comments", employeeExperienceDetailByid.comments);
-      setValue("status", employeeExperienceDetailByid.status);
-    }
-  }, [employeeExperienceDetailByid]);
+  const { data: employeeDetails } = useQuery({
+    queryKey: ["employeeDetails", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${"employee"}/${uid}`).then((res) => res.data),
+    enabled: !!uid,
+  });
+
+  console.log(employeeDetails, "employeeDetailsemployeeDetails");
 
   useEffect(() => {
-    if (employeeExperienceDetailByid) {
-      setImage(employeeExperienceDetailByid?.certificate);
+    if (employeeDbsCheckDetailByid) {
+      setValue("dbs_type", employeeDbsCheckDetailByid.dbs_type);
+      setValue("subscription", employeeDbsCheckDetailByid.subscription);
+      setValue("renewal_date", employeeDbsCheckDetailByid.renewal_date);
+      setValue("dbs_number", employeeDbsCheckDetailByid.dbs_number);
+      setValue("issue_date", employeeDbsCheckDetailByid.issue_date);
+      setValue("document", employeeDbsCheckDetailByid.document);
+      setValue("note", employeeDbsCheckDetailByid.note);
+      setValue("declaration", employeeDbsCheckDetailByid.declaration);
+      setValue("status", employeeDbsCheckDetailByid.status);
     }
-  }, [employeeExperienceDetailByid, setImage]);
+  }, [employeeDbsCheckDetailByid]);
+
+  useEffect(() => {
+    if (employeeDbsCheckDetailByid) {
+      setImage(employeeDbsCheckDetailByid?.document);
+    }
+  }, [employeeDbsCheckDetailByid, setImage]);
 
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
     reset();
   }
-
   const onSubmit = async (data) => {
     setLoader(true);
     try {
       const formData = new FormData();
-      formData.append("name", data?.name);
-      formData.append("start_date", data.start_date);
-      formData.append("reference", data.reference);
-      formData.append("comments", data.comments);
-      formData.append("status", data.status);
-      imageFile && formData.append("certificate", imageFile);
-      console.log(formData);
+      formData.append("dbs_type", data?.dbs_type?.value);
+      formData.append("employee_id", employeeDetails?.employee_id);
+      formData.append("user_id", uid);
+      formData.append("subscription", data.subscription?.value);
+      formData.append("renewal_date", data.renewal_date);
+      formData.append("dbs_number", data.dbs_number);
+      formData.append("issue_date", data.issue_date);
+      formData.append("note", data.note);
+      formData.append("declaration", data.declaration);
+      formData.append("status", data.status?.value);
+      imageFile && formData.append("document", imageFile);
 
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
-          `update-employee-experience/${selectedField}`,
+          `update-employee-dbs/${selectedField}`,
           formData,
+          // {
+          //   params: {
+          //     user_id: user?.id,
+          //   },
+          // },
         );
       } else {
-        res = await newFormRequest.post(api, formData);
+        res = await newFormRequest.post(api, formData,
+        //    {
+        //   params: {
+        //     user_id: user?.id,
+        //   },
+        // }
+        );
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
@@ -133,27 +170,28 @@ export default function DbsEditForm({
             ) : (
               <form
                 className="grid grid-cols-2 gap-3"
-                //   onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
                   <label className="label-text">DBS Type</label>
                   <Controller
-                    name="db_type"
+                    name="dbs_type"
                     control={control}
-                    // rules={{ required: true }}
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
                         isSearchable={false}
                         styles={customSelectStyles}
+                        options={dbsCheckType}
                         placeholder="Select Type"
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     )}
                   />
-                  {errors.name && (
+                  {errors.dbs_type && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.dbs_type?.message}
                     </span>
                   )}
                 </div>
@@ -163,55 +201,54 @@ export default function DbsEditForm({
                     Subscription
                   </label>
                   <Controller
-                    name="account_type"
+                    name="subscription"
                     control={control}
-                    // rules={{ required: true }}
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
                         isSearchable={false}
+                        options={successStatus}
                         styles={customSelectStyles}
                         placeholder="Select Type"
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     )}
                   />
-                  {errors.status && (
+                  {errors.subscription && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.status?.message}
+                      {errors.subscription?.message}
                     </span>
                   )}
                 </div>
-
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Renewal
                   </label>
                   <input
-                    {...register("start_date", { required: true })}
+                    {...register("renewal_date", { required: true })}
                     type="date"
                     className="input-box h-10 w-full pr-2"
                   />
-                  {errors.start_date && (
+                  {errors.renewal_date && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.start_date?.message}
+                      {errors.renewal_date?.message}
                     </span>
                   )}
                 </div>
-
                 <div className="group flex flex-col space-y-1">
                   <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     DBS Number
                   </label>
                   <input
-                    {...register("reference", { required: true })}
+                    {...register("dbs_number", { required: true })}
                     type="text"
                     placeholder="Enter reference"
                     className="input-box h-10 w-full"
                   />
-                  {errors.reference && (
+                  {errors.dbs_number && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.reference?.message}
+                      {errors.dbs_number?.message}
                     </span>
                   )}
                 </div>
@@ -220,13 +257,13 @@ export default function DbsEditForm({
                     Date of issue
                   </label>
                   <input
-                    {...register("start_date", { required: true })}
+                    {...register("issue_date", { required: true })}
                     type="date"
                     className="input-box h-10 w-full pr-2"
                   />
-                  {errors.start_date && (
+                  {errors.issue_date && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.start_date?.message}
+                      {errors.issue_date?.message}
                     </span>
                   )}
                 </div>
@@ -235,7 +272,7 @@ export default function DbsEditForm({
                     Document (optional)
                   </label>
                   <label
-                    htmlFor="employee-profile-pic"
+                    htmlFor="document"
                     className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md border border-dashed bg-gray-soft px-2"
                   >
                     <div className="flex items-center justify-between gap-32">
@@ -246,31 +283,39 @@ export default function DbsEditForm({
                       <Eye className="size-4" />
                     </div>
                     <input
-                      id="employee-profile-pic"
+                      id="document"
                       onChange={handleImageChange}
                       type="file"
                       className="hidden"
                     />
                   </label>
+                  <div className="flex items-center gap-2">
+                    <img
+                      className="h-40 w-40 rounded-md object-cover"
+                      src={image}
+                      alt="Preview"
+                    />
+                  </div>
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="label-text">Status</label>
                   <Controller
                     name="status"
                     control={control}
-                    // rules={{ required: true }}
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
                         isSearchable={false}
+                        options={employeeMasterOptions}
                         styles={customSelectStyles}
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                       />
                     )}
                   />
-                  {errors.name && (
+                  {errors.status && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
+                      {errors.status?.message}
                     </span>
                   )}
                 </div>
@@ -279,12 +324,12 @@ export default function DbsEditForm({
                     Note
                   </label>
                   <textarea
-                    {...register("comments", { required: true })}
+                    {...register("note", { required: true })}
                     className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
-                  {errors.employer_details && (
+                  {errors.note && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.employer_details?.message}
+                      {errors.note?.message}
                     </span>
                   )}
                 </div>
@@ -293,12 +338,12 @@ export default function DbsEditForm({
                     Self Declaration
                   </label>
                   <textarea
-                    {...register("comments", { required: true })}
+                    {...register("declaration", { required: true })}
                     className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
-                  {errors.employer_details && (
+                  {errors.declaration && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.employer_details?.message}
+                      {errors.declaration?.message}
                     </span>
                   )}
                 </div>
@@ -306,7 +351,7 @@ export default function DbsEditForm({
                   <button
                     type="submit"
                     className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange text-sm font-normal text-white focus:outline-none"
-                    disabled={loader}
+                    // disabled={loader}
                   >
                     {loader ? (
                       <div className="flex items-center gap-3">

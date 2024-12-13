@@ -1,19 +1,13 @@
-import {
-  EMPLOYEE_RIGHT_TO_WORK_UPDATE,
-  newFormRequest,
-  newRequest,
-} from "@/api";
-import useImageUpload from "@/hooks/useImageUpload";
+import { newFormRequest, newRequest } from "@/api";
 import { referenceSchema } from "@/schema/dashboard/employee/form/reference.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { UploadCloud, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
-import { useCallback } from "react";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
 
@@ -26,8 +20,6 @@ export default function ReferenceForm({
   api,
   uid,
 }) {
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
-    useImageUpload();
   const {
     register,
     handleSubmit,
@@ -43,52 +35,76 @@ export default function ReferenceForm({
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [description, setDescription] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+
+  const handleTypeChange = (selectedOption) => {
+    setSelectedType(selectedOption.value);
+  };
 
   // Get selected data
-  const { data: employeeRightToWorkDetailByid, isLoading } = useQuery({
-    queryKey: ["employeeRightToWorkDetailByid", api, selectedField],
+  const { data: employeeReferenceid, isLoading } = useQuery({
+    queryKey: ["employeeReferenceid", api, selectedField],
     queryFn: () =>
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
-  useEffect(() => {
-    if (employeeRightToWorkDetailByid) {
-      setValue("type", employeeRightToWorkDetailByid.type);
-      setValue("reference_name", employeeRightToWorkDetailByid.reference_name);
-      setValue("email", employeeRightToWorkDetailByid.email);
-    }
-  }, [employeeRightToWorkDetailByid]);
+  const { data: employeeDetails } = useQuery({
+    queryKey: ["employeeDetails", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${"employee"}/${uid}`).then((res) => res.data),
+    enabled: !!uid,
+  });
 
   useEffect(() => {
-    if (employeeRightToWorkDetailByid) {
-      setImage(employeeRightToWorkDetailByid?.document);
+    if (employeeReferenceid) {
+      setValue("type", employeeReferenceid.type);
+      setValue("reference_name", employeeReferenceid.reference_name);
+      setValue("personal_email", employeeReferenceid.personal_email);
+      setValue("company_email", employeeReferenceid.company_email);
+      setValue("company_name", employeeReferenceid.company_name);
+      setValue("designation", employeeReferenceid.designation);
     }
-  }, [employeeRightToWorkDetailByid, setImage]);
+  }, [employeeReferenceid]);
+
+  // useEffect(() => {
+  //   if (employeeReferenceid) {
+  //     setImage(employeeReferenceid?.document);
+  //   }
+  // }, [employeeReferenceid, setImage]);
 
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
+    setSelectedType(null);
     reset();
   }
 
-  const handleClearImage = useCallback(() => {
-    clearImage();
-    setDescription(""); // Reset description if needed
-  }, [clearImage]);
+  // const handleClearImage = useCallback(() => {
+  //   clearImage();
+  //   setDescription(""); // Reset description if needed
+  // }, [clearImage]);
 
   const onSubmit = async (data) => {
     setLoader(true);
     try {
+
+      console.log(data?.type,"data?.typedata?.type");
+      
       const formData = new FormData();
-      formData.append("type", data?.type);
+      formData.append("type", data?.type?.value);
+      formData.append("employee_id", employeeDetails?.employee_id);
+      formData.append("user_id", uid);
       formData.append("reference_name", data.reference_name);
-      formData.append("email", data.email);
-      imageFile && formData.append("document", imageFile);
+      formData.append("personal_email", data.personal_email);
+      formData.append("company_email", data.company_email);
+      formData.append("company_name", data.company_name);
+      formData.append("designation", data.designation);
+
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
-          `${EMPLOYEE_RIGHT_TO_WORK_UPDATE}/${selectedField}`,
+          `update-employee-references/${selectedField}`,
           formData,
         );
       } else {
@@ -106,7 +122,9 @@ export default function ReferenceForm({
       setLoader(false);
     }
   };
+  console.log(selectedType, "selectedTypeselectedType")
 
+  console.log(errors, "designationdesignationdesignation");
   return (
     <Dialog
       open={popupOpen}
@@ -145,7 +163,7 @@ export default function ReferenceForm({
                   <div className="group flex w-full flex-col gap-1">
                     <label className="label-text">Type</label>
                     <Controller
-                      name="document_type_id"
+                      name="type"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
@@ -153,8 +171,15 @@ export default function ReferenceForm({
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={[{ label: "Work" }, { label: "Personal" }]}
+                          options={[
+                            { value: "work", label: "Work" },
+                            { value: "personal", label: "Personal" },
+                          ]}
                           placeholder="Select Type"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleTypeChange(e);
+                          }}
                           className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                         />
                       )}
@@ -165,92 +190,117 @@ export default function ReferenceForm({
                       </span>
                     )}
                   </div>
-                  <div className="group flex flex-col space-y-1">
-                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Name of the reference
-                    </label>
-                    <input
-                      {...register("reference_name", { required: true })}
-                      className="input-box h-10 w-full"
-                    />
-                    {errors.reference_name && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.reference_name?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="group flex flex-col space-y-1">
-                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Email Address
-                    </label>
-                    <input
-                      {...register("email", { required: true })}
-                      className="input-box h-10 w-full"
-                    />
-                    {errors.email && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.email?.message}
-                      </span>
-                    )}
-                  </div>
-                  <div className="group flex w-full flex-col gap-1">
-                    <label className="label-text">Template</label>
-                    <Controller
-                      name="document"
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          options={[
-                            { label: "Personal" },
-                            { label: "Inactive" },
-                          ]}
-                          placeholder="Select Type"
-                          className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1] z-50"
-                        />
+                  {selectedType === "personal" && (
+                    <div className="group flex w-full flex-col gap-1">
+                      <label className="label-text">Template</label>
+                      <Controller
+                        name="document"
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            isSearchable={true}
+                            styles={customSelectStyles}
+                            options={[
+                              { label: "Template 1" },
+                              { label: "Template 2" },
+                            ]}
+                            placeholder="Select Template"
+                            className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                          />
+                        )}
+                      />
+                      {errors.document && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.document?.message}
+                        </span>
                       )}
-                    />
-                    {errors.type && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.type?.message}
-                      </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
+                  {selectedType === "work" ? (
+                    <div className="group flex flex-col space-y-1">
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Email Address
+                      </label>
+                      <input
+                        {...register("company_email", { required: true })}
+                        className="input-box h-10 w-full"
+                      />
+                      {errors.company_email && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.company_email?.message}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="group flex flex-col space-y-1">
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Email Address
+                      </label>
+                      <input
+                        {...register("personal_email", { required: true })}
+                        className="input-box h-10 w-full"
+                      />
+                      {errors.personal_email && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.personal_email?.message}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {selectedType === "work" ? (
+                    <div className="group flex flex-col space-y-1">
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Name of the reference
+                      </label>
+                      <input
+                        {...register("company_name", { required: true })}
+                        className="input-box h-10 w-full"
+                      />
+                      {errors.company_name && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.company_name?.message}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="group flex flex-col space-y-1">
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Name of the reference 
+                      </label>
+                      <input
+                        {...register("reference_name", { required: true })}
+                        className="input-box h-10 w-full"
+                      />
+                      {errors.reference_name && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.reference_name?.message}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
+
                 <div className="group flex flex-col space-y-1">
                   <label className="label-text">
                     Description-Professionals
                   </label>
                   <div className="relative min-h-52 w-full flex-grow overflow-hidden rounded-md border border-black/10">
-                    {/* Background Image with Blur */}
-                    {image && (
-                      <div
-                        className="absolute inset-0 z-0"
-                        style={{
-                          backgroundImage: `url(${image})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          filter: "blur(1px)", // Adjust the blur level as needed
-                        }}
-                      />
-                    )}
                     <ReactQuill
                       theme="snow"
-                      value={description}
+                      name="designation"
+                      // value={designation}
                       onChange={setDescription}
                       placeholder={"Type here.."}
                       className="relative z-10 h-full w-full rounded-md border-b border-transparent"
                       style={{
-                        backgroundColor: "rgba(255, 255, 255, 0.8)", // White background with transparency for readability
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
                       }}
                     />
                   </div>
-                  {errors?.description && (
+                  {errors?.designation && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.description?.message}
+                      {errors.designation?.message}
                     </span>
                   )}
                 </div>
