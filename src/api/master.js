@@ -3,33 +3,33 @@ import axios from "axios";
 
 // ---- EMPLOYEE MASTER APIS ----
 export const newRequest = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-  export const newFormRequest = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  const addAuthorizationInterceptor = (request) => {
-    request.interceptors.request.use((config) => {
-      const token = 
-      localStorage.getItem("super_token")||
-      localStorage.getItem("hr_token")||
-      localStorage.getItem("manager_token")||
+export const newFormRequest = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+const addAuthorizationInterceptor = (request) => {
+  request.interceptors.request.use((config) => {
+    const token =
+      localStorage.getItem("super_token") ||
+      localStorage.getItem("hr_token") ||
+      localStorage.getItem("manager_token") ||
       localStorage.getItem("employee_token");
-      if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`;
-      }
-      return config;
-    });
-  };
-  
-  addAuthorizationInterceptor(newRequest);
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  });
+};
+
+addAuthorizationInterceptor(newRequest);
 // empolyee type
 export const EMPLOYEE_TYPE = "employment-types";
 // listing
@@ -57,7 +57,6 @@ export const EMPLOYEE_ETHNICITY_LIST = "active-ethnicity";
 //employee religious/sexual orientation
 export const EMPLOYEE_RELIGIOUS_AND_SEXUAL = "sexual-orientations";
 
-
 // employee EeoJobCategoryType
 export const EMPLOYEE_EEO_CATEGORY = "EeoJobCategoryType";
 // listing
@@ -68,7 +67,10 @@ export const EMPLOYEE_WORK_LOCATION = "worklocations";
 // list
 export const EMPLOYEE_WORK_LOCATION_LIST = "active-worklocations";
 //work area
-export const EMPLOYEE_WORK_AREA="employee-work-area"
+export const EMPLOYEE_WORK_AREA = "employee-work-area";
+
+// Email Onboard Mail Send
+export const EMPLOYEE_ONBOARD_MAIL_SEND = "employee-onboarding-mail-send";
 
 // employee category
 export const EMPLOYEE_DOCUMENT_CATEGORY = "document-categories";
@@ -135,7 +137,6 @@ export const CANDIDATE_MASTER = "candidate-default-master";
 // CANDIDATE INTERVIEW START STOP
 export const CANDIDATE_INTERVIEW_START_STOP = "candidate-interview-start-stop";
 
-
 //-----EMPLOYEE SECTION API-----
 
 //EMPLOYEE CLOCKIN
@@ -153,10 +154,9 @@ export const TEAM_ATTENDANCE = "/employee-attendances";
 //SHIFT EMPLOYEE DETAILS
 export const TEAMROSTER_EMPLOYEELIST = "/roster-employee-list";
 //EMPLOYEE TEAM TIMESHEET LIST
-export const TEAM_TIMESHEET_EMPLOYEELIST = "/employee-team-time-sheets"
+export const TEAM_TIMESHEET_EMPLOYEELIST = "/employee-team-time-sheets";
 // EMPLOYEE LIST
 export const EMPLOYEE_LIST = "/team-employees";
 
 //  LEAVE REQUEST LIST
-export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests"
-
+export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests";

@@ -12,7 +12,7 @@ import { SALARY_DEFAULT_MASTERS } from "@/api/master";
 import { newFormRequest, newRequest } from "@/api";
 import { recCandidateSchema } from "@/schema/dashboard/recruiter/candidate/form/save.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { GET_CANDIDATES } from "@/api/recruiter";
+import { GET_CANDIDATES, GET_CANDIDATES_VIEW } from "@/api/recruiter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CircleArrowDown, MoveLeft, User } from "lucide-react";
@@ -30,6 +30,8 @@ export default function HiringCandidateDetails() {
   const cid = searchParams.get("cid");
   const [filePreview, setFilePreview] = useState("");
   const [resumefile, setResumeFile] = useState(null);
+  const [conditionalOfferLetter, setConditionalOfferLetter] = useState(null);
+
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -52,17 +54,22 @@ export default function HiringCandidateDetails() {
   const { data: candidateDetails, isLoading } = useQuery({
     queryKey: ["candidateDetails", cid, type],
     queryFn: () =>
-      newRequest.get(`${GET_CANDIDATES}/${cid}`).then((res) => {
+      newRequest.get(`${GET_CANDIDATES_VIEW}/${cid}`).then((res) => {
         return res.data;
       }),
     enabled: type == "update",
   });
 
+  console.log(
+    candidateDetails,
+    "candidateDetailscandidateDetailscandidateDetails",
+  );
+
   useEffect(() => {
     if (candidateDetails) {
       localStorage.setItem(
         "candidateDetails",
-        JSON.stringify(candidateDetails?.data),
+        JSON.stringify(candidateDetails),
       );
     }
   }, []);
@@ -78,9 +85,12 @@ export default function HiringCandidateDetails() {
 
   useEffect(() => {
     if (candidateDetails) {
-      setResumeFile(candidateDetails?.data?.pdf_upload);
+      setResumeFile(candidateDetails?.condtional_offer_letter_document_pdf);
+      setConditionalOfferLetter(
+        candidateDetails?.uncondtional_offer_letter_document_pdf,
+      );
     }
-  }, [candidateDetails, setResumeFile]);
+  }, [candidateDetails, setResumeFile, setConditionalOfferLetter]);
 
   useEffect(() => {
     if (candidateDetails) {
@@ -102,8 +112,6 @@ export default function HiringCandidateDetails() {
   const onSubmit = (data) => {
     setLoader(true);
   };
-
-  
 
   return (
     <>
@@ -128,8 +136,7 @@ export default function HiringCandidateDetails() {
                 </div>
                 <div className="flex flex-col text-black">
                   <div className="text-sm font-semibold">
-                    {candidateDetails?.data?.first_name}{" "}
-                    {candidateDetails?.data?.sur_name}
+                    {candidateDetails?.first_name} {candidateDetails?.sur_name}
                   </div>
                   <div className="text-xs text-gray-dark">
                     {candidateDetails?.data?.education?.value}
@@ -146,7 +153,9 @@ export default function HiringCandidateDetails() {
                   src="/assets/images/hiring/offer/1.png"
                   alt=""
                 />
-                <p className="text-[0.9rem] font-medium">Full Time</p>
+                <p className="text-[0.9rem] font-medium">
+                  {candidateDetails?.employement_type}
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <img
@@ -155,7 +164,7 @@ export default function HiringCandidateDetails() {
                   alt=""
                 />
                 <p className="text-[0.9rem] font-medium">
-                  {candidateDetails?.data?.date_applied}
+                  {candidateDetails?.date_applied}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -165,7 +174,7 @@ export default function HiringCandidateDetails() {
                   alt=""
                 />
                 <p className="text-[0.9rem] font-medium">
-                  {candidateDetails?.data?.city.label}
+                  {candidateDetails?.city}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -174,7 +183,9 @@ export default function HiringCandidateDetails() {
                   src="/assets/images/hiring/offer/4.png"
                   alt=""
                 />
-                <p className="text-[0.9rem] font-medium">Sales & Marketing</p>
+                <p className="text-[0.9rem] font-medium">
+                  {candidateDetails?.designation}
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <img
@@ -182,28 +193,53 @@ export default function HiringCandidateDetails() {
                   src="/assets/images/hiring/offer/5.png"
                   alt=""
                 />
-                <p className="text-[0.9rem] font-medium">Sales & Marketing</p>
+                <p className="text-[0.9rem] font-medium">
+                  {candidateDetails?.department}
+                </p>
               </div>
             </div>
-            <div className="group flex w-full flex-col space-y-1 py-2">
-              <label className="required label-text">Status</label>
-              <Controller
-                name="status_hiring"
-                className=""
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    isSearchable={true}
-                    styles={customSelectStyles}
-                    options={[]}
-                    placeholder="New Hiring"
-                    className="input-box"
-                  />
-                )}
-              />
-            </div>
+            {candidateDetails?.status?.status_name === "Hired" ? (
+              <>
+                <span
+                  style={{
+                    backgroundColor: candidateDetails?.status?.background_color,
+                    color: candidateDetails?.status?.text_color,
+                    border: `1px solid ${candidateDetails?.status?.border_color || "transparent"}`,
+                    borderRadius: "5px", // Rounded corners
+                    padding: "5px 15px", // Padding for spacing
+                    display: "inline-block", // Ensures it behaves like a box
+                    height: "30px", // Adjust height
+                    lineHeight: "30px", // Vertically center the text
+                    minWidth: "80px", // Adjust width (optional)
+                    textAlign: "center", // Center-align text
+                    fontSize: "14px", // Font size
+                    fontWeight: "bold", // Bold text
+                  }}
+                >
+                  {candidateDetails?.status?.status_name}
+                </span>
+              </>
+            ) : (
+              <div className="group flex w-full flex-col space-y-1 py-2">
+                <label className="required label-text">Status</label>
+                <Controller
+                  name="status_hiring"
+                  className=""
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      isSearchable={true}
+                      styles={customSelectStyles}
+                      options={[]}
+                      placeholder="New Hiring"
+                      className="input-box"
+                    />
+                  )}
+                />
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-x-3 rounded border-t bg-white py-4">
             <div className="group flex flex-col space-y-1 py-2">
@@ -213,6 +249,7 @@ export default function HiringCandidateDetails() {
                 autoComplete="off"
                 type="date"
                 className="input-box pr-2"
+                value={candidateDetails?.joining_date}
               />
               {errors.joining_date && (
                 <span className="text-xs font-medium text-red-500">
@@ -232,6 +269,9 @@ export default function HiringCandidateDetails() {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    value={recruiterMasters?.payTypes.find(
+                      (option) => option.id === candidateDetails?.pay_type?.id,
+                    )}
                     options={recruiterMasters?.payTypes}
                     placeholder="Select type"
                     className="input-box"
@@ -251,6 +291,7 @@ export default function HiringCandidateDetails() {
                 autoComplete="off"
                 type="text"
                 className="input-box"
+                value={candidateDetails?.salary}
               />
               {errors.salary && (
                 <span className="text-xs font-medium text-red-500">
@@ -283,7 +324,7 @@ export default function HiringCandidateDetails() {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-lg divide-y divide-black/5 rounded-xl bg-white">
+        <div className="mx-auto w-full max-w-lg rounded-xl bg-white">
           <Disclosure as="div" className="p-6" defaultOpen={false}>
             <DisclosureButton className="group flex w-full items-center gap-4 border px-5 py-3">
               <CircleArrowDown className="size-5 !fill-white/60 text-black/30 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
@@ -295,6 +336,22 @@ export default function HiringCandidateDetails() {
               <ResumePreview
                 file={resumefile}
                 setFile={setResumeFile}
+                filePreview={filePreview}
+                setFilePreview={setFilePreview}
+              />
+            </DisclosurePanel>
+          </Disclosure>
+          <Disclosure as="div" className="p-6" defaultOpen={false}>
+            <DisclosureButton className="group flex w-full items-center gap-4 border px-5 py-3">
+              <CircleArrowDown className="size-5 !fill-white/60 text-black/30 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
+              <span className="text-sm/6 font-medium group-data-[hover]:text-black/80">
+                View unconditional offer letter
+              </span>
+            </DisclosureButton>
+            <DisclosurePanel className="mt-2 h-fit">
+              <ResumePreview
+                file={conditionalOfferLetter}
+                setFile={setConditionalOfferLetter}
                 filePreview={filePreview}
                 setFilePreview={setFilePreview}
               />
