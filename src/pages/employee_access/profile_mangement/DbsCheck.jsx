@@ -1,18 +1,68 @@
-import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
-import DbsEdit from "@/components/popups/employee_access/profile_management/DbsEdit";
-import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import React, { useEffect, useState } from "react";
 import QueryTable from "@/components/table/QueryTable";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { EMPLOYEE_DBS_CHECK, newRequest } from "@/api";
+import DbsEditForm from "@/components/popups/employees/edit/DbsEditForm";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import DbsEdit from "@/components/popups/employee_access/profile_management/DbsEdit";
+import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
+import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function DbsCheck() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+
+  useEffect(() => {
+    if (selectedField) {
+      setPopupOpen(true);
+    }
+  }, [selectedField]);
+  const { setUser, user } = useUserStore((state) => ({
+    setUser: state.setUser,
+    user: state.user,
+  }));
+  const u_id = user.id;
+
+  // Fetch List
+  const { data: employeeDbCheck, isLoading } = useQuery({
+    queryKey: ["employeeDbCheck", currentPage, u_id, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_DBS_CHECK}/${u_id}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+  useEffect(() => {
+    if (employeeDbCheck) {
+      setTotalPages(employeeDbCheck?.last_page);
+    }
+  }, [employeeDbCheck]);
+  console.log(employeeDbCheck);
   const columns = React.useMemo(
     () =>
       [
         {
-          header: "Type",
-          accessorKey: "type",
+          header: "Sl No",
+          accessorKey: "sno",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -22,32 +72,55 @@ export default function DbsCheck() {
           },
         },
         {
+          header: "Type",
+          accessorKey: "type",
+          cell: ({ row }) => {
+            return <div className="flex px-2">{row.original?.dbs_type}</div>;
+          },
+        },
+        {
           header: "Date of issue",
-          accessorKey: "date of issue",
+          accessorKey: "date",
+          cell: ({ row }) => (
+            <div className="flex">{row.original?.issue_date}</div>
+          ),
         },
         {
           header: "Subscription",
           accessorKey: "subscription",
+          cell: ({ row }) => (
+            <div className="flex">
+              {row.original?.subscription === 1 ? "Yes" : "No"}
+            </div>
+          ),
         },
         {
           header: "DBS Number",
           accessorKey: "dbs_number",
           Cell: ({ row }) => {
-            return <div className="flex px-2 text-blue-500 underline">{row.original?.start_date}</div>;
+            return <div className="flex px-2">{row?.original?.dbs_number}</div>;
           },
         },
         {
           header: "Status",
-          accessorKey: "end_date",
-          Cell: ({ row }) => {
-            return <div className="flex px-2">{row.original?.end_date}</div>;
-          },
+          accessorKey: "status",
+          cell: ({ row }) => (
+            <div className="flex px-2">
+              {row.original?.status === 1 ? "Active" : "Inactive"}
+            </div>
+          ),
         },
         {
           header: "Action",
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              <button
+                type="button"
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+              >
+                <Eye className="size-3" />
+              </button>
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -72,13 +145,26 @@ export default function DbsCheck() {
           ),
         },
       ].filter(Boolean),
-    [],
+    [employeeDbCheck],
   );
-  const [popupOpen, setPopupOpen] = useState(false)
-
   return (
     <div className="flex flex-col">
-      <DbsEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"employeeDbCheck"}
+        api={EMPLOYEE_DBS_CHECK}
+      />
+      <DbsEdit
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeDbCheck"}
+        api={EMPLOYEE_DBS_CHECK}
+        uid={u_id}
+      />
       <MenuHeaderEmployeeAccess
         pathlink={""}
         currentpage={"DBS Check"}
@@ -87,9 +173,8 @@ export default function DbsCheck() {
       />
       <div className="flex gap-x-3">
         <ProfileSidebar />
-
         <div className="flex w-full flex-col">
-          <div className="w-full h-screen rounded-md bg-white px-5 py-4">
+          <div className="w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">DBS Check</h5>
@@ -104,9 +189,9 @@ export default function DbsCheck() {
                 </div>
               </div>
               <button
-                  onClick={() => {
-                    setPopupOpen(true);
-                  }}
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
                 className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
               >
                 <Plus className="size-4" />
@@ -114,7 +199,19 @@ export default function DbsCheck() {
               </button>
             </div>
             <div>
-              <QueryTable columns={columns} list={""} />
+              {isLoading ? (
+                <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+                </div>
+              ) : (
+                <QueryTable
+                  columns={columns}
+                  list={employeeDbCheck?.listing ?? []}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
             </div>
           </div>
         </div>

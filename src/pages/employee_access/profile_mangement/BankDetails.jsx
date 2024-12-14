@@ -1,12 +1,65 @@
-import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
-import BankDetailsEdit from "@/components/popups/employee_access/profile_management/BankDetailsEdit";
-import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import React, { useEffect, useState } from "react";
+import MenuHeader from "@/components/common/MenuHeader";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Plus, Search } from "lucide-react";
-import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { EMPLOYEE_BANK_DETAILS, newRequest } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import EmployeeBankDetailsEditForm from "@/components/popups/employees/edit/BankDetails";
+import BankDetailsEdit from "@/components/popups/employee_access/profile_management/BankDetailsEdit";
+import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
+import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function BankDetails() {
-  const [popupOpen, setPopupOpen] = useState(false)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+
+  useEffect(() => {
+    if (selectedField) {
+      setPopupOpen(true);
+    }
+  }, [selectedField]);
+  const { setUser, user } = useUserStore((state) => ({
+    setUser: state.setUser,
+    user: state.user,
+  }));
+  const u_id = user.id;
+  // Fetch List
+  const { data: employeeBankDetails, isLoading } = useQuery({
+    queryKey: ["employeeBankDetails", currentPage, u_id, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_BANK_DETAILS}/${u_id}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (employeeBankDetails) {
+      setTotalPages(employeeBankDetails?.data?.last_page);
+    }
+  }, [employeeBankDetails]);
+
+  console.log(employeeBankDetails?.data?.listing);
 
   const columns = React.useMemo(
     () =>
@@ -95,11 +148,27 @@ export default function BankDetails() {
           ),
         },
       ].filter(Boolean),
-    [],
+    [employeeBankDetails],
   );
   return (
     <div className="flex flex-col">
-      <BankDetailsEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"employeeBankDetails"}
+        api={EMPLOYEE_BANK_DETAILS}
+      />
+      <BankDetailsEdit
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeBankDetails"}
+        api={EMPLOYEE_BANK_DETAILS}
+        uid={u_id}
+      />
+
       <MenuHeaderEmployeeAccess
         pathlink={""}
         currentpage={"Bank Details"}
@@ -109,7 +178,7 @@ export default function BankDetails() {
       <div className="flex gap-x-3">
         <ProfileSidebar />
         <div className="flex w-full flex-col">
-          <div className="w-full rounded-md h-screen bg-white px-5 py-4">
+          <div className="h-screen w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Bank Details </h5>
@@ -124,9 +193,9 @@ export default function BankDetails() {
                 </div>
               </div>
               <button
-                  onClick={() => {
-                    setPopupOpen(true);
-                  }}
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
                 className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
               >
                 <Plus className="size-4" />

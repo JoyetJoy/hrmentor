@@ -1,17 +1,61 @@
+import React, { useEffect, useState } from "react";
+import QueryTable from "@/components/table/QueryTable";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { EMPLOYEE_SKILLS, newRequest } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import SkillEdit from "@/components/popups/employee_access/profile_management/SkillEdit";
 import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
-import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
-import React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function Skills() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
   const [currentPage, setCurrentPage] = useState(1);
-  const [popupOpen, setPopupOpen] = useState(false);
-
   const [totalPages, setTotalPages] = useState();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+  useEffect(() => {
+    if (selectedField) {
+      setPopupOpen(true);
+    }
+  }, [selectedField]);
+ 
+   const { setUser, user } = useUserStore((state) => ({
+       setUser: state.setUser,
+      user: state.user,
+     }));
+     const u_id = user.id ;
+
+  // Fetch List
+  const { data: employeeSkills, isLoading } = useQuery({
+    queryKey: ["employeeSkills", currentPage, u_id, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_SKILLS}/list/${u_id}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (employeeSkills) {
+      setTotalPages(employeeSkills?.last_page);
+    }
+  }, [employeeSkills]);
   const columns = React.useMemo(
     () =>
       [
@@ -31,7 +75,7 @@ export default function Skills() {
           accessorKey: "type",
           cell: ({ row }) => (
             <div className="flex">
-              {row.original?.qulification_type?.qualification_type_name || "NA"}
+              {row.original?.qulification_type?.qualification_type_name}
             </div>
           ),
         },
@@ -47,20 +91,14 @@ export default function Skills() {
           header: "Start Date",
           accessorKey: "end_date",
           Cell: ({ row }) => {
-            return (
-              <div className="flex px-2">
-                {row.original?.start_date || "NA"}
-              </div>
-            );
+            return <div className="flex px-2">{row.original?.start_date}</div>;
           },
         },
         {
           header: "End Date",
           accessorKey: "end_date",
           Cell: ({ row }) => {
-            return (
-              <div className="flex px-2">{row.original?.end_date || "NA"}</div>
-            );
+            return <div className="flex px-2">{row.original?.end_date}</div>;
           },
         },
         {
@@ -78,6 +116,7 @@ export default function Skills() {
           cell: ({ row }) => (
             <div className="flex">
               <Link
+                href={row.original?.document}
                 target="_blank"
                 className="text-[#1A75FF] underline underline-offset-2"
                 rel="noopener noreferrer"
@@ -94,6 +133,7 @@ export default function Skills() {
             <div className="flex items-center gap-2 text-xs">
               <button
                 type="button"
+                onClick={() => setSelectedField(row.original.id)}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               >
                 <img
@@ -105,7 +145,7 @@ export default function Skills() {
                 type="button"
                 onClick={() => {
                   setDeletePopup(true);
-                  // setSelectedId(row.original.id);
+                  setSelectedId(row.original.id);
                 }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
@@ -115,11 +155,26 @@ export default function Skills() {
           ),
         },
       ].filter(Boolean),
-    [],
+    [employeeSkills],
   );
   return (
-    <div className="flex  flex-col">
-      <SkillEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+    <div className="flex flex-col">
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"employeeSkills"}
+        api={EMPLOYEE_SKILLS}
+      />
+      <SkillEdit
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeSkills"}
+        api={EMPLOYEE_SKILLS}
+        uid={u_id}
+      />
       <MenuHeaderEmployeeAccess
         pathlink={""}
         currentpage={"Skill/Qulification"}
@@ -129,7 +184,7 @@ export default function Skills() {
       <div className="flex gap-x-3">
         <ProfileSidebar />
         <div className="flex w-full flex-col">
-          <div className="w-full h-screen rounded-md bg-white px-5 py-4">
+          <div className="w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Skills/Qualifications</h5>
@@ -154,13 +209,19 @@ export default function Skills() {
               </button>
             </div>
             <div>
-              <QueryTable
-                columns={columns}
-                list={""}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                // totalPages={totalPages}
-              />
+              {isLoading ? (
+                <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+                </div>
+              ) : (
+                <QueryTable
+                  columns={columns}
+                  list={employeeSkills?.listing ?? []}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
             </div>
           </div>
         </div>
