@@ -19,6 +19,7 @@ import {
   EMPLOYEE_DEPARTMENT_LIST,
   EMPLOYEE_DESIGNATION,
   EMPLOYEE_DESIGNATION_LIST,
+  EMPLOYEE_ONBOARD_MAIL_SEND,
   EMPLOYEE_TYPE,
   EMPLOYEE_TYPE_LIST,
   EMPLOYEE_WORK_LOCATION,
@@ -46,6 +47,8 @@ import {
   employeeColumnKeysForEmployeeType,
   employeeColumnKeysForWorkLocation,
 } from "@/lib/columns/employee";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 const masterConfig = {
   department: {
@@ -95,6 +98,10 @@ export default function SaveEmployeeForm({ formtype }) {
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
 
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+
   // MASTERS LISTING
   const { data: employeeMasters } = useEmployeeMaster(
     SALARY_DEFAULT_MASTERS,
@@ -104,7 +111,6 @@ export default function SaveEmployeeForm({ formtype }) {
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
 
-  
   // GET DETAILS IN CASE OF UPDATE
   const { data: employeeDetails, isLoading } = useQuery({
     queryKey: ["employeeDetails", uid, formtype],
@@ -124,7 +130,12 @@ export default function SaveEmployeeForm({ formtype }) {
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState();
-  const [imageerror,setImageerror] = useState('');
+  const [onBoardPopup, setOnBoardPopup] = useState(false);
+
+  function closeOnBoardPopup() {
+    setOnBoardPopup(false);
+  }
+  const [imageerror, setImageerror] = useState("");
 
   useEffect(() => {
     if (employeeDetails) {
@@ -296,19 +307,16 @@ export default function SaveEmployeeForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    if(imageFile){
+    if (imageFile) {
       setLoader(true);
-    handleEmployee(data);
-    }else{
-      setImageerror('Image is required')
-      toast.error('Image is required')
+      handleEmployee(data);
+    } else {
+      setImageerror("Image is required");
+      toast.error("Image is required");
     }
-    
   };
 
   const handleEmployee = async (data) => {
-    
-    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -343,7 +351,8 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("state_id", data.state_id?.value);
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
-    formData.append("pension_subscription",data.pention_status?.id)
+    formData.append("pention_subscription", data.pention_status?.id);
+    formData.append("pension_subscription", data.pention_status?.id);
 
     try {
       let res;
@@ -368,7 +377,9 @@ export default function SaveEmployeeForm({ formtype }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.message[0]||"Failed to save employee.");
+      toast.error(
+        error?.response?.data?.message[0] || "Failed to save employee.",
+      );
       setLoader(false);
     }
   };
@@ -401,13 +412,10 @@ export default function SaveEmployeeForm({ formtype }) {
               {formtype === "update" && (
                 <button
                   type="button"
-                  onClick={() => {
-                    window.open(
-                      "https://hr-mentor.techbutomy.com/public/onboardform",
-                      "_blank",
-                    );
-                  }}
                   className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
+                  onClick={() => {
+                    setOnBoardPopup(true);
+                  }}
                 >
                   <Share2 className="size-4" color="black" />
                   Onboarding Form
@@ -741,7 +749,8 @@ export default function SaveEmployeeForm({ formtype }) {
                       required: true,
                       maxLength: {
                         value: 9,
-                        message: "National Insurance must not exceed 9 characters",
+                        message:
+                          "National Insurance must not exceed 9 characters",
                       },
                     })}
                     autoComplete="off"
@@ -749,7 +758,6 @@ export default function SaveEmployeeForm({ formtype }) {
                     maxLength={9}
                     placeholder="Enter National Insurance Number"
                     className="input-box"
-                    
                   />
                   {errors.national_insurance_number && (
                     <span className="text-xs font-medium text-red-500">
@@ -806,12 +814,12 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text required">Upload Image</label>
-                  {imageerror&&(
+                  <label className="required label-text">Upload Image</label>
+                  {imageerror && (
                     <span className="text-xs font-medium text-red-500">
-                    {imageerror}
-                  </span>   
-                    )}
+                      {imageerror}
+                    </span>
+                  )}
                   {image ? (
                     <div className="relative">
                       <img
@@ -840,10 +848,16 @@ export default function SaveEmployeeForm({ formtype }) {
                         onChange={(e) => {
                           const file = e.target.files[0];
                           if (file) {
-                            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
+                            const allowedTypes = [
+                              "image/jpeg",
+                              "image/png",
+                              "image/gif",
+                            ]; // Allowed MIME types
                             if (!allowedTypes.includes(file.type)) {
-                              toast.error('Invalid file type. Only images (JPEG, PNG, GIF) are allowed.');
-                              e.target.value = ''; // Clear the input
+                              toast.error(
+                                "Invalid file type. Only images (JPEG, PNG, GIF) are allowed.",
+                              );
+                              e.target.value = ""; // Clear the input
                               return;
                             }
                             handleImageChange(e); // Proceed with the valid file
@@ -854,7 +868,6 @@ export default function SaveEmployeeForm({ formtype }) {
                         accept="image/jpeg, image/png, image/gif" // Restrict file types
                       />
                     </label>
-                    
                   )}
                 </div>
               </div>
@@ -1145,6 +1158,55 @@ export default function SaveEmployeeForm({ formtype }) {
           </div>
         </form>
       )}
+      <Dialog
+        open={onBoardPopup}
+        as="div"
+        className="relative z-10 focus:outline-none"
+        onClose={closeOnBoardPopup}
+      >
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel
+              transition
+              className="data-[closed]:transform-[scale(95%)] h-full w-full max-w-md rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            >
+              <div className="mb-7 flex items-center justify-between">
+                <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
+                  Share
+                </h1>
+                <button
+                  onClick={closeOnBoardPopup}
+                  className="text-lg font-extrabold text-[#00000080]"
+                >
+                  <X />
+                </button>
+              </div>
+              <p className="mt-2 text-sm text-black">
+                Do u want to share the form?
+              </p>
+              <div className="mt-3 flex flex-row gap-3">
+                <button
+                  onClick={closeOnBoardPopup}
+                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#cecdcd] text-sm font-normal text-black focus:outline-none"
+                >
+                  <span>Cancel</span>
+                </button>
+                <button
+                  type="submit"
+                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                  onClick={() => {
+                    handleShare();
+                  }}
+                >
+                  <Share2 className="size-4" color="white" />
+
+                  <span> Share</span>
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 }

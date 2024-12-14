@@ -38,6 +38,11 @@ export const salaryPackageType = [
   { value: 1, label: "Mentioned Package" },
   { value: 0, label: "Not Mentioned Package" },
 ];
+//dbs check
+export const dbsCheckType = [
+  { value: "basic", label: "Basic" },
+  { value: "enhanced", label: "Enhanced" },
+];
 
 // blood grops
 export const bloodGroups = [

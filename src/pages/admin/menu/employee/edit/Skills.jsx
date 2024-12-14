@@ -152,12 +152,15 @@ export default function SkillsQualifications() {
       ].filter(Boolean),
     [employeeSkills],
   );
+
+
+  
   return (
     <>
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeSkills"}
         api={EMPLOYEE_SKILLS}
       />

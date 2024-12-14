@@ -69,6 +69,7 @@ const MonthlyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
           >
             {day.format("D")}
           </div>
+          
         ))}
       </div>
     </div>
