@@ -73,7 +73,7 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Total Working Hours</label>
-                <p className="text-sm font-semibold">03:76:00</p>
+                <p className="text-sm font-semibold">{selected?.total_working_hour}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Overtime</label>

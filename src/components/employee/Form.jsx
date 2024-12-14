@@ -128,6 +128,8 @@ export default function SaveEmployeeForm({ formtype }) {
 
   useEffect(() => {
     if (employeeDetails) {
+      console.log(employeeDetails);
+      
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
       setValue("middle_name", employeeDetails.middle_name);
