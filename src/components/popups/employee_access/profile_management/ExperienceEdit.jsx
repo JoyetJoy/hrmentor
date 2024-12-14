@@ -1,33 +1,106 @@
-import useImageUpload from '@/hooks/useImageUpload';
-import { Dialog, DialogPanel } from '@headlessui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { UploadCloud, X } from 'lucide-react';
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
+import { newFormRequest, newRequest } from "@/api";
+import useImageUpload from "@/hooks/useImageUpload";
+import { empExperienceSchema } from "@/schema/dashboard/employee/form/experience.schema";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { UploadCloud, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
-export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField }) {
-    const {
-        register,
-        handleSubmit,
-        control,
-        reset,
-        setValue,
-        formState: { errors },
-      } = useForm({
-        mode: "onSubmit",
-        resolver: yupResolver(),
-      });
-    
-      function close() {
-        setPopupOpen(false);
+export default function ExperienceEdit({
+  popupOpen,
+  setPopupOpen,
+  selectedField,
+  setSelectedField,
+  qrKey,
+  api,
+  uid,
+}) {
+  const { image, imageFile, handleImageChange, clearImage, setImage } =
+    useImageUpload();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(empExperienceSchema),
+  });
+
+  const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+
+  // Get selected data
+  const { data: employeeExperienceDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeExperienceDetailByid", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
+    enabled: !!selectedField != 0,
+  });
+
+  useEffect(() => {
+    if (employeeExperienceDetailByid) {
+      setValue("job_role", employeeExperienceDetailByid.job_role);
+      setValue("employer", employeeExperienceDetailByid.employer);
+      setValue(
+        "employer_details",
+        employeeExperienceDetailByid.employer_details,
+      );
+      setValue("start_date", employeeExperienceDetailByid.start_date);
+      setValue("end_date", employeeExperienceDetailByid.end_date);
+    }
+  }, [employeeExperienceDetailByid]);
+
+  useEffect(() => {
+    if (employeeExperienceDetailByid) {
+      setImage(employeeExperienceDetailByid?.certificate);
+    }
+  }, [employeeExperienceDetailByid, setImage]);
+
+  function close() {
+    setPopupOpen(false);
+    setSelectedField(0);
+    reset();
+  }
+
+  const onSubmit = async (data) => {
+    setLoader(true);
+    try {
+      const formData = new FormData();
+      formData.append("job_role", data?.job_role);
+      formData.append("user_id", uid);
+      formData.append("employer", data.employer);
+      formData.append("employer_details", data.employer_details);
+      formData.append("start_date", data.start_date);
+      formData.append("end_date", data.end_date);
+      imageFile && formData.append("certificate", imageFile);
+      let res;
+      if (selectedField !== 0) {
+        res = await newFormRequest.post(
+          `update-employee-experience/${selectedField}`,
+          formData,
+        );
+      } else {
+        res = await newFormRequest.post(api, formData);
       }
-      const { image, imageFile, handleImageChange, clearImage, setImage } =
-        useImageUpload();
-      const [isLoading, setIsLoading] = useState();
-      const [loader, setLoder] = useState();
+      if (res.data?.status === 201) {
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries([qrKey]);
+        close();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
 
   return (
-    
     <Dialog
       open={popupOpen}
       as="div"
@@ -59,7 +132,7 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
             ) : (
               <form
                 className="grid grid-cols-1 gap-3"
-                // onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Job role </label>
@@ -94,7 +167,7 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Employer details
                   </label>
                   <textarea
@@ -109,7 +182,7 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Start Date
                   </label>
                   <input
@@ -124,7 +197,7 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     End Date
                   </label>
                   <input
@@ -164,7 +237,7 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
                       </div>
                       <input
                         id="employee-profile-pic"
-                        // onChange={handleImageChange}
+                        onChange={handleImageChange}
                         type="file"
                         className="hidden"
                       />
@@ -174,7 +247,7 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
-                    className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
                     disabled={loader}
                   >
                     {loader ? (
@@ -200,5 +273,5 @@ export default function ExperienceEdit({ popupOpen, setPopupOpen, selectedField 
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

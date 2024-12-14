@@ -173,7 +173,7 @@ export default function DbsEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="label-text">DBS Type</label>
+                  <label className="label-text required">DBS Type</label>
                   <Controller
                     name="dbs_type"
                     control={control}
@@ -197,7 +197,7 @@ export default function DbsEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Subscription
                   </label>
                   <Controller
@@ -222,7 +222,7 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Renewal
                   </label>
                   <input
@@ -237,7 +237,7 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     DBS Number
                   </label>
                   <input
@@ -253,7 +253,7 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem]  required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Date of issue
                   </label>
                   <input
@@ -298,7 +298,7 @@ export default function DbsEditForm({
                   </div>
                 </div>
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="label-text">Status</label>
+                  <label className="label-text required">Status</label>
                   <Controller
                     name="status"
                     control={control}
