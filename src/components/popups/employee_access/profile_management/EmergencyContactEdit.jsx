@@ -1,16 +1,28 @@
-import useImageUpload from "@/hooks/useImageUpload";
+import {
+  newFormRequest,
+  newRequest,
+  UPDATE_EMPLOYEE_EMERGENCY_CONTACTS,
+} from "@/api";
+import { relationshipList } from "@/constants/data";
+import { empEmergencyContactSchema } from "@/schema/dashboard/employee/form/emergencyContact.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { UploadCloud, X } from "lucide-react";
-import React, { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Select from "react-select";
 
 export default function EmergencyContactEdit({
   popupOpen,
   setPopupOpen,
   selectedField,
+  setSelectedField,
+  qrKey,
+  api,
+  uid,
 }) {
   const {
     register,
@@ -21,16 +33,71 @@ export default function EmergencyContactEdit({
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(),
+    resolver: yupResolver(empEmergencyContactSchema),
   });
+
+  const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+
+  // Get selected data
+  const { data: employeeEmergencyContactDetailByid, isLoading } = useQuery({
+    queryKey: ["employeeEmergencyContactDetailByid", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
+    enabled: !!selectedField != 0,
+  });
+
+  useEffect(() => {
+    if (employeeEmergencyContactDetailByid) {
+      setValue("name", employeeEmergencyContactDetailByid?.data?.name);
+      setValue(
+        "relationship",
+        employeeEmergencyContactDetailByid?.data?.relationship,
+      );
+      setValue("address", employeeEmergencyContactDetailByid?.data?.address);
+      setValue(
+        "contact_number",
+        employeeEmergencyContactDetailByid?.data?.contact_number,
+      );
+    }
+  }, [employeeEmergencyContactDetailByid]);
 
   function close() {
     setPopupOpen(false);
+    setSelectedField(0);
+    reset();
   }
 
-  const [isLoading, setIsLoading] = useState();
-  const [loader, setLoder] = useState();
-
+  const onSubmit = async (data) => {
+    setLoader(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("user_id", uid);
+      formData.append("relationship", data.relationship?.value);
+      formData.append("address", data.address);
+      formData.append("contact_number", data.contact_number);
+      let res;
+      if (selectedField !== 0) {
+        res = await newFormRequest.post(
+          `${UPDATE_EMPLOYEE_EMERGENCY_CONTACTS}/${selectedField}`,
+          formData,
+        );
+      } else {
+        res = await newFormRequest.post(api, formData);
+      }
+      if (res.data?.status === 201) {
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries([qrKey]);
+        close();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
   return (
     <Dialog
       open={popupOpen}
@@ -61,9 +128,12 @@ export default function EmergencyContactEdit({
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
               </div>
             ) : (
-              <form className="grid grid-cols-1 gap-3">
+              <form
+                className="grid grid-cols-1 gap-3"
+                onSubmit={handleSubmit(onSubmit)}
+              >
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Name
                   </label>
                   <input
@@ -80,7 +150,7 @@ export default function EmergencyContactEdit({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Relationship
                   </label>
                   <Controller
@@ -90,6 +160,7 @@ export default function EmergencyContactEdit({
                     render={({ field }) => (
                       <Select
                         {...field}
+                        options={relationshipList}
                         isSearchable={false}
                         styles={customSelectStyles}
                         placeholder="Select relationship"
@@ -104,7 +175,7 @@ export default function EmergencyContactEdit({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Phone Number
                   </label>
                   <input
@@ -126,7 +197,7 @@ export default function EmergencyContactEdit({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className=" text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Address
                   </label>
                   <textarea
