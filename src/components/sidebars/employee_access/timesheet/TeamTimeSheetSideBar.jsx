@@ -12,14 +12,11 @@ export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChang
   const [employee, setEmployee] = useState('')
 
   const handleEmployee = (selectedemployee)=>{
-    console.log(selectedemployee);
-    
-
-
+    setEmployee(selectedemployee)
   }
   
   return (
-    <div className={`min-h-full rounded-md bg-white ${type==='attendance'? 'w-64':"min-w-64"}`}>
+    <div className={`min-h-full rounded-md bg-white ${type==='attendance'? 'w-64':"max-w-[18rem]"}`}>
       <div className="w-full rounded-md bg-white px-5 py-7">
         <h1 className="text-base font-semibold text-textcolor-darkCharcoal">
           Filter
@@ -33,10 +30,10 @@ export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChang
               isSearchable={true}
               onChange={handleEmployee}
               styles={customSelectStyles}
-              value={years.find(
-                (yearOption) => yearOption.value === dayjs(date).year(),
+              value={employeeLists.find(
+                (Options) => Options.id === employee?.id,
               )}
-              placeholder={dayjs(date).format("YYYY")}
+              
               className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
             />
           </div>
