@@ -172,6 +172,10 @@ export default function SaveEmployeeForm({ formtype }) {
       setValue("city_id", employeeDetails.city_id);
       setValue("department_id", employeeDetails.department_id);
       setValue("employment_type", employeeDetails.employment_type);
+      setValue("pension_subscription", employeeDetails.pension_subscription);
+      if(employeeDetails?.state_id){
+        setState(employeeDetails?.state_id?.value)
+      }
     }
   }, [employeeDetails, setValue]);
 
@@ -351,7 +355,6 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("state_id", data.state_id?.value);
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
-    formData.append("pention_subscription", data.pention_status?.id);
     formData.append("pension_subscription", data.pention_status?.id);
 
     try {

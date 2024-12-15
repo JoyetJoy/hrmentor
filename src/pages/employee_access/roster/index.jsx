@@ -157,17 +157,13 @@ const EmployeeAccessRosterCalendar = () => {
           />
         </div>
         <div className="flex items-center gap-14">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-10">
             <div className="flex items-center gap-2 text-sm">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white">
-                L
-              </p>
+              <img src="/assets/icons/employee_access/header/availableshift.svg" alt="" />
               <p>Available slot</p>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#db0000] pt-[0.02rem] font-extrabold text-white">
-                R
-              </p>
+            <img src="/assets/icons/employee_access/header/requested_slot.svg" alt="" />
               <p>Requested slot</p>
             </div>
           </div>
@@ -202,24 +198,19 @@ const EmployeeAccessRosterCalendar = () => {
                   <>
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
                       {availableSlots?.map((slot, index) => (
-                        <p
-                          key={`available-slot-${index}`}
+                        <img 
+                        key={`available-slot-${index}`}
                           onClick={() => {
                             setClaimPopup(true);
                             setSelectedField(slot);
                           }}
-                          className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
-                        >
-                          A
-                        </p>
+                        src="/assets/icons/employee_access/header/availableshift.svg" 
+                        alt="" />
                       ))}
                       {requestedSlots?.map((slot, index) => (
-                        <p
-                          key={index}
-                          className={`flex min-h-7 w-7 items-center justify-center rounded-full bg-[#db0000] pl-[0.10rem] pt-[0.15rem] font-extrabold text-white`}
-                        >
-                          R
-                        </p>
+                        <img
+                        key={index}
+                         src="/assets/icons/employee_access/header/requested_slot.svg" alt="" />
                       ))}
                     </div>
                     {shiftEvents?.slice(0, 2)?.map((event, index) => (

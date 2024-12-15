@@ -37,6 +37,15 @@ export default function TimeSheet() {
       }),
     );
     setWeeks(newWeeks);
+     // Find the default week based on today's date
+  // const today = dayjs(); // Current date
+  // if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
+  //   const firstDayOfMonth = dayjs(date).startOf("month");
+  //   const defaultWeek = Math.ceil(today.diff(firstDayOfMonth, "day") / 7);
+  //   setSelectedWeek(defaultWeek);
+  // } else {
+  //   setSelectedWeek(1);
+  // }
   }, [date]);
 
   // Handle month change
