@@ -67,11 +67,11 @@ const EmployeeAccessTeamRoster = () => {
           },
         })
         .then((res) => res.data),
-    enabled: false, // Prevent the query from auto-fetching on mount
+        enabled: true,
+        staleTime: 0, 
   });
 
   useEffect(() => {
-    // Refetch data whenever the `date` changes
     refetch();
   }, [
     date,

@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest, ROASTER_LIST_GET } from "@/api/master";
+import { ACTIVE_EMPLOYEE } from "@/api";
+import { dividerClasses } from "@mui/material";
+import RosterItemList from "@/components/sidebars/roster/Index";
 
 const departmentOptions = [
   { value: "emergency", label: "Emergency Department" },
@@ -41,13 +44,37 @@ const RosterCalendar = () => {
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
   const navigate = useNavigate();
+  const [activeEmployee, setActiveEmployee] = useState("");
+  const [activeDepartment, setActiveDepartment] = useState("");
+  const [activeWorkArea, setActiveWorkArea] = useState("");
+  const [activeLocation, setActiveLocation] = useState("");
+
+  const { data: employee } = useQuery({
+    queryKey: ["employee"],
+    queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
+  });
 
   const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year],
+    queryKey: [
+      "events",
+      month,
+      year,
+      activeEmployee,
+      activeDepartment,
+      activeLocation,
+      activeWorkArea,
+    ],
     queryFn: () =>
       newRequest
         .get(ROASTER_LIST_GET, {
-          params: { month, year },
+          params: {
+            month,
+            year,
+            employee: activeEmployee,
+            department: activeDepartment,
+            location: activeLocation,
+            work_area: activeWorkArea,
+          },
         })
         .then((res) => res.data),
     enabled: true,
@@ -56,7 +83,14 @@ const RosterCalendar = () => {
 
   useEffect(() => {
     refetch();
-  }, [date, refetch]);
+  }, [
+    date,
+    refetch,
+    activeEmployee,
+    activeDepartment,
+    activeLocation,
+    activeWorkArea,
+  ]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -131,114 +165,128 @@ const RosterCalendar = () => {
   };
 
   return (
-    <>
-      <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-      <div className="flex flex-row py-4">
-        <div>
-          <div className="flex w-full items-center justify-between px-4 py-2">
-            <div className="flex items-center gap-4">
-              <Select
-                options={years}
-                isSearchable={true}
-                onChange={handleYearChange}
-                styles={customSelectStyles}
-                value={years.find(
-                  (yearOption) => yearOption.value === dayjs(date).year(),
-                )}
-                placeholder={dayjs(date).format("YYYY")}
-                className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-              />
-              <Select
-                options={months}
-                isSearchable={true}
-                onChange={handleMonthChange}
-                styles={customSelectStyles}
-                value={months.find(
-                  (monthOption) =>
-                    monthOption.value === dayjs(date).month() + 1,
-                )}
-                placeholder={dayjs(date).format("MMMM")}
-                className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-              />
+    <div className="flex gap-2">
+      <RosterItemList
+        activeDepartment={activeDepartment}
+        setActiveDepartment={setActiveDepartment}
+        activeLocation={activeLocation}
+        setActiveLocation={setActiveLocation}
+        activeWorkArea={activeWorkArea}
+        setActiveWorkArea={setActiveWorkArea}
+      />
+      <>
+        <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+        <div className="flex flex-row py-4">
+          <div>
+            <div className="flex w-full items-center justify-between px-4 py-2">
+              <div className="flex items-center gap-4">
+                <Select
+                  options={years}
+                  isSearchable={true}
+                  onChange={handleYearChange}
+                  styles={customSelectStyles}
+                  value={years.find(
+                    (yearOption) => yearOption.value === dayjs(date).year(),
+                  )}
+                  placeholder={dayjs(date).format("YYYY")}
+                  className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+                />
+                <Select
+                  options={months}
+                  isSearchable={true}
+                  onChange={handleMonthChange}
+                  styles={customSelectStyles}
+                  value={months.find(
+                    (monthOption) =>
+                      monthOption.value === dayjs(date).month() + 1,
+                  )}
+                  placeholder={dayjs(date).format("MMMM")}
+                  className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Select
+                  options={employee}
+                  isSearchable={true}
+                  onChange={(option) => setActiveEmployee(option?.id || "")}
+                  styles={customSelectStyles}
+                  placeholder={"All employee"}
+                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 caret-white focus:border-[#C2C1C1]"
+                />
+                <button
+                  onClick={() => addRoster()}
+                  className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  <Plus className="size-4" />
+                  Add Roster
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <Select
-                options={employee}
-                isSearchable={true}
-                styles={customSelectStyles}
-                placeholder={"All employee"}
-                className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 caret-white focus:border-[#C2C1C1]"
-              />
-              <button
-                onClick={() => addRoster()}
-                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
-              >
-                <Plus className="size-4" />
-                Add Roster
-              </button>
-            </div>
-          </div>
-          <div className="ml-4 mt-7 w-full max-w-6xl">
-            <Calendar
-              key={date}
-              onChange={handleDateChange}
-              value={date}
-              showNavigation={false}
-              className="w-full font-monorope"
-              locale="en-US"
-              formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
-              tileContent={({ date, view }) => {
-                if (view === "month") {
-                  const {
-                    holidayEvents,
-                    shiftEvents,
-                    availableSlots,
-                    requestedSlots,
-                  } = findEvents(date);
-                  return (
-                    <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
-                      <>
-                        <div className="absolute -top-6 right-0 flex flex-col items-end">
-                          {availableSlots?.map((slot, index) => (
-                            <img
-                              key={`available-slot-${index}`}
-                              onClick={() => {
-                                setClaimPopup(true);
-                                setSelectedField(slot);
-                              }}
-                              src="/assets/icons/employee_access/header/availableshift.svg"
-                              alt=""
-                            />
-                          ))}
-                          {requestedSlots?.map((slot, index) => (
-                            <img
-                              key={index}
-                              src="/assets/icons/employee_access/header/requested_slot.svg"
-                              alt=""
-                            />
-                          ))}
-                        </div>
-                        {shiftEvents?.slice(0, 2)?.map((event, index) => (
-                          <div
-                            key={index}
-                            onClick={() => handleClick(event)}
-                            className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
-                              date,
-                            )} justify-center text-gray-800`}
-                          >
-                            <span className="float-start flex text-[0.8rem] font-semibold">
-                              {event.shift_name}
-                            </span>
-                            <span className="float-start flex text-[12px]">
-                              {convertTo12HourFormat(event?.shift?.start_time)}-
-                              {convertTo12HourFormat(event?.shift?.end_time)}
-                            </span>
+            <div className="ml-4 mt-7 w-full max-w-6xl">
+              <Calendar
+                key={date}
+                onChange={handleDateChange}
+                value={date}
+                showNavigation={false}
+                className="w-full font-monorope"
+                locale="en-US"
+                formatShortWeekday={(locale, date) =>
+                  dayjs(date).format("dddd")
+                }
+                tileContent={({ date, view }) => {
+                  if (view === "month") {
+                    const {
+                      holidayEvents,
+                      shiftEvents,
+                      availableSlots,
+                      requestedSlots,
+                    } = findEvents(date);
+                    return (
+                      <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
+                        <>
+                          <div className="absolute -top-6 right-0 flex flex-col items-end">
+                            {availableSlots?.map((slot, index) => (
+                              <img
+                                key={`available-slot-${index}`}
+                                onClick={() => {
+                                  setClaimPopup(true);
+                                  setSelectedField(slot);
+                                }}
+                                src="/assets/icons/employee_access/header/availableshift.svg"
+                                alt=""
+                              />
+                            ))}
+                            {requestedSlots?.map((slot, index) => (
+                              <img
+                                key={index}
+                                src="/assets/icons/employee_access/header/requested_slot.svg"
+                                alt=""
+                              />
+                            ))}
                           </div>
-                        ))}
-                      </>
+                          {shiftEvents?.slice(0, 2)?.map((event, index) => (
+                            <div
+                              key={index}
+                              onClick={() => handleClick(event)}
+                              className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                                date,
+                              )} justify-center text-gray-800`}
+                            >
+                              <span className="float-start flex text-[0.8rem] font-semibold">
+                                {event.shift_name}
+                              </span>
+                              <span className="float-start flex text-[12px]">
+                                {convertTo12HourFormat(
+                                  event?.shift?.start_time,
+                                )}
+                                -{convertTo12HourFormat(event?.shift?.end_time)}
+                              </span>
+                            </div>
+                          ))}
+                        </>
 
-                      {/* "Count More" Button */}
-                      {/* {shiftEvents?.length > 2 && (
+                        {/* "Count More" Button */}
+                        {/* {shiftEvents?.length > 2 && (
                     <button
                       onClick={() => {
                         setSelectedField({ date, shiftEvents });
@@ -250,9 +298,9 @@ const RosterCalendar = () => {
                     </button>
                   )} */}
 
-                      {/* Available Slots */}
+                        {/* Available Slots */}
 
-                      {/* {holidayEvents?.map((event, index) => (
+                        {/* {holidayEvents?.map((event, index) => (
                         <div
                           key={index}
                           className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
@@ -263,7 +311,7 @@ const RosterCalendar = () => {
                         </div>
                       ))} */}
 
-                      {/* {availableSlots?.map((slot, index) => (
+                        {/* {availableSlots?.map((slot, index) => (
                     <div
                       key={`available-slot-${index}`}
                       onClick={() => {
@@ -290,16 +338,17 @@ const RosterCalendar = () => {
                       </span>
                     </div>
                   ))} */}
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      </>
+    </div>
   );
 };
 
