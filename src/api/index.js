@@ -155,3 +155,6 @@ export const ENDBREAK = "employee-running-break-stop";
 export const CLOCKOUT = "employee-access/employee-clock-out";
 //AVAILABLE SLOT
 export const AVAILABLE_SLOT = "shift-claim-request";
+
+// ADMIN NEWS
+export const NEWS_LISt = "news"
