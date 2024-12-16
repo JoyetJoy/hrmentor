@@ -335,13 +335,12 @@ export const rosterHeaderList = [
 ];
 export const activityItems = [
   {
-    icon: "/assets/icons/admin/project.svg",
-    label: "Project",
+    icon: "/assets/icons/admin/projectTask.svg",
+    label: "Project & Task",
     path: "/admin/project/projectManagement",
   },
-  { icon: "/assets/icons/admin/task.svg", label: "Task" },
   {
-    icon: "/assets/icons/admin/task.svg",
+    icon: "/assets/icons/admin/newsEvent.svg",
     label: "News & Event ",
     path: "admin/news-event/news",
   },

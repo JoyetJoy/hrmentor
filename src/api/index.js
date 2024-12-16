@@ -72,6 +72,10 @@ export const EMPLOYEE_WORK_INFO = "employee-work-informations";
 export const EMPLOYEE_SKILLS = "employee-skill-qualifications";
 // EXPERIENCE
 export const EMPLOYEE_EXPERIENCE = "employee-experiences";
+//DBS CHECK
+export const EMPLOYEE_DBS_CHECK ="employee-dbscheck";
+//REFERENCE 
+export const EMPLOYEE_REFERENCE ="employee-references"
 // MEMBERSHIP
 export const EMPLOYEE_MEMBERSHIP = "employee-registraion-membership";
 // MEMBERSHIP UPDATE
@@ -151,3 +155,6 @@ export const ENDBREAK = "employee-running-break-stop";
 export const CLOCKOUT = "employee-access/employee-clock-out";
 //AVAILABLE SLOT
 export const AVAILABLE_SLOT = "shift-claim-request";
+
+// ADMIN NEWS
+export const NEWS_LISt = "news"

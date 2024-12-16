@@ -1,11 +1,64 @@
-import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
-import RightToWorkEdit from "@/components/popups/employee_access/profile_management/RightToWorkEdit";
-import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import React, { useEffect, useState } from "react";
+import MenuHeader from "@/components/common/MenuHeader";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronRight, Plus, Search } from "lucide-react";
-import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import EmployeeRightToWorkEditForm from "@/components/popups/employees/edit/RightToWork";
+import RightToWorkEdit from "@/components/popups/employee_access/profile_management/RightToWorkEdit";
+import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
+import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function RightToWork() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+
+  useEffect(() => {
+    if (selectedField) {
+      setPopupOpen(true);
+    }
+  }, [selectedField]);
+  const { setUser, user } = useUserStore((state) => ({
+    setUser: state.setUser,
+    user: state.user,
+  }));
+  const u_id = user.id;
+  // Fetch List
+  const { data: employeeRightToWorks, isLoading } = useQuery({
+    queryKey: ["employeeRightToWorks", currentPage, u_id, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_RIGHT_TO_WORK}/${u_id}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (employeeRightToWorks) {
+      setTotalPages(employeeRightToWorks?.last_page);
+    }
+  }, [employeeRightToWorks]);
+
   const columns = React.useMemo(
     () =>
       [
@@ -81,13 +134,27 @@ export default function RightToWork() {
           ),
         },
       ].filter(Boolean),
-    [],
+    [employeeRightToWorks],
   );
-  const [popupOpen, setPopupOpen] = useState(false);
 
   return (
     <div className="flex flex-col">
-      <RightToWorkEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"employeeRightToWorks"}
+        api={EMPLOYEE_RIGHT_TO_WORK}
+      />
+      <RightToWorkEdit
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeRightToWorks"}
+        api={EMPLOYEE_RIGHT_TO_WORK}
+        uid={u_id}
+      />
       <MenuHeaderEmployeeAccess
         pathlink={""}
         currentpage={"Right to Work"}
@@ -98,7 +165,7 @@ export default function RightToWork() {
         <ProfileSidebar />
 
         <div className="flex w-full flex-col">
-          <div className="w-full rounded-md h-screen bg-white px-5 py-4">
+          <div className="w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Right to work</h5>
@@ -123,7 +190,19 @@ export default function RightToWork() {
               </button>
             </div>
             <div>
-              <QueryTable columns={columns} list={""} />
+              {isLoading ? (
+                <div className="flex min-h-96 w-full items-center justify-center bg-white">
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+                </div>
+              ) : (
+                <QueryTable
+                  columns={columns}
+                  list={employeeRightToWorks?.listing ?? []}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
             </div>
           </div>
         </div>

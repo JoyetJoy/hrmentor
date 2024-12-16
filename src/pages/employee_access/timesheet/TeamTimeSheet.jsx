@@ -63,6 +63,15 @@ export default function TeamTimeSheet() {
       }),
     );
     setWeeks(newWeeks);
+
+    const today = dayjs(); // Current date
+    if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
+      const firstDayOfMonth = dayjs(date).startOf("month");
+      const defaultWeek = Math.ceil(today.diff(firstDayOfMonth, "day") / 7);
+      setSelectedWeek(defaultWeek);
+    } else {
+      setSelectedWeek(1);
+    }
   }, [date]);
 
   // Handle month change
@@ -128,7 +137,7 @@ export default function TeamTimeSheet() {
         header: "Employee Name",
         accessorKey: "mon",
         cell: ({ row }) => (
-          <div className="bg-blurecool px-3 py-2">
+          <div className=" px-3 py-2 text-sm font-bold">
             <p>{row?.original?.employee_detail?.first_name || "NA"}</p>
             <p>
               #{row?.original?.employee_detail?.id}
@@ -140,7 +149,7 @@ export default function TeamTimeSheet() {
         header: "Total Worked Hours",
         accessorKey: "sno",
         cell: ({ row }) => (
-          <div className="px-3 py-2">
+          <div className="px-3 py-2 text-sm font-bold">
             {row?.original?.total_working_hours}
           </div>
         ),
@@ -156,12 +165,20 @@ export default function TeamTimeSheet() {
         ),
         accessorKey: dayObj.fullDate, // Unique key for each day
         cell: ({ row }) => {
-           const dayData = row?.original?.days_hours?.find((data) => data.date == dayObj.fullDate);
+          console.log(row?.original?.days_hours, dayObj.fullDate);
+          
+           const dayData = row?.original?.days_hours?.find((data) => data.date === dayObj.fullDate);
            console.log(dayData);
            
            return (
              <div className="text-sm font-bold capitalize text-gray-darkpale">
-               {dayData?.working_hours || "NA"}
+               <p>{dayData?.working_hours || "00:00"}</p>
+               {dayData?.over_time && (
+                <p className="font-medium text-[#e95d39]">[OT:{dayData?.over_time || ""}]</p>
+               )}
+               {dayData?.break_time &&
+                <p className="font-medium">BT:{dayData?.break_time || "NA"}</p>
+               }
              </div>
            );
         },        

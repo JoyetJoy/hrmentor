@@ -5,7 +5,7 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
+import { EMPLOYEE_REFERENCE, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ReferenceForm from "@/components/popups/employees/edit/ReferenceForm";
 
@@ -29,11 +29,11 @@ export default function EmployeeReferenceEdit() {
   }, [selectedField]);
 
   // Fetch List
-  const { data: employeeRightToWorks, isLoading } = useQuery({
-    queryKey: ["employeeRightToWorks", currentPage, uid, keyword],
+  const { data: employeeReference, isLoading } = useQuery({
+    queryKey: ["employeeReference", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_RIGHT_TO_WORK}/${uid}`, {
+        .get(`${EMPLOYEE_REFERENCE}/${uid}`, {
           params: {
             search: keyword,
             page: currentPage,
@@ -46,17 +46,17 @@ export default function EmployeeReferenceEdit() {
   });
 
   useEffect(() => {
-    if (employeeRightToWorks) {
-      setTotalPages(employeeRightToWorks?.last_page);
+    if (employeeReference) {
+      setTotalPages(employeeReference?.last_page);
     }
-  }, [employeeRightToWorks]);
+  }, [employeeReference]);
 
   const columns = React.useMemo(
     () =>
       [
         {
-          header: "Type",
-          accessorKey: "type",
+          header: "Sl No",
+          accessorKey: "sno",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -66,24 +66,67 @@ export default function EmployeeReferenceEdit() {
           },
         },
         {
+          header: "Type",
+          accessorKey: "type",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.original?.type}
+              </div>
+            );
+          },
+        },
+        {
+          header: "Name",
+          accessorKey: "reference_name",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.original?.reference_name}
+              </div>
+            );
+          },
+        },
+        {
           header: "Personal Email",
           accessorKey: "personal-email",
+          cell: ({ row }) => (
+            <div className="flex">{row.original?.personal_email}</div>
+          ),
         },
         {
           header: "Company Name",
           accessorKey: "condtion",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.original?.company_name}
+              </div>
+            );
+          },
         },
         {
           header: "Designation",
           accessorKey: "designation",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.original?.designation}
+              </div>
+            );
+          },
         },
-        {
-          header: "Company Name",
-          accessorKey: "company name",
-        },
+       
         {
           header: "Contact Number",
           accessorKey: "document",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.original?.contact_number}
+              </div>
+            );
+          },
         },
         {
           header: "Verification status",
@@ -130,24 +173,24 @@ export default function EmployeeReferenceEdit() {
           ),
         },
       ].filter(Boolean),
-    [employeeRightToWorks],
+    [employeeReference],
   );
   return (
     <>
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
-        qrKey={"employeeRightToWorks"}
-        api={EMPLOYEE_RIGHT_TO_WORK}
+        id={selectedId}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
       />
       <ReferenceForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
-        qrKey={"employeeRightToWorks"}
-        api={EMPLOYEE_RIGHT_TO_WORK}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
         uid={uid}
       />
       <div className="flex min-h-screen flex-col">
@@ -175,7 +218,7 @@ export default function EmployeeReferenceEdit() {
                     />
                   </div>
                 </div>
-                <button
+                {/* <button
                   onClick={() => {
                     setPopupOpen(true);
                   }}
@@ -183,7 +226,7 @@ export default function EmployeeReferenceEdit() {
                 >
                   <Plus className="size-4" />
                   Add Reference
-                </button>
+                </button> */}
               </div>
               <div>
                 {isLoading ? (
@@ -193,7 +236,7 @@ export default function EmployeeReferenceEdit() {
                 ) : (
                   <QueryTable
                     columns={columns}
-                    list={employeeRightToWorks?.listing ?? []}
+                    list={employeeReference?.listing ?? []}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     totalPages={totalPages}

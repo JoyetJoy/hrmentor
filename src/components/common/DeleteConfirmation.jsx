@@ -17,23 +17,25 @@ export default function DeleteConfirmation({
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
-  console.log(api,id,"cddcd");
-  
-
   const handleDelete = async () => {
     try {
       if (type !== "break" && type !== "roster") {
         setLoader(true);
         console.log("kp");
-
         const res = await newRequest.delete(`${api}/${id}`);
- 
         if (res?.data?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
           setLoader(false);
           toast.success(res?.data?.message);
           onCancel(false);
         }
+        if (res?.data?.status === 201) {
+          queryClient.invalidateQueries([qrkey]);
+          setLoader(false);
+          toast.success(res?.data?.message);
+          onCancel(false);
+        }
+        console.log(res, "resresres");
       } else {
         if (type === "break") {
           setNew_break((prevBreaks) =>
@@ -61,7 +63,6 @@ export default function DeleteConfirmation({
           );
           toast.success("Deleted roster item successfully");
         }
-
         setLoader(false);
         onCancel(false);
       }

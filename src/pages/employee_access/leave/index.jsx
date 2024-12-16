@@ -160,7 +160,7 @@ export default function Leave() {
           <img src="/assets/images/employee_access/leave.png" alt="" />
           <div className="max-w-8xl mb-10 w-full rounded-md bg-white p-5">
             <div className="mb-2 flex w-full items-center justify-between py-2">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <Select
                   options={years}
                   isSearchable={true}
@@ -177,7 +177,7 @@ export default function Leave() {
                 />
               </div>
               <div className="flex items-center gap-3">
-                <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
+                <label className="input flex h-10 min-h-10 min-w-72 items-center gap-2 rounded-md border border-gray-soft outline-none">
                   <Search className="size-4 object-contain text-gray-dark" />
                   <input
                     type="text"
@@ -189,8 +189,15 @@ export default function Leave() {
                   />
                 </label>
                 <Link
+                to="/employee-access/leave/team-request"
+                  className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-black px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  <PlusIcon className="size-5" />
+                  Team Leave Request
+                </Link>
+                <Link
                   onClick={handleClick}
-                  className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                  className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-hrmprimaryorange px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <PlusIcon className="size-5" />
                   Add Leave Request
