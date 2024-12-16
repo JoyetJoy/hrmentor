@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
@@ -10,6 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import RosterHeader from "@/components/common/RosterHeader";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest, ROASTER_LIST_GET } from "@/api/master";
 
 const events = [
   {
@@ -109,44 +111,95 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 }));
 
 const RosterCalendar = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    setError,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm({
-    mode: "on",
-    reValidateMode: "onChange",
-    resolver: yupResolver(),
-  });
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
+  const year = dayjs(date).year();
+  const month = dayjs(date).month() + 1;
   const navigate = useNavigate();
+
+  const { data: events = [], refetch } = useQuery({
+    queryKey: ["events", month, year],
+    queryFn: () =>
+      newRequest
+        .get(ROASTER_LIST_GET, {
+          params: { month, year },
+        })
+        .then((res) => res.data),
+    enabled: true,
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [date, refetch]);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleMonthChange = (selectedOption) => {
-    const updatedDate = dayjs(date).month(selectedOption.value).toDate();
-    setDate(updatedDate);
+    const currentDay = dayjs(date).date();
+    const updatedDate = dayjs(date)
+      .month(selectedOption.value - 1)
+      .date(1)
+      .date(
+        Math.min(
+          currentDay,
+          dayjs(date)
+            .month(selectedOption.value - 1)
+            .daysInMonth(),
+        ),
+      )
+      .toDate();
+    handleDateChange(updatedDate);
   };
+
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    setDate(updatedDate);
+    handleDateChange(updatedDate);
+  };
+
+  const getTileClass = (date) => {
+    if (dayjs(date).isSame(dayjs(), "day"))
+      return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
+    if (dayjs(date).isBefore(dayjs(), "day"))
+      return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
+    return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
   };
 
   const findEvents = (date) => {
-    return events.filter((event) => dayjs(event.date).isSame(date, "day"));
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    const holidayEvents = events?.result?.filter((event) =>
+      event?.holidays?.includes(formattedDate),
+    );
+    const shiftEvents = events?.result?.filter((event) =>
+      event?.date_range?.includes(formattedDate),
+    );
+
+    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
+
+    const requestedSlots = events?.requested_details?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
+
+    return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
 
-  const handleClick = () => {
-    navigate("/admin/roster/calendarview");
+  const handleClick = (event) => {
+    if (!event?.isHoliday) {
+      setSelectedField(event);
+      setPopupOpen(true);
+    }
   };
+
+  function convertTo12HourFormat(time) {
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${period}`;
+  }
 
   const addRoster = () => {
     setPopupOpen(true);
@@ -164,16 +217,23 @@ const RosterCalendar = () => {
                 isSearchable={true}
                 onChange={handleYearChange}
                 styles={customSelectStyles}
+                value={years.find(
+                  (yearOption) => yearOption.value === dayjs(date).year(),
+                )}
                 placeholder={dayjs(date).format("YYYY")}
-                className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 focus:border-[#C2C1C1]"
+                className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
               />
               <Select
                 options={months}
                 isSearchable={true}
                 onChange={handleMonthChange}
                 styles={customSelectStyles}
+                value={months.find(
+                  (monthOption) =>
+                    monthOption.value === dayjs(date).month() + 1,
+                )}
                 placeholder={dayjs(date).format("MMMM")}
-                className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 focus:border-[#C2C1C1]"
+                className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
               />
             </div>
             <div className="flex gap-2">
@@ -195,59 +255,120 @@ const RosterCalendar = () => {
           </div>
           <div className="ml-4 mt-7 w-full max-w-6xl">
             <Calendar
+              key={date}
               onChange={handleDateChange}
               value={date}
               showNavigation={false}
               className="w-full font-monorope"
+              locale="en-US"
               formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
               tileContent={({ date, view }) => {
                 if (view === "month") {
-                  const dailyEvents = findEvents(date);
-                  return dailyEvents.length ? (
-                    <div className="relative flex flex-col gap-2">
-                      {dailyEvents.map((event, index) => (
-                        <>
-                          <div
-                            onClick={() => addRoster()}
-                            className={`absolute -top-6 right-0 flex h-7 w-7 items-center justify-center rounded-md bg-[#efeff0] font-extrabold text-black hover:bg-[#f5f4f4]`}
-                          >
-                            <Plus size={16} color="#0d0d0d" strokeWidth={1.5} />
-                          </div>
+                  const {
+                    holidayEvents,
+                    shiftEvents,
+                    availableSlots,
+                    requestedSlots,
+                  } = findEvents(date);
+                  return (
+                    <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
+                      <>
+                        <div className="absolute -top-6 right-0 flex flex-col items-end">
+                          {availableSlots?.map((slot, index) => (
+                            <img
+                              key={`available-slot-${index}`}
+                              onClick={() => {
+                                setClaimPopup(true);
+                                setSelectedField(slot);
+                              }}
+                              src="/assets/icons/employee_access/header/availableshift.svg"
+                              alt=""
+                            />
+                          ))}
+                          {requestedSlots?.map((slot, index) => (
+                            <img
+                              key={index}
+                              src="/assets/icons/employee_access/header/requested_slot.svg"
+                              alt=""
+                            />
+                          ))}
+                        </div>
+                        {shiftEvents?.slice(0, 2)?.map((event, index) => (
                           <div
                             key={index}
-                            className={`mt-2 flex h-14 w-[9.5rem] flex-col rounded-sm border-l-4 px-3 text-[0.7rem] font-medium ${
-                              event.totalCount === event.count
-                                ? "border-l-[#e95d39] bg-[#2832770D] text-[#2C2C2C] hover:bg-[#f5f4f4]"
-                                : "border-l-[#e95d39] bg-[#e95d39] text-white"
-                            }`}
+                            onClick={() => handleClick(event)}
+                            className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                              date,
+                            )} justify-center text-gray-800`}
                           >
-                            <span
-                              className={`float-start flex font-semibold text-[0.8rem]${event.totalCount === event.count ? "text-[#2C2C2C]" : "text-white"}`}
-                            >
-                              {event.shift}
+                            <span className="float-start flex text-[0.8rem] font-semibold">
+                              {event.shift_name}
                             </span>
-                            <span
-                              className={`float-start flex text-[#2C2C2C]${event.totalCount === event.count ? "text-[#2C2C2C]" : "text-white"}`}
-                            >
-                              {event.time}
+                            <span className="float-start flex text-[12px]">
+                              {convertTo12HourFormat(event?.shift?.start_time)}-
+                              {convertTo12HourFormat(event?.shift?.end_time)}
                             </span>
-                            <div className="flex items-center justify-between">
-                              <span className="float-start flex font-semibold">
-                                Employee: {event.count}/{event.totalCount}
-                              </span>
-                              <ArrowRight
-                                onClick={() => handleClick(event)}
-                                size={16}
-                                color="#848484"
-                                strokeWidth={1.5}
-                              />
-                            </div>
                           </div>
-                        </>
-                      ))}
+                        ))}
+                      </>
+
+                      {/* "Count More" Button */}
+                      {/* {shiftEvents?.length > 2 && (
+                    <button
+                      onClick={() => {
+                        setSelectedField({ date, shiftEvents });
+                        setPopupOpen(true);
+                      }}
+                      className="mt-2 flex h-10 items-center justify-center rounded-sm bg-gray-200 px-3 py-1 text-sm text-gray-800 hover:bg-gray-300"
+                    >
+                      +{shiftEvents.length - 2} More
+                    </button>
+                  )} */}
+
+                      {/* Available Slots */}
+
+                      {/* {holidayEvents?.map((event, index) => (
+                        <div
+                          key={index}
+                          className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
+                        >
+                          <span className="float-start flex w-full font-semibold">
+                            Holiday
+                          </span>
+                        </div>
+                      ))} */}
+
+                      {/* {availableSlots?.map((slot, index) => (
+                    <div
+                      key={`available-slot-${index}`}
+                      onClick={() => {
+                        setClaimPopup(true);
+                        setSelectedField(slot);
+                      }}
+                      className="mb-2 mt-2 flex h-11 w-auto items-center justify-between rounded-sm bg-[#a3d8f4] px-3 py-4 text-left text-[12px] text-gray-800 lg:w-36 xl:w-44"
+                    >
+                      <span className="font-semibold">Available Slot</span>
                     </div>
-                  ) : null;
+                  ))}
+
+                  {requestedSlots?.map((event, index) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
+                    >
+                      <span className="float-start flex text-[12px] font-semibold">
+                        Requested Slot
+                      </span>
+                      <span className="float-start flex text-[10px]">
+                        Status :{" "}
+                        {event?.requests[0]?.request_status?.status_name}
+                      </span>
+                    </div>
+                  ))} */}
+                    </div>
+                  );
                 }
+                return null;
               }}
             />
           </div>

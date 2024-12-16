@@ -113,6 +113,8 @@ export const PROFILE_QUESTION = "ProfileQuestions";
 export const QUALIFICATION = "EducationQualifications";
 // INTERVIEW TYPE
 export const INTERVIEW_TYPE = "InterviewTypes";
+// ROASTER LIST
+export const ROASTER_LIST_GET = "/team-employee-rosters-list";
 // CANDIDATE TYPE
 export const CANDIDATE_TYPE = "CandidateTypes";
 // CANDIDATE TYPE LIST
