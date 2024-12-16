@@ -327,11 +327,11 @@ export const rosterItems = [
 ];
 export const rosterHeaderList = [
   { id: 1, name: "Roster List", link: "/admin/roster" },
-  {
-    id: 2,
-    name: "Settings",
-    link: "",
-  },
+  // {
+  //   id: 2,
+  //   name: "Settings",
+  //   link: "",
+  // },
 ];
 export const activityItems = [
   {
