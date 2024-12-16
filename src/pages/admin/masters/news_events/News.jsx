@@ -1,11 +1,59 @@
+import { newRequest, NEWS_LISt } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function News() {
-  const [loading, setLoding] = useState();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+
+  useEffect(() => {
+    if (selectedField) {
+      setPopupOpen(true);
+    }
+  }, [selectedField]);
+  // const { setUser, user } = useUserStore((state) => ({
+  //   setUser: state.setUser,
+  //   user: state.user,
+  // }));
+  // const u_id = user.id;
+  // Fetch List
+
+  const { data: employeeNews, isLoading } = useQuery({
+    queryKey: ["employeeNews", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(NEWS_LISt, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (employeeNews) {
+      setTotalPages(employeeNews?.last_page);
+    }
+  }, [employeeNews]);
+
   const columns = React.useMemo(
     () => [
       {
@@ -93,10 +141,17 @@ export default function News() {
         ),
       },
     ],
-    [],
+    [employeeNews],
   );
   return (
     <div className="h-screen">
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"employeeNews"}
+        api={NEWS_LISt}
+      />
       <NewsEventHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <h1 className="text-base font-semibold">News</h1>
@@ -124,12 +179,18 @@ export default function News() {
           </Link>
         </div>
       </div>
-      {loading ? (
+      {isLoading ? (
         <div className="flex min-h-96 w-full items-center justify-center bg-white">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
-        <QueryTable columns={columns} list={"NA"} />
+        <QueryTable
+          columns={columns}
+          list={employeeNews?.listing ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       )}
     </div>
   );

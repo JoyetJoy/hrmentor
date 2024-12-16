@@ -17,7 +17,6 @@ export default function DeleteConfirmation({
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
-  console.log(api, id, "cddcd");
   const handleDelete = async () => {
     try {
       if (type !== "break" && type !== "roster") {
