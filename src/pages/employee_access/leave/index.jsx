@@ -2,19 +2,26 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import LeaveSideBar from "@/components/sidebars/employee_access/leave/LeaveSideBar";
 import QueryTable from "@/components/table/QueryTable";
 import { Eye, PlusIcon, Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import dayjs from "dayjs";
 import { customSelectStyles } from "@/utils/customStyles";
 import AddLeave from "@/components/popups/employee_access/leave/AddLeave";
 import ViewLeave from "@/components/popups/employee_access/leave/ViewLeave";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import { EMPLOYEE_LEAVE_REQUEST_LIST } from "@/api/master";
 
 export default function Leave() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
   const [viewLeavePopupOpen, setViewLeavePopupOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [leaveDetails, setLeaveDetails] = useState({});
+
+  const pageLimit = 10;
 
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: i,
@@ -33,65 +40,46 @@ export default function Leave() {
         cell: ({ row }) => {
           return (
             <div className="">
-              NA
-              {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
+              {row.index + 1 + (currentPage - 1) * pageLimit}
             </div>
           );
         },
       },
       {
         header: "Start date",
-        accessorKey: "date",
-        cell: ({ row }) => (
-          <div className="">
-            <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
-            </p>
-          </div>
-        ),
+        accessorKey: "from_date",
       },
       {
         header: "End date",
-        accessorKey: "tue",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
-        ),
+        accessorKey: "to_date",
       },
       {
         header: "Leave type",
         accessorKey: "type",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.leave_type?.leave_name || "NA"}</p>
         ),
       },
       {
         header: "Leave Count",
         accessorKey: "count",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
-        ),
-      },
-      {
-        header: "LOP days",
-        accessorKey: "days",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.department?.department_name || "NA"}
-          </p>
+          <p className="">{row?.original?.total_leave_days || "-"}</p>
         ),
       },
       {
         header: "Approval Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <p className="bg-darkgreen px-3 py-2 text-textcolor-green">
-            {row?.original?.employee?.work_location?.work_location_name || "NA"}
-          </p>
+          <div
+            style={{
+              backgroundColor: row?.original?.leave_status?.background_color,
+              color: row?.original?.leave_status?.text_color,
+            }}
+            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold"
+          >
+            {row?.original?.leave_status?.leave_status_name}
+          </div>
         ),
       },
       {
@@ -99,7 +87,7 @@ export default function Leave() {
         accessorKey: "date",
         cell: ({ row }) => (
           <div className="whitespace-nowrap">
-            {row?.original?.employee?.employment_status?.status_name || "NA"}
+            {row?.original?.approval_date || "-"}
           </div>
         ),
       },
@@ -109,7 +97,10 @@ export default function Leave() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
-              onClick={handleClickView}
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
@@ -143,6 +134,35 @@ export default function Leave() {
   const findEvent = (date) => {
     return events.find((event) => dayjs(event.date).isSame(date, "day"));
   };
+
+  const { data: employeeLeaveList } = useQuery({
+    queryKey: ["employeeLeaveList"],
+    queryFn: () =>
+      newRequest.get(EMPLOYEE_LEAVE_REQUEST_LIST).then((res) => {
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {
+    if (employeeLeaveList) {
+      setTotalPages(employeeLeaveList?.last_page);
+    }
+  }, [employeeLeaveList]);
+
+  useEffect(() => {
+    if (selectedId) {
+      newRequest
+        .get(`/${EMPLOYEE_LEAVE_REQUEST_LIST}/${selectedId}`)
+        .then((res) => {
+          console.log(res);
+
+          setLeaveDetails(res.data);
+        });
+    }
+  }, [selectedId]);
+
+  console.log(leaveDetails, "cdcdc");
+
   return (
     <div className="flex flex-col">
       <ViewLeave
@@ -189,15 +209,15 @@ export default function Leave() {
                   />
                 </label>
                 <Link
-                to="/employee-access/leave/team-request"
-                  className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-black px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                  to="/employee-access/leave/team-request"
+                  className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-black px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <PlusIcon className="size-5" />
                   Team Leave Request
                 </Link>
                 <Link
                   onClick={handleClick}
-                  className="flex w-fit items-center whitespace-nowrap justify-center gap-2 rounded-md bg-hrmprimaryorange px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+                  className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <PlusIcon className="size-5" />
                   Add Leave Request
@@ -206,7 +226,7 @@ export default function Leave() {
             </div>
             <QueryTable
               columns={columns}
-              list={"NA"}
+              list={employeeLeaveList?.listing ?? []}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               totalPages={totalPages}

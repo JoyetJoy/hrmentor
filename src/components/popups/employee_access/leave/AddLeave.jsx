@@ -1,13 +1,22 @@
+import { newRequest } from "@/api";
+import { EMPLOYEE_LEAVE_SHIFTS } from "@/api/master";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 
-export default function AddLeave({ popupOpen, setPopupOpen }) {
+export default function AddLeave({
+  popupOpen,
+  setPopupOpen,
+  employeeTeamHoliday,
+}) {
   const [selectedLeaveType, setSelectedLeaveType] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   const {
     register,
@@ -37,6 +46,21 @@ export default function AddLeave({ popupOpen, setPopupOpen }) {
     setSelectedLeaveType(selectedOption.value);
   };
 
+  console.log(errors, "errorserrors");
+
+  const { data: employeeLeaveShift = [] } = useQuery({
+    queryKey: ["employeeLeaveShift", fromDate, toDate],
+    queryFn: () =>
+      newRequest
+        .get(EMPLOYEE_LEAVE_SHIFTS, {
+          params: { from_date: fromDate, to_date: toDate },
+        })
+        .then((res) => res.data),
+    enabled: !!fromDate && !!toDate,
+  });
+
+  console.log(employeeLeaveShift, "employeeLeaveShiftemployeeLeaveShift");
+
   return (
     <>
       <Dialog
@@ -55,39 +79,76 @@ export default function AddLeave({ popupOpen, setPopupOpen }) {
                 </button>
               </div>
               <form className="grid grid-cols-1 gap-4">
-                <div className="flex w-1/2 flex-col gap-2">
-                  <label className="text-sm font-medium">Leave Type</label>
-                  <Controller
-                    name="leaveType"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isSearchable={true}
-                        styles={customSelectStyles}
-                        options={leaveOptions}
-                        placeholder="Select Leave Type"
-                        className="input-box w-full text-black caret-white"
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleLeaveTypeChange(e);
-                        }}
+                <div className="flex gap-2">
+                  {employeeTeamHoliday ? (
+                    <div className="flex w-full flex-col gap-2">
+                      <label className="text-sm font-medium">Employee</label>
+                      <Controller
+                        name="leaveType"
+                        control={control}
+                        rules={{ required: true }}
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            isSearchable={true}
+                            styles={customSelectStyles}
+                            options={leaveOptions}
+                            placeholder="Select Leave Type"
+                            className="input-box w-full text-black caret-white"
+                            onChange={(e) => {
+                              field.onChange(e);
+                              handleLeaveTypeChange(e);
+                            }}
+                          />
+                        )}
                       />
-                    )}
-                  />
-                  {errors.leaveType && (
-                    <span className="text-xs text-red-500">
-                      {errors.leaveType?.message}
-                    </span>
+                      {errors.leaveType && (
+                        <span className="text-xs text-red-500">
+                          {errors.leaveType?.message}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <></>
                   )}
+
+                  <div className="flex w-full flex-col gap-2">
+                    <label className="text-sm font-medium">Leave Type</label>
+                    <Controller
+                      name="leaveType"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          options={leaveOptions}
+                          placeholder="Select Leave Type"
+                          className="input-box w-full text-black caret-white"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleLeaveTypeChange(e);
+                          }}
+                        />
+                      )}
+                    />
+                    {errors.leaveType && (
+                      <span className="text-xs text-red-500">
+                        {errors.leaveType?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <div className="flex w-full flex-col gap-2">
                     <label className="text-sm font-medium">Start Date</label>
                     <input
                       type="date"
-                      {...register("start_date", { required: true })}
+                      onChange={(e) => {
+                        setFromDate(e.target.value);
+                      }}
+                      value={fromDate}
                       className="input-box w-full pr-2"
                     />
                     {errors.start_date && (
@@ -100,7 +161,10 @@ export default function AddLeave({ popupOpen, setPopupOpen }) {
                     <label className="text-sm font-medium">End Date</label>
                     <input
                       type="date"
-                      {...register("end_date", { required: true })}
+                      onChange={(e) => {
+                        setToDate(e.target.value);
+                      }}
+                      value={toDate}
                       className="input-box w-full pr-2"
                     />
                     {errors.end_date && (

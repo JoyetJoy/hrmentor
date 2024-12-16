@@ -1,9 +1,12 @@
+import { newRequest } from "@/api";
+import { EMPLOYEE_TEAM_LEAVE_APPLICATIONS } from "@/api/master";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import LeaveSideBar from "@/components/sidebars/employee_access/leave/LeaveSideBar";
 import QueryTable from "@/components/table/QueryTable";
 import { customSelectStyles } from "@/utils/customStyles";
+import { useQuery } from "@tanstack/react-query";
 import { Eye, Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 
@@ -14,6 +17,22 @@ function TeamLeave() {
   };
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const pageLimit = 10;
+
+  const { data: employeeTeamHolidays } = useQuery({
+    queryKey: ["employeeTeamHolidays"],
+    queryFn: () =>
+      newRequest.get(EMPLOYEE_TEAM_LEAVE_APPLICATIONS).then((res) => {
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {
+    if (employeeTeamHolidays) {
+      setTotalPages(employeeTeamHolidays?.last_page);
+    }
+  }, [employeeTeamHolidays]);
+
   const columns = React.useMemo(
     () => [
       {
@@ -22,19 +41,18 @@ function TeamLeave() {
         cell: ({ row }) => {
           return (
             <div className="">
-              NA
-              {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
+              {row.index + 1 + (currentPage - 1) * pageLimit}
             </div>
           );
         },
       },
       {
         header: "Employee nmae & ID",
-        accessorKey: "name",
+        accessorKey: "employee_name",
         cell: ({ row }) => (
           <div className="">
             <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
+              {row?.original?.employee_name} &{row?.original?.unique_id} || "NA"
             </p>
           </div>
         ),
@@ -119,7 +137,7 @@ function TeamLeave() {
           </div>
           <QueryTable
             columns={columns}
-            list={"NA"}
+            list={ "NA"}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={totalPages}

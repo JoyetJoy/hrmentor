@@ -2,16 +2,17 @@ import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import LeaveSideBar from "@/components/sidebars/employee_access/leave/LeaveSideBar";
 import QueryTable from "@/components/table/QueryTable";
 import { Eye, PlusIcon, Search, Trash, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import dayjs from "dayjs";
 import { customSelectStyles } from "@/utils/customStyles";
 import AddLeave from "@/components/popups/employee_access/leave/AddLeave";
 import ViewLeave from "@/components/popups/employee_access/leave/ViewLeave";
+import { EMPLOYEE_TEAM_LEAVE_APPLICATIONS } from "@/api/master";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
 export default function TeamLeaveRequest() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
   const [viewLeavePopupOpen, setViewLeavePopupOpen] = useState(false);
 
@@ -24,6 +25,28 @@ export default function TeamLeaveRequest() {
     value: 2020 + i,
     label: (2020 + i).toString(),
   }));
+  const [employeeTeamHoliday, setEmployeeTeamHoliday] =
+    useState("Team_Holiday");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const pageLimit = 10;
+
+  const { data: employeeTeamHolidays } = useQuery({
+    queryKey: ["employeeTeamHolidays"],
+    queryFn: () =>
+      newRequest.get(EMPLOYEE_TEAM_LEAVE_APPLICATIONS).then((res) => {
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {
+    if (employeeTeamHolidays) {
+      setTotalPages(employeeTeamHolidays?.last_page);
+    }
+  }, [employeeTeamHolidays]);
+
+  console.log(employeeTeamHolidays, "employeeTeamHolidaysemployeeTeamHolidays");
+
   const columns = React.useMemo(
     () => [
       {
@@ -32,8 +55,7 @@ export default function TeamLeaveRequest() {
         cell: ({ row }) => {
           return (
             <div className="">
-              NA
-              {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
+              {row.index + 1 + (currentPage - 1) * pageLimit}
             </div>
           );
         },
@@ -43,9 +65,7 @@ export default function TeamLeaveRequest() {
         accessorKey: "id",
         cell: ({ row }) => (
           <div className="">
-            <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
-            </p>
+            <p>{row?.original?.unique_id}</p>
           </div>
         ),
       },
@@ -54,9 +74,7 @@ export default function TeamLeaveRequest() {
         accessorKey: "date",
         cell: ({ row }) => (
           <div className="">
-            <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
-            </p>
+            <p>{row?.original?.employee_name || "-"}</p>
           </div>
         ),
       },
@@ -65,36 +83,27 @@ export default function TeamLeaveRequest() {
         accessorKey: "date",
         cell: ({ row }) => (
           <div className="">
-            <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
-            </p>
+            <p>{row?.original?.from_date}</p>
           </div>
         ),
       },
       {
         header: "End date",
         accessorKey: "tue",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
-        ),
+        cell: ({ row }) => <p className="">{row?.original?.to_date}</p>,
       },
       {
         header: "Leave type",
         accessorKey: "type",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.leave_type_name || "NA"}</p>
         ),
       },
       {
         header: "Leave Count",
         accessorKey: "count",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
+          <p className="">{row?.original?.leave_count || "-"}</p>
         ),
       },
       //   {
@@ -111,7 +120,7 @@ export default function TeamLeaveRequest() {
         accessorKey: "status",
         cell: ({ row }) => (
           <p className="bg-darkgreen px-3 py-2 text-textcolor-green">
-            {row?.original?.employee?.work_location?.work_location_name || "NA"}
+            {row?.original?.leave_status_name || "NA"}
           </p>
         ),
       },
@@ -120,7 +129,7 @@ export default function TeamLeaveRequest() {
         accessorKey: "date",
         cell: ({ row }) => (
           <div className="whitespace-nowrap">
-            {row?.original?.employee?.employment_status?.status_name || "NA"}
+            {row?.original?.approval_date || "NA"}
           </div>
         ),
       },
@@ -182,7 +191,11 @@ export default function TeamLeaveRequest() {
         viewLeavePopupOpen={viewLeavePopupOpen}
         setViewLeavePopupOpen={setViewLeavePopupOpen}
       />
-      <AddLeave popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <AddLeave
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        employeeTeamHoliday={employeeTeamHoliday}
+      />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Leave"} />
       <div className="flex w-full items-center justify-between px-4 py-2">
         <h5 className="text-md font-bold">My Leave</h5>
@@ -227,7 +240,7 @@ export default function TeamLeaveRequest() {
                 Team Leave Request
               </Link> */}
                 <Link
-                  // onClick={handleClick}
+                  onClick={handleClick}
                   className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
                   <PlusIcon className="size-5" />
