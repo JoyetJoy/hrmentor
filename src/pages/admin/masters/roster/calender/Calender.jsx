@@ -13,79 +13,6 @@ import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest, ROASTER_LIST_GET } from "@/api/master";
 
-const events = [
-  {
-    date: "2024-10-01",
-    shift: "Morning Shift",
-    count: "20",
-    totalCount: "20",
-    time: "09:00-11:00",
-  },
-  {
-    date: "2024-10-01",
-    shift: "Evening Shift",
-    count: "20",
-    totalCount: "20",
-    time: "14:00-18:00",
-  },
-  {
-    date: "2024-10-02",
-    shift: "Morning Shift",
-    count: "20",
-    totalCount: "20",
-    time: "09:00-11:00",
-  },
-  {
-    date: "2024-10-02",
-    shift: "Evening Shift",
-    count: "20",
-    totalCount: "20",
-    time: "14:00-18:00",
-  },
-  {
-    date: "2024-10-03",
-    shift: "Morning Shift",
-    count: "20",
-    totalCount: "20",
-    time: "09:00-11:00",
-  },
-  {
-    date: "2024-10-03",
-    shift: "Evening Shift",
-    count: "20",
-    totalCount: "20",
-    time: "14:00-18:00",
-  },
-  {
-    date: "2024-10-04",
-    shift: "Morning Shift",
-    count: "20",
-    totalCount: "20",
-    time: "09:00-11:00",
-  },
-  {
-    date: "2024-10-04",
-    shift: "Evening Shift",
-    count: "15",
-    totalCount: "20",
-    time: "14:00-18:00",
-  },
-  {
-    date: "2024-10-05",
-    shift: "Morning Shift",
-    count: "20",
-    totalCount: "20",
-    time: "09:00-11:00",
-  },
-  {
-    date: "2024-10-05",
-    shift: "Evening Shift",
-    count: "20",
-    totalCount: "20",
-    time: "14:00-18:00",
-  },
-];
-
 const departmentOptions = [
   { value: "emergency", label: "Emergency Department" },
   { value: "cardiology", label: "Cardiology" },
@@ -93,18 +20,16 @@ const departmentOptions = [
   { value: "pediatrics", label: "Pediatrics" },
   { value: "oncology", label: "Oncology" },
 ];
+
+const employee = [
+  { value: "Harshal", label: "Harshal" },
+  { value: "Amit", label: "Amit" },
+];
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i,
+  value: i + 1,
   label: dayjs().month(i).format("MMMM"),
 }));
 
-const employee = [
-  { value: "emergency", label: "Emergency Department" },
-  { value: "cardiology", label: "Cardiology" },
-  { value: "radiology", label: "Radiology" },
-  { value: "pediatrics", label: "Pediatrics" },
-  { value: "oncology", label: "Oncology" },
-];
 const years = Array.from({ length: 11 }, (_, i) => ({
   value: 2020 + i,
   label: (2020 + i).toString(),
