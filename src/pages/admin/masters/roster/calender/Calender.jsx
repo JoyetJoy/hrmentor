@@ -148,6 +148,8 @@ const RosterCalendar = () => {
 
   const handleClick = (event) => {
     if (!event?.isHoliday) {
+      console.log(event,date);
+      
       setSelectedField(event);
       setPopupOpen(true);
     }
@@ -241,6 +243,8 @@ const RosterCalendar = () => {
                       availableSlots,
                       requestedSlots,
                     } = findEvents(date);
+                    console.log(shiftEvents);
+                    
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
                         <>
@@ -281,63 +285,21 @@ const RosterCalendar = () => {
                                 )}
                                 -{convertTo12HourFormat(event?.shift?.end_time)}
                               </span>
+                              <div className="flex items-center w-full justify-between">
+                              <span className="float-start flex font-semibold">
+                                Employee: {event.count}/{event.totalCount}
+                              </span>
+                              <ArrowRight
+                                onClick={() => handleClick(event)}
+                                size={16}
+                                color="#848484"
+                                strokeWidth={1.5}
+                              />
+                            </div>
+
                             </div>
                           ))}
                         </>
-
-                        {/* "Count More" Button */}
-                        {/* {shiftEvents?.length > 2 && (
-                    <button
-                      onClick={() => {
-                        setSelectedField({ date, shiftEvents });
-                        setPopupOpen(true);
-                      }}
-                      className="mt-2 flex h-10 items-center justify-center rounded-sm bg-gray-200 px-3 py-1 text-sm text-gray-800 hover:bg-gray-300"
-                    >
-                      +{shiftEvents.length - 2} More
-                    </button>
-                  )} */}
-
-                        {/* Available Slots */}
-
-                        {/* {holidayEvents?.map((event, index) => (
-                        <div
-                          key={index}
-                          className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
-                        >
-                          <span className="float-start flex w-full font-semibold">
-                            Holiday
-                          </span>
-                        </div>
-                      ))} */}
-
-                        {/* {availableSlots?.map((slot, index) => (
-                    <div
-                      key={`available-slot-${index}`}
-                      onClick={() => {
-                        setClaimPopup(true);
-                        setSelectedField(slot);
-                      }}
-                      className="mb-2 mt-2 flex h-11 w-auto items-center justify-between rounded-sm bg-[#a3d8f4] px-3 py-4 text-left text-[12px] text-gray-800 lg:w-36 xl:w-44"
-                    >
-                      <span className="font-semibold">Available Slot</span>
-                    </div>
-                  ))}
-
-                  {requestedSlots?.map((event, index) => (
-                    <div
-                      key={index}
-                      className="mt-2 flex h-11 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#fbe8f2] px-3 py-4 text-sm text-gray-800 lg:w-36 xl:w-44"
-                    >
-                      <span className="float-start flex text-[12px] font-semibold">
-                        Requested Slot
-                      </span>
-                      <span className="float-start flex text-[10px]">
-                        Status :{" "}
-                        {event?.requests[0]?.request_status?.status_name}
-                      </span>
-                    </div>
-                  ))} */}
                       </div>
                     );
                   }
