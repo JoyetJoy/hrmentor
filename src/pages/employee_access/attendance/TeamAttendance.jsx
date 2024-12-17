@@ -50,62 +50,62 @@ const TeamAttendanceCalendar = () => {
     staleTime: 0,
   });
 
-  const employeelist={
-    "employee_data": [
-        {
-            "employee_detail": {
-                "id": 14,
-                "user_id": 54,
-                "first_name": "Harshal",
-                "middle_name": null,
-                "sur_name": "D",
-                "unique_id": "7",
-                "formatted_date_of_joining": null
-            },
-            "total_working_hours": "00:00",
-            "total_over_time_hours": "00:00",
-            "total_break_time_hours": "00:00",
-            "days_hours": []
-        },
-        {
-            "employee_detail": {
-                "id": 17,
-                "user_id": 57,
-                "first_name": "Kiran",
-                "middle_name": "K",
-                "sur_name": "G",
-                "unique_id": "15",
-                "formatted_date_of_joining": null
-            },
-            "total_working_hours": "00:06",
-            "total_over_time_hours": "00:00",
-            "total_break_time_hours": "00:00",
-            "days_hours": [
-                {
-                    "date": "2024-12-09",
-                    "working_hours": "00:06",
-                    "over_time": "00:00",
-                    "break_time": "00:00"
-                }
-            ]
-        },
-        {
-            "employee_detail": {
-                "id": 19,
-                "user_id": 59,
-                "first_name": "Abhijith",
-                "middle_name": "G",
-                "sur_name": "G",
-                "unique_id": "19",
-                "formatted_date_of_joining": null
-            },
-            "total_working_hours": "00:00",
-            "total_over_time_hours": "00:00",
-            "total_break_time_hours": "00:00",
-            "days_hours": []
-        }
-    ]
-}
+//   const employeelist={
+//     "employee_data": [
+//         {
+//             "employee_detail": {
+//                 "id": 14,
+//                 "user_id": 54,
+//                 "first_name": "Harshal",
+//                 "middle_name": null,
+//                 "sur_name": "D",
+//                 "unique_id": "7",
+//                 "formatted_date_of_joining": null
+//             },
+//             "total_working_hours": "00:00",
+//             "total_over_time_hours": "00:00",
+//             "total_break_time_hours": "00:00",
+//             "days_hours": []
+//         },
+//         {
+//             "employee_detail": {
+//                 "id": 17,
+//                 "user_id": 57,
+//                 "first_name": "Kiran",
+//                 "middle_name": "K",
+//                 "sur_name": "G",
+//                 "unique_id": "15",
+//                 "formatted_date_of_joining": null
+//             },
+//             "total_working_hours": "00:06",
+//             "total_over_time_hours": "00:00",
+//             "total_break_time_hours": "00:00",
+//             "days_hours": [
+//                 {
+//                     "date": "2024-12-09",
+//                     "working_hours": "00:06",
+//                     "over_time": "00:00",
+//                     "break_time": "00:00"
+//                 }
+//             ]
+//         },
+//         {
+//             "employee_detail": {
+//                 "id": 19,
+//                 "user_id": 59,
+//                 "first_name": "Abhijith",
+//                 "middle_name": "G",
+//                 "sur_name": "G",
+//                 "unique_id": "19",
+//                 "formatted_date_of_joining": null
+//             },
+//             "total_working_hours": "00:00",
+//             "total_over_time_hours": "00:00",
+//             "total_break_time_hours": "00:00",
+//             "days_hours": []
+//         }
+//     ]
+// }
 
   const handleClick = () => {
     setPopupOpen(true);
@@ -255,7 +255,6 @@ const TeamAttendanceCalendar = () => {
           handleMonthChange={handleMonthChange}
           date={date}
           handleYearChange={handleYearChange}
-          employeelist={employeelist}
           type='attendance'
         />
       <Calendar

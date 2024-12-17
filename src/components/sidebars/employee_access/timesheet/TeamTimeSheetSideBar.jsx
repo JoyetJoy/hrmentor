@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Search } from "lucide-react";
 import dayjs from "dayjs";
 
-export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChange,selectedWeek,handleMonthChange,date,handleYearChange,employeelist,type,employeeLists}) {
+export default function TeamTimeSheetSideBar({years,months,weeks,handleWeekChange,selectedWeek,handleMonthChange,date,handleYearChange,type,employeeLists}) {
   console.log(years,date);
 
   const [employee, setEmployee] = useState('')

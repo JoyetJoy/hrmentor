@@ -152,7 +152,7 @@ export const TIME_SHEET = "/employee-time-sheets";
 //ATTENDANCE
 export const ATTENDANCE = "/employee-attendances";
 // TEAM ATTENDANCE
-export const TEAM_ATTENDANCE = "/employee-attendances";
+export const TEAM_ATTENDANCE = "/employee-team-attendances";
 //SHIFT EMPLOYEE DETAILS
 export const TEAMROSTER_EMPLOYEELIST = "/roster-employee-list";
 //EMPLOYEE TEAM TIMESHEET LIST
