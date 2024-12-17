@@ -10,12 +10,36 @@ import {
 import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { newRequest, ROSTER_CLAIM } from "@/api";
 
 export default function Claim() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
-  const [popupOpen, setPopupOpen] = useState(false);
+    const [totalPages, setTotalPages] = useState();
+    const [keyword, setKeyword] = useState("");
+    const pageLimit = 10;
 
+  const { data: rosterdetails, isLoading } = useQuery({
+    queryKey: ["rosterdetails", currentPage, rid,date, keyword],
+    queryFn: () =>
+      newRequest
+        .get(, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (rosterdetails) {
+      setTotalPages(rosterdetails?.last_page);
+    }
+  }, [rosterdetails]);
+ console.log(errors,"rosterdetailsrosterdetails")
   const columns = React.useMemo(
     () => [
       {
@@ -81,7 +105,7 @@ export default function Claim() {
       <div className="flex w-full gap-4">
         <div className="w-full">
           <div className="my-4 flex w-full items-center justify-between gap-2">
-            <h1 className="text-lg font-bold">Morning Shift</h1>
+            {/* <h1 className="text-lg font-bold">Morning Shift</h1> */}
             <div className="flex items-center gap-2">
               <p className="mr-3 whitespace-nowrap text-sm font-bold">
                 Shift claim{" "}
@@ -99,7 +123,7 @@ export default function Claim() {
             {calimList.map((item, index) => (
               <div key={index} className="rounded-md bg-white px-4 py-2">
                 <h1 className="font-semibold text-black">{item.title}</h1>
-                <h2 className="text-md font-extrabold">{item.value}</h2>
+                <h2 className="text-md font-extrabold">{rosterdetails?.roster_details?.leave_requests_of_roster_employees_count}</h2>
                 <p className="text-sm">{item.description}</p>
               </div>
             ))}

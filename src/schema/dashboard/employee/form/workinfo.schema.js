@@ -104,7 +104,11 @@ export const WorkInfoSchema = (reportNotRequired) => {
       ),
 
     age: Yup.string().required("Age is required"),
-    religious: Yup.string().required("Religious belief is required"),
-    pregnancy: Yup.string().required("Pregnancy & maternity is required"),
+    religious: Yup.string().required("Pregnancy & maternity is required"),
+    pregnancy: Yup.object({
+      id: Yup.string().nullable(),
+      value: Yup.string().nullable(),
+      label: Yup.string().nullable(),
+    })
   });
 };

@@ -76,7 +76,7 @@ const masterConfig = {
   },
 };
 
-export default function ProfileManagmentForm({formtype}) {
+export default function ProfileManagmentForm({ formtype }) {
   const queryClient = useQueryClient();
   const {
     register,
@@ -96,10 +96,11 @@ export default function ProfileManagmentForm({formtype}) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
-
-  const { user } = useUserStore((state) => ({
+  const { setUser, user } = useUserStore((state) => ({
+    setUser: state.setUser,
     user: state.user,
   }));
+  const u_id = user.id;
 
   // MASTERS LISTING
   const { data: employeeMasters } = useEmployeeMaster(
@@ -112,9 +113,9 @@ export default function ProfileManagmentForm({formtype}) {
 
   // GET DETAILS IN CASE OF UPDATE
   const { data: employeeDetails, isLoading } = useQuery({
-    queryKey: ["employeeDetails", uid, formtype],
+    queryKey: ["employeeDetails", u_id, formtype],
     queryFn: () =>
-      newRequest.get(`${EMPLOYEE}/${uid}`).then((res) => {
+      newRequest.get(`${EMPLOYEE}/${u_id}`).then((res) => {
         return res.data;
       }),
     enabled: formtype == "update",
@@ -381,10 +382,9 @@ export default function ProfileManagmentForm({formtype}) {
     }
   };
 
-
   return (
     <>
-    {isLoading ? (
+      {isLoading ? (
         <div className="flex min-h-72 w-full items-center justify-center">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
@@ -397,18 +397,6 @@ export default function ProfileManagmentForm({formtype}) {
                 : "Add New Employees"}
             </h1>
             <div className="flex items-center gap-3">
-              {formtype === "update" && (
-                <button
-                  type="button"
-                  className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
-                  onClick={() => {
-                    setOnBoardPopup(true);
-                  }}
-                >
-                  <Share2 className="size-4" color="black" />
-                  Onboarding Form
-                </button>
-              )}
               <button
                 type="submit"
                 className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
@@ -478,12 +466,13 @@ export default function ProfileManagmentForm({formtype}) {
                 <div className="h-36 w-36 overflow-hidden rounded-full border-2">
                   <img
                     className="h-full w-full bg-gray-neutral object-cover"
-                    src={""}
-                    alt={""}
+                    src={employeeDetails?.profile_image}
+                    alt={"profile"}
                   />
                 </div>
                 <p className="flex flex-col text-lg font-bold text-black">
-                  Harshal <span className="text-xs font-normal">Developer</span>
+                 {employeeDetails?.first_name} {employeeDetails?.middle_name} {employeeDetails?.sur_name}
+                  {/* <span className="text-xs font-normal">{employeeDetails?.sur_name}</span> */}
                 </p>
               </div>
               <div className="mt-4 grid w-full lg:grid-cols-2">
@@ -535,7 +524,7 @@ export default function ProfileManagmentForm({formtype}) {
                     </span>
                   )}
                 </div> */}
-                 <div className="group flex flex-col col-span-2  w-1/2 gap-1.5 px-3 py-2">
+                <div className="group col-span-2 flex w-1/2 flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Gender</label>
                   <Controller
                     name="gender"
@@ -741,7 +730,7 @@ export default function ProfileManagmentForm({formtype}) {
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col  gap-1.5 px-3 py-2">
+                <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label
                     className={`required label-text ${formtype === "update" ? "h-9" : ""}`}
                   >
@@ -773,7 +762,7 @@ export default function ProfileManagmentForm({formtype}) {
                           setSameAsHome(!sameAsHome);
                         }}
                       />
-                      <span className="mt-0.5 whitespace-nowrap text-[0.7rem] font-medium text-gray-dim ">
+                      <span className="mt-0.5 whitespace-nowrap text-[0.7rem] font-medium text-gray-dim">
                         Same as home
                       </span>
                     </div>
