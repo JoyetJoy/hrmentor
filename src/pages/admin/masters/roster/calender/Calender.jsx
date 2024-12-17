@@ -118,7 +118,9 @@ const RosterCalendar = () => {
     handleDateChange(updatedDate);
   };
 
-  const getTileClass = (date) => {
+  const getTileClass = (date, event) => {
+    if (event?.assigned_total_employee_count !== event?.people_required)
+      return "bg-slate-300 border-[#283277] hover:bg-slate-400";
     if (dayjs(date).isSame(dayjs(), "day"))
       return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
     if (dayjs(date).isBefore(dayjs(), "day"))
@@ -148,10 +150,19 @@ const RosterCalendar = () => {
 
   const handleClick = (event) => {
     if (!event?.isHoliday) {
-      console.log(event,date);
+      console.log(event, date);
+      const selectdate = new Date(date);
+      const formattedDate = selectdate
+        .toISOString()
+        .slice(0, 10)
+        .replace(/-/g, "/");
+        if(date){
+          navigate(`/admin/roster/calendarview?id=${event?.id}&date=${formattedDate}`);
+        }
       
-      setSelectedField(event);
-      setPopupOpen(true);
+
+      // setSelectedField(event);
+      // setPopupOpen(true);
     }
   };
 
@@ -244,7 +255,7 @@ const RosterCalendar = () => {
                       requestedSlots,
                     } = findEvents(date);
                     console.log(shiftEvents);
-                    
+
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
                         <>
@@ -272,8 +283,9 @@ const RosterCalendar = () => {
                             <div
                               key={index}
                               onClick={() => handleClick(event)}
-                              className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                              className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 px-3 py-3 lg:w-36 xl:w-44 ${getTileClass(
                                 date,
+                                event,
                               )} justify-center text-gray-800`}
                             >
                               <span className="float-start flex text-[0.8rem] font-semibold">
@@ -285,18 +297,19 @@ const RosterCalendar = () => {
                                 )}
                                 -{convertTo12HourFormat(event?.shift?.end_time)}
                               </span>
-                              <div className="flex items-center w-full justify-between">
-                              <span className="float-start flex font-semibold">
-                                Employee: {event.count}/{event.totalCount}
-                              </span>
-                              <ArrowRight
-                                onClick={() => handleClick(event)}
-                                size={16}
-                                color="#848484"
-                                strokeWidth={1.5}
-                              />
-                            </div>
-
+                              <div className="flex w-full items-center justify-between">
+                                <span className="float-start flex text-[12.2px] font-semibold">
+                                  Employee:{" "}
+                                  {event?.assigned_total_employee_count || 0}/
+                                  {event?.people_required || 0}
+                                </span>
+                                <ArrowRight
+                                  onClick={() => handleClick(event)}
+                                  size={16}
+                                  color="#848484"
+                                  strokeWidth={1.5}
+                                />
+                              </div>
                             </div>
                           ))}
                         </>
