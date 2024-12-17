@@ -22,6 +22,7 @@ export default function EmployeeReferenceEdit() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -218,7 +219,7 @@ export default function EmployeeReferenceEdit() {
                     />
                   </div>
                 </div>
-                {/* <button
+                <button
                   onClick={() => {
                     setPopupOpen(true);
                   }}
@@ -226,7 +227,7 @@ export default function EmployeeReferenceEdit() {
                 >
                   <Plus className="size-4" />
                   Add Reference
-                </button> */}
+                </button>
               </div>
               <div>
                 {isLoading ? (

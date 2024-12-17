@@ -1,11 +1,35 @@
+import { EVENT_LIST, newRequest, WORK_LOCATIONS } from "@/api";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Event() {
   const [loading, setLoding] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
+
+  const { data: eventList, isLoading } = useQuery({
+    queryKey: ["eventList", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(EVENT_LIST, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
   const columns = React.useMemo(
     () => [
       {
@@ -17,10 +41,10 @@ export default function Event() {
       },
       {
         header: "Event Name",
-        accessorKey: "event name",
+        accessorKey: "event_title",
         cell: ({ row }) => (
           <div className="flex items-center gap-x-2">
-            <p>{row?.original?.first_name || "NA"}</p>
+            <p>{row?.original?.event_title || "-"}</p>
           </div>
         ),
       },
@@ -43,6 +67,16 @@ export default function Event() {
       {
         header: "Created on",
         accessorKey: "created on",
+        cell: ({ row }) => (
+          <p className="">
+            {row?.original?.employee?.employment_type?.employment_type_name ||
+              "NA"}
+          </p>
+        ),
+      },
+      {
+        header: "Start date",
+        accessorKey: "Start date",
         cell: ({ row }) => (
           <p className="">
             {row?.original?.employee?.employment_type?.employment_type_name ||
@@ -139,7 +173,13 @@ export default function Event() {
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
-        <QueryTable columns={columns} list={"NA"} />
+        <QueryTable
+          columns={columns}
+          list={eventList ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       )}
     </div>
   );

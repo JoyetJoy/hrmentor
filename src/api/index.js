@@ -34,10 +34,10 @@ export const newFormRequest = axios.create({
 
 const addAuthorizationInterceptor = (request) => {
   request.interceptors.request.use((config) => {
-    const token = 
-      localStorage.getItem("super_token")||
-      localStorage.getItem("hr_token")||
-      localStorage.getItem("manager_token")||
+    const token =
+      localStorage.getItem("super_token") ||
+      localStorage.getItem("hr_token") ||
+      localStorage.getItem("manager_token") ||
       localStorage.getItem("employee_token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -73,9 +73,9 @@ export const EMPLOYEE_SKILLS = "employee-skill-qualifications";
 // EXPERIENCE
 export const EMPLOYEE_EXPERIENCE = "employee-experiences";
 //DBS CHECK
-export const EMPLOYEE_DBS_CHECK ="employee-dbscheck";
-//REFERENCE 
-export const EMPLOYEE_REFERENCE ="employee-references"
+export const EMPLOYEE_DBS_CHECK = "employee-dbscheck";
+//REFERENCE
+export const EMPLOYEE_REFERENCE = "employee-references";
 // MEMBERSHIP
 export const EMPLOYEE_MEMBERSHIP = "employee-registraion-membership";
 // MEMBERSHIP UPDATE
@@ -136,7 +136,6 @@ export const BUSINESS_TYPE = "company-bussiness-type";
 // COMPANY CALENDER
 export const COMPANY_CALENDER = "company-calender-settings";
 
-
 //EMPLOYEE SECTION
 
 //DASHBOARD
@@ -158,3 +157,9 @@ export const AVAILABLE_SLOT = "shift-claim-request";
 
 // ADMIN NEWS
 export const NEWS_LISt = "news"
+
+// ROSTER CLAIM DETAILS
+export const ROSTER_CLAIM = "get-and-show-roster-count-details"
+
+// Admin event
+export const EVENT_LIST = "events";

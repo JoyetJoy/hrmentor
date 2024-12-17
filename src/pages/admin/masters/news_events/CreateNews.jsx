@@ -8,7 +8,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import { Link } from "react-router-dom";
-import { newFormRequest, newRequest } from "@/api";
+import { newFormRequest, newRequest, NEWS_LISt } from "@/api";
+import toast from "react-hot-toast";
 
 export default function CreateNews({
   selectedField,
@@ -30,17 +31,14 @@ export default function CreateNews({
     resolver: yupResolver(newsSchema),
   });
 
+
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-
-
-
 
   // Get selected data
   const { data: newsid, isLoading } = useQuery({
     queryKey: ["newsid", api, selectedField],
-    queryFn: () =>
-      newRequest.post(`${"news"}`).then((res) => res.data),
+    queryFn: () => newRequest.post(`${"news"}`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
@@ -74,10 +72,12 @@ export default function CreateNews({
       formData.append("content", data.content);
       imageFile && formData.append("featured_image", imageFile);
       let res;
-      if (selectedField !== 0) {
+
+
+      if (selectedField) {
         res = await newFormRequest.post(`${"news"}/${selectedField}`, formData);
       } else {
-        res = await newFormRequest.post(api, formData);
+        res = await newFormRequest.post(NEWS_LISt, formData);
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
@@ -91,7 +91,6 @@ export default function CreateNews({
       setLoader(false);
     }
   };
-  console.log(uid, "errorserrorserrors");
   return (
     <div className="h-full">
       <NewsEventHeader page={1} />
@@ -171,11 +170,11 @@ export default function CreateNews({
                   ) : (
                     <label
                       htmlFor="featured_image"
-                      className="input-box flex h-10 cursor-pointer items-centre justify-start rounded-md border border-dashed pl-2"
+                      className="input-box items-centre flex h-10 cursor-pointer justify-start rounded-md border border-dashed pl-2"
                     >
                       <div className="flex items-center">
                         <ArrowUpFromLine strokeWidth={2} className="size-4" />
-                        <span className="font-semibold text-[#2C2C2C] text-sm">
+                        <span className="text-sm font-semibold text-[#2C2C2C]">
                           Upload File
                         </span>
                       </div>

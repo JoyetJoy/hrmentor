@@ -48,6 +48,7 @@ export default function News() {
         }),
   });
 
+
   useEffect(() => {
     if (employeeNews) {
       setTotalPages(employeeNews?.last_page);
@@ -58,27 +59,18 @@ export default function News() {
     () => [
       {
         header: "Sl No",
-        accessorKey: "sno",
-        cell: ({ row }) => {
-          return <div className="flex px-2"></div>;
-        },
+        accessorKey: "id",
       },
       {
         header: "News title",
-        accessorKey: "news-title",
+        accessorKey: "news_title",
         cell: ({ row }) => (
           <div className="flex items-center gap-x-2">
-            <p>{row?.original?.first_name || "NA"}</p>
+            <p>{row?.original?.news_title || "NA"}</p>
           </div>
         ),
       },
-      {
-        header: "Category",
-        accessorKey: "category",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
-        ),
-      },
+
       {
         header: "Created by",
         accessorKey: "created by",
@@ -91,26 +83,25 @@ export default function News() {
       {
         header: "Created on",
         accessorKey: "created on",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
-        ),
+        cell: ({ row }) => {
+          const createdAt = row?.original?.created_at;
+          const formattedDate = createdAt
+            ? new Intl.DateTimeFormat("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }).format(new Date(createdAt))
+            : "-";
+
+          return <p className="">{formattedDate}</p>;
+        },
       },
       {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div
-            style={{
-              backgroundColor:
-                row?.original?.employee?.employment_status?.background_color,
-              color: row?.original?.employee?.employment_status?.text_color,
-            }}
-            className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
-          >
-            {row?.original?.employee?.employment_status?.status_name || "NA"}
+          <div className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold">
+            {row?.original?.status || "NA"}
           </div>
         ),
       },
@@ -186,7 +177,7 @@ export default function News() {
       ) : (
         <QueryTable
           columns={columns}
-          list={employeeNews?.listing ?? []}
+          list={employeeNews ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}

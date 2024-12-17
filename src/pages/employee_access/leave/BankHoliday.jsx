@@ -1,9 +1,12 @@
+import { newRequest } from "@/api";
+import { EMPLOYEE_BANK_HOLIDAYS } from "@/api/master";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import LeaveSideBar from "@/components/sidebars/employee_access/leave/LeaveSideBar";
 import QueryTable from "@/components/table/QueryTable";
 import { customSelectStyles } from "@/utils/customStyles";
-import {Search } from "lucide-react";
-import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Search } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 function BankHoliday() {
@@ -13,6 +16,22 @@ function BankHoliday() {
   };
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const pageLimit = 10;
+
+  const { data: employeeBankHolidays } = useQuery({
+    queryKey: ["employeeBankHolidays"],
+    queryFn: () =>
+      newRequest.get(EMPLOYEE_BANK_HOLIDAYS).then((res) => {
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {
+    if (employeeBankHolidays) {
+      setTotalPages(employeeBankHolidays?.last_page);
+    }
+  }, [employeeBankHolidays]);
+
   const columns = React.useMemo(
     () => [
       {
@@ -21,8 +40,7 @@ function BankHoliday() {
         cell: ({ row }) => {
           return (
             <div className="">
-              NA
-              {/* {row.index + 1 + (currentPage - 1) * pageLimit} */}
+              {row.index + 1 + (currentPage - 1) * pageLimit}
             </div>
           );
         },
@@ -32,37 +50,26 @@ function BankHoliday() {
         accessorKey: "name",
         cell: ({ row }) => (
           <div className="">
-            <p>
-              {row?.original?.first_name} {row?.original?.sur_name || "NA"}
-            </p>
+            <p>{row?.original?.holiday_name || "NA"}</p>
           </div>
         ),
       },
       {
         header: "Date",
         accessorKey: "date",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
-        ),
+        cell: ({ row }) => <p className="">{row?.original?.date || "NA"}</p>,
       },
       {
         header: "Location",
         accessorKey: "loaction",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.location_name || "NA"}</p>
         ),
       },
       {
         header: "Type",
         accessorKey: "type",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
-        ),
+        cell: ({ row }) => <p className="">{row?.original?.type || "NA"}</p>,
       },
     ],
     [],
@@ -97,7 +104,7 @@ function BankHoliday() {
           </div>
           <QueryTable
             columns={columns}
-            list={"NA"}
+            list={employeeBankHolidays?.listing ?? []}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={totalPages}

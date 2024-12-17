@@ -162,3 +162,18 @@ export const EMPLOYEE_LIST = "/team-employees";
 
 //  LEAVE REQUEST LIST
 export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests";
+
+//REFERENCE TEMPLATE
+export const TEMPLATE="reference-mail-templates"
+// EMPLOYEE LEAVE REQUEST LIST
+export const EMPLOYEE_LEAVE_REQUEST_LIST = "employee-leave-requests";
+
+// EMPLOYEE BANK HOLIDAYS
+export const EMPLOYEE_BANK_HOLIDAYS = "employee-bank-holidays";
+
+// EMPLOYEE TEAM LEAVE APPLICATIONS
+export const EMPLOYEE_TEAM_LEAVE_APPLICATIONS =
+  "employee-team-leave-applications";
+
+// EMPLOYEE LEAVE SHIFTS
+export const EMPLOYEE_LEAVE_SHIFTS = "employee-leave-shifts";

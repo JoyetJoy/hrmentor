@@ -1,36 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Search, MoveDiagonal, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import Reassign from "../popups/master/roster/Calendar/Reassign";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
 
-function CalendarEmployees() {
-  const [keyword, setKeyword] = useState("");
+function CalendarEmployees({ api }) {
   const [popupOpen, setPopupOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("");
+  const pageLimit = 10;
 
-  const list = [
-    {
-      id: 1,
-      name: "John",
-    },
-    {
-      id: 2,
-      name: "Stanly",
-    },
-  ];
+  const { data: rosterCalim, isLoading } = useQuery({
+    queryKey: ["rosterCalim", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${api}/5/2024-12-13`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
 
+  useEffect(() => {
+    if (rosterCalim) {
+      setTotalPages(rosterCalim?.last_page);
+    }
+  }, [rosterCalim]);
   const columns = React.useMemo(
     () => [
       {
         header: "Emp.ID",
-        accessorKey: "id",
-        cell: ({ row }) => row.original?.id || "N/A",
+        accessorKey: "unique_id",
+        cell: ({ row }) => <span>#EMP{row.original?.unique_id ?? "NA"}</span>,
       },
       {
         header: "Name",
-        accessorKey: "name",
+        accessorKey: "first_name",
         cell: ({ row }) => (
-          <p className="whitespace-nowrap">{row.original?.name ?? "N/A"}</p>
+          <p className="whitespace-nowrap">
+            {row.original?.first_name ?? "N/A"}
+          </p>
         ),
       },
       {
@@ -98,7 +116,13 @@ function CalendarEmployees() {
         </div>
       </div>
       <div className="mt-2">
-        <QueryTable columns={columns} list={list} />
+        <QueryTable
+          columns={columns}
+          list={rosterCalim?.roster_details?.employees ?? []}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );

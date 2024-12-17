@@ -184,7 +184,7 @@ export default function HiringCandidateDetails() {
                   alt=""
                 />
                 <p className="text-[0.9rem] font-medium">
-                  {candidateDetails?.designation}
+                  {candidateDetails?.department}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -194,7 +194,7 @@ export default function HiringCandidateDetails() {
                   alt=""
                 />
                 <p className="text-[0.9rem] font-medium">
-                  {candidateDetails?.department}
+                  {candidateDetails?.designation}
                 </p>
               </div>
             </div>

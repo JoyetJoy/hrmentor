@@ -15,7 +15,7 @@ export default function PrimaryInformation() {
       />
       <div className="flex gap-x-3">
         <ProfileSidebar />
-        <ProfileManagmentForm />
+        <ProfileManagmentForm  formtype="update" />
       </div>
     </div>
   );

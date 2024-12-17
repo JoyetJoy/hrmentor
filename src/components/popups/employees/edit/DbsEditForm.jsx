@@ -15,7 +15,6 @@ import {
   employeeMasterOptions,
   successStatus,
 } from "@/constants/data";
-import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function DbsEditForm({
   popupOpen,
@@ -28,10 +27,7 @@ export default function DbsEditForm({
 }) {
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
-  // const { setUser, user } = useUserStore((state) => ({
-  //   setUser: state.setUser,
-  //   user: state.user,
-  // }));
+
   const {
     register,
     handleSubmit,
@@ -110,19 +106,9 @@ export default function DbsEditForm({
         res = await newFormRequest.post(
           `update-employee-dbs/${selectedField}`,
           formData,
-          // {
-          //   params: {
-          //     user_id: user?.id,
-          //   },
-          // },
         );
       } else {
         res = await newFormRequest.post(api, formData,
-        //    {
-        //   params: {
-        //     user_id: user?.id,
-        //   },
-        // }
         );
       }
       if (res.data?.status === 201) {
@@ -222,7 +208,7 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Renewal
                   </label>
                   <input

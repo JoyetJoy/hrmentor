@@ -13,7 +13,7 @@ export const referenceSchema = Yup.object({
     reference_name: Yup.string(),
     personal_email: Yup.string(),
     contact_number: Yup.string(),
-    company_name: Yup.string().required("company name is required"),
+    company_name: Yup.string(),
     designation: Yup.string(),
-    company_email: Yup.string().required("company email is required")
+    company_email: Yup.string()
 });
