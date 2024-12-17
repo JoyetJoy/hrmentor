@@ -159,10 +159,6 @@ const RosterCalendar = () => {
         if(date){
           navigate(`/admin/roster/calendarview?id=${event?.id}&date=${formattedDate}`);
         }
-      
-
-      // setSelectedField(event);
-      // setPopupOpen(true);
     }
   };
 
