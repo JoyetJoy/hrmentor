@@ -8,9 +8,10 @@ import MenuHeader from "@/components/common/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
 import { EMPLOYEE_LIST, newRequest, TEAM_ATTENDANCE } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
+import EmployeeAttendance from "@/components/popups/employee_access/attendance/EmployeeAttendance";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i,
+  value: i + 1,
   label: dayjs().month(i).format("MMMM"),
 }));
 
@@ -24,12 +25,21 @@ const EmployeeAttendanceCalendar = () => {
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
   const [activeEmployee, setActiveEmployee] = useState("");
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selected, setSelected] = useState('');
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
     queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
   });
 
+  useEffect(() => {
+    if (employee?.length > 0 && !activeEmployee) {
+      setActiveEmployee(employee[0]?.employee_id);
+    }
+  }, [employee, activeEmployee]);
+
+  // Fetch TEAM_ATTENDANCE only when activeEmployee is set
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year, activeEmployee],
     queryFn: () =>
@@ -42,12 +52,15 @@ const EmployeeAttendanceCalendar = () => {
           },
         })
         .then((res) => res.data),
-    enabled: true,
+    enabled: !!activeEmployee, // Call only if activeEmployee exists
     staleTime: 0,
   });
 
+  // Refetch when date or activeEmployee changes
   useEffect(() => {
-    refetch();
+    if (activeEmployee) {
+      refetch();
+    }
   }, [date, refetch, activeEmployee]);
 
   const handleDateChange = (newDate) => {
@@ -88,17 +101,14 @@ const EmployeeAttendanceCalendar = () => {
 
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    console.log(events);
-    console.log(formattedDate);
-    
-    
+
     const holidayEvents = events?.result?.filter((event) =>
       event?.holidays?.includes(formattedDate),
     );
     const shiftEvents = events?.filter((event) =>
-      event?.attendance_date?.includes(formattedDate)
+      event?.attendance_date?.includes(formattedDate),
     );
-console.log(shiftEvents);
+    // console.log(shiftEvents);
 
     const availableSlots = events?.available_slots_filtered?.filter((slot) =>
       dayjs(slot.date).isSame(dayjs(date), "day"),
@@ -112,22 +122,14 @@ console.log(shiftEvents);
   };
 
   const handleClick = (event) => {
-    if (!event?.isHoliday) {
-      console.log(event, date);
-      const selectdate = new Date(date);
-      const formattedDate = selectdate
-        .toISOString()
-        .slice(0, 10)
-        .replace(/-/g, "/");
-      if (date) {
-        navigate(
-          `/admin/roster/calendarview?id=${event?.id}&date=${formattedDate}`,
-        );
-      }
-    }
+    setSelected(event);
+    setPopupOpen(true);
   };
+  console.log(selected);
+  
   return (
     <div className="flex flex-col">
+      <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen} selected= {selected} />
       <MenuHeader
         menu={"Menu"}
         subMenu={""}
@@ -137,7 +139,7 @@ console.log(shiftEvents);
       />
       <div className="flex w-full items-center justify-between bg-white px-4 py-2">
         <div className="flex items-center gap-4">
-          <h5 className="text-lg font-bold">My Attendance</h5>
+          <h5 className="text-lg font-bold">Team Attendance</h5>
           <Select
             options={years}
             isSearchable={true}
@@ -163,21 +165,33 @@ console.log(shiftEvents);
         </div>
         <div className="flex gap-2">
           <Select
-            options={employee}
+            options={employee?.map((emp) => ({
+              value: emp.employee_id,
+              label: emp.label || emp.value,
+            }))} // Ensure options are in the correct format
             isSearchable={true}
-            onChange={(option) => setActiveEmployee(option?.employee_id || "")}
+            onChange={(option) => setActiveEmployee(option?.value || "")}
             styles={customSelectStyles}
-            placeholder={"All employee"}
+            placeholder={employee?.[0]?.label}
+            defaultValue={
+              employee?.[0]
+                ? {
+                    value: employee[0].employee_id,
+                    label: employee[0].label || employee[0].value,
+                  }
+                : null
+            }
             className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 caret-white focus:border-[#C2C1C1]"
           />
-          <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
+
+          {/* <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
             Team Attendance
-          </button>
+          </button> */}
         </div>
       </div>
 
       <div className="max-w-8xl mb-10 mt-7 w-full">
-      <Calendar
+        <Calendar
           key={date}
           onChange={handleDateChange}
           value={date}
@@ -193,10 +207,9 @@ console.log(shiftEvents);
                 availableSlots,
                 requestedSlots,
               } = findEvents(date);
-              console.log(shiftEvents);
 
               return events ? (
-                <div className="flex h-full w-full flex-col gap-2">
+                <div className="overflow-y-min flex h-full w-full flex-col gap-2 overflow-y-auto">
                   <>
                     {shiftEvents?.map((event, index) => (
                       <div

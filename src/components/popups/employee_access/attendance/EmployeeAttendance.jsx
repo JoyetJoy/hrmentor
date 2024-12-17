@@ -14,16 +14,7 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
     const formattedHours = hours % 12 || 12;
     return `${formattedHours}:${minutes} ${period}`;
   }
- let clockin
- let clockout
-  if(selected){
-    clockin= selected?.clock_in_time.split(" ")[1];
-    clockout= selected?.clock_out_time.split(" ")[1];
-  }else{
-    clockin = '00:00'
-    clockout = '00:00'
-  }
-
+ 
   return (
     <Dialog
       open={popupOpen}
@@ -53,7 +44,7 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
                 <label className="label-text">Shift</label>
                 <p className="text-sm font-semibold">{selected?.shift_detail ? selected?.shift_detail?.name : 'Present'} <br/>
                   {selected?.shift_detail && (
-                    <span>({selected?convertTo12HourFormat(selected?.shift_start_time):' 00:00'}-{selected?convertTo12HourFormat(selected?.shift_end_time):' 00:00'})</span>
+                    <span>({selected?convertTo12HourFormat(selected?.shift_start_time||selected?.shift_detail?.start_time):' 00:00'}-{selected?convertTo12HourFormat(selected?.shift_end_time||selected?.shift_detail?.end_time):' 00:00'})</span>
                   )}
                 </p>
               </div>
@@ -61,15 +52,15 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                 Shift duration
                 </label>
-                <p className="text-sm font-semibold">{selected?.shift_duration} </p>
+                <p className="text-sm font-semibold">{selected?.shift_duration||selected?.shift_detail?.shift_duration || "00:00"} </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock-in time</label>
-                <p className="text-sm font-semibold">{convertTo12HourFormat(clockin)}</p>
+                <p className="text-sm font-semibold">{selected?.clock_in_time? convertTo12HourFormat(selected?.clock_in_time):'00:00'}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock-out time</label>
-                <p className="text-sm font-semibold">{convertTo12HourFormat(clockout)}</p>
+                <p className="text-sm font-semibold">{selected?.clock_out_time? convertTo12HourFormat(selected?.clock_out_time):'00:00'}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Total Working Hours</label>
