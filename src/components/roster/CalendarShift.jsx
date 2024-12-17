@@ -1,25 +1,30 @@
-import { newRequest } from "@/api";
+import { newRequest, ROSTER_CLAIM } from "@/api";
 import { DASHBOARD_CANDIDATES_LIST } from "@/api/recruiter";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { Maximize2, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeaveRequest from "../popups/master/roster/Calendar/LeaveRequest";
 
 export default function CalanderShift() {
   const [leaveOpen, setLeaveOpen] = useState(false);
   const [claimOpen, setClaimOpen] = useState(false);
-  const [leavepopup,setLeavepopup] = useState(false);
-  const [type,setType] = useState('');
+  const [leavepopup, setLeavepopup] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const [type, setType] = useState("");
   const pageLimit = 10;
-  // Fetch List
-  const { data: newCandidates, isLoading } = useQuery({
-    queryKey: ["newCandidates"],
+
+  const { data: rosterCalim, isLoading } = useQuery({
+    queryKey: ["rosterCalim", currentPage, keyword],
     queryFn: () =>
       newRequest
-        .get(DASHBOARD_CANDIDATES_LIST, {
+        .get(`${ROSTER_CLAIM}/5/2024-12-13`, {
           params: {
+            search: keyword,
+            page: currentPage,
             per_limit: pageLimit,
           },
         })
@@ -28,39 +33,61 @@ export default function CalanderShift() {
         }),
   });
 
+  useEffect(() => {
+    if (rosterCalim) {
+      setTotalPages(rosterCalim?.last_page);
+    }
+  }, [rosterCalim]);
+  
+  console.log(
+    rosterCalim?.roster_details?.leave_employees[0]?.employee_name
+
+    ,
+  );
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
         <>
-        <LeaveRequest
-        popupOpen={leavepopup}
-        setPopupOpen={setLeavepopup}
-        type={type}
-        setType={setType}
-        />
-          {newCandidates?.length ? (
+          <LeaveRequest
+            popupOpen={leavepopup}
+            setPopupOpen={setLeavepopup}
+            type={type}
+            setType={setType}
+          />
+          {rosterCalim ? (
             <>
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Total Required</p>
-                  <p className="text-lg font-semibold">18</p>
+                  <p className="text-lg font-semibold">
+                    {
+                      rosterCalim?.roster_details?.shift_details
+                        ?.people_required
+                    }
+                  </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Employee</p>
                 </div>
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Available</p>
-                  <p className="text-lg font-semibold">18</p>
+                  <p className="text-lg font-semibold">
+                    {rosterCalim?.roster_details?.shift_claimed_employees_count}
+                  </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Employees</p>
                 </div>
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Shift Claim</p>
-                  <p className="text-lg font-semibold">18</p>
+                  <p className="text-lg font-semibold">
+                    {rosterCalim?.roster_details?.shift_details?.shift_claim}
+                  </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Requests</p>
                 </div>
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Leave Requested</p>
-                  <p className="text-lg font-semibold">18</p>
+                  <p className="text-lg font-semibold">
+                    {rosterCalim?.roster_details?.shift_details?.employee_count}
+                  </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Employees</p>
                 </div>
               </div>
@@ -79,34 +106,29 @@ export default function CalanderShift() {
                 <div className="flex w-full items-center justify-center">
                   <div
                     // key={candidate?.id}
-                    onClick={()=> {
-                      setLeavepopup(true)
-                      setType('leave')
+                    onClick={() => {
+                      setLeavepopup(true);
+                      setType("leave");
                     }}
                     className="flex h-16 w-[90%] items-center justify-between rounded-full bg-white py-2 pl-2 pr-5"
                   >
                     <div className="flex items-center gap-x-2">
                       <div className="flex h-11 w-11 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
-                        {/* {`${candidate?.first_name?.charAt(0)} ${candidate?.sur_name?.charAt(0)}`} */}
-                        J
+                        {rosterCalim?.roster_details?.leave_employees[0]?.employee_name[0]}
                       </div>
                       <div>
                         <h3 className="text-base font-semibold">
-                          <span className="mr-1">Jisham</span>
                           <span className="mr-1">
-                            {" "}
-                            {/* {candidate?.middle_name ?? ""} */}V
+                          {rosterCalim?.roster_details?.leave_employees[0]?.employee_name}
                           </span>
-                          {/* {candidate?.sur_name} */}
                         </h3>
                         <p className="text-xs font-medium text-darkblack">
-                          {/* {candidate?.job_name?.job_title} */}
-                          Developer
+                        {rosterCalim?.roster_details?.leave_employees[0]?.employee_designation_name}
                         </p>
                       </div>
                     </div>
                     <button
-                      onClick={()=>setLeavepopup(true)}
+                      onClick={() => setLeavepopup(true)}
                       className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                     >
                       <ChevronRight className="size-3" />
@@ -130,36 +152,35 @@ export default function CalanderShift() {
                 <div className="flex w-full items-center justify-center">
                   <div
                     // key={candidate?.id}
-                    onClick={()=> {
-                      setLeavepopup(true)
-                      setType('claimed')
+                    onClick={() => {
+                      setLeavepopup(true);
+                      setType("claimed");
                     }}
                     className="flex h-16 w-[90%] items-center justify-between rounded-full bg-white py-2 pl-2 pr-5"
                   >
                     <div className="flex items-center gap-x-2">
                       <div className="flex h-11 w-11 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
                         {/* {`${candidate?.first_name?.charAt(0)} ${candidate?.sur_name?.charAt(0)}`} */}
-                        J
+                        {rosterCalim?.roster_details?.shift_claim_requests[0]?.employee_name[0]}
+
                       </div>
                       <div>
                         <h3 className="text-base font-semibold">
-                          <span className="mr-1">Jisham</span>
                           <span className="mr-1">
-                            {" "}
-                            {/* {candidate?.middle_name ?? ""} */}V
+                          {rosterCalim?.roster_details?.shift_claim_requests[0]?.employee_name}
+
                           </span>
-                          {/* {candidate?.sur_name} */}
                         </h3>
                         <p className="text-xs font-medium text-darkblack">
-                          {/* {candidate?.job_name?.job_title} */}
-                          Developer
+                          {rosterCalim?.roster_details?.shift_claim_requests[0]
+                            ?.employee_designation_name}
                         </p>
                       </div>
                     </div>
                     <button
-                      onClick={()=>{
-                        setLeaveOpen(true)
-                        setType('claimed')
+                      onClick={() => {
+                        setLeaveOpen(true);
+                        setType("claimed");
                       }}
                       className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                     >

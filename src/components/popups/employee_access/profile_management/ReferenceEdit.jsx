@@ -1,16 +1,27 @@
-import { customSelectStyles } from "@/utils/customStyles";
+import { newFormRequest, newRequest } from "@/api";
+import { referenceSchema } from "@/schema/dashboard/employee/form/reference.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import Select from "react-select"
-
+import toast from "react-hot-toast";
+import ReactQuill from "react-quill";
+import { customSelectStyles } from "@/utils/customStyles";
+import Select from "react-select";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { TEMPLATE } from "@/api/master";
 export default function ReferenceEdit({
   popupOpen,
   setPopupOpen,
   selectedField,
+  setSelectedField,
+  qrKey,
+  api,
+  uid,
 }) {
+  
   const {
     register,
     handleSubmit,
@@ -21,17 +32,96 @@ export default function ReferenceEdit({
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(),
+    resolver: yupResolver(referenceSchema),
+  });
+  
+  const queryClient = useQueryClient();
+  const [selectedType, setSelectedType] = useState("");
+  const selecteType = watch("document_type_id");
+  const [loader,setLoader] =useState();
+
+  const { data: employeeReferenceid, isLoading } = useQuery({
+    queryKey: ["employeeReferenceid", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
+    enabled: !!selectedField != 0,
   });
 
-  const selectedType = watch("document_type_id");
+  const { data: employeeDetails } = useQuery({
+    queryKey: ["employeeDetails", api, selectedField],
+    queryFn: () =>
+      newRequest.get(`${"employee"}/${uid}`).then((res) => res.data),
+    enabled: !!uid,
+  });
+
+  useEffect(() => {
+    if (employeeReferenceid) {
+      setValue("type", employeeReferenceid.type);
+      setValue("reference_name", employeeReferenceid.reference_name);
+      setValue("personal_email", employeeReferenceid.personal_email);
+      setValue("company_email", employeeReferenceid.company_email);
+      setValue("company_name", employeeReferenceid.company_name);
+      setValue("designation", employeeReferenceid.designation);
+    }
+  }, [employeeReferenceid]);
+
+  // useEffect(() => {
+  //   if (employeeReferenceid) {
+  //     setImage(employeeReferenceid?.document);
+  //   }
+  // }, [employeeReferenceid, setImage]);
 
   function close() {
     setPopupOpen(false);
+    setSelectedField(0);
+    setSelectedType(null);
+    reset();
   }
 
-  const [isLoading, setIsLoading] = useState();
-  const [loader, setLoader] = useState();
+  // const handleClearImage = useCallback(() => {
+  //   clearImage();
+  //   setDescription(""); // Reset description if needed
+  // }, [clearImage]);
+
+  const onSubmit = async (data) => {
+    setLoader(true);
+    try {
+
+      console.log(data?.type,"data?.typedata?.type");
+      
+      const formData = new FormData();
+      formData.append("type", data?.type?.value);
+      formData.append("employee_id", employeeDetails?.employee_id);
+      formData.append("user_id", uid);
+      {
+        data?.type?.value !== "work"
+        ? formData.append("reference_name", data.reference_name) && formData.append("personal_email", data.personal_email)
+        : formData.append("company_email", data.company_email) && formData.append("company_email", data.company_email);;
+      }
+      formData.append("company_name", data.company_name);
+      formData.append("designation", data.designation);
+
+      let res;
+      if (selectedField !== 0) {
+        res = await newFormRequest.post(
+          `update-employee-references/${selectedField}`,
+          formData,
+        );
+      } else {
+        res = await newFormRequest.post(api, formData);
+      }
+      if (res.data?.status === 201) {
+        toast.success(res?.data?.message);
+        queryClient.invalidateQueries([qrKey]);
+        close();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
 
   return (
     <Dialog
@@ -65,7 +155,7 @@ export default function ReferenceEdit({
             ) : (
               <form
                 className="grid grid-cols-1 gap-3"
-                //   onSubmit={handleSubmit(onSubmit)}
+                  onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="grid grid-cols-1 gap-3 ">
                   <div className="group flex w-full flex-col gap-1">
@@ -128,7 +218,7 @@ export default function ReferenceEdit({
                   </div>
 
                   {/* Conditionally Displayed Fields */}
-                  {selectedType?.value === "work" && (
+                  {selecteType?.value === "work" && (
                     <>
                       <div className="group flex flex-col space-y-1">
                         <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
