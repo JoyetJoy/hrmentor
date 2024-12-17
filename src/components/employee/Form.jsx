@@ -242,10 +242,8 @@ export default function SaveEmployeeForm({ formtype }) {
 
   // Function to display state of the selected city
   const handleCitySelect = (selectedCity) => {
-    // Assuming selectedCity has a state_name attribute
     if (selectedCity?.state_name) {
       setState(selectedCity.state_name);
-      // Update the state display based on the selected city
       setValue("state_id", {
         label: selectedCity.state_name,
         value: selectedCity.state_id,

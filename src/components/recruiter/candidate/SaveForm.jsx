@@ -36,6 +36,7 @@ export default function RecSaveFormCandidate({ type }) {
   const [popupOpen, setPopupOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [state, setState] = useState('');
 
   const {
     register,
@@ -207,7 +208,7 @@ export default function RecSaveFormCandidate({ type }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("state_or_province", data.state_or_province?.id);
+    formData.append("state_or_province", data.state_or_province?.value);
     formData.append("same_as_home_address", sameAsHome ? 1 : 0);
 
     try {
@@ -243,6 +244,16 @@ export default function RecSaveFormCandidate({ type }) {
   const handleOptionClick = (option) => {
     setSelectedOption(option); // Update the button text
     setDropdownOpen(false); // Close the dropdown
+  };
+
+  const handleCitySelect = (selectedCity) => {
+    if (selectedCity?.state_name) {
+      setState(selectedCity.state_name);
+      setValue("state_or_province", {
+        label: selectedCity.state_name,
+        value: selectedCity.state_id,
+      });
+    }
   };
 
   return (
@@ -466,31 +477,6 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
             <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text flex flex-row items-center gap-1">
-                County
-              </label>
-              <Controller
-                name="state_or_province"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <AsyncSelect
-                    {...field}
-                    placeholder="Search ..."
-                    loadOptions={loadStatesOptions}
-                    isSearchable={true}
-                    noOptionsMessage={() => "type and search"}
-                    className="input-box"
-                  />
-                )}
-              />
-              {errors.state_or_province && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.state_or_province?.message}
-                </span>
-              )}
-            </div>
-            <div className="group flex flex-col space-y-1 py-2">
-              <label className="required label-text flex flex-row items-center gap-1">
                 City or Town
               </label>
               <Controller
@@ -503,6 +489,10 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadCitiesOptions}
                     isSearchable={true}
+                    onChange={(selectedOption) => {
+                      field.onChange(selectedOption); // Update form state
+                      handleCitySelect(selectedOption);
+                    }}
                     noOptionsMessage={() => "type and search"}
                     className="input-box"
                   />
@@ -514,6 +504,18 @@ export default function RecSaveFormCandidate({ type }) {
                 </span>
               )}
             </div>
+            <div className="group flex flex-col space-y-1 py-2">
+                  <label className="label-text">County</label>
+                  {/* Show the selected state's name if a city is selected */}
+                  <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
+                    {state || ""}
+                  </span>
+                  {errors.state_or_province && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.state_or_province?.message}
+                    </span>
+                  )}
+                </div>
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">Post Code</label>
               <input

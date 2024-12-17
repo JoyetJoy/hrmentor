@@ -90,6 +90,7 @@ const masterConfig = {
 
 function RecruiterJobPost() {
   const [isNotMentioned, setIsNotMentioned] = useState("");
+  const [state, setState] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -152,6 +153,8 @@ function RecruiterJobPost() {
 
   useEffect(() => {
     if (jobDetails) {
+      console.log(jobDetails);
+      
       setValue("job_title", jobDetails.job_title);
       setValue("employment_type", jobDetails?.employment_type);
       setValue("min_exp_id", jobDetails.min_exp_id);
@@ -402,7 +405,7 @@ function RecruiterJobPost() {
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
     formData.append("meta_title", data.meta_title ?? "");
-    formData.append("state_id", data.state_id?.id);
+    formData.append("state_id", data.state_id?.value);
     formData.append("career_page", showToCareerPage ? 1 : 0);
     postFile && formData.append("image", postFile);
     guidelinefile && formData.append("interview_guideline_file", guidelinefile);
@@ -436,6 +439,16 @@ function RecruiterJobPost() {
 
   const handleImageError = (event) => {
     event.target.src = "/assets/icons/tort.svg";
+  };
+
+  const handleCitySelect = (selectedCity) => {
+    if (selectedCity?.state_name) {
+      setState(selectedCity.state_name);
+      setValue("state_id", {
+        label: selectedCity.state_name,
+        value: selectedCity.state_id,
+      });
+    }
   };
 
   return (
@@ -792,31 +805,6 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="required label-text flex flex-row items-center gap-1">
-                    County
-                  </label>
-                  <Controller
-                    name="state_id"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <AsyncSelect
-                        {...field}
-                        placeholder="Search ..."
-                        loadOptions={loadStatesOptions}
-                        isSearchable={true}
-                        noOptionsMessage={() => "type county name"}
-                        className="input-box"
-                      />
-                    )}
-                  />
-                  {errors.state_id && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.state_id?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="required label-text flex flex-row items-center gap-1">
                     City or Town
                   </label>
                   <Controller
@@ -829,6 +817,10 @@ function RecruiterJobPost() {
                         placeholder="Search ..."
                         loadOptions={loadCitiesOptions}
                         isSearchable={true}
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption); // Update form state
+                          handleCitySelect(selectedOption);
+                        }}
                         noOptionsMessage={() => "type city name"}
                         className="input-box"
                       />
@@ -837,6 +829,18 @@ function RecruiterJobPost() {
                   {errors.city_id && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.city_id?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 px-3 py-2">
+                  <label className="label-text">County</label>
+                  {/* Show the selected state's name if a city is selected */}
+                  <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
+                    {state || ""}
+                  </span>
+                  {errors.state_id && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.state_id?.message}
                     </span>
                   )}
                 </div>
