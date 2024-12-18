@@ -105,7 +105,7 @@ export default function Skills() {
           header: "Status",
           accessorKey: "status",
           cell: ({ row }) => (
-            <div className="ufont-semibold flex h-8 w-fit items-center justify-center text-black">
+            <div className="flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-red-300 px-3 font-semibold text-red-700">
               {row.original?.status === "ongoing" ? "Ongoing" : "Completed"}
             </div>
           ),

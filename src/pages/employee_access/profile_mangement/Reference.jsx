@@ -1,19 +1,74 @@
-import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
-import ReferenceEdit from "@/components/popups/employee_access/profile_management/ReferenceEdit";
-import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import React, { useEffect, useState } from "react";
+import MenuHeader from "@/components/common/MenuHeader";
+import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { EMPLOYEE_REFERENCE, newRequest } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import ReferenceForm from "@/components/popups/employees/edit/ReferenceForm";
+import ReferenceSendEmail from "@/components/popups/employees/edit/ReferenceSendEmail";
+import ReferenceAdd from "@/components/popups/employees/edit/ReferenceAdd";
+import StatusEdit from "@/components/popups/employees/edit/StatusEdit";
+import ReferenceEdit from "@/components/popups/employee_access/profile_management/ReferenceEdit";
+import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
+import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function Reference() {
-  const [popupOpen, setPopupOpen] = useState(false)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [popupAddOpen, setPopupAddOpen] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedField, setSelectedField] = useState(0);
+  const pageLimit = 10;
+
+  // useEffect(() => {
+  //   if (selectedField) {
+  //     setPopupOpen(true);
+  //   }
+  // }, [selectedField]);
+
+  const { setUser, user } = useUserStore((state) => ({
+      setUser: state.setUser,
+      user: state.user,
+    }));
+    const u_id = user.id;
+  // Fetch List
+  const { data: employeeReference, isLoading } = useQuery({
+    queryKey: ["employeeReference", currentPage, u_id, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_REFERENCE}/${u_id}`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (employeeReference) {
+      setTotalPages(employeeReference?.last_page);
+    }
+  }, [employeeReference]);
 
   const columns = React.useMemo(
     () =>
       [
         {
-          header: "Type",
-          accessorKey: "type",
+          header: "Sl No",
+          accessorKey: "sno",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
@@ -23,47 +78,81 @@ export default function Reference() {
           },
         },
         {
+          header: "Type",
+          accessorKey: "type",
+          cell: ({ row }) => {
+            return <div className="flex px-2">{row.original?.type}</div>;
+          },
+        },
+        {
           header: "Name",
-          accessorKey: "name",
+          accessorKey: "reference_name",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">{row.original?.reference_name}</div>
+            );
+          },
         },
         {
           header: "Personal Email",
           accessorKey: "personal-email",
+          cell: ({ row }) => (
+            <div className="flex">{row.original?.personal_email}</div>
+          ),
         },
         {
-          header: "Company Name ",
-          accessorKey: "company-name",
+          header: "Company Name",
+          accessorKey: "condtion",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">{row.original?.company_name ?? "NA"}</div>
+            );
+          },
         },
         {
           header: "Designation",
           accessorKey: "designation",
+          cell: ({ row }) => {
+            return <div className="flex px-2">{row.original?.designation ?? "NA"}</div>;
+          },
         },
+
         {
-          header: "Company Email",
-          accessorKey: "company-email",
+          header: "Contact Number",
+          accessorKey: "document",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">{row.original?.contact_number}</div>
+            );
+          },
         },
+
         {
-          header: "Conatct Number",
-          accessorKey: "conatct-number",
-        },
-        {
-          header: "Verification Status",
-          accessorKey: "company-email",
+          header: "Verification status",
+          accessorKey: "status",
+          cell: ({ row }) => (
+            <div
+              style={{
+                backgroundColor: row?.original?.status?.background_color,
+                color: row?.original?.status?.text_color,
+              }}
+              className="flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-red-300 px-3 font-semibold text-red-700"
+            >
+              {row?.original?.status?.status_name}
+            </div>
+          ),
         },
         {
           header: "Action",
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
-               <button
-                type="button"
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
-              >
-                <Eye className="size-3" />
-              </button>
               <button
                 type="button"
-                onClick={() => setSelectedField(row.original.id)}
+                onClick={() => {
+                  setPopupAddOpen(true);
+                  setSelectedField(row.original.id);
+                }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               >
                 <img
@@ -71,12 +160,14 @@ export default function Reference() {
                   className="w-full object-contain"
                 />
               </button>
+            
+
               <button
                 type="button"
-                // onClick={() => {
-                //   setDeletePopup(true);
-                //   setSelectedId(row.original.id);
-                // }}
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedId(row.original.id);
+                }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
                 <Trash2 className="size-3" />
@@ -85,11 +176,26 @@ export default function Reference() {
           ),
         },
       ].filter(Boolean),
-    [],
+    [employeeReference],
   );
   return (
     <div className="flex flex-col">
-      <ReferenceEdit popupOpen={popupOpen} setPopupOpen={setPopupOpen}/>
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
+      />
+      <ReferenceEdit
+        popupAddOpen={popupAddOpen}
+        setPopupAddOpen={setPopupAddOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
+        uid={u_id}
+      />
       <MenuHeaderEmployeeAccess
         pathlink={""}
         currentpage={"Reference"}
@@ -99,7 +205,7 @@ export default function Reference() {
       <div className="flex gap-x-3">
         <ProfileSidebar />
         <div className="flex w-full flex-col">
-          <div className="w-full  h-screen rounded-md bg-white px-5 py-4">
+          <div className="h-screen w-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">Reference</h5>
@@ -114,9 +220,9 @@ export default function Reference() {
                 </div>
               </div>
               <button
-                  onClick={() => {
-                    setPopupOpen(true);
-                  }}
+                onClick={() => {
+                  setPopupAddOpen(true);
+                }}
                 className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
               >
                 <Plus className="size-4" />
@@ -124,7 +230,13 @@ export default function Reference() {
               </button>
             </div>
             <div>
-              <QueryTable columns={columns} list={""} />
+              <QueryTable
+                columns={columns}
+                list={employeeReference?.listing ?? []}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
             </div>
           </div>
         </div>

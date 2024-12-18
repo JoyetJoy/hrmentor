@@ -1,5 +1,5 @@
 import { newFormRequest, newRequest } from "@/api";
-import { STATUS_UPDATE } from "@/api/master";
+import {  STATUS_UPDATELIST } from "@/api/master";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { empExperienceSchema } from "@/schema/dashboard/employee/form/experience.schema";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -46,7 +46,7 @@ export default function StatusEdit({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  const { data: statusList } = useEmployeeMaster(STATUS_UPDATE, "statusList");
+  const { data: statusList } = useEmployeeMaster(STATUS_UPDATELIST, "statusList");
   const [status, setStatus] = useState(null);
 
   // const transformedStatusList = statusList?.map((status) => ({

@@ -78,26 +78,37 @@ export default function ReferenceEdit({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      console.log(data?.type, "data?.typedata?.type");
-
       const formData = new FormData();
       formData.append("type", data?.type?.value);
       formData.append("employee_id", employeeDetails?.employee_id);
       formData.append("user_id", uid);
       formData.append("reference_name", data.reference_name);
       formData.append("personal_email", data.personal_email);
-      {
-        selectedType === "work"
-          ? (formData.append("company_email", data.company_email),
-            formData.append("company_name", data.company_name),
-            formData.append("reference_name", data.reference_name),
-            formData.append("personal_email", data.personal_email))
-          : (formData.append("reference_name", data.reference_name),
-            formData.append("personal_email", data.personal_email));
-      }
+      // {
+      //   selectedType === "work"
+      //     ? (formData.append("company_email", data.company_email),
+      //       formData.append("company_name", data.company_name),
+      //       formData.append("reference_name", data.reference_name),
+      //       formData.append("personal_email", data.personal_email))
+      //     : (formData.append("reference_name", data.reference_name),
+      //       formData.append("personal_email", data.personal_email));
+      // }
 
+      {
+        if (selectedType === "work") {
+          formData.append("company_email", data.company_email);
+          formData.append("company_name", data.company_name);
+          formData.append("designation", data.designation);
+        }
+      }
       formData.append("contact_number", data.contact_number);
       formData.append("designation", data.designation);
+
+      if (selectedType === "work") {
+        if (!data?.company_name || !data?.company_email || !data?.designation) {
+          return toast.error("Filed Missing");
+        }
+      }
 
       let res;
       if (selectedField !== 0) {
@@ -121,7 +132,7 @@ export default function ReferenceEdit({
     }
   };
 
-  console.log(uid, "designationdesignationdesignation");
+  console.log(errors, "errordddd");
   return (
     <Dialog
       open={popupAddOpen}
