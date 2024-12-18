@@ -3,11 +3,14 @@ import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_REFERENCE, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ReferenceForm from "@/components/popups/employees/edit/ReferenceForm";
+import ReferenceSendEmail from "@/components/popups/employees/edit/ReferenceSendEmail";
+import ReferenceAdd from "@/components/popups/employees/edit/ReferenceAdd";
+import StatusEdit from "@/components/popups/employees/edit/StatusEdit";
 
 export default function EmployeeReferenceEdit() {
   const location = useLocation();
@@ -19,15 +22,17 @@ export default function EmployeeReferenceEdit() {
   const [keyword, setKeyword] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
+  const [popupAddOpen, setPopupAddOpen] = useState(false);
+  const [popupStatusOpen, setPopupStatusOpen] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
   
-  useEffect(() => {
-    if (selectedField) {
-      setPopupOpen(true);
-    }
-  }, [selectedField]);
+  // useEffect(() => {
+  //   if (selectedField) {
+  //     setPopupOpen(true);
+  //   }
+  // }, [selectedField]);
 
   // Fetch List
   const { data: employeeReference, isLoading } = useQuery({
@@ -135,15 +140,19 @@ export default function EmployeeReferenceEdit() {
           accessorKey: "status",
           cell: ({ row }) => (
             <div
-              style={{
-                backgroundColor:
-                  row?.original?.employee?.employment_status?.background_color,
-                color: row?.original?.employee?.employment_status?.text_color,
-              }}
-              className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
-            >
-              {row?.original?.employee?.employment_status?.status_name}
-            </div>
+            style={{
+              backgroundColor:
+                row?.original?.status?.background_color,
+              color: row?.original?.status?.text_color,
+            }}
+            onClick={() => {
+              setPopupStatusOpen(true);
+              setSelectedField(row.original.id);
+            }}
+            className="flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-red-300 px-3 font-semibold text-red-700"
+          >
+            {row?.original?.status?.status_name}
+          </div>
           ),
         },
         {
@@ -153,7 +162,11 @@ export default function EmployeeReferenceEdit() {
             <div className="flex items-center gap-2 text-xs">
               <button
                 type="button"
-                onClick={() => setSelectedField(row.original.id)}
+                onClick={() => {
+                  setPopupAddOpen(true);
+                  setSelectedField(row.original.id);
+                }}
+                
                 className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               >
                 <img
@@ -164,13 +177,24 @@ export default function EmployeeReferenceEdit() {
               <button
                 type="button"
                 onClick={() => {
+                  setPopupOpen(true);
+                  setSelectedField(row.original.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+              >
+                <Eye className="size-3" />
+              </button>
+              
+              {/* <button
+                type="button"
+                onClick={() => {
                   setDeletePopup(true);
                   setSelectedId(row.original.id);
                 }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
                 <Trash2 className="size-3" />
-              </button>
+              </button> */}
             </div>
           ),
         },
@@ -179,14 +203,32 @@ export default function EmployeeReferenceEdit() {
   );
   return (
     <>
-      <DeleteConfirmation
+       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
         id={selectedId}
         qrKey={"employeeReference"}
         api={EMPLOYEE_REFERENCE}
       />
-      <ReferenceForm
+       <StatusEdit
+        popupStatusOpen={popupStatusOpen}
+        setPopupStatusOpen={setPopupStatusOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
+        uid={uid}
+      />
+       <ReferenceAdd
+        popupAddOpen={popupAddOpen}
+        setPopupAddOpen={setPopupAddOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
+        uid={uid}
+      />
+       <ReferenceSendEmail
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
@@ -195,6 +237,15 @@ export default function EmployeeReferenceEdit() {
         api={EMPLOYEE_REFERENCE}
         uid={uid}
       />
+      {/* <ReferenceForm
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+        setSelectedField={setSelectedField}
+        qrKey={"employeeReference"}
+        api={EMPLOYEE_REFERENCE}
+        uid={uid}
+      /> */}
       <div className="flex min-h-screen flex-col">
         <MenuHeader
           menu={"Menu"}
@@ -222,7 +273,7 @@ export default function EmployeeReferenceEdit() {
                 </div>
                 <button
                   onClick={() => {
-                    setPopupOpen(true);
+                    setPopupAddOpen(true);
                   }}
                   className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
                 >
