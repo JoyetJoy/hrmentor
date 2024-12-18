@@ -48,6 +48,9 @@ export default function News() {
         }),
   });
 
+  
+
+
   useEffect(() => {
     if (employeeNews) {
       setTotalPages(employeeNews?.last_page);
@@ -59,6 +62,13 @@ export default function News() {
       {
         header: "Sl No",
         accessorKey: "id",
+        cell: ({ row }) => {
+          return (
+            <div className="">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
       },
       {
         header: "News title",
@@ -74,7 +84,9 @@ export default function News() {
         header: "Created by",
         accessorKey: "created_by",
         cell: ({ row }) => (
-          <p className="">{row?.original?.created_by || "NA"}</p>
+          <p className="">
+            {row?.original?.created_by || "NA"}
+          </p>
         ),
       },
       {
@@ -140,6 +152,7 @@ export default function News() {
         qrKey={"employeeNews"}
         api={NEWS_LISt}
       />
+      
       <NewsEventHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <h1 className="text-base font-semibold">News</h1>

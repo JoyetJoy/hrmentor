@@ -383,6 +383,7 @@ export default function AddLeave({
                     <label className="text-sm font-medium">End Date</label>
                     <input
                       type="date"
+                      min={fromDate}
                       onChange={(e) => {
                         setToDate(e.target.value);
                       }}

@@ -4,7 +4,7 @@ import QueryTable from "@/components/table/QueryTable";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Event() {
@@ -30,7 +30,11 @@ export default function Event() {
         }),
   });
 
-  console.log(eventList, "eventListeventList");
+  useEffect(() => {
+    if (eventList) {
+      setTotalPages(eventList?.last_page);
+    }
+  }, [eventList]);
 
   const columns = React.useMemo(
     () => [
@@ -38,7 +42,11 @@ export default function Event() {
         header: "Sl No",
         accessorKey: "sno",
         cell: ({ row }) => {
-          return <div className="flex px-2"></div>;
+          return (
+            <div className="">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
         },
       },
       {
@@ -175,7 +183,7 @@ export default function Event() {
       ) : (
         <QueryTable
           columns={columns}
-          list={eventList?.original ?? []}
+          list={eventList?.data ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}
