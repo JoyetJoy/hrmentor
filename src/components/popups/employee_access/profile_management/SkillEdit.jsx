@@ -43,6 +43,7 @@ function SkillEdit({popupOpen,
     "skillTypeList",
   );
 
+  
   // Get selected data
   const { data: employeeSkillDetailByid, isLoading } = useQuery({
     queryKey: ["employeeSkillDetailByid", api, selectedField],
