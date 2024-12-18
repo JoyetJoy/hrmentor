@@ -156,7 +156,10 @@ export const CLOCKOUT = "employee-access/employee-clock-out";
 export const AVAILABLE_SLOT = "shift-claim-request";
 
 // ADMIN NEWS
-export const NEWS_LISt = "news";
+export const NEWS_LISt = "news"
+
+// ROSTER CLAIM DETAILS
+export const ROSTER_CLAIM = "get-and-show-roster-count-details"
 
 // Admin event
 export const EVENT_LIST = "events";

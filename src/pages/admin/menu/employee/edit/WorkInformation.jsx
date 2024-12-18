@@ -417,6 +417,15 @@ export const WorkInformation = () => {
                         />
                       )}
                     />
+                    {/* <input
+                      {...register("pregnancy", {
+                        required: "pregnancy is required",
+                      })}
+                      autoComplete="off"
+                      placeholder="Enter"
+                      type="text"
+                      className="input-box"
+                    /> */}
                     {errors.pregnancy && (
                       <span className="text-xs font-medium text-red-500">
                         {errors.pregnancy?.message}

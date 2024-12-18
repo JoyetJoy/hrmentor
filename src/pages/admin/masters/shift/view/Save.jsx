@@ -143,8 +143,6 @@ export default function SaveMasterShift({ formtype, sid }) {
       } else {
         toast.error("Please enter the count for the selected days");
       }
-    } else if (data.fullday === "" && data.halfday === "") {
-      toast.error("Either full day or half day is required");
     } else {
       await handleShift(data);
     }
@@ -735,13 +733,13 @@ export default function SaveMasterShift({ formtype, sid }) {
                           placeholder={day}
                           type="number"
                           defaultValue={
-                            requireDays[index] === "0" ||
-                            requireDays[index] === 0
+                            requireDays?.[index] === "0" ||
+                            requireDays?.[index] === 0
                               ? ""
-                              : requireDays[index]
+                              : requireDays?.[index]
                           }
                           onChange={handleInputChange(index)}
-                          disabled={!selectedDays.includes(day)} // Disable input if the day is not selected
+                          disabled={!selectedDays?.includes(day)} // Disable input if the day is not selected
                         />
                         {/* Display error message */}
                         {dayerror[index] && (

@@ -152,7 +152,7 @@ export const TIME_SHEET = "/employee-time-sheets";
 //ATTENDANCE
 export const ATTENDANCE = "/employee-attendances";
 // TEAM ATTENDANCE
-export const TEAM_ATTENDANCE = "/employee-attendances";
+export const TEAM_ATTENDANCE = "/employee-team-attendances";
 //SHIFT EMPLOYEE DETAILS
 export const TEAMROSTER_EMPLOYEELIST = "/roster-employee-list";
 //EMPLOYEE TEAM TIMESHEET LIST
@@ -163,6 +163,8 @@ export const EMPLOYEE_LIST = "/team-employees";
 //  LEAVE REQUEST LIST
 export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests";
 
+//REFERENCE TEMPLATE
+export const TEMPLATE="reference-mail-templates"
 // EMPLOYEE LEAVE REQUEST LIST
 export const EMPLOYEE_LEAVE_REQUEST_LIST = "employee-leave-requests";
 

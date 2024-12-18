@@ -1,15 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Reassign from "../popups/master/roster/Calendar/Reassign";
+import { newRequest, ROSTER_CLAIM } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 
-function Rosteroveview() {
+function Rosteroveview({ api }) {
   const [isOn, setIsOn] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
+
+  const { data: rosterCalim, isLoading } = useQuery({
+    queryKey: ["rosterCalim", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(`${api}/5/2024-12-13`, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+
+  useEffect(() => {
+    if (rosterCalim) {
+      setTotalPages(rosterCalim?.last_page);
+    }
+  }, [rosterCalim]);
+
+  console.log(rosterCalim?.roster_details?.shift_details?.shift_start_time);
+
   return (
     <div className="mx-3 mb-2 flex items-center justify-between">
       <Reassign popupOpen={isOn} setPopupOpen={setIsOn} type={"claim"} />
       <div className="flex items-center gap-2 font-semibold text-black">
         <div className="flex gap-36">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
-            Morning Shift
+            {rosterCalim?.roster_details?.shift_details?.shift_name}
           </div>
           <div className="flex gap-2">
             <p className="pr-2 text-[0.8rem]">Shift Claim</p>
@@ -35,8 +67,16 @@ function Rosteroveview() {
         </div>
       </div>
       <div className="flex gap-20 text-sm font-semibold text-[#2c2c2c]">
-        <p>Shift Date -25/06/2024</p>
-        <p>Shift Time -09:00 am- 06:00 pm</p>
+        <p>
+          Shift Date -{" "}
+          {dayjs(rosterCalim?.roster_details?.roster_start_date).format(
+            "DD-MM-YYYY",
+          )}
+        </p>
+        <p>
+          Shift Time -
+          {rosterCalim?.roster_details?.shift_details?.shift_start_time}
+        </p>
       </div>
     </div>
   );

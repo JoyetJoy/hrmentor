@@ -10,6 +10,8 @@ import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { TEMPLATE } from "@/api/master";
 
 export default function ReferenceForm({
   popupOpen,
@@ -31,6 +33,10 @@ export default function ReferenceForm({
     mode: "onSubmit",
     resolver: yupResolver(referenceSchema),
   });
+  const { data: templateList } = useEmployeeMaster(
+    TEMPLATE,
+    "templateList",
+  );
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
@@ -45,7 +51,7 @@ export default function ReferenceForm({
   const { data: employeeReferenceid, isLoading } = useQuery({
     queryKey: ["employeeReferenceid", api, selectedField],
     queryFn: () =>
-      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
+      newRequest.get(`${"sent-email-employee-references"}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
@@ -95,10 +101,11 @@ export default function ReferenceForm({
       formData.append("type", data?.type?.value);
       formData.append("employee_id", employeeDetails?.employee_id);
       formData.append("user_id", uid);
-      formData.append("reference_name", data.reference_name);
-      formData.append("personal_email", data.personal_email);
-      formData.append("company_email", data.company_email);
-      formData.append("company_name", data.company_name);
+      {
+        data?.type?.value !== "work"
+        ? formData.append("reference_name", data.reference_name) && formData.append("personal_email", data.personal_email)
+        : formData.append("company_email", data.company_email) && formData.append("company_email", data.company_email);;
+      }
       formData.append("designation", data.designation);
 
       let res;
@@ -190,7 +197,7 @@ export default function ReferenceForm({
                       </span>
                     )}
                   </div>
-                  {selectedType === "personal" && (
+                  
                     <div className="group flex w-full flex-col gap-1">
                       <label className="label-text">Template</label>
                       <Controller
@@ -201,10 +208,7 @@ export default function ReferenceForm({
                             {...field}
                             isSearchable={true}
                             styles={customSelectStyles}
-                            options={[
-                              { label: "Template 1" },
-                              { label: "Template 2" },
-                            ]}
+                            options={templateList}
                             placeholder="Select Template"
                             className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                           />
@@ -216,7 +220,7 @@ export default function ReferenceForm({
                         </span>
                       )}
                     </div>
-                  )}
+                  
                   {selectedType === "work" ? (
                     <div className="group flex flex-col space-y-1">
                       <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">

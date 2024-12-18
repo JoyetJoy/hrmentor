@@ -356,9 +356,9 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                     key={item?.id}
                     className="flex items-center gap-3 rounded-lg bg-gray-100 p-3"
                   >
-                    <div className="h-11 w-11 rounded-full bg-gray-dark p-1">
+                    <div className="h-11 w-11 rounded-full bg-gray-dark  overflow-hidden">
                       <img
-                        className=""
+                        className="w-full h-full object-cover "
                         src={item?.profile_image}
                         alt="employee image"
                       />
