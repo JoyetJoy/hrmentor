@@ -265,6 +265,17 @@ export default function AddLeave({
         leave_reason: leaveReason,
       };
 
+      if (
+        !formData?.leave_type_id ||
+        !formData?.total_leave_days ||
+        !formData?.leave_reason ||
+        !formData?.leave_start_date ||
+        !formData?.leave_end_date ||
+        !formData?.leave_periods.length == 0
+      ) {
+        return toast.error("mandatory field missing error");
+      }
+
       let apiUrl = EMPLOYEE_LEAVE_REQUEST; // Default API URL
       if (employeeId) {
         apiUrl = EMPLOYEE_TEAM_LEAVE_APPLY;
