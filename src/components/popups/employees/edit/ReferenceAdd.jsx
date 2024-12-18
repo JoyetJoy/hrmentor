@@ -99,7 +99,13 @@ export default function ReferenceAdd({
 
       formData.append("contact_number", data.contact_number);
       formData.append("designation", data.designation);
-
+      
+      if (selectedType === "work") {
+        if (!data?.company_name || !data?.company_email || !data?.designation) {
+          return toast.error("Filed Missing");
+        }
+      }
+      
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
