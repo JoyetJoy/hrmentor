@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import CreateNews from "./CreateNews";
 
 export default function News() {
   const location = useLocation();
@@ -16,6 +17,7 @@ export default function News() {
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
@@ -25,12 +27,19 @@ export default function News() {
       setPopupOpen(true);
     }
   }, [selectedField]);
+
   // const { setUser, user } = useUserStore((state) => ({
   //   setUser: state.setUser,
   //   user: state.user,
   // }));
   // const u_id = user.id;
-  // Fetch List
+  const handleClick = () => {
+    setPopupOpen(true);
+  };
+
+  const handleClickView = () => {
+    setDeletePopup(true);
+  };
 
   const { data: employeeNews, isLoading } = useQuery({
     queryKey: ["employeeNews", currentPage, keyword],
@@ -47,9 +56,6 @@ export default function News() {
           return res.data;
         }),
   });
-
-  
-
 
   useEffect(() => {
     if (employeeNews) {
@@ -84,9 +90,7 @@ export default function News() {
         header: "Created by",
         accessorKey: "created_by",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.created_by || "NA"}
-          </p>
+          <p className="">{row?.original?.created_by || "NA"}</p>
         ),
       },
       {
@@ -120,8 +124,11 @@ export default function News() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
-              to={""}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
             >
               <Eye className="size-3" />
             </Link>
@@ -134,7 +141,13 @@ export default function News() {
                 className="w-full object-contain"
               />
             </Link>
-            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red">
+            <Link
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
+            >
               <Trash2 className="size-3" />
             </Link>
           </div>
@@ -152,7 +165,15 @@ export default function News() {
         qrKey={"employeeNews"}
         api={NEWS_LISt}
       />
-      
+
+      {/* <CreateNews
+        open={popupOpen}
+        onCancel={setPopupOpen}
+        id={selectedId}
+        qrKey={"employeeNews"}
+        api={NEWS_LISt}
+      /> */}
+
       <NewsEventHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <h1 className="text-base font-semibold">News</h1>

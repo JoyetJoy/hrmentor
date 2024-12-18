@@ -16,7 +16,7 @@ export default function CreateNews({
   setSelectedField,
   qrKey,
   api,
-  uid,
+  id,
 }) {
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();

@@ -29,6 +29,12 @@ export default function DeleteConfirmation({
           toast.success(res?.data?.message);
           onCancel(false);
         }
+        if (res?.status === 200) {
+          queryClient.invalidateQueries([qrkey]);
+          setLoader(false);
+          toast.success(res?.data?.message);
+          onCancel(false);
+        }
         if (res?.data?.status === 201) {
           queryClient.invalidateQueries([qrkey]);
           setLoader(false);

@@ -1,4 +1,5 @@
 import { EVENT_LIST, newRequest, WORK_LOCATIONS } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { useUserStore } from "@/lib/slices/auth.slice";
@@ -12,6 +13,9 @@ export default function Event() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
   const pageLimit = 10;
 
   const { data: eventList, isLoading } = useQuery({
@@ -33,8 +37,13 @@ export default function Event() {
   useEffect(() => {
     if (eventList) {
       setTotalPages(eventList?.last_page);
+      setCurrentPage(eventList?.current_page);
     }
   }, [eventList]);
+
+  const handleClickView = () => {
+    setDeletePopup(true);
+  };
 
   const columns = React.useMemo(
     () => [
@@ -138,7 +147,13 @@ export default function Event() {
                 className="w-full object-contain"
               />
             </Link>
-            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red">
+            <Link
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
+            >
               <Trash2 className="size-3" />
             </Link>
           </div>
@@ -149,6 +164,15 @@ export default function Event() {
   );
   return (
     <div className="h-screen">
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"eventList"}
+        api={EVENT_LIST}
+      />
+
+      
       <NewsEventHeader page={2} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <h1 className="text-base font-semibold">Event</h1>
