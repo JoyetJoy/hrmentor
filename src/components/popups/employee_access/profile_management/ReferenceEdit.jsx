@@ -1,49 +1,51 @@
 import { newFormRequest, newRequest } from "@/api";
 import { referenceSchema } from "@/schema/dashboard/employee/form/reference.schema";
-import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import ReactQuill from "react-quill";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
-import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import { TEMPLATE } from "@/api/master";
+import { Dialog, DialogPanel } from "@headlessui/react";
+
 export default function ReferenceEdit({
-  popupOpen,
-  setPopupOpen,
+  popupAddOpen,
+  setPopupAddOpen,
   selectedField,
   setSelectedField,
   qrKey,
   api,
   uid,
 }) {
-  
   const {
     register,
     handleSubmit,
     control,
     reset,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(referenceSchema),
   });
-  
-  const queryClient = useQueryClient();
-  const [selectedType, setSelectedType] = useState("");
-  const selecteType = watch("document_type_id");
-  const [loader,setLoader] =useState();
 
+  const queryClient = useQueryClient();
+  const [loader, setLoader] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
+
+  const handleTypeChange = (selectedOption) => {
+    setSelectedType(selectedOption.value);
+  };
+
+  // Get selected data
   const { data: employeeReferenceid, isLoading } = useQuery({
     queryKey: ["employeeReferenceid", api, selectedField],
     queryFn: () =>
-      newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
+      newRequest
+        .get(`${"employee-references"}/${selectedField}/edit`)
+        .then((res) => res.data),
     enabled: !!selectedField != 0,
   });
 
@@ -62,43 +64,39 @@ export default function ReferenceEdit({
       setValue("company_email", employeeReferenceid.company_email);
       setValue("company_name", employeeReferenceid.company_name);
       setValue("designation", employeeReferenceid.designation);
+      setValue("contact_number", employeeReferenceid.contact_number);
     }
   }, [employeeReferenceid]);
 
-  // useEffect(() => {
-  //   if (employeeReferenceid) {
-  //     setImage(employeeReferenceid?.document);
-  //   }
-  // }, [employeeReferenceid, setImage]);
-
   function close() {
-    setPopupOpen(false);
+    setPopupAddOpen(false);
     setSelectedField(0);
     setSelectedType(null);
     reset();
   }
 
-  // const handleClearImage = useCallback(() => {
-  //   clearImage();
-  //   setDescription(""); // Reset description if needed
-  // }, [clearImage]);
-
   const onSubmit = async (data) => {
     setLoader(true);
     try {
+      console.log(data?.type, "data?.typedata?.type");
 
-      console.log(data?.type,"data?.typedata?.type");
-      
       const formData = new FormData();
       formData.append("type", data?.type?.value);
       formData.append("employee_id", employeeDetails?.employee_id);
       formData.append("user_id", uid);
+      formData.append("reference_name", data.reference_name);
+      formData.append("personal_email", data.personal_email);
       {
-        data?.type?.value !== "work"
-        ? formData.append("reference_name", data.reference_name) && formData.append("personal_email", data.personal_email)
-        : formData.append("company_email", data.company_email) && formData.append("company_email", data.company_email);;
+        selectedType === "work"
+          ? (formData.append("company_email", data.company_email),
+            formData.append("company_name", data.company_name),
+            formData.append("reference_name", data.reference_name),
+            formData.append("personal_email", data.personal_email))
+          : (formData.append("reference_name", data.reference_name),
+            formData.append("personal_email", data.personal_email));
       }
-      formData.append("company_name", data.company_name);
+
+      formData.append("contact_number", data.contact_number);
       formData.append("designation", data.designation);
 
       let res;
@@ -123,9 +121,10 @@ export default function ReferenceEdit({
     }
   };
 
+  console.log(uid, "designationdesignationdesignation");
   return (
     <Dialog
-      open={popupOpen}
+      open={popupAddOpen}
       as="div"
       className="relative z-10 focus:outline-none"
       onClose={close}
@@ -138,7 +137,7 @@ export default function ReferenceEdit({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-                {selectedField ? "Update" : "Add"} Reference
+                Add Reference
               </h1>
               <button
                 type="button"
@@ -155,13 +154,13 @@ export default function ReferenceEdit({
             ) : (
               <form
                 className="grid grid-cols-1 gap-3"
-                  onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)}
               >
-                <div className="grid grid-cols-1 gap-3 ">
+                <div className="grid grid-cols-1 gap-3">
                   <div className="group flex w-full flex-col gap-1">
                     <label className="label-text">Type</label>
                     <Controller
-                      name="document_type_id"
+                      name="type"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
@@ -174,6 +173,10 @@ export default function ReferenceEdit({
                             { label: "Work", value: "work" },
                             ,
                           ]}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleTypeChange(e);
+                          }}
                           placeholder="Select Type"
                           className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
                         />
@@ -185,8 +188,6 @@ export default function ReferenceEdit({
                       </span>
                     )}
                   </div>
-
-                  {/* Always Displayed Fields */}
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Name of the reference
@@ -201,24 +202,21 @@ export default function ReferenceEdit({
                       </span>
                     )}
                   </div>
-
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Personal Email Address
                     </label>
                     <input
-                      {...register("email", { required: true })}
+                      {...register("personal_email", { required: true })}
                       className="input-box h-10 w-full"
                     />
-                    {errors.email && (
+                    {errors.personal_email && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.email?.message}
+                        {errors.personal_email?.message}
                       </span>
                     )}
                   </div>
-
-                  {/* Conditionally Displayed Fields */}
-                  {selecteType?.value === "work" && (
+                  {selectedType === "work" && (
                     <>
                       <div className="group flex flex-col space-y-1">
                         <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
@@ -264,7 +262,6 @@ export default function ReferenceEdit({
                       </div>
                     </>
                   )}
-
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Contact Number
