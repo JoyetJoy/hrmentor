@@ -34,11 +34,18 @@ export default function TeamLeaveRequest() {
   const pageLimit = 10;
 
   const { data: employeeTeamHolidays } = useQuery({
-    queryKey: ["employeeTeamHolidays"],
+    queryKey: ["employeeTeamHolidays", currentPage],
     queryFn: () =>
-      newRequest.get(EMPLOYEE_TEAM_LEAVE_APPLICATIONS).then((res) => {
-        return res.data;
-      }),
+      newRequest
+        .get(EMPLOYEE_TEAM_LEAVE_APPLICATIONS, {
+          params: {
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
   });
 
   useEffect(() => {

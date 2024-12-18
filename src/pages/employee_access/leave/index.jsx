@@ -136,11 +136,18 @@ export default function Leave() {
   };
 
   const { data: employeeLeaveList } = useQuery({
-    queryKey: ["employeeLeaveList"],
+    queryKey: ["employeeLeaveList", currentPage],
     queryFn: () =>
-      newRequest.get(EMPLOYEE_LEAVE_REQUEST_LIST).then((res) => {
-        return res.data;
-      }),
+      newRequest
+        .get(EMPLOYEE_LEAVE_REQUEST_LIST, {
+          params: {
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
   });
 
   useEffect(() => {

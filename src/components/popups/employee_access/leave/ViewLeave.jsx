@@ -21,9 +21,6 @@ export default function ViewLeave({
     enabled: !!selectedId,
   });
 
-  console.log(employeeLeaveRequestDetails,"employeeLeaveRequestDetailsemployeeLeaveRequestDetails");
-  
-
   function close() {
     setViewLeavePopupOpen(false);
   }
