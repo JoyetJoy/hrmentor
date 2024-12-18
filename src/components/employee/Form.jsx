@@ -143,7 +143,7 @@ export default function SaveEmployeeForm({ formtype }) {
       
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
-      setValue("middle_name", employeeDetails.middle_name);
+      setValue("middle_name", employeeDetails.middle_name||'');
       setValue("post_code", employeeDetails.post_code);
       setValue("sur_name", employeeDetails.sur_name);
       setValue("gender", employeeDetails.gender);
@@ -309,7 +309,8 @@ export default function SaveEmployeeForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    if (imageFile) {
+    console.log(image);
+    if (imageFile || image) {
       setLoader(true);
       handleEmployee(data);
     } else {
@@ -350,10 +351,12 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("state_id", data.state_id?.value);
-    imageFile && formData.append("profile_image", imageFile);
+    formData.append("state_id", data.state_id?.id);
+    imageFile ? formData.append("profile_image", imageFile) : formData.append("profile_image", '')
     formData.append("same_as_home", sameAsHome ? 1 : 0);
-    formData.append("pension_subscription", data.pention_status?.id);
+    formData.append("pension_subscription", data.pension_subscription?.id);
+    console.log(formData);
+    
 
     try {
       let res;
@@ -369,9 +372,7 @@ export default function SaveEmployeeForm({ formtype }) {
         clearImage();
         reset();
         setLoader(false);
-        formtype === "save"
-          ? navigate("/admin/employee")
-          : window.location.reload();
+        navigate("/admin/employee")
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
@@ -1134,7 +1135,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     Pension subscription
                   </label>
                   <Controller
-                    name="pention_status"
+                    name="pension_subscription"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
@@ -1148,9 +1149,9 @@ export default function SaveEmployeeForm({ formtype }) {
                       />
                     )}
                   />
-                  {errors.pention_status && (
+                  {errors.pension_subscription && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.pention?.message}
+                      {errors.pension_subscription?.message}
                     </span>
                   )}
                 </div>

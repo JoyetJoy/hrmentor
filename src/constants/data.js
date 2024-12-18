@@ -86,6 +86,6 @@ export const maritalStatuses = [
 ];
 
 export const pentionStatuses = [
-  { id: 1, label: "Yes", value: "yes" },
-  { id: 2, label: "No", value: "no" },
+  { id: 1, label: "Yes", value: "Yes" },
+  { id: 2, label: "No", value: "No" },
 ];

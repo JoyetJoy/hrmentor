@@ -119,7 +119,7 @@ export const EmployeeSchema = Yup.object({
   }).test("both-required", "Martial status is required", function (value) {
     return value?.value && value?.label;
   }),
-  pention_status: Yup.object({
+  pension_subscription: Yup.object({
     value: Yup.string(),
     label: Yup.string(),
   }).test("both-required", "Pention status is required", function (value) {
