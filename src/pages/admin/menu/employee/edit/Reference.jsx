@@ -129,6 +129,7 @@ export default function EmployeeReferenceEdit() {
             );
           },
         },
+        
         {
           header: "Verification status",
           accessorKey: "status",
