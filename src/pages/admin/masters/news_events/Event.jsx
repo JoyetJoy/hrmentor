@@ -30,6 +30,8 @@ export default function Event() {
         }),
   });
 
+  console.log(eventList, "eventListeventList");
+
   const columns = React.useMemo(
     () => [
       {
@@ -50,48 +52,46 @@ export default function Event() {
       },
       {
         header: "Location",
-        accessorKey: "location",
+        accessorKey: "location_id",
         cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
+          <p className="">{row?.original?.location_id || "NA"}</p>
         ),
       },
       {
         header: "Created by",
-        accessorKey: "created by",
+        accessorKey: "created_by",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.created_by || "NA"}</p>
         ),
       },
       {
         header: "Created on",
         accessorKey: "created on",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
-        ),
+        cell: ({ row }) => {
+          const createdAt = row?.original?.created_at;
+          const formattedDate = createdAt
+            ? new Intl.DateTimeFormat("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }).format(new Date(createdAt))
+            : "-";
+
+          return <p className="">{formattedDate}</p>;
+        },
       },
       {
         header: "Start date",
         accessorKey: "Start date",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
+          <p className="">{row?.original?.start_date || "NA"}</p>
         ),
       },
       {
         header: "End date",
         accessorKey: "end date",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
+          <p className="">{row?.original?.end_date || "NA"}</p>
         ),
       },
       {
@@ -106,7 +106,7 @@ export default function Event() {
             }}
             className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
           >
-            {row?.original?.employee?.employment_status?.status_name || "NA"}
+            {row?.original?.status || "NA"}
           </div>
         ),
       },
@@ -175,7 +175,7 @@ export default function Event() {
       ) : (
         <QueryTable
           columns={columns}
-          list={eventList ?? []}
+          list={eventList?.original ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}

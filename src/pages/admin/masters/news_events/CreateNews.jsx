@@ -31,10 +31,9 @@ export default function CreateNews({
     resolver: yupResolver(newsSchema),
   });
 
-
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-
+  const [content, setContent] = useState("");
   // Get selected data
   const { data: newsid, isLoading } = useQuery({
     queryKey: ["newsid", api, selectedField],
@@ -47,7 +46,7 @@ export default function CreateNews({
       setValue("news_title", newsid.news_title);
       setValue("short_summary", newsid.short_summary);
       setValue("featured_image", newsid.featured_image);
-      setValue("content", newsid.content);
+      setContent(newsid.content);
     }
   }, [newsid]);
 
@@ -63,16 +62,19 @@ export default function CreateNews({
   //   reset();
   // }
 
+  const handleContentChange = (value) => {
+    setContent(value);
+  };
+
   const onSubmit = async (data) => {
     setLoader(true);
     try {
       const formData = new FormData();
       formData.append("news_title", data?.news_title);
       formData.append("short_summary", data?.short_summary);
-      formData.append("content", data.content);
+      formData.append("content", content);
       imageFile && formData.append("featured_image", imageFile);
       let res;
-
 
       if (selectedField) {
         res = await newFormRequest.post(`${"news"}/${selectedField}`, formData);
@@ -127,7 +129,7 @@ export default function CreateNews({
                   autoComplete="off"
                   type="text"
                   placeholder="news title"
-                  {...register("title", { required: true })}
+                  {...register("news_title", { required: true })}
                   className="input-box placeholder:text-[0.8rem]"
                 />
                 {errors.subject && (
@@ -196,9 +198,20 @@ export default function CreateNews({
               <div className="group flex w-1/2 flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Content</label>
                 <ReactQuill
-                  theme="snow"
-                  placeholder={"Write something awesome..."}
-                  className="h-36 w-full rounded-md border border-gray-light"
+                  value={content}
+                  onChange={handleContentChange}
+                  modules={{
+                    toolbar: [
+                      ["bold", "italic", "underline", "strike"],
+                      [{ header: [1, 2, false] }],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      [{ align: [] }],
+                      [{ color: [] }, { background: [] }],
+                      ["link", "image"],
+                      ["clean"],
+                    ],
+                  }}
+                  placeholder="Type your content here..."
                 />
               </div>
             </div>

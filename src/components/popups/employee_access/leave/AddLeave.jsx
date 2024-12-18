@@ -391,18 +391,7 @@ export default function AddLeave({
                     />
                   </div>
                 </div>
-                <div className="flex w-1/2 flex-col gap-2">
-                  <label className="text-sm font-medium">
-                    Reason for Leave
-                  </label>
-                  <textarea
-                    className="input-box overflow-y-min h-20 w-full overflow-y-auto pt-2"
-                    rows="4"
-                    onChange={(e) => {
-                      setLeaveReason(e.target.value);
-                    }}
-                  />
-                </div>
+
                 {dateRange && (
                   <>
                     {dateRange.map((date, index) => {
@@ -499,29 +488,31 @@ export default function AddLeave({
                           )}
 
                           <div key={index}>
-                            {dateCount === shiftOptions.length ? (
-                              <span
-                                className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-red-600 px-3 py-3 text-sm font-medium text-white focus:outline-none data-[hover]:bg-red-700 data-[focus]:outline-1 data-[focus]:outline-white"
-                                onClick={() => handleDelete(index)}
-                              >
-                                <Trash2 className="size-5" />{" "}
-                                {/* Replace with your delete icon */}
-                              </span>
-                            ) : (
-                              <span
-                                className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-green-600 px-3 py-3 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
-                                onClick={() => handleDateShift(date)}
-                              >
-                                <PlusIcon className="size-5" />{" "}
-                                {/* Replace with your add icon */}
-                              </span>
+                            {shiftOptions.length >= 2 && (
+                              <>
+                                {dateCount === shiftOptions.length ? (
+                                  <span
+                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-red-600 px-3 py-3 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:outline-1 focus:outline-white"
+                                    onClick={() => handleDelete(index)}
+                                  >
+                                    <Trash2 className="size-5" />
+                                  </span>
+                                ) : (
+                                  <span
+                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-green-600 px-3 py-3 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:outline-1 focus:outline-white"
+                                    onClick={() => handleDateShift(date)}
+                                  >
+                                    <PlusIcon className="size-5" />
+                                  </span>
+                                )}
+                              </>
                             )}
                           </div>
                         </div>
                       );
                     })}
                     {/* Total Days */}
-                    <div className="flex items-center whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
+                    <div className="group flex items-center justify-between gap-x-2 rounded-md bg-gray-darklight px-6 py-4 font-bold">
                       <h1 className="w-3/5">Total</h1>
                       <h1>
                         {dateRange.length} day{dateRange.length > 1 ? "s" : ""}
@@ -529,7 +520,18 @@ export default function AddLeave({
                     </div>
                   </>
                 )}
-
+                <div className="flex w-1/2 flex-col gap-2">
+                  <label className="text-sm font-medium">
+                    Reason for Leave
+                  </label>
+                  <textarea
+                    className="input-box overflow-y-min h-20 w-full overflow-y-auto pt-2"
+                    rows="4"
+                    onChange={(e) => {
+                      setLeaveReason(e.target.value);
+                    }}
+                  />
+                </div>
                 <div className="mt-4 flex w-1/2 gap-3">
                   <button
                     type="button"

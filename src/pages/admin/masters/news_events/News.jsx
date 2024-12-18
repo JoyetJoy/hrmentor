@@ -48,7 +48,6 @@ export default function News() {
         }),
   });
 
-
   useEffect(() => {
     if (employeeNews) {
       setTotalPages(employeeNews?.last_page);
@@ -73,11 +72,9 @@ export default function News() {
 
       {
         header: "Created by",
-        accessorKey: "created by",
+        accessorKey: "created_by",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.created_by || "NA"}</p>
         ),
       },
       {
@@ -177,7 +174,7 @@ export default function News() {
       ) : (
         <QueryTable
           columns={columns}
-          list={employeeNews ?? []}
+          list={employeeNews?.data ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}
