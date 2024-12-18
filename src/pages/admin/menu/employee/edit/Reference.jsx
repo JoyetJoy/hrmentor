@@ -106,7 +106,7 @@ export default function EmployeeReferenceEdit() {
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
-                {row.original?.company_name}
+                {row.original?.company_name ?? "NA"}
               </div>
             );
           },
@@ -117,7 +117,7 @@ export default function EmployeeReferenceEdit() {
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
-                {row.original?.designation}
+                {row.original?.designation ?? "NA"}
               </div>
             );
           },
