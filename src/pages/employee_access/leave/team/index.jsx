@@ -29,6 +29,8 @@ export default function TeamLeaveRequest() {
     useState("Team_Holiday");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [selectedId, setSelectedId] = useState("");
+
   const pageLimit = 10;
 
   const { data: employeeTeamHolidays } = useQuery({
@@ -44,8 +46,6 @@ export default function TeamLeaveRequest() {
       setTotalPages(employeeTeamHolidays?.last_page);
     }
   }, [employeeTeamHolidays]);
-
-  console.log(employeeTeamHolidays, "employeeTeamHolidaysemployeeTeamHolidays");
 
   const columns = React.useMemo(
     () => [
@@ -139,7 +139,10 @@ export default function TeamLeaveRequest() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
-              onClick={handleClickView}
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
@@ -190,6 +193,7 @@ export default function TeamLeaveRequest() {
       <ViewLeave
         viewLeavePopupOpen={viewLeavePopupOpen}
         setViewLeavePopupOpen={setViewLeavePopupOpen}
+        selectedId={selectedId}
       />
       <AddLeave
         popupOpen={popupOpen}
@@ -201,7 +205,7 @@ export default function TeamLeaveRequest() {
         <h5 className="text-md font-bold">My Leave</h5>
       </div>
       <div className="flex gap-3">
-        {/* <LeaveSideBar /> */}
+        <LeaveSideBar isActive={1} />
         <div className="flex w-full flex-col gap-3">
           <div className="max-w-8xl mb-10 h-screen w-full rounded-md bg-white p-5">
             <div className="mb-2 flex w-full items-center justify-between py-2">
@@ -250,7 +254,7 @@ export default function TeamLeaveRequest() {
             </div>
             <QueryTable
               columns={columns}
-              list={"NA"}
+              list={employeeTeamHolidays?.data}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               totalPages={totalPages}

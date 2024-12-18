@@ -161,13 +161,12 @@ export default function Leave() {
     }
   }, [selectedId]);
 
-  console.log(leaveDetails, "cdcdc");
-
   return (
     <div className="flex flex-col">
       <ViewLeave
         viewLeavePopupOpen={viewLeavePopupOpen}
         setViewLeavePopupOpen={setViewLeavePopupOpen}
+        selectedId={selectedId}
       />
       <AddLeave popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Leave"} />
