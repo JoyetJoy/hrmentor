@@ -154,7 +154,7 @@ export default function TeamLeaveRequest() {
             >
               <Eye className="size-3" />
             </Link>
-            <button
+            {/* <button
               type="button"
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
@@ -165,7 +165,7 @@ export default function TeamLeaveRequest() {
             </button>
             <Link className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2">
               <Trash2 className="size-3" />
-            </Link>
+            </Link> */}
           </div>
         ),
       },
