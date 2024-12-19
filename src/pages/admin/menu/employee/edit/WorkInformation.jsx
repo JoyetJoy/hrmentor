@@ -24,7 +24,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { WorkInfoSchema } from "@/schema/dashboard/employee/form/workinfo.schema";
 
-export const WorkInformation = () => {
+export const WorkInformation = ({ formtype }) => {
   const [reportNotRequired, setReportNotRequired] = useState(false);
   const [loader, setLoader] = useState(false);
   const {
@@ -32,42 +32,67 @@ export const WorkInformation = () => {
     handleSubmit,
     control,
     setValue,
+    reset,
+    setError,
+    watch,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(WorkInfoSchema(reportNotRequired)),
+    resolver: yupResolver(WorkInfoSchema),
   });
 
   const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
+  const [localState, setLocalState] = useState(null);
 
-  // GET DETAILS IN CASE OF UPDATE
-  const { data: empWorkInfoDetail, isLoading } = useQuery({
-    queryKey: ["empWorkInfoDetail", uid],
+  const {
+    data: empWorkInfoDetail,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["empWorkInfoDetail", uid, formtype],
     queryFn: () =>
       newRequest.get(`${EMPLOYEE_WORK_INFO}/${uid}`).then((res) => {
         return res.data;
       }),
+
     enabled: !!uid,
   });
-  console.log(empWorkInfoDetail);
   useEffect(() => {
     if (empWorkInfoDetail) {
-      setValue("hiring_manager_id", empWorkInfoDetail?.hiringManager);
-      setValue("reporting_manager_id", empWorkInfoDetail?.reportingManager);
-      setValue("ethinicity_id", empWorkInfoDetail?.ethnicity);
-      setValue("eeo_job_category_id", empWorkInfoDetail?.eeoJobCategory);
+      setValue("hiring_manager_id", empWorkInfoDetail?.hiringManager?.id);
+      setValue("reporting_manager_id", empWorkInfoDetail?.reportingManager?.id);
+      setValue("ethinicity_id", empWorkInfoDetail?.ethnicity?.id);
+      setValue("eeo_job_category_id", empWorkInfoDetail?.eeoJobCategory?.id);
       setValue("notice_period", empWorkInfoDetail?.notice_period);
       setValue("probation_period", empWorkInfoDetail?.probation_period);
       setValue("relegion_belief_id", empWorkInfoDetail?.relegion_belief_id);
       setValue(
         "sexual_orientation_id",
-        empWorkInfoDetail?.sexual_orientation_id,
+        empWorkInfoDetail?.sexual_orientation?.id,
       );
+      setValue("gender", empWorkInfoDetail?.gender?.id);
+      setValue("marital_status", empWorkInfoDetail?.marital_status);
+      setValue("disability", empWorkInfoDetail?.disability?.id);
+      setValue(
+        "pregnancy_and_maternity",
+        empWorkInfoDetail?.pregnancy_and_maternity,
+      );
+      setValue("probation_period", empWorkInfoDetail?.probation_period);
+      setValue("age", empWorkInfoDetail?.age);
     }
   }, [empWorkInfoDetail, setValue]);
+
+  useEffect(() => {
+    if (uid) {
+      refetch().then((response) => {
+        console.log("Data refetched", response);
+        setLocalState(response?.data);
+      });
+    }
+  }, [uid, refetch]);
 
   useEffect(() => {
     if (empWorkInfoDetail) {
@@ -84,18 +109,26 @@ export const WorkInformation = () => {
 
   const handleSave = async (data) => {
     const formData = new FormData();
+
     formData.append("user_id", uid);
-    formData.append("hiring_manager_id", data.hiring_manager_id?.id ?? 0);
-    formData.append("reporting_manager_id", data.reporting_manager_id?.id ?? 0);
-    formData.append("ethinicity_id", data.ethinicity_id?.id);
-    formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
-    formData.append("relegion_belief_id", data.relegion_belief_id?.id);
-    formData.append("sexual_orientation_id", data.sexual_orientation_id?.id);
+    formData.append("hiring_manager_id", data.hiring_manager_id);
+    formData.append("reporting_manager_id", data.reporting_manager_id);
+    formData.append("ethinicity_id", data.ethinicity_id);
+    formData.append("eeo_job_category_id", data.eeo_job_category_id);
+    formData.append("relegion_belief_id", data.relegion_belief_id);
+    formData.append("sexual_orientation_id", data.sexual_orientation_id);
+    formData.append("pregnancy_and_maternity", data.pregnancy_and_maternity);
+    formData.append("gender", data.gender);
+    formData.append("marital_status", data.marital_status);
+    formData.append("disability", data.disability);
     formData.append("age", data.age);
-    formData.append("religious", data.religious);
     formData.append("dosent_reporting", reportNotRequired ? 1 : 0);
+
     try {
-      const res = await newFormRequest.post(EMPLOYEE_WORK_INFO, formData);
+      const res = await newFormRequest.post(
+        `employee-work-informations`,
+        formData,
+      );
       if (res?.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["empWorkInfoDetail"]);
@@ -193,16 +226,25 @@ export const WorkInformation = () => {
                         name="reporting_manager_id"
                         control={control}
                         rules={{ required: true }}
-                        render={({ field }) => (
-                          <Select
-                            {...field}
-                            isSearchable={true}
-                            styles={customSelectStyles}
-                            options={activeEmployeeList}
-                            placeholder="Select"
-                            className="input-box"
-                          />
-                        )}
+                        render={({ field }) =>
+                          // Check if activeEmployeeList is available and has data
+                          activeEmployeeList &&
+                          activeEmployeeList.length > 0 ? (
+                            <Select
+                              {...field}
+                              isSearchable={true}
+                              styles={customSelectStyles}
+                              options={activeEmployeeList}
+                              value={activeEmployeeList.find(
+                                (item) => item.id === field.value,
+                              )}
+                              placeholder="Select"
+                              className="input-box"
+                            />
+                          ) : (
+                            <p>Loading...</p>
+                          )
+                        }
                       />
                       {errors.reporting_manager_id && (
                         <span className="text-xs font-medium text-red-500">
@@ -216,16 +258,24 @@ export const WorkInformation = () => {
                         name="hiring_manager_id"
                         control={control}
                         rules={{ required: true }}
-                        render={({ field }) => (
-                          <Select
-                            {...field}
-                            isSearchable={true}
-                            styles={customSelectStyles}
-                            options={activeEmployeeList}
-                            placeholder="Select hiring manager"
-                            className="input-box"
-                          />
-                        )}
+                        render={({ field }) =>
+                          activeEmployeeList &&
+                          activeEmployeeList.length > 0 ? (
+                            <Select
+                              {...field}
+                              isSearchable={true}
+                              styles={customSelectStyles}
+                              options={activeEmployeeList}
+                              value={activeEmployeeList.find(
+                                (item) => item.id === field.value,
+                              )}
+                              placeholder="Select"
+                              className="input-box"
+                            />
+                          ) : (
+                            <p>Loading...</p>
+                          )
+                        }
                       />
                       {errors.hiring_manager_id && (
                         <span className="text-xs font-medium text-red-500">
@@ -244,18 +294,27 @@ export const WorkInformation = () => {
                     <input
                       autoComplete="off"
                       type="number"
+                      name="age"
                       placeholder="Enter"
                       {...register("age", { required: true })}
                       onKeyPress={(event) => {
                         if (
                           !/^[0-9]$/.test(event.key) ||
-                          event.target.value.length >= 3
+                          event.target.value.length >= 2
                         ) {
                           event.preventDefault();
                         }
                       }}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        if (value && !isNaN(value)) {
+                          setValue("age", value);
+                        }
+                      }}
                       className="input-box placeholder:text-[0.8rem]"
+                      value={watch("age")}
                     />
+
                     {errors.age && (
                       <span className="text-xs font-medium text-red-500">
                         {errors.age?.message}
@@ -268,16 +327,23 @@ export const WorkInformation = () => {
                       name="eeo_job_category_id"
                       control={control}
                       rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          options={eeoJobCategoryList}
-                          placeholder="Select"
-                          className="input-box"
-                        />
-                      )}
+                      render={({ field }) =>
+                        eeoJobCategoryList && eeoJobCategoryList.length > 0 ? (
+                          <Select
+                            {...field}
+                            isSearchable={true}
+                            styles={customSelectStyles}
+                            options={eeoJobCategoryList}
+                            value={eeoJobCategoryList.find(
+                              (item) => item.id === field.value,
+                            )}
+                            placeholder="Select"
+                            className="input-box"
+                          />
+                        ) : (
+                          <p>Loading...</p>
+                        )
+                      }
                     />
                     {errors.eeo_job_category_id && (
                       <span className="text-xs font-medium text-red-500">
@@ -287,20 +353,28 @@ export const WorkInformation = () => {
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Ethinicity</label>
+
                     <Controller
                       name="ethinicity_id"
                       control={control}
                       rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          options={ethinicityList}
-                          placeholder="Select"
-                          className="input-box"
-                        />
-                      )}
+                      render={({ field }) =>
+                        ethinicityList && ethinicityList.length > 0 ? (
+                          <Select
+                            {...field}
+                            isSearchable={true}
+                            styles={customSelectStyles}
+                            options={ethinicityList}
+                            value={ethinicityList.find(
+                              (item) => item.id === field.value,
+                            )}
+                            placeholder="Select"
+                            className="input-box"
+                          />
+                        ) : (
+                          <p>Loading...</p>
+                        )
+                      }
                     />
                     {errors.ethinicity_id && (
                       <span className="text-xs font-medium text-red-500">
@@ -320,6 +394,9 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={religiousSexualList?.religious}
+                          value={religiousSexualList?.religious.find(
+                            (item) => item.id === field.value,
+                          )}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -343,6 +420,9 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={genders}
+                          value={genders.find(
+                            (item) => item.id === field.value,
+                          )} // Match based on `id`
                           placeholder="Select"
                           className="input-box"
                         />
@@ -366,6 +446,12 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={religiousSexualList?.sexualOrientations}
+                          value={religiousSexualList?.sexualOrientations.find(
+                            (item) => item.id == field.value,
+                          )}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption?.id);
+                          }}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -379,8 +465,9 @@ export const WorkInformation = () => {
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Marital status</label>
+
                     <Controller
-                      name="maritalstatus"
+                      name="marital_status"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
@@ -389,21 +476,27 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={maritalStatuses}
+                          value={maritalStatuses?.find(
+                            (item) => item.value === field.value,
+                          )}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption?.value); // Use id from selected option
+                          }}
                           placeholder="Select"
                           className="input-box"
                         />
                       )}
                     />
-                    {errors.maritalstatus && (
+                    {errors.marital_status && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.maritalstatus?.message}
+                        {errors.marital_status?.message}
                       </span>
                     )}
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Pregnancy & maternity</label>
                     <Controller
-                      name="pregnancy"
+                      name="pregnancy_and_maternity"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
@@ -412,23 +505,20 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={successStatus}
+                          value={successStatus.find(
+                            (item) => item.value === field.value,
+                          )}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption?.value); // Use id from selected option
+                          }}
                           placeholder="Select"
                           className="input-box"
                         />
                       )}
                     />
-                    {/* <input
-                      {...register("pregnancy", {
-                        required: "pregnancy is required",
-                      })}
-                      autoComplete="off"
-                      placeholder="Enter"
-                      type="text"
-                      className="input-box"
-                    /> */}
-                    {errors.pregnancy && (
+                    {errors.pregnancy_and_maternity && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.pregnancy?.message}
+                        {errors.pregnancy_and_maternity?.message}
                       </span>
                     )}
                   </div>
@@ -437,7 +527,7 @@ export const WorkInformation = () => {
                       Physical / Mental disability{" "}
                     </label>
                     <Controller
-                      name="physical"
+                      name="disability"
                       control={control}
                       rules={{ required: true }}
                       render={({ field }) => (
@@ -446,6 +536,9 @@ export const WorkInformation = () => {
                           isSearchable={true}
                           styles={customSelectStyles}
                           options={successStatus}
+                          value={successStatus.find(
+                            (item) => item.value === field.value,
+                          )}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -453,7 +546,7 @@ export const WorkInformation = () => {
                     />
                     {errors.physical && (
                       <span className="text-xs font-medium text-red-500">
-                        {errors.physical?.message}
+                        {errors.disability?.message}
                       </span>
                     )}
                   </div>

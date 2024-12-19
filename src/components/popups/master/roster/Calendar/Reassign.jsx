@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Search } from "lucide-react";
+import { newRequest, SHIFT_CLAIM } from "@/api";
+import toast from "react-hot-toast";
 
-function Reassign({ popupOpen, setPopupOpen, type }) {
+function Reassign({ popupOpen, setPopupOpen, type, id }) {
   const [keyword, setKeyword] = useState("");
   const [results, setResults] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [claimcount, setClaimcount] = useState(0);
 
   // Mock data for demonstration
   const employees = [
@@ -39,15 +42,27 @@ function Reassign({ popupOpen, setPopupOpen, type }) {
     setKeyword("");
   };
 
-  const handleSave = () => {
-    if (selectedEmployee) {
-      console.log("Selected Employee:", selectedEmployee);
-      alert(`Employee ${selectedEmployee.name} selected!`);
-      setPopupOpen(false);
-    } else {
-      alert("Please select an employee before saving.");
+  const handleSave = async () => {
+    try {
+      let data;
+      let res;
+  
+      if (type === "claim") {
+        data = { roster_id: id, auto_close_at_claim: claimcount };
+      }
+  
+      if (data) {
+        res = await newRequest.post(SHIFT_CLAIM, data);
+        // Handle successful response
+        toast.success(res?.data?.message)
+        setPopupOpen(false)
+      }
+    } catch (error) {
+      // Handle error
+      console.error("Error saving data:", error);
     }
   };
+  
 
   return (
     <Dialog
@@ -151,7 +166,15 @@ function Reassign({ popupOpen, setPopupOpen, type }) {
               <>
               <div className="text-sm flex gap-2 items-center">
                 <p>Auto Close at</p>
-                <input type="text" className="border h-8 w-40 rounded-md text-sm px-2"/>
+                <input
+                  type="number"
+                  className="border h-8 w-40 rounded-md text-sm px-2"
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/[eE]/g, '');
+                    setClaimcount(e.target.value)
+                  }}
+                />
+
                 <p>Requests</p>
               </div>
               <div className="w-full flex mt-5 justify-center items-center">

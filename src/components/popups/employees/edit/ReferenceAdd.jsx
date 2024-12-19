@@ -144,7 +144,7 @@ export default function ReferenceAdd({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-                Add Reference
+              {selectedField ? "Update" : "Add"} Reference
               </h1>
               <button
                 type="button"

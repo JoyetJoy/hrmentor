@@ -163,3 +163,6 @@ export const ROSTER_CLAIM = "get-and-show-roster-count-details"
 
 // Admin event
 export const EVENT_LIST = "events";
+
+//Shift claim
+export const SHIFT_CLAIM = "shift-claim-on-of";

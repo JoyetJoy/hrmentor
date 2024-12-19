@@ -27,8 +27,11 @@ export const RosterCalendarView = ({ api, selectedId, selecteDate }) => {
   const id = queryParams.get("id");
   const date = queryParams.get("date");
 
+  console.log(id,date);
+  
+
   const { data: rosterCalim, isLoading } = useQuery({
-    queryKey: ["rosterCalim", currentPage, keyword],
+    queryKey: ["rosterCalim", currentPage, keyword, id, date],
     queryFn: () =>
       newRequest
         .get(`${ROSTER_CLAIM}/${id}/${date}`, {
@@ -41,6 +44,7 @@ export const RosterCalendarView = ({ api, selectedId, selecteDate }) => {
         .then((res) => {
           return res.data;
         }),
+        enabled : !!id && !!date
   });
 
   useEffect(() => {
@@ -56,27 +60,24 @@ export const RosterCalendarView = ({ api, selectedId, selecteDate }) => {
         <Loader />
       ) : (
         <div className="flex min-h-[32rem] flex-col gap-2 pt-2">
-          <Rosteroveview api={ROSTER_CLAIM} />
+          <Rosteroveview rosterCalim={rosterCalim} />
           <div className="grid h-full grid-cols-3 gap-2">
             <div className="flex h-fit flex-col gap-y-3 rounded-md">
               <CalanderShift
-                api={ROSTER_CLAIM}
-                // selectedId={}
-                // selecteDate={}
+                rosterCalim={rosterCalim}
+                isLoading={isLoading}
               />
             </div>
             <div className="min-h-[29rem] rounded-md bg-white pb-7">
               <CalendarEmployees
-                api={ROSTER_CLAIM}
-                //  selectedId={}
-                //  selecteDate={}
+                rosterCalim={rosterCalim}
+                isLoading={isLoading}
               />
             </div>
             <div className="min-h-[29rem] flex-col gap-y-3 rounded-md bg-white">
               <CalendarShiftHistory
-                api={ROSTER_CLAIM}
-                //  selectedId={}
-                //  selecteDate={}
+                rosterCalim={rosterCalim}
+                isLoading={isLoading}
               />
             </div>
           </div>

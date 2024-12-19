@@ -25,7 +25,7 @@ export default function DbsEditForm({
   api,
   uid,
 }) {
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
+  const { image, imageFile, clearImage, setImage } =
     useImageUpload();
 
   const {
@@ -42,6 +42,23 @@ export default function DbsEditForm({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  // const [image, setImage] = useState(null);
+  const [isImageClicked, setIsImageClicked] = useState(false); // Track if the image is clicked
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageClick = () => {
+    setIsImageClicked(true);
+  };
 
   // Get selected data
   const { data: employeeDbsCheckDetailByid, isLoading } = useQuery({
@@ -74,11 +91,11 @@ export default function DbsEditForm({
     }
   }, [employeeDbsCheckDetailByid]);
 
-  useEffect(() => {
-    if (employeeDbsCheckDetailByid) {
-      setImage(employeeDbsCheckDetailByid?.document);
-    }
-  }, [employeeDbsCheckDetailByid, setImage]);
+  // useEffect(() => {
+  //   if (employeeDbsCheckDetailByid) {
+  //     setImage(employeeDbsCheckDetailByid?.document);
+  //   }
+  // }, [employeeDbsCheckDetailByid, setImage]);
 
   function close() {
     setPopupOpen(false);
@@ -254,35 +271,52 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Document (optional)
-                  </label>
-                  <label
-                    htmlFor="document"
-                    className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md border border-dashed bg-gray-soft px-2"
-                  >
-                    <div className="flex items-center justify-between gap-32">
-                      <span className="flex items-center whitespace-nowrap text-xs font-semibold text-black/50">
-                        <ArrowUpFromLine className="size-4" />
-                        Upload Certificate
-                      </span>
-                      <Eye className="size-4" />
-                    </div>
-                    <input
-                      id="document"
-                      onChange={handleImageChange}
-                      type="file"
-                      className="hidden"
-                    />
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <img
-                      className="h-40 w-40 rounded-md object-cover"
-                      src={image}
-                      alt="Preview"
-                    />
-                  </div>
-                </div>
+      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+        Document (optional)
+      </label>
+      <label
+        htmlFor="document"
+        className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md border border-dashed bg-gray-soft px-2"
+      >
+        <div className="flex items-center justify-between gap-32">
+          <span className="flex items-center whitespace-nowrap text-xs font-semibold text-black/50">
+            <ArrowUpFromLine className="size-4" />
+            Upload Certificate
+          </span>
+          {image && <Eye className="size-4" />}
+        </div>
+        <input
+          id="document"
+          onChange={handleImageChange}
+          type="file"
+          className="hidden"
+        />
+      </label>
+
+      {/* Only display the preview if an image is uploaded */}
+      {image && (
+        <div className="flex items-center gap-2">
+          <img
+            className="h-40 w-40 rounded-md object-cover cursor-pointer"
+            src={image}
+            alt="Preview"
+            onClick={handleImageClick}
+          />
+        </div>
+      )}
+
+      {/* Optionally display the image in a larger modal or full screen */}
+      {isImageClicked && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div
+            className="bg-white p-4 rounded-md"
+            onClick={() => setIsImageClicked(false)}
+          >
+            <img src={image} alt="Full Screen Preview" className="h-auto w-full" />
+          </div>
+        </div>
+      )}
+    </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="label-text required">Status</label>
                   <Controller

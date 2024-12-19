@@ -148,16 +148,11 @@ const RosterCalendar = () => {
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
 
-  const handleClick = (event) => {
+  const handleClick = (event,date) => {
     if (!event?.isHoliday) {
-      console.log(event, date);
-      const selectdate = new Date(date);
-      const formattedDate = selectdate
-        .toISOString()
-        .slice(0, 10)
-        .replace(/-/g, "/");
+      const selectdate = dayjs(date).format("YYYY-MM-DD");
         if(date){
-          navigate(`/admin/roster/calendarview?id=${event?.id}&date=${formattedDate}`);
+          navigate(`/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`);
         }
     }
   };
@@ -251,6 +246,7 @@ const RosterCalendar = () => {
                       requestedSlots,
                     } = findEvents(date);
                     console.log(shiftEvents);
+                    
 
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
@@ -278,7 +274,7 @@ const RosterCalendar = () => {
                           {shiftEvents?.slice(0, 2)?.map((event, index) => (
                             <div
                               key={index}
-                              onClick={() => handleClick(event)}
+                              onClick={() => handleClick(event,date)}
                               className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 px-3 py-3 lg:w-36 xl:w-44 ${getTileClass(
                                 date,
                                 event,
