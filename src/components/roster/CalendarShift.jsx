@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeaveRequest from "../popups/master/roster/Calendar/LeaveRequest";
 
-export default function CalanderShift() {
+export default function CalanderShift({rosterCalim, isLoading}) {
   const [leaveOpen, setLeaveOpen] = useState(false);
   const [claimOpen, setClaimOpen] = useState(false);
   const [leavepopup, setLeavepopup] = useState(false);
@@ -16,22 +16,6 @@ export default function CalanderShift() {
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("");
   const pageLimit = 10;
-
-  const { data: rosterCalim, isLoading } = useQuery({
-    queryKey: ["rosterCalim", currentPage, keyword],
-    queryFn: () =>
-      newRequest
-        .get(`${ROSTER_CLAIM}/5/2024-12-13`, {
-          params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        }),
-  });
 
   useEffect(() => {
     if (rosterCalim) {
@@ -104,8 +88,9 @@ export default function CalanderShift() {
 
               {leaveOpen && (
                 <div className="flex w-full items-center justify-center">
-                  <div
-                    // key={candidate?.id}
+                {rosterCalim?.roster_details?.leave_employees.map((employee)=>(
+                    <div
+                    key={employee?.id}
                     onClick={() => {
                       setLeavepopup(true);
                       setType("leave");
@@ -114,16 +99,16 @@ export default function CalanderShift() {
                   >
                     <div className="flex items-center gap-x-2">
                       <div className="flex h-11 w-11 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
-                        {rosterCalim?.roster_details?.leave_employees[0]?.employee_name[0]}
+                        {employee?.employee_name[0]}
                       </div>
                       <div>
                         <h3 className="text-base font-semibold">
                           <span className="mr-1">
-                          {rosterCalim?.roster_details?.leave_employees[0]?.employee_name}
+                          {employee?.employee_name}
                           </span>
                         </h3>
                         <p className="text-xs font-medium text-darkblack">
-                        {rosterCalim?.roster_details?.leave_employees[0]?.employee_designation_name}
+                        {employee?.employee_designation_name}
                         </p>
                       </div>
                     </div>
@@ -134,6 +119,11 @@ export default function CalanderShift() {
                       <ChevronRight className="size-3" />
                     </button>
                   </div>
+                ))}
+                {rosterCalim?.roster_details?.leave_employees.length === 0 && (
+                  <p className="text-sm text-black">No data</p>
+                )
+                }
                 </div>
               )}
 
@@ -150,8 +140,9 @@ export default function CalanderShift() {
 
               {claimOpen && (
                 <div className="flex w-full items-center justify-center">
-                  <div
-                    // key={candidate?.id}
+                  {rosterCalim?.roster_details?.shift_claim_requests?.map((claimedEmployee)=>(
+                    <div
+                    key={claimedEmployee?.id}
                     onClick={() => {
                       setLeavepopup(true);
                       setType("claimed");
@@ -161,18 +152,18 @@ export default function CalanderShift() {
                     <div className="flex items-center gap-x-2">
                       <div className="flex h-11 w-11 min-w-[2.75rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
                         {/* {`${candidate?.first_name?.charAt(0)} ${candidate?.sur_name?.charAt(0)}`} */}
-                        {rosterCalim?.roster_details?.shift_claim_requests[0]?.employee_name[0]}
+                        {claimedEmployee?.employee_name[0]}
 
                       </div>
                       <div>
                         <h3 className="text-base font-semibold">
                           <span className="mr-1">
-                          {rosterCalim?.roster_details?.shift_claim_requests[0]?.employee_name}
+                          {claimedEmployee?.employee_name}
 
                           </span>
                         </h3>
                         <p className="text-xs font-medium text-darkblack">
-                          {rosterCalim?.roster_details?.shift_claim_requests[0]
+                          {claimedEmployee
                             ?.employee_designation_name}
                         </p>
                       </div>
@@ -187,6 +178,7 @@ export default function CalanderShift() {
                       <ChevronRight className="size-3" />
                     </button>
                   </div>
+                  ))}
                 </div>
               )}
             </>

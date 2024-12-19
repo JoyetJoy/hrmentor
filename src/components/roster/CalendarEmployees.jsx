@@ -6,29 +6,13 @@ import Reassign from "../popups/master/roster/Calendar/Reassign";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-function CalendarEmployees({ api }) {
+function CalendarEmployees({ rosterCalim }) {
   const [popupOpen, setPopupOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("");
   const pageLimit = 10;
-
-  const { data: rosterCalim, isLoading } = useQuery({
-    queryKey: ["rosterCalim", currentPage, keyword],
-    queryFn: () =>
-      newRequest
-        .get(`${api}/5/2024-12-13`, {
-          params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        }),
-  });
 
   useEffect(() => {
     if (rosterCalim) {

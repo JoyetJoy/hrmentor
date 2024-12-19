@@ -4,28 +4,12 @@ import { newRequest, ROSTER_CLAIM } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
-function Rosteroveview({ api }) {
+function Rosteroveview({ rosterCalim }) {
   const [isOn, setIsOn] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
-
-  const { data: rosterCalim, isLoading } = useQuery({
-    queryKey: ["rosterCalim", currentPage, keyword],
-    queryFn: () =>
-      newRequest
-        .get(`${api}/5/2024-12-13`, {
-          params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        }),
-  });
 
   useEffect(() => {
     if (rosterCalim) {
@@ -37,7 +21,7 @@ function Rosteroveview({ api }) {
 
   return (
     <div className="mx-3 mb-2 flex items-center justify-between">
-      <Reassign popupOpen={isOn} setPopupOpen={setIsOn} type={"claim"} />
+      <Reassign popupOpen={isOn} setPopupOpen={setIsOn} type={"claim"} id={rosterCalim?.roster_details?.roster_id} />
       <div className="flex items-center gap-2 font-semibold text-black">
         <div className="flex gap-36">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
@@ -51,6 +35,9 @@ function Rosteroveview({ api }) {
                 if (isOn) {
                   setIsOn(false);
                 } else {
+                  if(rosterCalim?.roster_details?.shift_details?.people_required === rosterCalim?.roster_details?.shift_claimed_employees_count){
+                    setIsOn(false)
+                  }
                   setIsOn(true);
                 }
               }}
