@@ -17,7 +17,6 @@ export const eventsSchema = Yup.object({
   end_date: Yup.string(),
   start_time: Yup.string(),
   end_time: Yup.string(),
-  featured_image: Yup.string(),
   content: Yup.string(),
   location_id: Yup.string(),
 });

@@ -341,7 +341,7 @@ export const activityItems = [
   },
   {
     icon: "/assets/icons/admin/newsEvent.svg",
-    label: "News & Event ",
+    label: "News & Events ",
     path: "admin/news-event/news",
   },
 
@@ -567,6 +567,6 @@ export const employeeaccessItems = [
 //ADMIN NEWS & EVENT HEADER
 export const newsEventHeaderList = [
   { id: 1, name: "News", link: "/admin/news-event/news" },
-  { id: 2, name: "Event", link: "/admin/news-event/event" },
+  { id: 2, name: "Events", link: "/admin/news-event/event" },
  
 ];

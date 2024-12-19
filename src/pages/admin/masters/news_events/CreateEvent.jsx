@@ -3,24 +3,30 @@ import NewsEventHeader from "@/components/common/NewsEventHeader";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpFromLine, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { eventsSchema } from "@/schema/dashboard/employee/masters/news.schema";
 import useImageUpload from "@/hooks/useImageUpload";
 import toast from "react-hot-toast";
 
-export default function CreateEvent(selectedField) {
+export default function CreateEvent() {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const popup = searchParams.get("popup");
+
   const [loading, setLoding] = useState();
   const { user } = useUserStore((state) => ({ user: state.user }));
   const [loader, setLoader] = useState(false);
   const [content, setContent] = useState("");
   const [locationId, setLocationId] = useState("");
+  const [locationName, setLocationName] = useState("");
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -32,6 +38,28 @@ export default function CreateEvent(selectedField) {
     mode: "onSubmit",
     resolver: yupResolver(eventsSchema),
   });
+
+  const { data: eventDetails, isLoading } = useQuery({
+    queryKey: ["eventDetails", id],
+    queryFn: () =>
+      newRequest.get(`${"events"}/${id}`).then((res) => res?.data?.original),
+    enabled: !!id != 0,
+  });
+
+  useEffect(() => {
+    if (eventDetails) {
+      setValue("event_title", eventDetails.event_title);
+      setValue("short_summary", eventDetails.short_summary);
+      setValue("featured_image", eventDetails.featured_image);
+      setValue("start_date", eventDetails.start_date);
+      setValue("end_date", eventDetails.end_date);
+      setValue("start_time", eventDetails.start_time);
+      setValue("end_time", eventDetails.end_time);
+      setContent(eventDetails.content);
+      setLocationName(eventDetails.location_id);
+      setImage(eventDetails?.featured_image);
+    }
+  }, [eventDetails]);
 
   const { data: locationList, error } = useQuery({
     queryKey: ["locationList", user?.id],
@@ -63,11 +91,28 @@ export default function CreateEvent(selectedField) {
       formData.append("location_id", locationId);
       let res;
 
-      res = await newFormRequest.post(EVENT_LIST, formData);
+      if (
+        !formData?.event_title ||
+        !formData?.short_summary ||
+        !formData?.start_date ||
+        !formData?.end_date ||
+        !formData?.start_time ||
+        !formData?.end_time ||
+        !formData?.content ||
+        !formData?.location_id
+      ) {
+        return toast.error("mandatory field missing error");
+      }
+
+      if (id) {
+        res = await newFormRequest.post(`${"events"}/${id}`, formData);
+      } else {
+        res = await newFormRequest.post(EVENT_LIST, formData);
+      }
 
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
-        queryClient.invalidateQueries([qrKey]);
+        queryClient.invalidateQueries(["events"]);
         close();
       }
     } catch (error) {
@@ -83,21 +128,25 @@ export default function CreateEvent(selectedField) {
       <NewsEventHeader page={2} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3 mt-2 flex items-center justify-between">
-          <h1 className="text-base font-semibold">Event</h1>
+          <h1 className="text-base font-semibold">Events</h1>
           <div className="flex items-center gap-2">
-            <Link
-              to={""}
-              className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
-            >
-              Save as draft
-            </Link>
-            <button
-              type="submit"
-              to={""}
-              className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
-            >
-              Publish
-            </button>
+            {popup !== "view" && (
+              <>
+                <Link
+                  to={""}
+                  className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
+                >
+                  Save as draft
+                </Link>
+                <button
+                  type="submit"
+                  to={""}
+                  className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
+                >
+                  Publish
+                </button>
+              </>
+            )}
           </div>
         </div>
         {loading ? (
@@ -106,7 +155,10 @@ export default function CreateEvent(selectedField) {
           </div>
         ) : (
           <div className="h-screen w-full rounded-md bg-white p-7">
-            <h1 className="mb-7 text-base font-bold">Create Event</h1>
+            <h1 className="mb-7 text-base font-bold">
+              {" "}
+              {popup !== "view" ? "Create Events" : "View Events"}
+            </h1>
             <div className="flex flex-col">
               <div className="group flex w-1/2 flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Event Title</label>
@@ -187,6 +239,7 @@ export default function CreateEvent(selectedField) {
                   <label className="label-text">End Time</label>
                   <input
                     autoComplete="off"
+                    min={"start_time"}
                     type="time"
                     {...register("end_time", { required: true })}
                     className="input-box pr-2 placeholder:text-[0.8rem]"
@@ -215,7 +268,13 @@ export default function CreateEvent(selectedField) {
                           className="input-box w-full"
                           onChange={(e) => {
                             setLocationId(e?.id);
+                            setLocationName(e?.label);
                           }}
+                          value={
+                            locationList?.find(
+                              (option) => option.label === locationName,
+                            ) || null
+                          }
                         />
                       )}
                     />

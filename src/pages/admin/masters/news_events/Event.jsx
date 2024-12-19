@@ -6,7 +6,7 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Event() {
   const [loading, setLoding] = useState();
@@ -15,6 +15,7 @@ export default function Event() {
   const [keyword, setKeyword] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const navigate = useNavigate();
 
   const pageLimit = 10;
 
@@ -43,6 +44,23 @@ export default function Event() {
 
   const handleClickView = () => {
     setDeletePopup(true);
+  };
+
+  const renderStatusBadge = (status) => {
+    const statusColors = {
+      draft: "bg-yellow-100 text-yellow-600",
+      expired: "bg-blue-100 text-blue-600",
+      Canceled: "bg-purple-100 text-purple-600",
+      "On hold": "bg-red-100 text-red-600",
+      upcoming: "bg-green-100 text-green-600",
+    };
+    return (
+      <span
+        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
+      >
+        {status}
+      </span>
+    );
   };
 
   const columns = React.useMemo(
@@ -115,16 +133,7 @@ export default function Event() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div
-            style={{
-              backgroundColor:
-                row?.original?.employee?.employment_status?.background_color,
-              color: row?.original?.employee?.employment_status?.text_color,
-            }}
-            className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
-          >
-            {row?.original?.status || "NA"}
-          </div>
+          <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
         ),
       },
       {
@@ -133,13 +142,19 @@ export default function Event() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
-              to={""}
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-event?id=${id}&&popup=view`);
+              }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
             </Link>
             <Link
-              to={""}
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-event?id=${id}&&popup=edit`);
+              }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
@@ -172,10 +187,9 @@ export default function Event() {
         api={EVENT_LIST}
       />
 
-      
       <NewsEventHeader page={2} />
       <div className="mb-4 mt-1 flex items-center justify-between">
-        <h1 className="text-base font-semibold">Event</h1>
+        <h1 className="text-base font-semibold">Events</h1>
         <div className="flex items-center gap-2">
           <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
             <Search className="size-4 object-contain text-gray-dark" />

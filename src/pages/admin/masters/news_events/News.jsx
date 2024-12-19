@@ -6,8 +6,7 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import CreateNews from "./CreateNews";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function News() {
   const location = useLocation();
@@ -21,12 +20,7 @@ export default function News() {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
-
-  useEffect(() => {
-    if (selectedField) {
-      setPopupOpen(true);
-    }
-  }, [selectedField]);
+  const navigate = useNavigate();
 
   // const { setUser, user } = useUserStore((state) => ({
   //   setUser: state.setUser,
@@ -63,6 +57,22 @@ export default function News() {
     }
   }, [employeeNews]);
 
+  const renderStatusBadge = (status) => {
+    const statusColors = {
+      draft: "bg-yellow-100 text-yellow-600",
+      save_as_draft: "bg-blue-100 text-blue-600",
+      Canceled: "bg-purple-100 text-purple-600",
+      "On hold": "bg-red-100 text-red-600",
+      published: "bg-green-100 text-green-600",
+    };
+    return (
+      <span
+        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
+      >
+        {status}
+      </span>
+    );
+  };
   const columns = React.useMemo(
     () => [
       {
@@ -113,9 +123,7 @@ export default function News() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold">
-            {row?.original?.status || "NA"}
-          </div>
+          <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
         ),
       },
       {
@@ -123,17 +131,20 @@ export default function News() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
-            <Link
+            <span
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
               onClick={() => {
-                handleClickView();
-                setSelectedId(row?.original?.id);
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-news?id=${id}&&popup=view`);
               }}
             >
               <Eye className="size-3" />
-            </Link>
+            </span>
             <Link
-              to={""}
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-news?id=${id}&&popup=edit`);
+              }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
@@ -165,14 +176,6 @@ export default function News() {
         qrKey={"employeeNews"}
         api={NEWS_LISt}
       />
-
-      {/* <CreateNews
-        open={popupOpen}
-        onCancel={setPopupOpen}
-        id={selectedId}
-        qrKey={"employeeNews"}
-        api={NEWS_LISt}
-      /> */}
 
       <NewsEventHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">

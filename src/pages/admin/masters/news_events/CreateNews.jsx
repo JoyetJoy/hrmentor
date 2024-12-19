@@ -7,7 +7,7 @@ import { ArrowUpFromLine, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { newFormRequest, newRequest, NEWS_LISt } from "@/api";
 import toast from "react-hot-toast";
 
@@ -16,8 +16,11 @@ export default function CreateNews({
   setSelectedField,
   qrKey,
   api,
-  id,
 }) {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const popup = searchParams.get("popup");
+
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
   const {
@@ -36,9 +39,10 @@ export default function CreateNews({
   const [content, setContent] = useState("");
   // Get selected data
   const { data: newsid, isLoading } = useQuery({
-    queryKey: ["newsid", api, selectedField],
-    queryFn: () => newRequest.post(`${"news"}`).then((res) => res.data),
-    enabled: !!selectedField != 0,
+    queryKey: ["newsid", id],
+    queryFn: () =>
+      newRequest.get(`${"news"}/${id}`).then((res) => res?.data?.original),
+    enabled: !!id != 0,
   });
 
   useEffect(() => {
@@ -56,12 +60,6 @@ export default function CreateNews({
     }
   }, [newsid, setImage]);
 
-  // function close() {
-  //   setPopupOpen(false);
-  //   setSelectedField(0);
-  //   reset();
-  // }
-
   const handleContentChange = (value) => {
     setContent(value);
   };
@@ -76,8 +74,16 @@ export default function CreateNews({
       imageFile && formData.append("featured_image", imageFile);
       let res;
 
-      if (selectedField) {
-        res = await newFormRequest.post(`${"news"}/${selectedField}`, formData);
+      if (
+        !formData?.news_title ||
+        !formData?.short_summary ||
+        !formData?.content
+      ) {
+        return toast.error("mandatory field missing error");
+      }
+
+      if (id) {
+        res = await newFormRequest.post(`${"news"}/${id}`, formData);
       } else {
         res = await newFormRequest.post(NEWS_LISt, formData);
       }
@@ -93,6 +99,7 @@ export default function CreateNews({
       setLoader(false);
     }
   };
+
   return (
     <div className="h-full">
       <NewsEventHeader page={1} />
@@ -100,19 +107,22 @@ export default function CreateNews({
         <div className="mb-3 mt-2 flex items-center justify-between">
           <h1 className="text-base font-semibold">News</h1>
           <div className="flex items-center gap-2">
-            <Link
-              to={""}
-              className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
-            >
-              Save as draft
-            </Link>
-            <button
-              type="submit"
-              to={""}
-              className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
-            >
-              Publish
-            </button>
+            {popup !== "view" && (
+              <>
+                <Link
+                  to="#"
+                  className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
+                >
+                  Save as Draft
+                </Link>
+                <button
+                  type="submit"
+                  className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
+                >
+                  Publish
+                </button>
+              </>
+            )}
           </div>
         </div>
         {isLoading ? (
@@ -121,13 +131,17 @@ export default function CreateNews({
           </div>
         ) : (
           <div className="h-screen w-full rounded-md bg-white p-7">
-            <h1 className="mb-7 text-base font-bold">Create News</h1>
+            <h1 className="mb-7 text-base font-bold">
+              {" "}
+              {popup !== "view" ? "Create News" : "View News"}
+            </h1>
             <div className="flex flex-col">
               <div className="group flex w-1/2 flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">News Title</label>
                 <input
                   autoComplete="off"
                   type="text"
+                  name="news_title"
                   placeholder="news title"
                   {...register("news_title", { required: true })}
                   className="input-box placeholder:text-[0.8rem]"
@@ -143,6 +157,7 @@ export default function CreateNews({
                 <input
                   autoComplete="off"
                   type="text"
+                  name="short_summary"
                   placeholder="short summary"
                   {...register("summary", { required: true })}
                   className="input-box placeholder:text-[0.8rem]"
