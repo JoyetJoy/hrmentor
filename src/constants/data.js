@@ -6,6 +6,11 @@ export const successStatus = [
   { value: 0, label: "No" },
 ];
 
+export const disabilityStatus = [
+  { id: 1, label: "Yes",value:"Yes" },
+  { id: 0, label: "No",value:"No"},
+];
+
 // status
 export const employeeMasterOptions = [
   { value: 1, label: "Active" },
