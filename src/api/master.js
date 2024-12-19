@@ -177,3 +177,23 @@ export const EMPLOYEE_TEAM_LEAVE_APPLICATIONS =
 
 // EMPLOYEE LEAVE SHIFTS
 export const EMPLOYEE_LEAVE_SHIFTS = "employee-leave-shifts";
+
+// EMPLOYEE LEAVE TYPE
+export const EMPLOYEE_LEAVE_TYPE = "employee-leave-types";
+
+// EMPLOYEE LEAVE REQUEST
+export const EMPLOYEE_LEAVE_REQUEST = "employee-leave-requests-send";
+
+// EMPLOYEE LEAVE REQUEST DETAILS
+export const EMPLOYEE_LEAVE_REQUEST_DEATAILS = "employee-leave-request-details";
+
+// EMPLOYEE LIST
+export const EMPLOYEE_TEAM_LIST = "employee-team-list";
+
+// EMPLOYEE TEAM LEAVE LIST
+export const EMPLOYEE_TEAM_LEAVE_TYPE = "employee-team-leave-types";
+
+// EMPLOYEE TEAM LEAVE APPLY
+export const EMPLOYEE_TEAM_LEAVE_APPLY = "employee-team-leave-apply";
+//STATUS LIST
+export const STATUS_UPDATELIST ="reference-status-list"

@@ -1,17 +1,22 @@
 import { EVENT_LIST, newRequest, WORK_LOCATIONS } from "@/api";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Event() {
   const [loading, setLoding] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const navigate = useNavigate();
+
   const pageLimit = 10;
 
   const { data: eventList, isLoading } = useQuery({
@@ -30,13 +35,45 @@ export default function Event() {
         }),
   });
 
+  useEffect(() => {
+    if (eventList) {
+      setTotalPages(eventList?.last_page);
+      setCurrentPage(eventList?.current_page);
+    }
+  }, [eventList]);
+
+  const handleClickView = () => {
+    setDeletePopup(true);
+  };
+
+  const renderStatusBadge = (status) => {
+    const statusColors = {
+      draft: "bg-yellow-100 text-yellow-600",
+      expired: "bg-blue-100 text-blue-600",
+      Canceled: "bg-purple-100 text-purple-600",
+      "On hold": "bg-red-100 text-red-600",
+      upcoming: "bg-green-100 text-green-600",
+    };
+    return (
+      <span
+        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
+      >
+        {status}
+      </span>
+    );
+  };
+
   const columns = React.useMemo(
     () => [
       {
         header: "Sl No",
         accessorKey: "sno",
         cell: ({ row }) => {
-          return <div className="flex px-2"></div>;
+          return (
+            <div className="">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
         },
       },
       {
@@ -50,64 +87,53 @@ export default function Event() {
       },
       {
         header: "Location",
-        accessorKey: "location",
+        accessorKey: "location_id",
         cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
+          <p className="">{row?.original?.location_id || "NA"}</p>
         ),
       },
       {
         header: "Created by",
-        accessorKey: "created by",
+        accessorKey: "created_by",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.created_by || "NA"}</p>
         ),
       },
       {
         header: "Created on",
         accessorKey: "created on",
-        cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
-        ),
+        cell: ({ row }) => {
+          const createdAt = row?.original?.created_at;
+          const formattedDate = createdAt
+            ? new Intl.DateTimeFormat("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }).format(new Date(createdAt))
+            : "-";
+
+          return <p className="">{formattedDate}</p>;
+        },
       },
       {
         header: "Start date",
         accessorKey: "Start date",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
+          <p className="">{row?.original?.start_date || "NA"}</p>
         ),
       },
       {
         header: "End date",
         accessorKey: "end date",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
-          </p>
+          <p className="">{row?.original?.end_date || "NA"}</p>
         ),
       },
       {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div
-            style={{
-              backgroundColor:
-                row?.original?.employee?.employment_status?.background_color,
-              color: row?.original?.employee?.employment_status?.text_color,
-            }}
-            className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
-          >
-            {row?.original?.employee?.employment_status?.status_name || "NA"}
-          </div>
+          <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
         ),
       },
       {
@@ -116,13 +142,19 @@ export default function Event() {
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
-              to={""}
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-event?id=${id}&&popup=view`);
+              }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
             </Link>
             <Link
-              to={""}
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-event?id=${id}&&popup=edit`);
+              }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
@@ -130,7 +162,13 @@ export default function Event() {
                 className="w-full object-contain"
               />
             </Link>
-            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red">
+            <Link
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
+            >
               <Trash2 className="size-3" />
             </Link>
           </div>
@@ -141,9 +179,17 @@ export default function Event() {
   );
   return (
     <div className="h-screen">
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"eventList"}
+        api={EVENT_LIST}
+      />
+
       <NewsEventHeader page={2} />
       <div className="mb-4 mt-1 flex items-center justify-between">
-        <h1 className="text-base font-semibold">Event</h1>
+        <h1 className="text-base font-semibold">Events</h1>
         <div className="flex items-center gap-2">
           <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
             <Search className="size-4 object-contain text-gray-dark" />
@@ -175,7 +221,7 @@ export default function Event() {
       ) : (
         <QueryTable
           columns={columns}
-          list={eventList ?? []}
+          list={eventList?.data ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}

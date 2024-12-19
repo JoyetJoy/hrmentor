@@ -96,7 +96,7 @@ export default function EmployeeDbsCheckEdit() {
           header: "Status",
           accessorKey: "status", 
           cell: ({ row }) => (
-            <div className="flex px-2">
+            <div className="flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-red-300 px-3 font-semibold text-red-700">
               {row.original?.status === 1 ? "Active" : "Inactive"}
             </div>
           ),

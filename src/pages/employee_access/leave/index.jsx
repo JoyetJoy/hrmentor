@@ -136,11 +136,18 @@ export default function Leave() {
   };
 
   const { data: employeeLeaveList } = useQuery({
-    queryKey: ["employeeLeaveList"],
+    queryKey: ["employeeLeaveList", currentPage],
     queryFn: () =>
-      newRequest.get(EMPLOYEE_LEAVE_REQUEST_LIST).then((res) => {
-        return res.data;
-      }),
+      newRequest
+        .get(EMPLOYEE_LEAVE_REQUEST_LIST, {
+          params: {
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
   });
 
   useEffect(() => {
@@ -161,13 +168,12 @@ export default function Leave() {
     }
   }, [selectedId]);
 
-  console.log(leaveDetails, "cdcdc");
-
   return (
     <div className="flex flex-col">
       <ViewLeave
         viewLeavePopupOpen={viewLeavePopupOpen}
         setViewLeavePopupOpen={setViewLeavePopupOpen}
+        selectedId={selectedId}
       />
       <AddLeave popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Leave"} />

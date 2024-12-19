@@ -1,12 +1,25 @@
+import { newRequest } from "@/api";
+import { EMPLOYEE_LEAVE_REQUEST_DEATAILS } from "@/api/master";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 
 export default function ViewLeave({
   viewLeavePopupOpen,
   setViewLeavePopupOpen,
+  selectedId,
 }) {
-  // const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const { data: employeeLeaveRequestDetails = [] } = useQuery({
+    queryKey: ["employeeLeaveRequestDetails", selectedId],
+    queryFn: () =>
+      newRequest
+        .get(`${EMPLOYEE_LEAVE_REQUEST_DEATAILS}/${selectedId}`)
+        .then((res) => res.data),
+    enabled: !!selectedId,
+  });
 
   function close() {
     setViewLeavePopupOpen(false);
@@ -40,38 +53,48 @@ export default function ViewLeave({
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Start Date
                 </label>
-                <p className="text-sm font-semibold">Oct 3,2024 </p>
+                <p className="text-sm font-semibold">
+                  {employeeLeaveRequestDetails?.from_date}
+                </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">End Date</label>
-                <p className="text-sm font-semibold">2/3/24</p>
+                <p className="text-sm font-semibold">
+                  {employeeLeaveRequestDetails?.to_date}
+                </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Leave Type</label>
-                <p className="text-sm font-semibold">sick leave</p>
+                <p className="text-sm font-semibold">
+                  {employeeLeaveRequestDetails?.leave_type?.leave_name}
+                </p>
               </div>
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Approval Status
                 </label>
-                <p className="text-sm font-semibold text-textcolor-green">
-                  {" "}
-                  Approved
+                <p
+                  className="text-sm font-semibold"
+                  style={{
+                    color:
+                      employeeLeaveRequestDetails?.leave_status?.text_color ||
+                      "green",
+                  }}
+                >
+                  {employeeLeaveRequestDetails?.leave_status
+                    ?.leave_status_name || ""}
                 </p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Leave Count</label>
-                <p className="text-sm font-semibold">1 day</p>
-              </div>
-              <div className="group flex w-full flex-col gap-1">
-                <label className="label-text">LOP</label>
-                <p className="text-sm font-semibold">1</p>
+                <p className="text-sm font-semibold">
+                  {employeeLeaveRequestDetails?.total_leave_days} day
+                </p>
               </div>
               <div className="group col-span-2 flex w-full flex-col gap-1">
                 <label className="label-text">Description</label>
                 <p className="text-sm font-semibold">
-                  chjsdfhkdfhkdfjhkjdfhgkjdhvn
-                  jdsfkjdfkjdkfjdkfjdkjdfkgjdkgdfkjdhvjkdhvjdvhd
+                  {employeeLeaveRequestDetails?.reason}
                 </p>
               </div>
               <div className="mt-2 flex w-full items-center justify-between gap-3">

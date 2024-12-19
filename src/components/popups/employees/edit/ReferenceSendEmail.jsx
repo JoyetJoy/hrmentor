@@ -87,8 +87,8 @@ export default function ReferenceSendEmail({
       formData.append("user_id", uid);
       formData.append("reference_name", data.reference_name);
       formData.append("personal_email", data.personal_email);
-      formData.append("template_heading", data.template_heading); // Correct value of template heading
-      formData.append("description", description);
+      // formData.append("template_heading", data.template_heading); // Correct value of template heading
+      // formData.append("description", description);
 
       let res;
       if (selectedField !== 0) {

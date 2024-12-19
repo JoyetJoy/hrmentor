@@ -21,9 +21,14 @@ export default function DeleteConfirmation({
     try {
       if (type !== "break" && type !== "roster") {
         setLoader(true);
-        console.log("kp");
         const res = await newRequest.delete(`${api}/${id}`);
         if (res?.data?.status === 200) {
+          queryClient.invalidateQueries([qrkey]);
+          setLoader(false);
+          toast.success(res?.data?.message);
+          onCancel(false);
+        }
+        if (res?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
           setLoader(false);
           toast.success(res?.data?.message);
@@ -35,7 +40,6 @@ export default function DeleteConfirmation({
           toast.success(res?.data?.message);
           onCancel(false);
         }
-        console.log(res, "resresres");
       } else {
         if (type === "break") {
           setNew_break((prevBreaks) =>
@@ -44,18 +48,7 @@ export default function DeleteConfirmation({
           setId("");
           toast.success("Deleted break time successfully");
         }
-        console.log("hii");
-        // if (type === 'roster') {
-        //   console.log('jii');
-
-        //   setSelectedEmployees((prevEmployees) => prevEmployees.filter((selectedEmployees) => selectedEmployees.unique_id !== selectedId));
-        //   toast.success("Deleted roster item successfully");
-        // }
         if (type === "roster") {
-          console.log("Attempting to delete roster item");
-          console.log("Selected ID:", selectedId);
-          console.log("Selected Employees before delete:", employee);
-
           setSelectedEmployees((prevEmployees) =>
             prevEmployees.filter(
               (selectedEmployees) => selectedEmployees.value !== id,

@@ -6,7 +6,7 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function News() {
   const location = useLocation();
@@ -16,21 +16,24 @@ export default function News() {
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (selectedField) {
-      setPopupOpen(true);
-    }
-  }, [selectedField]);
   // const { setUser, user } = useUserStore((state) => ({
   //   setUser: state.setUser,
   //   user: state.user,
   // }));
   // const u_id = user.id;
-  // Fetch List
+  const handleClick = () => {
+    setPopupOpen(true);
+  };
+
+  const handleClickView = () => {
+    setDeletePopup(true);
+  };
 
   const { data: employeeNews, isLoading } = useQuery({
     queryKey: ["employeeNews", currentPage, keyword],
@@ -48,18 +51,40 @@ export default function News() {
         }),
   });
 
-
   useEffect(() => {
     if (employeeNews) {
       setTotalPages(employeeNews?.last_page);
     }
   }, [employeeNews]);
 
+  const renderStatusBadge = (status) => {
+    const statusColors = {
+      draft: "bg-yellow-100 text-yellow-600",
+      save_as_draft: "bg-blue-100 text-blue-600",
+      Canceled: "bg-purple-100 text-purple-600",
+      "On hold": "bg-red-100 text-red-600",
+      published: "bg-green-100 text-green-600",
+    };
+    return (
+      <span
+        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
+      >
+        {status}
+      </span>
+    );
+  };
   const columns = React.useMemo(
     () => [
       {
         header: "Sl No",
         accessorKey: "id",
+        cell: ({ row }) => {
+          return (
+            <div className="">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
       },
       {
         header: "News title",
@@ -73,11 +98,9 @@ export default function News() {
 
       {
         header: "Created by",
-        accessorKey: "created by",
+        accessorKey: "created_by",
         cell: ({ row }) => (
-          <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
-          </p>
+          <p className="">{row?.original?.created_by || "NA"}</p>
         ),
       },
       {
@@ -100,9 +123,7 @@ export default function News() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold">
-            {row?.original?.status || "NA"}
-          </div>
+          <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
         ),
       },
       {
@@ -110,14 +131,20 @@ export default function News() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
-            <Link
-              to={""}
+            <span
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-news?id=${id}&&popup=view`);
+              }}
             >
               <Eye className="size-3" />
-            </Link>
+            </span>
             <Link
-              to={""}
+              onClick={() => {
+                const id = row.original.id;
+                navigate(`/admin/news-event/create-news?id=${id}&&popup=edit`);
+              }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
@@ -125,7 +152,13 @@ export default function News() {
                 className="w-full object-contain"
               />
             </Link>
-            <Link className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red">
+            <Link
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
+              onClick={() => {
+                handleClickView();
+                setSelectedId(row?.original?.id);
+              }}
+            >
               <Trash2 className="size-3" />
             </Link>
           </div>
@@ -143,6 +176,7 @@ export default function News() {
         qrKey={"employeeNews"}
         api={NEWS_LISt}
       />
+
       <NewsEventHeader page={1} />
       <div className="mb-4 mt-1 flex items-center justify-between">
         <h1 className="text-base font-semibold">News</h1>
@@ -177,7 +211,7 @@ export default function News() {
       ) : (
         <QueryTable
           columns={columns}
-          list={employeeNews ?? []}
+          list={employeeNews?.data ?? []}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}

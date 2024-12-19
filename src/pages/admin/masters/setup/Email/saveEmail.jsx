@@ -41,12 +41,12 @@ export default function EmailSetupSave() {
   const [isDefault, setIsDefault] = useState(false);
   const [emailTypeId, setEmailTypeId] = useState("");
   const [tokenId, setTokenId] = useState("");
+  const [tokenValue, setTokenValue] = useState("");
   const [tokens, setTokens] = useState([]);
   const [content, setContent] = useState(`
     Dear [Candidate First and Last Name],<br><br>
-    Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.
+    Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.${tokenValue}
   `);
-
 
   const {
     register,
@@ -112,6 +112,7 @@ export default function EmailSetupSave() {
 
   const onSubmit = async () => {
     setLoader(true);
+    setEmailTemplateId(id);
     try {
       const formData = {
         subject: saveEmail.subject,
@@ -146,6 +147,13 @@ export default function EmailSetupSave() {
       setLoader(false);
     }
   };
+
+  useEffect(() => {
+    if (tokenValue) {
+      setContent(`Dear [Candidate First and Last Name],<br><br>
+    Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.${tokenValue}`);
+    }
+  }, [tokenValue]);
 
   return (
     <>
@@ -210,28 +218,12 @@ export default function EmailSetupSave() {
                 <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
                   Folder
                 </label>
-                <Controller
-                  name="emailTemplateId"
-                  control={control}
-                  rules={{ required: "Email Folder is required" }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={emailFolderList}
-                      styles={customSelectStyles}
-                      placeholder="Select Email Folder"
-                      className="input-box"
-                      value={
-                        emailFolderList.find(
-                          (option) => option.id === emailTemplateId,
-                        ) || null
-                      }
-                      onChange={(selectedOption) => {
-                        field.onChange(selectedOption.id);
-                        setEmailTemplateId(selectedOption.id);
-                      }}
-                    />
-                  )}
+                <input
+                  name="subject"
+                  value={label}
+                  type="text"
+                  placeholder="Subject"
+                  className="input-box h-10 w-full rounded border border-black/10 px-2 text-sm"
                 />
                 {errors.emailTemplateId && (
                   <span className="text-xs font-medium text-red-500">
@@ -345,6 +337,7 @@ export default function EmailSetupSave() {
                       onChange={(selectedOption) => {
                         field.onChange(selectedOption.value);
                         setTokenId(selectedOption.value);
+                        setTokenValue(selectedOption.label);
                       }}
                     />
                   )}
