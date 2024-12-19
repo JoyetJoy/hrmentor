@@ -2,7 +2,6 @@ import { newRequest, NEWS_LISt } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -21,12 +20,6 @@ export default function News() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
   const navigate = useNavigate();
-
-  // const { setUser, user } = useUserStore((state) => ({
-  //   setUser: state.setUser,
-  //   user: state.user,
-  // }));
-  // const u_id = user.id;
   const handleClick = () => {
     setPopupOpen(true);
   };

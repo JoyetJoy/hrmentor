@@ -2,7 +2,6 @@ import { EVENT_LIST, newRequest, WORK_LOCATIONS } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -18,7 +17,6 @@ export default function Event() {
   const navigate = useNavigate();
 
   const pageLimit = 10;
-
   const { data: eventList, isLoading } = useQuery({
     queryKey: ["eventList", currentPage, keyword],
     queryFn: () =>
@@ -38,7 +36,6 @@ export default function Event() {
   useEffect(() => {
     if (eventList) {
       setTotalPages(eventList?.last_page);
-      setCurrentPage(eventList?.current_page);
     }
   }, [eventList]);
 
@@ -177,6 +174,8 @@ export default function Event() {
     ],
     [],
   );
+
+  
   return (
     <div className="h-screen">
       <DeleteConfirmation
