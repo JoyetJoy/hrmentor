@@ -60,7 +60,7 @@ export default function News() {
   const renderStatusBadge = (status) => {
     const statusColors = {
       draft: "bg-yellow-100 text-yellow-600",
-      save_as_draft: "bg-blue-100 text-blue-600",
+      save_as_draft: "bg-purple-100 text-purple-600", // Use valid class names
       Canceled: "bg-purple-100 text-purple-600",
       "On hold": "bg-red-100 text-red-600",
       published: "bg-green-100 text-green-600",
