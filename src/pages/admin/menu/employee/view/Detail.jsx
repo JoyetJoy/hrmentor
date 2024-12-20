@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Share2 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import MonthlyCalendarPicker from "@/components/common/MonthPicker";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -24,6 +24,7 @@ export default function EmployeeDetails() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
+  const navigate = useNavigate();
 
   // EMPLOYEE DETAILS;
   const { data: employeeViewDetails, isLoading } = useQuery({
@@ -33,7 +34,7 @@ export default function EmployeeDetails() {
         return res.data;
       }),
   });
-
+  console.log(employeeViewDetails, "employeeViewDetailsemployeeViewDetails");
   return (
     <>
       <MenuHeader
@@ -63,17 +64,19 @@ export default function EmployeeDetails() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
+                className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
                 onClick={() => {
-                  if (employeeViewDetails?.basic_details?.status == "active") {
+                  if (employeeViewDetails?.basic_details?.employmentStatus?.id === 1) {
                     setSharePopupOpen(true);
+                  } else {
+                    navigate(`/onboarding-form?uid=${uid}`);
                   }
                 }}
-                className="btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none hover:bg-paleblue"
               >
-                {employeeViewDetails?.basic_details?.status === active ? (
-                  <Eye className="size-4" color="black" />
-                ) : (
+                {employeeViewDetails?.basic_details?.employmentStatus?.id === 1 ? (
                   <Share2 className="size-4" color="black" />
+                ) : (
+                  <Eye className="size-4" color="black" />
                 )}
                 Onboarding Form
               </button>
@@ -107,9 +110,19 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                {employeeViewDetails?.basic_details?.status !== "active" ? (
+                <div className="ml-5 flex h-7  cursor-pointer items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]"
+                  onClick={() => {
+                    if (employeeViewDetails?.basic_details?.employmentStatus?.label !== "Active") {
+                      setPopupOpen(true);
+                      setType("status");
+                    } 
+                  }}
+                >
+                   {employeeViewDetails?.basic_details?.employmentStatus?.label}
+                  </div>
+                {/* {employeeViewDetails?.basic_details?.employmentStatus?.label !== "active" ? (
                   <div className="ml-5 flex h-7 cursor-default items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]">
-                    Active
+                   {employeeViewDetails?.basic_details?.employmentStatus?.label}
                   </div>
                 ) : (
                   <div
@@ -121,10 +134,10 @@ export default function EmployeeDetails() {
                   >
                     Active
                   </div>
-                )}
+                )} */}
               </div>
               <div className="flex items-center gap-3">
-                {employeeViewDetails?.basic_details?.status === active ? (
+                {employeeViewDetails?.basic_details?.employmentStatus?.label === "Active" ? (
                   <>
                     {" "}
                     <Link
