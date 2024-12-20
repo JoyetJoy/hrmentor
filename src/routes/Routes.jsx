@@ -9,6 +9,7 @@ import CareerDetail from "@/pages/jobarea/Detail";
 import ApplyJob from "@/pages/jobarea/Apply";
 import EmployeeAccessLayouts from "@/layouts/employee_access/EmployeeAccessLayouts";
 import { EmployeeAccessRoutes } from "./employee_access/EmployeeAccessRoutes";
+import OnboardingForm from "@/pages/onboarding";
 
 export const appRoutes = createBrowserRouter([
   {
@@ -39,10 +40,9 @@ export const appRoutes = createBrowserRouter([
     errorElement: <ErrorPage />,
     children:EmployeeAccessRoutes,
   },
-  
-  // {
-  //   path: "*",
-  //   element: <Navigate to="/admin/dashboard" replace />,
-  // },
+  {
+    path: "onboarding-form",
+    element: <OnboardingForm/>,
+  },
 
 ]);
