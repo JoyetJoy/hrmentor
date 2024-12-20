@@ -33,12 +33,14 @@ export default function Event() {
         }),
   });
 
+  console.log(currentPage, "eventListeventList");
+
   useEffect(() => {
     if (eventList) {
-      setTotalPages(eventList?.last_page);
+      setTotalPages(eventList.last_page || 1);
+      setCurrentPage(eventList.current_page || 1);
     }
   }, [eventList]);
-
   const handleClickView = () => {
     setDeletePopup(true);
   };
@@ -65,13 +67,12 @@ export default function Event() {
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => {
-          return (
-            <div className="">
-              {row.index + 1 + (currentPage - 1) * pageLimit}
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <>
+            {console.log(currentPage, "currentPagecurrentPage")}
+            <div>{row.index + 1 + (currentPage - 1) * pageLimit}</div>
+          </>
+        ),
       },
       {
         header: "Event Name",
@@ -174,8 +175,6 @@ export default function Event() {
     ],
     [],
   );
-
-  
   return (
     <div className="h-screen">
       <DeleteConfirmation
