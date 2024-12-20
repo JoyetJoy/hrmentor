@@ -66,6 +66,8 @@ export const EMPLOYEE_DETAILS = "view-employee-page";
 export const ACTIVE_EMPLOYEE = "active-employees";
 // UPDATE EMPLOYEE
 export const UPDATE_EMPLOYEE = "employee-update";
+//SEND ONBORDING
+export const SEND_ONBORDING = "employee-onboarding-mail-send";
 // WORK INFORMATION
 export const EMPLOYEE_WORK_INFO = "employee-work-informations";
 // SKILLS
