@@ -68,6 +68,8 @@ const BasicSettings = ({ formtype = "save" }) => {
     resolver: yupResolver(leaveSchema),
   });
 
+  console.log(errors, "errorserrors");
+
   const close = () => {
     setPopupOpen(false);
     reset();
@@ -77,7 +79,7 @@ const BasicSettings = ({ formtype = "save" }) => {
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [accrualType, setAccrualType] = useState("bycycle");
-  const [applicable, setApplicable] = useState("all_employees");
+  const [applicable, setApplicable] = useState("all_employee");
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
@@ -124,7 +126,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         pay_type: data.pay_type,
         description: data.description,
         units: units,
-        status: status,
+        status: data.status,
         valid_from: moment(data.valid_from).format("YYYY-MM-DD"),
         accural_type: accrualType,
         accural_period: accuralPeriod,
@@ -145,6 +147,10 @@ const BasicSettings = ({ formtype = "save" }) => {
         max_encashments: Number(encashmentsPay),
         no_of_days: data.no_of_days,
       };
+
+      if (!formData) {
+        return toast.error("");
+      }
       const res = await newRequest.post(HOLIDAY_STATUS, formData);
 
       if (res.data.success === true) {
@@ -328,13 +334,17 @@ const BasicSettings = ({ formtype = "save" }) => {
                       isSearchable
                       placeholder="Select a status"
                       onChange={(selectedOption) => {
-                        field.onChange(selectedOption.value);
-                        setStatus(selectedOption.value);
+                        field.onChange(selectedOption.value); // Update field value
                       }}
                       className="input-box w-full"
                     />
                   )}
                 />
+                {errors.status && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.status.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -367,7 +377,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
               </div>
             </div>
-            {accrualType === "bycycle" && (
+            {accrualType == "bycycle" && (
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">

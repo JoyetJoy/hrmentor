@@ -64,11 +64,16 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
           },
         },
         {
+          header: colKeys?.field8?.label,
+          accessorKey: colKeys?.field1?.key,
+          cell: ({ row }) => <td>{`${row.original.employee_id} `}</td>,
+        },
+        {
           header: colKeys?.field1?.label,
           accessorKey: colKeys?.field1?.key,
           cell: ({ row }) => (
             <td>
-              {`${row.original.employee.first_name || ""} ${row.original.employee.middle_name || ""} & ${row.original.employee_id}`}
+              {`${row.original.employee.first_name || ""} ${row.original.employee.middle_name || ""}`}
             </td>
           ),
         },

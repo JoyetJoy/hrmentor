@@ -117,6 +117,18 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
         holiday_id: id,
         ...availabilitySelection, // Use spread syntax to avoid listing each field
       };
+      if (formData.department_availability.length == 0) {
+        return toast.error("Select Department Availability");
+      }
+      if (formData.gender_availability.length == 0) {
+        return toast.error("Select Gender Availability");
+      }
+      if (formData.locations_availability.length == 0) {
+        return toast.error("Select Locations Availability");
+      }
+      if (formData.role_availability.length == 0) {
+        return toast.error("Select Role Availability");
+      }
 
       const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
 
@@ -124,10 +136,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
         navigate(`/admin/leave/settings/advancedsettings/${res.data.data.id}`);
       }
     } catch (error) {
-      console.error("Error Details:", error);
-      console.error("Error Response Data:", error?.response?.data);
-
-      // Display a specific error message from the server if available
       const errorMessage =
         error?.response?.data?.error || "An unexpected error occurred";
       toast.error(errorMessage);

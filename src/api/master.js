@@ -197,3 +197,6 @@ export const EMPLOYEE_TEAM_LEAVE_TYPE = "employee-team-leave-types";
 export const EMPLOYEE_TEAM_LEAVE_APPLY = "employee-team-leave-apply";
 //STATUS LIST
 export const STATUS_UPDATELIST ="reference-status-list"
+
+// ADMIN EMPLOYEE LEAVE UPDATE
+export const ADMIN_EMPLOYEE_LEAVE_UPDATE ="admin-employee-leave-update"
