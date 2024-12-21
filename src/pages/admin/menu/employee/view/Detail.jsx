@@ -1,10 +1,5 @@
 import { EMPLOYEE_DETAILS, newRequest } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Share2 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -18,7 +13,6 @@ export default function EmployeeDetails() {
   const [type, setType] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
   const [sharePopupOpen, setSharePopupOpen] = useState(false);
-
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [active, setActive] = useState();
   const location = useLocation();
@@ -34,7 +28,6 @@ export default function EmployeeDetails() {
         return res.data;
       }),
   });
-  console.log(employeeViewDetails, "employeeViewDetailsemployeeViewDetails");
   return (
     <>
       <MenuHeader
@@ -156,13 +149,6 @@ export default function EmployeeDetails() {
                       <p>Date of joining</p>
                       <p className="font-semibold">Oct 10,2024</p>
                     </div>
-
-                    <Link
-                      to={`/admin/employee/activitylog/?uid=${uid}`}
-                      className="bg-pale flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 rounded-md bg-[#e0e2f3] px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]"
-                    >
-                      Activity Log
-                    </Link>
                     <button
                       onClick={() => {
                         setPopupOpen(true);
@@ -172,6 +158,13 @@ export default function EmployeeDetails() {
                     >
                       Reschedule
                     </button>
+                    <Link
+                      to={`/admin/employee/activitylog/?uid=${uid}`}
+                      className="bg-pale flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 rounded-md bg-[#e0e2f3] px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]"
+                    >
+                      Activity Log
+                    </Link>
+                  
                   </>
                 )}
               </div>
