@@ -90,7 +90,6 @@ export default function CreateEvent() {
       formData.append("content", content);
       formData.append("location_id", locationId);
       let res;
-
       if (
         !data?.event_title ||
         !data?.short_summary ||
@@ -98,7 +97,7 @@ export default function CreateEvent() {
         !data?.end_date ||
         !data?.start_time ||
         !data?.end_time ||
-        !image || 
+        !image ||
         !content ||
         !locationId
       ) {
@@ -155,7 +154,7 @@ export default function CreateEvent() {
             <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
           </div>
         ) : (
-          <div className="h-screen w-full rounded-md bg-white p-7">
+          <div className="h-full w-full rounded-md bg-white p-7">
             <h1 className="mb-7 text-base font-bold">
               {" "}
               {popup !== "view" ? "Create Events" : "View Events"}

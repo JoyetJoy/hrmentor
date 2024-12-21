@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { Plus, Minus } from "lucide-react";
@@ -7,8 +7,9 @@ import Select from "react-select";
 import moment from "moment";
 import { newRequest, HOLIDAY_STATUS } from "@/api";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 const statusOptions = [
   { value: 3, label: "Active" },
@@ -68,28 +69,29 @@ const BasicSettings = ({ formtype = "save" }) => {
     resolver: yupResolver(leaveSchema),
   });
 
-  console.log(errors, "errorserrors");
-
   const close = () => {
     setPopupOpen(false);
     reset();
   };
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  const [accrualType, setAccrualType] = useState("bycycle");
-  const [applicable, setApplicable] = useState("all_employee");
+  const [accrualType, setAccrualType] = useState();
+  const [applicable, setApplicable] = useState();
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
-  const [units, setUnits] = useState("days");
+  const [units, setUnits] = useState("");
   const [status, setStatus] = useState("");
   const [accuralPeriod, setAccuralPeriod] = useState("");
   const [accuralDays, setAccuralDays] = useState("");
   const [accuralMonth, setAccuralMonth] = useState("");
   const [accuralAt, setAccuralAt] = useState("");
   const [encashmentsPay, setEncashmentsPay] = useState("");
+  const { user } = useUserStore((state) => ({ user: state.user }));
 
   const [boxes, setBoxes] = useState([
     { id: 1, years: "", months: "", daysleave: "" },
@@ -115,6 +117,56 @@ const BasicSettings = ({ formtype = "save" }) => {
   const onSubmit = async (data) => {
     handledSubmit(data);
   };
+
+  const { data: basicholidayDetails } = useQuery({
+    queryKey: ["basicholidayDetails", user?.id, id],
+    queryFn: () =>
+      newRequest
+        .get(`${HOLIDAY_STATUS}/${id}`, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id && !!id,
+  });
+
+  useEffect(() => {
+    if (basicholidayDetails) {
+      console.log(
+        basicholidayDetails,
+        "basicholidayDetailsbasicholidayDetails",
+      );
+
+      reset({
+        leave_name: basicholidayDetails?.leave_name,
+        display_name: basicholidayDetails?.display_name,
+        code: basicholidayDetails?.code,
+        pay_type: basicholidayDetails?.pay_type,
+        description: basicholidayDetails?.description,
+        status: basicholidayDetails?.status?.status_name == "Active" ? 3 : 4,
+        valid_from: moment(basicholidayDetails?.valid_from).format(
+          "YYYY-MM-DD",
+        ),
+        accrual_leave: basicholidayDetails?.accrual_leave,
+        specific_days: basicholidayDetails?.specific_days,
+        emp_no_days: basicholidayDetails?.emp_no_days,
+        max_no_days: basicholidayDetails?.max_no_days,
+        exp_days: basicholidayDetails?.exp_days,
+        encashments_pay: "basicpay",
+        no_of_days: basicholidayDetails?.no_of_days,
+      });
+      setIsOn(basicholidayDetails?.carry_forword);
+      setIsOn2(basicholidayDetails?.carry_expire);
+      setIsOn3(basicholidayDetails?.encashments);
+      setUnits(basicholidayDetails?.units);
+      setAccuralPeriod(basicholidayDetails?.accural_period);
+      setAccuralDays(basicholidayDetails?.accural_day);
+      setAccuralMonth(basicholidayDetails?.accural_monthly);
+      setAccrualType(basicholidayDetails?.accural_type);
+      setApplicable(basicholidayDetails?.application_to);
+      setAccuralAt(basicholidayDetails?.accural_at);
+      setEncashmentsPay(basicholidayDetails?.max_encashments);
+    }
+  }, [basicholidayDetails, reset]);
 
   const handledSubmit = async (data) => {
     try {
@@ -148,10 +200,23 @@ const BasicSettings = ({ formtype = "save" }) => {
         no_of_days: data.no_of_days,
       };
 
+      let res;
+
       if (!formData) {
         return toast.error("");
       }
-      const res = await newRequest.post(HOLIDAY_STATUS, formData);
+
+      if (id) {
+        res = await newRequest.post(`${HOLIDAY_STATUS}/${id}`, formData);
+      } else {
+        res = await newRequest.post(HOLIDAY_STATUS, formData);
+      }
+
+      console.log(res.data, "res.data");
+
+      if (res.data.message == "Holiday basic settings updated successfully!") {
+        navigate(`/admin/leave/settings/availabilitysettings/${id}`);
+      }
 
       if (res.data.success === true) {
         navigate(
@@ -241,7 +306,6 @@ const BasicSettings = ({ formtype = "save" }) => {
                       value="paid"
                       {...register("pay_type")}
                       className="radio-black"
-                      defaultChecked
                     />
                     <label className="text-sm font-normal">Paid</label>
                   </div>
@@ -264,10 +328,10 @@ const BasicSettings = ({ formtype = "save" }) => {
                     <input
                       type="radio"
                       name="units"
-                      value="days"
+                      value={"days"}
                       onClick={() => setUnits("days")}
                       className="radio-black"
-                      defaultChecked
+                      checked={units == "days"}
                     />
                     <label className="text-sm font-normal">Days</label>
                   </div>
@@ -278,6 +342,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                       value="hours"
                       onClick={() => setUnits("hours")}
                       className="radio-black"
+                      checked={units === "hours"}
                     />
                     <label className="text-sm font-normal">Hours</label>
                   </div>
@@ -361,7 +426,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     value="bycycle"
                     onClick={() => setAccrualType("bycycle")}
                     className="radio-black"
-                    defaultChecked
+                    checked={accrualType === "bycycle"}
                   />
                   <label className="label-text">By cycle</label>
                 </div>
@@ -372,6 +437,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     value="byworking"
                     onClick={() => setAccrualType("byworking")}
                     className="radio-black"
+                    checked={accrualType === "byworking"}
                   />
                   <label className="label-text">By Working days</label>
                 </div>
@@ -583,7 +649,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     value="all_employee"
                     onClick={() => setApplicable("all_employee")}
                     className="radio-black"
-                    defaultChecked
+                    checked={applicable === "all_employee"}
                   />
                   <label className="label-text">All employees</label>
                 </div>
@@ -594,6 +660,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     value="based_on_exp"
                     onClick={() => setApplicable("based_on_exp")}
                     className="radio-black"
+                    checked={applicable === "based_on_exp"}
                   />
                   <label className="label-text">Based on experience</label>
                 </div>
