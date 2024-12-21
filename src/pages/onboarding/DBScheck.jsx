@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import MenuHeader from "@/components/common/MenuHeader";
-import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { ChevronRight, Eye, Trash2 } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { EMPLOYEE_DBS_CHECK, newRequest } from "@/api";
-import DbsEditForm from "@/components/popups/employees/edit/DbsEditForm";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 
 

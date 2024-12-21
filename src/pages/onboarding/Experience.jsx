@@ -102,7 +102,7 @@ export default function Experience() {
           cell: ({ row }) => (
             <div className="flex">
               <Link
-                href={row.original?.document}
+                // href={row.original?.document}
                 target="_blank"
                 className="text-[#1A75FF] underline underline-offset-2"
                 rel="noopener noreferrer"
@@ -119,7 +119,7 @@ export default function Experience() {
             <div className="flex items-center gap-2 text-xs">
               <button
                 type="button"
-                onClick={() => setSelectedField(row.original.id)}
+                // onClick={() => setSelectedField(row.original.id)}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
                 <img
@@ -129,10 +129,10 @@ export default function Experience() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedId(row.original.id);
-                }}
+                // onClick={() => {
+                //   setDeletePopup(true);
+                //   setSelectedId(row.original.id);
+                // }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
                 <Trash2 className="size-3" />

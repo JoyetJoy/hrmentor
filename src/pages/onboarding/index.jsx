@@ -11,36 +11,56 @@ import Bank from "./Bank";
 import Document from "./Document";
 import toast from "react-hot-toast";
 
-import { newFormRequest, SEND_ONBORDING } from "@/api";
+import { EMPLOYEE, newFormRequest, SEND_ONBORDING } from "@/api";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Loader } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function OnboardingForm() {
-  const { setUser, user } = useUserStore((state) => ({
-      setUser: state.setUser,
-      user: state.user,
-    }));
-    const u_id = user.id;
-  const [isLoader,setIsLoader] =useState();
+  const location = useLocation();
+  const [errors, serErrors] = useState();
+  const [isLoader, setIsLoader] = useState();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const statusId = 2;
+  const navigate = useNavigate();
   
+  console.log(errors, "u_idu_idu_id");
+  // const { data: employeeDetails} = useQuery({
+  //   queryKey: ["employeeDetails", uid],
+  //   queryFn: () =>
+  //     newRequest.get(`${EMPLOYEE}/${uid}`).then((res) => {
+  //       return res.data;
+  //     }),
+  //   enabled: formtype == "update",
+  // });
   const handleShare = async () => {
     try {
       setIsLoader(true);
-      const response = await newFormRequest.post(`employee-status-update`);
+      const onboarding = {
+        employee_id: uid,
+        status: statusId,
+      };
+      const response = await newFormRequest.post(
+        `employee-status-update`,
+        onboarding,
+      );
       if (response?.status === 200) {
+        setIsLoader(false)
         toast.success("Approve successfully");
-        setSharePopupOpen(false);
+        navigate(`/admin/employee/details/?uid=${uid}`);
       } else {
         toast.error("Failed to approve,");
       }
-    } catch (error) {
-      console.error("Error sharing the form:", error);
+    } 
+    catch (error) {
       toast.error(
-        error?.response?.data?.error ||
-          "Failed to share the form. Please try again!",
+        error?.response?.data?.message[0] || "Failed to Approve employee.",
       );
-    } finally {
-      setIsLoader(false);
+     
     }
+    
   };
   return (
     <div className="flex h-full w-full flex-col gap-4 bg-gray-100 p-10">

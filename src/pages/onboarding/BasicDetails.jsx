@@ -7,72 +7,52 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
-import { ChevronRight, Eye, Plus, RotateCw, Share2, UploadCloud, X } from "lucide-react";
+import { ChevronRight, Eye, RotateCw, X } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  bloodGroups,
-  maritalStatuses,
-  pentionStatuses,
-} from "@/constants/data";
+
 import {
   COUNTRY,
   COUNTRY_CITY,
-  EMPLOYEE_DEPARTMENT,
-  EMPLOYEE_DEPARTMENT_LIST,
-  EMPLOYEE_DESIGNATION,
-  EMPLOYEE_DESIGNATION_LIST,
-  EMPLOYEE_ONBOARD_MAIL_SEND,
-  EMPLOYEE_TYPE,
-  EMPLOYEE_TYPE_LIST,
-  EMPLOYEE_WORK_LOCATION,
-  EMPLOYEE_WORK_LOCATION_LIST,
-  NATIONALITY,
   ROLES_LIST,
   SALARY_DEFAULT_MASTERS,
-  STATE_COUNTRY,
 } from "@/api/master";
 import useImageUpload from "@/hooks/useImageUpload";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import {
-  EMPLOYEE,
-  EMPLOYEE_UNIQUE_ID,
-  newFormRequest,
-  newRequest,
-  UPDATE_EMPLOYEE,
-} from "@/api";
-import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  employeeColumnKeysForDepartment,
-  employeeColumnKeysForDesignation,
-  employeeColumnKeysForEmployeeType,
-  employeeColumnKeysForWorkLocation,
-} from "@/lib/columns/employee";
-import { Dialog, DialogPanel } from "@headlessui/react";
+import { EMPLOYEE, EMPLOYEE_UNIQUE_ID, newRequest } from "@/api";
+import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
-export default function BasicDetails({formtype}) {
-      const {
-        register,
-        handleSubmit,
-        control,
-        setValue,
-        setError,
-        reset,
-        watch,
-        formState: { errors },
-      } = useForm({
-        mode: "on",
-        reValidateMode: "onChange",
-        resolver: yupResolver(EmployeeSchema),
-      });
-      const location = useLocation();
+export default function BasicDetails({ formtype }) {
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    setError,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: "on",
+    reValidateMode: "onChange",
+    resolver: yupResolver(EmployeeSchema),
+  });
+
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
+  const [sameAsHome, setSameAsHome] = useState(false);
+  const [state, setState] = useState();
+  const [isImageVisible, setIsImageVisible] = useState(false);
+  const [imageError, setImageError] = useState(null);
+  const { country_id, state_id, home_address, city_id } = watch();
 
+  const toggleImageVisibility = () => {
+    setIsImageVisible((prev) => !prev);
+  };
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
@@ -96,48 +76,23 @@ export default function BasicDetails({formtype}) {
     enabled: formtype == "update",
   });
 
-  const navigate = useNavigate();
-  const [masterApi, setMasterApi] = useState(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [qrkey, setQrkey] = useState(null);
-  const [type, setType] = useState(null);
-  const [colKeys, setColKeys] = useState(null);
-  const [sameAsHome, setSameAsHome] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [state, setState] = useState();
-  const [onBoardPopup, setOnBoardPopup] = useState(false);
-
-  function closeOnBoardPopup() {
-    setOnBoardPopup(false);
-  }
-  const [imageerror, setImageerror] = useState("");
-
+  console.log(employeeDetails, "employeeDetailsemployeeDetails");
   useEffect(() => {
     if (employeeDetails) {
       console.log(employeeDetails);
-      
+
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
-      setValue("middle_name", employeeDetails.middle_name||'');
+      setValue("middle_name", employeeDetails.middle_name || "");
       setValue("post_code", employeeDetails.post_code);
       setValue("sur_name", employeeDetails.sur_name);
       setValue("gender", employeeDetails.gender);
       setValue("dob", employeeDetails.dob);
-      setValue("marital_status", employeeDetails.marital_status);
       setValue("blood_group", employeeDetails.blood_group);
       setValue("nationality_id", employeeDetails.nationality_id);
       setValue("communication_address", employeeDetails.communication_address);
       setValue("home_address", employeeDetails.home_address);
-      setValue("email", employeeDetails.email);
-      setValue("mobile_number", employeeDetails.mobile_number);
       setValue("employee_type", employeeDetails.employee_type);
-      setValue("department", employeeDetails.department);
-      setValue("worklocation_id", employeeDetails.worklocation_id);
-      setValue("designation_id", employeeDetails.designation_id);
-      setValue("date_of_joining", employeeDetails.date_of_joining);
-      setValue("role_id", employeeDetails.role_id);
-      setValue("work_email", employeeDetails.work_email);
-      setValue("personal_email", employeeDetails.personal_email);
       setValue(
         "national_insurance_number",
         employeeDetails.national_insurance_number,
@@ -145,29 +100,22 @@ export default function BasicDetails({formtype}) {
       setValue("country_id", employeeDetails.country_id);
       setValue("state_id", employeeDetails.state_id);
       setValue("city_id", employeeDetails.city_id);
-      setValue("department_id", employeeDetails.department_id);
       setValue("employment_type", employeeDetails.employment_type);
-      setValue("pension_subscription", employeeDetails.pension_subscription);
-      if(employeeDetails?.state_id){
-        setState(employeeDetails?.state_id?.value)
+      if (employeeDetails?.state_id) {
+        setState(employeeDetails?.state_id?.value);
       }
     }
   }, [employeeDetails, setValue]);
 
+  console.log(
+    employeeDetails?.gender?.value,
+    " employeeDetails.employment_type",
+  );
   useEffect(() => {
     if (employeeDetails) {
       setImage(employeeDetails?.profile_image);
     }
   }, [employeeDetails, setImage]);
-
-//   const handleOpenSaveMaster = (toOpen) => {
-//     const config = masterConfig[toOpen];
-//     setMasterApi(config.api);
-//     setQrkey(config.qrkey);
-//     setType(config.type);
-//     setColKeys(config.colKeys);
-//     setPopupOpen(true);
-//   };
 
   useEffect(() => {
     if (employeeDetails) {
@@ -187,23 +135,6 @@ export default function BasicDetails({formtype}) {
     }
   }, [employeeDetails, sameAsHome]);
 
-  // COUNTRY LISTING
-  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
-
-  // DESIGNATION LISTING
-  const { data: designationListing } = useEmployeeMaster(
-    EMPLOYEE_DESIGNATION_LIST,
-    "employeeDesignationList",
-  );
-
-  // NATIONALITY LISTING
-  const { data: nationalityList } = useEmployeeMaster(
-    NATIONALITY,
-    "nationalityList",
-  );
-
-  const { country_id, state_id, home_address, city_id } = watch();
-
   // GET CITY BY STATE ID AND SEARCH KEY
   const loadCitiesOptions = async (inputValue) => {
     if (inputValue?.length < 3) {
@@ -214,35 +145,6 @@ export default function BasicDetails({formtype}) {
     });
     return response?.data;
   };
-
-  // Function to display state of the selected city
-  const handleCitySelect = (selectedCity) => {
-    if (selectedCity?.state_name) {
-      setState(selectedCity.state_name);
-      setValue("state_id", {
-        label: selectedCity.state_name,
-        value: selectedCity.state_id,
-      });
-    }
-  };
-
-  // DEPARTMENT LISTING
-  const { data: departmentListing } = useEmployeeMaster(
-    EMPLOYEE_DEPARTMENT_LIST,
-    "employeeDepartmentList",
-  );
-
-  // WORK LOCATION LISTING
-  const { data: workLocationListing } = useEmployeeMaster(
-    EMPLOYEE_WORK_LOCATION_LIST,
-    "employeeWorkLocationList",
-  );
-
-  // EMOPLOYEE TYPE LIST
-  const { data: employeeTypeList } = useEmployeeMaster(
-    EMPLOYEE_TYPE_LIST,
-    "employeeTypeList",
-  );
 
   // EMPLOYEE UNIQUE ID
   const { data: uniqueId } = useEmployeeMaster(
@@ -281,85 +183,6 @@ export default function BasicDetails({formtype}) {
   };
 
   // ROLES LIST
-  const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
-
-//   const onSubmit = (data) => {
-//     console.log(image);
-//     if (imageFile || image) {
-//       setLoader(true);
-//       handleEmployee(data);
-//     } else {
-//       setImageerror("Image is required");
-//       toast.error("Image is required");
-//     }
-//   };
-
-//   const handleEmployee = async (data) => {
-//     const formData = new FormData();
-//     formData.append("first_name", data.first_name);
-//     formData.append("middle_name", data.middle_name);
-//     formData.append("sur_name", data.sur_name);
-//     formData.append("gender", data.gender?.id);
-//     formData.append("post_code", data.post_code);
-//     formData.append("dob", data.dob);
-//     formData.append("blood_group", data.blood_group?.value);
-//     formData.append("marital_status", data.marital_status?.value);
-//     formData.append("nationality_id", data.nationality_id?.id);
-//     formData.append("unique_id", uniqueId?.unique_id);
-//     formData.append("mobile_number", data.mobile_number);
-//     formData.append("work_email", data.work_email);
-//     formData.append("personal_email", data.personal_email);
-//     formData.append(
-//       "national_insurance_number",
-//       data.national_insurance_number,
-//     );
-//     formData.append("home_address", data.home_address);
-//     formData.append("communication_address", data.communication_address);
-//     formData.append("department_id", data.department_id?.id);
-//     formData.append("worklocation_id", data.worklocation_id?.id);
-//     formData.append("employment_type", data.employment_type?.id);
-//     formData.append("designation_id", data.designation_id?.id);
-//     formData.append("date_of_joining", data.date_of_joining);
-//     data.role_id.forEach((role) => {
-//       formData.append("role_id[]", role.id);
-//       formData.append("roles[]", role.value);
-//     });
-//     formData.append("country_id", data.country_id?.id);
-//     formData.append("city_id", data.city_id?.id);
-//     formData.append("state_id", data.state_id?.id);
-//     imageFile ? formData.append("profile_image", imageFile) : formData.append("profile_image", '')
-//     formData.append("same_as_home", sameAsHome ? 1 : 0);
-//     formData.append("pension_subscription", data.pension_subscription?.id);
-//     console.log(formData);
-    
-
-//     try {
-//       let res;
-//       if (formtype === "save") {
-//         res = await newFormRequest.post(EMPLOYEE, formData);
-//       } else {
-//         res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
-//       }
-//       if (res.data?.status === 201) {
-//         toast.success(res?.data?.message);
-//         queryClient.invalidateQueries(["employeeDetails"]);
-//         queryClient.invalidateQueries(["employeeListing"]);
-//         clearImage();
-//         reset();
-//         setLoader(false);
-//         navigate("/admin/employee")
-//       } else {
-//         toast.error("Failed to save employee.");
-//         setLoader(false);
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       toast.error(
-//         error?.response?.data?.message[0] || "Failed to save employee.",
-//       );
-//       setLoader(false);
-//     }
-//   };
 
   return (
     <Disclosure as="div" className="px-5 py-2" defaultOpen={true}>
@@ -370,15 +193,14 @@ export default function BasicDetails({formtype}) {
         <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
           Basic Details
         </p>
-        <div className="border w-full bg-darkblack"></div>
+        <div className="w-full border bg-darkblack"></div>
       </DisclosureButton>
-      <DisclosurePanel className="my-4 text-sm/5 text-black/50 grid grid-cols-2">
-      
+      <DisclosurePanel className="my-4 grid grid-cols-2 text-sm/5 text-black/50">
         <div
-          className={`flex w-full flex-col rounded-md  bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
+          className={`flex w-full flex-col rounded-md bg-white py-4 ${formtype === "update" ? "px-2" : "px-5"}`}
         >
           <div className="flex items-center justify-end">
-            <div className="flex flex-col ">
+            <div className="flex flex-col">
               <div className="flex items-center gap-1">
                 <div className="flex h-11 w-fit items-center justify-between gap-3 font-semibold text-black">
                   <label className="label-text text-sm">Employee ID</label>
@@ -406,11 +228,11 @@ export default function BasicDetails({formtype}) {
                   />
                 )}
               </div>
-              {errors.unique_id && (
+              {/* {errors.unique_id && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.unique_id?.message}
                 </span>
-              )}
+              )} */}
             </div>
           </div>
           <div className="mt-4 grid w-full lg:grid-cols-2">
@@ -428,15 +250,15 @@ export default function BasicDetails({formtype}) {
                   },
                 })}
                 className="input-box"
-                onInput={(e) => {
-                  e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
-                }}
+                // onInput={(e) => {
+                //   e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                // }}
               />
-              {errors.first_name && (
+              {/* {errors.first_name && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.first_name?.message}
                 </span>
-              )}
+              )} */}
             </div>
 
             <div className="group flex flex-col gap-1.5 px-3 py-2">
@@ -456,11 +278,11 @@ export default function BasicDetails({formtype}) {
                   e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
                 }}
               />
-              {errors.middle_name && (
+              {/* {errors.middle_name && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.middle_name?.message}
                 </span>
-              )}
+              )} */}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Surname</label>
@@ -480,11 +302,11 @@ export default function BasicDetails({formtype}) {
                   e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
                 }}
               />
-              {errors.sur_name && (
+              {/* {errors.sur_name && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.sur_name?.message}
                 </span>
-              )}
+              )} */}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Date of birth</label>
@@ -495,11 +317,11 @@ export default function BasicDetails({formtype}) {
                 max={new Date().toISOString().split("T")[0]}
                 className="input-box pr-2"
               />
-              {errors.dob && (
+              {/* {errors.dob && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.dob?.message}
                 </span>
-              )}
+              )} */}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Gender</label>
@@ -513,17 +335,17 @@ export default function BasicDetails({formtype}) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    options={employeeMasters?.genders}
+                    // options={employeeMasters?.genders}
                     placeholder="Select Gender"
                     className="input-box"
                   />
                 )}
               />
-              {errors.gender && (
+              {/* {errors.gender && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.gender.message}
                 </span>
-              )}
+              )} */}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Nationality</label>
@@ -536,17 +358,17 @@ export default function BasicDetails({formtype}) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    options={nationalityList}
+                    // options={nationalityList}
                     placeholder="Select Nationality"
                     className="input-box"
                   />
                 )}
               />
-              {errors.nationality_id && (
+              {/* {errors.nationality_id && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.nationality_id?.message}
                 </span>
-              )}
+              )} */}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Country</label>
@@ -559,17 +381,17 @@ export default function BasicDetails({formtype}) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    options={countryList}
+                    // options={countryList}
                     placeholder="Select Country"
                     className="input-box"
                   />
                 )}
               />
-              {errors.country_id && (
+              {/* {errors.country_id && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.country_id?.message}
                 </span>
-              )}
+              )} */}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">City</label>
@@ -584,33 +406,20 @@ export default function BasicDetails({formtype}) {
                     loadOptions={loadCitiesOptions}
                     isSearchable={true}
                     noOptionsMessage={() => "Type city name"}
-                    onChange={(selectedOption) => {
-                      field.onChange(selectedOption); // Update form state
-                      handleCitySelect(selectedOption);
-                    }}
+                    // onChange={(selectedOption) => {
+                    //   field.onChange(selectedOption); // Update form state
+                    //   handleCitySelect(selectedOption);
+                    // }}
                     value={field.value} // Ensure the value is controlled
                     className="input-box"
                   />
                 )}
               />
-              {errors.city_id && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.city_id?.message}
-                </span>
-              )}
             </div>
 
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="label-text">County</label>
-              {/* Show the selected state's name if a city is selected */}
-              <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
-                {state || ""}
-              </span>
-              {errors.state_id && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.state_id?.message}
-                </span>
-              )}
+              <span className="input-box p-2">{state || ""}</span>
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Post Code</label>
@@ -623,26 +432,8 @@ export default function BasicDetails({formtype}) {
                 autoComplete="off"
                 type="text"
                 placeholder="Enter Post Code"
-                onKeyPress={(event) => {
-                  const valueWithoutSpaces = event.target.value.replace(
-                    /\s/g,
-                    "",
-                  );
-                  if (
-                    !/^[a-zA-Z0-9]$/.test(event.key) || // Allow only alphanumeric characters
-                    valueWithoutSpaces.length >= 7 // Prevent more than 7 characters
-                  ) {
-                    event.preventDefault();
-                  }
-                }}
                 className="input-box"
               />
-
-              {errors.post_code && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.post_code?.message}
-                </span>
-              )}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="label-text">Blood Group</label>
@@ -655,17 +446,12 @@ export default function BasicDetails({formtype}) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    options={bloodGroups}
+                    // options={bloodGroups}
                     placeholder="Select Blood Group"
                     className="input-box"
                   />
                 )}
               />
-              {errors.blood_group && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.blood_group?.message}
-                </span>
-              )}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">
@@ -685,11 +471,6 @@ export default function BasicDetails({formtype}) {
                 placeholder="Enter National Insurance Number"
                 className="input-box"
               />
-              {errors.national_insurance_number && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.national_insurance_number?.message}
-                </span>
-              )}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label
@@ -703,16 +484,9 @@ export default function BasicDetails({formtype}) {
                 {...register("home_address", { required: true })}
                 className="input-box min-h-28 py-1"
               />
-              {errors.home_address && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.home_address?.message}
-                </span>
-              )}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
-              <label
-                className={`label-text flex  flex-col `}
-              >
+              <label className={`label-text flex flex-col`}>
                 <p className="required">Communication Address</p>
                 <div className="flex gap-1.5">
                   <input
@@ -733,20 +507,15 @@ export default function BasicDetails({formtype}) {
                 {...register("communication_address", { required: true })}
                 className="input-box min-h-28 py-1"
               />
-              {errors.communication_address && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.communication_address?.message}
-                </span>
-              )}
             </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Profile pic</label>
-              {imageerror && (
+              {imageError && (
                 <span className="text-xs font-medium text-red-500">
-                  {imageerror}
+                  {imageError}
                 </span>
               )}
-              {image ? (
+              {isImageVisible ? (
                 <div className="relative">
                   <img
                     src={image}
@@ -754,45 +523,21 @@ export default function BasicDetails({formtype}) {
                     className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                   />
                   <X
-                    onClick={clearImage}
+                    onClick={toggleImageVisibility}
                     className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
                   />
                 </div>
               ) : (
                 <label
-                  htmlFor="employee-profile-pic"
+                  onClick={toggleImageVisibility}
                   className="input-box flex h-10 cursor-pointer items-center justify-start rounded-md border border-dashed pl-2"
                 >
                   <div className="flex items-center justify-start">
                     <Eye className="size-4" />
-                    <span className="font-semibold text-textcolor-darkCharcoal text-xs">
-                      view image
+                    <span className="text-xs font-semibold text-textcolor-darkCharcoal">
+                      View image
                     </span>
                   </div>
-                  <input
-                    id="employee-profile-pic"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const allowedTypes = [
-                          "image/jpeg",
-                          "image/png",
-                          "image/gif",
-                        ]; // Allowed MIME types
-                        if (!allowedTypes.includes(file.type)) {
-                          toast.error(
-                            "Invalid file type. Only images (JPEG, PNG, GIF) are allowed.",
-                          );
-                          e.target.value = ""; // Clear the input
-                          return;
-                        }
-                        handleImageChange(e); // Proceed with the valid file
-                      }
-                    }}
-                    type="file"
-                    className="hidden"
-                    accept="image/jpeg, image/png, image/gif" // Restrict file types
-                  />
                 </label>
               )}
             </div>

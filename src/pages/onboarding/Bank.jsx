@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import MenuHeader from "@/components/common/MenuHeader";
-import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight,Trash2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { EMPLOYEE_BANK_DETAILS, newRequest } from "@/api";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import EmployeeBankDetailsEditForm from "@/components/popups/employees/edit/BankDetails";
 import {
   Disclosure,
   DisclosureButton,
@@ -22,8 +18,7 @@ export default function Bank() {
   const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
-  const [deletePopup, setDeletePopup] = useState(false);
+ 
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 

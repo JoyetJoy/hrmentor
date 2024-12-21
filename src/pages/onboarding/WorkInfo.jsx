@@ -1,28 +1,10 @@
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useEmployeeMaster from "@/hooks/useEmployeeMasters";
-import {
-  disabilityStatus,
-  genders,
-  maritalStatuses,
-  pentionStatuses,
-  successStatus,
-} from "@/constants/data";
-import {
-  ACTIVE_EMPLOYEE,
-  EMPLOYEE_WORK_INFO,
-  newFormRequest,
-  newRequest,
-} from "@/api";
+import { EMPLOYEE_WORK_INFO, newRequest } from "@/api";
 import { useLocation } from "react-router-dom";
-import {
-  EMPLOYEE_EEO_CATEGORY_LIST,
-  EMPLOYEE_ETHNICITY_LIST,
-  EMPLOYEE_RELIGIOUS_AND_SEXUAL,
-} from "@/api/master";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+
+import { useQuery } from "@tanstack/react-query";
 import { WorkInfoEmployeeSchema } from "@/schema/dashboard/employee/form/workinfo.schema";
 import {
   Disclosure,
@@ -51,18 +33,11 @@ export default function WorkInfo({ formtype }) {
   });
 
   console.log(errors, "errorserrors");
-
-  // const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
-  // const [localState, setLocalState] = useState(null);
 
-  const {
-    data: empWorkInfoDetail,
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: empWorkInfoDetail, refetch } = useQuery({
     queryKey: ["empWorkInfoDetail", uid, formtype],
     queryFn: () =>
       newRequest.get(`${EMPLOYEE_WORK_INFO}/${uid}`).then((res) => {
@@ -99,7 +74,6 @@ export default function WorkInfo({ formtype }) {
     if (uid) {
       refetch().then((response) => {
         console.log("Data refetched", response);
-        setLocalState(response?.data);
       });
     }
   }, [uid, refetch]);
@@ -112,83 +86,6 @@ export default function WorkInfo({ formtype }) {
     }
   }, [empWorkInfoDetail, setReportNotRequired]);
 
-  // const onSubmit = (data) => {
-  //   setLoader(true);
-  //   handleSave(data);
-  // };
-
-  // const handleSave = async (data) => {
-  //   const formData = new FormData();
-  //   console.log(data, "343434");
-  //   formData.append("user_id", uid);
-
-  //   formData.append("ethinicity_id", data.ethinicity_id?.id);
-  //   formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
-  //   formData.append("relegion_belief_id", data.relegion_belief_id?.id);
-  //   formData.append("sexual_orientation_id", data.sexual_orientation_id?.id);
-  //   formData.append(
-  //     "pregnancy_and_maternity",
-  //     data.pregnancy_and_maternity?.id,
-  //   );
-  //   formData.append("gender", data.gender?.id);
-  //   formData.append("marital_status", data.marital_status?.value);
-  //   formData.append("disability", data.disability?.id);
-  //   formData.append("age", data.age);
-  //   formData.append("dosent_reporting", reportNotRequired ? 1 : 0);
-  //   if (reportNotRequired == 0) {
-  //     formData.append("hiring_manager_id", data.hiring_manager_id?.id);
-  //     formData.append("reporting_manager_id", data.reporting_manager_id?.id);
-  //     if (!data.hiring_manager_id?.id) {
-  //       return toast.error("select hiring manager");
-  //     }
-  //     if (!data.reporting_manager_id?.id) {
-  //       return toast.error("select Reporting manager");
-  //     }
-  //   }
-
-  //   try {
-  //     const res = await newFormRequest.post(
-  //       `employee-work-informations`,
-  //       formData,
-  //     );
-  //     if (res?.data?.status === 201) {
-  //       toast.success(res?.data?.message);
-  //       queryClient.invalidateQueries(["empWorkInfoDetail"]);
-  //       setLoader(false);
-  //     } else {
-  //       toast.error("Failed to update work information");
-  //       setLoader(false);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Failed to update");
-  //     setLoader(false);
-  //   }
-  // };
-
-  // EMOPLOYEE LIST
-  const { data: activeEmployeeList } = useEmployeeMaster(
-    ACTIVE_EMPLOYEE,
-    "activeEmployeeList",
-  );
-
-  // Active ethinicity list
-  const { data: ethinicityList } = useEmployeeMaster(
-    EMPLOYEE_ETHNICITY_LIST,
-    "ethnicityList",
-  );
-  // EEO job category list
-  const { data: eeoJobCategoryList } = useEmployeeMaster(
-    EMPLOYEE_EEO_CATEGORY_LIST,
-    "eeoJobCategoryList",
-  );
-
-  // Religious and sexual orientation list
-  const { data: religiousSexualList } = useEmployeeMaster(
-    EMPLOYEE_RELIGIOUS_AND_SEXUAL,
-    "religiousSexualList",
-  );
-
   return (
     <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
       <DisclosureButton className="group flex w-full items-center gap-x-2">
@@ -198,7 +95,7 @@ export default function WorkInfo({ formtype }) {
         <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
           Work Information
         </p>
-        <div className="border w-full "></div>
+        <div className="w-full border"></div>
       </DisclosureButton>
       <DisclosurePanel className="my-4 grid grid-cols-2 text-sm/5 text-black/50">
         <div
@@ -214,29 +111,9 @@ export default function WorkInfo({ formtype }) {
                   name="age"
                   placeholder="Enter"
                   {...register("age", { required: true })}
-                  onKeyPress={(event) => {
-                    if (
-                      !/^[0-9]$/.test(event.key) ||
-                      event.target.value.length >= 2
-                    ) {
-                      event.preventDefault();
-                    }
-                  }}
-                  onChange={(event) => {
-                    const value = event.target.value;
-                    if (value && !isNaN(value)) {
-                      setValue("age", value);
-                    }
-                  }}
                   className="input-box placeholder:text-[0.8rem]"
                   value={watch("age")}
                 />
-
-                {errors.age && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.age?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">EEO Job Category</label>
@@ -249,21 +126,15 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={eeoJobCategoryList}
+                      // options={eeoJobCategoryList}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.eeo_job_category_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.eeo_job_category_id?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Ethinicity</label>
-
                 <Controller
                   name="ethinicity_id"
                   control={control}
@@ -273,17 +144,12 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={ethinicityList}
+                      // options={ethinicityList}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.ethinicity_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.ethinicity_id?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Religious belief</label>
@@ -296,17 +162,12 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={religiousSexualList?.religious}
+                      // options={religiousSexualList?.religious}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.relegion_belief_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.relegion_belief_id?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Gender</label>
@@ -319,17 +180,12 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={genders}
+                      // options={genders}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.gender && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.gender?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Sexual orientation</label>
@@ -342,21 +198,14 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={religiousSexualList?.sexualOrientations}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.sexual_orientation_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.sexual_orientation_id?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Marital status</label>
-
                 <Controller
                   name="marital_status"
                   control={control}
@@ -366,17 +215,11 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={maritalStatuses}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.marital_status && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.marital_status?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">Pregnancy & maternity</label>
@@ -389,17 +232,11 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={disabilityStatus}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.pregnancy_and_maternity && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.pregnancy_and_maternity?.message}
-                  </span>
-                )}
               </div>
               <div className="group flex flex-col gap-1.5 px-3 py-2">
                 <label className="label-text">
@@ -414,17 +251,11 @@ export default function WorkInfo({ formtype }) {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={disabilityStatus}
                       placeholder="Select"
                       className="input-box"
                     />
                   )}
                 />
-                {errors.physical && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.disability?.message}
-                  </span>
-                )}
               </div>
             </div>
           </div>
