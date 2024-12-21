@@ -847,19 +847,19 @@ function RecruiterJobPost() {
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="required label-text">Postal Code</label>
                   <input
-                    {...register("postal_code")}
-                    autoComplete="off"
-                    type="text"
-                    className="input-box"
-                    onKeyPress={(event) => {
-                      if (
-                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
-                        event.target.value.replace(/\s/g, "").length >= 6
-                      ) {
-                        event.preventDefault();
-                      }
-                    }}
-                  />
+  {...register("postal_code")}
+  autoComplete="off"
+  type="text"
+  className="input-box"
+  onKeyPress={(event) => {
+    // Prevent any characters except numbers and spaces
+    if (!/^[0-9\s]$/.test(event.key)||event.target.value.replace(/\s/g, "").length >= 7) {
+      event.preventDefault(); // Block input if it's not a number or space
+    }
+  }}
+  
+/>
+
                   {errors.postal_code && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.postal_code?.message}

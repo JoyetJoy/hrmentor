@@ -527,7 +527,7 @@ export default function RecSaveFormCandidate({ type }) {
                 onKeyPress={(event) => {
                   if (
                     !/^[a-zA-Z0-9\s]$/.test(event.key) ||
-                    event.target.value.replace(/\s/g, "").length >= 6
+                    event.target.value.replace(/\s/g, "").length >= 7
                   ) {
                     event.preventDefault();
                   }
