@@ -133,6 +133,8 @@ export default function SaveEmployeeForm({ formtype }) {
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState();
   const [sharePopupOpen, setSharePopupOpen] = useState(false);
+ 
+
 
   const [imageerror, setImageerror] = useState("");
 
@@ -320,7 +322,7 @@ export default function SaveEmployeeForm({ formtype }) {
 
   const handleEmployee = async (data) => {
     console.log(data?.state_id);
-
+    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -353,9 +355,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
     formData.append("state_id", data.state_id?.value);
-    imageFile
-      ? formData.append("profile_image", imageFile)
-      : formData.append("profile_image", "");
+    imageFile ? formData.append("profile_image", imageFile) : formData.append("profile_image", '')
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pension_subscription", data.pension_subscription?.id);
     console.log(formData);
@@ -387,7 +387,7 @@ export default function SaveEmployeeForm({ formtype }) {
       setLoader(false);
     }
   };
-
+  
   return (
     <>
       <Share
@@ -705,19 +705,21 @@ export default function SaveEmployeeForm({ formtype }) {
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
                   <label className="required label-text">Post Code</label>
                   <input
-                    {...register("postal_code")}
+                    {...register("post_code", {
+                      required: true,
+                    })}
                     autoComplete="off"
                     type="text"
-                    className="input-box"
+                    placeholder="Enter Post Code"
                     onKeyPress={(event) => {
-                      // Prevent any characters except numbers and spaces
                       if (
-                        !/^[0-9\s]$/.test(event.key) ||
+                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
                         event.target.value.replace(/\s/g, "").length >= 7
                       ) {
-                        event.preventDefault(); // Block input if it's not a number or space
+                        event.preventDefault();
                       }
                     }}
+                    className="input-box"
                   />
 
                   {errors.post_code && (
