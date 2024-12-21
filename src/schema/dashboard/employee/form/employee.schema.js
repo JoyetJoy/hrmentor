@@ -80,8 +80,8 @@ export const EmployeeSchema = Yup.object({
   date_of_joining: Yup.string().required("Date of joining is required"),
 
   mobile_number: Yup.string()
-  .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
-  .required("Mobile number is required"),
+    .matches(/^[0-9]{11}$/, "Mobile number must be 11 digits")
+    .required("Mobile number is required"),
 
   personal_email: Yup.string()
     .email("Invalid email format")

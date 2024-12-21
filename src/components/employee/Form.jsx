@@ -1069,9 +1069,10 @@ export default function SaveEmployeeForm({ formtype }) {
                     type="text"
                     placeholder="Enter Moblie Number"
                     onKeyPress={(event) => {
+                      // Allow only digits (0-9) and prevent input if length is already 11
                       if (
-                        !/^[0-9]$/.test(event.key) ||
-                        event.target.value.length >= 11
+                        !/^[0-9]$/.test(event.key) || // Check if the key is a number
+                        event.target.value.length >= 11 // Prevent typing if length is 11
                       ) {
                         event.preventDefault();
                       }
