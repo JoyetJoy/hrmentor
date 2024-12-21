@@ -36,7 +36,7 @@ export default function RecSaveFormCandidate({ type }) {
   const [popupOpen, setPopupOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [state, setState] = useState('');
+  const [state, setState] = useState("");
 
   const {
     register,
@@ -505,31 +505,31 @@ export default function RecSaveFormCandidate({ type }) {
               )}
             </div>
             <div className="group flex flex-col space-y-1 py-2">
-                  <label className="label-text">County</label>
-                  {/* Show the selected state's name if a city is selected */}
-                  <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
-                    {state || ""}
-                  </span>
-                  {errors.state_or_province && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.state_or_province?.message}
-                    </span>
-                  )}
-                </div>
+              <label className="label-text">County</label>
+              {/* Show the selected state's name if a city is selected */}
+              <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
+                {state || ""}
+              </span>
+              {errors.state_or_province && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.state_or_province?.message}
+                </span>
+              )}
+            </div>
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">Post Code</label>
               <input
-                {...register("post_code", { required: true })}
+                {...register("postal_code")}
                 autoComplete="off"
                 type="text"
-                placeholder="Enter Post Code"
                 className="input-box"
                 onKeyPress={(event) => {
+                  // Prevent any characters except numbers and spaces
                   if (
-                    !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                    !/^[0-9\s]$/.test(event.key) ||
                     event.target.value.replace(/\s/g, "").length >= 7
                   ) {
-                    event.preventDefault();
+                    event.preventDefault(); // Block input if it's not a number or space
                   }
                 }}
               />
