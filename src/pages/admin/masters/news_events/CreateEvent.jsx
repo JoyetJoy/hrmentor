@@ -92,14 +92,15 @@ export default function CreateEvent() {
       let res;
 
       if (
-        !formData?.event_title ||
-        !formData?.short_summary ||
-        !formData?.start_date ||
-        !formData?.end_date ||
-        !formData?.start_time ||
-        !formData?.end_time ||
-        !formData?.content ||
-        !formData?.location_id
+        !data?.event_title ||
+        !data?.short_summary ||
+        !data?.start_date ||
+        !data?.end_date ||
+        !data?.start_time ||
+        !data?.end_time ||
+        !image || 
+        !content ||
+        !locationId
       ) {
         return toast.error("mandatory field missing error");
       }

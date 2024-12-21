@@ -74,11 +74,7 @@ export default function CreateNews({
       imageFile && formData.append("featured_image", imageFile);
       let res;
 
-      if (
-        !formData?.news_title ||
-        !formData?.short_summary ||
-        !formData?.content
-      ) {
+      if (!data?.news_title || !data?.short_summary || !image || !content) {
         return toast.error("mandatory field missing error");
       }
 
@@ -159,7 +155,7 @@ export default function CreateNews({
                   type="text"
                   name="short_summary"
                   placeholder="short summary"
-                  {...register("summary", { required: true })}
+                  {...register("short_summary", { required: true })}
                   className="input-box placeholder:text-[0.8rem]"
                 />
                 {errors.recipient && (
