@@ -120,14 +120,17 @@ export default function EmployeeSalaryEdit() {
       ].filter(Boolean),
     [employeeSalaryDetails],
   );
+  console.log(selectedId);
+  
   return (
     <>
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeSalaryDetails"}
         api={EMPLOYEE_SALARY_DETAILS}
+        
       />
       <EmployeeSalaryDetailsEditForm
         popupOpen={popupOpen}
