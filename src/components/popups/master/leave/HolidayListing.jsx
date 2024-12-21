@@ -11,6 +11,8 @@ import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar
 import Loader from "@/components/ui/Loader";
 import LeaveSettingsHeader from "@/components/common/LeaveSettingsHeader";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import BasicSettings from "./settings/BasicSettings";
+import { useNavigate } from "react-router-dom";
 
 export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,11 +27,11 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
     user: state.user,
   }));
 
-  // useEffect(() => {
-  //   if (selectedField) {
-  //     setPopupOpen(true);
-  //   }
-  // }, [selectedField]);
+  const navigate = useNavigate();
+
+  const handleNavigation = (id) => {
+    navigate(`/admin/leave/settings/basesettings?id=${id}`);
+  };
 
   // Fetch List
   const { data, isLoading } = useQuery({
@@ -108,7 +110,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
             <button
-              to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
+              onClick={() => handleNavigation(row.original?.id)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
