@@ -320,6 +320,8 @@ export default function SaveEmployeeForm({ formtype }) {
   };
 
   const handleEmployee = async (data) => {
+    console.log(data?.state_id);
+    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -351,7 +353,7 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("state_id", data.state_id?.id);
+    formData.append("state_id", data.state_id?.value);
     imageFile ? formData.append("profile_image", imageFile) : formData.append("profile_image", '')
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pension_subscription", data.pension_subscription?.id);
@@ -692,20 +694,14 @@ export default function SaveEmployeeForm({ formtype }) {
                   <input
                     {...register("post_code", {
                       required: true,
-                      minLength: 5,
-                      maxLength: 7,
                     })}
                     autoComplete="off"
                     type="text"
                     placeholder="Enter Post Code"
                     onKeyPress={(event) => {
-                      const valueWithoutSpaces = event.target.value.replace(
-                        /\s/g,
-                        "",
-                      );
                       if (
-                        !/^[a-zA-Z0-9]$/.test(event.key) || // Allow only alphanumeric characters
-                        valueWithoutSpaces.length >= 7 // Prevent more than 7 characters
+                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
+                        event.target.value.replace(/\s/g, "").length >= 6
                       ) {
                         event.preventDefault();
                       }

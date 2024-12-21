@@ -12,9 +12,7 @@ export const EmployeeSchema = Yup.object({
     label: Yup.string(),
   }),
   post_code: Yup.string()
-    .required("Postal code is required")
-    .min(5, "Postal code must be at least 5 characters")
-    .max(7, "Postal code must not exceed 7 characters"),
+    .required("Postal code is required"),
   dob: Yup.string().required("Date of birth is required"),
   nationality_id: Yup.object({
     value: Yup.string(),
@@ -82,8 +80,8 @@ export const EmployeeSchema = Yup.object({
   date_of_joining: Yup.string().required("Date of joining is required"),
 
   mobile_number: Yup.string()
-    .matches(/^[0-9]{11}$/, "Mobile number must be 11 digits")
-    .required("Mobile number is required"),
+  .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
+  .required("Mobile number is required"),
 
   personal_email: Yup.string()
     .email("Invalid email format")

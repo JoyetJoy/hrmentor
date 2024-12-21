@@ -38,9 +38,9 @@ export default function Event() {
   useEffect(() => {
     if (eventList) {
       setTotalPages(eventList?.last_page);
-      setCurrentPage(eventList?.current_page);
     }
   }, [eventList]);
+console.log(currentPage);
 
   const handleClickView = () => {
     setDeletePopup(true);
@@ -69,6 +69,8 @@ export default function Event() {
         header: "Sl No",
         accessorKey: "sno",
         cell: ({ row }) => {
+          console.log(currentPage);
+          
           return (
             <div className="">
               {row.index + 1 + (currentPage - 1) * pageLimit}
