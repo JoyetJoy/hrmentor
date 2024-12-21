@@ -191,7 +191,7 @@ const EmployeeAccessAttendanceCalendar = () => {
                       <div
                         key={index}
                         onClick={() => handleClick(event)}
-                        className={`flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 lg:w-36 xl:w-44 ${getTileClass(
+                        className={`flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2  ${getTileClass(
                           date,
                         )} justify-center text-gray-800`}
                       >

@@ -27,21 +27,21 @@ export default function Document() {
   const pageLimit = 10;
 
   // Fetch List
-  const { data: employeeDocumentsCategory, isLoading } = useQuery({
-    queryKey: ["employeeDocumentsCategory", keyword, currentPage],
-    queryFn: () =>
-      newRequest
-        .get(EMPLOYEE_DOCUMENT_CATEGORY, {
-          params: {
-            page: currentPage,
-            per_limit: pageLimit,
-            search: keyword,
-          },
-        })
-        .then((res) => {
-          return res.data;
-        }),
-  });
+   const { data: employeeDocumentsCategory, isLoading } = useQuery({
+     queryKey: ["employeeDocumentsCategory", keyword, currentPage],
+     queryFn: () =>
+       newRequest
+         .get(EMPLOYEE_DOCUMENT_CATEGORY, {
+           params: {
+             page: currentPage,
+             per_limit: pageLimit,
+             search: keyword,
+           },
+         })
+         .then((res) => {
+           return res.data;
+         }),
+   });
 
   useEffect(() => {
     if (employeeDocumentsCategory) {
@@ -49,6 +49,8 @@ export default function Document() {
     }
   }, [employeeDocumentsCategory]);
 
+
+ console.log(employeeDocumentsCategory?.listing,"employeeDocumentsCategoryemployeeDocumentsCategory")
   return (
     <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
       <DisclosureButton className="group flex w-full items-center gap-x-2">
@@ -58,9 +60,9 @@ export default function Document() {
         <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
           Document
         </p>
-        <div className="h-px w-full bg-darkblack"></div>
+        <div className="border w-full"></div>
       </DisclosureButton>
-      <DisclosurePanel className="my-4 grid grid-cols-2 text-sm/5 text-black/50 ml-7">
+      <DisclosurePanel className=" grid grid-cols-1 text-sm/5 text-black/50 ml-7">
         <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white">
           {employeeDocumentsCategory?.listing?.map((item) => (
             <Disclosure
@@ -70,10 +72,10 @@ export default function Document() {
               defaultOpen={false}
             >
               <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
-                {/* <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
+                <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
                   <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                </div> */}
-                <p className="text-xs font-semibold text-black">{item?.document_category_name}</p>
+                </div>
+                <p className="text-sm font-semibold text-black">{item?.document_category_name}</p>
               </DisclosureButton>
               <DocumentUnderListing
                 // cid={item?.id}

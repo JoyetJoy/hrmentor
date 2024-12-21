@@ -11,6 +11,8 @@ import { ATTENDANCE, EMPLOYEE_LIST, newRequest, ROASTER_GET, TEAM_ATTENDANCE } f
 import TeamAttendanceSideBar from "@/components/sidebars/employee_access/attendance/TeamAttendanceSideBar";
 import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timesheet/TeamTimeSheetSideBar";
 import { Link } from "react-router-dom";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { ROSTER_EMPLIST, SHIFT_LIST } from "@/api/setup";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
@@ -25,8 +27,32 @@ const years = Array.from({ length: 11 }, (_, i) => ({
 const TeamAttendanceCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedShift, setSelectedShift] = useState('')
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
+
+  const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
+  console.log(selectedShift);
+
+  const { data: rosterEmpList } = useQuery({
+    queryKey: ["rosterEmpList", selectedShift],
+    queryFn: () => {
+      console.log(`Fetching employee list for shift ID: ${selectedShift}`);
+      return newRequest
+        .get(`${ROSTER_EMPLIST}/${selectedShiftId}`)
+        .then((res) => {
+          return res.data;
+        });
+    },
+    enabled: !!selectedShift,
+    onSuccess: (data) => {
+      console.log("Fetched employee list:", data);
+    },
+    onError: (error) => {
+      console.error("Error fetching employee list:", error?.message || error);
+    },
+  });
+  
 
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year],
@@ -199,6 +225,10 @@ const TeamAttendanceCalendar = () => {
           date={date}
           handleYearChange={handleYearChange}
           type='attendance'
+          shiftList={shiftList}
+          setSelectedShift={setSelectedShift}
+          rosterEmpList={rosterEmpList}
+          setSelectedEmployee={setSelectedEmployee}
         />
       <Calendar
           key={date}

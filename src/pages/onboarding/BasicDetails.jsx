@@ -370,7 +370,7 @@ export default function BasicDetails({formtype}) {
         <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
           Basic Details
         </p>
-        <div className="h-px w-full bg-darkblack"></div>
+        <div className="border w-full bg-darkblack"></div>
       </DisclosureButton>
       <DisclosurePanel className="my-4 text-sm/5 text-black/50 grid grid-cols-2">
       

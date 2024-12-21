@@ -180,10 +180,12 @@ function RecViewJobDetail() {
                   strokeWidth={2}
                 />
               </div>
-              <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
+              <Link
+               to={'/admin/employee/create'}
+               className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
                 <Plus className="size-5" />
                 Add Candidate
-              </div>
+              </Link>
               <div className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-neutralmedium px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">
                 <ArrowUpFromLine className="size-4" />
                 Export

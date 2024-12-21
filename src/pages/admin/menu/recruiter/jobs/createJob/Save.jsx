@@ -90,7 +90,7 @@ const masterConfig = {
 
 function RecruiterJobPost() {
   const [isNotMentioned, setIsNotMentioned] = useState("");
-  const [state, setState] = useState('');
+  const [state, setState] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -154,7 +154,7 @@ function RecruiterJobPost() {
   useEffect(() => {
     if (jobDetails) {
       console.log(jobDetails);
-      
+
       setValue("job_title", jobDetails.job_title);
       setValue("employment_type", jobDetails?.employment_type);
       setValue("min_exp_id", jobDetails.min_exp_id);
@@ -479,7 +479,7 @@ function RecruiterJobPost() {
       <div className="flex flex-row items-start justify-between gap-3">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="mb-3 mt-1 flex items-center justify-between">
-            <div className="flex flex-row items-center justify-center gap-2 text-base font-bold text-black cursor-pointer">
+            <div className="flex cursor-pointer flex-row items-center justify-center gap-2 text-base font-bold text-black">
               {/* <ArrowLeft onClick={() => history.back()} className="size-4" /> */}
               Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-textcolor-darkCharcoal">
@@ -852,14 +852,16 @@ function RecruiterJobPost() {
                     type="text"
                     className="input-box"
                     onKeyPress={(event) => {
+                      // Prevent any characters except numbers and spaces
                       if (
-                        !/^[a-zA-Z0-9\s]$/.test(event.key) ||
-                        event.target.value.replace(/\s/g, "").length >= 6
+                        !/^[0-9\s]$/.test(event.key) ||
+                        event.target.value.replace(/\s/g, "").length >= 7
                       ) {
-                        event.preventDefault();
+                        event.preventDefault(); // Block input if it's not a number or space
                       }
                     }}
                   />
+
                   {errors.postal_code && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.postal_code?.message}
@@ -935,7 +937,7 @@ function RecruiterJobPost() {
                           type="button"
                           disabled={job_code}
                           onClick={generateJobCode}
-                          className="w-fit text-[0.8rem] font-medium text-hrmprimaryorange pr-2"
+                          className="w-fit pr-2 text-[0.8rem] font-medium text-hrmprimaryorange"
                         >
                           Generate
                         </button>
