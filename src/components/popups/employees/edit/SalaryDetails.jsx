@@ -83,7 +83,7 @@ export default function EmployeeSalaryDetailsEditForm({
       const formData = new FormData();
       formData.append("user_id", uid);
       formData.append("effective_from", data.effective_from);
-      formData.append("effective_to", data.to);
+      formData.append("effective_to", data.effective_to);
       formData.append("currency", data.currency?.id);
       formData.append("roles", data.roles);
       formData.append("pay_rate", data.pay_rate);
