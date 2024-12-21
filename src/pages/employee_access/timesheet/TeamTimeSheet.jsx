@@ -31,8 +31,6 @@ export default function TeamTimeSheet() {
     queryFn: () =>
       newRequest.get(TEAM_TIMESHEET_EMPLOYEELIST).then((res) => res.data),
   });
-  // console.log(employeelist);
-  
 
   // Trigger the query on mount and when selectedWeek > 0
   useEffect(() => {
@@ -65,7 +63,10 @@ export default function TeamTimeSheet() {
     setWeeks(newWeeks);
 
     const today = dayjs(); // Current date
-    if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
+    if (
+      today.month() === dayjs(date).month() &&
+      today.year() === dayjs(date).year()
+    ) {
       const firstDayOfMonth = dayjs(date).startOf("month");
       const defaultWeek = Math.ceil(today.diff(firstDayOfMonth, "day") / 7);
       setSelectedWeek(defaultWeek);
@@ -80,7 +81,6 @@ export default function TeamTimeSheet() {
     setDate(updatedDate);
     setSelectedWeek(1); // Reset to the 1st week on month change
   };
-  console.log(date);
 
   // Handle year change
   const handleYearChange = (selectedOption) => {
@@ -129,7 +129,6 @@ export default function TeamTimeSheet() {
     const [hours, minutes] = time.split(":"); // Split the time into hours, minutes, and seconds
     return `${hours} hr ${minutes} min`;
   };
-  console.log(date);
 
   const columns = React.useMemo(
     () => [
@@ -137,11 +136,9 @@ export default function TeamTimeSheet() {
         header: "Employee Name",
         accessorKey: "mon",
         cell: ({ row }) => (
-          <div className=" px-3 py-2 text-sm font-bold">
+          <div className="px-3 py-2 text-sm font-bold">
             <p>{row?.original?.employee_detail?.first_name || "NA"}</p>
-            <p>
-              #{row?.original?.employee_detail?.id}
-            </p>
+            <p>#{row?.original?.employee_detail?.id}</p>
           </div>
         ),
       },
@@ -165,23 +162,24 @@ export default function TeamTimeSheet() {
         ),
         accessorKey: dayObj.fullDate, // Unique key for each day
         cell: ({ row }) => {
-          console.log(row?.original?.days_hours, dayObj.fullDate);
-          
-           const dayData = row?.original?.days_hours?.find((data) => data.date === dayObj.fullDate);
-           console.log(dayData);
-           
-           return (
-             <div className="text-sm font-bold capitalize text-gray-darkpale">
-               <p>{dayData?.working_hours || "00:00"}</p>
-               {dayData?.over_time && (
-                <p className="font-medium text-[#e95d39]">[OT:{dayData?.over_time || ""}]</p>
-               )}
-               {dayData?.break_time &&
+          const dayData = row?.original?.days_hours?.find(
+            (data) => data.date === dayObj.fullDate,
+          );
+
+          return (
+            <div className="text-sm font-bold capitalize text-gray-darkpale">
+              <p>{dayData?.working_hours || "00:00"}</p>
+              {dayData?.over_time && (
+                <p className="font-medium text-[#e95d39]">
+                  [OT:{dayData?.over_time || ""}]
+                </p>
+              )}
+              {dayData?.break_time && (
                 <p className="font-medium">BT:{dayData?.break_time || "NA"}</p>
-               }
-             </div>
-           );
-        },        
+              )}
+            </div>
+          );
+        },
       })),
       {
         header: "",
@@ -250,7 +248,7 @@ export default function TeamTimeSheet() {
           selectedWeek={selectedWeek}
           handleMonthChange={handleMonthChange}
           date={date}
-          type={'timesheet'}
+          type={"timesheet"}
           handleYearChange={handleYearChange}
           employeelist={timesheetlist}
         />
