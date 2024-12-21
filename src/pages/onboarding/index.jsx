@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BasicDetails from "./BasicDetails";
 import WorkInfo from "./WorkInfo";
 import Skills from "./Skills";
@@ -9,12 +9,43 @@ import RightToWork from "./RightToWork";
 import Emergency from "./Emergency";
 import Bank from "./Bank";
 import Document from "./Document";
+import toast from "react-hot-toast";
+
+import { newFormRequest, SEND_ONBORDING } from "@/api";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function OnboardingForm() {
+  const { setUser, user } = useUserStore((state) => ({
+      setUser: state.setUser,
+      user: state.user,
+    }));
+    const u_id = user.id;
+  const [isLoader,setIsLoader] =useState();
+  
+  const handleShare = async () => {
+    try {
+      setIsLoader(true);
+      const response = await newFormRequest.post(`employee-status-update`);
+      if (response?.status === 200) {
+        toast.success("Approve successfully");
+        setSharePopupOpen(false);
+      } else {
+        toast.error("Failed to approve,");
+      }
+    } catch (error) {
+      console.error("Error sharing the form:", error);
+      toast.error(
+        error?.response?.data?.error ||
+          "Failed to share the form. Please try again!",
+      );
+    } finally {
+      setIsLoader(false);
+    }
+  };
   return (
-    <div className="flex bg-gray-100 w-full h-full flex-col gap-4 p-10">
+    <div className="flex h-full w-full flex-col gap-4 bg-gray-100 p-10">
       <div
-        className="flex min-h-48 max-w-full items-center justify-between rounded-ee-lg rounded-tr-lg rounded-bl-lg bg-cover bg-no-repeat px-20 py-16"
+        className="flex min-h-48 max-w-full items-center justify-between rounded-bl-lg rounded-ee-lg rounded-tr-lg bg-cover bg-no-repeat px-20 py-16"
         style={{
           backgroundImage: `url(/onbording.png)`,
         }}
@@ -39,24 +70,38 @@ export default function OnboardingForm() {
             Employee Onboarding Form
           </h1>
         </div>
-        <button className="rounded-md bg-white px-8 py-2 text-black text-sm font-semibold">
-          Approve
+        <button
+          type="submit"
+          onClick={() => {
+            handleShare();
+          }}
+          className="rounded-md bg-hrmprimaryorange px-8 py-2 text-sm font-semibold text-white"
+        >
+          {isLoader ? (
+            <div className="flex items-center gap-3">
+              <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+              Sending
+            </div>
+          ) : (
+            <>
+              <span> Approve</span>
+            </>
+          )}
         </button>
       </div>
-      <div className="bg-white rounded-md px-10 py-8">
-        <form>
-        <BasicDetails formtype="update"/>
-        <WorkInfo/>
-        <Skills/>
-        <Experience/>
-        <Registration/>
-        <DBScheck/>
-        <RightToWork/>
-        <Emergency/>
-        <Bank/>
-        <Document/>
+      <div className="rounded-md bg-white px-10 py-8">
+        <form className="flex flex-col gap-4">
+          <BasicDetails formtype="update" />
+          <WorkInfo />
+          <Skills />
+          <Experience />
+          <Registration />
+          <DBScheck />
+          <RightToWork />
+          <Emergency />
+          <Bank />
+          <Document />
         </form>
-        
       </div>
     </div>
   );

@@ -114,8 +114,6 @@ export default function DocumentUnderListing({ cid, uid, documentName }) {
 
   return (
     <>
-    
-     
       <DisclosurePanel className="my-4 ml-10 text-sm/5 text-black/50">
         <div>
         

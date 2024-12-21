@@ -16,7 +16,7 @@ export default function Share({ sharePopupOpen, setSharePopupOpen,uid }) {
         toast.success("Form shared successfully");
         setSharePopupOpen(false)
       } else {
-        toast.error("Failed to share");
+        toast.error("Failed to share,Template Not Available");
       }
     } catch (error) {
       console.error("Error sharing the form:", error);

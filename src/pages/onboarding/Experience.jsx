@@ -152,10 +152,10 @@ export default function Experience() {
         <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
           Experience
         </p>
-        <div className="h-px w-full bg-darkblack"></div>
+        <div className="border w-full "></div>
       </DisclosureButton>
-      <DisclosurePanel className="my-4 grid grid-cols-2 text-sm/5 text-black/50">
-        <div>
+      <DisclosurePanel className="grid grid-cols-1 text-sm/5 text-black/50">
+        <div className="px-5 py-5">
           {isLoading ? (
             <div className="flex min-h-96 w-full items-center justify-center bg-white">
               <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
