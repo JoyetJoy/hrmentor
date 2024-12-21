@@ -1,4 +1,4 @@
-import { BreakTimeSchema } from "@/schema/dashboard/masters/shift.schema";
+import { LeaveRequestSchema } from "@/schema/dashboard/masters/shift.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { X, ChevronDown } from "lucide-react";
@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
-import { LEAVE_REQUEST_LIST } from "@/api/master";
+import { ADMIN_EMPLOYEE_LEAVE_UPDATE, LEAVE_REQUEST_LIST } from "@/api/master";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
@@ -26,8 +26,10 @@ export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
     formState: { errors },
   } = useForm({
     mode: "onChange",
-    resolver: yupResolver(BreakTimeSchema),
+    resolver: yupResolver(LeaveRequestSchema),
   });
+
+  console.log(errors, "errorserrors");
 
   const { data: leaveDetails } = useQuery({
     queryKey: ["leaveDetails", user?.id, id],
@@ -45,11 +47,33 @@ export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
     }
   }, [leaveDetails]);
   const onSubmit = async (data) => {
-    await handleShift(data);
-    close();
-  };
+    try {
+      const formData = {
+        leave_status_id: selectedStatus,
+        descriptions: reason,
+      };
 
-  const handleShift = async (data) => {};
+      const res = await newRequest.post(
+        `${ADMIN_EMPLOYEE_LEAVE_UPDATE}/${id}`,
+        formData,
+        {
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
+      if (res) {
+        toast.success(res?.data?.message);
+        window.location.reload();
+        close();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
 
   function close() {
     setPopupOpen(false);

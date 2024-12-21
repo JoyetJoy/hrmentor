@@ -9,7 +9,8 @@ export const recColumnKeysForJobDescription = {
 
 // job description
 export const recColumnKeysForHolidayreqList = {
-  field1: { key: "employee_name_id", label: "Employee Name & ID" },
+  field8: { key: "employee_name_id", label: "Employee ID" },
+  field1: { key: "employee_name_id", label: "Employee Name" },
   field2: { key: "start_date", label: "Start Date" },
   field3: { key: "end_date", label: "End Date" },
   field4: { key: "leave_type", label: "Leave Type" },

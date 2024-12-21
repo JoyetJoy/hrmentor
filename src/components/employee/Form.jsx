@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
-import { Plus, RotateCw, Share2, UploadCloud, X } from "lucide-react";
+import { Eye, Plus, RotateCw, Share2, UploadCloud, X } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -36,6 +36,7 @@ import {
   EMPLOYEE_UNIQUE_ID,
   newFormRequest,
   newRequest,
+  SEND_ONBORDING,
   UPDATE_EMPLOYEE,
 } from "@/api";
 import toast from "react-hot-toast";
@@ -49,6 +50,7 @@ import {
 } from "@/lib/columns/employee";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import Share from "../popups/employees/view/Share";
 
 const masterConfig = {
   department: {
@@ -130,20 +132,19 @@ export default function SaveEmployeeForm({ formtype }) {
   const [sameAsHome, setSameAsHome] = useState(false);
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState();
-  const [onBoardPopup, setOnBoardPopup] = useState(false);
+  const [sharePopupOpen, setSharePopupOpen] = useState(false);
+ 
 
-  function closeOnBoardPopup() {
-    setOnBoardPopup(false);
-  }
+
   const [imageerror, setImageerror] = useState("");
 
   useEffect(() => {
     if (employeeDetails) {
       console.log(employeeDetails);
-      
+
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
-      setValue("middle_name", employeeDetails.middle_name||'');
+      setValue("middle_name", employeeDetails.middle_name || "");
       setValue("post_code", employeeDetails.post_code);
       setValue("sur_name", employeeDetails.sur_name);
       setValue("gender", employeeDetails.gender);
@@ -173,8 +174,8 @@ export default function SaveEmployeeForm({ formtype }) {
       setValue("department_id", employeeDetails.department_id);
       setValue("employment_type", employeeDetails.employment_type);
       setValue("pension_subscription", employeeDetails.pension_subscription);
-      if(employeeDetails?.state_id){
-        setState(employeeDetails?.state_id?.value)
+      if (employeeDetails?.state_id) {
+        setState(employeeDetails?.state_id?.value);
       }
     }
   }, [employeeDetails, setValue]);
@@ -358,7 +359,6 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pension_subscription", data.pension_subscription?.id);
     console.log(formData);
-    
 
     try {
       let res;
@@ -374,7 +374,7 @@ export default function SaveEmployeeForm({ formtype }) {
         clearImage();
         reset();
         setLoader(false);
-        navigate("/admin/employee")
+        navigate("/admin/employee");
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
@@ -387,9 +387,14 @@ export default function SaveEmployeeForm({ formtype }) {
       setLoader(false);
     }
   };
-
+  
   return (
     <>
+      <Share
+        sharePopupOpen={sharePopupOpen}
+        setSharePopupOpen={setSharePopupOpen}
+        uid={uid}
+      />
       <SaveEmployeeMasterForm
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
@@ -418,10 +423,18 @@ export default function SaveEmployeeForm({ formtype }) {
                   type="button"
                   className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
                   onClick={() => {
-                    setOnBoardPopup(true);
+                    if (employeeDetails?.status?.value === 1) {
+                      setSharePopupOpen(true);
+                    } else {
+                      navigate(`/onboarding-form?uid=${uid}`);
+                    }
                   }}
                 >
-                  <Share2 className="size-4" color="black" />
+                  {employeeDetails?.status?.value === 1 ? (
+                    <Share2 className="size-4" color="black" />
+                  ) : (
+                    <Eye className="size-4" color="black" />
+                  )}
                   Onboarding Form
                 </button>
               )}
@@ -1156,55 +1169,6 @@ export default function SaveEmployeeForm({ formtype }) {
           </div>
         </form>
       )}
-      <Dialog
-        open={onBoardPopup}
-        as="div"
-        className="relative z-10 focus:outline-none"
-        onClose={closeOnBoardPopup}
-      >
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              transition
-              className="data-[closed]:transform-[scale(95%)] h-full w-full max-w-md rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
-            >
-              <div className="mb-7 flex items-center justify-between">
-                <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
-                  Share
-                </h1>
-                <button
-                  onClick={closeOnBoardPopup}
-                  className="text-lg font-extrabold text-[#00000080]"
-                >
-                  <X />
-                </button>
-              </div>
-              <p className="mt-2 text-sm text-black">
-                Do u want to share the form?
-              </p>
-              <div className="mt-3 flex flex-row gap-3">
-                <button
-                  onClick={closeOnBoardPopup}
-                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#cecdcd] text-sm font-normal text-black focus:outline-none"
-                >
-                  <span>Cancel</span>
-                </button>
-                <button
-                  type="submit"
-                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
-                  onClick={() => {
-                    handleShare();
-                  }}
-                >
-                  <Share2 className="size-4" color="white" />
-
-                  <span> Share</span>
-                </button>
-              </div>
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog>
     </>
   );
 }

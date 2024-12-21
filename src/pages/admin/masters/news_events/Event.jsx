@@ -2,7 +2,6 @@ import { EVENT_LIST, newRequest, WORK_LOCATIONS } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -18,7 +17,6 @@ export default function Event() {
   const navigate = useNavigate();
 
   const pageLimit = 10;
-
   const { data: eventList, isLoading } = useQuery({
     queryKey: ["eventList", currentPage, keyword],
     queryFn: () =>
@@ -35,13 +33,14 @@ export default function Event() {
         }),
   });
 
+  console.log(currentPage, "eventListeventList");
+
   useEffect(() => {
     if (eventList) {
-      setTotalPages(eventList?.last_page);
+      setTotalPages(eventList.last_page || 1);
+      setCurrentPage(eventList.current_page || 1);
     }
   }, [eventList]);
-console.log(currentPage);
-
   const handleClickView = () => {
     setDeletePopup(true);
   };
@@ -68,15 +67,12 @@ console.log(currentPage);
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => {
-          console.log(currentPage);
-          
-          return (
-            <div className="">
-              {row.index + 1 + (currentPage - 1) * pageLimit}
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <>
+            {console.log(currentPage, "currentPagecurrentPage")}
+            <div>{row.index + 1 + (currentPage - 1) * pageLimit}</div>
+          </>
+        ),
       },
       {
         header: "Event Name",

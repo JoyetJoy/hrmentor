@@ -99,3 +99,8 @@ export const ProfileManagementSchema = Yup.object({
   password: Yup.string(),
   profile_image: Yup.string(),
 });
+
+export const LeaveRequestSchema = Yup.object({
+  status: Yup.string(),
+  reason: Yup.string(),
+});

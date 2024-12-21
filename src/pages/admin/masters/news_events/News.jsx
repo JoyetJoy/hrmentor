@@ -2,7 +2,6 @@ import { newRequest, NEWS_LISt } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
-import { useUserStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -21,12 +20,6 @@ export default function News() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
   const navigate = useNavigate();
-
-  // const { setUser, user } = useUserStore((state) => ({
-  //   setUser: state.setUser,
-  //   user: state.user,
-  // }));
-  // const u_id = user.id;
   const handleClick = () => {
     setPopupOpen(true);
   };
@@ -60,7 +53,7 @@ export default function News() {
   const renderStatusBadge = (status) => {
     const statusColors = {
       draft: "bg-yellow-100 text-yellow-600",
-      save_as_draft: "bg-blue-100 text-blue-600",
+      save_as_draft: "bg-purple-100 text-purple-600", // Use valid class names
       Canceled: "bg-purple-100 text-purple-600",
       "On hold": "bg-red-100 text-red-600",
       published: "bg-green-100 text-green-600",
@@ -69,7 +62,7 @@ export default function News() {
       <span
         className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
       >
-        {status}
+        {status=="save_as_draft"?"Draft":"Published"}
       </span>
     );
   };

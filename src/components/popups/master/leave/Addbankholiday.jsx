@@ -15,7 +15,7 @@ import moment from "moment";
 
 export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
-  const [percentage, setPercentage] = useState(false);
+  const [percentage, setPercentage] = useState("");
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
 
@@ -32,6 +32,9 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
     mode: "onSubmit",
     resolver: yupResolver(BankHolidaySchema),
   });
+
+  console.log(errors);
+  
 
   // Location List API Query
   const {
@@ -66,10 +69,23 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
         holiday_name: data.holiday_name,
         date: moment(data.date).format("YYYY-MM-DD"),
         location_id: selectedlocationId,
-        type: data.type,
+        type: percentage,
         percentage: Number(data.percentage),
         description: data.description,
       };
+
+      console.log(formData, "formDataformData");
+
+      if (!formData.location_id) {
+        return toast.error("Please Select Location");
+      }
+      if (!formData.type) {
+        return toast.error("Please Select Type");
+      }
+
+      if (formData.type === "paid" && !formData.percentage) {
+        return toast.error("Percentage is manditory");
+      }
       // Make the API call
       const res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
 
@@ -91,7 +107,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
 
   return (
     <Dialog open={popupOpen} as="div" className="relative z-10" onClose={close}>
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto overflow-y-min bg-black/20">
+      <div className="overflow-y-min fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
@@ -175,9 +191,8 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         type="radio"
                         name="type"
                         value="paid"
-                        onClick={() => setPercentage(true)}
+                        onClick={() => setPercentage("paid")}
                         className="radio-black"
-                        {...register("type")}
                       />
                       <label className="label-text">Paid</label>
                     </div>
@@ -186,25 +201,19 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         type="radio"
                         name="type"
                         value="unpaid"
-                        onClick={() => setPercentage(false)}
+                        onClick={() => setPercentage("unpaid")}
                         className="radio-black"
-                        {...register("type")}
                       />
                       <label className="label-text">Unpaid</label>
                     </div>
                   </div>
-                  {errors.type && (
-                    <span className="text-xs text-red-500">
-                      {errors.type.message}
-                    </span>
-                  )}
                 </div>
                 {percentage && (
                   <div>
                     <label className="label-text">Percentage</label>
                     <input
                       autoComplete="off"
-                      type="text"
+                      type="number"
                       placeholder="Enter Percentage"
                       {...register("percentage")}
                       className="input-box"

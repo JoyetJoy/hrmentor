@@ -116,7 +116,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
                 className="w-full object-contain"
               />
             </button>
-            <button
+            {/* <button
               onClick={() => {
                 setDeletePopup(true);
                 setSelectedField(row?.original?.id);
@@ -124,7 +124,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
             >
               <Trash2 className="size-3" />
-            </button>
+            </button> */}
           </div>
         ),
       },
