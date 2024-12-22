@@ -14,10 +14,15 @@ export default function DeleteConfirmation({
   selectedId,
   qrkey,
   api,
+  confirmDelete
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
   const handleDelete = async () => {
+    if(type==='rosterdelete'){
+      confirmDelete(selectedId)
+      return;
+    }
     try {
       if (type !== "break" && type !== "roster") {
         setLoader(true);

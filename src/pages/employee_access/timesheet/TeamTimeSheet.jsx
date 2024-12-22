@@ -11,6 +11,7 @@ import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timeshee
 import TeamAddManually from "@/components/popups/employee_access/timesheet/team/AddManually";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest, TEAM_TIMESHEET_EMPLOYEELIST } from "@/api/master";
+import { ACTIVE_EMPLOYEE } from "@/api";
 
 export default function TeamTimeSheet() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,10 +25,16 @@ export default function TeamTimeSheet() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [weeks, setWeeks] = useState([]);
+  const [activeEmployee, setActiveEmployee] = useState("");
+
+  const { data: employee } = useQuery({
+    queryKey: ["employee"],
+    queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
+  });
 
   // Fetch the data for the selected week
   const { data: timesheetlist, refetch } = useQuery({
-    queryKey: ["timesheetlist", selectedWeek, date], // Unique query key
+    queryKey: ["timesheetlist", selectedWeek, date,activeEmployee], // Unique query key
     queryFn: () =>
       newRequest.get(TEAM_TIMESHEET_EMPLOYEELIST).then((res) => res.data),
   });
@@ -251,6 +258,8 @@ export default function TeamTimeSheet() {
           type={"timesheet"}
           handleYearChange={handleYearChange}
           employeelist={timesheetlist}
+          employee={employee}
+          setActiveEmployee={setActiveEmployee}
         />
         <QueryTable
           columns={columns}

@@ -17,13 +17,13 @@ export default function TeamTimeSheetSideBar({
   handleYearChange,
   type,
   rosterEmpList,
+  employee,
   shiftList,
   setSelectedShift,
+  setActiveEmployee
 }) {
-  console.log(years, date);
+  console.log(rosterEmpList, type);
   const { control } = useForm();
-
-  const [employee, setEmployee] = useState("");
 
   return (
     <div
@@ -121,6 +121,10 @@ export default function TeamTimeSheetSideBar({
                 className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
               />
             </div>
+            <div
+            className={`group flex flex-col gap-1.5 py-2 ${type === "attendance" ? "px-0" : "px-3"}`}
+          >
+            <label className="label-text">Search employee</label>
             <Select
             options={employee}
             isSearchable={true}
@@ -129,6 +133,7 @@ export default function TeamTimeSheetSideBar({
             placeholder={"All employee"}
             className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
           />
+          </div>
           </>
           )}
 

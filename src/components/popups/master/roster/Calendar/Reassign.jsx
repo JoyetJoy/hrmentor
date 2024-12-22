@@ -3,19 +3,15 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X, Search } from "lucide-react";
 import { newRequest, SHIFT_CLAIM } from "@/api";
 import toast from "react-hot-toast";
+import { customSelectStyles } from "@/utils/customStyles";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
 
-function Reassign({ popupOpen, setPopupOpen, type, id }) {
+function Reassign({ popupOpen, setPopupOpen, type, id, setSelectedEmployee, rosterEmpList, handleReassign }) {
   const [keyword, setKeyword] = useState("");
   const [results, setResults] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [claimcount, setClaimcount] = useState(0);
-
-  // Mock data for demonstration
-  const employees = [
-    { id: 1, name: "Jisham V", role: "Developer" },
-    { id: 2, name: "Rahul K", role: "Designer" },
-    { id: 3, name: "Aisha M", role: "Manager" },
-  ];
+  const { control } = useForm();
 
   // Function to filter employees based on keyword
   const handleSearch = (e) => {
@@ -88,19 +84,32 @@ function Reassign({ popupOpen, setPopupOpen, type, id }) {
             {type === "reassign" ? (
               <>
                 <p className="mb-2 text-sm">Search Employee</p>
-                <label className="input flex h-10 min-h-10 min-w-40 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
-                  <Search
-                    className="size-4 object-contain text-gray-dark"
-                    strokeWidth={2}
-                  />
-                  <input
-                    type="text"
-                    onChange={handleSearch}
-                    value={keyword}
-                    className="grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
-                    placeholder="Search"
-                  />
-                </label>
+                <div
+            className={`group flex flex-col gap-1.5 h-10 min-h-10 min-w-52`}
+          >
+
+            <Controller
+              name="employees"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  placeholder="Select Employee"
+                  className="input-box w-full"
+                  options={rosterEmpList?.employees?.map((item) => ({
+                    label: item.first_name,
+                    value: item?.id,
+                  }))}
+                  onChange={(selectedOption) => {
+                    field.onChange(selectedOption);
+                    setSelectedEmployee(selectedOption.value);
+                  }}
+                />
+              )}
+            />
+          </div>
 
                 {/* Display search results */}
                 {results.length > 0 && (
@@ -130,7 +139,7 @@ function Reassign({ popupOpen, setPopupOpen, type, id }) {
                 )}
 
                 {/* Selected employee */}
-                {selectedEmployee && (
+                {/* {selectedEmployee && (
                   <div className="mt-4 flex items-center gap-2 rounded bg-gray-100 p-2">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
                       {selectedEmployee.name.charAt(0)}
@@ -144,7 +153,7 @@ function Reassign({ popupOpen, setPopupOpen, type, id }) {
                       </p>
                     </div>
                   </div>
-                )}
+                )} */}
                 <div className="mt-4 flex gap-3">
               <button
                 type="button"
@@ -155,7 +164,7 @@ function Reassign({ popupOpen, setPopupOpen, type, id }) {
               </button>
               <button
                 type="button"
-                onClick={handleSave}
+                onClick={handleReassign}
                 className="w-full rounded bg-black px-7 py-3 text-white"
               >
                 Re assign

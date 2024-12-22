@@ -5,14 +5,22 @@ import QueryTable from "@/components/table/QueryTable";
 import Reassign from "../popups/master/roster/Calendar/Reassign";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
+import { Controller, useForm } from "react-hook-form";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
+import DeleteConfirmation from "../common/DeleteConfirmation";
 
-function CalendarEmployees({ rosterCalim }) {
-  const [popupOpen, setPopupOpen] = useState(false);
+function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelectedEmployee,handleReassign, setSwapEmployee, setPopupOpen, popupOpen, handleDelete,deletePopup, setDeletePopup }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
+  const [selectedId, setSelectedId] = useState({
+    id:"",
+    user_id:""
+  });
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("");
   const pageLimit = 10;
+  const { control } = useForm();
 
   useEffect(() => {
     if (rosterCalim) {
@@ -44,6 +52,7 @@ function CalendarEmployees({ rosterCalim }) {
               type="button"
               onClick={() => {
                 setPopupOpen(true);
+                setSwapEmployee(row.original?.id)
               }}
               className="flex cursor-pointer items-center justify-center rounded-lg bg-black px-4 py-[6px] text-white"
             >
@@ -54,7 +63,7 @@ function CalendarEmployees({ rosterCalim }) {
               type="button"
               onClick={() => {
                 setDeletePopup(true);
-                setSelectedField(row.original?.roster_details?.roster_id);
+                setSelectedId({id:row.original?.id, user_id: row.original?.user_id});
               }}
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
@@ -68,35 +77,61 @@ function CalendarEmployees({ rosterCalim }) {
   );
   return (
     <div className="overflow-y-min flex h-full flex-col overflow-y-auto overflow-x-hidden p-2">
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        confirmDelete={handleDelete}
+        selectedId={selectedId}
+        // qrkey={qrkey}
+        // api={api}
+        type={'rosterdelete'}
+      />
       <Reassign
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         type={"reassign"}
+        rosterEmpList={rosterEmpList}
+        setSelectedEmployee={setSelectedEmployee}
+        handleReassign={handleReassign}
       />
       <div className="flex items-center justify-between gap-2 text-white">
         <p className="text-[1rem] font-semibold text-black">Employees</p>
         <div className="flex gap-2">
-          <label className="input flex h-10 min-h-10 min-w-40 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
-            <Search
-              className="size-4 object-contain text-gray-dark"
-              strokeWidth={2}
+        <div
+            className={`group flex flex-col gap-1.5 h-10 min-h-10 min-w-52`}
+          >
+
+            <Controller
+              name="employees"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  placeholder="Select Employee"
+                  className="input-box w-full"
+                  options={rosterEmpList?.employees?.map((item) => ({
+                    label: item.first_name,
+                    value: item?.id,
+                  }))}
+                  onChange={(selectedOption) => {
+                    field.onChange(selectedOption);
+                    setSelectedEmployee(selectedOption.value);
+                  }}
+                />
+              )}
             />
-            <input
-              type="text"
-              onChange={(e) => {
-                setKeyword(e.target.value);
-              }}
-              value={keyword}
-              className="grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
-              placeholder="Search"
-            />
-          </label>
-          <Link
+          </div>
+          <div
+          onClick={()=>{
+            handleSubmit();
+          }}
             // to="/admin/recruiter/jobs/post"
             className="flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded bg-hrmprimaryorange text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-4" strokeWidth={1.5} />
-          </Link>
+          </div>
         </div>
       </div>
       <div className="mt-2">

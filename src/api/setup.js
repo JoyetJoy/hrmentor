@@ -40,4 +40,10 @@ export const UPDATE_EMAIL_TEMPLATE ="update-email-template"
 
 export const ROSTER_EMPLIST = "get-employee-details";
 export const UPDATE_ROSTER_LIST = "employee-roster-list ";
+//swap employee roster
+export const SWAP_EMPLOYEE_ROSTER = "swap-shift-roster-employee";
+//add employee roster
+export const ADD_EMPLOYEE_ROSTER = "employee-add-roster-by-day";
+//delete employee roster
+export const DELETE_EMPLOYEE_ROSTER = "remove-employee-day-roster";
 //
