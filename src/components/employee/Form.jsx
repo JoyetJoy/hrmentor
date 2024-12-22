@@ -246,6 +246,7 @@ export default function SaveEmployeeForm({ formtype }) {
     if (selectedCity?.state_name) {
       setState(selectedCity.state_name);
       setValue("state_id", {
+        id: selectedCity.state_id,
         label: selectedCity.state_name,
         value: selectedCity.state_id,
       });
@@ -354,7 +355,7 @@ export default function SaveEmployeeForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("state_id", data.state_id?.value);
+    formData.append("state_id", data.state_id?.id);
     imageFile ? formData.append("profile_image", imageFile) : formData.append("profile_image", '')
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pension_subscription", data.pension_subscription?.id);
