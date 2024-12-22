@@ -335,36 +335,13 @@ export default function RecSaveFormCandidate({ type }) {
               </div>
             )}
           </div>
-          {types === "2" && (
-            <div>
-              <hr className="mt-3" />
-              <div className="mt-2 flex w-full justify-end">
-                <div
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-darklight p-2"
-                  onClick={() => {
-                    if(!edit){
-                      setEdit(true);
-                    }else if(edit){
-                      setEdit(false);
-                    }
-                  }}
-                >
-                  <img
-                    src="/assets/icons/setup/re-Edit.svg"
-                    alt="icons"
-                    className="h-5 w-5"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
           <div className="mt-5 grid w-full grid-cols-2 gap-x-5">
             <div className="group flex flex-col gap-1.5 py-2">
               <label className="required label-text">First Name</label>
               <input
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 placeholder="Enter First Name"
                 {...register("first_name", { required: true })}
                 className="input-box"
@@ -380,7 +357,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 placeholder="Enter Middle Name"
                 {...register("middle_name")}
                 className="input-box"
@@ -395,8 +372,7 @@ export default function RecSaveFormCandidate({ type }) {
               <label className="required label-text">Last name</label>
               <input
                 {...register("sur_name")}
-                autoComplete="off"
-                disabled={types === '1'||!edit}
+                autoComplete="off"disabled={types === '1'}
                 placeholder="Enter Surname"
                 type="text"
                 className="input-box"
@@ -412,7 +388,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("phone_number", { required: true })}
                 autoComplete="off"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 type="text"
                 placeholder="Enter Moblie Number"
                 onKeyPress={(event) => {
@@ -438,7 +414,7 @@ export default function RecSaveFormCandidate({ type }) {
                 {...register("email", { required: true })}
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 placeholder="Enter Email Address"
                 className="input-box"
               />
@@ -460,7 +436,7 @@ export default function RecSaveFormCandidate({ type }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     options={recruiterMasters?.genders}
                     placeholder="Select Gender"
                     className="input-box"
@@ -479,7 +455,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("date_of_birth", { required: true })}
                 autoComplete="off"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 type="date"
                 className="input-box pr-2"
               />
@@ -500,7 +476,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     styles={customSelectStyles}
                     options={countryList}
                     placeholder="Select Country"
@@ -528,7 +504,7 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadCitiesOptions}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     onChange={(selectedOption) => {
                       field.onChange(selectedOption); // Update form state
                       handleCitySelect(selectedOption);
@@ -562,7 +538,7 @@ export default function RecSaveFormCandidate({ type }) {
                 {...register("post_code", { required: true })}
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 placeholder="Enter Post Code"
                 className="input-box"
                 onKeyPress={(event) => {
@@ -591,7 +567,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     styles={customSelectStyles}
                     options={recruiterMasters?.languages}
                     isMulti
@@ -618,7 +594,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     styles={customSelectStyles}
                     options={recruiterMasters?.educationlevels}
                     placeholder="Select college or University"
@@ -644,7 +620,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     styles={customSelectStyles}
                     options={recruiterMasters?.collegesUniversities}
                     placeholder="Select college or University"
@@ -663,7 +639,7 @@ export default function RecSaveFormCandidate({ type }) {
               <textarea
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 {...register("home_address", { required: true })}
                 className="input-box min-h-28 py-1"
               />
@@ -679,7 +655,7 @@ export default function RecSaveFormCandidate({ type }) {
                 <div className="flex gap-1.5">
                   <input
                     type="checkbox"
-                    disabled={types === '1'||!edit}
+                    disabled={types === '1'}
                     checked={sameAsHome}
                     onChange={() => {
                       setSameAsHome(!sameAsHome);
@@ -691,7 +667,7 @@ export default function RecSaveFormCandidate({ type }) {
                 </div>
               </label>
               <textarea
-                disabled={sameAsHome||types === '1'||!edit}
+                disabled={sameAsHome||types === '1'}
                 autoComplete="off"
                 {...register("communication_address", { required: true })}
                 className="input-box min-h-28 py-1"
@@ -712,7 +688,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     styles={customSelectStyles}
                     options={sourcesList}
                     placeholder="Select source"
@@ -731,7 +707,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("date_applied", { required: true })}
                 autoComplete="off"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 type="date"
                 className="input-box pr-2"
               />
@@ -752,7 +728,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'||!edit}
+                    isDisabled={types === '1'}
                     styles={customSelectStyles}
                     options={recruiterMasters?.activeJobs}
                     placeholder="Select recruiting job"
@@ -771,7 +747,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("linked_in")}
                 autoComplete="off"
-                disabled={types === '1'||!edit}
+                disabled={types === '1'}
                 type="text"
                 className="input-box"
               />
@@ -808,7 +784,6 @@ export default function RecSaveFormCandidate({ type }) {
         </div>
         ): types==='2' ? (
           <div className="flex items-center font-semibold">
-          {edit &&(
             <button
             type="submit"
             disabled={loader}
@@ -823,7 +798,7 @@ export default function RecSaveFormCandidate({ type }) {
               <>{type == "update" ? "Update" : "Submit"}</>
             )}
           </button>
-          )}
+          
         </div>
         ) : (<></>)}
       </form>
