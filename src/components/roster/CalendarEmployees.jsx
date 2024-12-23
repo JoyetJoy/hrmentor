@@ -37,12 +37,36 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
       {
         header: "Name",
         accessorKey: "first_name",
-        cell: ({ row }) => (
-          <p className="whitespace-nowrap">
-            {row.original?.first_name ?? "N/A"}
-          </p>
-        ),
-      },
+        cell: ({ row }) => {
+          let name = "";
+      
+          // Check if swaped_employees exist
+          if (rosterCalim?.roster_details?.swaped_employees?.length > 0) {
+            const finded = rosterCalim.roster_details.swaped_employees.find(
+              (employee) => employee?.swaping_from_employee_id === row.original?.id
+            );
+            console.log(finded);
+            if (finded) {
+              name = finded.employee_to?.first_name;
+            }
+          }
+      
+          console.log(name); // Log the computed name for debugging
+      
+          return (
+            <p className={`whitespace-nowrap flex items-center`}>
+              {name && 
+              <>
+              <p className={`${name ? "line-through text-red-500 pr-1" : ""}`}>{name}
+              </p>
+              <p>→</p>
+              </>
+              }  
+              <p className="pl-1">{row.original?.first_name}</p>
+            </p>
+          );
+        },
+      },      
       {
         header: "Action",
         accessorKey: "action",

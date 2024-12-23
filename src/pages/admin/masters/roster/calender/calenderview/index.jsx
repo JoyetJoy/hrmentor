@@ -49,7 +49,6 @@ export const RosterCalendarView = ({ api, selectedId, selecteDate }) => {
         }),
         enabled : !!id && !!date
   });
-console.log(rosterCalim);
 
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", id],
