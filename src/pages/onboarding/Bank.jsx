@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import MenuHeader from "@/components/common/MenuHeader";
-import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronRight,Trash2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { EMPLOYEE_BANK_DETAILS, newRequest } from "@/api";
-import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import EmployeeBankDetailsEditForm from "@/components/popups/employees/edit/BankDetails";
 import {
   Disclosure,
   DisclosureButton,
@@ -22,8 +18,7 @@ export default function Bank() {
   const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
-  const [deletePopup, setDeletePopup] = useState(false);
+ 
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
@@ -114,36 +109,36 @@ export default function Bank() {
           accessorKey: "sort_code",
           cell: ({ row }) => <>{row.original?.account_details?.sort_code}</>,
         },
-        {
-          header: "Action",
-          accessorKey: "action",
-          cell: ({ row }) => (
-            <div className="flex items-center gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() =>
-                  setSelectedField(row.original?.account_details?.id)
-                }
-                className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-              >
-                <img
-                  src="/assets/icons/admin/marker.svg"
-                  className="w-full object-contain"
-                />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedId(row.original?.account_details?.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
-              >
-                <Trash2 className="size-3" />
-              </button>
-            </div>
-          ),
-        },
+        // {
+        //   header: "Action",
+        //   accessorKey: "action",
+        //   cell: ({ row }) => (
+        //     <div className="flex items-center gap-2 text-xs">
+        //       <button
+        //         type="button"
+        //         onClick={() =>
+        //           setSelectedField(row.original?.account_details?.id)
+        //         }
+        //         className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+        //       >
+        //         <img
+        //           src="/assets/icons/admin/marker.svg"
+        //           className="w-full object-contain"
+        //         />
+        //       </button>
+        //       <button
+        //         type="button"
+        //         onClick={() => {
+        //           setDeletePopup(true);
+        //           setSelectedId(row.original?.account_details?.id);
+        //         }}
+        //         className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+        //       >
+        //         <Trash2 className="size-3" />
+        //       </button>
+        //     </div>
+        //   ),
+        // },
       ].filter(Boolean),
     [employeeBankDetails],
   );

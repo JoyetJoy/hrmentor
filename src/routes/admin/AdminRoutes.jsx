@@ -14,6 +14,7 @@ import { RosterRoutes } from "./children/RosterRoutes";
 import { PayrollRoute } from "./children/PayrollRoute";
 import { ProjectRoutes } from "./children/ProjectRoute";
 import { NewsEventRoute } from "./children/NewsEventRoute";
+import Notification from "@/pages/admin/notification";
 
 export const AdminRoutes = [
   {
@@ -27,6 +28,10 @@ export const AdminRoutes = [
   {
     path: "/admin/subscription",
     element: <MenuSubscription />,
+  },
+  {
+    path: "/admin/notification",
+    element: <Notification />,
   },
   {
     path: "/admin/employee",

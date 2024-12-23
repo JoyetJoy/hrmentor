@@ -1,29 +1,18 @@
-// import {
-//   Disclosure,
-//   DisclosureButton,
-//   DisclosurePanel,
-// } from "@headlessui/react";
+
 import React, { useEffect, useState } from "react";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
-import { ChevronRight, Search } from "lucide-react";
-import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
-import MenuHeader from "@/components/common/MenuHeader";
+import { ChevronRight } from "lucide-react";
 import { EMPLOYEE_DOCUMENT_CATEGORY } from "@/api/master";
-import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
-import UnderListing from "@/components/employee/edit-documents/UnderListing";
 import Pagination from "@/components/table/Pagination"
 import DocumentUnderListing from "./DocumentUnderListing";
 
 export default function Document() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
-  const [popupOpen, setPopupOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
-  const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState(0);
+ 
   const pageLimit = 10;
 
   // Fetch List

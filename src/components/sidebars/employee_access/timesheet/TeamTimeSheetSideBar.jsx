@@ -17,17 +17,17 @@ export default function TeamTimeSheetSideBar({
   handleYearChange,
   type,
   rosterEmpList,
+  employee,
   shiftList,
   setSelectedShift,
+  setActiveEmployee
 }) {
-  console.log(years, date);
+  console.log(rosterEmpList, type);
   const { control } = useForm();
-
-  const [employee, setEmployee] = useState("");
 
   return (
     <div
-      className={`min-h-full rounded-md bg-white ${type === "attendance" ? "w-64" : "max-w-[18rem]"}`}
+      className={`min-h-full rounded-md bg-white ${type === "attendance" ? "w-64" : "w-[18rem]"}`}
     >
       <div className="w-full rounded-md bg-white px-5 py-7">
         <h1 className="text-base font-semibold text-textcolor-darkCharcoal">
@@ -35,6 +35,7 @@ export default function TeamTimeSheetSideBar({
         </h1>
         <div>
           {type === "attendance" ? (
+            <>
             <div className={`group flex flex-col gap-1.5 py-2`}>
               <label className="label-text">Shift</label>
               <Controller
@@ -60,6 +61,34 @@ export default function TeamTimeSheetSideBar({
                 )}
               />
             </div>
+            <div
+            className={`group flex flex-col gap-1.5 py-2 ${type === "attendance" ? "px-0" : "px-3"}`}
+          >
+            <label className="label-text">Search employee</label>
+
+            <Controller
+              name="employees"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  placeholder="Select Employee"
+                  className="input-box w-full"
+                  options={rosterEmpList?.employees?.map((item) => ({
+                    label: item.first_name,
+                    value: item?.id,
+                  }))}
+                  onChange={(selectedOption) => {
+                    field.onChange(selectedOption);
+                    setSelectedEmployee(selectedOption.value);
+                  }}
+                />
+              )}
+            />
+          </div>
+          </>
           ) : (
             <div className={`group flex flex-col gap-1.5 px-3 py-2`}>
               <label className="label-text">Year</label>
@@ -77,6 +106,7 @@ export default function TeamTimeSheetSideBar({
             </div>
           )}
           {type === "timesheet" && (
+            <>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="label-text">Week</label>
               <Select
@@ -91,6 +121,20 @@ export default function TeamTimeSheetSideBar({
                 className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
               />
             </div>
+            <div
+            className={`group flex flex-col gap-1.5 py-2 ${type === "attendance" ? "px-0" : "px-3"}`}
+          >
+            <label className="label-text">Search employee</label>
+            <Select
+            options={employee}
+            isSearchable={true}
+            onChange={(option) => setActiveEmployee(option?.id || "")}
+            styles={customSelectStyles}
+            placeholder={"All employee"}
+            className="input-box h-10 w-full rounded-md border-gray-muted focus:border-gray-muted"
+          />
+          </div>
+          </>
           )}
 
           {/* <div className="group flex flex-col gap-1.5 px-3 py-2">
@@ -116,33 +160,6 @@ export default function TeamTimeSheetSideBar({
               </span>
             )}
           </div> */}
-          <div
-            className={`group flex flex-col gap-1.5 py-2 ${type === "attendance" ? "px-0" : "px-3"}`}
-          >
-            <label className="label-text">Search employee</label>
-
-            <Controller
-              name="employees"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Select
-                  isSearchable={true}
-                  styles={customSelectStyles}
-                  placeholder="Select Employee"
-                  className="input-box w-full"
-                  options={rosterEmpList?.employees?.map((item) => ({
-                    label: item.first_name,
-                    value: item?.id,
-                  }))}
-                  onChange={(selectedOption) => {
-                    field.onChange(selectedOption);
-                    setSelectedEmployee(selectedOption);
-                  }}
-                />
-              )}
-            />
-          </div>
         </div>
       </div>
     </div>

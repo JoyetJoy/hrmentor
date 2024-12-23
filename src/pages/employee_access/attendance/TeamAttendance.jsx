@@ -13,6 +13,7 @@ import TeamTimeSheetSideBar from "@/components/sidebars/employee_access/timeshee
 import { Link } from "react-router-dom";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { ROSTER_EMPLIST, SHIFT_LIST } from "@/api/setup";
+import { ACTIVE_EMPLOYEE } from "@/api";
 
 const months = Array.from({ length: 12 }, (_, i) => ({
   value: i,
@@ -28,18 +29,24 @@ const TeamAttendanceCalendar = () => {
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedShift, setSelectedShift] = useState('')
+  const [selectedEmployee, setSelectedEmployee] = useState('')
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
 
   const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
   console.log(selectedShift);
 
+  const { data: employee } = useQuery({
+    queryKey: ["employee"],
+    queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
+  });
+
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedShift],
     queryFn: () => {
       console.log(`Fetching employee list for shift ID: ${selectedShift}`);
       return newRequest
-        .get(`${ROSTER_EMPLIST}/${selectedShiftId}`)
+        .get(`${ROSTER_EMPLIST}/${selectedShift}`)
         .then((res) => {
           return res.data;
         });
@@ -55,11 +62,11 @@ const TeamAttendanceCalendar = () => {
   
 
   const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year],
+    queryKey: ["events", month, year, selectedEmployee],
     queryFn: () =>
       newRequest
         .get(TEAM_ATTENDANCE, {
-          params: { month, year },
+          params: { month, year, selectedEmployee,selectedShift },
         })
         .then((res) => res.data),
     enabled: true,

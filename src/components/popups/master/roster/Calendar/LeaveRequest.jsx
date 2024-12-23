@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
+import { newRequest } from "@/api";
+import toast from "react-hot-toast";
 
 function LeaveRequest({
   popupOpen,
@@ -9,8 +11,12 @@ function LeaveRequest({
   setType,
   requestData,
   handleSave,
+  data,
+  api,
+  selectedId
 }) {
   const [note, setNote] = useState("");
+console.log(data);
 
   const onClose = () => {
     setPopupOpen(false);
@@ -18,16 +24,26 @@ function LeaveRequest({
     setNote(""); // Clear note field on close
   };
 
-  const saveRequest = () => {
-    if (type === "claimed" && !note.trim()) {
-      alert("Please add a note before accepting the request.");
-      return;
+  const saveRequest = async(id) => {
+    if (type === "claimed") {
+      const response = await newRequest.post(`${api}/${selectedId}`, {
+        status_id:id,
+        accepted_note: note,
+      });
+      if (response.status === 200) {
+        toast.success(response.data?.message || "Claim request accepted successfully!");
+        setDeletePopup(false);
+        refetch();
+      } else {
+        toast.error(response.data?.message || "Failed to save claim request.");
+      }
     }
 
     // Pass data to parent callback
     handleSave({ type, note });
     onClose();
   };
+console.log(data?.request_details?.employee?.first_name[0]);
 
   return (
     <Dialog open={popupOpen} as="div" className="relative z-10" onClose={onClose}>
@@ -46,17 +62,19 @@ function LeaveRequest({
               <div className="flex h-14 w-full items-center justify-between rounded-md py-2 pl-2 pr-2">
                 <div className="flex w-full items-center gap-x-2">
                   <div className="flex h-12 w-12 min-w-[3rem] items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
-                    {requestData?.initials || "J"}
+                    {requestData?.initials || data?.request_details?.employee?.first_name[0]}
                   </div>
                   <div className="w-full">
                     <h3 className="flex w-full justify-between text-base font-semibold">
-                      <span className="mr-1">{requestData?.name || "Jisham"}</span>
-                      <span className="rounded-md bg-[#fef7f5] px-6 py-1 font-medium text-[#e95d39]">
+                      <span className="mr-1">{requestData?.name || data?.request_details?.employee?.first_name}</span>
+                      {type === "leave" && (
+                        <span className="rounded-md bg-[#fef7f5] px-6 py-1 font-medium text-[#e95d39]">
                         {requestData?.leaveType || "Sick Leave"}
                       </span>
+                      )}
                     </h3>
                     <p className="text-xs font-medium text-darkblack">
-                      {requestData?.jobTitle || "Developer"}
+                      {requestData?.jobTitle || data?.request_details?.employee?.designation?.designation_name}
                     </p>
                   </div>
                 </div>
@@ -65,10 +83,10 @@ function LeaveRequest({
             <hr className="w-full" />
             {type === "claimed" ? (
               <div className="flex flex-col gap-2">
-                <p className="text-sm">Not from employee</p>
+                <p className="text-sm">Note from employee</p>
                 <p className="text-sm font-semibold">
                   {requestData?.description ||
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry."}
+                    data?.request_details?.note}
                 </p>
                 <div className="flex flex-col gap-1 mt-2">
                   <label htmlFor="note" className="text-sm">
@@ -85,14 +103,18 @@ function LeaveRequest({
                 <div className="mt-4 flex gap-3">
                   <button
                     type="button"
-                    onClick={onClose}
+                    onClick={()=>{
+                      saveRequest(3)
+                    }}
                     className="w-full rounded border border-black px-4 py-3"
                   >
-                    Cancel
+                    Reject Request
                   </button>
                   <button
                     type="button"
-                    onClick={saveRequest}
+                    onClick={()=>{
+                      saveRequest(2)
+                    }}
                     className="w-full rounded bg-black px-4 py-3 text-white"
                   >
                     Accept Request

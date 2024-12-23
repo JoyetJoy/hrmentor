@@ -6,7 +6,7 @@ import QueryTable from "@/components/table/QueryTable";
 import Loader from "@/components/ui/Loader";
 import { jobSubList } from "@/constants/dummyData";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ArrowUpFromLine, Filter, Plus, Search } from "lucide-react";
+import { ArrowLeft, ArrowUpFromLine, Eye, Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -100,8 +100,17 @@ function RecViewJobDetail() {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+          <div className="flex items-center justify-start gap-2 text-xs">
+            <Link
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              to={`/admin/recruiter/candidate/profile?cid=${jid}&types=1`}
+            >
+              <Eye className="h-3 w-3" />
+            </Link>
+            <Link
+               to={`/admin/recruiter/candidate/profile?cid=${jid}&types=2`}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
               <img
                 src="/assets/icons/admin/marker.svg"
                 className="w-full object-contain"

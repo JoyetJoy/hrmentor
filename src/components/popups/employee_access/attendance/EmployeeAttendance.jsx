@@ -14,6 +14,31 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
     const formattedHours = hours % 12 || 12;
     return `${formattedHours}:${minutes} ${period}`;
   }
+
+  const addOvertime = (overtimeArray) => {
+    let totalHours = 0;
+    let totalMinutes = 0;
+    let totalSeconds = 0;
+  
+    overtimeArray.forEach((item) => {
+      const [hours, minutes, seconds] = item.overtime_hours.split(":").map(Number);
+  
+      totalHours += hours;
+      totalMinutes += minutes;
+      totalSeconds += seconds;
+  
+      // Handle overflow of seconds into minutes
+      totalMinutes += Math.floor(totalSeconds / 60);
+      totalSeconds = totalSeconds % 60;
+  
+      // Handle overflow of minutes into hours
+      totalHours += Math.floor(totalMinutes / 60);
+      totalMinutes = totalMinutes % 60;
+    });
+  
+    // Format result as "hh:mm:ss"
+    return `${String(totalHours).padStart(2, "0")}:${String(totalMinutes).padStart(2, "0")}:${String(totalSeconds).padStart(2, "0")}`;
+  };
  
   return (
     <Dialog
@@ -68,7 +93,8 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Overtime</label>
-                <p className="text-sm font-semibold">76 Min</p>
+                <p className="text-sm font-semibold">
+                  {selected?.over_time? addOvertime(selected?.over_time) : '00:00:00'}</p>
               </div>
               <div className="mt-2 flex w-full items-center justify-between gap-3">
                 <button
