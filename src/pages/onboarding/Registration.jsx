@@ -76,34 +76,34 @@ export default function Registration() {
           header: "Renewal Date",
           accessorKey: "renewal_date",
         },
-        {
-          header: "Action",
-          accessorKey: "action",
-          cell: ({ row }) => (
-            <div className="flex items-center gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => setSelectedField(row.original.id)}
-                className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-              >
-                <img
-                  src="/assets/icons/admin/marker.svg"
-                  className="w-full object-contain"
-                />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedId(row.original.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
-              >
-                <Trash2 className="size-3" />
-              </button>
-            </div>
-          ),
-        },
+        // {
+        //   header: "Action",
+        //   accessorKey: "action",
+        //   cell: ({ row }) => (
+        //     <div className="flex items-center gap-2 text-xs">
+        //       <button
+        //         type="button"
+        //         onClick={() => setSelectedField(row.original.id)}
+        //         className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+        //       >
+        //         <img
+        //           src="/assets/icons/admin/marker.svg"
+        //           className="w-full object-contain"
+        //         />
+        //       </button>
+        //       <button
+        //         type="button"
+        //         onClick={() => {
+        //           setDeletePopup(true);
+        //           setSelectedId(row.original.id);
+        //         }}
+        //         className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+        //       >
+        //         <Trash2 className="size-3" />
+        //       </button>
+        //     </div>
+        //   ),
+        // },
       ].filter(Boolean),
     [employeeMemberships],
   );

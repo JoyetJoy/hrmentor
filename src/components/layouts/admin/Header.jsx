@@ -6,6 +6,8 @@ import { menuitems, activityItems } from "@/constants/dummyData";
 import { LayoutGrid, MessageSquareText, Bell } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
+import Notification from "@/components/popups/notification";
 
 export const AdminHeader = () => {
   const { setUser, user } = useUserStore((state) => ({
@@ -15,7 +17,15 @@ export const AdminHeader = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
 
+  const handleClick = () => {
+    setPopupOpen(true);
+  };
+  const handleNotificationClick = () => {
+    setNotificationPopupOpen(true);
+  };
   const handleNavigation = (path) => {
     if (path === "/login") {
       setUser({});
@@ -28,6 +38,11 @@ export const AdminHeader = () => {
 
   return (
     <>
+      <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <Notification
+        notificationPopupOpen={notificationPopupOpen}
+        setNotificationPopupOpen={setNotificationPopupOpen}
+      />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link to="/admin/dashboard" className="flex flex-row gap-1 pl-3">
           <div className="mr-2 h-9">
@@ -68,10 +83,16 @@ export const AdminHeader = () => {
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+          <div
+            onClick={handleNotificationClick}
+            className="flex h-10 w-10 items-center  cursor-pointer justify-center rounded-full bg-gray-100"
+          >
             <Bell className="size-5 text-hrmblue" />
           </div>
-          {/* <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+          <div
+            onClick={handleClick}
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+          >
             <MessageSquareText className="size-5 text-hrmblue" />
           </div> */}
           <Menu as="div" className="relative inline-block text-left">
