@@ -427,6 +427,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     if (employeeDetails?.status?.value === 1) {
                       setSharePopupOpen(true);
                     } else {
+                      reset();
                       navigate(`/onboarding-form?uid=${uid}`);
                     }
                   }}
