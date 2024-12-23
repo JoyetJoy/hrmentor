@@ -94,7 +94,7 @@ export const AdminHeader = () => {
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <MessageSquareText className="size-5 text-hrmblue" />
-          </div> */}
+          </div> 
           <Menu as="div" className="relative inline-block text-left">
             <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100 p-3">
               <Menu.Button>
