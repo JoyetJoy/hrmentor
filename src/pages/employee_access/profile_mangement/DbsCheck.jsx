@@ -171,10 +171,10 @@ export default function DbsCheck() {
         subMenu={"ProfileManagement"}
         icon={<ChevronRight className="size-3" />}
       />
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 h-screen">
         <ProfileSidebar />
-        <div className="flex w-full flex-col">
-          <div className="w-full rounded-md bg-white px-5 py-4">
+        <div className="flex w-full  flex-col">
+          <div className="w-full h-full rounded-md bg-white px-5 py-4">
             <div className="my-4 flex items-center justify-between">
               <div className="flex items-center gap-7">
                 <h5 className="text-lg font-bold">DBS Check</h5>
