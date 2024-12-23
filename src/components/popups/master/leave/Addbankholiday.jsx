@@ -4,7 +4,7 @@ import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { BankHolidaySchema } from "@/schema/dashboard/leave/bankholiday.schema";
 import toast from "react-hot-toast";
@@ -13,7 +13,11 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { date } from "yup";
 import moment from "moment";
 
-export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
+export default function AddBankHoliday({
+  popupOpen,
+  setPopupOpen,
+  selectedField,
+}) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
   const [percentage, setPercentage] = useState("");
   const queryClient = useQueryClient();
@@ -27,14 +31,12 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(BankHolidaySchema),
   });
-
-  console.log(errors);
-  
 
   // Location List API Query
   const {
@@ -57,6 +59,30 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
     reset();
   };
 
+  const { data: bankHolidayDetails } = useQuery({
+    queryKey: ["bankHolidayDetail", selectedField],
+    queryFn: async () => {
+      const response = await newRequest.get(
+        `${TEAM_BANK_HOLIDAY}/${selectedField}`,
+      );
+      return response?.data;
+    },
+    enabled: !!selectedField != 0, // Ensures the query runs only when selectedField is truthy
+  });
+
+  useEffect(() => {
+    if (bankHolidayDetails) {
+      setValue("holiday_name", bankHolidayDetails.leave_name || "");
+      setValue("date", bankHolidayDetails.date || "");
+      setValue("percentage", bankHolidayDetails.percentage || "");
+      setValue("description", bankHolidayDetails.description || "");
+      setPercentage(bankHolidayDetails.type || "");
+      setSelectedlocationId(
+        bankHolidayDetails?.work_location?.location_id || "",
+      );
+    }
+  }, [bankHolidayDetails, setValue]);
+
   const onSubmit = async (data) => {
     handledSubmit(data);
   };
@@ -73,8 +99,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
         percentage: Number(data.percentage),
         description: data.description,
       };
-
-      console.log(formData, "formDataformData");
+      let res;
 
       if (!formData.location_id) {
         return toast.error("Please Select Location");
@@ -86,8 +111,14 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
       if (formData.type === "paid" && !formData.percentage) {
         return toast.error("Percentage is manditory");
       }
-      // Make the API call
-      const res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
+      if (selectedField) {
+        res = await newRequest.post(
+          `${"team-bank-holiday-update"}/${selectedField}`,
+          formData,
+        );
+      } else {
+        res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
+      }
 
       toast.success(res?.data?.message);
       queryClient.invalidateQueries(["bank_holidays"]);
@@ -111,7 +142,11 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
-              <h1 className="text-md font-bold">Add Bank Holiday</h1>
+              {selectedField ? (
+                <h1 className="text-md font-bold">Edit Bank Holiday</h1>
+              ) : (
+                <h1 className="text-md font-bold">Add Bank Holiday</h1>
+              )}
               <button onClick={close}>
                 <X />
               </button>
@@ -193,6 +228,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         value="paid"
                         onClick={() => setPercentage("paid")}
                         className="radio-black"
+                        checked={percentage === "paid"}
                       />
                       <label className="label-text">Paid</label>
                     </div>
@@ -203,6 +239,7 @@ export default function AddBankHoliday({ popupOpen, setPopupOpen }) {
                         value="unpaid"
                         onClick={() => setPercentage("unpaid")}
                         className="radio-black"
+                        checked={percentage === "unpaid"}
                       />
                       <label className="label-text">Unpaid</label>
                     </div>

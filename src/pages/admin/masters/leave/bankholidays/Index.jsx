@@ -19,7 +19,7 @@ function BankHolidays() {
   const [byStatus, setByStatus] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState(0);
+  const [selectedField, setSelectedField] = useState(null);
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
   const pageLimit = 10;
@@ -130,6 +130,10 @@ function BankHolidays() {
           <div className="flex items-center gap-2 text-xs">
             <Link
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedField(row?.original?.id);
+              }}
             >
               <img
                 src="/assets/icons/admin/marker.svg"
@@ -153,7 +157,11 @@ function BankHolidays() {
   );
   return (
     <>
-      <AddBankHoliday popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <AddBankHoliday
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selectedField={selectedField}
+      />
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}

@@ -8,7 +8,7 @@ import { ArrowUpFromLine, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { eventsSchema } from "@/schema/dashboard/employee/masters/news.schema";
 import useImageUpload from "@/hooks/useImageUpload";
 import toast from "react-hot-toast";
@@ -17,13 +17,14 @@ export default function CreateEvent() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const popup = searchParams.get("popup");
-
+  const navigate = useNavigate();
   const [loading, setLoding] = useState();
   const { user } = useUserStore((state) => ({ user: state.user }));
   const [loader, setLoader] = useState(false);
   const [content, setContent] = useState("");
   const [locationId, setLocationId] = useState("");
   const [locationName, setLocationName] = useState("");
+  const [status, setStatus] = useState("");
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
   const queryClient = useQueryClient();
@@ -89,7 +90,11 @@ export default function CreateEvent() {
       imageFile && formData.append("featured_image", imageFile);
       formData.append("content", content);
       formData.append("location_id", locationId);
+      formData.append("active_status", status);
+
       let res;
+      console.log(status, "statust");
+
       if (
         !data?.event_title ||
         !data?.short_summary ||
@@ -97,9 +102,9 @@ export default function CreateEvent() {
         !data?.end_date ||
         !data?.start_time ||
         !data?.end_time ||
+        !status ||
         !image ||
-        !content ||
-        !locationId
+        !content
       ) {
         return toast.error("mandatory field missing error");
       }
@@ -114,6 +119,7 @@ export default function CreateEvent() {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["events"]);
         close();
+        navigate("/admin/news-event/event");
       }
     } catch (error) {
       console.log(error);
@@ -132,15 +138,18 @@ export default function CreateEvent() {
           <div className="flex items-center gap-2">
             {popup !== "view" && (
               <>
-                <Link
-                  to={""}
-                  className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
-                >
-                  Save as draft
-                </Link>
                 <button
                   type="submit"
                   to={""}
+                  onClick={() => setStatus("save_as_draft")}
+                  className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
+                >
+                  Save as draft
+                </button>
+                <button
+                  type="submit"
+                  to={""}
+                  onClick={() => setStatus("published")}
                   className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
                 >
                   Publish

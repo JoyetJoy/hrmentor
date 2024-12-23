@@ -51,9 +51,19 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
         }),
   });
 
+  const removeIdFromLocalStorage = () => {
+    const storedData = localStorage.getItem("myData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      delete parsedData.id; // Remove the `id` property
+      localStorage.setItem("myData", JSON.stringify(parsedData)); // Save the updated object
+    }
+  };
+
   useEffect(() => {
     if (data) {
       setTotalPages(data?.original?.pagination);
+      removeIdFromLocalStorage();
     }
   }, [data]);
   const columns = React.useMemo(

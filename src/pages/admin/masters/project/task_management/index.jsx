@@ -1,12 +1,14 @@
-import { newRequest } from "@/api";
+import { ACTIVE_EMPLOYEE, newRequest, PROJECT_LIST } from "@/api";
 import { EMAIL_FOLDER } from "@/api/setup";
 import ProjectHeader from "@/components/common/ProjectHeader";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import { taskSchema } from "@/schema/dashboard/employee/masters/project_and_tasks.schema";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Dialog, DialogPanel, Select } from "@headlessui/react";
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@tanstack/react-query";
 import {
   Eye,
@@ -21,6 +23,14 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import Select from "react-select";
+
+const Priority = [
+  { value: 1, label: "Low" },
+  { value: 2, label: "Medium" },
+  { value: 3, label: "High" },
+  { value: 4, label: "Urgent" },
+];
 
 export default function TaskManagement() {
   const [keyword, setKeyword] = useState("");
@@ -33,6 +43,7 @@ export default function TaskManagement() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupEditOpen, setPopupEditOpen] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
+  const [memberList, setMemberList] = useState([]);
 
   const [folderName, setFolderName] = useState("");
   const [folderId, setFolderId] = useState(null);
@@ -48,6 +59,39 @@ export default function TaskManagement() {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(taskSchema),
+  });
+
+  const { data: EmployeeList, error } = useQuery({
+    queryKey: ["EmployeeList", user?.id],
+    queryFn: () =>
+      newRequest
+        .get(ACTIVE_EMPLOYEE, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id, // Only run if user.id is defined
+  });
+
+  const { data: projectList, isLoading } = useQuery({
+    queryKey: ["projectList"],
+    queryFn: async () => {
+      const response = await newRequest.get(PROJECT_LIST);
+      return response?.data?.listing?.map((project) => ({
+        value: project.id, // Map id to value
+        label: project.project_name, // Map project_name to label
+      }));
+    },
+  });
 
   const statuses = [
     { label: "Not Started", count: 1, tasks: 1, color: "text-gray-700" },
@@ -140,15 +184,6 @@ export default function TaskManagement() {
       </span>
     );
   };
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-  });
 
   const columns = React.useMemo(
     () => [
@@ -202,6 +237,44 @@ export default function TaskManagement() {
       {
         header: "Priority",
         accessorKey: "priority",
+      },
+      {
+        header: "Action",
+        accessorKey: "location",
+        cell: ({ row }) => (
+          <div className="flex items-center justify-start gap-3 text-xs">
+            <Link
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedId(row.original.id);
+              }}
+              className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
+              <Eye className="size-3" />
+            </Link>
+            <Link
+              onClick={() => {
+                setPopupOpen(true);
+                setSelectedId(row.original.id);
+              }}
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+            >
+              <img
+                src="/assets/icons/admin/marker.svg"
+                className="w-full object-contain"
+              />
+            </Link>
+            <Link
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedId(row?.original?.id);
+              }}
+            >
+              <Trash2 className="size-3" />
+            </Link>
+          </div>
+        ),
       },
     ],
     [projects],
@@ -328,7 +401,7 @@ export default function TaskManagement() {
           </Link>
         </div>
       </div>
-      <div className="flex items-center rounded-lg bg-gray-50 p-4 shadow-sm">
+      <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">
         {statuses.map((status, index) => (
           <React.Fragment key={status.label}>
             <div className="flex flex-col items-center px-24">
@@ -425,18 +498,30 @@ export default function TaskManagement() {
                       Priority
                     </label>
                     <Controller
-                      name="emailTemplateId"
+                      name="priority_id"
                       control={control}
-                      rules={{ required: "Email Folder is required" }}
+                      rules={{ required: "Priority is required" }}
                       render={({ field }) => (
                         <Select
                           {...field}
                           styles={customSelectStyles}
-                          placeholder="Select Email Folder"
+                          options={Priority}
+                          placeholder="Select Priority"
                           className="input-box"
+                          value={Priority.find(
+                            (option) => option.value === field.value,
+                          )} // Ensure the selected value matches
+                          onChange={(selectedOption) =>
+                            field.onChange(selectedOption?.value)
+                          } // Update the value in RHF
                         />
                       )}
                     />
+                    {errors.priority_id && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.priority_id?.message}
+                      </span>
+                    )}
                   </div>
                   <div className="flex w-[50%] flex-col gap-1.5 py-2">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
@@ -449,7 +534,7 @@ export default function TaskManagement() {
                       <div className="flex items-center gap-2">
                         <UploadCloud />
                         <span className="font-semibold text-textcolor-darkCharcoal">
-                          Upload Certificate
+                          Upload Document
                         </span>
                       </div>
                       <input
@@ -462,23 +547,7 @@ export default function TaskManagement() {
                 </div>
                 <div className="flex w-full gap-3">
                   {/* Display Name */}
-                  <div className="group col-span-2 flex w-[50%] flex-col gap-1.5 py-2">
-                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                      Repeat Every
-                    </label>
-                    <Controller
-                      name="members"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          styles={customSelectStyles}
-                          placeholder="Select a members"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                  </div>
+
                   <div className="group col-span-2 flex w-[50%] flex-col gap-1.5 py-2">
                     <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
                       Related To
@@ -489,45 +558,30 @@ export default function TaskManagement() {
                       render={({ field }) => (
                         <Select
                           {...field}
+                          options={projectList}
                           styles={customSelectStyles}
-                          placeholder="Select a members"
+                          placeholder="Select a Assignees"
                           className="input-box"
                         />
                       )}
                     />
                   </div>
-                </div>
-                <div className="flex w-full gap-3">
+
                   {/* Display Name */}
                   <div className="group col-span-2 flex w-[50%] flex-col gap-1.5 py-2">
                     <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
                       Assignees
                     </label>
                     <Controller
-                      name="members"
+                      name="assignees"
                       control={control}
                       render={({ field }) => (
                         <Select
                           {...field}
+                          options={EmployeeList}
+                          isMulti
                           styles={customSelectStyles}
-                          placeholder="Select a members"
-                          className="input-box"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="group col-span-2 flex w-[50%] flex-col gap-1.5 py-2">
-                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                      Followers
-                    </label>
-                    <Controller
-                      name="members"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          styles={customSelectStyles}
-                          placeholder="Select a members"
+                          placeholder="Select a Assignees"
                           className="input-box"
                         />
                       )}

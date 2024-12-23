@@ -252,7 +252,7 @@ export default function CompanyCalender() {
       {
         header: "Location",
         cell: ({ row }) => (
-          <p className="">{row.original?.location.work_location_name}</p>
+          <p className="">{row.original?.location?.work_location_name}</p>
         ),
       },
       {

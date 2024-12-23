@@ -33,8 +33,6 @@ export default function Event() {
         }),
   });
 
-  console.log(currentPage, "eventListeventList");
-
   useEffect(() => {
     if (eventList) {
       setTotalPages(eventList.last_page || 1);
@@ -47,11 +45,11 @@ export default function Event() {
 
   const renderStatusBadge = (status) => {
     const statusColors = {
-      draft: "bg-yellow-100 text-yellow-600",
+      save_as_draft: "bg-yellow-100 text-yellow-600",
       expired: "bg-blue-100 text-blue-600",
-      Canceled: "bg-purple-100 text-purple-600",
-      "On hold": "bg-red-100 text-red-600",
+      ongoing: "bg-purple-100 text-purple-600",
       upcoming: "bg-green-100 text-green-600",
+      published: "bg-green-100 text-green-600",
     };
     return (
       <span
@@ -87,7 +85,7 @@ export default function Event() {
         header: "Location",
         accessorKey: "location_id",
         cell: ({ row }) => (
-          <p className="">{row?.original?.location_id || "NA"}</p>
+          <p className="">{row?.original?.location_name || "NA"}</p>
         ),
       },
       {
@@ -132,6 +130,13 @@ export default function Event() {
         accessorKey: "status",
         cell: ({ row }) => (
           <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
+        ),
+      },
+      {
+        header: "Active Status",
+        accessorKey: "active_status",
+        cell: ({ row }) => (
+          <td>{renderStatusBadge(row.original.active_status)}</td> // Render badge based on status
         ),
       },
       {

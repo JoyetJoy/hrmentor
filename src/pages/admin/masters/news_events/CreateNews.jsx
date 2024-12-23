@@ -7,7 +7,7 @@ import { ArrowUpFromLine, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { newFormRequest, newRequest, NEWS_LISt } from "@/api";
 import toast from "react-hot-toast";
 
@@ -33,11 +33,11 @@ export default function CreateNews({
     mode: "onSubmit",
     resolver: yupResolver(newsSchema),
   });
-
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [content, setContent] = useState("");
-  // Get selected data
+  const [status, setStatus] = useState("");
   const { data: newsid, isLoading } = useQuery({
     queryKey: ["newsid", id],
     queryFn: () =>
@@ -71,6 +71,8 @@ export default function CreateNews({
       formData.append("news_title", data?.news_title);
       formData.append("short_summary", data?.short_summary);
       formData.append("content", content);
+      status;
+      formData.append("status", status);
       imageFile && formData.append("featured_image", imageFile);
       let res;
 
@@ -87,6 +89,7 @@ export default function CreateNews({
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
+        navigate("/admin/news-event/news");
       }
     } catch (error) {
       console.log(error);
@@ -105,14 +108,17 @@ export default function CreateNews({
           <div className="flex items-center gap-2">
             {popup !== "view" && (
               <>
-                <Link
+                <button
+                  type="submit"
                   to="#"
+                  onClick={() => setStatus("save_as_draft")}
                   className="btn flex h-10 min-h-10 items-center bg-gray-platinum px-6 text-xs font-semibold text-black hover:bg-gray-platinum"
                 >
                   Save as Draft
-                </Link>
+                </button>
                 <button
                   type="submit"
+                  onClick={() => setStatus("published")}
                   className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
                 >
                   Publish
