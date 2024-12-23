@@ -112,7 +112,7 @@ export default function OnboardingForm() {
       <div className="rounded-md bg-white px-10 py-8">
         <form className="flex flex-col gap-4">
           <BasicDetails formtype="update" />
-          <WorkInfo />
+          <WorkInfo formtype="update"  />
           <Skills />
           <Experience />
           <Registration />

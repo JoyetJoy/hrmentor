@@ -8,10 +8,14 @@ import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_SKILLS, newRequest } from "@/api";
 import SkillEditForm from "@/components/popups/employees/edit/SkillEditForm";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 
 export default function Skills() {
-    const location = useLocation();
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
   const [currentPage, setCurrentPage] = useState(1);
@@ -122,34 +126,34 @@ export default function Skills() {
             </div>
           ),
         },
-        {
-          header: "Action",
-          accessorKey: "action",
-          cell: ({ row }) => (
-            <div className="flex items-center gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => setSelectedField(row.original.id)}
-                className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-              >
-                <img
-                  src="/assets/icons/admin/marker.svg"
-                  className="w-full object-contain"
-                />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedId(row.original.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
-              >
-                <Trash2 className="size-3" />
-              </button>
-            </div>
-          ),
-        },
+        // {
+        //   header: "Action",
+        //   accessorKey: "action",
+        //   cell: ({ row }) => (
+        //     <div className="flex items-center gap-2 text-xs">
+        //       <button
+        //         type="button"
+        //         onClick={() => setSelectedField(row.original.id)}
+        //         className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+        //       >
+        //         <img
+        //           src="/assets/icons/admin/marker.svg"
+        //           className="w-full object-contain"
+        //         />
+        //       </button>
+        //       <button
+        //         type="button"
+        //         onClick={() => {
+        //           setDeletePopup(true);
+        //           setSelectedId(row.original.id);
+        //         }}
+        //         className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+        //       >
+        //         <Trash2 className="size-3" />
+        //       </button>
+        //     </div>
+        //   ),
+        // },
       ].filter(Boolean),
     [employeeSkills],
   );
@@ -163,7 +167,7 @@ export default function Skills() {
         <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
           Skills/Qualification
         </p>
-        <div className="border w-full"></div>
+        <div className="w-full border"></div>
       </DisclosureButton>
       <DisclosurePanel className="grid grid-cols-1 text-sm/5 text-black/50">
         <div className="px-5 py-5">
