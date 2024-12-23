@@ -4,7 +4,7 @@ import { dbsSchema } from "@/schema/dashboard/employee/form/dbs.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowUpFromLine, Eye, UploadCloud, X } from "lucide-react";
+import { ArrowUpFromLine, Eye, EyeOff, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
@@ -25,8 +25,7 @@ export default function DbsEditForm({
   api,
   uid,
 }) {
-  const { image, imageFile, clearImage, setImage } =
-    useImageUpload();
+  const { image, imageFile, clearImage, setImage } = useImageUpload();
 
   const {
     register,
@@ -42,22 +41,22 @@ export default function DbsEditForm({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  // const [image, setImage] = useState(null);
-  const [isImageClicked, setIsImageClicked] = useState(false); // Track if the image is clicked
+  const [isImageVisible, setIsImageVisible] = useState(false);
+  const [imageError, setImageError] = useState("");
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setImage(URL.createObjectURL(file));
+      setIsImageVisible(false);
+      setImageError("");
+    } else {
+      setImageError("Please upload a valid image.");
     }
   };
 
-  const handleImageClick = () => {
-    setIsImageClicked(true);
+  const toggleImageVisibility = () => {
+    setIsImageVisible((prev) => !prev);
   };
 
   // Get selected data
@@ -91,12 +90,6 @@ export default function DbsEditForm({
     }
   }, [employeeDbsCheckDetailByid]);
 
-  // useEffect(() => {
-  //   if (employeeDbsCheckDetailByid) {
-  //     setImage(employeeDbsCheckDetailByid?.document);
-  //   }
-  // }, [employeeDbsCheckDetailByid, setImage]);
-
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
@@ -125,8 +118,7 @@ export default function DbsEditForm({
           formData,
         );
       } else {
-        res = await newFormRequest.post(api, formData,
-        );
+        res = await newFormRequest.post(api, formData);
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
@@ -176,7 +168,7 @@ export default function DbsEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="label-text required">DBS Type</label>
+                  <label className="required label-text">DBS Type</label>
                   <Controller
                     name="dbs_type"
                     control={control}
@@ -200,7 +192,7 @@ export default function DbsEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Subscription
                   </label>
                   <Controller
@@ -240,7 +232,7 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     DBS Number
                   </label>
                   <input
@@ -256,7 +248,7 @@ export default function DbsEditForm({
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem]  required font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Date of issue
                   </label>
                   <input
@@ -270,55 +262,76 @@ export default function DbsEditForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col gap-1.5">
-      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-        Document (optional)
-      </label>
-      <label
-        htmlFor="document"
-        className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md border border-dashed bg-gray-soft px-2"
-      >
-        <div className="flex items-center justify-between gap-32">
-          <span className="flex items-center whitespace-nowrap text-xs font-semibold text-black/50">
-            <ArrowUpFromLine className="size-4" />
-            Upload Certificate
-          </span>
-          {image && <Eye className="size-4" />}
-        </div>
-        <input
-          id="document"
-          onChange={handleImageChange}
-          type="file"
-          className="hidden"
-        />
-      </label>
+                <div className="flex flex-col gap-4">
+                  <div className="group flex flex-col gap-1">
+                    <label className="text-[0.8rem] font-medium text-[#3A3A3A]">
+                      Document (optional)
+                    </label>
+                    <div className="flex h-10 items-center justify-between gap-4 rounded-md border border-dashed bg-gray-soft px-2">
+                      <div className="flex items-center gap-2 text-black/50">
+                        {image ? (
+                          <>
+                            {isImageVisible ? (
+                              <EyeOff
+                                className="size-4 cursor-pointer"
+                                onClick={toggleImageVisibility}
+                              />
+                            ) : (
+                              <Eye
+                                className="size-4 cursor-pointer"
+                                onClick={toggleImageVisibility}
+                              />
+                            )}
+                            <span
+                              className="cursor-pointer text-xs font-semibold text-black/50"
+                              onClick={toggleImageVisibility}
+                            >
+                              {isImageVisible ? "Hide Certificate" : "View Certificate"}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <ArrowUpFromLine className="size-4" />
+                            <label
+                              htmlFor="document"
+                              className="cursor-pointer text-xs font-semibold text-black/50"
+                            >
+                              Upload Certificate
+                            </label>
+                          </>
+                        )}
+                      </div>
+                      <input
+                        id="document"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </div>
+                    {imageError && (
+                      <span className="text-xs font-medium text-red-500">
+                        {imageError}
+                      </span>
+                    )}
+                  </div>
 
-      {/* Only display the preview if an image is uploaded */}
-      {image && (
-        <div className="flex items-center gap-2">
-          <img
-            className="h-40 w-40 rounded-md object-cover cursor-pointer"
-            src={image}
-            alt="Preview"
-            onClick={handleImageClick}
-          />
-        </div>
-      )}
-
-      {/* Optionally display the image in a larger modal or full screen */}
-      {isImageClicked && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div
-            className="bg-white p-4 rounded-md"
-            onClick={() => setIsImageClicked(false)}
-          >
-            <img src={image} alt="Full Screen Preview" className="h-auto w-full" />
-          </div>
-        </div>
-      )}
-    </div>
+                  {/* Image Preview */}
+                  {isImageVisible && image && (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  )}
+                </div>
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="label-text required">Status</label>
+                  <label className="required label-text">Status</label>
                   <Controller
                     name="status"
                     control={control}
