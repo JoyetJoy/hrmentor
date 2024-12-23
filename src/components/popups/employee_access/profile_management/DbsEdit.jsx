@@ -4,7 +4,7 @@ import { dbsSchema } from "@/schema/dashboard/employee/form/dbs.schema";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowUpFromLine, Eye, UploadCloud, X } from "lucide-react";
+import { ArrowUpFromLine, Eye, EyeOff, UploadCloud, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
@@ -26,8 +26,7 @@ export default function DbsEdit({
   api,
   uid,
 }) {
-  const { image, imageFile, handleImageChange, clearImage, setImage } =
-    useImageUpload();
+  const { image, imageFile, clearImage, setImage } = useImageUpload();
   const {
     register,
     handleSubmit,
@@ -42,6 +41,23 @@ export default function DbsEdit({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  const [isImageVisible, setIsImageVisible] = useState(false);
+  const [imageError, setImageError] = useState("");
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file));
+      setIsImageVisible(false);
+      setImageError("");
+    } else {
+      setImageError("Please upload a valid image.");
+    }
+  };
+
+  const toggleImageVisibility = () => {
+    setIsImageVisible((prev) => !prev);
+  };
 
   // Get selected data
   const { data: employeeDbsCheckDetailByid, isLoading } = useQuery({
@@ -74,11 +90,11 @@ export default function DbsEdit({
     }
   }, [employeeDbsCheckDetailByid]);
 
-  useEffect(() => {
-    if (employeeDbsCheckDetailByid) {
-      setImage(employeeDbsCheckDetailByid?.document);
-    }
-  }, [employeeDbsCheckDetailByid, setImage]);
+  // useEffect(() => {
+  //   if (employeeDbsCheckDetailByid) {
+  //     setImage(employeeDbsCheckDetailByid?.document);
+  //   }
+  // }, [employeeDbsCheckDetailByid, setImage]);
 
   function close() {
     setPopupOpen(false);
@@ -265,35 +281,75 @@ export default function DbsEdit({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col gap-1.5">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Document (optional)
-                  </label>
-                  <label
-                    htmlFor="document"
-                    className="input-box flex h-10 cursor-pointer items-center justify-between gap-36 rounded-md border border-dashed bg-gray-soft px-2"
-                  >
-                    <div className="flex items-center justify-between gap-32">
-                      <span className="flex items-center whitespace-nowrap text-xs font-semibold text-black/50">
-                        <ArrowUpFromLine className="size-4" />
-                        Upload Certificate
-                      </span>
-                      <Eye className="size-4" />
+                <div className="flex flex-col gap-4">
+                  <div className="group flex flex-col gap-1">
+                    <label className="text-[0.8rem] font-medium text-[#3A3A3A]">
+                      Document (optional)
+                    </label>
+                    <div className="flex h-10 items-center justify-between gap-4 rounded-md border border-dashed bg-gray-soft px-2">
+                      <div className="flex items-center gap-2 text-black/50">
+                        {image ? (
+                          <>
+                            {isImageVisible ? (
+                              <EyeOff
+                                className="size-4 cursor-pointer"
+                                onClick={toggleImageVisibility}
+                              />
+                            ) : (
+                              <Eye
+                                className="size-4 cursor-pointer"
+                                onClick={toggleImageVisibility}
+                              />
+                            )}
+                            <span
+                              className="cursor-pointer text-xs font-semibold text-black/50"
+                              onClick={toggleImageVisibility}
+                            >
+                              {isImageVisible
+                                ? "Hide Certificate"
+                                : "View Certificate"}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <ArrowUpFromLine className="size-4" />
+                            <label
+                              htmlFor="document"
+                              className="cursor-pointer text-xs font-semibold text-black/50"
+                            >
+                              Upload Certificate
+                            </label>
+                          </>
+                        )}
+                      </div>
+                      <input
+                        id="document"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
                     </div>
-                    <input
-                      id="document"
-                      onChange={handleImageChange}
-                      type="file"
-                      className="hidden"
-                    />
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <img
-                      className="h-40 w-40 rounded-md object-cover"
-                      src={image}
-                      alt="Preview"
-                    />
+                    {imageError && (
+                      <span className="text-xs font-medium text-red-500">
+                        {imageError}
+                      </span>
+                    )}
                   </div>
+
+                  {/* Image Preview */}
+                  {isImageVisible && image && (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Status</label>
