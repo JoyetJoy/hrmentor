@@ -56,7 +56,7 @@ export default function Documents() {
         subMenu={"ProfileManagement"}
         icon={<ChevronRight className="size-3" />}
       />
-      <div className="flex gap-x-3">
+      <div className="flex gap-x-3 ">
         <ProfileSidebar />
         <div className="mt-2 w-full">
           <>
