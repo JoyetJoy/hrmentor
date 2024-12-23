@@ -28,7 +28,6 @@ function Reassign({ popupOpen, setPopupOpen, type, id, setSelectedEmployee, rost
   };
 
   const onClose = () => {
-    setSelectedEmployee("");
     setPopupOpen(false);
   };
 

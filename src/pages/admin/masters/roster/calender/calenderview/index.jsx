@@ -67,16 +67,16 @@ console.log(rosterCalim);
   const handleSubmit = async (data) => {
     if (selectedEmployee) {
       try {
-        const shiftid = Number(id)
         const response = await newRequest.post(ADD_EMPLOYEE_ROSTER, {
           employee_id: selectedEmployee,
-          shift_id: shiftid,
+          shift_id: rosterCalim?.roster_details?.shift_details?.shift_id,
           roster_id: rosterCalim?.roster_details?.roster_id,
           shift_date: date,
         });
   
         if (response.status === 200) {
           toast.success(response.data?.message || "Candidate saved successfully!");
+          refetch();
         } else {
           toast.error(response.data?.message || "Failed to save candidate.");
         }
@@ -92,17 +92,17 @@ console.log(rosterCalim);
   const handleReassign = async (data) => {
     if (selectedEmployee) {
       try {
-        const shiftid = Number(id)
         const response = await newRequest.post(SWAP_EMPLOYEE_ROSTER, {
           swaping_from_employee_id: swapEmployee,
           swaping_to_employee_id:selectedEmployee,
-          shift_id: shiftid,
+          shift_id:  rosterCalim?.roster_details?.shift_details?.shift_id,
           roster_id: rosterCalim?.roster_details?.roster_id,
           swaping_date: date,
         });
   
         if (response.status === 200) {
           toast.success(response.data?.message || "Shift swapped successfully!");
+          refetch();
           setPopupOpen(false);
         } else {
           toast.error(response.data?.message || "Failed to swap shift.");
@@ -118,13 +118,10 @@ console.log(rosterCalim);
   
   const handleDelete = async (data) => {
       try {
-        console.log(data);
-        
-        const shiftid = Number(id)
         const response = await newRequest.post(DELETE_EMPLOYEE_ROSTER, {
           removed_employee_id: data?.id,
           removed_from_user_id:data?.user_id,
-          shift_id: shiftid,
+          shift_id:  rosterCalim?.roster_details?.shift_details?.shift_id,
           roster_id: rosterCalim?.roster_details?.roster_id,
           removed_date: date,
         });

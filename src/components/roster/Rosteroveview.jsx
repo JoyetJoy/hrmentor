@@ -29,7 +29,7 @@ function Rosteroveview({ rosterCalim }) {
           </div>
           <div className="flex gap-2">
             <p className="pr-2 text-[0.8rem]">Shift Claim</p>
-            <p className="text-[0.8rem] text-slate-600">Close</p>
+            <p className="text-[0.8rem] text-slate-600" onClick={()=>setIsOn(false)}>Close</p>
             <div
               onClick={() => {
                 if (isOn) {

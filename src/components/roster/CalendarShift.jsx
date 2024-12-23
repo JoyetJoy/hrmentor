@@ -6,6 +6,7 @@ import { Maximize2, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeaveRequest from "../popups/master/roster/Calendar/LeaveRequest";
+import { ROSTER_CLAIMED_EMPLOYEE_DETAILS, ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST, ROSTER_EMPLIST } from "@/api/setup";
 
 export default function CalanderShift({rosterCalim, isLoading}) {
   const [leaveOpen, setLeaveOpen] = useState(false);
@@ -15,7 +16,22 @@ export default function CalanderShift({rosterCalim, isLoading}) {
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("");
+  const [selectedId, setSelectedId] = useState('');
   const pageLimit = 10;
+
+
+  const { data: rosterEmpList } = useQuery({
+    queryKey: ["rosterEmpList", selectedId],
+    queryFn: () => {
+      console.log(`Fetching employee list for shift ID: ${selectedId}`);
+      return newRequest
+        .get(`${ROSTER_CLAIMED_EMPLOYEE_DETAILS}/${selectedId}`)
+        .then((res) => {
+          return res.data;
+        });
+    },
+    enabled: !!selectedId,
+  });
 
   useEffect(() => {
     if (rosterCalim) {
@@ -23,11 +39,6 @@ export default function CalanderShift({rosterCalim, isLoading}) {
     }
   }, [rosterCalim]);
   
-  console.log(
-    rosterCalim?.roster_details?.leave_employees[0]?.employee_name
-
-    ,
-  );
   return (
     <>
       {isLoading ? (
@@ -39,6 +50,9 @@ export default function CalanderShift({rosterCalim, isLoading}) {
             setPopupOpen={setLeavepopup}
             type={type}
             setType={setType}
+            data={rosterEmpList}
+            api={ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST}
+            selectedId={selectedId}
           />
           {rosterCalim ? (
             <>
@@ -70,7 +84,7 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Leave Requested</p>
                   <p className="text-lg font-semibold">
-                    {rosterCalim?.roster_details?.shift_details?.employee_count}
+                    {rosterCalim?.roster_details?.leave_requests_of_roster_employees_count}
                   </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Employees</p>
                 </div>
@@ -139,11 +153,12 @@ export default function CalanderShift({rosterCalim, isLoading}) {
               </div>
 
               {claimOpen && (
-                <div className="flex w-full items-center justify-center">
+                <div className="flex w-full flex-col gap-3 items-center justify-center">
                   {rosterCalim?.roster_details?.shift_claim_requests?.map((claimedEmployee)=>(
                     <div
                     key={claimedEmployee?.id}
                     onClick={() => {
+                      setSelectedId(claimedEmployee?.id)
                       setLeavepopup(true);
                       setType("claimed");
                     }}
@@ -170,6 +185,7 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                     </div>
                     <button
                       onClick={() => {
+                        setSelectedId(claimedEmployee?.id)
                         setLeaveOpen(true);
                         setType("claimed");
                       }}
