@@ -19,7 +19,7 @@ function BankHolidays() {
   const [byStatus, setByStatus] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState(null);
+  const [selectedField, setSelectedField] = useState('');
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
   const pageLimit = 10;
@@ -161,6 +161,7 @@ function BankHolidays() {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
+        setSelectedField={setSelectedField}
       />
       <DeleteConfirmation
         open={deletePopup}

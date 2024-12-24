@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const empSalaryDetailsSchema = Yup.object({
-  effective_from: Yup.string(),
+  effective_from: Yup.string().required("Effective from is required"),
   effective_to: Yup.string(),
   currency: Yup.object({
     id: Yup.string(),
@@ -16,11 +16,7 @@ export const empSalaryDetailsSchema = Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  })
-    .test("both-required", "Roles is required", function (value) {
-      return value?.value && value?.label;
-    })
-    .required("Roles is required"),
+  }),
   pay_rate: Yup.string().required("Type is required"),
   per: Yup.object({
     id: Yup.string(),
@@ -57,7 +53,7 @@ export const empSalaryDetailsSchema = Yup.object({
       return value?.value && value?.label;
     })
     .required("Type is required"),
-  pay_calculation: Yup.string().required("Pay Calculation is required"),
+  pay_calculation: Yup.string(),
   weekly_contract_hours: Yup.string().required(
     "Weekly contract hours are required",
   ),
