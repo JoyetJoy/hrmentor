@@ -1,5 +1,5 @@
 import { newRequest } from "@/api";
-import { SALARY_DEFAULT_MASTERS } from "@/api/master";
+import { ROLES_LIST, SALARY_DEFAULT_MASTERS } from "@/api/master";
 import { employeeMasterOptions, overTimeList } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { empSalaryDetailsSchema } from "@/schema/dashboard/employee/form/salarydetails.schema";
@@ -41,6 +41,7 @@ export default function EmployeeSalaryDetailsEditForm({
     SALARY_DEFAULT_MASTERS,
     "empSalaryMasterList",
   );
+  const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   // Get selected data
   const { data: employeeSalaryDetailByid, isLoading } = useQuery({
@@ -215,7 +216,7 @@ console.log(empSalaryMasterList);
                     render={({ field }) => (
                       <Select
                         {...field}
-                        options={empSalaryMasterList?.currencies}
+                        options={rolesList}
                         isSearchable={false}
                         styles={customSelectStyles}
                         placeholder="Select role"

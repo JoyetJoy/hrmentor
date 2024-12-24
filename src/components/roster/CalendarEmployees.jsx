@@ -59,7 +59,7 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
               <>
               <p className={`${name ? "line-through text-red-500 pr-1" : ""}`}>{name}
               </p>
-              <p>→</p>
+              <p className="text-[1.2rem] pb-1">→</p>
               </>
               }  
               <p className="pl-1">{row.original?.first_name}</p>

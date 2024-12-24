@@ -122,6 +122,7 @@ export default function SaveEmployeeForm({ formtype }) {
       }),
     enabled: formtype == "update",
   });
+console.log(employeeDetails);
 
   const navigate = useNavigate();
   const [masterApi, setMasterApi] = useState(null);
