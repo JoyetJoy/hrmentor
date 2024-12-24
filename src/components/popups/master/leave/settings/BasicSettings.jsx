@@ -75,8 +75,6 @@ const BasicSettings = ({ formtype = "save" }) => {
   };
 
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [accrualType, setAccrualType] = useState();
@@ -92,6 +90,18 @@ const BasicSettings = ({ formtype = "save" }) => {
   const [accuralAt, setAccuralAt] = useState("");
   const [encashmentsPay, setEncashmentsPay] = useState("");
   const { user } = useUserStore((state) => ({ user: state.user }));
+
+  const getStoredData = () => {
+    const storedData = localStorage.getItem("myData");
+    return storedData ? JSON.parse(storedData) : null; // Parse only if storedData exists
+  };
+
+  const storedData = getStoredData();
+
+  const [searchParams] = useSearchParams();
+
+  // Prefer `searchParams` over `storedData`, with proper fallback
+  const id = searchParams.get("id") || storedData?.id || null;
 
   const [boxes, setBoxes] = useState([
     { id: 1, years: "", months: "", daysleave: "" },
@@ -131,11 +141,6 @@ const BasicSettings = ({ formtype = "save" }) => {
 
   useEffect(() => {
     if (basicholidayDetails) {
-      console.log(
-        basicholidayDetails,
-        "basicholidayDetailsbasicholidayDetails",
-      );
-
       reset({
         leave_name: basicholidayDetails?.leave_name,
         display_name: basicholidayDetails?.display_name,
@@ -190,20 +195,20 @@ const BasicSettings = ({ formtype = "save" }) => {
         application_to: applicable,
         emp_no_days: data.emp_no_days,
         based_experience_details: boxes,
-        carry_forword: isOn,
-        max_no_days: data.max_no_days,
-        carry_expire: isOn2,
-        exp_days: data.exp_days,
-        encashments: isOn3,
+        carry_forword: isOn ?? 0,
+        max_no_days: data.max_no_days ?? 0,
+        carry_expire: isOn2 ?? 0,
+        exp_days: data.exp_days ?? 0,
+        encashments: isOn3 ?? 0,
         encashments_pay: "basicpay",
-        max_encashments: Number(encashmentsPay),
-        no_of_days: data.no_of_days,
+        max_encashments: Number(encashmentsPay) ?? 0,
+        no_of_days: data.no_of_days ?? 0,
       };
 
       let res;
 
-      if (!formData) {
-        return toast.error("");
+      if (!applicable || !formData.emp_no_days) {
+        return toast.error("Please Select Applicate Type");
       }
 
       if (id) {
@@ -211,8 +216,6 @@ const BasicSettings = ({ formtype = "save" }) => {
       } else {
         res = await newRequest.post(HOLIDAY_STATUS, formData);
       }
-
-      console.log(res.data, "res.data");
 
       if (res.data.message == "Holiday basic settings updated successfully!") {
         navigate(`/admin/leave/settings/availabilitysettings/${id}`);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,7 +14,7 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { HOLIDAY_AVAILABLE_SETTING, WORK_LOCATIONS } from "@/api";
 import toast from "react-hot-toast";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 
 // Validation Schema
 const leaveSchema = Yup.object().shape({
@@ -45,12 +45,30 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     reset();
   };
 
-  const { id } = useParams();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const { user } = useUserStore((state) => ({ user: state.user }));
   const queryClient = useQueryClient();
 
+  const getStoredData = () => {
+    const storedData = localStorage.getItem("myData");
+    return storedData ? JSON.parse(storedData) : null; // Parse only if storedData exists
+  };
+
+  const storedData = getStoredData();
+  const { id: routeId } = useParams(); // Use `routeId` to avoid naming conflicts
+  const [searchParams] = useSearchParams();
+
+  // Determine `id` with priority: searchParams -> routeId -> storedData
+  const id = searchParams.get("id") || routeId || storedData?.id || null;
+
+
+  useEffect(() => {
+    const data = { id };
+    localStorage.setItem("myData", JSON.stringify(data));
+  }, [id]);
+
+ 
   const [availabilitySelection, setAvailabilitySelection] = useState({
     department_availability: [],
     department_except: [],
@@ -106,6 +124,32 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     enabled: !!user?.id,
   });
 
+  const { data: availableholidayDetails } = useQuery({
+    queryKey: ["availableholidayDetails", user?.id, id],
+    queryFn: () =>
+      newRequest
+        .get(`${HOLIDAY_AVAILABLE_SETTING}/${id}`, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id && !!id,
+  });
+
+  useEffect(() => {
+    if (availableholidayDetails) {
+      // Filter only the keys that exist in both objects
+      const updatedSelection = Object.keys(availabilitySelection).reduce(
+        (acc, key) => {
+          acc[key] = availableholidayDetails[key] || [];
+          return acc;
+        },
+        {},
+      );
+
+      setAvailabilitySelection(updatedSelection);
+    }
+  }, [availableholidayDetails, reset]);
+
   const onSubmit = async () => {
     handledSubmit(availabilitySelection);
   };
@@ -133,7 +177,7 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
       const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
 
       if (res.data.success === true) {
-        navigate(`/admin/leave/settings/advancedsettings/${res.data.data.id}`);
+        navigate(`/admin/leave/settings/advancedsettings/${id}`);
       }
     } catch (error) {
       const errorMessage =

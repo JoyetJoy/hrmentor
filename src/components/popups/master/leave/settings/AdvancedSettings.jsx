@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useParams } from "react-router-dom";
-import { HOLIDAY_ADVANCE_SETTINGS } from "@/api";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { HOLIDAY_ADVANCE_SETTINGS, newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 const AdvancedSettings = ({ formtype = "save" }) => {
   const [isOn1, setIsOn1] = useState(false); // For applyDays
   const [isOn4, setIsOn4] = useState(false); // For documentsMandatoryDays
-  const { id } = useParams();
+  const { user } = useUserStore((state) => ({ user: state.user }));
+  const navigate = useNavigate();
+
+  const getStoredData = () => {
+    const storedData = localStorage.getItem("myData");
+    return storedData ? JSON.parse(storedData) : null; // Parse only if storedData exists
+  };
+
+  const storedData = getStoredData();
+  const { id: routeId } = useParams(); // Use `routeId` to avoid naming conflicts
+  const [searchParams] = useSearchParams();
+
+  // Determine `id` with priority: searchParams -> routeId -> storedData
+  const id = searchParams.get("id") || routeId || storedData?.id || null;
 
   const advancedSettingsSchema = Yup.object().shape({
     leave_type: Yup.string(),
@@ -44,10 +60,49 @@ const AdvancedSettings = ({ formtype = "save" }) => {
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
   const [isOn5, setIsOn5] = useState(false);
-  const [leaveBalance, setLeaveBalance] = useState("dontallow");
+  const [leaveBalance, setLeaveBalance] = useState();
 
   const close = () => {
     reset();
+  };
+
+  const { data: AdvanceholidayDetails } = useQuery({
+    queryKey: ["AdvanceholidayDetails", user?.id, id],
+    queryFn: () =>
+      newRequest
+        .get(`${HOLIDAY_ADVANCE_SETTINGS}/${id}`, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => res.data),
+    enabled: !!user?.id && !!id,
+  });
+
+  useEffect(() => {
+    if (AdvanceholidayDetails) {
+      reset({
+        leave_type: AdvanceholidayDetails?.leave_type,
+        consecutive_leave_allow: AdvanceholidayDetails?.consecutive_leave_allow,
+        taken_past_leave_days: AdvanceholidayDetails?.taken_past_leave_days,
+        before_leave_apply: AdvanceholidayDetails?.before_leave_apply,
+        support_document_leave: AdvanceholidayDetails?.support_document_leave,
+      });
+      setLeaveBalance(AdvanceholidayDetails?.leave_balance);
+      setIsOn(AdvanceholidayDetails?.half_day_leave);
+      setIsOn1(AdvanceholidayDetails?.taken_past_leave);
+      setIsOn2(AdvanceholidayDetails?.holiday_leaves);
+      setIsOn3(AdvanceholidayDetails?.weekend_leaves);
+      setIsOn4(AdvanceholidayDetails?.support_documents);
+      setIsOn5(AdvanceholidayDetails?.notice_period_leave);
+    }
+  }, [AdvanceholidayDetails, reset]);
+
+  const removeIdFromLocalStorage = () => {
+    const storedData = localStorage.getItem("myData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      delete parsedData.id; // Remove the `id` property
+      localStorage.setItem("myData", JSON.stringify(parsedData)); // Save the updated object
+    }
   };
 
   const onSubmit = async (data) => {
@@ -61,15 +116,15 @@ const AdvancedSettings = ({ formtype = "save" }) => {
       const formData = {
         leave_type: data.leave_type,
         leave_balance: leaveBalance,
-        consecutive_leave_allow: data.consecutive_leave_allow,
+        consecutive_leave_allow: data.consecutive_leave_allow ?? 0,
         half_day_leave: isOn,
         taken_past_leave: isOn1,
-        taken_past_leave_days: data.taken_past_leave_days,
+        taken_past_leave_days: data.taken_past_leave_days ?? 0,
         holiday_leaves: isOn2,
         weekend_leaves: isOn3,
-        before_leave_apply: data.before_leave_apply,
+        before_leave_apply: data.before_leave_apply ?? 0,
         support_documents: isOn4,
-        support_document_leave: data.support_document_leave,
+        support_document_leave: data.support_document_leave ?? 0,
         notice_period_leave: isOn5,
         holiday_id: id,
       };
@@ -77,8 +132,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
       const res = await newRequest.post(HOLIDAY_ADVANCE_SETTINGS, formData);
 
       toast.success(res?.data?.message);
-      queryClient.invalidateQueries(["bank_holidays"]);
       close();
+      removeIdFromLocalStorage();
+      navigate(`/admin/leave/settings`);
     } catch (error) {
       console.error("Error Details:", error);
       console.error("Error Response Data:", error?.response?.data);
@@ -131,8 +187,8 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="leave_balance"
-                    value="dontallow"
-                    onClick={() => setLeaveBalance("dontallow")}
+                    value="dont_allow"
+                    onClick={() => setLeaveBalance("dont_allow")}
                     className="radio-black"
                     defaultChecked
                   />
@@ -142,8 +198,8 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="leave_balance"
-                    value="allowwithnegativebalance"
-                    onClick={() => setLeaveBalance("allowwithnegativebalance")}
+                    value="allow_negative"
+                    onClick={() => setLeaveBalance("allow_negative")}
                     className="radio-black"
                   />
                   <label className="text-sm font-normal">
@@ -154,8 +210,8 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="leave_balance"
-                    value="allowwithlop"
-                    onClick={() => setLeaveBalance("dontallow")}
+                    value="allow_lop"
+                    onClick={() => setLeaveBalance("allow_lop")}
                     className="radio-black"
                   />
                   <label className="text-sm font-normal">Allow with LOP</label>
