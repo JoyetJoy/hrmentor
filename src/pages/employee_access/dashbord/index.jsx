@@ -14,6 +14,41 @@ import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 export const EmployeeDashboard = () => {
+  const cardsData = [
+    {
+      title: "Documents Expiry",
+      details: [
+        { type: "Visa", count: "5/233" },
+        { type: "Passport", count: "3/150" },
+        { type: "ID Card", count: "8/300" },
+      ],
+    },
+    {
+      title: "New Joiners",
+      details: [
+        { type: "HR", count: "2/20" },
+        { type: "Engineers", count: "10/50" },
+        { type: "Designers", count: "5/30" },
+      ],
+    },
+    {
+      title: "Bank Holidays",
+      details: [
+        { type: "2024", count: "10/12" },
+        { type: "2025", count: "8/10" },
+        { type: "2026", count: "5/8" },
+      ],
+    },
+    {
+      title: "Birthday in next 30 days",
+      details: [
+        { type: "HR", count: "2/12" },
+        { type: "Engineers", count: "3/15" },
+        { type: "Designers", count: "1/10" },
+      ],
+    },
+  ];
+
   const queryClient = useQueryClient();
   const [breakpopupOpen, setBreakPopupOpen] = useState(false);
   const [clockInpopupOpen, setClockInPopupOpen] = useState(false);
@@ -131,7 +166,7 @@ export const EmployeeDashboard = () => {
         loggedTime={loggedTime}
       />
       <div className="my-3 flex items-baseline justify-between rounded-md">
-        <aside className="flex min-w-[72%] flex-col gap-3">
+        <div className="flex min-w-[72%] flex-col gap-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-black">Dashboard</h1>
             <div className="flex items-center gap-3">
@@ -175,288 +210,50 @@ export const EmployeeDashboard = () => {
               </label>
             </div>
           </div>
-          <div className="grid grid-cols-2 items-center justify-center gap-4">
-            <div className="flex flex-col gap-2 rounded-md bg-white p-9">
-              <label className="mb-4 flex items-center justify-between">
-                <h1 className="text-base font-bold text-black">
-                  Documents Expiry
-                </h1>
-                <p className="flex items-center gap-2 text-sm font-medium text-gray-dark">
-                  View <Eye className="size-4 text-black/70" />
-                </p>
-              </label>
-              <div className="flex items-center justify-between gap-2 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {cardsData.map((card, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-4 rounded-md bg-white p-6 shadow-sm"
+              >
+                <label className="mb-4 flex items-center justify-between">
+                  <h1 className="text-base font-bold text-black">
+                    {card.title}
+                  </h1>
+                  <p className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                    View <Eye className="size-4 text-black/70" />
+                  </p>
+                </label>
+                {card.details.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between gap-4 rounded-full bg-gray-100 p-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="rounded-full border border-gray-300 p-2">
+                        <SquareMenu
+                          className="size-5 text-black/20"
+                          strokeWidth={1.2}
+                        />
+                      </div>
+                      <label className="text-xs text-black">
+                        <h1>{item.type}</h1>
+                        <h1>{item.count}</h1>
+                      </label>
+                    </div>
+                    <div className="rounded-full border bg-gray-soft p-2">
+                      <MoveDiagonal
+                        className="size-3 text-black"
+                        strokeWidth={1.7}
+                      />
+                    </div>
                   </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
+                ))}
               </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 rounded-md bg-white p-9">
-              <label className="mb-4 flex items-center justify-between">
-                <h1 className="text-base font-bold text-black">New Joiners</h1>
-                <p className="flex items-center gap-2 text-xs font-medium text-gray-dark">
-                  View <Eye className="size-4 text-black/70" />
-                </p>
-              </label>
-              <div className="flex items-center justify-between gap-2 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 rounded-md bg-white p-9">
-              <label className="mb-4 flex items-center justify-between">
-                <h1 className="text-base font-bold text-black">
-                  Bank holidays
-                </h1>
-                <p className="flex items-center gap-2 text-xs font-medium text-gray-dark">
-                  View <Eye className="size-4 text-black/70" />
-                </p>
-              </label>
-              <div className="flex items-center justify-between gap-2 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 rounded-md bg-white p-9">
-              <label className="mb-4 flex items-center justify-between">
-                <h1 className="text-base font-bold text-black">
-                  Birthday in next 30 days
-                </h1>
-                <p className="flex items-center gap-2 text-xs font-medium text-gray-dark">
-                  View <Eye className="size-4 text-black/70" />
-                </p>
-              </label>
-              <div className="flex items-center justify-between gap-2 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-4 rounded-full bg-gray-soft p-1">
-                <div className="flex items-center gap-1">
-                  <div className="rounded-full border border-[#C9C9C9] p-2">
-                    <SquareMenu
-                      className="text-blacl/20 size-5"
-                      strokeWidth={1.2}
-                    />
-                  </div>
-                  <label className="text-xs text-black">
-                    <h1 className="">Visa</h1>
-                    <h1>5/233</h1>
-                  </label>
-                </div>
-                <div className="rounded-full border bg-[#C9C9C9] p-1">
-                  <MoveDiagonal
-                    className="text-blacl/20 size-3"
-                    strokeWidth={1.2}
-                  />
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-        </aside>
-        <aside className="flex w-[27%] flex-col gap-4">
+        </div>
+        <div className="flex w-[27%] flex-col gap-4">
           <LeaveAvailability />
           <div className="rounded-md bg-white p-6 shadow-sm">
             <Link
@@ -488,7 +285,7 @@ export const EmployeeDashboard = () => {
               ))}
             </div>
           </div>
-        </aside>
+        </div>
       </div>
     </>
   );
