@@ -786,11 +786,16 @@ console.log(employeeDetails);
                     Home Address
                   </label>
                   <textarea
-                    autoComplete="off"
-                    type="text"
-                    {...register("home_address", { required: true })}
-                    className="input-box min-h-28 py-1"
-                  />
+  autoComplete="off"
+  type="text"
+  {...register("home_address", { required: true })}
+  className="input-box min-h-28 py-1"
+  onInput={(e) => {
+    const value = e.target.value;
+    e.target.value = value.replace(/^\s+/g, ''); // Remove leading spaces from the first line
+  }}
+/>
+
                   {errors.home_address && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.home_address?.message}

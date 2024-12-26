@@ -66,13 +66,18 @@ export default function EmployeeSalaryDetailsEditForm({
       setValue("pay_schedule", employeeSalaryDetailByid.pay_schedule);
       setValue("pay_type", employeeSalaryDetailByid.pay_type);
       setValue("over_time", employeeSalaryDetailByid.over_time);
+      setValue("roles",employeeSalaryDetailByid?.role_id)
       setValue(
         "weekly_contract_hours",
         employeeSalaryDetailByid.weekly_contract_hours,
       );
       setValue("weekly_pay", employeeSalaryDetailByid.weekly_pay);
+      setValue("pay_calculation", employeeSalaryDetailByid?.pay_calculation)
       setValue("annual_pay", employeeSalaryDetailByid.annual_pay);
       setValue("status", employeeSalaryDetailByid.status);
+      if(employeeSalaryDetailByid.over_time){
+        setSelectedOverTime(employeeSalaryDetailByid.over_time?.value)
+      }
     }
   }, [employeeSalaryDetailByid]);
 
@@ -127,9 +132,7 @@ export default function EmployeeSalaryDetailsEditForm({
       formData.append("pay_schedule", data.pay_schedule?.id);
       formData.append("pay_type", data.pay_type?.id);
       formData.append("over_time", data.over_time?.value);
-      if(data?.over_time==="nonExempt"){
-        formData.append("pay_calculation", data?.pay_calculation);
-      }
+      formData.append("pay_calculation", data?.pay_calculation);
       formData.append("weekly_contract_hours", data.weekly_contract_hours);
       formData.append("weekly_pay", data.weekly_pay);
       formData.append("annual_pay", data.annual_pay);
