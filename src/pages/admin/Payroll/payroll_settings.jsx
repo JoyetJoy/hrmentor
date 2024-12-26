@@ -260,7 +260,7 @@ export default function PayrollSettings() {
                 The system will automatically adjust the LOP of the last day of
                 this pay period during the next pay period.
               </p>
-              <div className="grid grid-cols-2 gap-4">
+              <div className=" gap-4 flex">
                 {payDuriation === "weekly" && (
                   <div>
                     <label className="mb-2 block text-sm font-semibold">
@@ -268,7 +268,7 @@ export default function PayrollSettings() {
                     </label>
                     <select
                       name="start_day"
-                      className="w-full rounded-md border px-4 py-2"
+                      className="w-full min-w-[13rem] rounded-md border px-4 py-2"
                       onChange={(e) => setStartDay(e.target.value)} // Corrected event handler
                       value={startDay}
                     >
@@ -277,6 +277,8 @@ export default function PayrollSettings() {
                       <option value="Wed">Wednesday</option>
                       <option value="Thu">Thursday</option>
                       <option value="Fri">Friday</option>
+                      <option value="Fri">Saturday</option>
+                      <option value="Fri">Sunday</option>
                     </select>
                   </div>
                 )}

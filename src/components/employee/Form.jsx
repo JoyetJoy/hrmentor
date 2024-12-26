@@ -122,7 +122,7 @@ export default function SaveEmployeeForm({ formtype }) {
       }),
     enabled: formtype == "update",
   });
-console.log(employeeDetails);
+  console.log(employeeDetails);
 
   const navigate = useNavigate();
   const [masterApi, setMasterApi] = useState(null);
@@ -134,8 +134,6 @@ console.log(employeeDetails);
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState();
   const [sharePopupOpen, setSharePopupOpen] = useState(false);
- 
-
 
   const [imageerror, setImageerror] = useState("");
 
@@ -324,7 +322,7 @@ console.log(employeeDetails);
 
   const handleEmployee = async (data) => {
     console.log(data?.state_id);
-    
+
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -357,7 +355,9 @@ console.log(employeeDetails);
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
     formData.append("state_id", data.state_id?.id);
-    imageFile ? formData.append("profile_image", imageFile) : formData.append("profile_image", '')
+    imageFile
+      ? formData.append("profile_image", imageFile)
+      : formData.append("profile_image", "");
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pension_subscription", data.pension_subscription?.id);
     console.log(formData);
@@ -389,7 +389,7 @@ console.log(employeeDetails);
       setLoader(false);
     }
   };
-  
+
   return (
     <>
       <Share
@@ -786,16 +786,15 @@ console.log(employeeDetails);
                     Home Address
                   </label>
                   <textarea
-  autoComplete="off"
-  type="text"
-  {...register("home_address", { required: true })}
-  className="input-box min-h-28 py-1"
-  onInput={(e) => {
-    const value = e.target.value;
-    e.target.value = value.replace(/^\s+/g, ''); // Remove leading spaces from the first line
-  }}
-/>
-
+                    autoComplete="off"
+                    type="text"
+                    {...register("home_address", { required: true })}
+                    className="input-box min-h-28 py-1"
+                    onInput={(e) => {
+                      const value = e.target.value;
+                      e.target.value = value.replace(/^\s+/g, ""); // Remove leading spaces from the first line
+                    }}
+                  />
                   {errors.home_address && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.home_address?.message}
