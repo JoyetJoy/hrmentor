@@ -2,7 +2,7 @@ import QueryTable from "@/components/table/QueryTable";
 import React, { useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { ArrowLeft } from "@mui/icons-material";
-import { Check } from "lucide-react";
+import { Check, ChevronUp } from "lucide-react";
 
 const summaryData = [
   { label: "Total Working hours", value: "240 hr 00 min" },
@@ -173,7 +173,7 @@ export default function PayrollOffEdit() {
         <div className="col-span-3 rounded-md p-4 shadow">
           <div>
             <div className="summary-header mb-4">
-              <h4 className="text-sm font-bold">
+              <h4 className="text-sm font-bold ">
                 Monday, 11 Nov 2024 to Saturday, 15 Nov 2024{" "}
                 <button className="toggle-button text-sm text-gray-600">
                   ⌃
@@ -186,8 +186,8 @@ export default function PayrollOffEdit() {
                   key={index}
                   className="summary-row flex justify-between border-b py-2"
                 >
-                  <span className="label text-gray-700">{item.label}</span>
-                  <span className="value text-gray-900">{item.value}</span>
+                  <span className="label text-gray-700 text-sm">{item.label}</span>
+                  <span className="value text-gray-900 text-sm">{item.value}</span>
                 </div>
               ))}
             </div>
@@ -197,7 +197,7 @@ export default function PayrollOffEdit() {
               <h4 className="text-sm font-bold">
                 Monday, 11 Nov 2024 to Saturday, 15 Nov 2024{" "}
                 <button className="toggle-button text-sm text-gray-600">
-                  ⌃
+                <ChevronUp size={16} strokeWidth={1.5} />
                 </button>
               </h4>
             </div>

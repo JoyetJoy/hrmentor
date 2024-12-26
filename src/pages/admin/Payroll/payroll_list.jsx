@@ -1,5 +1,5 @@
 import QueryTable from "@/components/table/QueryTable";
-import { Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import React, { useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { useNavigate } from "react-router-dom";
@@ -114,7 +114,7 @@ export default function PayrollList() {
   return (
     <>
       <PayrollHeader page={2} />
-      <div className="min-h-screen bg-gray-100 p-6">
+      <div className="min-h-screen bg-gray-100 ">
         {/* Header Navigation */}
         <div className="mb-4 flex items-center justify-between">
           {/* Left Section */}
@@ -169,7 +169,14 @@ export default function PayrollList() {
         </div>
 
         {/* Table Section */}
-        <div className="mt-2">
+        <div className="mt-2 bg-white p-4 rounded-md">
+          <div className="pb-3 text-xs font-semibold flex items-center gap-2">
+          <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
+          <p>01 Nov 2024 to  15 Nov 2024</p>
+          <span>|</span>
+          <p> 16 Nov 2024 to  30 Nov 2024</p>
+          <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
+          </div>
           <QueryTable
             columns={columns}
             list={data}
