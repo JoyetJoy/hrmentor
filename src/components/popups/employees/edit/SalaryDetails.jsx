@@ -109,22 +109,27 @@ export default function EmployeeSalaryDetailsEditForm({
   }
 
   const onSubmit = async (data) => {
-    setLoader(true);
+    if(data.over_time?.value==="nonExempt" && !data.pay_calculation){
+      toast.error('Pay Calculation is required for Non-Exempt')
+      return;
+    }
     try {
       console.log(data);
-
+      setLoader(true);
       const formData = new FormData();
       formData.append("user_id", uid);
       formData.append("effective_from", data.effective_from);
       formData.append("effective_to", data.effective_to);
       formData.append("currency", data.currency?.id);
-      formData.append("roles", data.roles);
+      formData.append("roles", data?.roles?.id);
       formData.append("pay_rate", data.pay_rate);
       formData.append("per", data.per?.id);
       formData.append("pay_schedule", data.pay_schedule?.id);
       formData.append("pay_type", data.pay_type?.id);
       formData.append("over_time", data.over_time?.value);
-      formData.append("pay_calculation", data.pay_calculation);
+      if(data?.over_time==="nonExempt"){
+        formData.append("pay_calculation", data?.pay_calculation);
+      }
       formData.append("weekly_contract_hours", data.weekly_contract_hours);
       formData.append("weekly_pay", data.weekly_pay);
       formData.append("annual_pay", data.annual_pay);
@@ -134,6 +139,8 @@ export default function EmployeeSalaryDetailsEditForm({
       if (selectedField !== 0) {
         res = await newRequest.patch(`${api}/${selectedField}`, formData);
       } else {
+        console.log(formData);
+        
         res = await newRequest.post(api, formData);
       }
       if (res.data?.status === 201) {
