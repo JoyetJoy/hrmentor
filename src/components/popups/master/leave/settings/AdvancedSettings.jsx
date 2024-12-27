@@ -63,6 +63,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
   const [isOn3, setIsOn3] = useState("false");
   const [isOn5, setIsOn5] = useState("false");
   const [leaveBalance, setLeaveBalance] = useState();
+  const [leaveType, setLeaveType] = useState([]);
 
   const close = () => {
     reset();
@@ -107,25 +108,23 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     }
   };
 
-  const { data: leaveType } = useQuery({
-    queryKey: ["leaveType", user?.id],
+  const { data: leaveTypelist } = useQuery({
+    queryKey: ["leaveTypelist"],
     queryFn: async () => {
-      const response = await newRequest.get("combo-lave-types", {
-        params: { user_id: user?.id },
-      });
-
-      // Map the data into the desired format
+      const response = await newRequest.get("combo-lave-types");
       const mappedStatuses = response.data?.map((status) => ({
         value: status?.id, // Use the unique identifier for the status
         label: status?.leave_type, // Use the project name as the label
       }));
-
       return mappedStatuses || []; // Ensure a defined return value
     },
-    enabled: !!user?.id, // Only run if user.id is defined
   });
 
-  console.log(leaveType, "response.dataresponse.data");
+  useEffect(() => {
+    if (leaveTypelist) {
+      setLeaveType(leaveTypelist);
+    }
+  }, [leaveTypelist]);
 
   const onSubmit = async (data) => {
     handledSubmit(data);
