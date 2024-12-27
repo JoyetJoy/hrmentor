@@ -1,8 +1,13 @@
 import QueryTable from "@/components/table/QueryTable";
-import { Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import React, { useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { useNavigate } from "react-router-dom";
+import { EMPLOYEE_DEPARTMENT_LIST } from "@/api/master";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { useForm, Controller } from "react-hook-form";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
 
 const data = [
   {
@@ -41,6 +46,13 @@ export default function PayrollList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const navigate = useNavigate();
+  const { control } = useForm();
+  const [monthValue, setMonthValue] = useState('weekly')
+
+  const { data: departmentListing } = useEmployeeMaster(
+    EMPLOYEE_DEPARTMENT_LIST,
+    "employeeDepartmentList",
+  );
 
   const columns = React.useMemo(
     () => [
@@ -102,7 +114,7 @@ export default function PayrollList() {
   return (
     <>
       <PayrollHeader page={2} />
-      <div className="min-h-screen bg-gray-100 p-6">
+      <div className="min-h-screen bg-gray-100 ">
         {/* Header Navigation */}
         <div className="mb-4 flex items-center justify-between">
           {/* Left Section */}
@@ -112,16 +124,21 @@ export default function PayrollList() {
 
           {/* Right Section */}
           <div className="flex items-center gap-4">
-            <button className="rounded-md border bg-white px-4 py-2 text-sm text-gray-600">
+            <button 
+            onClick={()=> setMonthValue('weekly')}
+            className={`rounded-md border px-4 py-2 text-sm ${monthValue === "weekly"? 'text-white bg-[#e95d39]' : 'bg-white text-gray-600'} `}>
               Weekly
             </button>
             <button
-              className="rounded-md px-4 py-2 text-sm text-white"
-              style={{ backgroundColor: "#e95d39" }}
+              onClick={()=> setMonthValue('monthly')}
+              className={`rounded-md border px-4 py-2 text-sm ${monthValue === "monthly"? 'text-white bg-[#e95d39]' : 'bg-white text-gray-600'} `}
             >
               Monthly
             </button>
-            <button className="rounded-md border bg-white px-4 py-2 text-sm text-gray-600">
+            <button 
+            onClick={()=> setMonthValue('monthlytwice')}
+            className={`rounded-md border px-4 py-2 w-full text-sm ${monthValue === "monthlytwice"? 'text-white bg-[#e95d39]' : 'bg-white text-gray-600'} `}
+            >
               Monthly twice
             </button>
             <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
@@ -132,17 +149,34 @@ export default function PayrollList() {
                 placeholder="Search"
               />
             </label>
-            <select className="rounded-md border px-4 py-2 text-sm">
-              <option>All department</option>
-              <option>IT department</option>
-              <option>HR department</option>
-              <option>Finance</option>
-            </select>
+            <Controller
+              name="department_id"
+              className=""
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  options={departmentListing}
+                  placeholder="Select Department"
+                  className="input-box min-w-[13rem]"
+                />
+              )}
+            />
           </div>
         </div>
 
         {/* Table Section */}
-        <div className="mt-2">
+        <div className="mt-2 bg-white p-4 rounded-md">
+          <div className="pb-3 text-xs font-semibold flex items-center gap-2">
+          <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
+          <p>01 Nov 2024 to  15 Nov 2024</p>
+          <span>|</span>
+          <p> 16 Nov 2024 to  30 Nov 2024</p>
+          <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
+          </div>
           <QueryTable
             columns={columns}
             list={data}

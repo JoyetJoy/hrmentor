@@ -192,6 +192,9 @@ function RecruiterJobPost() {
         jobDetails.search_engine_description ?? "",
       );
       setValue("career_page", jobDetails.career_page);
+      if (jobDetails?.state_id) {
+        setState(jobDetails?.state_id?.value);
+      }
     }
   }, [jobDetails, setValue]);
 
@@ -405,7 +408,7 @@ function RecruiterJobPost() {
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
     formData.append("meta_title", data.meta_title ?? "");
-    formData.append("state_id", data.state_id?.value);
+    formData.append("state_id", data.state_id?.id);
     formData.append("career_page", showToCareerPage ? 1 : 0);
     postFile && formData.append("image", postFile);
     guidelinefile && formData.append("interview_guideline_file", guidelinefile);
@@ -445,8 +448,9 @@ function RecruiterJobPost() {
     if (selectedCity?.state_name) {
       setState(selectedCity.state_name);
       setValue("state_id", {
+        id: selectedCity.state_id,
         label: selectedCity.state_name,
-        value: selectedCity.state_id,
+        value: selectedCity.state_id
       });
     }
   };

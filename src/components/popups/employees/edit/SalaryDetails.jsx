@@ -1,5 +1,5 @@
 import { newRequest } from "@/api";
-import { SALARY_DEFAULT_MASTERS } from "@/api/master";
+import { ROLES_LIST, SALARY_DEFAULT_MASTERS } from "@/api/master";
 import { employeeMasterOptions, overTimeList } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { empSalaryDetailsSchema } from "@/schema/dashboard/employee/form/salarydetails.schema";
@@ -28,6 +28,7 @@ export default function EmployeeSalaryDetailsEditForm({
     reset,
     setValue,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
@@ -36,11 +37,14 @@ export default function EmployeeSalaryDetailsEditForm({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  const [selectedOverTime, setSelectedOverTime] = useState("");
+
   //  EMPLOYEE SALARY MASTERS
   const { data: empSalaryMasterList } = useEmployeeMaster(
     SALARY_DEFAULT_MASTERS,
     "empSalaryMasterList",
   );
+  const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   // Get selected data
   const { data: employeeSalaryDetailByid, isLoading } = useQuery({
@@ -55,21 +59,53 @@ export default function EmployeeSalaryDetailsEditForm({
     if (employeeSalaryDetailByid) {
       setValue("user_id", employeeSalaryDetailByid.user_id);
       setValue("effective_from", employeeSalaryDetailByid.effective_from);
+      setValue("effective_to", employeeSalaryDetailByid.effective_to);
       setValue("currency", employeeSalaryDetailByid.currency);
       setValue("pay_rate", employeeSalaryDetailByid.pay_rate);
       setValue("per", employeeSalaryDetailByid.per);
       setValue("pay_schedule", employeeSalaryDetailByid.pay_schedule);
       setValue("pay_type", employeeSalaryDetailByid.pay_type);
       setValue("over_time", employeeSalaryDetailByid.over_time);
+      setValue("roles",employeeSalaryDetailByid?.role_id)
       setValue(
         "weekly_contract_hours",
         employeeSalaryDetailByid.weekly_contract_hours,
       );
       setValue("weekly_pay", employeeSalaryDetailByid.weekly_pay);
+      setValue("pay_calculation", employeeSalaryDetailByid?.pay_calculation)
       setValue("annual_pay", employeeSalaryDetailByid.annual_pay);
       setValue("status", employeeSalaryDetailByid.status);
+      if(employeeSalaryDetailByid.over_time){
+        setSelectedOverTime(employeeSalaryDetailByid.over_time?.value)
+      }
     }
   }, [employeeSalaryDetailByid]);
+
+  // Watch input values
+  const payRate = watch("pay_rate") || 0;
+  const payCalculation = watch("pay_calculation") || 0;
+  const weeklyContractHours = watch("weekly_contract_hours") || 0;
+
+  // Calculate Weekly Pay
+  useEffect(() => {
+    const payRateNum = parseFloat(payRate);
+    const payCalculationNum = parseFloat(payCalculation);
+    const weeklyContractHoursNum = parseFloat(weeklyContractHours);
+
+    if (
+      !isNaN(payRateNum) &&
+      !isNaN(payCalculationNum) &&
+      !isNaN(weeklyContractHoursNum)
+    ) {
+      const total=payRateNum + (payRateNum * (payCalculationNum / 100))
+      const calculatedWeeklyPay =total * weeklyContractHoursNum;
+      const annualPay = calculatedWeeklyPay * 52;
+
+      // Update weekly_pay in the form
+      setValue("weekly_pay", calculatedWeeklyPay.toFixed(2));
+      setValue("annual_pay", annualPay.toFixed(2));
+    }
+  }, [payRate, payCalculation, weeklyContractHours, setValue]);
 
   function close() {
     setPopupOpen(false);
@@ -78,22 +114,25 @@ export default function EmployeeSalaryDetailsEditForm({
   }
 
   const onSubmit = async (data) => {
-    setLoader(true);
+    if(data.over_time?.value==="nonExempt" && !data.pay_calculation){
+      toast.error('Pay Calculation is required for Non-Exempt')
+      return;
+    }
     try {
       console.log(data);
-      
+      setLoader(true);
       const formData = new FormData();
       formData.append("user_id", uid);
       formData.append("effective_from", data.effective_from);
       formData.append("effective_to", data.effective_to);
       formData.append("currency", data.currency?.id);
-      formData.append("roles", data.roles);
+      formData.append("role_id", data?.roles?.id);
       formData.append("pay_rate", data.pay_rate);
       formData.append("per", data.per?.id);
       formData.append("pay_schedule", data.pay_schedule?.id);
       formData.append("pay_type", data.pay_type?.id);
       formData.append("over_time", data.over_time?.value);
-      formData.append("pay_calculation", data.pay_calculation);
+      formData.append("pay_calculation", data?.pay_calculation);
       formData.append("weekly_contract_hours", data.weekly_contract_hours);
       formData.append("weekly_pay", data.weekly_pay);
       formData.append("annual_pay", data.annual_pay);
@@ -103,6 +142,8 @@ export default function EmployeeSalaryDetailsEditForm({
       if (selectedField !== 0) {
         res = await newRequest.patch(`${api}/${selectedField}`, formData);
       } else {
+        console.log(formData);
+        
         res = await newRequest.post(api, formData);
       }
       if (res.data?.status === 201) {
@@ -117,7 +158,7 @@ export default function EmployeeSalaryDetailsEditForm({
       setLoader(false);
     }
   };
-console.log(empSalaryMasterList);
+  console.log(empSalaryMasterList);
 
   return (
     <Dialog
@@ -207,7 +248,7 @@ console.log(empSalaryMasterList);
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Roles</label>
+                  <label className="label-text">Roles</label>
                   <Controller
                     name="roles"
                     control={control}
@@ -215,7 +256,7 @@ console.log(empSalaryMasterList);
                     render={({ field }) => (
                       <Select
                         {...field}
-                        options={empSalaryMasterList?.currencies}
+                        options={rolesList}
                         isSearchable={false}
                         styles={customSelectStyles}
                         placeholder="Select role"
@@ -330,6 +371,10 @@ console.log(empSalaryMasterList);
                         styles={customSelectStyles}
                         placeholder="Select Over Time"
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption); // Update form value
+                          setSelectedOverTime(selectedOption.value); // Update state
+                        }}
                       />
                     )}
                   />
@@ -340,16 +385,26 @@ console.log(empSalaryMasterList);
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Pay calculation</label>
+                  <label className="label-text">
+                    Pay Calculation (Percentage)
+                  </label>
                   <input
-                    {...register("pay_calculation", { required: true })}
+                    {...register("pay_calculation", {
+                      validate: (value) => {
+                        if (selectedOverTime === "nonExempt" && !value) {
+                          return "Pay Calculation is required for Non-Exempt";
+                        }
+                        return true;
+                      },
+                    })}
                     type="text"
+                    disabled={selectedOverTime !== "nonExempt"} // Disable if not exempt
                     onKeyPress={(event) => {
                       if (!/^[0-9]$/.test(event.key)) {
                         event.preventDefault();
                       }
                     }}
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem] disabled:bg-gray-200"
                   />
                   {errors.pay_calculation && (
                     <span className="text-xs font-medium text-red-500">
@@ -384,34 +439,21 @@ console.log(empSalaryMasterList);
                     Weekly Pay
                   </label>
                   <input
-                    {...register("weekly_pay", { required: true })}
-                    placeholder="Enter weekly pay"
-                    onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }}
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                    {...register("weekly_pay")}
+                    readOnly
+                    placeholder="Calculated Weekly Pay"
+                    className="input-box h-10 w-full bg-gray-100 placeholder:text-[0.8rem]"
                   />
-                  {errors.weekly_pay && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.weekly_pay?.message}
-                    </span>
-                  )}
                 </div>
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Annual Pay
                   </label>
                   <input
-                    {...register("annual_pay", { required: true })}
-                    onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }}
-                    placeholder="Enter Annual Pay"
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                    {...register("annual_pay")}
+                    readOnly
+                    placeholder="Calculated Weekly Pay"
+                    className="input-box h-10 w-full bg-gray-100 placeholder:text-[0.8rem]"
                   />
                   {errors.annual_pay && (
                     <span className="text-xs font-medium text-red-500">

@@ -17,6 +17,7 @@ export default function AddBankHoliday({
   popupOpen,
   setPopupOpen,
   selectedField,
+  setSelectedField
 }) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
   const [percentage, setPercentage] = useState("");
@@ -119,7 +120,7 @@ export default function AddBankHoliday({
       } else {
         res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
       }
-
+      setSelectedField('');
       toast.success(res?.data?.message);
       queryClient.invalidateQueries(["bank_holidays"]);
       close();
