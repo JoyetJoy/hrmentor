@@ -1,4 +1,9 @@
-import { ACTIVE_EMPLOYEE, newRequest, PROJECT_LIST } from "@/api";
+import {
+  ACTIVE_EMPLOYEE,
+  ALL_STATUS_LIST,
+  newRequest,
+  PROJECT_LIST,
+} from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ProjectHeader from "@/components/common/ProjectHeader";
 import QueryTable from "@/components/table/QueryTable";
@@ -8,6 +13,7 @@ import { projectSchema } from "@/schema/dashboard/employee/masters/project_and_t
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { color } from "@mui/system";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpFromLine,
@@ -42,6 +48,8 @@ export default function ProjectManagement() {
   const [selectedId, setSelectedId] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [memberList, setMemberList] = useState([]);
+  const [status, setStatus] = useState([]);
+  const navigate = useNavigate();
 
   const [content, setContent] = useState("");
   const { image, imageFile, handleImageChange, clearImage, setImage } =
@@ -49,6 +57,10 @@ export default function ProjectManagement() {
   function close() {
     setPopupOpen(false);
     reset();
+    setMemberList([]);
+    setSelectedId(null);
+    clearImage();
+    setContent("");
   }
   const { user } = useUserStore((state) => ({
     user: state.user,
@@ -93,14 +105,14 @@ export default function ProjectManagement() {
           },
         })
         .then((res) => {
-          return res.data;
+          return res.data?.original;
         }),
   });
 
   useEffect(() => {
     if (projectList) {
-      setTotalPages(projectList.last_page || 1);
-      setCurrentPage(projectList.current_page || 1);
+      setTotalPages(projectList?.last_page || 1);
+      setCurrentPage(projectList?.current_page || 1);
     }
   }, [projectList]);
 
@@ -115,40 +127,71 @@ export default function ProjectManagement() {
     enabled: !!selectedId != 0, // Ensures the query runs only when selectedField is truthy
   });
 
+  const { data: statusList } = useQuery({
+    queryKey: ["statusList"],
+    queryFn: async () => {
+      const response = await newRequest.get(`${"get-all-status"}`);
+      // Map the statuses into the desired format
+      return response?.data?.statuses?.map((status) => ({
+        value: status?.id, // Use the unique identifier for the status
+        label: status?.project_status_name, // Use the status name as the label
+      }));
+    },
+  });
+
+  useEffect(() => {
+    if (statusList) {
+      setStatus(statusList);
+    }
+  }, [statusList]);
+
   useEffect(() => {
     if (projectListDetails) {
-      console.log(
-        projectListDetails?.members,
-        "projectListDetailprojectListDetail",
-      );
-
       setValue("project_name", projectListDetails?.project_name || "");
       setValue("start_date", projectListDetails?.start_date || "");
       setValue("end_date", projectListDetails?.end_date || "");
       setValue("priority_id", projectListDetails?.priority?.value || "");
       setValue("description", projectListDetails?.description || "");
-      setValue("status", projectListDetails?.status?.value || "");
       setMemberList(projectListDetails?.members);
       setImage(projectListDetails?.file);
       setContent(projectListDetails?.description || "");
     }
   }, [projectListDetails, setValue]);
 
-  const renderStatusBadge = (status) => {
-    const statusColors = {
-      "Not started": "bg-yellow-100 text-yellow-600",
-      "In progress": "bg-blue-100 text-blue-600",
-      Canceled: "bg-purple-100 text-purple-600",
-      "On hold": "bg-red-100 text-red-600",
-      Finished: "bg-green-100 text-green-600",
-    };
-    return (
-      <span
-        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
-      >
-        {status}
-      </span>
-    );
+  const handleStatusChange = async (id, newValue) => {
+    const selectedOption = status.find((option) => option.value === newValue);
+    try {
+      const formData = {
+        status: selectedOption?.value,
+      };
+
+      let res;
+      if (selectedId) {
+        res = await newRequest.post(
+          `${"projects"}/${selectedId}/${"status"}`, // URL with dynamic ID
+          formData, // formData should be the second argument, which is the request body
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            params: {
+              user_id: user?.id,
+            },
+          },
+        );
+      }
+
+      if (res) {
+        toast.success(res?.data?.message);
+        close();
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
   };
 
   const columns = React.useMemo(
@@ -215,7 +258,22 @@ export default function ProjectManagement() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <td>{renderStatusBadge(row.original.status)}</td> // Render badge based on status
+          <td>
+            <select
+              value={row.original.status} // Assuming status stores the numeric value (e.g., 1, 2, 3)
+              onChange={(e) => {
+                const newValue = parseInt(e.target.value, 10); // Convert string to number
+                handleStatusChange(row.original.id, newValue);
+                setSelectedId(row.original.id);
+              }}
+            >
+              {status.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </td>
         ),
       },
       {
@@ -225,8 +283,9 @@ export default function ProjectManagement() {
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
               onClick={() => {
-                setPopupOpen(true);
-                setSelectedId(row.original.id);
+                navigate(
+                  `/admin/project/projectManagementView?id=${row.original.id}`,
+                );
               }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
@@ -283,7 +342,7 @@ export default function ProjectManagement() {
       formData.append("start_date", data.start_date);
       imageFile && formData.append("file", imageFile);
       formData.append("priority_id", data?.priority_id);
-      formData.append("status", 1);
+      formData.append("status", data?.status);
       formData.append("description", content);
       newArray.forEach((member, index) => {
         formData.append(`members[${index}][user_id]`, member.user_id);
@@ -295,7 +354,7 @@ export default function ProjectManagement() {
 
       if (selectedId) {
         res = await newRequest.post(
-          `${PROJECT_LIST}/${selectedId}`, // URL with dynamic ID
+          `${"update-project"}/${selectedId}`, // URL with dynamic ID
           formData, // formData should be the second argument, which is the request body
           {
             headers: {
@@ -322,8 +381,9 @@ export default function ProjectManagement() {
       }
 
       if (res) {
-        toast.success(res?.data?.message);
+        toast.success("Status Updated Successfully");
         close();
+        window.location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -392,7 +452,7 @@ export default function ProjectManagement() {
           <div className="flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">
             <QueryTable
               columns={columns}
-              list={projectList?.listing ?? []} // Corrected here
+              list={projectList?.data?.listing ?? []} // Corrected here
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               totalPages={totalPages}
@@ -578,42 +638,39 @@ export default function ProjectManagement() {
                         </label>
                       )}
                     </div>
-                    {errors.featured_image && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.featured_image?.message}
-                      </span>
-                    )}
                   </div>
-                  <div className="flex w-[50%] flex-col gap-1.5 py-2">
-                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                      Status
-                    </label>
-                    <Controller
-                      name="priority_id"
-                      control={control}
-                      rules={{ required: "Priority is required" }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          styles={customSelectStyles}
-                          options={Priority}
-                          placeholder="Select Priority"
-                          className="input-box"
-                          value={Priority.find(
-                            (option) => option.value === field.value,
-                          )} // Ensure the selected value matches
-                          onChange={(selectedOption) =>
-                            field.onChange(selectedOption?.value)
-                          } // Update the value in RHF
-                        />
+                  {!selectedId && (
+                    <div className="flex w-[50%] flex-col gap-1.5 py-2">
+                      <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
+                        Status
+                      </label>
+                      <Controller
+                        name="status"
+                        control={control}
+                        rules={{ required: "Priority is required" }}
+                        render={({ field }) => (
+                          <Select
+                            {...field}
+                            styles={customSelectStyles}
+                            options={status}
+                            placeholder="Select Status"
+                            className="input-box"
+                            value={status.find(
+                              (option) => option.value === field.value,
+                            )} // Ensure the selected value matches
+                            onChange={(selectedOption) =>
+                              field.onChange(selectedOption?.value)
+                            } // Update the value in RHF
+                          />
+                        )}
+                      />
+                      {errors.status && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.status?.message}
+                        </span>
                       )}
-                    />
-                    {errors.priority_id && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.priority_id?.message}
-                      </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
                 <div
                   style={{

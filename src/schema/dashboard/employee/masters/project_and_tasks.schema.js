@@ -1,10 +1,11 @@
 import * as Yup from "yup";
 export const taskSchema = Yup.object({
-  subject: Yup.string(),
-  start_date: Yup.string(),
-  due_date: Yup.string(),
-  priority_id: Yup.string(),
-  task_description: Yup.string(),
+  subject: Yup.string().required("Subject Name is required"),
+  start_date: Yup.string().required("Start Date Name is required"),
+  due_date: Yup.string().required("Due Date is required"),
+  priority_id: Yup.string().required("Priority is required"),
+  task_description: Yup.string().required("Task Description is required"),
+  related_to: Yup.string().required("Related To is required"),
   status: Yup.string(),
   file: Yup.string(),
 });
