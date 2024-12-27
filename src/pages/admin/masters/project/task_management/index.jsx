@@ -5,10 +5,8 @@ import {
   PROJECT_LIST,
   TASK_LIST,
 } from "@/api";
-import { EMAIL_FOLDER } from "@/api/setup";
+import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ProjectHeader from "@/components/common/ProjectHeader";
-import SetUpHeader from "@/components/common/SetupMenuHeader";
-import Setup from "@/components/sidebars/setup";
 import QueryTable from "@/components/table/QueryTable";
 import useImageUpload from "@/hooks/useImageUpload";
 import { useUserStore } from "@/lib/slices/auth.slice";
@@ -24,7 +22,6 @@ import {
   Plus,
   Search,
   Trash2,
-  UploadCloud,
   X,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -49,7 +46,7 @@ export default function TaskManagement() {
   const [pageLimit, setPageLimit] = useState(10);
   const navigate = useNavigate();
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupEditOpen, setPopupEditOpen] = useState(false);
+  const [popupViewOpen, setPopupViewOpen] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -60,6 +57,8 @@ export default function TaskManagement() {
 
   function close() {
     setPopupOpen(false);
+    setPopupViewOpen(false);
+    setSelectedId(null);
     reset();
   }
   function closeEdit() {
@@ -74,6 +73,7 @@ export default function TaskManagement() {
     register,
     handleSubmit,
     control,
+    setValue,
     reset,
     formState: { errors },
   } = useForm({
@@ -144,12 +144,35 @@ export default function TaskManagement() {
         .then((res) => res.data?.original?.data),
   });
 
+  const { data: taskListDetails } = useQuery({
+    queryKey: ["taskListDetails", selectedId],
+    queryFn: () =>
+      newRequest
+        .get(`${TASK_LIST}/${selectedId}`, {})
+        .then((res) => res.data?.data?.task),
+    enabled: !!selectedId != 0,
+  });
+
   useEffect(() => {
     if (taskList) {
       setTotalPages(taskList?.last_page || 1);
       setCurrentPage(taskList?.current_page || 1);
     }
   }, [taskList]);
+
+  useEffect(() => {
+    if (taskListDetails) {
+      setValue("subject", taskListDetails?.subject);
+      setValue("start_date", taskListDetails?.start_date);
+      setValue("due_date", taskListDetails?.due_date);
+      setValue("file", taskListDetails?.file);
+      setValue("priority_id", taskListDetails?.priority_id);
+      setValue("status", taskListDetails?.status);
+      setValue("task_description", taskListDetails?.task_description);
+      setValue("assignees", taskListDetails?.assignees);
+      setValue("related_to", taskListDetails?.related_to);
+    }
+  }, [taskListDetails]);
 
   const statuses = [
     { label: "Not Started", count: 1, tasks: 1, color: "text-gray-700" },
@@ -158,19 +181,58 @@ export default function TaskManagement() {
     { label: "Awaiting Feedback", count: 0, tasks: 1, color: "text-green-600" },
     { label: "Complete", count: 2, tasks: 2, color: "text-green-600" },
   ];
-  const renderStatusBadge = (status) => {
-    const statusColors = {
-      "Not started": "bg-yellow-100 text-yellow-600",
-      "In progress": "bg-blue-100 text-blue-600",
-      Canceled: "bg-purple-100 text-purple-600",
-      "On hold": "bg-red-100 text-red-600",
-      Finished: "bg-green-100 text-green-600",
+
+  const handleStatusChange = async (id, newValue) => {
+    const selectedOption = status.find((option) => option.value === newValue);
+    try {
+      const formData = {
+        status: selectedOption?.value,
+      };
+
+      let res;
+      if (selectedId) {
+        res = await newRequest.post(
+          `${"task"}/${selectedId}/${"status"}`, // URL with dynamic ID
+          formData, // formData should be the second argument, which is the request body
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            params: {
+              user_id: user?.id,
+            },
+          },
+        );
+      }
+
+      if (res) {
+        toast.success(res?.data?.message);
+        close();
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.error);
+    } finally {
+      setLoader(false);
+    }
+  };
+  const renderStatusBadge = (statusDetails) => {
+    if (!statusDetails) return null; // Handle cases where statusDetails is undefined or null
+
+    const { project_status_name, background_color, text_color } = statusDetails;
+
+    const dynamicStyles = {
+      backgroundColor: background_color || "#F0F0F0", // Default background color
+      color: text_color || "#000000", // Default text color
     };
+
     return (
       <span
-        className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
+        className="rounded-md px-3 py-1 text-sm font-medium"
+        style={dynamicStyles}
       >
-        {status}
+        {project_status_name}
       </span>
     );
   };
@@ -193,7 +255,22 @@ export default function TaskManagement() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <td>{renderStatusBadge(row.original.status_details)}</td> // Render badge based on status
+          <td>
+            <select
+              value={row.original.status} // Assuming status stores the numeric value (e.g., 1, 2, 3)
+              onChange={(e) => {
+                const newValue = parseInt(e.target.value, 10); // Convert string to number
+                handleStatusChange(row.original.id, newValue);
+                setSelectedId(row.original.id);
+              }}
+            >
+              {status.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </td>
         ),
       },
       {
@@ -252,7 +329,7 @@ export default function TaskManagement() {
           <div className="flex items-center justify-start gap-3 text-xs">
             <Link
               onClick={() => {
-                setPopupOpen(true);
+                setPopupViewOpen(true);
                 setSelectedId(row.original.id);
               }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -284,7 +361,7 @@ export default function TaskManagement() {
         ),
       },
     ],
-    [taskList],
+    [taskList?.listing, currentPage, totalPages],
   );
 
   const onSubmit = async (data) => {
@@ -319,7 +396,7 @@ export default function TaskManagement() {
 
       if (selectedId) {
         res = await newRequest.post(
-          `${TASK_LIST}/${selectedId}`, // URL with dynamic ID
+          `${"update-task"}/${selectedId}`, // URL with dynamic ID
           formData, // formData should be the second argument, which is the request body
           {
             headers: {
@@ -358,8 +435,6 @@ export default function TaskManagement() {
     }
   };
 
-  console.log(taskList, "taskListtaskList");
-
   return (
     <>
       <ProjectHeader
@@ -367,6 +442,13 @@ export default function TaskManagement() {
         currentpath="Task Management"
         page={2}
         currentPage={"Task Management"}
+      />
+      <DeleteConfirmation
+        open={deletePopup}
+        onCancel={setDeletePopup}
+        id={selectedId}
+        qrKey={"taskList"}
+        api={TASK_LIST}
       />
       <div className="mb-4 mt-1 flex items-center justify-between">
         {/* Left-aligned label */}
@@ -644,36 +726,38 @@ export default function TaskManagement() {
                     />
                   </div>
                 </div>
-                <div className="flex w-[50%] flex-col gap-1.5 py-2">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                    Status
-                  </label>
-                  <Controller
-                    name="status"
-                    control={control}
-                    rules={{ required: "Priority is required" }}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        styles={customSelectStyles}
-                        options={status}
-                        placeholder="Select Status"
-                        className="input-box"
-                        value={status.find(
-                          (option) => option.value === field.value,
-                        )} // Ensure the selected value matches
-                        onChange={(selectedOption) =>
-                          field.onChange(selectedOption?.value)
-                        } // Update the value in RHF
-                      />
+                {!selectedId && (
+                  <div className="flex w-[50%] flex-col gap-1.5 py-2">
+                    <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
+                      Status
+                    </label>
+                    <Controller
+                      name="status"
+                      control={control}
+                      rules={{ required: "Priority is required" }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          styles={customSelectStyles}
+                          options={status}
+                          placeholder="Select Status"
+                          className="input-box"
+                          value={status.find(
+                            (option) => option.value === field.value,
+                          )} // Ensure the selected value matches
+                          onChange={(selectedOption) =>
+                            field.onChange(selectedOption?.value)
+                          } // Update the value in RHF
+                        />
+                      )}
+                    />
+                    {errors.status && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.status?.message}
+                      </span>
                     )}
-                  />
-                  {errors.status && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.status?.message}
-                    </span>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 <div
                   style={{
@@ -718,6 +802,103 @@ export default function TaskManagement() {
                   </div>
                 </div>
               </form>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog>
+      <Dialog
+        open={popupViewOpen}
+        as="div"
+        className="relative z-10 focus:outline-none"
+        onClose={close}
+      >
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel
+              transition
+              className="data-[closed]:transform-[scale(95%)] h-full w-full max-w-2xl rounded bg-white/90 p-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            >
+              <div className="mb-7 flex items-center justify-between">
+                <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
+                  View Task
+                </h1>
+                <button
+                  onClick={close}
+                  className="text-lg font-extrabold text-[#00000080]"
+                >
+                  <X />
+                </button>
+              </div>
+              <div className="flex flex-col rounded-lg bg-white p-6 shadow-md md:flex-row">
+                {/* Left Section */}
+                <div className="w-full border-r p-4 md:w-1/2">
+                  <h2 className="mb-4 text-xl font-semibold">Salary Type</h2>
+                  <p className="mb-2 text-gray-500">
+                    <strong>Related:</strong> #1045-HRMentor
+                  </p>
+                  <button className="mb-4 flex w-full items-center justify-center rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
+                    <span className="material-icons mr-2">timer</span> Start
+                    Timer
+                  </button>
+                  <h3 className="text-md mb-2 font-medium">Task Description</h3>
+                  <p className="text-gray-600">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nunc vulputate libero et velit interdum, ac aliquet odio
+                    mattis.
+                  </p>
+                </div>
+
+                {/* Right Section */}
+                <div className="w-full p-4 md:w-1/2">
+                  <h3 className="mb-4 text-lg font-semibold">Task Info</h3>
+                  <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                    <p>
+                      <strong>Task Created:</strong> 08-05-2025, 09:00 AM
+                    </p>
+                    <p></p>
+                    <p>
+                      <strong>Start Date:</strong> 08-05-2025
+                    </p>
+                    <p>
+                      <strong>Due Date:</strong> 08-05-2025
+                    </p>
+                    <p>
+                      <strong>Logged Time:</strong> 00:00
+                    </p>
+                    <p>
+                      <strong>Total Logged Time:</strong>{" "}
+                      <span className="text-green-500">05:56</span>
+                    </p>
+                  </div>
+
+                  <h3 className="mt-6 font-medium">Priority</h3>
+                  <span className="inline-block rounded-md bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600">
+                    In Progress
+                  </span>
+
+                  <h3 className="mt-6 font-medium">Assignees</h3>
+                  <div className="mt-2 flex">
+                    <img
+                      src="https://via.placeholder.com/40"
+                      alt="Assignee 1"
+                      className="-ml-2 h-10 w-10 rounded-full border-2 border-white shadow"
+                    />
+                    <img
+                      src="https://via.placeholder.com/40"
+                      alt="Assignee 2"
+                      className="-ml-2 h-10 w-10 rounded-full border-2 border-white shadow"
+                    />
+                  </div>
+
+                  <h3 className="mt-6 font-medium">Attach Files</h3>
+                  <div className="mt-2 rounded-md border-2 border-dashed border-gray-300 p-4 text-center text-gray-500">
+                    <button className="flex items-center justify-center text-blue-500">
+                      <span className="material-icons mr-2">upload</span> Attach
+                      files
+                    </button>
+                  </div>
+                </div>
+              </div>
             </DialogPanel>
           </div>
         </div>

@@ -127,6 +127,9 @@ export default function ProjectManagement() {
     enabled: !!selectedId != 0, // Ensures the query runs only when selectedField is truthy
   });
 
+  console.log(projectListDetails,"projectListDetailsprojectListDetails");
+  
+
   const { data: statusList } = useQuery({
     queryKey: ["statusList"],
     queryFn: async () => {

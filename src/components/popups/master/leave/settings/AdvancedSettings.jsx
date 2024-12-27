@@ -7,10 +7,12 @@ import { HOLIDAY_ADVANCE_SETTINGS, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
 
 const AdvancedSettings = ({ formtype = "save" }) => {
-  const [isOn1, setIsOn1] = useState(false); // For applyDays
-  const [isOn4, setIsOn4] = useState(false); // For documentsMandatoryDays
+  const [isOn1, setIsOn1] = useState("false"); // For applyDays
+  const [isOn4, setIsOn4] = useState("false"); // For documentsMandatoryDays
   const { user } = useUserStore((state) => ({ user: state.user }));
   const navigate = useNavigate();
 
@@ -50,16 +52,16 @@ const AdvancedSettings = ({ formtype = "save" }) => {
   } = useForm({
     resolver: yupResolver(advancedSettingsSchema),
     defaultValues: {
-      isOn1: false,
-      isOn4: false,
+      isOn1: "false",
+      isOn4: "false",
     },
   });
 
   const [loader, setLoader] = useState(false);
-  const [isOn, setIsOn] = useState(false);
-  const [isOn2, setIsOn2] = useState(false);
-  const [isOn3, setIsOn3] = useState(false);
-  const [isOn5, setIsOn5] = useState(false);
+  const [isOn, setIsOn] = useState("false");
+  const [isOn2, setIsOn2] = useState("false");
+  const [isOn3, setIsOn3] = useState("false");
+  const [isOn5, setIsOn5] = useState("false");
   const [leaveBalance, setLeaveBalance] = useState();
 
   const close = () => {
@@ -105,6 +107,26 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     }
   };
 
+  const { data: leaveType } = useQuery({
+    queryKey: ["leaveType", user?.id],
+    queryFn: async () => {
+      const response = await newRequest.get("combo-lave-types", {
+        params: { user_id: user?.id },
+      });
+
+      // Map the data into the desired format
+      const mappedStatuses = response.data?.map((status) => ({
+        value: status?.id, // Use the unique identifier for the status
+        label: status?.leave_type, // Use the project name as the label
+      }));
+
+      return mappedStatuses || []; // Ensure a defined return value
+    },
+    enabled: !!user?.id, // Only run if user.id is defined
+  });
+
+  console.log(leaveType, "response.dataresponse.data");
+
   const onSubmit = async (data) => {
     handledSubmit(data);
   };
@@ -112,7 +134,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
   const handledSubmit = async (data) => {
     try {
       setLoader(true);
-
       const formData = {
         leave_type: data.leave_type,
         leave_balance: leaveBalance,
@@ -126,7 +147,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
         support_documents: isOn4,
         support_document_leave: data.support_document_leave ?? 0,
         notice_period_leave: isOn5,
-        holiday_id: id,
+        holiday_id: Number(id),
       };
       // Make the API call
       const res = await newRequest.post(HOLIDAY_ADVANCE_SETTINGS, formData);
@@ -148,6 +169,8 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     }
   };
 
+  console.log(leaveType, "leaveTypeleaveType");
+
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full p-5">
@@ -162,17 +185,29 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 What are the leaves that cannot be clubbed with this leave?
               </label>
               <div className="group col-span-2 flex w-full flex-col gap-1.5 py-2 lg:w-[49.5%]">
-                <input
-                  autoComplete="off"
+                <Controller
                   name="leave_type"
-                  type="text"
-                  placeholder="Leave Type"
-                  {...register("leave_type")}
-                  className="input-box"
+                  control={control}
+                  rules={{ required: "leave_type is required" }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      styles={customSelectStyles}
+                      options={leaveType}
+                      placeholder="Select Leave"
+                      className="input-box"
+                      value={leaveType.find(
+                        (option) => option.value === field.value,
+                      )} // Ensure the selected value matches
+                      onChange={(selectedOption) =>
+                        field.onChange(selectedOption?.value)
+                      } // Update the value in RHF
+                    />
+                  )}
                 />
-                {errors.leave && (
+                {errors.leave_type && (
                   <span className="text-xs font-medium text-red-500">
-                    {errors.leave.message}
+                    {errors.leave_type.message}
                   </span>
                 )}
               </div>
@@ -190,7 +225,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                     value="dont_allow"
                     onClick={() => setLeaveBalance("dont_allow")}
                     className="radio-black"
-                    defaultChecked
                   />
                   <label className="text-sm font-normal">Don’t allow</label>
                 </div>
@@ -252,9 +286,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div
                   onClick={() => {
                     if (isOn) {
-                      setIsOn(false);
+                      setIsOn("false");
                     } else {
-                      setIsOn(true);
+                      setIsOn("true");
                     }
                   }}
                   className={`h-5 w-10 rounded-full p-[1px] ${isOn ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
@@ -276,9 +310,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div
                   onClick={() => {
                     if (isOn1) {
-                      setIsOn1(false);
+                      setIsOn1("false");
                     } else {
-                      setIsOn1(true);
+                      setIsOn1("true");
                     }
                   }}
                   className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn1 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
@@ -330,9 +364,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div
                   onClick={() => {
                     if (isOn2) {
-                      setIsOn2(false);
+                      setIsOn2("false");
                     } else {
-                      setIsOn2(true);
+                      setIsOn2("true");
                     }
                   }}
                   className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
@@ -354,9 +388,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div
                   onClick={() => {
                     if (isOn3) {
-                      setIsOn3(false);
+                      setIsOn3("false");
                     } else {
-                      setIsOn3(true);
+                      setIsOn3("true");
                     }
                   }}
                   className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
@@ -407,9 +441,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div
                   onClick={() => {
                     if (isOn4) {
-                      setIsOn4(false);
+                      setIsOn4("false");
                     } else {
-                      setIsOn4(true);
+                      setIsOn4("true");
                     }
                   }}
                   className={`h-5 w-10 rounded-full p-[1px] ${isOn4 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
@@ -463,9 +497,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 <div
                   onClick={() => {
                     if (isOn5) {
-                      setIsOn5(false);
+                      setIsOn5("false");
                     } else {
-                      setIsOn5(true);
+                      setIsOn5("true");
                     }
                   }}
                   className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn5 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
