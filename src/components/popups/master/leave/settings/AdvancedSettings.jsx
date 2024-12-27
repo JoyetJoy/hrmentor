@@ -420,6 +420,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   autoComplete="off"
                   name="before_leave_apply"
                   type="number"
+                  min={0}
                   placeholder="0"
                   {...register("before_leave_apply")}
                   className="input-box"

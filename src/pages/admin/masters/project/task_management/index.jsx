@@ -370,9 +370,6 @@ export default function TaskManagement() {
       if (!memberList) {
         return toast.error("Select A Assignees");
       }
-      if (!image) {
-        return toast.error("Select A Image");
-      }
       const newArray = memberList.map(({ id, employee_id }) => ({
         user_id: id,
         employee_id,
@@ -529,7 +526,7 @@ export default function TaskManagement() {
             >
               <div className="mb-7 flex items-center justify-between">
                 <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
-                  Add New Task
+                  {selectedId ? "Edit Task" : "Add New Task"}
                 </h1>
                 <button
                   onClick={close}

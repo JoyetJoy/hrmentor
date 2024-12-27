@@ -630,6 +630,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     autoComplete="off"
                     type="number"
+                    min={0}
                     placeholder="Enter Name of the Leave"
                     {...register("specific_days")}
                     className="input-box"
@@ -676,6 +677,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     autoComplete="off"
                     placeholder={`Number of ${units}`}
                     type="number"
+                    min={0}
                     className="input-box"
                     name="emp_no_days"
                     {...register("emp_no_days")}
@@ -746,6 +748,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
+                          min={0}
                           id={`days-${box.id}`}
                           value={box.daysleave}
                           onChange={(e) =>
@@ -823,6 +826,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     <input
                       autoComplete="off"
                       type="number"
+                      min={0}
                       className="input-box"
                       name="max_no_days"
                       {...register("max_no_days")}
@@ -870,6 +874,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         <input
                           autoComplete="off"
                           type="number"
+                          min={0}
                           placeholder="Expires in days"
                           className="input-box"
                           name="exp_days"
@@ -969,6 +974,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                       autoComplete="off"
                       placeholder="Number of day(s)"
                       type="number"
+                      min={0}
                       className="input-box"
                       name="no_of_days"
                       {...register("no_of_days")}

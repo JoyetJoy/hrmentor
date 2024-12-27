@@ -127,8 +127,7 @@ export default function ProjectManagement() {
     enabled: !!selectedId != 0, // Ensures the query runs only when selectedField is truthy
   });
 
-  console.log(projectListDetails,"projectListDetailsprojectListDetails");
-  
+  console.log(projectListDetails, "projectListDetailsprojectListDetails");
 
   const { data: statusList } = useQuery({
     queryKey: ["statusList"],
@@ -328,9 +327,6 @@ export default function ProjectManagement() {
       if (!memberList) {
         return toast.error("Select A members");
       }
-      if (!image) {
-        return toast.error("Select A Image");
-      }
       if (!content) {
         return toast.error("Please Fill Description");
       }
@@ -477,7 +473,7 @@ export default function ProjectManagement() {
             >
               <div className="mb-7 flex items-center justify-between">
                 <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
-                  Add New Project
+                  {selectedId ? "Edit Project" : "Add New Project"}
                 </h1>
                 <button
                   onClick={close}
