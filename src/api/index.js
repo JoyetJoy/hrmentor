@@ -171,3 +171,9 @@ export const SHIFT_CLAIM = "shift-claim-on-of";
 
 // Project
 export const PROJECT_LIST = "project";
+
+// Task
+export const TASK_LIST = "task";
+
+// ALL STATUS LIST
+export const ALL_STATUS_LIST = "get-all-status";

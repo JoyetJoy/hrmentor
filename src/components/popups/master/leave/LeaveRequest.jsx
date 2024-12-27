@@ -11,7 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 import { ADMIN_EMPLOYEE_LEAVE_UPDATE, LEAVE_REQUEST_LIST } from "@/api/master";
 import { useUserStore } from "@/lib/slices/auth.slice";
 
-export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
+export default function LeaveRequest({
+  popupOpen,
+  setPopupOpen,
+  id,
+  ViewEdit,
+}) {
   const [showLeaveList, setShowLeaveList] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [reason, setReason] = useState(null);
@@ -95,7 +100,9 @@ export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
-                View leave request
+                {ViewEdit == "view"
+                  ? "View leave request"
+                  : "Edit leave request"}
               </h1>
               <button
                 onClick={close}
@@ -269,20 +276,22 @@ export default function LeaveRequest({ popupOpen, setPopupOpen, id }) {
                   ></textarea>
                 </div>
               )}
-              <div className="mt-3 flex flex-row gap-3">
-                <button
-                  onClick={close}
-                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#cecdcd] text-sm font-normal text-black focus:outline-none"
-                >
-                  <span>Cancel</span>
-                </button>
-                <button
-                  type="submit"
-                  className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
-                >
-                  <span>Save</span>
-                </button>
-              </div>
+              {ViewEdit == "edit" && (
+                <div className="mt-3 flex flex-row gap-3">
+                  <button
+                    onClick={close}
+                    className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#cecdcd] text-sm font-normal text-black focus:outline-none"
+                  >
+                    <span>Cancel</span>
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex h-11 w-1/2 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                  >
+                    <span>Save</span>
+                  </button>
+                </div>
+              )}
             </form>
           </DialogPanel>
         </div>

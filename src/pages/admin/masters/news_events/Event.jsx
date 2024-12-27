@@ -55,7 +55,7 @@ export default function Event() {
       <span
         className={`rounded-md px-3 py-1 text-sm font-medium ${statusColors[status]}`}
       >
-        {status}
+        {status == "save_as_draft" ? "Draft" : status}
       </span>
     );
   };
