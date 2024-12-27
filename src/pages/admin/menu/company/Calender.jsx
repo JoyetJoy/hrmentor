@@ -180,17 +180,17 @@ export default function CompanyCalender() {
       const formData = {
         location: location_id,
         fiscal_calendar: fiscalCalendar,
-        calender_from: calenderFrom,
-        calender_to: calenderTo,
+        fiscal_year_calender_from: calenderFrom,
+        fiscal_year_calender_to: calenderTo,
         leave_year: leaveYear,
         leave_year_from: yearFrom,
         leave_year_to: yearTo,
-        max_work_hr: companyCalender.max_work_hr,
+        max_work_hr_per_day: companyCalender.max_work_hr,
         week_start: weekStart,
         shift_start_time: companyCalender.shift_start_time,
         shift_end_time: companyCalender.shift_end_time,
         shift_duration: companyCalender.shift_duration,
-        full_day: companyCalender.full_day,
+        minimum_hours_required_for_full_day: companyCalender.full_day,
         full_tolarance: companyCalender.full_tolarance,
         half_day: companyCalender.half_day,
         half_day_tolarance: companyCalender.half_day_tolarance,
@@ -301,7 +301,11 @@ export default function CompanyCalender() {
             <div className="flex items-center gap-2 text-xs">
               <button
                 type="button"
-                onClick={() => navigate(`/admin/company/add_calender/${id}?popupOpens=true&selectIds=${row?.original?.id}`)}
+                onClick={() =>
+                  navigate(
+                    `/admin/company/add_calender/${id}?popupOpens=true&selectIds=${row?.original?.id}`,
+                  )
+                }
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
                 <img

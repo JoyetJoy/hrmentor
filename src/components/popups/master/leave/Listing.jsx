@@ -18,6 +18,8 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
+  const [ViewEdit, setViewEdit] = useState("");
+
   const pageLimit = 10;
 
   useEffect(() => {
@@ -163,6 +165,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
                 onClick={() => {
                   setSelectedId(row?.original?.id);
                   setPopupOpen(true);
+                  setViewEdit("view");
                 }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
               >
@@ -172,6 +175,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
                 type="button"
                 onClick={() => {
                   setPopupOpen(true);
+                  setViewEdit("edit");
                   setSelectedId(row?.original?.id);
                 }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
@@ -211,6 +215,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         id={selectedId}
+        ViewEdit={ViewEdit}
       />
       <div className="flex flex-col">
         <LeaveHeader page={1} currentPage={"Leave request"} />
