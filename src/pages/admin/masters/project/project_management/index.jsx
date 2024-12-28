@@ -105,7 +105,7 @@ export default function ProjectManagement() {
           },
         })
         .then((res) => {
-          return res.data?.original;
+          return res.data?.original?.data;
         }),
   });
 
@@ -126,8 +126,6 @@ export default function ProjectManagement() {
     },
     enabled: !!selectedId != 0, // Ensures the query runs only when selectedField is truthy
   });
-
-  console.log(projectListDetails, "projectListDetailsprojectListDetails");
 
   const { data: statusList } = useQuery({
     queryKey: ["statusList"],
@@ -168,24 +166,21 @@ export default function ProjectManagement() {
       };
 
       let res;
-      if (selectedId) {
-        res = await newRequest.post(
-          `${"projects"}/${selectedId}/${"status"}`, // URL with dynamic ID
-          formData, // formData should be the second argument, which is the request body
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            params: {
-              user_id: user?.id,
-            },
+      res = await newRequest.post(
+        `${"projects"}/${id}/${"status"}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-        );
-      }
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
 
       if (res) {
         toast.success(res?.data?.message);
-        close();
         window.location.reload();
       }
     } catch (error) {
@@ -260,22 +255,19 @@ export default function ProjectManagement() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <td>
-            <select
-              value={row.original.status} // Assuming status stores the numeric value (e.g., 1, 2, 3)
-              onChange={(e) => {
-                const newValue = parseInt(e.target.value, 10); // Convert string to number
-                handleStatusChange(row.original.id, newValue);
-                setSelectedId(row.original.id);
-              }}
-            >
-              {status.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </td>
+          <select
+            value={row.original.status} // Assuming status stores the numeric value (e.g., 1, 2, 3)
+            onChange={(e) => {
+              const newValue = parseInt(e.target.value, 10); // Convert string to number
+              handleStatusChange(row.original.id, newValue);
+            }}
+          >
+            {status.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         ),
       },
       {
@@ -451,7 +443,7 @@ export default function ProjectManagement() {
           <div className="flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">
             <QueryTable
               columns={columns}
-              list={projectList?.data?.listing ?? []} // Corrected here
+              list={projectList?.listing ?? []} // Corrected here
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               totalPages={totalPages}

@@ -343,7 +343,7 @@ export default function CompanyCalender() {
                     onClick={() => history.back()}
                     className="size-4 cursor-pointer"
                   />
-                  Company Profile{" "}
+                  Company Profiless{" "}
                 </div>
                 <button
                   type="submit"

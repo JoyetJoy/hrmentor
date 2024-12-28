@@ -182,19 +182,19 @@ export default function CompanyAddCalender() {
     try {
       const location_id = location.map((item) => item.id);
       const formData = {
-        location: 12,
+        location: location_id,
         fiscal_calendar: fiscalCalendar,
-        calender_from: calenderFrom,
-        calender_to: calenderTo,
+        fiscal_year_calender_from: calenderFrom,
+        fiscal_year_calender_to: calenderTo,
         leave_year: leaveYear,
         leave_year_from: yearFrom,
         leave_year_to: yearTo,
-        max_work_hr: companyCalender.max_work_hr,
+        max_work_hr_per_day: companyCalender.max_work_hr,
         week_start: weekStart,
         shift_start_time: companyCalender.shift_start_time,
         shift_end_time: companyCalender.shift_end_time,
         shift_duration: companyCalender.shift_duration,
-        full_day: companyCalender.full_day,
+        minimum_hours_required_for_full_day: companyCalender.full_day,
         full_tolarance: companyCalender.full_tolarance,
         half_day: companyCalender.half_day,
         half_day_tolarance: companyCalender.half_day_tolarance,
@@ -482,7 +482,9 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text font-normal">Week start on</label>
+                    <label className="label-text font-normal">
+                      Week start on
+                    </label>
                     <Controller
                       name="accural_monthly"
                       control={control}
@@ -505,7 +507,9 @@ export default function CompanyAddCalender() {
                     />
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text font-normal">Shift Start time</label>
+                    <label className="label-text font-normal">
+                      Shift Start time
+                    </label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -522,7 +526,9 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text font-normal">Shift end time</label>
+                    <label className="label-text font-normal">
+                      Shift end time
+                    </label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -539,7 +545,9 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text font-normal">Shift duration</label>
+                    <label className="label-text font-normal">
+                      Shift duration
+                    </label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -579,7 +587,9 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text font-normal">Full day tolarance</label>
+                    <label className="label-text font-normal">
+                      Full day tolarance
+                    </label>
                     <input
                       autoComplete="off"
                       placeholder="HH:MM"
@@ -613,7 +623,9 @@ export default function CompanyAddCalender() {
                     )}
                   </div>
                   <div className="group flex flex-col space-y-1 px-3 py-1">
-                    <label className="label-text font-normal">Half day tolarance</label>
+                    <label className="label-text font-normal">
+                      Half day tolarance
+                    </label>
                     <input
                       autoComplete="off"
                       type="time"
@@ -647,7 +659,7 @@ export default function CompanyAddCalender() {
                     {headers.map((header, index) => (
                       <div
                         key={index}
-                        className="whitespace-nowrap font-normal text-xs "
+                        className="whitespace-nowrap text-xs font-normal"
                       >
                         {header}
                       </div>
@@ -709,7 +721,7 @@ export default function CompanyAddCalender() {
           <div className="w-full rounded-md bg-white px-5 py-7">
             <div className="grid w-1/2 grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
               <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
-                <label className="label-text font-normal ">Location</label>
+                <label className="label-text font-normal">Location</label>
                 <div className="flex items-center gap-2">
                   <Controller
                     name="accural_monthly"
@@ -906,7 +918,9 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text font-normal">Week start on</label>
+                  <label className="label-text font-normal">
+                    Week start on
+                  </label>
                   <Controller
                     name="accural_monthly"
                     control={control}
@@ -929,7 +943,9 @@ export default function CompanyAddCalender() {
                   />
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text font-normal">Shift Start time</label>
+                  <label className="label-text font-normal">
+                    Shift Start time
+                  </label>
                   <input
                     autoComplete="off"
                     type="time"
@@ -946,7 +962,9 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text font-normal">Shift end time</label>
+                  <label className="label-text font-normal">
+                    Shift end time
+                  </label>
                   <input
                     autoComplete="off"
                     type="time"
@@ -963,7 +981,9 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text font-normal">Shift duration</label>
+                  <label className="label-text font-normal">
+                    Shift duration
+                  </label>
                   <input
                     autoComplete="off"
                     type="time"
@@ -1003,7 +1023,9 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text font-normal">Full day tolarance</label>
+                  <label className="label-text font-normal">
+                    Full day tolarance
+                  </label>
                   <input
                     autoComplete="off"
                     placeholder="HH:MM"
@@ -1037,7 +1059,9 @@ export default function CompanyAddCalender() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-1">
-                  <label className="label-text font-normal">Half day tolarance</label>
+                  <label className="label-text font-normal">
+                    Half day tolarance
+                  </label>
                   <input
                     autoComplete="off"
                     type="time"

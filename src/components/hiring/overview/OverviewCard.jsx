@@ -12,7 +12,6 @@ export const OverviewCards = ({ data }) => {
     {
       path: `overview/listing?type=offer`,
       title: "Offer to be finalized",
-      count: 1322,
       count: `${data?.offer_requested_candidates}`,
       bgColor: "#F8F3FF",
       imgSrc: "/assets/images/hiring/2.png",
