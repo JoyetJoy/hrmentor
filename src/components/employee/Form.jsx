@@ -122,7 +122,6 @@ export default function SaveEmployeeForm({ formtype }) {
       }),
     enabled: formtype == "update",
   });
-  console.log(employeeDetails);
 
   const navigate = useNavigate();
   const [masterApi, setMasterApi] = useState(null);
@@ -139,8 +138,6 @@ export default function SaveEmployeeForm({ formtype }) {
 
   useEffect(() => {
     if (employeeDetails) {
-      console.log(employeeDetails);
-
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
       setValue("middle_name", employeeDetails.middle_name || "");
@@ -310,7 +307,6 @@ export default function SaveEmployeeForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    console.log(image);
     if (imageFile || image) {
       setLoader(true);
       handleEmployee(data);
@@ -321,7 +317,6 @@ export default function SaveEmployeeForm({ formtype }) {
   };
 
   const handleEmployee = async (data) => {
-    console.log(data?.state_id);
 
     const formData = new FormData();
     formData.append("first_name", data.first_name);
@@ -360,7 +355,6 @@ export default function SaveEmployeeForm({ formtype }) {
       : formData.append("profile_image", "");
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pension_subscription", data.pension_subscription?.id);
-    console.log(formData);
 
     try {
       let res;
@@ -429,7 +423,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       setSharePopupOpen(true);
                     } else {
                       reset();
-                      navigate(`/onboarding-form?uid=${uid}`);
+                      navigate(`/onboarding-form?uid=${uid}&employee_id=${employeeDetails?.employee_id}`);
                     }
                   }}
                 >

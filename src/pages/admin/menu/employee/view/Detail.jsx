@@ -4,10 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Share2 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MonthlyCalendarPicker from "@/components/common/MonthPicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Reschedule from "@/components/popups/employees/view/Reschedule";
 import Share from "@/components/popups/employees/view/Share";
+import { set } from "date-fns";
 
 export default function EmployeeDetails() {
   const [type, setType] = useState("");
@@ -28,6 +29,7 @@ export default function EmployeeDetails() {
         return res.data;
       }),
   });
+
   return (
     <>
       <MenuHeader
@@ -41,6 +43,7 @@ export default function EmployeeDetails() {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         type={type}
+        id={employeeViewDetails?.basic_details?.employee_id}
       />
       <Share
         sharePopupOpen={sharePopupOpen}
@@ -55,24 +58,31 @@ export default function EmployeeDetails() {
           <div className="flex items-center justify-between gap-7">
             <h5 className="text-lg font-bold">Employee Details </h5>
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
-                onClick={() => {
-                  if (employeeViewDetails?.basic_details?.employmentStatus?.id === 1) {
-                    setSharePopupOpen(true);
-                  } else {
-                    navigate(`/onboarding-form?uid=${uid}`);
-                  }
-                }}
-              >
-                {employeeViewDetails?.basic_details?.employmentStatus?.id === 1 ? (
-                  <Share2 className="size-4" color="black" />
-                ) : (
-                  <Eye className="size-4" color="black" />
-                )}
-                Onboarding Form
-              </button>
+              {employeeViewDetails?.basic_details?.employmentStatus?.id !==
+                9 && (
+                <button
+                  type="button"
+                  className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
+                  onClick={() => {
+                    if (
+                      employeeViewDetails?.basic_details?.employmentStatus
+                        ?.id === 1
+                    ) {
+                      setSharePopupOpen(true);
+                    } else {
+                      navigate(`/onboarding-form?uid=${uid}&employee_id=${employeeViewDetails?.basic_details?.employee_id}`);
+                    }
+                  }}
+                >
+                  {employeeViewDetails?.basic_details?.employmentStatus?.id ===
+                  1 ? (
+                    <Share2 className="size-4" color="black" />
+                  ) : (
+                    <Eye className="size-4" color="black" />
+                  )}
+                  Onboarding Form
+                </button>
+              )}
               <Link
                 to={`/admin/employee/primary/?uid=${uid}`}
                 className="btn flex h-10 min-h-10 min-w-24 items-center justify-center gap-1 bg-hrmblack px-6 text-xs font-bold text-white shadow-none hover:bg-hrmblue/70"
@@ -103,16 +113,20 @@ export default function EmployeeDetails() {
                     {employeeViewDetails?.basic_details?.designation}{" "}
                   </p>
                 </div>
-                <div className="ml-5 flex h-7  cursor-pointer items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]"
+                <div
+                  className="ml-5 flex h-7 cursor-pointer items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]"
                   onClick={() => {
-                    if (employeeViewDetails?.basic_details?.employmentStatus?.label !== "Active") {
+                    if (
+                      employeeViewDetails?.basic_details?.employmentStatus
+                        ?.label !== "Active"
+                    ) {
                       setPopupOpen(true);
                       setType("status");
-                    } 
+                    }
                   }}
                 >
-                   {employeeViewDetails?.basic_details?.employmentStatus?.label}
-                  </div>
+                  {employeeViewDetails?.basic_details?.employmentStatus?.label}
+                </div>
                 {/* {employeeViewDetails?.basic_details?.employmentStatus?.label !== "active" ? (
                   <div className="ml-5 flex h-7 cursor-default items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]">
                    {employeeViewDetails?.basic_details?.employmentStatus?.label}
@@ -130,7 +144,8 @@ export default function EmployeeDetails() {
                 )} */}
               </div>
               <div className="flex items-center gap-3">
-                {employeeViewDetails?.basic_details?.employmentStatus?.label === "Active" ? (
+                {employeeViewDetails?.basic_details?.employmentStatus?.label ===
+                "Active" ? (
                   <>
                     {" "}
                     <Link
@@ -164,7 +179,6 @@ export default function EmployeeDetails() {
                     >
                       Activity Log
                     </Link>
-                  
                   </>
                 )}
               </div>

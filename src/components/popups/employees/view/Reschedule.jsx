@@ -1,26 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
+import { useNavigate } from "react-router-dom";
+import { newFormRequest } from "@/api";
+import toast from "react-hot-toast";
 
-const Reschedule = ({ popupOpen, setPopupOpen, type }) => {
+const Reschedule = ({ popupOpen, setPopupOpen, type, id }) => {
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
   const onClose = () => {
     // setSelectedEmployee("");
     setPopupOpen(false);
   };
 
   const options = [
-    { label: "On Leave", value: "on_leave" },
-    { label: "Onboarding Pending", value: "onboarding_pending" },
-    { label: "Active", value: "active" },
-    { label: "Awaiting Joining", value: "awaiting_joining" },
-    { label: "Resigned", value: "resigned" },
-    { label: "Terminated", value: "terminated" },
+    { label: "On Leave", value: 3 },
+    { label: "Onboarding Pending", value: 1 },
+    { label: "Active", value: 4 },
+    { label: "Awaiting Joining", value: 5 },
+    { label: "Resigned", value: 6 },
+    { label: "Terminated", value: 7 },
   ];
 
-  const handleSave = () => {
+  const [status, setStatus] = useState(null);
+
+  const handleSave = async () => {
     setPopupOpen(false);
+    try {
+      const onboarding = {
+        employee_id: id,
+        status: status,
+      };
+      const response = await newFormRequest.post(
+        `employee-status-update`,
+        onboarding,
+      );
+      if (response?.status === 200) {
+        setPopupOpen(false);
+        toast.success("Approve successfully");
+        window.location.reload()
+        // navigate(`/admin/employee/details/?uid=${uid}`);
+      } else {
+        toast.error("Failed to approve,");
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message[0] || "Failed to Approve employee.",
+      );
+    }
   };
   return (
     <Dialog
@@ -69,7 +99,8 @@ const Reschedule = ({ popupOpen, setPopupOpen, type }) => {
                   className="mt-1 h-10 rounded border pl-3 pr-2 text-sm"
                   options={options}
                   styles={customSelectStyles}
-                  defaultValue={options[0].value}
+                  defaultValue={options[0]} // Default to the first option object
+                  onChange={(selectedOption) => setStatus(selectedOption.value)} // Update status with the selected value
                 />
               </div>
             )}
