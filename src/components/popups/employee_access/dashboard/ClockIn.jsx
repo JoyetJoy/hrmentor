@@ -168,10 +168,9 @@ export default function ClockIn({
                         </RadioGroup.Option>
                       ) : (
                         <>
-                          {data?.error ? (
+                          {data?.error || !data ? (
                             <></>
                           ) : (
-                            data.length > 0 &&
                             data.map((times) => (
                               <RadioGroup.Option
                                 key={times?.shift?.name}
