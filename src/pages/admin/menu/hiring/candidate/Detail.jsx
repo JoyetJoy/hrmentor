@@ -34,6 +34,7 @@ export default function HiringCandidateDetails() {
   const [resumefile, setResumeFile] = useState(null);
   const [conditionalOfferLetter, setConditionalOfferLetter] = useState(null);
   const [statusList, setStatusList] = useState([]);
+  const [popup, setPopup] = useState(false);
 
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
@@ -129,8 +130,6 @@ export default function HiringCandidateDetails() {
   };
 
   const handleCandidateStatus = async (selectedOption) => {
-    console.log(selectedOption?.id, "Selected Candidate Status ID");
-
     setLoader(true); // Ensure the loader is activated before the API call
 
     try {
@@ -138,6 +137,40 @@ export default function HiringCandidateDetails() {
       const res = await newRequest.post(
         `${CANDIDATE_STATUS_UPDATE}/${cid}/${selectedOption?.id}`,
       );
+
+      // If the response is successful, display a success toast
+      if (res?.data?.message) {
+        toast.success(res.data.message);
+        window.location.reload();
+      } else {
+        toast.success("Candidate status updated successfully.");
+        window.location.reload();
+      }
+    } catch (error) {
+      // Log and display an error message if the API request fails
+      console.error("Error updating candidate status:", error);
+
+      const errorMessage =
+        error?.response?.data?.error ||
+        "Failed to update candidate status. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      // Ensure the loader is deactivated after the API call
+      setLoader(false);
+    }
+  };
+
+  const handleCandidateConfirm = async (selectedOption) => {
+    setLoader(true); // Ensure the loader is activated before the API call
+
+    try {
+      const formData = {
+        candidate_id: cid,
+      };
+      // Make the API request to update the candidate status
+      const res = await newRequest.post(`${"hiring-candidate-to-employee"}`, {
+        formData,
+      });
 
       // If the response is successful, display a success toast
       if (res?.data?.message) {
@@ -268,32 +301,45 @@ export default function HiringCandidateDetails() {
                 </span>
               </>
             ) : (
-              <div className="group flex w-full flex-col space-y-1 py-2">
-                <label className="required label-text">Status</label>
-                <Controller
-                  name="status_hiring"
-                  className=""
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      isSearchable={true}
-                      styles={customSelectStyles}
-                      options={statusList}
-                      value={statusList.find(
-                        (option) => option.id === candidateDetails?.status?.id,
-                      )}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleCandidateStatus(e);
-                      }}
-                      placeholder="New Hiring"
-                      className="input-box"
-                    />
-                  )}
-                />
-              </div>
+              <>
+                <div className="group flex w-full flex-col space-y-1 py-2">
+                  <Controller
+                    name="status_hiring"
+                    className=""
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        options={statusList}
+                        value={statusList.find(
+                          (option) =>
+                            option.id === candidateDetails?.status?.id,
+                        )}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleCandidateStatus(e);
+                        }}
+                        placeholder="New Hiring"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                </div>
+                <div className="ml-3 mt-2">
+                  <button
+                    type={"button"}
+                    onClick={() => {
+                      setPopup(true);
+                    }}
+                    className="h-9 rounded bg-hrmprimaryorange px-7 text-xs text-white"
+                  >
+                    Confirm Join{" "}
+                  </button>
+                </div>
+              </>
             )}
           </div>
           <div className="grid grid-cols-2 gap-x-3 rounded border-t bg-white py-4">
@@ -414,6 +460,37 @@ export default function HiringCandidateDetails() {
           </Disclosure>
         </div>
       </form>
+      {popup == true && (
+        <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-sm rounded bg-white px-10 py-7 shadow-lg">
+            <h4 className="text-base font-bold text-black/70">
+              you want to confirm this candidate convert to employee{" "}
+            </h4>
+
+            <div className="mt-10 flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setPopup(false);
+                }}
+                className="h-10 w-full rounded-lg border border-black/20 px-4 text-sm font-semibold text-black/70 hover:bg-gray-pale"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedField(candidateDetails?.data?.id);
+                  handleCandidateConfirm();
+                }}
+                className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-black/80 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
