@@ -549,8 +549,58 @@ export const employeemenuitems = [
 // list activity items
 
 export const employeeAccessActivityList = [
-  { icon: "/assets/icons/admin/project.svg", label: "Project" },
-  { icon: "/assets/icons/admin/task.svg", label: "Task" },
+  {
+    icon: "/assets/icons/admin/projectTask.svg",
+    label: "Project & Task",
+    path: "/employee-access/projectManagement",
+  },
+  {
+    icon: "/assets/icons/admin/newsEvent.svg",
+    label: "News & Events ",
+    // path: "admin/news-event/news",
+  },
+
+  {
+    icon: "/assets/icons/admin/payroll.svg",
+    label: "Payroll",
+    // path: "/admin/payroll",
+  },
+  {
+    icon: "/assets/icons/admin/leaveday.svg",
+    label: "Leave",
+    // path: "/admin/leave/request",
+  },
+  {
+    icon: "/assets/icons/admin/shift.svg",
+    label: "Shift",
+    // path: "/admin/shift",
+  },
+  {
+    icon: "/assets/icons/admin/roster.svg",
+    label: "Roster",
+    // path: "/admin/roster",
+  },
+
+  {
+    icon: "/assets/icons/admin/setup.svg",
+    label: "Setup",
+    // path: "/admin/setup/email",
+  },
+  {
+    icon: "/assets/icons/admin/recruiter-black.svg",
+    label: "Recruiter",
+    // path: "/admin/recruiter",
+  },
+  {
+    icon: "/assets/icons/admin/hiring-black.svg",
+    label: "Hiring",
+    // path: "/admin/hiring",
+  },
+  {
+    icon: "/assets/icons/admin/employee-black.svg",
+    label: "Employee",
+    // path: "/admin/employee",
+  },
 ];
 export const employeeaccessItems = [
   {
@@ -562,11 +612,8 @@ export const employeeaccessItems = [
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
 ];
 
-
-
 //ADMIN NEWS & EVENT HEADER
 export const newsEventHeaderList = [
   { id: 1, name: "News", link: "/admin/news-event/news" },
   { id: 2, name: "Events", link: "/admin/news-event/event" },
- 
 ];

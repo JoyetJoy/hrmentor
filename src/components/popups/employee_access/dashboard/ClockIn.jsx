@@ -23,6 +23,8 @@ export default function ClockIn({
     setClockInPopupOpen(false);
   }
 
+  console.log(data, "data");
+
   function formatTime(time) {
     if (!time) return "";
     const [hours, minutes, seconds] = time.split(":");
@@ -76,12 +78,16 @@ export default function ClockIn({
         setTimer(response.data.timer);
         setClockInPopupOpen(false);
         toast.success("Clock-in Successfully");
-      }else {
-        const errorMessage = res?.data?.message || "Failed to clock in, Try again."; 
+      } else {
+        const errorMessage =
+          res?.data?.message || "Failed to clock in, Try again.";
         toast.error(errorMessage);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to Clock-in, Please try again");
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to Clock-in, Please try again",
+      );
     } finally {
       setLoader(false);
     }
@@ -161,38 +167,45 @@ export default function ClockIn({
                           )}
                         </RadioGroup.Option>
                       ) : (
-                        data?.map((times) => (
-                          <RadioGroup.Option
-                            key={times?.shift?.name}
-                            value={{
-                              id: times?.id,
-                              shift_id: times?.shift_id,
-                              start_time: times?.shift?.start_time,
-                            }}
-                            className="group cursor-pointer"
-                            aria-label={`Select ${times?.shift?.name}`}
-                          >
-                            {({ checked, disabled }) => (
-                              <div
-                                className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
-                                  disabled
-                                    ? "cursor-not-allowed border-gray-300 bg-gray-100 text-gray-500"
-                                    : checked
-                                      ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                                      : "border-gray-300 bg-white"
-                                }`}
+                        <>
+                          {data?.error ? (
+                            <></>
+                          ) : (
+                            data.length > 0 &&
+                            data.map((times) => (
+                              <RadioGroup.Option
+                                key={times?.shift?.name}
+                                value={{
+                                  id: times?.id,
+                                  shift_id: times?.shift_id,
+                                  start_time: times?.shift?.start_time,
+                                }}
+                                className="group cursor-pointer"
+                                aria-label={`Select ${times?.shift?.name}`}
                               >
-                                <p className="font-medium text-textcolor-darkCharcoal">
-                                  {times?.shift?.name}
-                                </p>
-                                <p className="font-bold text-textcolor-darkCharcoal">
-                                  {formatTime(times?.shift?.start_time)} -{" "}
-                                  {formatTime(times?.shift?.end_time)}
-                                </p>
-                              </div>
-                            )}
-                          </RadioGroup.Option>
-                        ))
+                                {({ checked, disabled }) => (
+                                  <div
+                                    className={`flex w-full flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                                      disabled
+                                        ? "cursor-not-allowed border-gray-300 bg-gray-100 text-gray-500"
+                                        : checked
+                                          ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                                          : "border-gray-300 bg-white"
+                                    }`}
+                                  >
+                                    <p className="font-medium text-textcolor-darkCharcoal">
+                                      {times?.shift?.name}
+                                    </p>
+                                    <p className="font-bold text-textcolor-darkCharcoal">
+                                      {formatTime(times?.shift?.start_time)} -{" "}
+                                      {formatTime(times?.shift?.end_time)}
+                                    </p>
+                                  </div>
+                                )}
+                              </RadioGroup.Option>
+                            ))
+                          )}
+                        </>
                       )}
                     </RadioGroup>
                   </div>

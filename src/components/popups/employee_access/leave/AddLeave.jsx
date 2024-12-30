@@ -271,7 +271,7 @@ export default function AddLeave({
         !formData?.leave_reason ||
         !formData?.leave_start_date ||
         !formData?.leave_end_date ||
-        !formData?.leave_periods.length == 0
+        formData?.leave_periods.length == 0
       ) {
         return toast.error("mandatory field missing error");
       }
