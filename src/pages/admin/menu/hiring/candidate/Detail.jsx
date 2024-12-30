@@ -19,6 +19,8 @@ import { CircleArrowDown, MoveLeft, User } from "lucide-react";
 import ResumePreview from "@/components/recruiter/candidate/Preview";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
 import RejectCandidate from "@/components/popups/hiring/ready-to-hiring/RejectCandidate";
+import { CANDIDATE_STATUS, CANDIDATE_STATUS_UPDATE } from "@/api/hiring";
+import toast from "react-hot-toast";
 
 export default function HiringCandidateDetails() {
   let type = "update";
@@ -31,6 +33,7 @@ export default function HiringCandidateDetails() {
   const [filePreview, setFilePreview] = useState("");
   const [resumefile, setResumeFile] = useState(null);
   const [conditionalOfferLetter, setConditionalOfferLetter] = useState(null);
+  const [statusList, setStatusList] = useState([]);
 
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
@@ -60,10 +63,22 @@ export default function HiringCandidateDetails() {
     enabled: type == "update",
   });
 
-  console.log(
-    candidateDetails,
-    "candidateDetailscandidateDetailscandidateDetails",
-  );
+  const { data: candidateStatus } = useQuery({
+    queryKey: ["candidateStatus"],
+    queryFn: () =>
+      newRequest.get(`${CANDIDATE_STATUS}`).then((res) => {
+        return res.data;
+      }),
+  });
+
+  useEffect(() => {
+    if (candidateStatus) {
+      const filteredData = candidateStatus.filter(
+        (item) => item.label !== "" && item.value !== "",
+      );
+      setStatusList(filteredData);
+    }
+  }, [candidateStatus]);
 
   useEffect(() => {
     if (candidateDetails) {
@@ -111,6 +126,39 @@ export default function HiringCandidateDetails() {
 
   const onSubmit = (data) => {
     setLoader(true);
+  };
+
+  const handleCandidateStatus = async (selectedOption) => {
+    console.log(selectedOption?.id, "Selected Candidate Status ID");
+
+    setLoader(true); // Ensure the loader is activated before the API call
+
+    try {
+      // Make the API request to update the candidate status
+      const res = await newRequest.post(
+        `${CANDIDATE_STATUS_UPDATE}/${cid}/${selectedOption?.id}`,
+      );
+
+      // If the response is successful, display a success toast
+      if (res?.data?.message) {
+        toast.success(res.data.message);
+        window.location.reload();
+      } else {
+        toast.success("Candidate status updated successfully.");
+        window.location.reload();
+      }
+    } catch (error) {
+      // Log and display an error message if the API request fails
+      console.error("Error updating candidate status:", error);
+
+      const errorMessage =
+        error?.response?.data?.error ||
+        "Failed to update candidate status. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      // Ensure the loader is deactivated after the API call
+      setLoader(false);
+    }
   };
 
   return (
@@ -232,7 +280,14 @@ export default function HiringCandidateDetails() {
                       {...field}
                       isSearchable={true}
                       styles={customSelectStyles}
-                      options={[]}
+                      options={statusList}
+                      value={statusList.find(
+                        (option) => option.id === candidateDetails?.status?.id,
+                      )}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleCandidateStatus(e);
+                      }}
                       placeholder="New Hiring"
                       className="input-box"
                     />

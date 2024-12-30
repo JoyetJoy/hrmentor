@@ -25,6 +25,8 @@ export default function EmployeeAccessHeader() {
       localStorage.removeItem("employee_token");
       navigate("/login");
     }
+    console.log(path, "pathpath");
+
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
@@ -32,6 +34,7 @@ export default function EmployeeAccessHeader() {
   const handleClick = () => {
     setPopupOpen(true);
   };
+
   return (
     <>
       <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
@@ -94,13 +97,13 @@ export default function EmployeeAccessHeader() {
               </Menu.Button>
             </div>
             <Menu.Items className="absolute top-12 z-20 w-36 rounded-lg bg-white p-4 shadow-lg">
-              <ul className="flex flex-col gap-5"> 
+              <ul className="flex flex-col gap-5">
                 {employeeAccessActivityList.map((item, index) => (
                   <Menu.Item key={index}>
                     {({ active }) => (
                       <Link
-                      onClick={() => handleNavigation(item.path)}
-                      className={`flex cursor-pointer items-center gap-3 whitespace-nowrap text-xs font-semibold ${
+                        onClick={() => handleNavigation(item.path)}
+                        className={`flex cursor-pointer items-center gap-3 whitespace-nowrap text-xs font-semibold ${
                           active ? "" : ""
                         }`}
                       >

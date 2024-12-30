@@ -250,6 +250,7 @@ export default function AddLeave({
     const updatedData = dateRange.filter((_, i) => i !== index); // Remove the item at the given index
     setDateRange(updatedData); // Update the state
   };
+  
 
   const onSubmit = async () => {
     setLoader(true);

@@ -283,7 +283,7 @@ export default function RecSaveFormCandidate({ type }) {
               <div className="relative flex gap-3">
                 {/* Consider Button */}
                 <div className="relative">
-                  <div
+                  {/* <div
                     className="flex h-10 min-h-10 w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-[#ecbebe] bg-[#fff2f2] pl-4 text-xs font-semibold text-black"
                     onClick={toggleDropdown}
                   >
@@ -295,10 +295,10 @@ export default function RecSaveFormCandidate({ type }) {
                         isDropdownOpen ? "rotate-180" : "rotate-0"
                       }`}
                     />
-                  </div>
+                  </div> */}
 
                   {/* Dropdown Menu */}
-                  {isDropdownOpen && (
+                  {/* {isDropdownOpen && (
                     <div className="absolute left-0 top-12 z-10 w-40 rounded-md border border-gray-200 bg-white text-sm shadow-lg">
                       <ul className="py-2">
                         <li
@@ -321,7 +321,7 @@ export default function RecSaveFormCandidate({ type }) {
                         </li>
                       </ul>
                     </div>
-                  )}
+                  )} */}
                 </div>
 
                 {/* Transfer to Job Button */}
@@ -341,7 +341,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 placeholder="Enter First Name"
                 {...register("first_name", { required: true })}
                 className="input-box"
@@ -357,7 +357,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 placeholder="Enter Middle Name"
                 {...register("middle_name")}
                 className="input-box"
@@ -372,7 +372,8 @@ export default function RecSaveFormCandidate({ type }) {
               <label className="required label-text">Last name</label>
               <input
                 {...register("sur_name")}
-                autoComplete="off"disabled={types === '1'}
+                autoComplete="off"
+                disabled={types === "1"}
                 placeholder="Enter Surname"
                 type="text"
                 className="input-box"
@@ -388,7 +389,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("phone_number", { required: true })}
                 autoComplete="off"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 type="text"
                 placeholder="Enter Moblie Number"
                 onKeyPress={(event) => {
@@ -414,7 +415,7 @@ export default function RecSaveFormCandidate({ type }) {
                 {...register("email", { required: true })}
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 placeholder="Enter Email Address"
                 className="input-box"
               />
@@ -436,7 +437,7 @@ export default function RecSaveFormCandidate({ type }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     options={recruiterMasters?.genders}
                     placeholder="Select Gender"
                     className="input-box"
@@ -455,7 +456,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("date_of_birth", { required: true })}
                 autoComplete="off"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 type="date"
                 className="input-box pr-2"
               />
@@ -476,7 +477,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     styles={customSelectStyles}
                     options={countryList}
                     placeholder="Select Country"
@@ -504,7 +505,7 @@ export default function RecSaveFormCandidate({ type }) {
                     placeholder="Search ..."
                     loadOptions={loadCitiesOptions}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     onChange={(selectedOption) => {
                       field.onChange(selectedOption); // Update form state
                       handleCitySelect(selectedOption);
@@ -538,7 +539,7 @@ export default function RecSaveFormCandidate({ type }) {
                 {...register("post_code", { required: true })}
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 placeholder="Enter Post Code"
                 className="input-box"
                 onKeyPress={(event) => {
@@ -567,7 +568,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     styles={customSelectStyles}
                     options={recruiterMasters?.languages}
                     isMulti
@@ -594,7 +595,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     styles={customSelectStyles}
                     options={recruiterMasters?.educationlevels}
                     placeholder="Select college or University"
@@ -620,7 +621,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     styles={customSelectStyles}
                     options={recruiterMasters?.collegesUniversities}
                     placeholder="Select college or University"
@@ -639,7 +640,7 @@ export default function RecSaveFormCandidate({ type }) {
               <textarea
                 autoComplete="off"
                 type="text"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 {...register("home_address", { required: true })}
                 className="input-box min-h-28 py-1"
               />
@@ -655,7 +656,7 @@ export default function RecSaveFormCandidate({ type }) {
                 <div className="flex gap-1.5">
                   <input
                     type="checkbox"
-                    disabled={types === '1'}
+                    disabled={types === "1"}
                     checked={sameAsHome}
                     onChange={() => {
                       setSameAsHome(!sameAsHome);
@@ -667,7 +668,7 @@ export default function RecSaveFormCandidate({ type }) {
                 </div>
               </label>
               <textarea
-                disabled={sameAsHome||types === '1'}
+                disabled={sameAsHome || types === "1"}
                 autoComplete="off"
                 {...register("communication_address", { required: true })}
                 className="input-box min-h-28 py-1"
@@ -688,7 +689,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     styles={customSelectStyles}
                     options={sourcesList}
                     placeholder="Select source"
@@ -707,7 +708,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("date_applied", { required: true })}
                 autoComplete="off"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 type="date"
                 className="input-box pr-2"
               />
@@ -728,7 +729,7 @@ export default function RecSaveFormCandidate({ type }) {
                   <Select
                     {...field}
                     isSearchable={true}
-                    isDisabled={types === '1'}
+                    isDisabled={types === "1"}
                     styles={customSelectStyles}
                     options={recruiterMasters?.activeJobs}
                     placeholder="Select recruiting job"
@@ -747,7 +748,7 @@ export default function RecSaveFormCandidate({ type }) {
               <input
                 {...register("linked_in")}
                 autoComplete="off"
-                disabled={types === '1'}
+                disabled={types === "1"}
                 type="text"
                 className="input-box"
               />
@@ -765,42 +766,43 @@ export default function RecSaveFormCandidate({ type }) {
           filePreview={filePreview}
           setFilePreview={setFilePreview}
         />
-        {type==='save'?(
-          <div className="flex items-center font-semibold">
-          <button
-            type="submit"
-            disabled={loader}
-            className="btn flex h-10 min-h-10 items-center gap-2 rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-hrmdarkblue"
-          >
-            {loader ? (
-              <div className="flex items-center gap-2">
-                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>{" "}
-                { "Saving"}
-              </div>
-            ) : (
-              <>{ "Submit"}</>
-            )}
-          </button>
-        </div>
-        ): types==='2' ? (
+        {type === "save" ? (
           <div className="flex items-center font-semibold">
             <button
-            type="submit"
-            disabled={loader}
-            className="btn flex h-10 min-h-10 items-center gap-2 rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-hrmdarkblue"
-          >
-            {loader ? (
-              <div className="flex items-center gap-2">
-                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>{" "}
-                {type == "update" ? "Updating" : "Saving"}
-              </div>
-            ) : (
-              <>{type == "update" ? "Update" : "Submit"}</>
-            )}
-          </button>
-          
-        </div>
-        ) : (<></>)}
+              type="submit"
+              disabled={loader}
+              className="btn flex h-10 min-h-10 items-center gap-2 rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-hrmdarkblue"
+            >
+              {loader ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>{" "}
+                  {"Saving"}
+                </div>
+              ) : (
+                <>{"Submit"}</>
+              )}
+            </button>
+          </div>
+        ) : types === "2" ? (
+          <div className="flex items-center font-semibold">
+            <button
+              type="submit"
+              disabled={loader}
+              className="btn flex h-10 min-h-10 items-center gap-2 rounded-md bg-hrmblack px-14 text-xs font-semibold text-white hover:bg-hrmdarkblue"
+            >
+              {loader ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>{" "}
+                  {type == "update" ? "Updating" : "Saving"}
+                </div>
+              ) : (
+                <>{type == "update" ? "Update" : "Submit"}</>
+              )}
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </form>
     </>
   );
