@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { EMAIL_TEMPLATE } from "@/api/setup";
 import { newRequest } from "@/api";
 
