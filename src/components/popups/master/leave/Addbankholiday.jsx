@@ -56,6 +56,7 @@ export default function AddBankHoliday({
   });
 
   const close = () => {
+    setSelectedField(null);
     setPopupOpen(false);
     reset();
   };
@@ -218,6 +219,7 @@ export default function AddBankHoliday({
                     </span>
                   )}
                 </div>
+
                 {/* Holiday Status */}
                 <div className="group items-center gap-3 text-[0.85rem]">
                   <div className="flex gap-3">

@@ -36,15 +36,15 @@ export const empSalaryDetailsSchema = Yup.object({
       return value?.value && value?.label;
     })
     .required("Pay type is required"),
-  pay_type: Yup.object({
-    id: Yup.string(),
-    value: Yup.string(),
-    label: Yup.string(),
-  })
-    .test("both-required", "Pay type is required", function (value) {
-      return value?.value && value?.label;
-    })
-    .required("Pay type is required"),
+  // pay_type: Yup.object({
+  //   id: Yup.string(),
+  //   value: Yup.string(),
+  //   label: Yup.string(),
+  // })
+  //   .test("both-required", "Pay type is required", function (value) {
+  //     return value?.value && value?.label;
+  //   })
+  //   .required("Pay type is required"),
   over_time: Yup.object({
     value: Yup.string(),
     label: Yup.string(),

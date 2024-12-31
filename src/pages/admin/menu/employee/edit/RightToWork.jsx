@@ -54,25 +54,25 @@ export default function EmployeeRightToWorkEdit() {
   const columns = React.useMemo(
     () =>
       [
-        {
-          header: "Sl No",
-          accessorKey: "sno",
-          cell: ({ row }) => {
-            return (
-              <div className="flex px-2">
-                {row.index + 1 + (currentPage - 1) * pageLimit}
-              </div>
-            );
-          },
-        },
+        // {
+        //   header: "Sl No",
+        //   accessorKey: "sno",
+        //   cell: ({ row }) => {
+        //     return (
+        //       <div className="flex px-2">
+        //         {row.index + 1 + (currentPage - 1) * pageLimit}
+        //       </div>
+        //     );
+        //   },
+        // },
         {
           header: "Reference No",
           accessorKey: "reference_no",
         },
-        {
-          header: "Condition",
-          accessorKey: "condtion",
-        },
+        // {
+        //   header: "Condition",
+        //   accessorKey: "condtion",
+        // },
         {
           header: "Expiry Date",
           accessorKey: "expiry_date",
@@ -94,6 +94,15 @@ export default function EmployeeRightToWorkEdit() {
               >
                 document
               </Link>
+            </div>
+          ),
+        },
+        {
+          header: "Status",
+          accessorKey: "status",
+          cell: ({ row }) => (
+            <div className={`flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold  ${row.original?.status === "expired" ?'text-red-700  bg-red-300' :'bg-green-200 text-green-700'}`}>
+              {row.original?.status === "expired" ? "Expired" : "Active"}
             </div>
           ),
         },

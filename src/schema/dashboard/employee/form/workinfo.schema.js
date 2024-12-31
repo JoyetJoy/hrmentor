@@ -75,7 +75,7 @@ export const WorkInfoEmployeeSchema = Yup.object({
       return value?.value && value?.label;
     })
     .required("sexual orientation is required"),
-  age: Yup.string().required("Age is required"),
+  // age: Yup.string().required("Age is required"),
   pregnancy_and_maternity: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

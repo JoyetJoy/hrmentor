@@ -230,7 +230,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
           />
         </div>
         {selectedRoster && (
-          <div className="flex h-screen w-1/2 flex-col gap-2 rounded-md border border-gray-300 bg-white p-6">
+          <div className="flex w-1/2 h-full flex-col gap-2 rounded-md border border-gray-300 bg-white p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="rounded-full bg-gray-darklight p-2">
