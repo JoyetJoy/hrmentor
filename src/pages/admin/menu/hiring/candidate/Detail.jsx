@@ -160,28 +160,31 @@ export default function HiringCandidateDetails() {
     }
   };
 
-  const handleCandidateConfirm = async (selectedOption) => {
+  const handleCandidateConfirm = async () => {
     setLoader(true); // Ensure the loader is activated before the API call
 
     try {
-      const formData = {
-        candidate_id: cid,
-      };
-      // Make the API request to update the candidate status
-      const res = await newRequest.post(`${"hiring-candidate-to-employee"}`, {
-        formData,
-      });
+      const formData = new FormData();
+      formData.append("candidate_id", Number(cid));
 
-      // If the response is successful, display a success toast
-      if (res?.data?.message) {
-        toast.success(res.data.message);
-        window.location.reload();
-      } else {
-        toast.success("Candidate status updated successfully.");
-        window.location.reload();
-      }
+      // Make the API request to update the candidate status
+      const res = await newRequest.post(
+        "hiring-candidate-to-employee",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      // Handle success response
+      const successMessage =
+        res?.data?.message || "Candidate status updated successfully.";
+      toast.success(successMessage);
+      window.location.reload();
     } catch (error) {
-      // Log and display an error message if the API request fails
+      // Log the error and display an appropriate message to the user
       console.error("Error updating candidate status:", error);
 
       const errorMessage =
