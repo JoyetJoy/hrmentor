@@ -4,19 +4,24 @@ import { Share2, X } from "lucide-react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function Share({ sharePopupOpen, setSharePopupOpen,uid }) {
-  
-  const [isLoader,setIsLoader] =useState();
+export default function Share({ sharePopupOpen, setSharePopupOpen, uid }) {
+  const [isLoader, setIsLoader] = useState();
   const handleShare = async () => {
     try {
       setIsLoader(true);
       const response = await newFormRequest.post(`${SEND_ONBORDING}/${uid}`);
 
-      if (response?.status === 200) {
-        toast.success("Form shared successfully");
-        setSharePopupOpen(false)
+      console.log(response, "responseresponse");
+
+      if (response?.data?.original?.message) {
+        toast.error(response?.data?.original?.message);
       } else {
-        toast.error("Failed to share,Template Not Available");
+        if (response?.status === 200) {
+          toast.success("Form shared successfully");
+          setSharePopupOpen(false);
+        } else {
+          toast.error("Failed to share,Template Not Available");
+        }
       }
     } catch (error) {
       console.error("Error sharing the form:", error);
@@ -25,7 +30,7 @@ export default function Share({ sharePopupOpen, setSharePopupOpen,uid }) {
           "Failed to share the form. Please try again!",
       );
     } finally {
-      setIsLoader(false); 
+      setIsLoader(false);
     }
   };
   const onClose = () => {

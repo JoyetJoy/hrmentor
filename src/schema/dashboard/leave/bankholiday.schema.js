@@ -9,6 +9,5 @@ export const BankHolidaySchema = Yup.object().shape({
   type: Yup.string(),
   description: Yup.string()
     .trim()
-    .max(250, "Description cannot exceed 250 characters")
-    .required("Description  is required"),
+    .max(250, "Description cannot exceed 250 characters"),
 });

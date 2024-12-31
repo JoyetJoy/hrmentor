@@ -107,7 +107,7 @@ export default function EmailTempleteEdit() {
   return (
     <>
       <SetUpHeader menu="Menu" currentpath="Folder" page={1} />
-      <div className="mx-auto mb-3 flex h-full w-[98%] items-center justify-between">
+      <div className="mx-auto mb-3 flex w-[98%] items-center justify-between">
         <label>
           <b>Edit Email Template</b>
         </label>
