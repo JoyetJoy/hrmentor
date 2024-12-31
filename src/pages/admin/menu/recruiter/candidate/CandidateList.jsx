@@ -62,25 +62,29 @@ function CandidatesList() {
         },
       },
       {
-        header: "Date applied",
-        accessorKey: "date_applied",
+        header: "Candidate name",
+        accessorKey: "candidate_name",
       },
       { header: "Job ID", accessorKey: "job_id" },
       {
-        header: "Candidate name",
-        accessorKey: "candidate_name",
+        header: "Job title",
+        accessorKey: "job_title",
+      },
+      {
+        header: "Date applied",
+        accessorKey: "date_applied",
+      },
+      {
+        header: "Email",
+        accessorKey: "email",
       },
       {
         header: "Contact",
         accessorKey: "phone_number",
       },
       {
-        header: "Job title",
-        accessorKey: "job_title",
-      },
-      {
-        header: "Email",
-        accessorKey: "email",
+        header: "Source",
+        accessorKey: "source",
       },
       // {
       //   header: "Designation",
@@ -100,10 +104,6 @@ function CandidatesList() {
             {row?.original?.status?.status_name}
           </div>
         ),
-      },
-      {
-        header: "Source",
-        accessorKey: "source",
       },
       {
         header: "Action",

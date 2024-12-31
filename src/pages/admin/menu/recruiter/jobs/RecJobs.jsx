@@ -72,13 +72,13 @@ function RecruiterJobs() {
           </p>
         ),
       },
-      {
-        header: "Designation",
-        accessorKey: "designation",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.designation?.designation_name}</p>
-        ),
-      },
+      // {
+      //   header: "Designation",
+      //   accessorKey: "designation",
+      //   cell: ({ row }) => (
+      //     <p className="">{row?.original?.designation?.designation_name}</p>
+      //   ),
+      // },
       {
         header: "Department",
         accessorKey: "department",

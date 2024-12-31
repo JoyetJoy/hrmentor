@@ -64,7 +64,7 @@ export default function EmployeeSalaryDetailsEditForm({
       setValue("pay_rate", employeeSalaryDetailByid.pay_rate);
       setValue("per", employeeSalaryDetailByid.per);
       setValue("pay_schedule", employeeSalaryDetailByid.pay_schedule);
-      setValue("pay_type", employeeSalaryDetailByid.pay_type);
+      // setValue("pay_type", employeeSalaryDetailByid.pay_type);
       setValue("over_time", employeeSalaryDetailByid.over_time);
       setValue("roles", employeeSalaryDetailByid?.role_id);
       setValue(
@@ -130,7 +130,7 @@ export default function EmployeeSalaryDetailsEditForm({
       formData.append("pay_rate", data.pay_rate);
       formData.append("per", data.per?.id);
       formData.append("pay_schedule", data.pay_schedule?.id);
-      formData.append("pay_type", data.pay_type?.id);
+      // formData.append("pay_type", data.pay_type?.id);
       formData.append("over_time", data.over_time?.value);
       formData.append("pay_calculation", data?.pay_calculation);
       formData.append("weekly_contract_hours", data.weekly_contract_hours);
@@ -342,7 +342,7 @@ export default function EmployeeSalaryDetailsEditForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex w-full flex-col gap-1">
+                {/* <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Pay Type</label>
                   <Controller
                     name="pay_type"
@@ -364,7 +364,7 @@ export default function EmployeeSalaryDetailsEditForm({
                       {errors.pay_type?.message}
                     </span>
                   )}
-                </div>
+                </div> */}
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Over Time</label>
                   <Controller

@@ -55,7 +55,12 @@ export default function EmployeeMembershipEdit() {
     () =>
       [
         {
-          header: "Membership Body",
+          header: () => (
+            <>
+              Registration/<br />
+              Membership Body
+            </>
+          ),
           accessorKey: "reg_memb_body",
         },
         {
@@ -73,6 +78,15 @@ export default function EmployeeMembershipEdit() {
         {
           header: "Renewal Date",
           accessorKey: "renewal_date",
+        },
+        {
+          header: "Status",
+          accessorKey: "status",
+          cell: ({ row }) => (
+            <div className={`flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold  ${row.original?.status === "expired" ?'text-red-700  bg-red-300' :'bg-green-200 text-green-700'}`}>
+              {row.original?.status === "expired" ? "Expired" : "Active"}
+            </div>
+          ),
         },
         {
           header: "Action",

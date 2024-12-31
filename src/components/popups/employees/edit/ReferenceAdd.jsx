@@ -86,13 +86,11 @@ export default function ReferenceAdd({
       formData.append("employee_id", employeeDetails?.employee_id);
       formData.append("user_id", uid);
       formData.append("reference_name", data.reference_name);
-      formData.append("personal_email", data.personal_email);
       {
         selectedType === "work"
           ? (formData.append("company_email", data.company_email),
             formData.append("company_name", data.company_name),
-            formData.append("reference_name", data.reference_name),
-            formData.append("personal_email", data.personal_email))
+            formData.append("reference_name", data.reference_name))
           : (formData.append("reference_name", data.reference_name),
             formData.append("personal_email", data.personal_email));
       }
@@ -197,7 +195,7 @@ export default function ReferenceAdd({
                   </div>
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Name of the reference
+                      Name of the referee
                     </label>
                     <input
                       {...register("reference_name", { required: true })}
@@ -209,9 +207,10 @@ export default function ReferenceAdd({
                       </span>
                     )}
                   </div>
-                  <div className="group flex flex-col space-y-1">
+                  {selectedType === "personal" && (
+                    <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Personal Email Address
+                      Email Address
                     </label>
                     <input
                       {...register("personal_email", { required: true })}
@@ -223,6 +222,7 @@ export default function ReferenceAdd({
                       </span>
                     )}
                   </div>
+                  )}
                   {selectedType === "work" && (
                     <>
                       <div className="group flex flex-col space-y-1">
@@ -255,7 +255,7 @@ export default function ReferenceAdd({
                       </div>
                       <div className="group flex flex-col space-y-1">
                         <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                          Company Email Address
+                          Work Email Address
                         </label>
                         <input
                           {...register("company_email", { required: true })}

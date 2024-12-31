@@ -95,7 +95,7 @@ export const WorkInformation = ({ formtype }) => {
         empWorkInfoDetail?.pregnancy_and_maternity,
       );
       setValue("probation_period", empWorkInfoDetail?.probation_period);
-      setValue("age", empWorkInfoDetail?.age);
+      // setValue("age", empWorkInfoDetail?.age);
     }
   }, [empWorkInfoDetail, setValue]);
 
@@ -137,7 +137,7 @@ export const WorkInformation = ({ formtype }) => {
     formData.append("gender", data.gender?.id);
     formData.append("marital_status", data.marital_status?.value);
     formData.append("disability", data.disability?.id);
-    formData.append("age", data.age);
+    // formData.append("age", data.age);
     formData.append("dosent_reporting", reportNotRequired ? 1 : 0);
     if (reportNotRequired == 0) {
       formData.append("hiring_manager_id", data.hiring_manager_id?.id);
@@ -298,7 +298,7 @@ export const WorkInformation = ({ formtype }) => {
               <div className="flex flex-col rounded-md border border-gray-soft bg-white px-5 py-4">
                 <h1 className="#2C2C2C px-3 text-lg font-bold">EEO Details</h1>
                 <div className="mt-4 grid w-full grid-cols-2 gap-x-2">
-                  <div className="group flex flex-col gap-1.5 px-3 py-2">
+                  {/* <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Age</label>
                     <input
                       autoComplete="off"
@@ -329,7 +329,7 @@ export const WorkInformation = ({ formtype }) => {
                         {errors.age?.message}
                       </span>
                     )}
-                  </div>
+                  </div> */}
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">EEO Job Category</label>
                     <Controller

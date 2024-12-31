@@ -172,7 +172,7 @@ export default function SkillEditForm({
 
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Field of study
+                    Skills/Qualifications
                   </label>
                   <input
                     {...register("field_of_study", { required: true })}
