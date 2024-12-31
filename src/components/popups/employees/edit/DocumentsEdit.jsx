@@ -2,12 +2,13 @@ import { newFormRequest, newRequest, UPDATE_EMPLOYEE_DOCUMENTS } from "@/api";
 import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
 import { employeeMasterOptions } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import useImageUpload from "@/hooks/useImageUpload";
 import { empDocumentTypeSchema } from "@/schema/dashboard/employee/form/documentType.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { X } from "lucide-react";
+import { UploadCloud, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -38,6 +39,9 @@ export default function EmployeeDocumentEditForm({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+
+  const { image, imageFile, handleImageChange, clearImage, setImage } =
+  useImageUpload();
   //   TYPE
   const { data: employeeDocumentTypeList } = useEmployeeMaster(
     EMPLOYEE_DOCUMENT_TYPE_LIST,
@@ -90,6 +94,7 @@ export default function EmployeeDocumentEditForm({
       formData.append("issued_date", data.issued_date);
       formData.append("expiry_date", data.expiry_date);
       formData.append("issued_authority", data.issued_authority);
+      imageFile && formData.append("document", imageFile);
 
       let res;
       if (selectedField !== 0) {
@@ -259,6 +264,39 @@ export default function EmployeeDocumentEditForm({
                     <span className="text-xs font-medium text-red-500">
                       {errors.status?.message}
                     </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5">
+                  {image ? (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload Document
+                        </span>
+                      </div>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </label>
                   )}
                 </div>
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">

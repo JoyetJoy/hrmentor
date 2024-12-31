@@ -101,7 +101,7 @@ export default function HiringCandidateDetails() {
 
   useEffect(() => {
     if (candidateDetails) {
-      setResumeFile(candidateDetails?.condtional_offer_letter_document_pdf);
+      setResumeFile(candidateDetails?.accepted_condtional_offer_letter_pdf);
       setConditionalOfferLetter(
         candidateDetails?.uncondtional_offer_letter_document_pdf,
       );
