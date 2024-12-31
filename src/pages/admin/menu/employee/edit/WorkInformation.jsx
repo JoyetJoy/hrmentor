@@ -25,6 +25,7 @@ import {
   EMPLOYEE_EEO_CATEGORY_LIST,
   EMPLOYEE_ETHNICITY_LIST,
   EMPLOYEE_RELIGIOUS_AND_SEXUAL,
+  SALARY_DEFAULT_MASTERS,
 } from "@/api/master";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -54,6 +55,12 @@ export const WorkInformation = ({ formtype }) => {
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
   const [localState, setLocalState] = useState(null);
+
+  const { data: employeeMasters } = useEmployeeMaster(
+    SALARY_DEFAULT_MASTERS,
+    "employeeMasters",
+  );
+
 
   const {
     data: empWorkInfoDetail,
@@ -404,7 +411,7 @@ export const WorkInformation = ({ formtype }) => {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={genders}
+                          options={employeeMasters?.genders}
                           placeholder="Select"
                           className="input-box"
                         />
