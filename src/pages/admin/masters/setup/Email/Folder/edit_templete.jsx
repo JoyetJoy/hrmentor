@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
 import Select from "react-select"; // Import React Select instead of MUI's Select
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { customSelectStyles } from "@/utils/customStyles";
 import { EMAIL_TEMPLATE, EMAIL_TYPE, UPDATE_EMAIL_TEMPLATE } from "@/api/setup";
 import { newRequest } from "@/api";
