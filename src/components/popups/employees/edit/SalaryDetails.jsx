@@ -89,15 +89,15 @@ export default function EmployeeSalaryDetailsEditForm({
   // Calculate Weekly Pay
   useEffect(() => {
     const payRateNum = parseFloat(payRate);
-    const payCalculationNum = parseFloat(payCalculation);
+    // const payCalculationNum = parseFloat(payCalculation);
     const weeklyContractHoursNum = parseFloat(weeklyContractHours);
 
     if (
       !isNaN(payRateNum) &&
-      !isNaN(payCalculationNum) &&
+      // !isNaN(payCalculationNum) &&
       !isNaN(weeklyContractHoursNum)
     ) {
-      const total=payRateNum + (payRateNum * (payCalculationNum / 100))
+      const total=payRateNum + (payRateNum )
       const calculatedWeeklyPay =total * weeklyContractHoursNum;
       const annualPay = calculatedWeeklyPay * 52;
 
@@ -271,23 +271,31 @@ export default function EmployeeSalaryDetailsEditForm({
                   )}
                 </div>
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Pay Rate</label>
-                  <input
-                    {...register("pay_rate", { required: true })}
-                    onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
-                        event.preventDefault();
-                      }
-                    }}
-                    placeholder="Enter Pay Rate"
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
-                  />
-                  {errors.pay_rate && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.pay_rate?.message}
-                    </span>
-                  )}
-                </div>
+  <label className="required label-text">Pay Rate</label>
+  <input
+    {...register("pay_rate", { required: true })}
+    onKeyPress={(event) => {
+      const inputChar = event.key;
+      const currentValue = event.target.value;
+
+      // Allow only digits, a single decimal point, and control keys
+      if (
+        !/^[0-9.]$/.test(inputChar) || 
+        (inputChar === "." && currentValue.includes("."))
+      ) {
+        event.preventDefault();
+      }
+    }}
+    placeholder="Enter Pay Rate"
+    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+  />
+  {errors.pay_rate && (
+    <span className="text-xs font-medium text-red-500">
+      {errors.pay_rate?.message}
+    </span>
+  )}
+</div>
+
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Per</label>
                   <Controller
