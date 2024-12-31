@@ -42,6 +42,8 @@ export const relationshipList = [
   { value: "Wife", label: "Wife" },
   { value: "Son", label: "Son" },
   { value: "Daughter", label: "Daughter" },
+  { value: "Friend", label: "Friend" },
+  { value: "Next_of_kin", label: "Next of kin" },
   { value: "Others", label: "Others" },
 ];
 
