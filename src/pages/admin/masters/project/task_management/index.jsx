@@ -61,10 +61,7 @@ export default function TaskManagement() {
     setSelectedId(null);
     reset();
   }
-  function closeEdit() {
-    setPopupEditOpen(false);
-    reset();
-  }
+
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
@@ -166,11 +163,12 @@ export default function TaskManagement() {
       setValue("start_date", taskListDetails?.start_date);
       setValue("due_date", taskListDetails?.due_date);
       setValue("file", taskListDetails?.file);
-      setValue("priority_id", taskListDetails?.priority_id);
-      setValue("status", taskListDetails?.status);
+      setValue("priority_id", taskListDetails?.priority?.value);
+      setValue("status", taskListDetails?.status?.value);
       setValue("task_description", taskListDetails?.task_description);
       setValue("assignees", taskListDetails?.assignees);
-      setValue("related_to", taskListDetails?.related_to);
+      setValue("related_to", taskListDetails?.related_to?.value);
+      setMemberList(taskListDetails?.assignees);
     }
   }, [taskListDetails]);
 
@@ -190,24 +188,22 @@ export default function TaskManagement() {
       };
 
       let res;
-      if (selectedId) {
-        res = await newRequest.post(
-          `${"task"}/${selectedId}/${"status"}`, // URL with dynamic ID
-          formData, // formData should be the second argument, which is the request body
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            params: {
-              user_id: user?.id,
-            },
+      res = await newRequest.post(
+        `${"task"}/${id}/${"status"}`, // URL with dynamic ID
+        formData, // formData should be the second argument, which is the request body
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-        );
-      }
+          params: {
+            user_id: user?.id,
+          },
+        },
+      );
 
       if (res) {
         toast.success(res?.data?.message);
-        close();
+        setSelectedId(null);
         window.location.reload();
       }
     } catch (error) {
@@ -216,25 +212,6 @@ export default function TaskManagement() {
     } finally {
       setLoader(false);
     }
-  };
-  const renderStatusBadge = (statusDetails) => {
-    if (!statusDetails) return null; // Handle cases where statusDetails is undefined or null
-
-    const { project_status_name, background_color, text_color } = statusDetails;
-
-    const dynamicStyles = {
-      backgroundColor: background_color || "#F0F0F0", // Default background color
-      color: text_color || "#000000", // Default text color
-    };
-
-    return (
-      <span
-        className="rounded-md px-3 py-1 text-sm font-medium"
-        style={dynamicStyles}
-      >
-        {project_status_name}
-      </span>
-    );
   };
 
   const columns = React.useMemo(
@@ -261,7 +238,6 @@ export default function TaskManagement() {
               onChange={(e) => {
                 const newValue = parseInt(e.target.value, 10); // Convert string to number
                 handleStatusChange(row.original.id, newValue);
-                setSelectedId(row.original.id);
               }}
             >
               {status.map((option) => (
@@ -681,10 +657,10 @@ export default function TaskManagement() {
                         <Select
                           {...field}
                           options={projectList}
-                          placeholder="Select Priority"
+                          placeholder="Select Related"
                           styles={customSelectStyles}
                           className="input-box"
-                          value={Priority.find(
+                          value={projectList.find(
                             (option) => option.value === field.value,
                           )} // Ensure the selected value matches
                           onChange={(selectedOption) =>

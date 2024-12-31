@@ -250,6 +250,7 @@ export default function AddLeave({
     const updatedData = dateRange.filter((_, i) => i !== index); // Remove the item at the given index
     setDateRange(updatedData); // Update the state
   };
+  
 
   const onSubmit = async () => {
     setLoader(true);
@@ -271,7 +272,7 @@ export default function AddLeave({
         !formData?.leave_reason ||
         !formData?.leave_start_date ||
         !formData?.leave_end_date ||
-        !formData?.leave_periods.length == 0
+        formData?.leave_periods.length == 0
       ) {
         return toast.error("mandatory field missing error");
       }

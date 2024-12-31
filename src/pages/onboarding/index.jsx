@@ -23,10 +23,11 @@ export default function OnboardingForm() {
   const [isLoader, setIsLoader] = useState();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
-  const statusId = 2;
+  const employee_id = searchParams.get("employee_id");
+  const statusId = 9;
+  const [id, setId] = useState("");
   const navigate = useNavigate();
-  
-  console.log(errors, "u_idu_idu_id");
+
   // const { data: employeeDetails} = useQuery({
   //   queryKey: ["employeeDetails", uid],
   //   queryFn: () =>
@@ -35,11 +36,15 @@ export default function OnboardingForm() {
   //     }),
   //   enabled: formtype == "update",
   // });
+
+
+  console.log(employee_id,"employee_idemployee_id");
+  
   const handleShare = async () => {
     try {
       setIsLoader(true);
       const onboarding = {
-        employee_id: uid,
+        employee_id: employee_id,
         status: statusId,
       };
       const response = await newFormRequest.post(
@@ -47,20 +52,17 @@ export default function OnboardingForm() {
         onboarding,
       );
       if (response?.status === 200) {
-        setIsLoader(false)
+        setIsLoader(false);
         toast.success("Approve successfully");
         navigate(`/admin/employee/details/?uid=${uid}`);
       } else {
         toast.error("Failed to approve,");
       }
-    } 
-    catch (error) {
+    } catch (error) {
       toast.error(
         error?.response?.data?.message[0] || "Failed to Approve employee.",
       );
-     
     }
-    
   };
   return (
     <div className="flex h-full w-full flex-col gap-4 bg-gray-100 p-10">
@@ -112,7 +114,7 @@ export default function OnboardingForm() {
       <div className="rounded-md bg-white px-10 py-8">
         <form className="flex flex-col gap-4">
           <BasicDetails formtype="update" />
-          <WorkInfo formtype="update"  />
+          <WorkInfo formtype="update" />
           <Skills />
           <Experience />
           <Registration />

@@ -25,6 +25,8 @@ export default function EmployeeAccessHeader() {
       localStorage.removeItem("employee_token");
       navigate("/login");
     }
+    console.log(path, "pathpath");
+
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
@@ -32,6 +34,7 @@ export default function EmployeeAccessHeader() {
   const handleClick = () => {
     setPopupOpen(true);
   };
+
   return (
     <>
       <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
@@ -99,7 +102,7 @@ export default function EmployeeAccessHeader() {
                   <Menu.Item key={index}>
                     {({ active }) => (
                       <Link
-                        to={item?.path}
+                        onClick={() => handleNavigation(item.path)}
                         className={`flex cursor-pointer items-center gap-3 whitespace-nowrap text-xs font-semibold ${
                           active ? "" : ""
                         }`}

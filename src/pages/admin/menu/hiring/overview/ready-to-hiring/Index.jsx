@@ -14,6 +14,8 @@ export const ReadyToHiring = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [selectedField, setSelectedField] = useState(0);
+  const [selectedStatusId, setSelectedStatusId] = useState(null);
+
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
@@ -130,14 +132,13 @@ export const ReadyToHiring = () => {
     [readyToHirings, currentPage],
   );
 
-  console.log(readyToHirings, "readyToHiringsreadyToHiringsreadyToHirings");
-
   return (
     <>
       <ChooseOfferLetterType
         open={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
+        selectedStatusId={selectedStatusId}
       />
       <MenuHeaderHiring page={1} />
       <div className="flex flex-col gap-3">

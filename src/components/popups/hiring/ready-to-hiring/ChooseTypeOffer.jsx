@@ -5,6 +5,7 @@ export default function ChooseOfferLetterType({
   open,
   setPopupOpen,
   selectedField,
+  selectedStatusId,
 }) {
   const [type, setType] = useState("conditional");
   const navigate = useNavigate();
@@ -23,17 +24,19 @@ export default function ChooseOfferLetterType({
               Offer Letter Type
             </h2>
             <div className="mt-7 flex w-full items-center gap-10">
-              <div className="flex items-center text-sm">
-                <input
-                  type="radio"
-                  name="offerType"
-                  value="conditional"
-                  className="size-4"
-                  checked={type === "conditional"}
-                  onChange={(e) => setType(e.target.value)} // Update type on change
-                />
-                <span className="ml-1">Conditional</span>
-              </div>
+              {selectedStatusId !== 6 && (
+                <div className="flex items-center text-sm">
+                  <input
+                    type="radio"
+                    name="offerType"
+                    value="conditional"
+                    className="size-4"
+                    checked={type === "conditional"}
+                    onChange={(e) => setType(e.target.value)} // Update type on change
+                  />
+                  <span className="ml-1">Conditional</span>
+                </div>
+              )}
               <div className="flex items-center text-sm">
                 <input
                   type="radio"

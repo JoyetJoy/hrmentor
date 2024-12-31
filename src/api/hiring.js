@@ -61,3 +61,9 @@ export const DEFAULT_UN_EMAIL_TEMPLATE_DESCRIPTION =
 // DEFAULT DOCUMENT TEMPLATE DESCRIPTION
 export const DEFAULT_UN_DOCUMENT_TEMPLATE_DESCRIPTION =
   "unconditional-offer-letter-document-template-description";
+
+// CANDIDATE STATUS
+export const CANDIDATE_STATUS = "candidate-status";
+
+// CANDIDATE STATUS UPDATE
+export const CANDIDATE_STATUS_UPDATE = "candidate-status-update";

@@ -208,7 +208,7 @@ export default function CompanyGeneral() {
         created_date: companyProfileBasic?.created_date,
         username: companyProfileBasic?.username,
         upload_company_logo: companyProfileBasic?.upload_company_logo,
-        upload_company_logo: companyProfileBasic?.upload_letter_head,
+        upload_letter_head: companyProfileBasic?.upload_letter_head,
         address_one: companyProfileBasic?.address_one,
         address_two: companyProfileBasic?.address_two,
         postal_code: companyProfileBasic.postal_code,
