@@ -48,6 +48,8 @@ export default function EmailSetupSave() {
     Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.${tokenValue}
   `);
 
+  console.log(id, "idididididididid");
+
   const {
     register,
     control,
@@ -118,7 +120,7 @@ export default function EmailSetupSave() {
         subject: saveEmail.subject,
         templete_name: saveEmail.template_name,
         is_default: isDefault === true ? 1 : 0,
-        folder_id: emailTemplateId,
+        folder_id: id,
         email_type_id: emailTypeId,
         content: content,
         token_id: tokenId,
@@ -158,7 +160,7 @@ export default function EmailSetupSave() {
   return (
     <>
       <SetUpHeader menu="Menu" currentpath="Folder" page={1} />
-      <div className="mx-auto mb-3 flex h-full w-[98%] items-center justify-between">
+      <div className="mx-auto mb-3 flex w-[98%] items-center justify-between">
         <label>
           <b>Email Template</b>
         </label>

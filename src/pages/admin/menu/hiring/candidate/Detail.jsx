@@ -188,8 +188,7 @@ export default function HiringCandidateDetails() {
       console.error("Error updating candidate status:", error);
 
       const errorMessage =
-        error?.response?.data?.error ||
-        "Failed to update candidate status. Please try again.";
+        error?.response?.data?.error || "Email Is Duplicate ,Please check";
       toast.error(errorMessage);
     } finally {
       // Ensure the loader is deactivated after the API call
@@ -282,7 +281,7 @@ export default function HiringCandidateDetails() {
                 </p>
               </div>
             </div>
-            {candidateDetails?.status?.status_name === "Hired" ? (
+            {candidateDetails?.status?.id === 11 ? (
               <>
                 <span
                   style={{
@@ -404,28 +403,30 @@ export default function HiringCandidateDetails() {
               )}
             </div>
           </div>
-          <div className="flex gap-3">
-            <button
-              type={"button"}
-              onClick={() => {
-                setRejectOpen(true);
-                setSelectedField(candidateDetails?.data?.id);
-              }}
-              className="h-9 rounded bg-[#AB2727]/10 px-7 text-xs font-semibold text-[#AB2727]"
-            >
-              Reject
-            </button>
-            <button
-              type={"button"}
-              onClick={() => {
-                setPopupOpen(true);
-                setSelectedField(candidateDetails?.data?.id);
-              }}
-              className="h-9 rounded bg-hrmprimaryorange px-7 text-xs text-white"
-            >
-              Send Offer Letter
-            </button>
-          </div>
+          {candidateDetails?.status?.id !== 11 && (
+            <div className="flex gap-3">
+              <button
+                type={"button"}
+                onClick={() => {
+                  setRejectOpen(true);
+                  setSelectedField(candidateDetails?.data?.id);
+                }}
+                className="h-9 rounded bg-[#AB2727]/10 px-7 text-xs font-semibold text-[#AB2727]"
+              >
+                Reject
+              </button>
+              <button
+                type={"button"}
+                onClick={() => {
+                  setPopupOpen(true);
+                  setSelectedField(candidateDetails?.data?.id);
+                }}
+                className="h-9 rounded bg-hrmprimaryorange px-7 text-xs text-white"
+              >
+                Send Offer Letter
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="mx-auto w-full max-w-lg rounded-xl bg-white">
