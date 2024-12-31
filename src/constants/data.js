@@ -11,6 +11,12 @@ export const disabilityStatus = [
   { id: 0, label: "No",value:"No"},
 ];
 
+export const pregnancyStatus = [
+  { id: 1, label: "Yes",value:"Yes" },
+  { id: 0, label: "No",value:"No"},
+  { id: 2, label: "Prefer Not To Say",value:"prefer_not_to_say"},
+];
+
 // status
 export const employeeMasterOptions = [
   { value: 1, label: "Active" },

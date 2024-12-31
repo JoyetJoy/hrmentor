@@ -11,6 +11,7 @@ import {
   disabilityStatus,
   genders,
   maritalStatuses,
+  pregnancyStatus,
   successStatus,
 } from "@/constants/data";
 import {
@@ -473,7 +474,7 @@ export const WorkInformation = ({ formtype }) => {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={disabilityStatus}
+                          options={pregnancyStatus}
                           // value={successStatus.find(
                           //   (item) => item.id === field.id,
                           // )}
