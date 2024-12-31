@@ -408,12 +408,20 @@ export default function EmployeeSalaryDetailsEditForm({
                     type="text"
                     disabled={selectedOverTime !== "nonExempt"} // Disable if not exempt
                     onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
+                      const inputChar = event.key;
+                      const currentValue = event.target.value;
+
+                      // Allow digits, a single decimal point, and control keys
+                      if (
+                        !/^[0-9.]$/.test(inputChar) ||
+                        (inputChar === "." && currentValue.includes("."))
+                      ) {
                         event.preventDefault();
                       }
                     }}
                     className="input-box h-10 w-full placeholder:text-[0.8rem] disabled:bg-gray-200"
                   />
+
                   {errors.pay_calculation && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.pay_calculation?.message}
