@@ -92,34 +92,37 @@ export const ReadyToHiring = () => {
         accessorKey: "action",
         cell: ({ row }) => (
           <>
-            {(row?.original?.status?.status_name !== "Un Conditional Accepted" &&
-    row?.original?.status?.status_name !== "Hired" &&
-    row?.original?.status?.status_name !== "Conditional Accepted") && (
-              <div className="flex items-center gap-3">
-                <button
-                  type={"button"}
-                  onClick={() => {
-                    setPopupOpen(true);
-                    setSelectedField(row.original.id);
-                  }}
-                  className="rounded bg-hrmprimaryorange px-2 py-1.5 text-xs text-white"
-                >
-                  Send Offer Letter
-                </button>
-                <button
-                  type="button"
-                  className="flex h-7 w-7 items-center justify-center rounded-full bg-[#AB27271A]/10 text-[#AB2727]"
-                >
-                  <CircleX className="h-5" />
-                </button>
-                <Link
-                  to={`/admin/hiring/view-candidate?cid=${row?.original?.id}`}
-                  className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-                >
-                  <Maximize2 className="size-3" />
-                </Link>
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              {row?.original?.status?.id !== 9 &&
+                row?.original?.status?.id !== 11 && (
+                  <>
+                    <button
+                      type={"button"}
+                      onClick={() => {
+                        setPopupOpen(true);
+                        setSelectedField(row.original.id);
+                        setSelectedStatusId(row?.original?.status?.id);
+                      }}
+                      className="rounded bg-hrmprimaryorange px-2 py-1.5 text-xs text-white"
+                    >
+                      Send Offer Letter
+                    </button>
+                    <button
+                      type="button"
+                      className="flex h-7 w-7 items-center justify-center rounded-full bg-[#AB27271A]/10 text-[#AB2727]"
+                    >
+                      <CircleX className="h-5" />
+                    </button>
+                  </>
+                )}
+
+              <Link
+                to={`/admin/hiring/view-candidate?cid=${row?.original?.id}`}
+                className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              >
+                <Maximize2 className="size-3" />
+              </Link>
+            </div>
           </>
         ),
       },
