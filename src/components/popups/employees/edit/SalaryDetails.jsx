@@ -66,17 +66,17 @@ export default function EmployeeSalaryDetailsEditForm({
       setValue("pay_schedule", employeeSalaryDetailByid.pay_schedule);
       setValue("pay_type", employeeSalaryDetailByid.pay_type);
       setValue("over_time", employeeSalaryDetailByid.over_time);
-      setValue("roles",employeeSalaryDetailByid?.role_id)
+      setValue("roles", employeeSalaryDetailByid?.role_id);
       setValue(
         "weekly_contract_hours",
         employeeSalaryDetailByid.weekly_contract_hours,
       );
       setValue("weekly_pay", employeeSalaryDetailByid.weekly_pay);
-      setValue("pay_calculation", employeeSalaryDetailByid?.pay_calculation)
+      setValue("pay_calculation", employeeSalaryDetailByid?.pay_calculation);
       setValue("annual_pay", employeeSalaryDetailByid.annual_pay);
       setValue("status", employeeSalaryDetailByid.status);
-      if(employeeSalaryDetailByid.over_time){
-        setSelectedOverTime(employeeSalaryDetailByid.over_time?.value)
+      if (employeeSalaryDetailByid.over_time) {
+        setSelectedOverTime(employeeSalaryDetailByid.over_time?.value);
       }
     }
   }, [employeeSalaryDetailByid]);
@@ -89,16 +89,16 @@ export default function EmployeeSalaryDetailsEditForm({
   // Calculate Weekly Pay
   useEffect(() => {
     const payRateNum = parseFloat(payRate);
-    const payCalculationNum = parseFloat(payCalculation);
+    // const payCalculationNum = parseFloat(payCalculation);
     const weeklyContractHoursNum = parseFloat(weeklyContractHours);
 
     if (
       !isNaN(payRateNum) &&
-      !isNaN(payCalculationNum) &&
+      // !isNaN(payCalculationNum) &&
       !isNaN(weeklyContractHoursNum)
     ) {
-      const total=payRateNum + (payRateNum * (payCalculationNum / 100))
-      const calculatedWeeklyPay =total * weeklyContractHoursNum;
+      const total = payRateNum + payRateNum;
+      const calculatedWeeklyPay = total * weeklyContractHoursNum;
       const annualPay = calculatedWeeklyPay * 52;
 
       // Update weekly_pay in the form
@@ -114,8 +114,8 @@ export default function EmployeeSalaryDetailsEditForm({
   }
 
   const onSubmit = async (data) => {
-    if(data.over_time?.value==="nonExempt" && !data.pay_calculation){
-      toast.error('Pay Calculation is required for Non-Exempt')
+    if (data.over_time?.value === "nonExempt" && !data.pay_calculation) {
+      toast.error("Pay Calculation is required for Non-Exempt");
       return;
     }
     try {
@@ -143,7 +143,7 @@ export default function EmployeeSalaryDetailsEditForm({
         res = await newRequest.patch(`${api}/${selectedField}`, formData);
       } else {
         console.log(formData);
-        
+
         res = await newRequest.post(api, formData);
       }
       if (res.data?.status === 201) {
@@ -275,7 +275,14 @@ export default function EmployeeSalaryDetailsEditForm({
                   <input
                     {...register("pay_rate", { required: true })}
                     onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
+                      const inputChar = event.key;
+                      const currentValue = event.target.value;
+
+                      // Allow only digits, a single decimal point, and control keys
+                      if (
+                        !/^[0-9.]$/.test(inputChar) ||
+                        (inputChar === "." && currentValue.includes("."))
+                      ) {
                         event.preventDefault();
                       }
                     }}
@@ -288,6 +295,7 @@ export default function EmployeeSalaryDetailsEditForm({
                     </span>
                   )}
                 </div>
+
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Per</label>
                   <Controller
@@ -400,12 +408,20 @@ export default function EmployeeSalaryDetailsEditForm({
                     type="text"
                     disabled={selectedOverTime !== "nonExempt"} // Disable if not exempt
                     onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
+                      const inputChar = event.key;
+                      const currentValue = event.target.value;
+
+                      // Allow digits, a single decimal point, and control keys
+                      if (
+                        !/^[0-9.]$/.test(inputChar) ||
+                        (inputChar === "." && currentValue.includes("."))
+                      ) {
                         event.preventDefault();
                       }
                     }}
                     className="input-box h-10 w-full placeholder:text-[0.8rem] disabled:bg-gray-200"
                   />
+
                   {errors.pay_calculation && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.pay_calculation?.message}

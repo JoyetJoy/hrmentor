@@ -17,7 +17,7 @@ export default function AddBankHoliday({
   popupOpen,
   setPopupOpen,
   selectedField,
-  setSelectedField
+  setSelectedField,
 }) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
   const [percentage, setPercentage] = useState("");
@@ -120,7 +120,7 @@ export default function AddBankHoliday({
       } else {
         res = await newRequest.post(TEAM_BANK_HOLIDAY, formData);
       }
-      setSelectedField('');
+      setSelectedField("");
       toast.success(res?.data?.message);
       queryClient.invalidateQueries(["bank_holidays"]);
       close();
@@ -156,7 +156,7 @@ export default function AddBankHoliday({
               <div className="flex flex-col gap-4">
                 {/* Holiday Name */}
                 <div>
-                  <label className="label-text">Holiday Name</label>
+                  <label className="required label-text">Holiday Name</label>
                   <input
                     autoComplete="off"
                     type="text"
@@ -173,7 +173,7 @@ export default function AddBankHoliday({
 
                 {/* Date */}
                 <div>
-                  <label className="label-text">Date</label>
+                  <label className="required label-text">Date</label>
                   <input
                     type="date"
                     {...register("date")}
@@ -188,7 +188,7 @@ export default function AddBankHoliday({
 
                 {/* Location */}
                 <div>
-                  <label className="label-text">Location</label>
+                  <label className="required label-text">Location</label>
                   <Controller
                     name="location_id"
                     control={control}
@@ -212,13 +212,12 @@ export default function AddBankHoliday({
                       />
                     )}
                   />
-                  {errors.location && (
+                  {errors.location_id && (
                     <span className="text-xs text-red-500">
-                      {errors.location.message}
+                      {errors.location_id.message}
                     </span>
                   )}
                 </div>
-
                 {/* Holiday Status */}
                 <div className="group items-center gap-3 text-[0.85rem]">
                   <div className="flex gap-3">
@@ -246,14 +245,21 @@ export default function AddBankHoliday({
                     </div>
                   </div>
                 </div>
-                {percentage && (
+
+                {/* Conditionally Render Percentage Input */}
+                {percentage === "paid" && (
                   <div>
-                    <label className="label-text">Percentage</label>
+                    <label className="required label-text">Percentage</label>
                     <input
                       autoComplete="off"
                       type="number"
                       placeholder="Enter Percentage"
-                      {...register("percentage")}
+                      {...register("percentage", {
+                        required: {
+                          value: percentage === "paid",
+                          message: "Percentage is required",
+                        },
+                      })}
                       className="input-box"
                     />
                     {errors.percentage && (
@@ -266,9 +272,9 @@ export default function AddBankHoliday({
 
                 {/* Description */}
                 <div className="mt-2 flex flex-col gap-2">
-                  <label>Description</label>
+                  <label className="label-text">Description</label>
                   <textarea
-                    className="h-20 w-full rounded-md border border-[#cecdcd] p-1"
+                    className="input-box h-20 w-full rounded-md border border-[#cecdcd] p-1"
                     placeholder="Enter description here..."
                     {...register("description")}
                   ></textarea>

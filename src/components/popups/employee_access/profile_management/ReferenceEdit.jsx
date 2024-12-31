@@ -215,7 +215,7 @@ export default function ReferenceEdit({
                   </div>
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Personal Email Address
+                      Email Address
                     </label>
                     <input
                       {...register("personal_email", { required: true })}

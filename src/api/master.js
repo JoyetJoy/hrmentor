@@ -165,6 +165,8 @@ export const EMPLOYEE_LIST = "/team-employees";
 export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests";
 
 export const PENDING_LEAVE_REQUEST_LIST = "admin-employee-pending-leave-request-list";
+// COMPLETED LEAVE REQUEST LIST
+export const COMPLETED_LEAVE_REQUEST_LIST = "admin-employee-completed-leave-request-list";
 
 
 //REFERENCE TEMPLATE

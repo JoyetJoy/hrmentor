@@ -22,6 +22,14 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
 
   const pageLimit = 10;
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -66,12 +74,12 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
           },
         },
         {
-          header: colKeys?.field8?.label,
+          header: "Emp ID",
           accessorKey: colKeys?.field1?.key,
           cell: ({ row }) => <td>{`${row.original.employee_id} `}</td>,
         },
         {
-          header: colKeys?.field1?.label,
+          header: "Emp Name",
           accessorKey: colKeys?.field1?.key,
           cell: ({ row }) => (
             <td>
@@ -105,13 +113,13 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
             );
           },
         },
-        colKeys.field4 && {
-          header: colKeys?.field4?.label,
-          accessorKey: colKeys?.field4?.key,
-          cell: ({ row }) => (
-            <td>{`${row.original.leave_type.leave_name || ""}`}</td>
-          ),
-        },
+        // colKeys.field4 && {
+        //   header: colKeys?.field4?.label,
+        //   accessorKey: colKeys?.field4?.key,
+        //   cell: ({ row }) => (
+        //     <td>{`${row.original.leave_type.leave_name || ""}`}</td>
+        //   ),
+        // },
         colKeys.field5 && {
           header: colKeys?.field5?.label,
           accessorKey: "total_leave_days",
@@ -119,21 +127,15 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
             <td>{`${row.original.total_leave_days || "-"} `}</td>
           ),
         },
-        colKeys.field6 && {
-          header: colKeys?.field6?.label,
-          accessorKey: colKeys?.field6?.key,
-          cell: ({ row }) => {
-            const formatDate = (dateString) => {
-              const date = new Date(dateString);
-              const day = String(date.getDate()).padStart(2, "0");
-              const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-              const year = date.getFullYear();
-              return `${day}-${month}-${year}`;
-            };
-
-            return <td>{formatDate(row.original.created_at)}</td>;
+          colKeys.field6 && {
+            header: colKeys?.field6?.label,
+            accessorKey: colKeys?.field6?.key,
+            cell: ({ row }) => {
+              return formatDate(row.original.created_at); // Ensure the formatDate function is properly defined
+            },
           },
-        },
+        
+        
         {
           header: colKeys?.field7?.label,
           cell: ({ row }) => {
@@ -171,7 +173,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
               >
                 <Eye className="size-3" />
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => {
                   setPopupOpen(true);
@@ -194,7 +196,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
                 className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
               >
                 <Trash2 className="size-3" />
-              </button>
+              </button> */}
             </div>
           ),
         },

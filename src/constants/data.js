@@ -11,6 +11,12 @@ export const disabilityStatus = [
   { id: 0, label: "No",value:"No"},
 ];
 
+export const pregnancyStatus = [
+  { id: 1, label: "Yes",value:"Yes" },
+  { id: 0, label: "No",value:"No"},
+  { id: 2, label: "Prefer Not To Say",value:"prefer_not_to_say"},
+];
+
 // status
 export const employeeMasterOptions = [
   { value: 1, label: "Active" },
@@ -36,6 +42,8 @@ export const relationshipList = [
   { value: "Wife", label: "Wife" },
   { value: "Son", label: "Son" },
   { value: "Daughter", label: "Daughter" },
+  { value: "Friend", label: "Friend" },
+  { value: "Next_of_kin", label: "Next of kin" },
   { value: "Others", label: "Others" },
 ];
 
@@ -88,6 +96,7 @@ export const maritalStatuses = [
   { id: 2, label: "Married", value: "married" },
   { id: 3, label: "Divorced", value: "divorced" },
   { id: 4, label: "Widowed", value: "widowed" },
+  { id: 5, label: "Prefer not to say", value: "prefer_not_to_say" },
 ];
 
 export const pentionStatuses = [

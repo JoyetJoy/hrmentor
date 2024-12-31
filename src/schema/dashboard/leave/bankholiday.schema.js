@@ -4,8 +4,9 @@ export const BankHolidaySchema = Yup.object().shape({
   holiday_name: Yup.string().trim().required("Holiday name is required"),
   date: Yup.date()
     .required("Date is required")
-    .typeError("Invalid date format"),
-  location_id: Yup.object(),
+    .typeError("Date is required"),
+  location_id: Yup.object()
+  .required("Location is required"),
   type: Yup.string(),
   description: Yup.string()
     .trim()

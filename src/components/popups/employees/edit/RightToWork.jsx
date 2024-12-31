@@ -215,7 +215,7 @@ export default function EmployeeRightToWorkEditForm({
                         <div className="flex items-center gap-2">
                           <UploadCloud />
                           <span className="font-semibold text-[#2C2C2C]">
-                            Upload Certificate
+                            Upload Document
                           </span>
                         </div>
                         <input

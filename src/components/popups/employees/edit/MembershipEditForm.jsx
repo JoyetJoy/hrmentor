@@ -180,7 +180,7 @@ export default function EmployeeMembershipEditForm({
                 </div>
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    First Registered Date
+                    Registered Date
                   </label>
                   <input
                     {...register("first_registered_date", { required: true })}

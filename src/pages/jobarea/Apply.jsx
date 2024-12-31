@@ -22,11 +22,13 @@ export default function Apply() {
   const [resume, setResume] = useState("");
   const [popupOpen, setPopupOpen] = useState(false);
   const [resumeFileName, setResumeFileName] = useState("");
+  const [state, setState] = useState();
   const {
     register,
     handleSubmit,
     control,
     reset,
+    setValue,
     watch,
     formState: { errors },
   } = useForm({
@@ -59,6 +61,18 @@ export default function Apply() {
     return response?.data;
   };
 
+  // Function to display state of the selected city
+  const handleCitySelect = (selectedCity) => {
+    if (selectedCity?.state_name) {
+      setState(selectedCity.state_name);
+      setValue("state_id", {
+        id: selectedCity.state_id,
+        label: selectedCity.state_name,
+        value: selectedCity.state_id,
+      });
+    }
+  };
+
   // GET CITY BY STATE ID AND SEARCH KEY
   const loadCitiesOptions = async (inputValue) => {
     if (inputValue?.length < 3) {
@@ -84,6 +98,7 @@ export default function Apply() {
   };
 
   const handleSave = async (data) => {
+    
     const formData = {
       first_name: data.first_name,
       middle_name: data.middle_name,
@@ -91,7 +106,7 @@ export default function Apply() {
       email: data.email,
       phone_number: data.phone_number,
       country_id: parseInt(data.country_id?.id),
-      state_or_province: parseInt(data.state_or_province?.id),
+      state_or_province: parseInt(data.state_id?.id),
       city_id: parseInt(data.city_id?.id),
       about_your_self: data?.about_your_self,
       job_list_id: parseInt(id),
@@ -225,7 +240,7 @@ export default function Apply() {
               />
             </Link>
             <div className="text-2xl text-white">Apply with us now</div>
-            <div className="max-w-2/4 min-w-2/4 w-2/4 text-center text-[0.8rem] text-softcool">
+            <div className="max-w-2/4 min-w-2/4 text-softcool w-2/4 text-center text-[0.8rem]">
               Build up your career with us form by either selecting from one of
               our application form. Using the Neodesk form builder to format and
               customize the application form template to match your needs.
@@ -294,6 +309,11 @@ export default function Apply() {
                   {...register("email")}
                   className="input-box h-10 w-full rounded-md focus:border-gray-300"
                 />
+                {errors.email && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.email?.message}
+                  </span>
+                )}
               </div>
               <div className="group flex flex-col space-y-1">
                 <label className="required label-text">Phone</label>
@@ -317,6 +337,11 @@ export default function Apply() {
                     className="input-box"
                   />
                 </div>
+                {errors.phone_number && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.phone_number?.message}
+                  </span>
+                )}
               </div>
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">Country</label>
@@ -342,41 +367,23 @@ export default function Apply() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5">
-                <label className="required label-text">County</label>
-                <Controller
-                  name="state_or_province"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <AsyncSelect
-                      {...field}
-                      placeholder="Search ..."
-                      loadOptions={loadStatesOptions}
-                      isSearchable={true}
-                      noOptionsMessage={() => "type state name"}
-                      className="input-box"
-                    />
-                  )}
-                />
-                {errors.state_or_province && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.state_or_province?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">City</label>
                 <Controller
                   name="city_id"
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: "City is required" }} // Custom error message
                   render={({ field }) => (
                     <AsyncSelect
                       {...field}
                       placeholder="Search ..."
                       loadOptions={loadCitiesOptions}
                       isSearchable={true}
-                      noOptionsMessage={() => "type city name"}
+                      noOptionsMessage={() => "Type city name"}
+                      onChange={(selectedOption) => {
+                        field.onChange(selectedOption); // Update form state
+                        handleCitySelect(selectedOption);
+                      }}
+                      value={field.value} // Ensure the value is controlled
                       className="input-box"
                     />
                   )}
@@ -387,17 +394,34 @@ export default function Apply() {
                   </span>
                 )}
               </div>
+              <div className="group flex flex-col gap-1.5">
+                <label className="label-text">County</label>
+                {/* Show the selected state's name if a city is selected */}
+                <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
+                  {state || ""}
+                </span>
+                {errors.state_id && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.state_id?.message}
+                  </span>
+                )}
+              </div>
             </div>
             <hr className="my-6 border-[#ECE9F1]" />
             <div className="mt-4 grid w-full gap-5">
               <div className="group flex flex-col space-y-2">
-                <label className="label-text">About Yourself</label>
+                <label className="required label-text">About Yourself</label>
                 <textarea
                   autoComplete="off"
                   {...register("about_your_self")}
                   placeholder="A small description about yourself"
                   className="input-box mt-0 h-24 w-full rounded-md focus:border-gray-300"
                 />
+                {errors.about_your_self && (
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.about_your_self?.message}
+                  </span>
+                )}
               </div>
               {/* Render profile questions */}
               {careerJobQuestion?.profileQuestions?.map((question, index) => (
