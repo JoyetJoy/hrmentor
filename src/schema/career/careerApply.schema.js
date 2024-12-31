@@ -17,12 +17,10 @@ export const CareerApplySchema = Yup.object({
   }).test("both-required", "Country is required", function (value) {
     return value?.value && value?.label;
   }),
-  state_or_province: Yup.object({
+  state_id: Yup.object({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "County is required", function (value) {
-    return value?.value && value?.label;
   }),
   city_id: Yup.object({
     id: Yup.string(),

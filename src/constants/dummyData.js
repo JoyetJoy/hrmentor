@@ -301,12 +301,12 @@ export const setupItems = [
     active: "email",
     path: "/admin/setup/email",
   },
-  {
-    id: 1,
-    name: "Basic Settings",
-    active: "basic settings",
-    path: "/admin/setup/basic-settings",
-  },
+  // {
+  //   id: 1,
+  //   name: "Basic Settings",
+  //   active: "basic settings",
+  //   path: "/admin/setup/basic-settings",
+  // },
 ];
 export const rosterItems = [
   {
