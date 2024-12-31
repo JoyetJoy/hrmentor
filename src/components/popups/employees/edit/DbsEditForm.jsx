@@ -296,7 +296,7 @@ export default function DbsEditForm({
                               htmlFor="document"
                               className="cursor-pointer text-xs font-semibold text-black/50"
                             >
-                              Upload Certificate
+                              Upload Document
                             </label>
                           </>
                         )}
