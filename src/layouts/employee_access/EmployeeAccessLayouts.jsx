@@ -28,6 +28,7 @@ export default function EmployeeAccessLayouts() {
       setUser(profile?.data);
     }
   }, [profile]);
+console.log(location);
 
   if (location.pathname === "/employee_access") {
     return <Navigate to="/employee_access/dashboard" replace />;

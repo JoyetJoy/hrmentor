@@ -563,7 +563,7 @@ export const employeeAccessActivityList = [
   {
     icon: "/assets/icons/admin/payroll.svg",
     label: "Payroll",
-    // path: "/admin/payroll",
+    path: "/employee-access/payroll",
   },
   {
     icon: "/assets/icons/admin/leaveday.svg",

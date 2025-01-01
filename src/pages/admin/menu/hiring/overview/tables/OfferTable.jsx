@@ -2,7 +2,7 @@ import { newRequest } from "@/api";
 import QueryTable from "@/components/table/QueryTable";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { Maximize2 } from "lucide-react";
+import { Eye, Maximize2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -93,7 +93,7 @@ export const OfferTable = ({ api, keyword, setKeyword }) => {
           to={`/admin/hiring/view-candidate?cid=${row.original?.id}`}
           className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
         >
-          <Maximize2 className="size-3" />
+          <Eye className="size-3" />
         </Link>
       ),
     },

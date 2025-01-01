@@ -65,7 +65,7 @@ export default function NewComers() {
                       to={`/admin/hiring/view-candidate?cid=${candidate?.id}`}
                       className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                     >
-                      <Maximize2 className="size-3" />
+                      <Eye className="size-3" />
                     </Link>
                   </div>
                 ))}

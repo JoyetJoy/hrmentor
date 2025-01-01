@@ -5,7 +5,7 @@ import { newRequest } from "@/api";
 import { HIRING_READY } from "@/api/hiring";
 import Loader from "@/components/ui/Loader";
 import QueryTable from "@/components/table/QueryTable";
-import { CircleX, Filter, Maximize2, Search, X } from "lucide-react";
+import { CircleX, Eye, Filter, Maximize2, Search, X } from "lucide-react";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
 import { Link } from "react-router-dom";
 
@@ -15,7 +15,6 @@ export const ReadyToHiring = () => {
   const [totalPages, setTotalPages] = useState();
   const [selectedField, setSelectedField] = useState(0);
   const [selectedStatusId, setSelectedStatusId] = useState(null);
-
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
 
@@ -122,7 +121,7 @@ export const ReadyToHiring = () => {
                 to={`/admin/hiring/view-candidate?cid=${row?.original?.id}`}
                 className="flex h-7 w-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               >
-                <Maximize2 className="size-3" />
+                <Eye className="size-3" />
               </Link>
             </div>
           </>

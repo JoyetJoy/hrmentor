@@ -130,7 +130,7 @@ export default function ProfileManagement() {
                   <div className="items-left col-span-4 flex flex-col space-y-3">
                     <div className="h-32 w-32 overflow-hidden rounded-full border-2 border-hrmprimaryorange">
                       <img
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
                         src={profileManagement?.profile_image}
                         alt={profileManagement?.first_name}
                       />

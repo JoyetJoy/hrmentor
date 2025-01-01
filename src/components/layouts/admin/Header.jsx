@@ -75,7 +75,7 @@ export const AdminHeader = () => {
                     : item.iconSrcBlack
                 }
                 alt={item.name}
-                className="h-4 w-4"
+                className="h-4 w-4 "
               />
               <p className="text-sm">{item.name}</p>
             </NavLink>
@@ -116,7 +116,7 @@ export const AdminHeader = () => {
                           <img
                             src={item.icon}
                             alt={`${item.label} icon`}
-                            className="w-full object-contain"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         {item.label}
