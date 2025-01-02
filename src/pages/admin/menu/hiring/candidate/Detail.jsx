@@ -333,7 +333,7 @@ export default function HiringCandidateDetails() {
                 </>
               ) : (
                 <>
-                  <div className="group flex w-3/4 flex-col border text-[0.80rem] text-[#3a3a3a] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
+                  <div className="group flex w-3/4 flex-col border border-[#8be691] text-[0.80rem] text-[#3a3a3a] bg-[#f0fff1] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
                   <p 
                   onClick={()=>setStatusPopup(true)}
                   className="flex gap-2">{candidateDetails?.status?.status_name}<ChevronDown size={20} color="#8c8989" /></p>

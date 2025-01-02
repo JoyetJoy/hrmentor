@@ -162,7 +162,7 @@ export default function EmployeeDetails() {
                   <>
                     <div className="text-xs">
                       <p>Date of joining</p>
-                      <p className="font-semibold">Oct 10,2024</p>
+                      <p className="font-semibold">{employeeViewDetails?.basic_details?.date_of_joining}</p>
                     </div>
                     <button
                       onClick={() => {
