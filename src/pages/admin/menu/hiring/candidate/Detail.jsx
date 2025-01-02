@@ -212,36 +212,9 @@ export default function HiringCandidateDetails() {
       />
       <div>
       <div className="flex items-center justify-between gap-2 font-semibold text-white">
-          <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
-            Ready To Hiring
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="input flex h-9 min-h-9 min-w-72 items-center gap-2 border-none outline-none">
-              <Search className="size-4 object-contain text-gray-dark" />
-              <input
-                onChange={(e) => {
-                  setKeyword(e.target.value);
-                }}
-                type="text"
-                className="w-full grow text-sm text-gray-dark placeholder:text-sm placeholder:font-normal focus:outline-none"
-                placeholder="Search"
-              />
-            </label>
-            <div className="h-9 min-h-9 rounded-md border border-gray-platinum bg-white p-[0.58rem]">
-              <Filter
-                className="stroke size-4 font-medium text-black"
-                strokeWidth={2}
-              />
-            </div>
-          </div>
-        </div>
-      <form className="mt-2 grid grid-cols-2 gap-5 rounded-md  py-4 pb-12">
-        
-        <div className="flex flex-col bg-white p-5 rounded-md">
-          <div className="flex">
+      <div className="flex">
             {candidateDetails && (
               <div className="flex items-center gap-2">
-                <MoveLeft onClick={() => history.back()} className="h-5" />
                 <div className="flex size-7 items-center justify-center rounded-full border">
                   <User className="size-4 fill-black" />
                 </div>
@@ -249,15 +222,18 @@ export default function HiringCandidateDetails() {
                   <div className="text-sm font-semibold">
                     {candidateDetails?.first_name} {candidateDetails?.sur_name}
                   </div>
-                  <div className="text-xs text-gray-dark">
-                    {candidateDetails?.data?.education?.value}
-                  </div>
                 </div>
               </div>
             )}
           </div>
+          <div className="bg-white ">
+            
+          </div>
+        </div>
+      <form className="mt-2 grid grid-cols-2 gap-5 rounded-md  py-4 pb-12">
+        <div className="flex flex-col bg-white p-5 rounded-md">
           <div className="flex">
-            <div className="mt-2 flex h-fit w-full flex-col gap-3 rounded bg-white py-4">
+            <div className="mt-2 flex h-fit w-full flex-col gap-3 rounded bg-white py-1">
               <div className="flex items-center gap-2">
                 <img
                   className="h-7 w-7"

@@ -97,8 +97,7 @@ export default function EmployeeSalaryDetailsEditForm({
       // !isNaN(payCalculationNum) &&
       !isNaN(weeklyContractHoursNum)
     ) {
-      const total = payRateNum + payRateNum;
-      const calculatedWeeklyPay = total * weeklyContractHoursNum;
+      const calculatedWeeklyPay = payRateNum * weeklyContractHoursNum;
       const annualPay = calculatedWeeklyPay * 52;
 
       // Update weekly_pay in the form
