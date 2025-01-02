@@ -10,6 +10,7 @@ import {
   Search,
   Trash2,
   Files,
+  Eye,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -149,7 +150,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               onClick={() => handleView(row.original?.roster_details)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <MoveDiagonal className="size-3" />
+              <Eye className="size-3" />
             </Link>
             <button
               type="button"

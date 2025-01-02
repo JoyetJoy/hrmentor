@@ -15,12 +15,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { GET_CANDIDATES, GET_CANDIDATES_VIEW } from "@/api/recruiter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CircleArrowDown, MoveLeft, User } from "lucide-react";
+import { CircleArrowDown, Filter, MoveLeft, Search, User } from "lucide-react";
 import ResumePreview from "@/components/recruiter/candidate/Preview";
 import ChooseOfferLetterType from "@/components/popups/hiring/ready-to-hiring/ChooseTypeOffer";
 import RejectCandidate from "@/components/popups/hiring/ready-to-hiring/RejectCandidate";
 import { CANDIDATE_STATUS, CANDIDATE_STATUS_UPDATE } from "@/api/hiring";
 import toast from "react-hot-toast";
+import MenuHeaderHiring from "@/components/hiring/MenuHeader";
 
 export default function HiringCandidateDetails() {
   let type = "update";
@@ -203,13 +204,40 @@ export default function HiringCandidateDetails() {
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
       />
+      <MenuHeaderHiring page={1} />
       <RejectCandidate
         open={rejectOpen}
         setPopupOpen={setRejectOpen}
         selectedField={selectedField}
       />
-      <form className="mt-2 grid grid-cols-2 gap-5 rounded-md bg-white px-6 py-4 pb-12">
-        <div className="flex flex-col">
+      <div>
+      <div className="flex items-center justify-between gap-2 font-semibold text-white">
+          <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
+            Ready To Hiring
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="input flex h-9 min-h-9 min-w-72 items-center gap-2 border-none outline-none">
+              <Search className="size-4 object-contain text-gray-dark" />
+              <input
+                onChange={(e) => {
+                  setKeyword(e.target.value);
+                }}
+                type="text"
+                className="w-full grow text-sm text-gray-dark placeholder:text-sm placeholder:font-normal focus:outline-none"
+                placeholder="Search"
+              />
+            </label>
+            <div className="h-9 min-h-9 rounded-md border border-gray-platinum bg-white p-[0.58rem]">
+              <Filter
+                className="stroke size-4 font-medium text-black"
+                strokeWidth={2}
+              />
+            </div>
+          </div>
+        </div>
+      <form className="mt-2 grid grid-cols-2 gap-5 rounded-md  py-4 pb-12">
+        
+        <div className="flex flex-col bg-white p-5 rounded-md">
           <div className="flex">
             {candidateDetails && (
               <div className="flex items-center gap-2">
@@ -284,12 +312,13 @@ export default function HiringCandidateDetails() {
             {candidateDetails?.status?.id === 11 ? (
               <>
                 <span
+                className="flex items-center justify-center"
                   style={{
                     backgroundColor: candidateDetails?.status?.background_color,
                     color: candidateDetails?.status?.text_color,
                     border: `1px solid ${candidateDetails?.status?.border_color || "transparent"}`,
                     borderRadius: "5px", // Rounded corners
-                    padding: "5px 15px", // Padding for spacing
+                    padding: "5px 5px", // Padding for spacing
                     display: "inline-block", // Ensures it behaves like a box
                     height: "30px", // Adjust height
                     lineHeight: "30px", // Vertically center the text
@@ -304,7 +333,7 @@ export default function HiringCandidateDetails() {
               </>
             ) : (
               <>
-                <div className="group flex w-full flex-col space-y-1 py-2">
+                <div className="group flex w-3/4 flex-col space-y-1 py-2">
                   <Controller
                     name="status_hiring"
                     className=""
@@ -330,13 +359,13 @@ export default function HiringCandidateDetails() {
                     )}
                   />
                 </div>
-                <div className="ml-3 mt-2">
+                <div className="ml-3 mt-2 w-1/2">
                   <button
                     type={"button"}
                     onClick={() => {
                       setPopup(true);
                     }}
-                    className="h-9 rounded bg-hrmprimaryorange px-7 text-xs text-white"
+                    className="h-9 rounded bg-hrmprimaryorange px-7 text-xs text-white w-full"
                   >
                     Confirm Join{" "}
                   </button>
@@ -429,7 +458,7 @@ export default function HiringCandidateDetails() {
           )}
         </div>
 
-        <div className="mx-auto w-full max-w-lg rounded-xl bg-white">
+        <div className="mx-auto w-full  rounded-md bg-white">
           <Disclosure as="div" className="p-6" defaultOpen={false}>
             <DisclosureButton className="group flex w-full items-center gap-4 border px-5 py-3">
               <CircleArrowDown className="size-5 !fill-white/60 text-black/30 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
@@ -464,6 +493,8 @@ export default function HiringCandidateDetails() {
           </Disclosure>
         </div>
       </form>
+      </div>
+      
       {popup == true && (
         <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-sm rounded bg-white px-10 py-7 shadow-lg">
