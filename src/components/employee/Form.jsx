@@ -307,17 +307,11 @@ export default function SaveEmployeeForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    if (imageFile || image) {
-      setLoader(true);
-      handleEmployee(data);
-    } else {
-      setImageerror("Image is required");
-      toast.error("Image is required");
-    }
+    handleEmployee(data);
   };
 
   const handleEmployee = async (data) => {
-
+    setLoader(true)
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -826,7 +820,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">Upload Image</label>
+                  <label className="label-text">Upload Image</label>
                   {imageerror && (
                     <span className="text-xs font-medium text-red-500">
                       {imageerror}

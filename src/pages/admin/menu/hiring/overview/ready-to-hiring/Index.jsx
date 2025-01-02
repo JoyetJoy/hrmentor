@@ -58,10 +58,6 @@ export const ReadyToHiring = () => {
         },
       },
       {
-        header: "Type",
-        accessorKey: "phone_number",
-      },
-      {
         header: "Job title",
         accessorKey: "job_title",
       },

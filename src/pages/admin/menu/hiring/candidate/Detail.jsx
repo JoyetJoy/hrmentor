@@ -366,7 +366,7 @@ export default function HiringCandidateDetails() {
               )}
             </div>
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="label-text">Pay Type</label>
+              <label className="label-text">Per</label>
               <Controller
                 name="pay_type"
                 className=""
@@ -377,10 +377,10 @@ export default function HiringCandidateDetails() {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    value={recruiterMasters?.payTypes.find(
+                    value={recruiterMasters?.pers.find(
                       (option) => option.id === candidateDetails?.pay_type?.id,
                     )}
-                    options={recruiterMasters?.payTypes}
+                    options={recruiterMasters?.pers}
                     placeholder="Select type"
                     className="input-box"
                   />

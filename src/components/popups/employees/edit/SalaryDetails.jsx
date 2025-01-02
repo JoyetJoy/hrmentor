@@ -435,7 +435,14 @@ export default function EmployeeSalaryDetailsEditForm({
                     {...register("weekly_contract_hours", { required: true })}
                     type="text"
                     onKeyPress={(event) => {
-                      if (!/^[0-9]$/.test(event.key)) {
+                      const inputChar = event.key;
+                      const currentValue = event.target.value;
+
+                      // Allow only digits, a single decimal point, and control keys
+                      if (
+                        !/^[0-9.]$/.test(inputChar) ||
+                        (inputChar === "." && currentValue.includes("."))
+                      ) {
                         event.preventDefault();
                       }
                     }}
