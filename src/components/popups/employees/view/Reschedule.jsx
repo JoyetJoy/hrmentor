@@ -64,7 +64,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id }) => {
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
               <DialogTitle as="h1" className="text-md font-bold">
-                Reschedule date of joining
+                {type === "reschedule" ?'Reschedule date of joining' : 'Change Status'}
               </DialogTitle>
               <button
                 onClick={onClose}

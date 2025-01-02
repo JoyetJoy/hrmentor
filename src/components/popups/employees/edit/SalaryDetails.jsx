@@ -125,7 +125,7 @@ export default function EmployeeSalaryDetailsEditForm({
       formData.append("effective_from", data.effective_from);
       formData.append("effective_to", data.effective_to);
       formData.append("currency", data.currency?.id);
-      formData.append("role_id", data?.roles?.id);
+      formData.append("role_id", data?.roles?.id||'');
       formData.append("pay_rate", data.pay_rate);
       formData.append("per", data.per?.id);
       formData.append("pay_schedule", data.pay_schedule?.id);

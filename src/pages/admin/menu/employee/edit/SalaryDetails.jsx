@@ -83,11 +83,6 @@ export default function EmployeeSalaryEdit() {
           accessorKey: "pay_schedule",
           cell: ({ row }) => <>{row.original?.pay_schedule?.name}</>,
         },
-        {
-          header: "Pay Type",
-          accessorKey: "pay_type",
-          cell: ({ row }) => <>{row.original?.pay_type?.name}</>,
-        },
         { header: "Over time", accessorKey: "over_time" },
         {
           header: "Action",

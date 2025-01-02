@@ -69,6 +69,10 @@ export default function EmployeeEmergencyContactEditForm({
   }
 
   const onSubmit = async (data) => {
+    if(data.contact_number.length>11){
+      toast.error('Mobile Number should not be more than 11 digits');
+      return
+    }
     setLoader(true);
     try {
       const formData = new FormData();
@@ -184,7 +188,7 @@ export default function EmployeeEmergencyContactEditForm({
                     onKeyPress={(event) => {
                       if (
                         !/^[0-9]$/.test(event.key) ||
-                        event.target.value.length >= 10
+                        event.target.value.length >= 11
                       ) {
                         event.preventDefault();
                       }
