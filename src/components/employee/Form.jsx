@@ -286,7 +286,7 @@ export default function SaveEmployeeForm({ formtype }) {
   const handleUniqueIdChange = async (uniqueId) => {
     try {
       const res = await newRequest(EMPLOYEE_UNIQUE_ID, {
-        params: { unique_id: parseInt(uniqueId) },
+        params: { unique_id: uniqueId },
       });
 
       if (res?.status === 200) {
