@@ -16,6 +16,7 @@ import { GET_CANDIDATES, GET_CANDIDATES_VIEW } from "@/api/recruiter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  ChevronDown,
   CircleArrowDown,
   Filter,
   History,
@@ -30,6 +31,7 @@ import RejectCandidate from "@/components/popups/hiring/ready-to-hiring/RejectCa
 import { CANDIDATE_STATUS, CANDIDATE_STATUS_UPDATE } from "@/api/hiring";
 import toast from "react-hot-toast";
 import MenuHeaderHiring from "@/components/hiring/MenuHeader";
+import ChangeStatus from "@/components/popups/hiring/ready-to-hiring/ChangeStatus";
 
 export default function HiringCandidateDetails() {
   let type = "update";
@@ -44,6 +46,11 @@ export default function HiringCandidateDetails() {
   const [conditionalOfferLetter, setConditionalOfferLetter] = useState(null);
   const [statusList, setStatusList] = useState([]);
   const [popup, setPopup] = useState(false);
+  const [statusPopup,setStatusPopup] = useState(false);
+  const [status,setStatus] = useState({
+    id:'',
+    status_name:''
+  })
 
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
@@ -64,7 +71,7 @@ export default function HiringCandidateDetails() {
 
   //
   // GET DETAILS IN CASE OF UPDATE
-  const { data: candidateDetails, isLoading } = useQuery({
+  const { data: candidateDetails, isLoading,refetch } = useQuery({
     queryKey: ["candidateDetails", cid, type],
     queryFn: () =>
       newRequest.get(`${GET_CANDIDATES_VIEW}/${cid}`).then((res) => {
@@ -150,10 +157,10 @@ export default function HiringCandidateDetails() {
       // If the response is successful, display a success toast
       if (res?.data?.message) {
         toast.success(res.data.message);
-        window.location.reload();
+        refetch();
       } else {
         toast.success("Candidate status updated successfully.");
-        window.location.reload();
+        refetch();
       }
     } catch (error) {
       // Log and display an error message if the API request fails
@@ -218,6 +225,13 @@ export default function HiringCandidateDetails() {
         setPopupOpen={setRejectOpen}
         selectedField={selectedField}
       />
+      <ChangeStatus
+      statusList={statusList}
+      candidateDetails={candidateDetails}
+      open={statusPopup}
+      setOpen={setStatusPopup}
+      handleCandidateStatus={handleCandidateStatus}
+      />
       <div>
         <div className="flex items-center justify-between gap-2 font-semibold text-white">
           <div className="flex">
@@ -234,8 +248,8 @@ export default function HiringCandidateDetails() {
               </div>
             )}
           </div>
-          <div className="flex items-center gap-2 rounded-md border bg-white px-7 py-2 font-medium text-black">
-            <History size={20} color="black" />
+          <div className="flex items-center gap-2 rounded-md border bg-white px-7 py-2 font-medium text-sm text-black">
+            <History size={16} color="black" />
             <p>History</p>
           </div>
         </div>
@@ -319,31 +333,10 @@ export default function HiringCandidateDetails() {
                 </>
               ) : (
                 <>
-                  <div className="group flex w-3/4 flex-col space-y-1 py-2">
-                    <Controller
-                      name="status_hiring"
-                      className=""
-                      control={control}
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          isSearchable={true}
-                          styles={customSelectStyles}
-                          options={statusList}
-                          value={statusList.find(
-                            (option) =>
-                              option.id === candidateDetails?.status?.id,
-                          )}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleCandidateStatus(e);
-                          }}
-                          placeholder="New Hiring"
-                          className="input-box"
-                        />
-                      )}
-                    />
+                  <div className="group flex w-3/4 flex-col border text-[0.80rem] text-[#3a3a3a] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
+                  <p 
+                  onClick={()=>setStatusPopup(true)}
+                  className="flex gap-2">{candidateDetails?.status?.status_name}<ChevronDown size={20} color="#8c8989" /></p>
                   </div>
                   <div className="ml-3 mt-2 w-1/2">
                     <button
