@@ -50,6 +50,9 @@ addAuthorizationInterceptor(newRequest);
 addAuthorizationInterceptor(XFormRequest);
 addAuthorizationInterceptor(newFormRequest);
 
+// ADMIN DASHBOARD
+export const ADMIN_DASHBOARD = "main-dashboard";
+
 // ROLES AND PERMISSIONS ENDPOINTS
 export const ROLES = "roles";
 export const PAGINATED_ROLES = "paginated-roles";
