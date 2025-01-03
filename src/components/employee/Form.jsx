@@ -232,9 +232,13 @@ export default function SaveEmployeeForm({ formtype }) {
       return [];
     }
     const response = await newRequest.get(COUNTRY_CITY, {
-      params: { state_id: parseInt(state_id?.id), search: inputValue },
+      params: {
+        state_id: parseInt(state_id?.id),
+        search: inputValue,
+        country_id: parseInt(country_id?.id),
+      },
     });
-    return response?.data;
+    return response?.data?.data;
   };
 
   // Function to display state of the selected city
@@ -311,7 +315,7 @@ export default function SaveEmployeeForm({ formtype }) {
   };
 
   const handleEmployee = async (data) => {
-    setLoader(true)
+    setLoader(true);
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -417,7 +421,9 @@ export default function SaveEmployeeForm({ formtype }) {
                       setSharePopupOpen(true);
                     } else {
                       reset();
-                      navigate(`/onboarding-form?uid=${uid}&employee_id=${employeeDetails?.employee_id}`);
+                      navigate(
+                        `/onboarding-form?uid=${uid}&employee_id=${employeeDetails?.employee_id}`,
+                      );
                     }
                   }}
                 >
@@ -657,14 +663,23 @@ export default function SaveEmployeeForm({ formtype }) {
                   <Controller
                     name="city_id"
                     control={control}
-                    rules={{ required: "City is required" }} // Custom error message
+                    rules={{
+                      required: country_id
+                        ? "City is required"
+                        : "Please select a country first",
+                    }}
                     render={({ field }) => (
                       <AsyncSelect
                         {...field}
                         placeholder="Search ..."
-                        loadOptions={loadCitiesOptions}
+                        loadOptions={country_id ? loadCitiesOptions : () => []} // Only load options when country is selected
                         isSearchable={true}
-                        noOptionsMessage={() => "Type city name"}
+                        noOptionsMessage={() =>
+                          country_id
+                            ? "No cities found"
+                            : "Select a country first"
+                        }
+                        isDisabled={!country_id} // Disable if no country is selected
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption); // Update form state
                           handleCitySelect(selectedOption);
