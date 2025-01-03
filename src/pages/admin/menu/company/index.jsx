@@ -54,12 +54,14 @@ export default function CompanyGeneral() {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+  const [edit, setEdit] = useState("");
   const [business_Type, setBusiness_Type] = useState();
   const [status, setStatus] = useState("");
   const [countryId, setCountryId] = useState("");
   const [stateId, setStateId] = useState("");
-  const [stateName,setStateName] = useState('');
+  const [stateName, setStateName] = useState("");
   const [cityId, setCityId] = useState("");
+  const [cityName, setCityName] = useState("");
   const [search, setSearch] = useState("");
   const [selectedLogo, setSelectedLogo] = useState(null);
   const [selectedLogoBlob, setSelectedLogoBlob] = useState(null); // Store binary data
@@ -115,6 +117,7 @@ export default function CompanyGeneral() {
     setStateId("");
     setCountryId("");
     setCityId("");
+    setEdit("");
   }
   // Fetch List
   const { data: companyProfileBasic } = useQuery({
@@ -171,19 +174,19 @@ export default function CompanyGeneral() {
   });
 
   const loadCitiesOptions = async (inputValue) => {
-      if (inputValue?.length < 3) {
-        return [];
-      }
-      const response = await newRequest.get(COUNTRY_CITY, {
-        params: {
-          state_id: parseInt(stateId),
-          search: inputValue,
-          country_id: parseInt(countryId),
-        },
-      });
-  
-      return response?.data?.data;
-    };
+    if (inputValue?.length < 3) {
+      return [];
+    }
+    const response = await newRequest.get(COUNTRY_CITY, {
+      params: {
+        state_id: parseInt(stateId),
+        search: inputValue,
+        country_id: parseInt(countryId),
+      },
+    });
+
+    return response?.data?.data;
+  };
 
   const { data: cityList } = useQuery({
     queryKey: ["cityList", user?.id],
@@ -223,6 +226,8 @@ export default function CompanyGeneral() {
       setStateId(companyProfileBasic?.state?.id);
       setCountryId(companyProfileBasic?.country?.id);
       setCityId(companyProfileBasic?.city?.id);
+      setStateName(companyProfileBasic?.state?.label);
+      setCityName(companyProfileBasic?.city?.label);
     }
   }, [companyProfileBasic]);
 
@@ -317,8 +322,6 @@ export default function CompanyGeneral() {
     }
   };
 
-  console.log(countryId);
-  
   return (
     <>
       {!companyBasic ? (
@@ -873,11 +876,19 @@ export default function CompanyGeneral() {
               />
               Company Profile{" "}
             </div>
-            <div
-              onClick={handleSubmit(onSubmit)}
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
-            >
-              Edit
+            <div className="flex">
+              <button
+                onClick={() => setEdit("edit")}
+                className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleSubmit(onSubmit)}
+                className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+              >
+                Save
+              </button>
             </div>
           </div>
           <div className="flex flex-row items-start justify-between gap-3">
@@ -933,10 +944,12 @@ export default function CompanyGeneral() {
                           autoComplete="off"
                           name="company_name"
                           type="text"
+                          enabled
                           placeholder="Enter Name"
                           className="input-box"
                           value={companyBasic.company_name}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.company_name && (
                           <span className="text-xs font-medium text-red-500">
@@ -955,6 +968,7 @@ export default function CompanyGeneral() {
                           className="input-box"
                           value={companyBasic.first_name}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.ac_owner_firstname && (
                           <span className="text-xs font-medium text-red-500">
@@ -973,6 +987,7 @@ export default function CompanyGeneral() {
                           className="input-box"
                           value={companyBasic.last_name}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.ac_owner_lastname && (
                           <span className="text-xs font-medium text-red-500">
@@ -990,6 +1005,7 @@ export default function CompanyGeneral() {
                           className="input-box"
                           value={companyBasic.email}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.email_adds && (
                           <span className="text-xs font-medium text-red-500">
@@ -1007,6 +1023,7 @@ export default function CompanyGeneral() {
                           className="input-box"
                           value={companyBasic.phone_no}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.ph_nu && (
                           <span className="text-xs font-medium text-red-500">
@@ -1027,6 +1044,7 @@ export default function CompanyGeneral() {
                               styles={customSelectStyles}
                               placeholder="Select"
                               className="input-box"
+                              isDisabled={edit !== "edit"} // Use `isDisabled` for React-Select components
                               options={businessTypes}
                               value={businessTypes.find(
                                 (option) => option.value === business_Type,
@@ -1051,6 +1069,7 @@ export default function CompanyGeneral() {
                           name="created_date"
                           value={companyBasic.created_date}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.ac_date && (
                           <span className="text-xs font-medium text-red-500">
@@ -1064,6 +1083,7 @@ export default function CompanyGeneral() {
                           name="status"
                           control={control}
                           rules={{ required: true }}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           render={({ field }) => (
                             <Select
                               {...field}
@@ -1072,6 +1092,7 @@ export default function CompanyGeneral() {
                               placeholder="Select status"
                               className="input-box"
                               options={CompanyStatus}
+                              isDisabled={edit !== "edit"} // Use `isDisabled` for React-Select components
                               value={CompanyStatus.find(
                                 (option) => option.value === status,
                               )}
@@ -1098,10 +1119,11 @@ export default function CompanyGeneral() {
                           value={companyBasic.username}
                           name="username"
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
-                        {errors.user_name && (
+                        {errors.username && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors.user_name?.message}
+                            {errors.username?.message}
                           </span>
                         )}
                       </div>
@@ -1182,10 +1204,7 @@ export default function CompanyGeneral() {
                     <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                       <div className="grid w-1/2 grid-cols-2 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
                         <div className="group flex flex-col space-y-1 px-3 py-1">
-                          <label className="label-text">
-                            {" "}
-                            Address line 1
-                          </label>
+                          <label className="label-text"> Address line 1</label>
                           <input
                             autoComplete="off"
                             type="text"
@@ -1194,6 +1213,7 @@ export default function CompanyGeneral() {
                             onChange={HandleCompanyBasic}
                             name="address_one"
                             value={companyBasic.address_one}
+                            disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           />
                           {errors.address_one && (
                             <span className="text-xs font-medium text-red-500">
@@ -1202,10 +1222,7 @@ export default function CompanyGeneral() {
                           )}
                         </div>
                         <div className="group flex flex-col space-y-1 px-3 py-1">
-                          <label className="label-text">
-                            {" "}
-                            Address line 2
-                          </label>
+                          <label className="label-text"> Address line 2</label>
                           <input
                             autoComplete="off"
                             type="text"
@@ -1214,6 +1231,7 @@ export default function CompanyGeneral() {
                             onChange={HandleCompanyBasic}
                             name="address_two"
                             value={companyBasic.address_two}
+                            disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           />
                           {errors.address_two && (
                             <span className="text-xs font-medium text-red-500">
@@ -1222,7 +1240,10 @@ export default function CompanyGeneral() {
                           )}
                         </div>
                         <div className="group flex flex-col space-y-1 px-3 py-1">
-                          <label className="label-text"> Country of residence</label>
+                          <label className="label-text">
+                            {" "}
+                            Country of residence
+                          </label>
                           <Controller
                             name="country"
                             control={control}
@@ -1233,7 +1254,11 @@ export default function CompanyGeneral() {
                                 isSearchable={true}
                                 // isDisabled={types === "1"}
                                 styles={customSelectStyles}
+                                isDisabled={edit !== "edit"} // Disable input if edit is not "edit"
                                 options={countryList}
+                                value={countryList.find(
+                                  (option) => option.id === countryId,
+                                )}
                                 placeholder="Select Country"
                                 className="input-box"
                                 onChange={(selectedOption) => {
@@ -1263,19 +1288,26 @@ export default function CompanyGeneral() {
                               <AsyncSelect
                                 {...field}
                                 placeholder="Search ..."
-                                loadOptions={countryId ? loadCitiesOptions : () => []}
+                                loadOptions={
+                                  countryId ? loadCitiesOptions : () => []
+                                }
                                 isSearchable={true} // Enable search
                                 noOptionsMessage={() =>
                                   countryId
                                     ? "No cities found"
                                     : "Select a country first"
                                 }
-                                isDisabled={!countryId}
+                                isDisabled={!countryId || edit !== "edit"} // Disable input if countryId is falsy or edit is not "edit"
                                 className="input-box"
+                                value={
+                                  cityId
+                                    ? { value: cityId, label: cityName } // Dynamically set value using cityId and cityName
+                                    : null
+                                }
                                 onChange={(selectedOption) => {
                                   field.onChange(selectedOption); // Update form state
                                   setCityId(selectedOption.id); // Trigger any custom logic
-                                  setStateName(selectedOption?.state_name)
+                                  setStateName(selectedOption?.state_name);
                                 }}
                               />
                             )}
@@ -1289,11 +1321,11 @@ export default function CompanyGeneral() {
                         </div>
                         <div className="group flex flex-col space-y-1 px-3 py-1">
                           <label className="label-text">County</label>
-                          <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm ">
+                          <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm">
                             {stateName || ""}
                           </span>
                           {errors.state_or_province && (
-                            <span className="text-xs font-medium  text-red-500">
+                            <span className="text-xs font-medium text-red-500">
                               {errors.state_or_province?.message}
                             </span>
                           )}

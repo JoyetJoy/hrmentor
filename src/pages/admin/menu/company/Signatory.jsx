@@ -21,6 +21,7 @@ export default function CompanySignatory() {
   const handleItemClick = (itemName) => {
     setActiveItem(itemName);
   };
+  const [edit, setEdit] = useState("");
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const { user } = useUserStore((state) => ({
@@ -37,6 +38,7 @@ export default function CompanySignatory() {
       authorised_name: "",
       authorised_signature: "",
     });
+    setEdit("");
   }
 
   const {
@@ -215,11 +217,19 @@ export default function CompanySignatory() {
               Company Profile{" "}
             </div>
 
-            <div
-              onClick={handleSubmit(onSubmit)}
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
-            >
-              Next
+            <div className="flex">
+              <button
+                onClick={() => setEdit("edit")}
+                className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleSubmit(onSubmit)}
+                className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+              >
+                Next
+              </button>
             </div>
           </div>
           <div className="flex flex-row items-start justify-between gap-3">
@@ -276,6 +286,7 @@ export default function CompanySignatory() {
                       name="authorised_name"
                       value={companySignature.authorised_name}
                       onChange={HandleCompanySignature}
+                      disabled={edit !== "edit"} // Disable input if edit is not "edit"
                     />
                     {errors.authorised_name && (
                       <span className="text-xs font-medium text-red-500">
