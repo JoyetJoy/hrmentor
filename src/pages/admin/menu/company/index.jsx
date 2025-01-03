@@ -878,7 +878,7 @@ export default function CompanyGeneral() {
             </div>
             <div className="flex">
               <button
-                onClick={() => setEdit("edit")}
+                onClick={() => setEdit(edit == "edit" ? "" : "edit")}
                 className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
               >
                 Edit
@@ -887,7 +887,7 @@ export default function CompanyGeneral() {
                 onClick={handleSubmit(onSubmit)}
                 className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
               >
-                Save
+                Next
               </button>
             </div>
           </div>
