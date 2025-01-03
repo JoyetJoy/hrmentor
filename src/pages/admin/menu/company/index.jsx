@@ -26,6 +26,7 @@ const CompanyStatus = [
   { value: "inactive", label: "Inactive" },
 ];
 import { companySettingSideList } from "@/constants/dummyData";
+import AsyncSelect from "react-select/async";
 const CompanyBasicSchema = Yup.object({
   company_name: Yup.string(),
   first_name: Yup.string(),
@@ -57,12 +58,14 @@ export default function CompanyGeneral() {
   const [status, setStatus] = useState("");
   const [countryId, setCountryId] = useState("");
   const [stateId, setStateId] = useState("");
+  const [stateName,setStateName] = useState('');
   const [cityId, setCityId] = useState("");
   const [search, setSearch] = useState("");
   const [selectedLogo, setSelectedLogo] = useState(null);
   const [selectedLogoBlob, setSelectedLogoBlob] = useState(null); // Store binary data
   const [letterHead, setLetterHead] = useState(null);
   const [businessTypes, setBusinessTypes] = useState([]);
+  const [state, setState] = useState("");
   const [companyBasic, SetCompanyBasic] = useState({
     id: "",
     company_name: "",
@@ -89,7 +92,6 @@ export default function CompanyGeneral() {
     mode: "onSubmit",
     resolver: yupResolver(CompanyBasicSchema),
   });
-
 
   function close() {
     SetCompanyBasic({
@@ -168,19 +170,20 @@ export default function CompanyGeneral() {
     enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
   });
 
-  const { data: stateList } = useQuery({
-    queryKey: ["stateList", user?.id],
-    queryFn: () =>
-      newRequest
-        .get(STATE_COUNTRY, {
-          params: {
-            user_id: user?.id,
-            country_id: countryId,
-          },
-        })
-        .then((res) => res.data),
-    enabled: !!user?.id && !!countryId, // Ensure the query only runs if both `user.id` and `country_id` are available
-  });
+  const loadCitiesOptions = async (inputValue) => {
+      if (inputValue?.length < 3) {
+        return [];
+      }
+      const response = await newRequest.get(COUNTRY_CITY, {
+        params: {
+          state_id: parseInt(stateId),
+          search: inputValue,
+          country_id: parseInt(countryId),
+        },
+      });
+  
+      return response?.data?.data;
+    };
 
   const { data: cityList } = useQuery({
     queryKey: ["cityList", user?.id],
@@ -314,6 +317,8 @@ export default function CompanyGeneral() {
     }
   };
 
+  console.log(countryId);
+  
   return (
     <>
       {!companyBasic ? (
@@ -675,31 +680,12 @@ export default function CompanyGeneral() {
                         </div>
                         <div className="group flex flex-col space-y-1 px-3 py-1">
                           <label className="label-text">County</label>
-                          <Controller
-                            name="state"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                              <Select
-                                {...field}
-                                isSearchable={false}
-                                styles={customSelectStyles}
-                                placeholder="Select"
-                                className="input-box"
-                                options={stateList}
-                                value={stateList.find(
-                                  (option) => option.id == stateId,
-                                )}
-                                onChange={(selectedOption) => {
-                                  field.onChange(selectedOption); // Update form state
-                                  setStateId(selectedOption.id); // Trigger any custom logic
-                                }}
-                              />
-                            )}
-                          />
-                          {errors.state && (
+                          <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm font-thin">
+                            {state || ""}
+                          </span>
+                          {errors.state_or_province && (
                             <span className="text-xs font-medium text-red-500">
-                              {errors.state?.message}
+                              {errors.state_or_province?.message}
                             </span>
                           )}
                         </div>
@@ -1244,14 +1230,12 @@ export default function CompanyGeneral() {
                             render={({ field }) => (
                               <Select
                                 {...field}
-                                isSearchable={false}
+                                isSearchable={true}
+                                // isDisabled={types === "1"}
                                 styles={customSelectStyles}
-                                placeholder="Select"
-                                className="input-box"
                                 options={countryList}
-                                value={countryList.find(
-                                  (option) => option.id == countryId,
-                                )}
+                                placeholder="Select Country"
+                                className="input-box"
                                 onChange={(selectedOption) => {
                                   field.onChange(selectedOption); // Update form state
                                   setCountryId(selectedOption.id); // Trigger any custom logic
@@ -1266,60 +1250,32 @@ export default function CompanyGeneral() {
                           )}
                         </div>
                         <div className="group flex flex-col space-y-1 px-3 py-1">
-                          <label className="label-text">County</label>
-                          <Controller
-                            name="state"
-                            control={control}
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                              <Select
-                                {...field}
-                                isSearchable={false}
-                                styles={customSelectStyles}
-                                placeholder="Select"
-                                className="input-box"
-                                options={stateList}
-                                value={stateList.find(
-                                  (option) => option.id == stateId,
-                                )}
-                                onChange={(selectedOption) => {
-                                  field.onChange(selectedOption); // Update form state
-                                  setStateId(selectedOption.id); // Trigger any custom logic
-                                }}
-                              />
-                            )}
-                          />
-                          {errors.state && (
-                            <span className="text-xs font-medium text-red-500">
-                              {errors.state?.message}
-                            </span>
-                          )}
-                        </div>
-                        <div className="group flex flex-col space-y-1 px-3 py-1">
                           <label className="label-text"> City</label>
                           <Controller
                             name="city"
                             control={control}
-                            rules={{ required: true }}
+                            rules={{
+                              required: countryId
+                                ? "City is required"
+                                : "Please select a country first",
+                            }}
                             render={({ field }) => (
-                              <Select
+                              <AsyncSelect
                                 {...field}
+                                placeholder="Search ..."
+                                loadOptions={countryId ? loadCitiesOptions : () => []}
                                 isSearchable={true} // Enable search
-                                styles={customSelectStyles}
-                                placeholder="Select"
-                                className="input-box"
-                                options={cityList}
-                                value={
-                                  cityList?.find(
-                                    (option) => option.id === cityId,
-                                  ) || null
+                                noOptionsMessage={() =>
+                                  countryId
+                                    ? "No cities found"
+                                    : "Select a country first"
                                 }
+                                isDisabled={!countryId}
+                                className="input-box"
                                 onChange={(selectedOption) => {
                                   field.onChange(selectedOption); // Update form state
                                   setCityId(selectedOption.id); // Trigger any custom logic
-                                }}
-                                onInputChange={(inputValue) => {
-                                  setSearch(inputValue); // Update the search variable
+                                  setStateName(selectedOption?.state_name)
                                 }}
                               />
                             )}
@@ -1328,6 +1284,17 @@ export default function CompanyGeneral() {
                           {errors.city && (
                             <span className="text-xs font-medium text-red-500">
                               {errors.city?.message}
+                            </span>
+                          )}
+                        </div>
+                        <div className="group flex flex-col space-y-1 px-3 py-1">
+                          <label className="label-text">County</label>
+                          <span className="h-10 rounded-md border border-[#cacaca] p-2 text-sm ">
+                            {stateName || ""}
+                          </span>
+                          {errors.state_or_province && (
+                            <span className="text-xs font-medium  text-red-500">
+                              {errors.state_or_province?.message}
                             </span>
                           )}
                         </div>
