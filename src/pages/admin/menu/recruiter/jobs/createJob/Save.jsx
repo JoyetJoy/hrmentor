@@ -789,7 +789,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="required label-text">Country</label>
+                  <label className="required label-text">Country of residence</label>
                   <Controller
                     name="country_id"
                     control={control}

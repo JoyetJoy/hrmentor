@@ -1184,7 +1184,7 @@ export default function CompanyGeneral() {
                         <div className="group flex flex-col space-y-1 px-3 py-1">
                           <label className="label-text">
                             {" "}
-                            Address line 1 details
+                            Address line 1
                           </label>
                           <input
                             autoComplete="off"
@@ -1204,7 +1204,7 @@ export default function CompanyGeneral() {
                         <div className="group flex flex-col space-y-1 px-3 py-1">
                           <label className="label-text">
                             {" "}
-                            Address line 2 details
+                            Address line 2
                           </label>
                           <input
                             autoComplete="off"
@@ -1222,7 +1222,7 @@ export default function CompanyGeneral() {
                           )}
                         </div>
                         <div className="group flex flex-col space-y-1 px-3 py-1">
-                          <label className="label-text"> Country</label>
+                          <label className="label-text"> Country of residence</label>
                           <Controller
                             name="country"
                             control={control}

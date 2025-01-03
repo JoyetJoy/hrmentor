@@ -469,7 +469,7 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
 
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="required label-text">Country</label>
+              <label className="required label-text">Country of residence</label>
               <Controller
                 name="country_id"
                 control={control}

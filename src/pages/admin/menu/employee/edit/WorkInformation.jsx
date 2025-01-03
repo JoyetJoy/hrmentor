@@ -296,7 +296,7 @@ export const WorkInformation = ({ formtype }) => {
                 ) : null}
               </div>
               <div className="flex flex-col rounded-md border border-gray-soft bg-white px-5 py-4">
-                <h1 className="#2C2C2C px-3 text-lg font-bold">EEO Details</h1>
+                <h1 className="#2C2C2C px-3 text-lg font-bold">Equal Employment Opportunity Details</h1>
                 <div className="mt-4 grid w-full grid-cols-2 gap-x-2">
                   {/* <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Age</label>
@@ -331,7 +331,7 @@ export const WorkInformation = ({ formtype }) => {
                     )}
                   </div> */}
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
-                    <label className="label-text">EEO Job Category</label>
+                    <label className="label-text">Job Category</label>
                     <Controller
                       name="eeo_job_category_id"
                       control={control}
