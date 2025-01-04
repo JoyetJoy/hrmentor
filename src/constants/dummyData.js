@@ -1,38 +1,6 @@
 import tickgreen from "/assets/icons/admin/tick-green.svg";
 import tickgray from "/assets/icons/admin/tick-gray.svg";
 
-export const employeeDetails = [
-  {
-    title: "Total Employees",
-    value: "750",
-    path: "/admin/employee",
-    percentage: "10.0%",
-    trend: "plus",
-    description: "Employees",
-  },
-  {
-    title: "Job Open",
-    value: "27",
-    path: "/admin/recruiter/jobs",
-    percentage: "10.0%",
-    trend: "plus",
-    description: "Jobs",
-  },
-  {
-    title: "Job Applied",
-    value: "1270",
-    percentage: "10.0%",
-    trend: "minus",
-    description: "Applicants",
-  },
-  {
-    title: "Employees on Holiday",
-    value: "85",
-    percentage: "10.0%",
-    trend: "plus",
-    description: "Employees",
-  },
-];
 export const meetings = [
   {
     date: "16",

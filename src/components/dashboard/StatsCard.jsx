@@ -1,8 +1,44 @@
-import { employeeDetails } from "@/constants/dummyData";
+
 import { TrendingDown, TrendingUp, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function StatsCard() {
+ 
+export default function StatsCard({data}) {
+  
+  const employeeDetails = [
+    {
+      title: "Total Employees",
+      value: `${data?.total_employees_count}`,
+      path: "/admin/employee",
+      percentage: `${data?.total_employees_percentage}`,
+      trend: "plus",
+      description: "Employees",
+    },
+    {
+      title: "Job Open",
+      value: `${data?.openJobs}`,
+      path: "/admin/recruiter/jobs",
+      percentage: `${data?.openJobs_percentage}`,
+      trend: "plus",
+      description: "Jobs",
+    },
+    {
+      title: "Job Applied",
+      value: `${data?.total_job_applications}`,
+      percentage: `${data?.total_job_applications_percentage}`,
+      trend: "minus",
+      description: "Applicants",
+    },
+    {
+      title: "Employees on Holiday",
+      value: `${data?.total_leaves_today}`,
+      percentage: `${data?.openJobs_percentage}`,
+      trend: "plus",
+      description: "Employees",
+    },
+  ];
+  
+
   return (
     <div className="grid w-full grid-cols-4 gap-3">
       {employeeDetails.map((stat, index) => (
@@ -14,7 +50,7 @@ export default function StatsCard() {
             <h2 className="flex text-sm font-semibold text-black flex-wrap">
               {stat.title}
             </h2>
-            <span
+            {/* <span
               className={`flex h-7 items-center justify-center gap-1 rounded-full bg-darkgreen px-2 text-[0.78rem] font-semibold text-textcolor-green ${
                 stat.trend === "minus" ? "bg-textcolor-red/10 text-textcolor-red" : ""
               }`}
@@ -25,7 +61,7 @@ export default function StatsCard() {
                 <TrendingUp className="h-4" />
               )}
               {stat.percentage}
-            </span>
+            </span> */}
           </div>
           <div className="flex justify-between w-full items-center">
             <div>

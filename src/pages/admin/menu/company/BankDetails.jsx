@@ -62,6 +62,7 @@ export default function CompanyBankDetails() {
     mode: "onSubmit",
     resolver: yupResolver(CompanyBankSchema),
   });
+  const [edit, setEdit] = useState("");
   const [taxPayment, setTaxPayment] = useState("");
   const [diductorName, setDiductorname] = useState("");
   const [bankDetails, SetBankDetails] = useState({
@@ -79,7 +80,6 @@ export default function CompanyBankDetails() {
     iban_no: "",
     company_profile_id: "",
   });
-
 
   function close() {
     SetBankDetails({
@@ -99,6 +99,7 @@ export default function CompanyBankDetails() {
     });
     setTaxPayment("");
     setDiductorname("");
+    setEdit("");
   }
 
   const { data: companyBankDetails } = useQuery({
@@ -500,11 +501,19 @@ export default function CompanyBankDetails() {
               />
               Company Profile{" "}
             </div>
-            <div
-              onClick={handleSubmit(onSubmit)}
-              className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
-            >
-              Edit
+            <div className="flex">
+              <button
+                onClick={() => setEdit(edit == "edit" ? "" : "edit")}
+                className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleSubmit(onSubmit)}
+                className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+              >
+                Next
+              </button>
             </div>
           </div>
           <div className="flex flex-row items-start justify-between gap-3">
@@ -563,6 +572,7 @@ export default function CompanyBankDetails() {
                           name="bank_name"
                           value={bankDetails.bank_name}
                           onChange={HandleCompanyBasic}
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.bank_name && (
                           <span className="text-xs font-medium text-red-500">
@@ -579,6 +589,7 @@ export default function CompanyBankDetails() {
                           value={bankDetails.branch}
                           onChange={HandleCompanyBasic}
                           className="input-box"
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.branch && (
                           <span className="text-xs font-medium text-red-500">
@@ -597,6 +608,7 @@ export default function CompanyBankDetails() {
                           value={bankDetails.account_no}
                           onChange={HandleCompanyBasic}
                           className="input-box"
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.account_no && (
                           <span className="text-xs font-medium text-red-500">
@@ -615,6 +627,7 @@ export default function CompanyBankDetails() {
                           value={bankDetails.account_holder_name}
                           onChange={HandleCompanyBasic}
                           className="input-box"
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.account_holder_name && (
                           <span className="text-xs font-medium text-red-500">
@@ -631,6 +644,7 @@ export default function CompanyBankDetails() {
                           value={bankDetails.sort_code}
                           onChange={HandleCompanyBasic}
                           className="input-box"
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.sort_code && (
                           <span className="text-xs font-medium text-red-500">
@@ -648,6 +662,7 @@ export default function CompanyBankDetails() {
                           value={bankDetails.swift_code}
                           onChange={HandleCompanyBasic}
                           className="input-box"
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.swift_code && (
                           <span className="text-xs font-medium text-red-500">
@@ -664,6 +679,7 @@ export default function CompanyBankDetails() {
                           value={bankDetails.iban_no}
                           onChange={HandleCompanyBasic}
                           className="input-box"
+                          disabled={edit !== "edit"} // Disable input if edit is not "edit"
                         />
                         {errors.iban_num && (
                           <span className="text-xs font-medium text-red-500">
@@ -696,6 +712,7 @@ export default function CompanyBankDetails() {
                             value={bankDetails.pan_numner}
                             onChange={HandleCompanyBasic}
                             className="input-box"
+                            disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           />
                           {errors.pan_number && (
                             <span className="text-xs font-medium text-red-500">
@@ -712,6 +729,7 @@ export default function CompanyBankDetails() {
                             value={bankDetails.tan_number}
                             onChange={HandleCompanyBasic}
                             className="input-box"
+                            disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           />
                           {errors.tan_num && (
                             <span className="text-xs font-medium text-red-500">
@@ -728,6 +746,7 @@ export default function CompanyBankDetails() {
                             value={bankDetails.tds_code}
                             onChange={HandleCompanyBasic}
                             className="input-box"
+                            disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           />
                           {errors.tds_code && (
                             <span className="text-xs font-medium text-red-500">
@@ -758,6 +777,7 @@ export default function CompanyBankDetails() {
                                   field.onChange(selectedOption);
                                   setTaxPayment(selectedOption.value);
                                 }}
+                                isDisabled={edit !== "edit"} // Disable input if edit is not "edit"
                               />
                             )}
                           />
@@ -783,6 +803,7 @@ export default function CompanyBankDetails() {
                                   field.onChange(selectedOption);
                                   setDiductorname(selectedOption.value);
                                 }}
+                                isDisabled={edit !== "edit"} // Disable input if edit is not "edit"
                               />
                             )}
                           />
@@ -804,6 +825,7 @@ export default function CompanyBankDetails() {
                             value={bankDetails.deductor_father_name}
                             onChange={HandleCompanyBasic}
                             className="input-box"
+                            disabled={edit !== "edit"} // Disable input if edit is not "edit"
                           />
                           {errors.deductor_father_name && (
                             <span className="text-xs font-medium text-red-500">
