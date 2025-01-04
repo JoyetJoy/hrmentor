@@ -200,7 +200,7 @@ export default function EmployeeSalaryDetailsEditForm({
                   <input
                     {...register("effective_from", { required: true })}
                     type="date"
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem] pr-2"
                   />
                   {errors.effective_from && (
                     <span className="text-xs font-medium text-red-500">
@@ -215,7 +215,7 @@ export default function EmployeeSalaryDetailsEditForm({
                   <input
                     {...register("effective_to", { required: true })}
                     type="date"
-                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem] pr-2"
                   />
                   {errors.effective_to && (
                     <span className="text-xs font-medium text-red-500">
