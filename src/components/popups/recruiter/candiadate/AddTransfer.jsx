@@ -43,8 +43,16 @@ function Addtransfer({ popupOpen, setPopupOpen, cid }) {
   });
 
   const workflow = [
-    {id:1, value: "consider", label: "Consider" },
-    {id:1, value: "reject", label: "Reject" }
+    {
+      "id": 3,
+      "label": "Short Listed",
+      "value": "Short Listed"
+  },
+  {
+      "id": 4,
+      "label": "New Hiring",
+      "value": "New Hiring"
+  },
   ]
 
   function closeModal() {
@@ -54,7 +62,7 @@ function Addtransfer({ popupOpen, setPopupOpen, cid }) {
     try {
       const formData = {
         job_id: data?.job?.id,
-        status: data.workflow.value,
+        status: data.workflow.id,
         candidate_id: parseInt(cid),
       };
   
