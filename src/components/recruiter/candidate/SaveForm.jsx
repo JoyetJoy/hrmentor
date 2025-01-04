@@ -267,7 +267,7 @@ export default function RecSaveFormCandidate({ type }) {
 
   return (
     <>
-      <Addtransfer popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <Addtransfer popupOpen={popupOpen} setPopupOpen={setPopupOpen} cid={cid} />
       {type === "update" && (
         <MenuHeaderCandidate page={1} candidate={candidateDetails?.data} />
       )}

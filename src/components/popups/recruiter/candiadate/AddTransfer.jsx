@@ -1,11 +1,29 @@
-import { customSelectStyles } from "@/utils/customStyles";
+import React, { Fragment } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Popover, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
-import React, { Fragment } from "react";
-import { Controller, useForm } from "react-hook-form";
 import Select from "react-select";
+import { useQuery } from "@tanstack/react-query";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { newRequest } from "@/api/master";
+import { JOB_LISTING, JOB_POST } from "@/api/recruiter";
+import { customSelectStyles } from "@/utils/customStyles";
+import toast from "react-hot-toast";
 
-function Addtransfer({ popupOpen, setPopupOpen }) {
+// Define the validation schema
+const schema = yup.object().shape({
+  job: yup
+    .object()
+    .nullable()
+    .required("Job is required"),
+  workflow: yup
+    .object()
+    .nullable()
+    .required("Workflow is required"),
+});
+
+function Addtransfer({ popupOpen, setPopupOpen, cid }) {
   const {
     register,
     handleSubmit,
@@ -13,11 +31,44 @@ function Addtransfer({ popupOpen, setPopupOpen }) {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
+
+  const { data: joblisting, isLoading } = useQuery({
+    queryKey: ["joblisting"],
+    queryFn: () =>
+      newRequest.get(JOB_LISTING).then((res) => {
+        return res.data;
+      }),
+  });
+
+  const workflow = [
+    {id:1, value: "consider", label: "Consider" },
+    {id:1, value: "reject", label: "Reject" }
+  ]
+
   function closeModal() {
     setPopupOpen(false);
   }
+  const onSubmit = async (data) => {
+    try {
+      const formData = {
+        job_id: data?.job?.id,
+        status: data.workflow.value,
+        candidate_id: parseInt(cid),
+      };
+  
+      const res = await newRequest.post(`${JOB_POST}`, formData);
+
+      if(res.data.status){
+        toast.success(res?.data?.message)
+      }
+      closeModal();
+    } catch (error) {
+      console.error("Error updating candidate: ", error);
+    }
+  };
+  
   return (
     <>
       {popupOpen && (
@@ -47,70 +98,71 @@ function Addtransfer({ popupOpen, setPopupOpen }) {
                     </button>
                   </div>
 
-                  <form className="mt-4 grid grid-cols-1 gap-3">
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="mt-4 grid grid-cols-1 gap-3"
+                  >
+                    {/* Select Job Field */}
                     <div className="group flex w-full flex-col gap-1">
-                      <label className="label-text">Select job</label>
+                      <label className="label-text">Select Job</label>
                       <Controller
-                        name="nationality"
+                        name="job"
                         control={control}
-                        rules={{ required: true }}
                         render={({ field }) => (
                           <Select
-                            // required
-                            //   selected={''}
-                            //   value={''}
-                            //   onChange={(selectedOption) => {
-                            //     handle(selectedOption);
-                            //     field.onChange(selectedOption);
-                            //   }}
-                            //   options={}
+                            {...field}
+                            options={joblisting}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Select "
+                            placeholder="Select Job"
                             className="input-box h-10 w-full rounded-md border-[#C2C1C1] placeholder:text-[#7F7F7F] focus:border-[#C2C1C1]"
                           />
                         )}
                       />
-                      {errors.nationality && (
+                      {errors.job && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.nationality?.message}
+                          {errors.job.message}
                         </span>
                       )}
                     </div>
+
+                    {/* Select Workflow Field */}
                     <div className="group flex w-full flex-col gap-1">
-                      <label className="label-text">Select work flow</label>
+                      <label className="label-text">Select Workflow</label>
                       <Controller
-                        name="nationality"
+                        name="workflow"
                         control={control}
-                        rules={{ required: true }}
                         render={({ field }) => (
                           <Select
-                            // required
-                            //   selected={''}
-                            //   value={''}
-                            //   onChange={(selectedOption) => {
-                            //     handle(selectedOption);
-                            //     field.onChange(selectedOption);
-                            //   }}
-                            //   options={}
+                            {...field}
+                            options={workflow}
                             isSearchable={false}
                             styles={customSelectStyles}
-                            placeholder="Select Role"
+                            placeholder="Select Workflow"
                             className="input-box h-10 w-full rounded-md border-[#C2C1C1] placeholder:text-[#7F7F7F] focus:border-[#C2C1C1]"
                           />
                         )}
                       />
-                      {errors.nationality && (
+                      {errors.workflow && (
                         <span className="text-xs font-medium text-red-500">
-                          {errors.nationality?.message}
+                          {errors.workflow.message}
                         </span>
                       )}
                     </div>
+
+                    {/* Buttons */}
                     <div className="mt-2 flex flex-row items-center justify-center gap-2">
-                      <button className="flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded border border-[#ECE9F1] bg-white text-sm font-semibold text-[#7F7F7F] focus:outline-none">
+                      <button
+                        type="button"
+                        onClick={closeModal}
+                        className="flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded border border-[#ECE9F1] bg-white text-sm font-semibold text-[#7F7F7F] focus:outline-none"
+                      >
                         Cancel
                       </button>
-                      <button className="bg-bgColor-100 flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded bg-hrmblack text-sm font-semibold text-white focus:outline-none">
+                      <button
+                        type="submit"
+                        className="bg-bgColor-100 flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded bg-hrmblack text-sm font-semibold text-white focus:outline-none"
+                      >
                         Save
                       </button>
                     </div>
