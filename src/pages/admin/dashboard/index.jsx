@@ -118,7 +118,7 @@ export const AdminDashboard = () => {
         </div>
       </div>
       <div className="flex w-[27%] flex-col">
-        <ProfileCompletionCount data={admindashboard} />
+        <ProfileCompletionCount value={admindashboard} />
         <LeaveAvailability />
         <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
           <h1 className="mb-4 flex items-center justify-between text-lg font-semibold text-black">
