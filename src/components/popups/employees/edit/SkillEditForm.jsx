@@ -226,7 +226,7 @@ export default function SkillEditForm({
                   <input
                     {...register("start_date", { required: true })}
                     type="date"
-                    className="input-box h-10 w-full"
+                    className="input-box h-10 w-full pr-2"
                   />
                   {errors.start_date && (
                     <span className="text-xs font-medium text-red-500">
@@ -241,7 +241,7 @@ export default function SkillEditForm({
                   <input
                     {...register("end_date", { required: true })}
                     type="date"
-                    className="input-box h-10 w-full"
+                    className="input-box h-10 w-full pr-2"
                   />
                   {errors.end_date && (
                     <span className="text-xs font-medium text-red-500">

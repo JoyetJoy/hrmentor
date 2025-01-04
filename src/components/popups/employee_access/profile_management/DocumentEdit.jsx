@@ -214,7 +214,7 @@ export default function DocumentEdit({
                 <input
                   {...register("issued_date", { required: true })}
                   type="date"
-                  className="input-box h-10 w-full"
+                  className="input-box h-10 w-full pr-2"
                 />
                 {errors.issued_date && (
                   <span className="text-xs font-medium text-red-500">
@@ -229,7 +229,7 @@ export default function DocumentEdit({
                 <input
                   {...register("expiry_date", { required: true })}
                   type="date"
-                  className="input-box h-10 w-full"
+                  className="input-box h-10 w-full pr-2"
                 />
                 {errors.expiry_date && (
                   <span className="text-xs font-medium text-red-500">

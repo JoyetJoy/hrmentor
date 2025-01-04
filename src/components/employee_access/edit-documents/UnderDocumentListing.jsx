@@ -142,7 +142,7 @@ export default function UnderDocumentListing({ cid, uid, documentName }) {
       <DisclosurePanel className="my-4 ml-10 text-sm/5 text-black/50">
         <div>
           <div className="my-4 flex items-center justify-between">
-            <div className="input-box flex h-10 w-72 items-center gap-2 placeholder:text-black">
+            <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
               <Search className="size-4 text-gray-dark" />
               <input
                 onChange={(e) => setKeyword(e.target.value)}
