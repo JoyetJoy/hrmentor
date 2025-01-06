@@ -127,15 +127,14 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
             <td>{`${row.original.total_leave_days || "-"} `}</td>
           ),
         },
-          colKeys.field6 && {
-            header: colKeys?.field6?.label,
-            accessorKey: colKeys?.field6?.key,
-            cell: ({ row }) => {
-              return formatDate(row.original.created_at); // Ensure the formatDate function is properly defined
-            },
+        colKeys.field6 && {
+          header: colKeys?.field6?.label,
+          accessorKey: colKeys?.field6?.key,
+          cell: ({ row }) => {
+            return formatDate(row.original.created_at); // Ensure the formatDate function is properly defined
           },
-        
-        
+        },
+
         {
           header: colKeys?.field7?.label,
           cell: ({ row }) => {
@@ -233,9 +232,6 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
                   className="h-full w-full placeholder:text-[#7F7F7F]"
                   placeholder="Search"
                 />
-              </div>
-              <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
-                <Filter className="size-4" />
               </div>
             </div>
             <div>

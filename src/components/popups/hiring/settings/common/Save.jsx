@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import "quill/dist/quill.snow.css";
 import Select from "react-select";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function SaveHiringMasterForm({
   popupOpen,
@@ -50,6 +51,7 @@ export default function SaveHiringMasterForm({
     control,
     reset,
     setValue,
+    getValues,
     setError,
     formState: { errors },
   } = useForm({
@@ -94,6 +96,26 @@ export default function SaveHiringMasterForm({
   }
 
   const isTemplateDescription = type === "Document & Templates";
+
+  const Generate_text = async () => {
+    const nameValue = getValues("name"); // Get the value of the "name" field
+
+    try {
+      const genAI = new GoogleGenerativeAI(
+        "AIzaSyCBgwP-pT6WdPM9ksvpEbZT44BZSYML8yM",
+      );
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+      const prompt = `Write a job description for ${nameValue}`;
+
+      const result = await model.generateContent(prompt);
+      setDescription(result.response.text());
+    } catch (error) {
+      console.error("Error generating text:", error.message);
+      setDescription("Error generating text. Please try again.");
+    }
+  };
+
   const onSubmit = async (data) => {
     if (isTemplateDescription && !description) {
       setError("description", {
@@ -148,12 +170,20 @@ export default function SaveHiringMasterForm({
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
                 {selectedField ? "Update" : "Add"} {type}
               </h1>
-              <button
-                onClick={close}
-                className="text-lg font-extrabold text-[#00000080]"
-              >
-                <X />
-              </button>
+              <div className="flex">
+                <button
+                  onClick={Generate_text}
+                  className="rounded bg-red-500 px-4 py-2 text-sm font-extrabold text-white"
+                >
+                  Generate
+                </button>
+                <button
+                  onClick={close}
+                  className="px-4 py-2 text-lg font-extrabold text-[#00000080]"
+                >
+                  <X />
+                </button>
+              </div>
             </div>
             {isLoading ? (
               <div className="flex min-h-72 w-full items-center justify-center">

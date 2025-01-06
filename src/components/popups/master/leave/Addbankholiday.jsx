@@ -251,11 +251,13 @@ export default function AddBankHoliday({
                 {/* Conditionally Render Percentage Input */}
                 {percentage === "paid" && (
                   <div>
-                    <label className="required label-text">Percentage</label>
+                    <label className="required label-text">
+                      Additional Percentage
+                    </label>
                     <input
                       autoComplete="off"
                       type="number"
-                      placeholder="Enter Percentage"
+                      placeholder="Enter Additional Percentage"
                       {...register("percentage", {
                         required: {
                           value: percentage === "paid",
