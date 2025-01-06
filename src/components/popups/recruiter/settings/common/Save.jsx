@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Select from "react-select";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function SaveRecruiterMasterForm({
   popupOpen,
@@ -42,6 +43,7 @@ export default function SaveRecruiterMasterForm({
     control,
     reset,
     setValue,
+    getValues,
     setError,
     formState: { errors },
   } = useForm({
@@ -74,6 +76,24 @@ export default function SaveRecruiterMasterForm({
     reset();
   }
 
+  const Generate_text = async () => {
+    const nameValue = getValues("name"); // Get the value of the "name" field
+
+    try {
+      const genAI = new GoogleGenerativeAI(
+        "AIzaSyCBgwP-pT6WdPM9ksvpEbZT44BZSYML8yM",
+      );
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+      const prompt = `Write a job description for ${nameValue}`;
+
+      const result = await model.generateContent(prompt);
+      setDescription(result.response.text());
+    } catch (error) {
+      console.error("Error generating text:", error.message);
+      setDescription("Error generating text. Please try again.");
+    }
+  };
   const isJobDescription = type === "Job Description";
   const onSubmit = async (data) => {
     if (isJobDescription && !description) {
@@ -129,12 +149,20 @@ export default function SaveRecruiterMasterForm({
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
                 {selectedField ? "Update" : "Add"} {type}
               </h1>
-              <button
-                onClick={close}
-                className="text-lg font-extrabold text-[#00000080]"
-              >
-                <X />
-              </button>
+              <div className="flex">
+                <button
+                  onClick={Generate_text}
+                  className="rounded bg-red-500 px-4 py-2 text-sm font-extrabold text-white"
+                >
+                  Generate
+                </button>
+                <button
+                  onClick={close}
+                  className="px-4 py-2 text-lg font-extrabold text-[#00000080]"
+                >
+                  <X />
+                </button>
+              </div>
             </div>
             {isLoading ? (
               <div className="flex min-h-72 w-full items-center justify-center">
@@ -193,7 +221,7 @@ export default function SaveRecruiterMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="w-full flex-grow rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
+                      className="flex-grow rounded-md border-black/10 placeholder:text-[#8b8b8b]"
                     />
                     {errors?.jobDescription && (
                       <span className="text-xs font-medium text-red-500">
@@ -226,7 +254,7 @@ export default function SaveRecruiterMasterForm({
                   </div>
                 ) : null}
 
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                <div className="mt-2 z-10 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
                     className="flex h-11 w-full !cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"

@@ -347,8 +347,8 @@ export default function SaveMasterShift({ formtype, sid }) {
                       {...register("start_time", { required: true })}
                       autoComplete="off"
                       name="start_time"
-                      type="time"
-                      placeholder="HH:MM"
+                      // type="time"
+                      placeholder="hh:mm"
                       className="input-box"
                     />
                     {errors.start_time && (
@@ -362,8 +362,9 @@ export default function SaveMasterShift({ formtype, sid }) {
                     <input
                       {...register("end_time", { required: true })}
                       autoComplete="off"
-                      type="time"
+                      // type="time"
                       name="end_time"
+                      placeholder="hh:mm"
                       className="input-box"
                     />
                     {errors.end_time && (
@@ -527,7 +528,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="fullday"
                           type="text"
-                          placeholder="--:--"
+                          placeholder="hh:mm"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function
@@ -558,7 +559,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="fulltolerence"
                           type="text"
-                          placeholder="--:--"
+                          placeholder="hh:mm"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function
@@ -589,7 +590,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="halfday"
                           type="text"
-                          placeholder="--:--"
+                          placeholder="hh:mm"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function
@@ -620,7 +621,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="halfdaytolerence"
                           type="text" // Change type to text for manual input (no time picker)
-                          placeholder="--:--"
+                          placeholder="hh:mm"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function for formatting
