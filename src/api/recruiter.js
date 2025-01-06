@@ -74,3 +74,8 @@ export const DASHBOARD_INTERVIEWS_LIST = "dashboard-scheduledInterviews";
 export const DASHBOARD_CANDIDATES_LIST = "dashboard-newCandidates";
 // INTERVIEWS LIST
 export const REC_INTERVIEWS_LIST = "interviews-all";
+
+// TRANSFER TO JOB LISTING
+export const JOB_LISTING = "job-list-drop-down";
+// TRANSFER TO JOB POST
+export const JOB_POST = "transfer-to-job";

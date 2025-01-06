@@ -221,7 +221,7 @@ export default function SaveRecruiterMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="w-full flex-grow rounded-md border border-black/10 placeholder:text-[#8b8b8b]"
+                      className="flex-grow rounded-md border-black/10 placeholder:text-[#8b8b8b]"
                     />
                     {errors?.jobDescription && (
                       <span className="text-xs font-medium text-red-500">
@@ -254,7 +254,7 @@ export default function SaveRecruiterMasterForm({
                   </div>
                 ) : null}
 
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                <div className="mt-2 z-10 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
                     className="flex h-11 w-full !cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"

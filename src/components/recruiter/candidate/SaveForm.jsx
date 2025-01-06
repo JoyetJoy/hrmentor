@@ -267,7 +267,7 @@ export default function RecSaveFormCandidate({ type }) {
 
   return (
     <>
-      <Addtransfer popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <Addtransfer popupOpen={popupOpen} setPopupOpen={setPopupOpen} cid={cid} />
       {type === "update" && (
         <MenuHeaderCandidate page={1} candidate={candidateDetails?.data} />
       )}
@@ -326,13 +326,15 @@ export default function RecSaveFormCandidate({ type }) {
                 </div>
 
                 {/* Transfer to Job Button */}
-                <div
-                  onClick={() => setPopupOpen(true)}
-                  className="flex h-10 min-h-10 w-40 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange pl-4 text-xs font-semibold text-white"
-                >
-                  Transfer to job
-                  <Plus size={20} color="#ffffff" strokeWidth={2} />
-                </div>
+            {types==2 && (
+               <div
+               onClick={() => setPopupOpen(true)}
+               className="flex h-10 min-h-10 w-40 cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange pl-4 text-xs font-semibold text-white"
+             >
+               Transfer to job
+               <Plus size={20} color="#ffffff" strokeWidth={2} />
+             </div>
+            )}
               </div>
             )}
           </div>
