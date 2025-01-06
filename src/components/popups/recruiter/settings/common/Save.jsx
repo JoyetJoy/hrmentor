@@ -29,6 +29,7 @@ export default function SaveRecruiterMasterForm({
   const [description, setDescription] = useState("");
   const [isdefault, setIsDefault] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [generateLoader, setGenerateLoader] = useState(false);
   // Get selected data
   const { data: recMastersDetailByid, isLoading } = useQuery({
     queryKey: ["recMastersDetailByid", colKeys, type, api, selectedField],
@@ -78,17 +79,27 @@ export default function SaveRecruiterMasterForm({
 
   const Generate_text = async () => {
     const nameValue = getValues("name"); // Get the value of the "name" field
+    if (!nameValue) {
+      toast.error("Enter a Job Description");
+      return;
+    }
 
     try {
+      setGenerateLoader(true);
       const genAI = new GoogleGenerativeAI(
         "AIzaSyCBgwP-pT6WdPM9ksvpEbZT44BZSYML8yM",
       );
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      const prompt = `Write a job description for ${nameValue}`;
+      const prompt = `Write a job description for ${nameValue} within 300 words`;
 
       const result = await model.generateContent(prompt);
-      setDescription(result.response.text());
+
+      // Extract the full content text from the response
+      const jobDescription = result.response.text();
+
+      setDescription(jobDescription);
+      setGenerateLoader(false);
     } catch (error) {
       console.error("Error generating text:", error.message);
       setDescription("Error generating text. Please try again.");
@@ -132,6 +143,34 @@ export default function SaveRecruiterMasterForm({
     }
   };
 
+  const customizedDescription = description
+    ? description
+        .replace(/(\*\*Job Title:\*\*)/g, "<br /><strong>Job Title:</strong>")
+        .replace(
+          /(\*\*Job Description:\*\*)/g,
+          "<br /><strong>Job Description:</strong>",
+        )
+        .replace(
+          /(\*\*About the Role:\*\*)/g,
+          "<br /><strong>About the Role:</strong>",
+        )
+        .replace(/(\*\*Department:\*\*)/g, "<br /><strong>Department:</strong>")
+        .replace(/(\*\*Reports To:\*\*)/g, "<br /><strong>Reports To:</strong>")
+        .replace(/(\*\*Summary:\*\*)/g, "<br /><strong>Summary:</strong>")
+        .replace(
+          /(\*\*Responsibilities:\*\*)/g,
+          "<br /><strong>Responsibilities:</strong>",
+        )
+        .replace(
+          /(\*\*Qualifications:\*\*)/g,
+          "<br /><strong>Qualifications:</strong>",
+        )
+        .replace(
+          /(\*\*Bonus Points:\*\*)/g,
+          "<br /><strong>Bonus Points:</strong>",
+        )
+    : "";
+
   return (
     <Dialog
       open={popupOpen}
@@ -150,12 +189,22 @@ export default function SaveRecruiterMasterForm({
                 {selectedField ? "Update" : "Add"} {type}
               </h1>
               <div className="flex">
-                <button
-                  onClick={Generate_text}
-                  className="rounded bg-red-500 px-4 py-2 text-sm font-extrabold text-white"
-                >
-                  Generate
-                </button>
+                {type === "Job Description" && (
+                  <button
+                    className="rounded bg-red-500 px-4 py-2 text-sm font-extrabold text-white"
+                    onClick={Generate_text}
+                    disabled={generateLoader}
+                  >
+                    {generateLoader ? (
+                      <div className="flex items-center gap-3">
+                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                        Generating
+                      </div>
+                    ) : (
+                      <span>Generate</span>
+                    )}
+                  </button>
+                )}
                 <button
                   onClick={close}
                   className="px-4 py-2 text-lg font-extrabold text-[#00000080]"
@@ -218,7 +267,7 @@ export default function SaveRecruiterMasterForm({
                     </label>
                     <ReactQuill
                       theme="snow"
-                      value={description}
+                      value={customizedDescription}
                       onChange={setDescription}
                       placeholder={"Type here.."}
                       className="flex-grow rounded-md border-black/10 placeholder:text-[#8b8b8b]"
@@ -254,7 +303,7 @@ export default function SaveRecruiterMasterForm({
                   </div>
                 ) : null}
 
-                <div className="mt-2 z-10 flex flex-row items-center justify-center gap-3">
+                <div className="z-10 mt-2 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
                     className="flex h-11 w-full !cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
