@@ -27,11 +27,10 @@ export const AdminDashboard = () => {
     },
     {
       title: "Available slot",
-      details: [
-        { type: "HR", count: "2/20" },
-        { type: "Engineers", count: "10/50" },
-        { type: "Designers", count: "5/30" },
-      ],
+      details: admindashboard?.available_slots?.map((holiday) => ({
+        type: holiday.holiday_name,
+        date: holiday.date,
+      })),
     },
     {
       title: "Upcoming Holidays",
@@ -42,11 +41,10 @@ export const AdminDashboard = () => {
     },
     {
       title: "People on leave",
-      details: [
-        { type: "HR", count: "2/20" },
-        { type: "Engineers", count: "10/50" },
-        { type: "Designers", count: "5/30" },
-      ],
+      details: admindashboard?.people_on_leave?.map((holiday) => ({
+        type: holiday.holiday_name,
+        date: holiday.date,
+      })),
     },
   ];
   console.log(
@@ -86,7 +84,7 @@ export const AdminDashboard = () => {
                   View <Eye className="size-4 text-black/70" />
                 </p>
               </label>
-              {card.details?.length > 0 &&
+              {card.details?.length > 0 ? (
                 card.details.map((item, idx) => (
                   <div
                     key={idx}
@@ -112,7 +110,10 @@ export const AdminDashboard = () => {
                       />
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p className="text-sm text-gray-dark">Data not available</p>
+              )}
             </div>
           ))}
         </div>
