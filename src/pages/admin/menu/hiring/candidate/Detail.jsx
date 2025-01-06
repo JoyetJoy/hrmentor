@@ -310,24 +310,7 @@ export default function HiringCandidateDetails() {
               </div>
               {candidateDetails?.status?.id === 11 ? (
                 <>
-                  <span
-                    className="flex items-center justify-center"
-                    style={{
-                      backgroundColor:
-                        candidateDetails?.status?.background_color,
-                      color: candidateDetails?.status?.text_color,
-                      border: `1px solid ${candidateDetails?.status?.border_color || "transparent"}`,
-                      borderRadius: "5px", // Rounded corners
-                      padding: "5px 5px", // Padding for spacing
-                      display: "inline-block", // Ensures it behaves like a box
-                      height: "30px", // Adjust height
-                      lineHeight: "30px", // Vertically center the text
-                      minWidth: "80px", // Adjust width (optional)
-                      textAlign: "center", // Center-align text
-                      fontSize: "14px", // Font size
-                      fontWeight: "bold", // Bold text
-                    }}
-                  >
+                  <span className="group flex w-1/6 flex-col border items-center border-[#8be691] text-[0.80rem] text-[#3a3a3a] bg-[#f0fff1] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
                     {candidateDetails?.status?.status_name}
                   </span>
                 </>

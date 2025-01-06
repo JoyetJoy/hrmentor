@@ -4,6 +4,7 @@ import Dropzone from "react-dropzone";
 
 export default function ResumeDragzone({
   file,
+  types,
   setFile,
   filePreview,
   setFilePreview,
@@ -30,12 +31,14 @@ export default function ResumeDragzone({
         <div className="flex flex-col">
           <div className="flex items-center gap-4 pb-1 pt-14">
             <h1 className="text-[0.84rem] font-bold">Resume Upload</h1>
-            <div
+            {types==2 &&(
+              <div
               onClick={() => setFile(null)}
               className="cursor-pointer rounded border border-hrmprimaryorange px-2 py-1.5 text-xs font-bold text-black/90"
             >
               Change File
             </div>
+            )}
           </div>
           <div className="h-full overflow-hidden rounded-lg border border-gray-lightSoft py-2">
             {filePreview ? (

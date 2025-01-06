@@ -774,6 +774,7 @@ export default function RecSaveFormCandidate({ type }) {
         <ResumeDragzone
           file={resumefile}
           setFile={setResumeFile}
+          types={types}
           filePreview={filePreview}
           setFilePreview={setFilePreview}
         />
