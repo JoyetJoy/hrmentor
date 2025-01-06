@@ -93,20 +93,22 @@ export default function EmployeeExperienceEdit() {
         },
         {
           header: "Document",
-          accessorKey: "document",
+          accessorKey: "certificate",
           cell: ({ row }) => (
             <div className="flex">
-              <Link
-                href={row.original?.document}
+              <a
+                href={row.original?.certificate}
                 target="_blank"
                 className="text-[#1A75FF] underline underline-offset-2"
                 rel="noopener noreferrer"
               >
-                document
-              </Link>
+                {row.original?.certificate?"document":''}
+                
+              </a>
             </div>
           ),
         },
+        
         {
           header: "Action",
           accessorKey: "action",

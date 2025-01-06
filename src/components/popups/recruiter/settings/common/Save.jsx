@@ -74,6 +74,7 @@ export default function SaveRecruiterMasterForm({
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
+    setDescription('');
     reset();
   }
 

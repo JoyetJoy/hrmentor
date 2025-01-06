@@ -310,7 +310,7 @@ export default function HiringCandidateDetails() {
               </div>
               {candidateDetails?.status?.id === 11 ? (
                 <>
-                  <span className="group flex w-1/6 flex-col border items-center border-[#8be691] text-[0.80rem] text-[#3a3a3a] bg-[#f0fff1] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
+                  <span className="group flex w-1/6 flex-col items-center text-[0.80rem] text-[#3a3a3a] bg-[#f2f4f5] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
                     {candidateDetails?.status?.status_name}
                   </span>
                 </>

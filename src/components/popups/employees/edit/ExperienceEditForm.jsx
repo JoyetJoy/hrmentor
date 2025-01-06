@@ -91,10 +91,14 @@ export default function EmployeeExperienceEditForm({
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
+      }else if(res.data?.status ===422 ){
+        console.log(res);
+        
+        
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.error);
+      toast.error(error?.response?.data?.error||error?.response?.data?.errors?.document[0]);
     } finally {
       setLoader(false);
     }
@@ -239,6 +243,7 @@ export default function EmployeeExperienceEditForm({
                         id="employee-profile-pic"
                         onChange={handleImageChange}
                         type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
                         className="hidden"
                       />
                     </label>
