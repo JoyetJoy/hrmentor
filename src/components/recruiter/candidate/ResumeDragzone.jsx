@@ -67,7 +67,11 @@ export default function ResumeDragzone({
           </div>
         </div>
       ) : (
-        <Dropzone onDrop={onDrop}>
+        <Dropzone onDrop={onDrop} accept={{
+          "application/pdf": [".pdf"],
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+          "application/msword": [".doc"],
+        }}>
           {({ getRootProps, getInputProps }) => (
             <div {...getRootProps()} className="flex flex-col justify-center">
               <input {...getInputProps()} />

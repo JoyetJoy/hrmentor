@@ -95,6 +95,7 @@ function RecruiterJobPost() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const jid = searchParams.get("jid");
+  const types = searchParams.get("type");
   const {
     register,
     handleSubmit,
@@ -489,7 +490,7 @@ function RecruiterJobPost() {
           <div className="mb-3 mt-1 flex items-center justify-between">
             <div className="flex cursor-pointer flex-row items-center justify-center gap-2 text-base font-bold text-black">
               {/* <ArrowLeft onClick={() => history.back()} className="size-4" /> */}
-              Create New Job <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
+              {types==1?'Edit Job':'Create New Job'} <div className="h-4 w-[.07rem] bg-[#B0B0B0]"></div>
               <span className="text-sm font-medium text-textcolor-darkCharcoal">
                 Post
               </span>

@@ -63,7 +63,7 @@ export const recCandidateSchema = Yup.object({
   linked_in: Yup.string(),
   date_applied: Yup.string().required("Date applied is required"),
   phone_number: Yup.string()
-    .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits")
+    .matches(/^[0-9]{11}$/, "Mobile number must be 11 digits")
     .required("Mobile number is required"),
 
   email: Yup.string()

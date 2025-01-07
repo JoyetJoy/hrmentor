@@ -82,9 +82,10 @@ export default function Apply() {
       params: {
         state_id: parseInt(state_or_province?.id),
         search: inputValue,
+        country_id: parseInt(country_id?.id),
       },
     });
-    return response?.data;
+    return response?.data?.data;
   };
 
   const onSubmit = (data) => {
@@ -344,7 +345,7 @@ export default function Apply() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5">
-                <label className="required label-text">Country</label>
+                <label className="required label-text">Country of residence</label>
                 <Controller
                   name="country_id"
                   control={control}
@@ -369,25 +370,33 @@ export default function Apply() {
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">City</label>
                 <Controller
-                  name="city_id"
-                  control={control}
-                  rules={{ required: "City is required" }} // Custom error message
-                  render={({ field }) => (
-                    <AsyncSelect
-                      {...field}
-                      placeholder="Search ..."
-                      loadOptions={loadCitiesOptions}
-                      isSearchable={true}
-                      noOptionsMessage={() => "Type city name"}
-                      onChange={(selectedOption) => {
-                        field.onChange(selectedOption); // Update form state
-                        handleCitySelect(selectedOption);
-                      }}
-                      value={field.value} // Ensure the value is controlled
-                      className="input-box"
-                    />
-                  )}
-                />
+                name="city_id"
+                control={control}
+                rules={{
+                  required: country_id
+                    ? "City is required"
+                    : "Please select a country first",
+                }}
+                render={({ field }) => (
+                  <AsyncSelect
+                    {...field}
+                    placeholder="Search ..."
+                    loadOptions={country_id ? loadCitiesOptions : () => []}
+                    isSearchable={true}
+                    noOptionsMessage={() =>
+                      country_id
+                        ? "No cities found"
+                        : "Select a country first"
+                    }
+                    isDisabled={!country_id}
+                    onChange={(selectedOption) => {
+                      field.onChange(selectedOption); // Update form state
+                      handleCitySelect(selectedOption);
+                    }}
+                    className="input-box"
+                  />
+                )}
+              />
                 {errors.city_id && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.city_id?.message}

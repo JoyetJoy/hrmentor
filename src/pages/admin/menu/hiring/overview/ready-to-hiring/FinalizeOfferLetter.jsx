@@ -12,6 +12,8 @@ export const FinalizeOfferLetter = () => {
   );
   // get data from url search params
   const cid = new URLSearchParams(window.location.search).get("selected");
+  console.log(cid);
+  
   // GET DETAILS IN CASE OF UPDATE
   const { data: candidateDetails, isLoading } = useQuery({
     queryKey: ["candidateDetails", cid],
@@ -19,6 +21,7 @@ export const FinalizeOfferLetter = () => {
       newRequest.get(`${GET_CANDIDATES}/${cid}`).then((res) => {
         return res.data;
       }),
+      enabled:!!cid
   });
 
   return (

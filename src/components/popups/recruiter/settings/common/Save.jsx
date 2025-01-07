@@ -238,7 +238,7 @@ export default function SaveRecruiterMasterForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex w-full flex-col gap-1">
+                <div className="group flex w-full flex-col gap-1 z-50">
                   <label className="required label-text">Status</label>
                   <Controller
                     name="status"

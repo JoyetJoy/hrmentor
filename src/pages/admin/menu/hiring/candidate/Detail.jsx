@@ -211,6 +211,7 @@ export default function HiringCandidateDetails() {
       setLoader(false);
     }
   };
+console.log(candidateDetails);
 
   return (
     <>
@@ -404,7 +405,7 @@ export default function HiringCandidateDetails() {
                   type={"button"}
                   onClick={() => {
                     setRejectOpen(true);
-                    setSelectedField(candidateDetails?.data?.id);
+                    setSelectedField(cid);
                   }}
                   className="h-9 rounded bg-[#AB2727]/10 px-7 text-xs font-semibold text-[#AB2727]"
                 >
@@ -414,7 +415,7 @@ export default function HiringCandidateDetails() {
                   type={"button"}
                   onClick={() => {
                     setPopupOpen(true);
-                    setSelectedField(candidateDetails?.data?.id);
+                    setSelectedField(cid);
                   }}
                   className="h-9 rounded bg-hrmprimaryorange px-7 text-xs text-white"
                 >

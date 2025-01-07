@@ -97,25 +97,6 @@ export default function SaveHiringMasterForm({
 
   const isTemplateDescription = type === "Document & Templates";
 
-  const Generate_text = async () => {
-    const nameValue = getValues("name"); // Get the value of the "name" field
-
-    try {
-      const genAI = new GoogleGenerativeAI(
-        "AIzaSyCBgwP-pT6WdPM9ksvpEbZT44BZSYML8yM",
-      );
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-      const prompt = `Write a job description for ${nameValue}`;
-
-      const result = await model.generateContent(prompt);
-      setDescription(result.response.text());
-    } catch (error) {
-      console.error("Error generating text:", error.message);
-      setDescription("Error generating text. Please try again.");
-    }
-  };
-
   const onSubmit = async (data) => {
     if (isTemplateDescription && !description) {
       setError("description", {
@@ -171,12 +152,6 @@ export default function SaveHiringMasterForm({
                 {selectedField ? "Update" : "Add"} {type}
               </h1>
               <div className="flex">
-                <button
-                  onClick={Generate_text}
-                  className="rounded bg-red-500 px-4 py-2 text-sm font-extrabold text-white"
-                >
-                  Generate
-                </button>
                 <button
                   onClick={close}
                   className="px-4 py-2 text-lg font-extrabold text-[#00000080]"
@@ -263,7 +238,7 @@ export default function SaveHiringMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="min-h-52 w-full flex-grow rounded-md border border-black/10 placeholder:text-gray-mediumDark"
+                      className="max-h-56 min-h-36 w-full flex-grow rounded-md border border-black/10 placeholder:text-gray-mediumDark"
                     />
                     {errors?.description && (
                       <span className="text-xs font-medium text-red-500">
@@ -273,7 +248,7 @@ export default function SaveHiringMasterForm({
                   </div>
                 ) : null}
 
-                <div className="group z-[50] flex w-full items-center gap-3">
+                <div className="group z-[50] mt-4 pl-1 flex w-full items-center gap-3">
                   <label className="required label-text">Is Default</label>
                   <div className="flex">
                     <input
@@ -294,7 +269,7 @@ export default function SaveHiringMasterForm({
                   )}
                 </div>
 
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                <div className="mt-7 flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
                     className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"

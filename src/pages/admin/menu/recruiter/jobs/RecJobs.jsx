@@ -120,7 +120,7 @@ function RecruiterJobs() {
               <Eye className="size-3" />
             </Link>
             <Link
-              to={`/admin/recruiter/jobs/post?jid=${row.original.id}`}
+              to={`/admin/recruiter/jobs/post?jid=${row.original.id}&type=1`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
