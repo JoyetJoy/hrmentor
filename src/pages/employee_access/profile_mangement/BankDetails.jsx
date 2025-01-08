@@ -203,7 +203,7 @@ export default function BankDetails() {
               </button>
             </div>
             <div>
-              <QueryTable columns={columns} list={""} />
+              <QueryTable columns={columns} list={employeeBankDetails?.data?.listing} />
             </div>
           </div>
         </div>

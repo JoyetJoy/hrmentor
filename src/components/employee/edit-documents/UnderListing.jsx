@@ -79,6 +79,23 @@ export default function UnderListing({ cid, uid, documentName }) {
         ),
       },
       {
+        header: "Document",
+        accessorKey: "document",
+        cell: ({ row }) => (
+          <div className="flex">
+             <a
+              href={row.original?.upload_documents}
+              target="_blank"
+              className={`${row.original?.upload_documents? 'text-[#1A75FF] underline underline-offset-2':''}`}
+              rel="noopener noreferrer"
+            >
+              {row.original?.upload_documents?'document':'No document'}
+              
+            </a>
+          </div>
+        ),
+      },
+      {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (

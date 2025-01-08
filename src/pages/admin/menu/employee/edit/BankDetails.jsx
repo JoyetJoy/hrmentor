@@ -86,11 +86,6 @@ export default function EmployeeBankDetails() {
           },
         },
         {
-          header: "Branch Name",
-          accessorKey: "branch",
-          cell: ({ row }) => <>{row.original?.account_details?.branch}</>,
-        },
-        {
           header: "Acc. Number",
           accessorKey: "account_number",
           cell: ({ row }) => (

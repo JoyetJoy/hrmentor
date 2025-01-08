@@ -70,6 +70,10 @@ export default function EmployeeRightToWorkEditForm({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
+      if(!imageFile){
+        toast.error('Document is required');
+        return;
+      }
       const formData = new FormData();
       formData.append("reference_no", data?.reference_no);
       formData.append("user_id", uid);
@@ -222,6 +226,7 @@ export default function EmployeeRightToWorkEditForm({
                           id="employee-profile-pic"
                           onChange={handleImageChange}
                           type="file"
+                          accept=".pdf,.jpg,.jpeg,.png"
                           className="hidden"
                         />
                       </label>

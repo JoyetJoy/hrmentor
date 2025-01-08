@@ -303,6 +303,7 @@ export default function SkillEditForm({
                         id="employee-profile-pic"
                         onChange={handleImageChange}
                         type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
                         className="hidden"
                       />
                     </label>

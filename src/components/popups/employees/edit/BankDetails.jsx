@@ -60,13 +60,13 @@ export default function EmployeeBankDetailsEditForm({
       setValue("account_type", employeeBankDetailByid?.data?.account_type);
       setValue("bank_name", employeeBankDetailByid?.data?.bank_name);
       // setValue("branch", employeeBankDetailByid?.data?.branch);
-      setValue("iban", employeeBankDetailByid?.data?.iban);
+      setValue("iban", employeeBankDetailByid?.data?.iban||'');
       setValue("account_number", employeeBankDetailByid?.data?.account_number);
       setValue(
         "account_holder_name",
         employeeBankDetailByid?.data?.account_holder_name,
       );
-      setValue("swift_code", employeeBankDetailByid?.data?.swift_code);
+      setValue("swift_code", employeeBankDetailByid?.data?.swift_code||'');
       setValue("sort_code", employeeBankDetailByid?.data?.sort_code);
     }
   }, [employeeBankDetailByid, setValue]);
@@ -87,15 +87,17 @@ export default function EmployeeBankDetailsEditForm({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
+      console.log(data);
+      
       const formData = new FormData();
       formData.append("user_id", uid);
       formData.append("account_type", data.account_type?.id);
       formData.append("bank_name", data.bank_name);
       // formData.append("branch", data.branch);
-      formData.append("iban", data.iban);
+      formData.append("iban", data.iban||'');
       formData.append("account_number", data.account_number);
       formData.append("account_holder_name", data.account_holder_name);
-      formData.append("swift_code", data.swift_code);
+      formData.append("swift_code", data.swift_code||'');
       formData.append("sort_code", data.sort_code);
       formData.append("default", isDefault ? 1 : 0);
 

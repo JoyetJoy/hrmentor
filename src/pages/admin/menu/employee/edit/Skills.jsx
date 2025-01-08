@@ -113,10 +113,11 @@ export default function SkillsQualifications() {
               <a
                 href={row.original?.document}
                 target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
+                className={`${row.original?.document? 'text-[#1A75FF] underline underline-offset-2':''}`}
                 rel="noopener noreferrer"
               >
-                document
+                {row.original?.document?'document':'No document'}
+                
               </a>
             </div>
           ),

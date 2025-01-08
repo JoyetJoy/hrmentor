@@ -323,7 +323,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("gender", data.gender?.id);
     formData.append("post_code", data.post_code);
     formData.append("dob", data.dob);
-    formData.append("blood_group", data.blood_group?.value||'');
+    formData.append("blood_group", data.blood_group?.value || "");
     formData.append("marital_status", data.marital_status?.value);
     formData.append("nationality_id", data.nationality_id?.id);
     formData.append("unique_id", uniqueId?.unique_id);
@@ -510,13 +510,17 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("first_name", {
                       required: "First Name is required",
                       pattern: {
-                        value: /^[A-Za-z]+$/,
-                        message: "Only alphabetic characters are allowed",
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "Only alphabetic characters and spaces are allowed",
                       },
                     })}
                     className="input-box"
                     onInput={(e) => {
-                      e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                      e.target.value = e.target.value.replace(
+                        /[^A-Za-z\s]/g,
+                        "",
+                      );
                     }}
                   />
                   {errors.first_name && (
@@ -531,8 +535,9 @@ export default function SaveEmployeeForm({ formtype }) {
                   <input
                     {...register("middle_name", {
                       pattern: {
-                        value: /^[A-Za-z]+$/,
-                        message: "Only alphabetic characters are allowed",
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "Only alphabetic characters and spaces are allowed",
                       },
                     })}
                     autoComplete="off"
@@ -540,7 +545,10 @@ export default function SaveEmployeeForm({ formtype }) {
                     type="text"
                     className="input-box"
                     onInput={(e) => {
-                      e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                      e.target.value = e.target.value.replace(
+                        /[^A-Za-z\s]/g,
+                        "",
+                      );
                     }}
                   />
                   {errors.middle_name && (
@@ -555,8 +563,9 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("sur_name", {
                       required: "Surname is required",
                       pattern: {
-                        value: /^[A-Za-z]+$/,
-                        message: "Only alphabetic characters are allowed",
+                        value: /^[A-Za-z\s]+$/,
+                        message:
+                          "Only alphabetic characters and spaces are allowed",
                       },
                     })}
                     autoComplete="off"
@@ -564,7 +573,10 @@ export default function SaveEmployeeForm({ formtype }) {
                     type="text"
                     className="input-box"
                     onInput={(e) => {
-                      e.target.value = e.target.value.replace(/[^A-Za-z]/g, "");
+                      e.target.value = e.target.value.replace(
+                        /[^A-Za-z\s]/g,
+                        "",
+                      );
                     }}
                   />
                   {errors.sur_name && (
@@ -636,7 +648,9 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">Country of residence</label>
+                  <label className="required label-text">
+                    Country of residence
+                  </label>
                   <Controller
                     name="country_id"
                     control={control}

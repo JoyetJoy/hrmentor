@@ -94,14 +94,15 @@ export default function RightToWork() {
           accessorKey: "document",
           cell: ({ row }) => (
             <div className="flex">
-              <Link
+              <a
                 href={row.original?.document}
                 target="_blank"
-                className="text-[#1A75FF] underline underline-offset-2"
+                className={`${row.original?.document? 'text-[#1A75FF] underline underline-offset-2':''}`}
                 rel="noopener noreferrer"
               >
-                document
-              </Link>
+                {row.original?.document?'document':'No document'}
+                
+              </a>
             </div>
           ),
         },
