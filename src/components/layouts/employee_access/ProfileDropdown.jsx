@@ -2,7 +2,7 @@ import { employeeaccessItems } from "@/constants/dummyData";
 import { Menu } from "@headlessui/react";
 import { ProfileImage } from "@/utils";
 
-export default function ProfileDropdown({ handleNavigation, user }) {
+export default function ProfileDropdown({ handleNavigation, user, employeeDetails }) {
   return (
     <div className="relative flex flex-col items-center gap-3">
       <Menu>
@@ -13,7 +13,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
             {user?.name} {user?.sur_name}
             <span className="text-xs font-medium text-gray-lightDim">
-              Doctor
+              {employeeDetails?.designation_id?.value}
             </span>
           </h1>
         </Menu.Button>

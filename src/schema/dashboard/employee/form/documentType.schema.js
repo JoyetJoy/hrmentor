@@ -21,13 +21,14 @@ export const empDocumentTypeSchema = Yup.object({
     .required("Status is required"),
   issued_date: Yup.string().required("Issued date is required"),
   expiry_date: Yup.string()
-    .required("Expiry date is required")
+    .nullable() // Allows expiry_date to be null
     .test(
       "expiry-after-issued",
       "Expiry date should be after issued date",
       function (expiry_date) {
         const { issued_date } = this.parent;
-        return new Date(expiry_date) > new Date(issued_date);
+        if (!expiry_date) return true; // Skip validation if expiry_date is not provided
+        return new Date(expiry_date) > new Date(issued_date); // Validate only if expiry_date is provided
       },
     ),
   issued_authority: Yup.string().required("Issued authority is required"),
