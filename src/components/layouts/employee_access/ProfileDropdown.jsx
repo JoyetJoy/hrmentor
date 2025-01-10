@@ -2,18 +2,18 @@ import { employeeaccessItems } from "@/constants/dummyData";
 import { Menu } from "@headlessui/react";
 import { ProfileImage } from "@/utils";
 
-export default function ProfileDropdown({ handleNavigation, user, employeeDetails }) {
+export default function ProfileDropdown({ handleNavigation, user }) {
   return (
     <div className="relative flex flex-col items-center gap-3">
       <Menu>
         <Menu.Button className="flex cursor-pointer flex-row items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full overflow-hidden bg-hrmprimaryorange/20 text-sm font-bold uppercase">
-          <img className="w-full h-full" src={user?.profile_image||ProfileImage} alt="" />
+          <img className="w-full h-full" src={user?.user?.profile_image||ProfileImage} alt="" />
           </div>
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
-            {user?.name} {user?.sur_name}
+            {user?.user?.name} {user?.user?.sur_name}
             <span className="text-xs font-medium text-gray-lightDim">
-              {employeeDetails?.designation_id?.value}
+              {user?.employee_data?.designation?.designation_name}
             </span>
           </h1>
         </Menu.Button>

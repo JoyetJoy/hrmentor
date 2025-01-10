@@ -9,8 +9,6 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import ProfileDropdown from "../employee_access/ProfileDropdown";
 import { Menu } from "@headlessui/react";
 import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
-import { useQuery } from "@tanstack/react-query";
-import { EMPLOYEE, newRequest } from "@/api";
 
 export default function EmployeeAccessHeader() {
   const { setUser, user } = useUserStore((state) => ({
@@ -18,16 +16,6 @@ export default function EmployeeAccessHeader() {
     user: state.user,
   }));
 console.log(user);
-
-const { data: employeeDetails, isLoading } = useQuery({
-  queryKey: ["employeeDetails", user],
-  queryFn: () =>
-    newRequest.get(`${EMPLOYEE}/${user?.id}`).then((res) => {
-      return res.data;
-    }),
-  enabled: !!user,
-});
-console.log(employeeDetails);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -135,7 +123,7 @@ console.log(employeeDetails);
               </ul>
             </Menu.Items>
           </Menu>
-          <ProfileDropdown handleNavigation={handleNavigation} user={user} employeeDetails={employeeDetails}/>
+          <ProfileDropdown handleNavigation={handleNavigation} user={user}/>
         </div>
       </div>
     </>
