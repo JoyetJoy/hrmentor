@@ -93,6 +93,24 @@ export default function ClockIn({
     }
   };
 
+  useEffect(() => {
+    if (clockindata?.shift_detail) {
+      // Set the default to clockindata's shift_detail if present
+      setSelected({
+        id: clockindata?.shift_detail?.id,
+        shift_id: clockindata?.shift_id,
+      });
+    } else if (data?.length > 0&&!selected) {
+      // Set the default to the first shift in the data array if present
+      const firstShift = data[0];
+      setSelected({
+        id: firstShift?.id,
+        shift_id: firstShift?.shift_id,
+        start_time: firstShift?.shift?.start_time,
+      });
+    }
+  }, [clockindata, data]);
+
   return (
     <Dialog
       open={clockInpopupOpen}

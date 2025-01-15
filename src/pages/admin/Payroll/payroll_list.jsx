@@ -10,6 +10,7 @@ import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
+import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
 
 const data = [
@@ -73,6 +74,8 @@ export default function PayrollList() {
   const [endDate, setEndDate] = useState("");
   const [startDate2, setStartDate2] = useState("");
   const [endDate2, setEndDate2] = useState("");
+  const pageLimit = 10;
+
 
   const { data, isLoading } = useQuery({
     queryKey: ["payperiod", monthValue],
@@ -92,6 +95,8 @@ export default function PayrollList() {
             pay_schedule: monthValue,
             start_date: startDate,
             end_date: endDate,
+            page: currentPage,
+              per_limit: pageLimit,
           },
         })
         .then((res) => res.data),
@@ -211,8 +216,13 @@ export default function PayrollList() {
   const columns = React.useMemo(
     () => [
       {
-        header: "Sl.No",
-        accessorKey: "slNo",
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => (
+          <div className="flex px-2">
+            {row.index + 1 + (currentPage - 1) * pageLimit}
+          </div>
+        ),
       },
       {
         header: "Department",
@@ -325,7 +335,8 @@ export default function PayrollList() {
 
         {/* Table Section */}
         <div className="mt-2 rounded-md bg-white p-4">
-          <div className="flex items-center gap-2 pb-3 text-xs font-semibold">
+          {startDate&&endDate?(
+            <><div className="flex items-center gap-2 pb-3 text-xs font-semibold">
             <button className="p-2" onClick={() => handlePreviousPeriod()}>
               <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
             </button>
@@ -346,13 +357,21 @@ export default function PayrollList() {
               <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
             </button>
           </div>
+          {payrollList?
           <QueryTable
-            columns={columns}
-            list={payrollList}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-          />
+          columns={columns}
+          list={payrollList}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
+        :
+          <Loader />
+          }
+          </>
+          ):(
+            <Loader />
+          )}
         </div>
       </div>
     </>
