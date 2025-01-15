@@ -2,7 +2,7 @@ import { newRequest, ENDBREAK } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify"; // Make sure to import toast from react-toastify
+import {toast} from 'react-hot-toast';
 
 export default function StopBreak({
   breakpopupOpen,

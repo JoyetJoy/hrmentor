@@ -158,6 +158,7 @@ export const EmployeeDashboard = () => {
         attendanceId={clockin?.id}
         breakpopupOpen={runningbreak}
         setBreakPopupOpen={setRunningbreak}
+        setStartBreakPopupOpen={setBreakPopupOpen}
       />
       <StopBreak
         breakdata={breakdata}

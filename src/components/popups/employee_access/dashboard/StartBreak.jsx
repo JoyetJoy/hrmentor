@@ -9,10 +9,12 @@ export default function StartBreak({
   breakpopupOpen,
   setBreakPopupOpen,
   attendanceId,
+  setStartBreakPopupOpen
 }) {
   const [selectedBreak, setSelectedBreak] = useState(null);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState("");
+  const [nobreak, setNobreak] = useState(false);
   const shiftData = JSON.parse(localStorage.getItem("shiftid"));
 
   const { data: breaklist, refetch } = useQuery({
@@ -48,6 +50,7 @@ export default function StartBreak({
     const response = await newRequest.post(STARTBREAK, payload);
     if (response.status === 200) {
       setBreakPopupOpen(false);
+      setStartBreakPopupOpen(true);
       toast.success("Start break successfully");
     } else {
       setBreakPopupOpen(false);
@@ -84,27 +87,31 @@ export default function StartBreak({
                 <div className="mx-auto w-full max-w-md">
                   <div className="space-y-4">
                     {(breaklist || []).map((breakTime) => (
-                      <button
-                      key={breakTime.id}
-                      type="button"
-                      onClick={() => setSelectedBreak(breakTime)}
-                      disabled={!breakTime?.break_status}
-                      className={`flex w-full cursor-pointer flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
-                        selectedBreak?.id === breakTime.id
-                          ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
-                          : "border-gray-300 bg-white"
-                      } ${!breakTime?.break_status ? "opacity-50 cursor-not-allowed" : ""}`}
-                    >
-                      <p className="font-medium text-textcolor-darkCharcoal">
-                        {breakTime.type_name}
-                      </p>
-                      <p className="font-bold text-textcolor-darkCharcoal">
-                        Duration : {breakTime.break_time_duration}
-                      </p>
-                      {!breakTime?.break_status && (
-                        <p className="text-xs text-red-500">Not Available</p>
-                      )}
-                    </button>
+                      <>
+                      {breakTime?.break_status ?(
+                        <button
+                        key={breakTime.id}
+                        type="button"
+                        onClick={() => setSelectedBreak(breakTime)}
+                        disabled={!breakTime?.break_status}
+                        className={`flex w-full cursor-pointer flex-col items-start justify-between rounded-lg border px-5 py-1 text-sm/6 transition ${
+                          selectedBreak?.id === breakTime.id
+                            ? "border-hrmprimaryorange bg-hrmprimaryorange/15"
+                            : "border-gray-300 bg-white"
+                        } ${!breakTime?.break_status ? "opacity-50 cursor-not-allowed" : ""}`}
+                      >
+                        <p className="font-medium text-textcolor-darkCharcoal">
+                          {breakTime.type_name}
+                        </p>
+                        <p className="font-bold text-textcolor-darkCharcoal">
+                          Duration : {breakTime.break_time_duration}
+                        </p>
+                        {!breakTime?.break_status && (
+                          <p className="text-xs text-red-500">Not Available</p>
+                        )}
+                      </button>
+                      ):(<p className="text-xs text-red-500">No Breaks Available</p>)}
+                      </>
                     ))}
                   </div>
                 </div>

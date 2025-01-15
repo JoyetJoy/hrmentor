@@ -68,19 +68,19 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock Out</label>
-                <p className="text-sm font-semibold">3:00pm</p>
+                <p className="text-sm font-semibold">{convertTo12HourFormat(data?.shift?.end_time||'')}</p>
               </div>
-              <div className="group flex w-full flex-col gap-1">
+              {/* <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Over time</label>
                 <p className="text-sm font-semibold">30:00</p>
-              </div>
+              </div> */}
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Break time</label>
-                <p className="text-sm font-semibold">07:55 min</p>
+                <p className="text-sm font-semibold">{convertToHourMinutes(data?.shift?.break_time||'00:00:00')} Hrs</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Total work time</label>
-                <p className="text-sm font-semibold">{convertToHourMinutes(data?.shift?.shift_duration||'00:00:00')} Hr</p>
+                <p className="text-sm font-semibold">{convertToHourMinutes(data?.shift?.shift_duration||'00:00:00')} Hrs</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Members</label>
@@ -98,16 +98,17 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
                 <label className="label-text">Work Area</label>
                 <p className="text-sm font-semibold">{data?.shift?.work_area?.name||''}</p>
               </div>
-              <div className="mt-2 flex w-full items-center justify-between gap-3">
+              
+            </div>
+            <div className="mt-5 flex w-full items-center justify-end">
                 <button
                   type="button"
                   onClick={close}
-                  className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                  className="flex h-11 w-fit min-w-40 mr-3 cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
                 >
                   Close
                 </button>
               </div>
-            </div>
           </DialogPanel>
         </div>
       </div>
