@@ -44,7 +44,7 @@ export default function EmailSetup() {
       newRequest
         .get(EMAIL_FOLDER, { params: { user_id: user?.id } })
         .then((res) => res.data.listing),
-    enabled: !!user?.id,
+    enabled: user?.id,
   });
 
   const {
