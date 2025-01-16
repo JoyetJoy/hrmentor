@@ -82,7 +82,7 @@ export default function EditRoster({
       setSelectedEmployees((prev) => [
         ...prev,
         {
-          unique_id: selectedEmployee.value,
+          employee_id: selectedEmployee.value,
           first_name: selectedEmployee.label,
         },
       ]);
@@ -185,8 +185,8 @@ export default function EditRoster({
     () => [
       {
         header: "Emp:ID",
-        accessorKey: "unique_id",
-        cell: ({ row }) => row?.original?.unique_id || "NA",
+        accessorKey: "employee_id",
+        cell: ({ row }) => row?.original?.employee_id || "NA",
       },
       {
         header: "Emp:Name",
@@ -216,12 +216,12 @@ export default function EditRoster({
     ],
     [],
   );
-  console.log(selectedRoster?.employees);
+  console.log(selectedRoster);
   useEffect(() => {
     if (selectedRoster?.employees) {
       setSelectedEmployees(
         selectedRoster.employees.map((employee) => ({
-          unique_id: employee.unique_id,
+          employee_id: employee.id,
           first_name: employee.first_name,
         })),
       );
@@ -429,7 +429,7 @@ export default function EditRoster({
                             className="input-box w-full"
                             options={rosterEmpList?.employees?.map((item) => ({
                               label: item?.first_name,
-                              value: item?.unique_id,
+                              value: item?.id,
                             }))}
                             onChange={(selectedOption) => {
                               field.onChange(selectedOption);
