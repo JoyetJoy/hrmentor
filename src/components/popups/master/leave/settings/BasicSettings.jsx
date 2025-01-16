@@ -136,7 +136,7 @@ const BasicSettings = ({ formtype = "save" }) => {
           params: { user_id: user?.id },
         })
         .then((res) => res.data),
-    enabled: !!user?.id && !!id,
+    enabled: user?.id && id,
   });
 
   useEffect(() => {
