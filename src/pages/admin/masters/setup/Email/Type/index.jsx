@@ -18,6 +18,7 @@ export default function EmailType() {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+
   const { data: emailType } = useQuery({
     queryKey: ["emailType", user?.id, currentPage, pageLimit],
     queryFn: () =>
@@ -30,9 +31,8 @@ export default function EmailType() {
           },
         })
         .then((res) => res.data),
-    enabled: !!user?.id, // Ensure the query only runs if both `user.id` and `country_id` are available
+    enabled: user?.id, 
   });
-
   const columns = React.useMemo(
     () => [
       {
