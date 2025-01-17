@@ -65,7 +65,7 @@ function BankHolidays() {
           },
         })
         .then((res) => res.data),
-    enabled: !!user?.id, // Ensure the query only runs if `user.id` is available
+    enabled: user?.id,
   });
 
   useEffect(() => {

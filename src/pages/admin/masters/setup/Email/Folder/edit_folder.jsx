@@ -30,7 +30,7 @@ export default function EmailFolders() {
       newRequest
         .get(EMAIL_TEMPLATE, { params: { user_id: user?.id, folder_id: id } })
         .then((res) => res.data.listing),
-    enabled: !!user?.id && !!id,
+    enabled: user?.id && id,
   });
 
   const columns = React.useMemo(
