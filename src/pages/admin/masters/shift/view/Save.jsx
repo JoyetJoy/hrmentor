@@ -82,26 +82,33 @@ export default function SaveMasterShift({ formtype, sid }) {
 
   useEffect(() => {
     if (startTime && endTime) {
-      const [startHours, startMinutes] = startTime.split(":").map(Number);
-      const [endHours, endMinutes] = endTime.split(":").map(Number);
-
-      let startTotalMinutes = startHours * 60 + startMinutes;
-      let endTotalMinutes = endHours * 60 + endMinutes;
-
-      if (endTotalMinutes < startTotalMinutes) {
-        endTotalMinutes += 24 * 60;
+      const isValidTime = (time) => /^([01]\d|2[0-3]):([0-5]\d)$/.test(time);
+  
+      if (isValidTime(startTime) && isValidTime(endTime)) {
+        const [startHours, startMinutes] = startTime.split(":").map(Number);
+        const [endHours, endMinutes] = endTime.split(":").map(Number);
+  
+        let startTotalMinutes = startHours * 60 + startMinutes;
+        let endTotalMinutes = endHours * 60 + endMinutes;
+  
+        if (endTotalMinutes < startTotalMinutes) {
+          endTotalMinutes += 24 * 60;
+        }
+  
+        const diffMinutes = endTotalMinutes - startTotalMinutes;
+  
+        const hours = String(Math.floor(diffMinutes / 60)).padStart(2, "0");
+        const minutes = String(diffMinutes % 60).padStart(2, "0");
+  
+        setDuration(`${hours}:${minutes}`);
+      } else {
+        setDuration("00:00"); // Invalid time format
       }
-
-      const diffMinutes = endTotalMinutes - startTotalMinutes;
-
-      const hours = String(Math.floor(diffMinutes / 60)).padStart(2, "0");
-      const minutes = String(diffMinutes % 60).padStart(2, "0");
-
-      setDuration(`${hours}:${minutes}`);
     } else {
-      setDuration(null);
+      setDuration("00:00"); // Missing time input
     }
   }, [startTime, endTime, shiftDetails]);
+  
   console.log(requireDays);
 
   const handleInputChange = (index) => (event) => {
@@ -347,7 +354,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                       {...register("start_time", { required: true })}
                       autoComplete="off"
                       name="start_time"
-                      // type="time"
+                      type="time"
                       placeholder="hh:mm"
                       className="input-box"
                     />
@@ -362,7 +369,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                     <input
                       {...register("end_time", { required: true })}
                       autoComplete="off"
-                      // type="time"
+                      type="time"
                       name="end_time"
                       placeholder="hh:mm"
                       className="input-box"
