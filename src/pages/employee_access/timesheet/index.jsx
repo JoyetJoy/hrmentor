@@ -71,8 +71,11 @@ export default function TimeSheet() {
   const getStartAndEndOfWeek = () => {
     const startOfWeek = dayjs(date)
       .startOf("month")
-      .add((selectedWeek - 1) * 7, "day");
-    const endOfWeek = startOfWeek.add(6, "day");
+      .add((selectedWeek - 1) * 7, "day")
+      .startOf("week");
+
+    // Get the ending day of the calendar week (e.g., Saturday)
+    const endOfWeek = startOfWeek.endOf("week");
     return {
       start: startOfWeek.format("YYYY-MM-DD"),
       end: endOfWeek.format("YYYY-MM-DD"),
@@ -96,8 +99,9 @@ export default function TimeSheet() {
     };
   });
 
-  const { end } = getStartAndEndOfWeek();
 
+  const { end } = getStartAndEndOfWeek();
+  console.log(end);
   // Fetch the data for the selected week
   const { data: events, refetch } = useQuery({
     queryKey: ["events", selectedWeek, date], // Unique query key

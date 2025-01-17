@@ -68,6 +68,12 @@ export const recColumnKeysForCandidateType = {
   field2: { key: "status", label: "Status" },
 };
 
+// candidate type
+export const recColumnKeysForDocumentType = {
+  field1: { key: "document", label: "Document Type" },
+  field2: { key: "status", label: "Status" },
+};
+
 // work location
 export const employeeColumnKeysForWorkLocation = {
   field1: { key: "work_location_name", label: "Work Location Name" },

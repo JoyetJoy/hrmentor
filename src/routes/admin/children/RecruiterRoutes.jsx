@@ -16,6 +16,7 @@ import { RecruiterSettingQualification } from "@/pages/admin/menu/recruiter/sett
 import { RecruiterSettingJobDescription } from "@/pages/admin/menu/recruiter/settings/Index";
 import { Integrations } from "@/pages/admin/menu/recruiter/settings/Integrations";
 import { RecruiterSettingInterviewType } from "@/pages/admin/menu/recruiter/settings/InterviewType";
+import { RecruiterSettingDocumentType } from "@/pages/admin/menu/recruiter/settings/DocumentType";
 import { RecruiterSettingMinimumExperience } from "@/pages/admin/menu/recruiter/settings/MinimumExperience";
 import { RecruiterSettingProfileQuestion } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
 import { RecruiterSettingSources } from "@/pages/admin/menu/recruiter/settings/Sources";
@@ -109,6 +110,10 @@ export const RecruiterRoutes = [
       {
         path: "interview-type",
         element: <RecruiterSettingInterviewType />,
+      },
+      {
+        path: "document-type",
+        element: <RecruiterSettingDocumentType />,
       },
       {
         path: "candidate-type",

@@ -79,6 +79,8 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     role_availability: [],
     role_except: [],
   });
+  console.log(user?.id);
+  
 
   const { isLoading: isLocation, data: location } = useQuery({
     queryKey: ["location", user?.id],
