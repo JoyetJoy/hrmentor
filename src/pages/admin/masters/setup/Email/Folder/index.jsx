@@ -38,13 +38,15 @@ export default function EmailSetup() {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+  console.log(user);
+  
   const { data: emailFolderList = [] } = useQuery({
     queryKey: ["emailFolderList", user?.id],
     queryFn: () =>
       newRequest
         .get(EMAIL_FOLDER, { params: { user_id: user?.id } })
         .then((res) => res.data.listing),
-    enabled: user?.id,
+    enabled: !!user,
   });
 
   const {
