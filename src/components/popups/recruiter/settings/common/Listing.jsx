@@ -139,6 +139,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [(data, type, api, qrkey, colKeys)],
   );
+console.log(data?.listing);
 
   return (
     <>
@@ -155,7 +156,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrkey={qrkey}
         api={api}
       />

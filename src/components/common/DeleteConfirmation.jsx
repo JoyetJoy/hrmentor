@@ -18,6 +18,8 @@ export default function DeleteConfirmation({
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
+  console.log(selectedId);
+  
   const handleDelete = async () => {
     if(type==='rosterdelete'){
       confirmDelete(selectedId)
