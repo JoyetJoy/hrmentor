@@ -25,7 +25,7 @@ export default function EmployeeAccessLayouts() {
 
   useEffect(() => {
     if (profile) {
-      setUser(profile?.data);
+      setUser(profile?.data?.user);
     }
   }, [profile]);
 console.log(location);

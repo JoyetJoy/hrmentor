@@ -25,7 +25,7 @@ export const AdminLayout = () => {
 
   useEffect(() => {
     if (profile) {
-      setUser(profile?.data);
+      setUser(profile?.data?.user);
     }
   }, [profile]);
 
