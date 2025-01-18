@@ -9,10 +9,10 @@ export default function ProfileDropdown({ handleNavigation, user }) {
       <Menu>
         <Menu.Button className="flex cursor-pointer flex-row items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border text-sm font-bold uppercase">
-            <img className="h-full w-full object-contain" src={user?.user?.profile_image||ProfileImage} alt="" />
+            <img className="h-full w-full object-contain" src={user?.profile_image||ProfileImage} alt="" />
           </div>
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
-            {user?.user?.first_name} {user?.user?.sur_name}
+            {user?.first_name} {user?.sur_name}
             <span className="text-xs font-medium text-gray-lightDim">
               Administrator
             </span>
