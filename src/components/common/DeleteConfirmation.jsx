@@ -31,22 +31,16 @@ export default function DeleteConfirmation({
         const res = await newRequest.delete(`${api}/${id}`);
         if (res?.data?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
-          setLoader(false);
-          toast.success(res?.data?.message);
-          onCancel(false);
         }
         if (res?.status === 200) {
           queryClient.invalidateQueries([qrkey]);
-          setLoader(false);
-          toast.success(res?.data?.message);
-          onCancel(false);
         }
         if (res?.data?.status === 201) {
           queryClient.invalidateQueries([qrkey]);
-          setLoader(false);
-          toast.success(res?.data?.message);
-          onCancel(false);
         }
+        setLoader(false);
+        toast.success(res?.data?.message);
+        onCancel(false);
       } else {
         if (type === "break") {
           setNew_break((prevBreaks) =>
