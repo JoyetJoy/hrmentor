@@ -65,7 +65,7 @@ function BankHolidays() {
           },
         })
         .then((res) => res.data),
-    enabled: user?.id,
+    enabled: !!user?.id,
   });
 
   useEffect(() => {

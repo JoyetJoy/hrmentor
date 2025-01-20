@@ -31,7 +31,7 @@ export default function EmailType() {
           },
         })
         .then((res) => res.data),
-    enabled: user?.id, 
+    enabled: !!user?.id, 
   });
   const columns = React.useMemo(
     () => [

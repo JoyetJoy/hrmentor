@@ -177,7 +177,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
         api={api}
       />
       <div className="flex flex-col">
-        <MenuHeaderHiring page={2} />
+        <MenuHeaderHiring page={3} />
         <div className="flex gap-x-3">
           <SettingsSidebar sidebarList={hiringSetting} active={type} />
           <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">

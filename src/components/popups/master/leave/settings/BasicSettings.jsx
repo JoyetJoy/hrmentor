@@ -53,7 +53,7 @@ const leaveSchema = Yup.object().shape({
   valid_from: Yup.date()
     .required("Valid from date is required")
     .typeError("Invalid date format"),
-  status: Yup.string().required("Status is required"),
+  status: Yup.string(),
 });
 
 const BasicSettings = ({ formtype = "save" }) => {
@@ -550,7 +550,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     autoComplete="off"
                     type="number"
-                    placeholder="Enter Name of the Leave"
+                    placeholder="Enter number of working days"
                     {...register("accrual_leave")}
                     className="input-box"
                   />
@@ -574,7 +574,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                           { value: "annually", label: "Annually" },
                           { value: "monthly", label: "Monthly" },
                         ]}
-                        placeholder="Select a period"
+                        placeholder="Select accrual period"
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption);
                           setAccuralPeriod(selectedOption.value);
@@ -608,7 +608,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                             label: "After specific number of days",
                           },
                         ]}
-                        placeholder="Select a At"
+                        placeholder="Select accrual at"
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption);
                           setAccuralAt(selectedOption.value);
@@ -631,7 +631,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     autoComplete="off"
                     type="number"
                     min={0}
-                    placeholder="Enter Name of the Leave"
+                    placeholder="Enter specific days"
                     {...register("specific_days")}
                     className="input-box"
                   />{" "}
