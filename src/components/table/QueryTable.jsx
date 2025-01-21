@@ -57,7 +57,7 @@ export default function QueryTable({
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className="justify-end text-[0.8rem] font-medium capitalize text-gray-darkpale"
+                          className="justify-end text-[0.8rem] font-medium text-gray-darkpale"
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
