@@ -147,20 +147,19 @@ export default function AddLeave({
       const fetchEmployeeLeaveType = async () => {
         try {
           const response = await newRequest.get(EMPLOYEE_LEAVE_TYPE);
-          const employeeLeaveType = Array.isArray(response.data)
-            ? response.data.filter((item) => item.leave_types)
+          const employeeLeaveType = Array.isArray(response?.data?.data)
+            ? response?.data?.data
             : [];
-
           if (employeeLeaveType?.length) {
             const options = employeeLeaveType
               .filter(
                 (type) =>
                   type.already_taked_leaves <
-                  Number(type.leave_types?.emp_no_days),
+                  Number(type?.emp_no_days),
               )
               .map((type) => ({
-                label: type.leave_types.display_name,
-                value: type.leave_types.id,
+                label: type.display_name,
+                value: type.id,
               }));
 
             setLeaveType(options); // Set filtered options to the state
