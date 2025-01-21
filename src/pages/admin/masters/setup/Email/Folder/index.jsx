@@ -40,7 +40,7 @@ export default function EmailSetup() {
   }));
   console.log(user);
   
-  const { data: emailFolderList = [] } = useQuery({
+  const { data: emailFolderList = [],refetch } = useQuery({
     queryKey: ["emailFolderList", user?.id],
     queryFn: () =>
       newRequest
@@ -135,6 +135,7 @@ export default function EmailSetup() {
       if (res) {
         toast.success(res?.data?.message);
         close();
+        refetch();
       }
     } catch (error) {
       console.log(error);
@@ -181,11 +182,12 @@ export default function EmailSetup() {
       });
       if (res) {
         toast.success(res?.data?.message);
-        closeEdit();
-        window.location.reload();
+        setDeletePopup(false);
+        refetch();
       }
     } catch (error) {
       console.log(error);
+      setDeletePopup(false)
       toast.error(error?.response?.data?.error);
     } finally {
       setLoader(false);

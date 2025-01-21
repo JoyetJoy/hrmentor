@@ -67,6 +67,9 @@ const BasicSettings = ({ formtype = "save" }) => {
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(leaveSchema),
+    defaultValues: {
+      pay_type: "paid", // Default value
+    },
   });
 
   const close = () => {
@@ -77,12 +80,12 @@ const BasicSettings = ({ formtype = "save" }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  const [accrualType, setAccrualType] = useState();
-  const [applicable, setApplicable] = useState();
+  const [accrualType, setAccrualType] = useState('bycycle');
+  const [applicable, setApplicable] = useState('all_employee');
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
-  const [units, setUnits] = useState("");
+  const [units, setUnits] = useState("days");
   const [status, setStatus] = useState("");
   const [accuralPeriod, setAccuralPeriod] = useState("");
   const [accuralDays, setAccuralDays] = useState("");
@@ -208,7 +211,7 @@ const BasicSettings = ({ formtype = "save" }) => {
       let res;
 
       if (!applicable || !formData.emp_no_days) {
-        return toast.error("Please Select Applicate Type");
+        return toast.error("Please Fill Applicate to");
       }
 
       if (id) {
@@ -245,8 +248,8 @@ const BasicSettings = ({ formtype = "save" }) => {
         <div className="flex w-full flex-row items-center justify-between">
           <h1 className="text-lg font-bold">Basic Settings</h1>
         </div>
-        <div className="mt-4 grid gap-x-3 lg:grid-cols-2">
-          <div className="mt-4 flex w-full flex-col gap-1">
+        <div className="mt-4 grid gap-x-3 lg:grid-cols-4">
+          <div className="mt-4 flex w-full flex-col gap-1 lg:col-span-3">
             <div className="flex w-full gap-3">
               {/* Name of the Leave */}
               <div className="flex w-[50%] flex-col gap-1.5 py-2">
@@ -307,6 +310,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                       type="radio"
                       name="pay_type"
                       value="paid"
+                      defaultChecked
                       {...register("pay_type")}
                       className="radio-black"
                     />
@@ -323,6 +327,11 @@ const BasicSettings = ({ formtype = "save" }) => {
                     <label className="text-sm font-normal">Unpaid</label>
                   </div>
                 </div>
+                {errors.pay_type && (
+                <span className="text-xs font-medium text-red-500">
+                  {errors.pay_type.message}
+                </span>
+              )}
               </div>
               <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
                 <label className="required label-text">Units</label>
@@ -429,6 +438,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     value="bycycle"
                     onClick={() => setAccrualType("bycycle")}
                     className="radio-black"
+                    defaultChecked
                     checked={accrualType === "bycycle"}
                   />
                   <label className="label-text">By cycle</label>
