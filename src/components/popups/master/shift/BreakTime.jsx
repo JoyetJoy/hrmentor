@@ -32,21 +32,32 @@ export default function BreakTime({
         type: "manual",
         message: "Either duration or start and end time should be provided",
       });
-    } else {
+    } else if(data?.start_time&&data?.time){
+      setError("time", {
+        type: "manual",
+        message: "Either duration or start and end time are allowed",
+      });
+
+    } else{
       await handleShift(data);
       close();
     }
   };
 
   const handleShift = async (data) => {
-    const formData = {
-      id: uuidv4(),
-      type_name: data.type_name,
-      start_time: data.start_time,
-      end_time: data.end_time,
-      pay_node: data.pay_node,
-      time: data.time,
-    };
+    let formData;
+    if(data?.start_time&&data?.end_time&&!data?.time){
+      formData = {
+        id: uuidv4(),
+        type_name: data.type_name,
+        start_time: data.start_time,
+        end_time: data.end_time,
+        pay_node: data.pay_node,
+        time: data.time,
+      };
+    }else{
+      return;
+    }
 
     console.log(formData);
 
@@ -193,6 +204,9 @@ export default function BreakTime({
                       // type="time"
                       placeholder="hh:mm"
                       className="input-box pr-2"
+                      onChange={(e) => {
+                        e.target.value = formatTime(e.target.value); // Call the helper function
+                      }}
                     />
                     {errors.start_time && (
                       <span className="text-xs font-medium text-red-500">
@@ -208,6 +222,9 @@ export default function BreakTime({
                       // type="time"
                       placeholder="hh:mm"
                       className="input-box pr-2"
+                      onChange={(e) => {
+                        e.target.value = formatTime(e.target.value); // Call the helper function
+                      }}
                     />
                     {errors.end_time && (
                       <span className="text-xs font-medium text-red-500">
