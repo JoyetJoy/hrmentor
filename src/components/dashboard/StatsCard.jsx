@@ -8,7 +8,7 @@ export default function StatsCard({data}) {
   const employeeDetails = [
     {
       title: "Total Employees",
-      value: `${data?.total_employees_count}`,
+      value: `${data?.total_employees_count||'0'}`,
       path: "/admin/employee",
       percentage: `${data?.total_employees_percentage}`,
       trend: "plus",
@@ -16,7 +16,7 @@ export default function StatsCard({data}) {
     },
     {
       title: "Job Open",
-      value: `${data?.openJobs}`,
+      value: `${data?.openJobs||'0'}`,
       path: "/admin/recruiter/jobs",
       percentage: `${data?.openJobs_percentage}`,
       trend: "plus",
@@ -24,14 +24,14 @@ export default function StatsCard({data}) {
     },
     {
       title: "Job Applied",
-      value: `${data?.total_job_applications}`,
+      value: `${data?.total_job_applications||'0'}`,
       percentage: `${data?.total_job_applications_percentage}`,
       trend: "minus",
       description: "Applicants",
     },
     {
       title: "Employees on Holiday",
-      value: `${data?.total_leaves_today}`,
+      value: `${data?.total_leaves_today||'0'}`,
       percentage: `${data?.openJobs_percentage}`,
       trend: "plus",
       description: "Employees",

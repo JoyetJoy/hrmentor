@@ -59,8 +59,6 @@ export default function BreakTime({
       return;
     }
 
-    console.log(formData);
-
     try {
       if (formData) {
         setNew_break((prevtime) => [...prevtime, formData]);

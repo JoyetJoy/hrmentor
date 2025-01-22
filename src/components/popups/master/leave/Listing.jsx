@@ -172,7 +172,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
               >
                 <Eye className="size-3" />
               </button>
-              {/* <button
+              <button
                 type="button"
                 onClick={() => {
                   setPopupOpen(true);
@@ -195,7 +195,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
                 className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
               >
                 <Trash2 className="size-3" />
-              </button> */}
+              </button>
             </div>
           ),
         },
