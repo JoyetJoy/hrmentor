@@ -100,9 +100,10 @@ export default function ProfileManagmentForm({ formtype }) {
     setUser: state.setUser,
     user: state.user,
   }));
-  console.log(user);
   
   const u_id = user?.employee_data?.user_id;
+  console.log(errors);
+  
 
   // MASTERS LISTING
   const { data: employeeMasters } = useEmployeeMaster(
@@ -172,7 +173,7 @@ export default function ProfileManagmentForm({ formtype }) {
       setValue("city_id", employeeDetails.city_id);
       setValue("department_id", employeeDetails.department_id);
       setValue("employment_type", employeeDetails.employment_type);
-      setValue("pention_status", employeeDetails.pension_subscription);
+      setValue("pension_subscription", employeeDetails.pension_subscription);
       if (employeeDetails?.state_id) {
         setState(employeeDetails?.state_id?.value);
       }
@@ -311,7 +312,7 @@ export default function ProfileManagmentForm({ formtype }) {
   const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
 
   const onSubmit = (data) => {
-    if (imageFile) {
+    if (imageFile||image) {
       setLoader(true);
       handleEmployee(data);
     } else {
@@ -352,28 +353,27 @@ export default function ProfileManagmentForm({ formtype }) {
     });
     formData.append("country_id", data.country_id?.id);
     formData.append("city_id", data.city_id?.id);
-    formData.append("state_id", data.state_id?.value);
+    formData.append("state_id", data.state_id?.id);
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
-    formData.append("pention_subscription", data.pention_status?.id);
+    formData.append("pention_subscription", data.pension_subscription?.id);
 
     try {
       let res;
       if (formtype === "save") {
         res = await newFormRequest.post(EMPLOYEE, formData);
       } else {
-        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${uid}`, formData);
+        res = await newFormRequest.post(`${UPDATE_EMPLOYEE}/${u_id}`, formData);
       }
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["employeeDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
-        clearImage();
-        reset();
+        formtype === "save"&&(reset(), clearImage())
         setLoader(false);
         formtype === "save"
           ? navigate("/admin/employee")
-          : window.location.reload();
+          : '';
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
@@ -394,7 +394,7 @@ export default function ProfileManagmentForm({ formtype }) {
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
-        <form onClick={handleSubmit(onSubmit)} className="w-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="my-1 flex w-full flex-row items-center justify-between">
             <h1 className="text-base font-bold">
               {formtype === "update"
@@ -540,6 +540,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={employeeMasters?.genders}
                         placeholder="Select Gender"
@@ -558,6 +559,7 @@ export default function ProfileManagmentForm({ formtype }) {
                   <input
                     {...register("dob", { required: true })}
                     autoComplete="off"
+                    disabled={formtype === "update"}
                     type="date"
                     max={new Date().toISOString().split("T")[0]}
                     className="input-box pr-2"
@@ -578,6 +580,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={nationalityList}
                         placeholder="Select Nationality"
@@ -601,6 +604,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={countryList}
                         placeholder="Select Country"
@@ -624,6 +628,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <AsyncSelect
                         {...field}
                         placeholder="Search ..."
+                        isDisabled={formtype === "update"}
                         loadOptions={loadCitiesOptions}
                         isSearchable={true}
                         noOptionsMessage={() => "Type city name"}
@@ -665,6 +670,7 @@ export default function ProfileManagmentForm({ formtype }) {
                     })}
                     autoComplete="off"
                     type="text"
+                    disabled={formtype === "update"}
                     placeholder="Enter Post Code"
                     onKeyPress={(event) => {
                       const valueWithoutSpaces = event.target.value.replace(
@@ -697,6 +703,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={bloodGroups}
                         placeholder="Select Blood Group"
@@ -725,6 +732,7 @@ export default function ProfileManagmentForm({ formtype }) {
                     })}
                     autoComplete="off"
                     type="text"
+                    disabled={formtype === "update"}
                     maxLength={9}
                     placeholder="Enter National Insurance Number"
                     className="input-box"
@@ -744,6 +752,7 @@ export default function ProfileManagmentForm({ formtype }) {
                   <textarea
                     autoComplete="off"
                     type="text"
+                    disabled={formtype === "update"}
                     {...register("home_address", { required: true })}
                     className="input-box min-h-28 py-1"
                   />
@@ -773,7 +782,6 @@ export default function ProfileManagmentForm({ formtype }) {
                     </div>
                   </label>
                   <textarea
-                    disabled={sameAsHome}
                     autoComplete="off"
                     {...register("communication_address", { required: true })}
                     className="input-box min-h-28 py-1"
@@ -869,6 +877,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={departmentListing}
                         placeholder="Select Department"
@@ -893,6 +902,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={rolesList}
                         isMulti
@@ -927,6 +937,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={designationListing}
                         placeholder="Select Designation"
@@ -946,6 +957,7 @@ export default function ProfileManagmentForm({ formtype }) {
                   <input
                     {...register("date_of_joining", { required: true })}
                     autoComplete="off"
+                    disabled={formtype === "update"}
                     type="date"
                     className="input-box pr-2"
                   />
@@ -975,6 +987,7 @@ export default function ProfileManagmentForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={workLocationListing}
                         placeholder="Select Work location"
@@ -1007,6 +1020,7 @@ export default function ProfileManagmentForm({ formtype }) {
                     render={({ field }) => (
                       <Select
                         {...field}
+                        isDisabled={formtype === "update"}
                         isSearchable={true}
                         styles={customSelectStyles}
                         options={employeeTypeList}
@@ -1090,6 +1104,7 @@ export default function ProfileManagmentForm({ formtype }) {
                     {...register("work_email", { required: true })}
                     autoComplete="off"
                     type="text"
+                    disabled={formtype === "update"}
                     placeholder="Enter Work Email Address"
                     className="input-box"
                   />
@@ -1104,13 +1119,14 @@ export default function ProfileManagmentForm({ formtype }) {
                     Pension subscription
                   </label>
                   <Controller
-                    name="pention_status"
+                    name="pension_subscription"
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
                         isSearchable={true}
+                        isDisabled={formtype === "update"}
                         styles={customSelectStyles}
                         options={pentionStatuses}
                         placeholder="Select status"
@@ -1118,9 +1134,9 @@ export default function ProfileManagmentForm({ formtype }) {
                       />
                     )}
                   />
-                  {errors.pention_status && (
+                  {errors.pension_subscription && (
                     <span className="text-xs font-medium text-red-500">
-                      {errors.pention?.message}
+                      {errors.pension_subscription?.message}
                     </span>
                   )}
                 </div>
