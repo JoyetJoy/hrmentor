@@ -172,6 +172,10 @@ export default function ProfileManagmentForm({ formtype }) {
       setValue("city_id", employeeDetails.city_id);
       setValue("department_id", employeeDetails.department_id);
       setValue("employment_type", employeeDetails.employment_type);
+      setValue("pention_status", employeeDetails.pension_subscription);
+      if (employeeDetails?.state_id) {
+        setState(employeeDetails?.state_id?.value);
+      }
     }
   }, [employeeDetails, setValue]);
 
@@ -352,7 +356,6 @@ export default function ProfileManagmentForm({ formtype }) {
     imageFile && formData.append("profile_image", imageFile);
     formData.append("same_as_home", sameAsHome ? 1 : 0);
     formData.append("pention_subscription", data.pention_status?.id);
-    formData.append("pension_subscription", data.pention_status?.id);
 
     try {
       let res;
@@ -391,7 +394,7 @@ export default function ProfileManagmentForm({ formtype }) {
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <form onClick={handleSubmit(onSubmit)} className="w-full">
           <div className="my-1 flex w-full flex-row items-center justify-between">
             <h1 className="text-base font-bold">
               {formtype === "update"
