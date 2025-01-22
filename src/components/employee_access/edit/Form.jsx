@@ -100,7 +100,9 @@ export default function ProfileManagmentForm({ formtype }) {
     setUser: state.setUser,
     user: state.user,
   }));
-  const u_id = user.id;
+  console.log(user);
+  
+  const u_id = user?.employee_data?.user_id;
 
   // MASTERS LISTING
   const { data: employeeMasters } = useEmployeeMaster(

@@ -42,7 +42,24 @@ export default function RecCreateInterview({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  const [time, setTime] = useState({ hour: "", minute: "" });
 
+  const hours = Array.from({ length: 24 }, (_, i) =>
+    String(i).padStart(2, "0"),
+  );
+  const minutes = Array.from({ length: 60 }, (_, i) =>
+    String(i).padStart(2, "0"),
+  );
+
+  const handleTimeChange = (key, value) => {
+    const updatedTime = { ...time, [key]: value };
+    setTime(updatedTime);
+
+    // Combine hour and minute into a single value
+    if (updatedTime.hour && updatedTime.minute) {
+      setValue("interview_time", `${updatedTime.hour}:${updatedTime.minute}`);
+    }
+  };
   let enableKey = selectedField === 0 ? false : true;
 
   // Get selected data
@@ -146,6 +163,11 @@ export default function RecCreateInterview({
       setValue("interviewer_id", candidateInterviewDetail?.interviewers);
       setValue("scheduled_date", candidateInterviewDetail?.scheduled_date);
       setValue("interview_time", candidateInterviewDetail?.interview_time);
+      if (candidateInterviewDetail?.interview_time) {
+        const timeParts = candidateInterviewDetail.interview_time.split(":");
+        const updatedTime = {hour: timeParts[0],minute:timeParts[1] };
+    setTime(updatedTime);
+      }
     }
   }, [candidateInterviewDetail, setValue]);
 
@@ -271,11 +293,41 @@ export default function RecCreateInterview({
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Scheduled Time
                   </label>
-                  <input
-                    {...register("interview_time")}
-                    type="time"
-                    className="input-box"
-                  />
+                  <div className="flex space-x-2">
+                    {/* Hours Dropdown */}
+                    <select
+                      className="input-box w-16 text-center"
+                      value={time.hour}
+                      onChange={(e) => handleTimeChange("hour", e.target.value)}
+                    >
+                      <option value="" disabled>
+                        HH
+                      </option>
+                      {hours.map((hour) => (
+                        <option key={hour} value={hour}>
+                          {hour}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Minutes Dropdown */}
+                    <select
+                      className="input-box w-16 text-center"
+                      value={time.minute}
+                      onChange={(e) =>
+                        handleTimeChange("minute", e.target.value)
+                      }
+                    >
+                      <option value="" disabled>
+                        MM
+                      </option>
+                      {minutes.map((minute) => (
+                        <option key={minute} value={minute}>
+                          {minute}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
                   {errors.interview_time && (
                     <span className="text-xs font-medium text-red-500">
