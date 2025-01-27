@@ -8,6 +8,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 import AddManually from "@/components/popups/employee_access/timesheet/AddManually";
 import { TIME_SHEET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
+import { getISOWeek, format } from "date-fns";
 
 export default function TimeSheet() {
   const [date, setDate] = useState(new Date());
@@ -37,15 +38,18 @@ export default function TimeSheet() {
       }),
     );
     setWeeks(newWeeks);
-     // Find the default week based on today's date
-  const today = dayjs(); // Current date
-  if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
-    const firstDayOfMonth = dayjs(date).startOf("month");
-    const defaultWeek = Math.ceil(today.diff(firstDayOfMonth, "day") / 7);
-    setSelectedWeek(defaultWeek);
-  } else {
-    setSelectedWeek(1);
-  }
+    // Find the default week based on today's date
+    const today = dayjs(); // Current date
+    if (
+      today.month() === dayjs(date).month() &&
+      today.year() === dayjs(date).year()
+    ) {
+      const today = new Date();
+      const currentWeek = getISOWeek(today);
+      setSelectedWeek(currentWeek);
+    } else {
+      setSelectedWeek(1);
+    }
   }, [date]);
 
   // Handle month change
@@ -98,7 +102,6 @@ export default function TimeSheet() {
       fullDate: startOfWeek.format("YYYY-MM-DD"),
     };
   });
-
 
   const { end } = getStartAndEndOfWeek();
   console.log(end);
