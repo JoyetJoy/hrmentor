@@ -22,7 +22,8 @@ export default function UnderDocumentListing({ cid, uid, documentName }) {
     setUser: state.setUser,
     user: state.user,
   }));
-  const u_id = user.id;
+
+  const u_id = user?.user?.id;
   // Fetch List
   const { data: employeeDocumentsListing, isLoading } = useQuery({
     queryKey: ["employeeDocumentsListing", currentPage, keyword, u_id, cid],
@@ -41,13 +42,13 @@ export default function UnderDocumentListing({ cid, uid, documentName }) {
         }),
     enabled: !!cid,
   });
-
+ 
   useEffect(() => {
     if (employeeDocumentsListing) {
       setTotalPages(employeeDocumentsListing?.last_page);
     }
   }, [employeeDocumentsListing]);
-
+ 
   const columns = React.useMemo(
     () => [
       {

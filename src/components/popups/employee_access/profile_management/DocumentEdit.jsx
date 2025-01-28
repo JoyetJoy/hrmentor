@@ -2,12 +2,13 @@ import { newFormRequest, newRequest, UPDATE_EMPLOYEE_DOCUMENTS } from "@/api";
 import { EMPLOYEE_DOCUMENT_TYPE_LIST } from "@/api/master";
 import { employeeMasterOptions } from "@/constants/data";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import useImageUpload from "@/hooks/useImageUpload";
 import { empDocumentTypeSchema } from "@/schema/dashboard/employee/form/documentType.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { X } from "lucide-react";
+import { UploadCloud, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -51,7 +52,8 @@ export default function DocumentEdit({
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
-
+  const { image, imageFile, handleImageChange, clearImage, setImage } =
+    useImageUpload();
   useEffect(() => {
     if (employeeDocumentDetailByid) {
       setValue("status", employeeDocumentDetailByid?.data?.status);
@@ -90,6 +92,7 @@ export default function DocumentEdit({
       formData.append("issued_date", data.issued_date);
       formData.append("expiry_date", data.expiry_date);
       formData.append("issued_authority", data.issued_authority);
+      imageFile && formData.append("document", imageFile);
 
       let res;
       if (selectedField !== 0) {
@@ -112,184 +115,216 @@ export default function DocumentEdit({
       setLoader(false);
     }
   };
-
-
+console.log(uid,"uiduid")
   return (
     <Dialog
-    open={popupOpen}
-    as="div"
-    className="relative z-10 focus:outline-none"
-    onClose={close}
-  >
-    <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
-      <div className="flex min-h-full items-center justify-center p-4">
-        <DialogPanel
-          transition
-          className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
-        >
-          <div className="mb-7 flex items-center justify-between">
-            <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-              {selectedField ? "Update" : "Add"} {documentName}
-            </h1>
-            <button
-              type="button"
-              onClick={close}
-              className="text-lg font-extrabold text-[#00000080]"
-            >
-              <X />
-            </button>
-          </div>
-          {isLoading ? (
-            <div className="flex min-h-72 w-full items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
+      open={popupOpen}
+      as="div"
+      className="relative z-10 focus:outline-none"
+      onClose={close}
+    >
+      <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+        <div className="flex min-h-full items-center justify-center p-4">
+          <DialogPanel
+            transition
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+          >
+            <div className="mb-7 flex items-center justify-between">
+              <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
+                {selectedField ? "Update" : "Add"} {documentName}
+              </h1>
+              <button
+                type="button"
+                onClick={close}
+                className="text-lg font-extrabold text-[#00000080]"
+              >
+                <X />
+              </button>
             </div>
-          ) : (
-            <form
-              className="grid grid-cols-1 gap-3"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Document Name
-                </label>
-                <input
-                  {...register("document_name", { required: true })}
-                  type="text"
-                  placeholder="Enter document name"
-                  className="input-box h-10 w-full placeholder:text-[0.8rem]"
-                />
-                {errors.document_name && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.document_name?.message}
-                  </span>
-                )}
+            {isLoading ? (
+              <div className="flex min-h-72 w-full items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
               </div>
-
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Document Type
-                </label>
-                <Controller
-                  name="document_type_id"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={employeeDocumentTypeList}
-                      isSearchable={true}
-                      styles={customSelectStyles}
-                      placeholder="Select Type"
-                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                    />
+            ) : (
+              <form
+                className="grid grid-cols-1 gap-3"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Document Name
+                  </label>
+                  <input
+                    {...register("document_name", { required: true })}
+                    type="text"
+                    placeholder="Enter document name"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                  />
+                  {errors.document_name && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.document_name?.message}
+                    </span>
                   )}
-                />
-                {errors.document_type_id && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.document_type_id?.message}
-                  </span>
-                )}
-              </div>
+                </div>
 
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Issued Authority
-                </label>
-                <input
-                  {...register("issued_authority", { required: true })}
-                  type="text"
-                  placeholder="Enter issued authority"
-                  className="input-box h-10 w-full placeholder:text-[0.8rem]"
-                />
-                {errors.issued_authority && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.issued_authority?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Issued Date
-                </label>
-                <input
-                  {...register("issued_date", { required: true })}
-                  type="date"
-                  className="input-box h-10 w-full pr-2"
-                />
-                {errors.issued_date && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.issued_date?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Expiry date
-                </label>
-                <input
-                  {...register("expiry_date", { required: true })}
-                  type="date"
-                  className="input-box h-10 w-full pr-2"
-                />
-                {errors.expiry_date && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.expiry_date?.message}
-                  </span>
-                )}
-              </div>
-              <div className="group flex flex-col space-y-1">
-                <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Status
-                </label>
-                <Controller
-                  name="status"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={employeeMasterOptions}
-                      isSearchable={false}
-                      styles={customSelectStyles}
-                      placeholder="Select Status"
-                      className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
-                    />
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Document Type
+                  </label>
+                  <Controller
+                    name="document_type_id"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={employeeDocumentTypeList}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        placeholder="Select Type"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.document_type_id && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.document_type_id?.message}
+                    </span>
                   )}
-                />
-                {errors.status && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.status?.message}
-                  </span>
-                )}
-              </div>
-              <div className="mt-2 flex flex-row items-center justify-center gap-3">
-                <button
-                  type="submit"
-                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
-                  disabled={loader}
-                >
-                  {loader ? (
-                    <div className="flex items-center gap-3">
-                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      {selectedField ? "Updating" : "Saving"}
+                </div>
+
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Issued Authority
+                  </label>
+                  <input
+                    {...register("issued_authority", { required: true })}
+                    type="text"
+                    placeholder="Enter issued authority"
+                    className="input-box h-10 w-full placeholder:text-[0.8rem]"
+                  />
+                  {errors.issued_authority && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.issued_authority?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Issued Date
+                  </label>
+                  <input
+                    {...register("issued_date", { required: true })}
+                    type="date"
+                    className="input-box h-10 w-full pr-2"
+                  />
+                  {errors.issued_date && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.issued_date?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Expiry date
+                  </label>
+                  <input
+                    {...register("expiry_date", { required: true })}
+                    type="date"
+                    className="input-box h-10 w-full pr-2"
+                  />
+                  {errors.expiry_date && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.expiry_date?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1">
+                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Status
+                  </label>
+                  <Controller
+                    name="status"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={employeeMasterOptions}
+                        isSearchable={false}
+                        styles={customSelectStyles}
+                        placeholder="Select Status"
+                        className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
+                      />
+                    )}
+                  />
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col gap-1.5">
+                  {image ? (
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="Uploaded"
+                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      />
+                      <X
+                        onClick={clearImage}
+                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                      />
                     </div>
                   ) : (
-                    <span>{selectedField ? "Update" : "Save"}</span>
+                    <label
+                      htmlFor="employee-profile-pic"
+                      className="input-box flex h-10 cursor-pointer items-center justify-center rounded-md border border-dashed"
+                    >
+                      <div className="flex items-center gap-2">
+                        <UploadCloud />
+                        <span className="font-semibold text-[#2C2C2C]">
+                          Upload Document
+                        </span>
+                      </div>
+                      <input
+                        id="employee-profile-pic"
+                        onChange={handleImageChange}
+                        type="file"
+                        className="hidden"
+                      />
+                    </label>
                   )}
-                </button>
-                <button
-                  type="button"
-                  onClick={close}
-                  className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-        </DialogPanel>
+                </div>
+                <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                  <button
+                    type="submit"
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                    disabled={loader}
+                  >
+                    {loader ? (
+                      <div className="flex items-center gap-3">
+                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                        {selectedField ? "Updating" : "Saving"}
+                      </div>
+                    ) : (
+                      <span>{selectedField ? "Update" : "Save"}</span>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </DialogPanel>
+        </div>
       </div>
-    </div>
-  </Dialog>
+    </Dialog>
   );
 }
