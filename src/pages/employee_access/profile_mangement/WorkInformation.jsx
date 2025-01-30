@@ -71,7 +71,7 @@ export default function WorkInformation({ formtype }) {
 
     enabled: !!u_id,
   });
- console.log(empWorkInfoDetail,"empWorkInfoDetail")
+  console.log(empWorkInfoDetail, "empWorkInfoDetail");
   useEffect(() => {
     if (empWorkInfoDetail) {
       console.log(empWorkInfoDetail);
@@ -250,7 +250,7 @@ export default function WorkInformation({ formtype }) {
                         render={({ field }) => (
                           <Select
                             {...field}
-                            isSearchable={true}
+                            isSearchable={false}
                             styles={customSelectStyles}
                             // options={activeEmployeeList}
                             placeholder="Select"
@@ -275,6 +275,7 @@ export default function WorkInformation({ formtype }) {
                             {...field}
                             isSearchable={true}
                             styles={customSelectStyles}
+                            isDisabled={true}
                             // options={activeEmployeeList}
                             placeholder="Select"
                             className="input-box"
@@ -299,6 +300,7 @@ export default function WorkInformation({ formtype }) {
                       autoComplete="off"
                       type="number"
                       name="age"
+                      isDisabled={true}
                       placeholder="Enter"
                       // {...register("age", { required: true })}
                       // onKeyPress={(event) => {
@@ -334,9 +336,10 @@ export default function WorkInformation({ formtype }) {
                       render={({ field }) => (
                         <Select
                           {...field}
-                          isSearchable={true}
+                          isSearchable={false}
                           styles={customSelectStyles}
-                          // options={eeoJobCategoryList}
+                          isDisabled={true}
+                          options={eeoJobCategoryList}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -360,6 +363,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
+                          isDisabled={true}
                           // options={ethinicityList}
                           placeholder="Select"
                           className="input-box"
@@ -383,6 +387,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
+                          isDisabled={true}
                           // options={religiousSexualList?.religious}
                           placeholder="Select"
                           className="input-box"
@@ -407,6 +412,7 @@ export default function WorkInformation({ formtype }) {
                           isSearchable={true}
                           styles={customSelectStyles}
                           // options={genders}
+                          isDisabled={true}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -429,6 +435,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
+                          isDisabled={true}
                           // options={religiousSexualList?.sexualOrientations}
                           placeholder="Select"
                           className="input-box"
@@ -443,7 +450,6 @@ export default function WorkInformation({ formtype }) {
                   </div>
                   <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Marital status</label>
-
                     <Controller
                       name="marital_status"
                       control={control}
@@ -455,6 +461,7 @@ export default function WorkInformation({ formtype }) {
                           styles={customSelectStyles}
                           // options={maritalStatuses}
                           placeholder="Select"
+                          isDisabled={true}
                           className="input-box"
                         />
                       )}
@@ -476,6 +483,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
+                          isDisabled={true}
                           // options={disabilityStatus}
                           // value={successStatus.find(
                           //   (item) => item.id === field.id,
@@ -507,6 +515,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
+                          isDisabled={true}
                           // options={disabilityStatus}
                           placeholder="Select"
                           className="input-box"
