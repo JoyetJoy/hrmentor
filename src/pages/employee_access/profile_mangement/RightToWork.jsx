@@ -35,7 +35,7 @@ export default function RightToWork() {
     setUser: state.setUser,
     user: state.user,
   }));
-  const u_id = user.id;
+  const u_id = user?.user?.id;
   // Fetch List
   const { data: employeeRightToWorks, isLoading } = useQuery({
     queryKey: ["employeeRightToWorks", currentPage, u_id, keyword],

@@ -35,7 +35,7 @@ export default function EmergencyContact() {
     setUser: state.setUser,
     user: state.user,
   }));
-  const u_id = user.id;
+  const u_id = user?.user?.id;
   // Fetch List
   const { data: employeeEmergencyContacts, isLoading } = useQuery({
     queryKey: ["employeeEmergencyContacts", currentPage, u_id, keyword],

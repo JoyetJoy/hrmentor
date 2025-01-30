@@ -57,7 +57,7 @@ export default function WorkInformation({ formtype }) {
     setUser: state.setUser,
     user: state.user,
   }));
-  const u_id = user.id;
+  const u_id = user?.user?.id;
   const {
     data: empWorkInfoDetail,
     isLoading,
@@ -69,9 +69,9 @@ export default function WorkInformation({ formtype }) {
         return res.data;
       }),
 
-    enabled: !!uid,
+    enabled: !!u_id,
   });
-
+ console.log(empWorkInfoDetail,"empWorkInfoDetail")
   useEffect(() => {
     if (empWorkInfoDetail) {
       console.log(empWorkInfoDetail);
@@ -252,7 +252,7 @@ export default function WorkInformation({ formtype }) {
                             {...field}
                             isSearchable={true}
                             styles={customSelectStyles}
-                            options={activeEmployeeList}
+                            // options={activeEmployeeList}
                             placeholder="Select"
                             className="input-box"
                           />
@@ -275,7 +275,7 @@ export default function WorkInformation({ formtype }) {
                             {...field}
                             isSearchable={true}
                             styles={customSelectStyles}
-                            options={activeEmployeeList}
+                            // options={activeEmployeeList}
                             placeholder="Select"
                             className="input-box"
                           />
@@ -300,21 +300,21 @@ export default function WorkInformation({ formtype }) {
                       type="number"
                       name="age"
                       placeholder="Enter"
-                      {...register("age", { required: true })}
-                      onKeyPress={(event) => {
-                        if (
-                          !/^[0-9]$/.test(event.key) ||
-                          event.target.value.length >= 2
-                        ) {
-                          event.preventDefault();
-                        }
-                      }}
-                      onChange={(event) => {
-                        const value = event.target.value;
-                        if (value && !isNaN(value)) {
-                          setValue("age", value);
-                        }
-                      }}
+                      // {...register("age", { required: true })}
+                      // onKeyPress={(event) => {
+                      //   if (
+                      //     !/^[0-9]$/.test(event.key) ||
+                      //     event.target.value.length >= 2
+                      //   ) {
+                      //     event.preventDefault();
+                      //   }
+                      // }}
+                      // onChange={(event) => {
+                      //   const value = event.target.value;
+                      //   if (value && !isNaN(value)) {
+                      //     setValue("age", value);
+                      //   }
+                      // }}
                       className="input-box placeholder:text-[0.8rem]"
                       value={watch("age")}
                     />
@@ -336,7 +336,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={eeoJobCategoryList}
+                          // options={eeoJobCategoryList}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -360,7 +360,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={ethinicityList}
+                          // options={ethinicityList}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -383,7 +383,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={religiousSexualList?.religious}
+                          // options={religiousSexualList?.religious}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -406,7 +406,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={genders}
+                          // options={genders}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -429,7 +429,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={religiousSexualList?.sexualOrientations}
+                          // options={religiousSexualList?.sexualOrientations}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -453,7 +453,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={maritalStatuses}
+                          // options={maritalStatuses}
                           placeholder="Select"
                           className="input-box"
                         />
@@ -476,7 +476,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={disabilityStatus}
+                          // options={disabilityStatus}
                           // value={successStatus.find(
                           //   (item) => item.id === field.id,
                           // )}
@@ -507,7 +507,7 @@ export default function WorkInformation({ formtype }) {
                           {...field}
                           isSearchable={true}
                           styles={customSelectStyles}
-                          options={disabilityStatus}
+                          // options={disabilityStatus}
                           placeholder="Select"
                           className="input-box"
                         />
