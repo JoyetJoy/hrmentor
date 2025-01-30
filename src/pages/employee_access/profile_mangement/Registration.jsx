@@ -29,7 +29,7 @@ export default function Registration() {
     setUser: state.setUser,
    user: state.user,
   }));
-  const u_id = user.id ;
+  const u_id = user?.user?.id;
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
