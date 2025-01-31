@@ -180,12 +180,12 @@ export default function Leave() {
       <div className="flex w-full items-center justify-between px-4 py-2">
         <h5 className="text-md font-bold">My Leave</h5>
       </div>
-      <div className="flex gap-3">
+      <div className="flex gap-3 w-full">
         <LeaveSideBar />
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 min-w-[80%]">
           <img src="/assets/images/employee_access/leave.png" alt="" />
-          <div className="max-w-8xl mb-10 w-full rounded-md bg-white p-5">
-            <div className="mb-2 flex w-full items-center justify-between py-2">
+          <div className=" mb-10 rounded-md bg-white p-5">
+            <div className="mb-2 flex  items-center justify-between py-2">
               <div className="flex items-center gap-3">
                 <Select
                   options={years}
@@ -203,7 +203,7 @@ export default function Leave() {
                 />
               </div>
               <div className="flex items-center gap-3">
-                <label className="input flex h-10 min-h-10 min-w-72 items-center gap-2 rounded-md border border-gray-soft outline-none">
+                {/* <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border border-gray-soft outline-none">
                   <Search className="size-4 object-contain text-gray-dark" />
                   <input
                     type="text"
@@ -213,7 +213,7 @@ export default function Leave() {
                     className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
                     placeholder="Search"
                   />
-                </label>
+                </label> */}
                 <Link
                   to="/employee-access/leave/team-request"
                   className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-black px-3 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
