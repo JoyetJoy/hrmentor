@@ -255,7 +255,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
           />
           <p className="text-[0.9rem] font-medium">{candidate?.city.label}</p>
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <img
             className="h-7 w-7"
             src="/assets/images/hiring/offer/4.png"
@@ -270,7 +270,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
             alt=""
           />
           <p className="text-[0.9rem] font-medium">Sales & Marketing</p>
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-4 gap-x-3 rounded border-t bg-white p-4">
         <div className="group flex flex-col space-y-1 py-2">

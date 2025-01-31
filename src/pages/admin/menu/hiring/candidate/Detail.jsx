@@ -249,10 +249,10 @@ console.log(candidateDetails);
               </div>
             )}
           </div>
-          <div className="flex items-center gap-2 rounded-md border bg-white px-7 py-2 font-medium text-sm text-black">
+          {/* <div className="flex items-center gap-2 rounded-md border bg-white px-7 py-2 font-medium text-sm text-black">
             <History size={16} color="black" />
             <p>History</p>
-          </div>
+          </div> */}
         </div>
         <form className="mt-2 grid grid-cols-2 gap-5 rounded-md py-4 pb-12">
           <div className="flex flex-col rounded-md bg-white p-5">

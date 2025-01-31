@@ -45,7 +45,7 @@ export const AdminLayout = () => {
   return token ? (
     <>
       <ScrollBack />
-      <div className="w-full bg-gray-100 px-12 py-4">
+      <div className="w-full h-screen min-h-full bg-gray-100 px-12 py-4">
         <AdminHeader />
         <Outlet />
       </div>
