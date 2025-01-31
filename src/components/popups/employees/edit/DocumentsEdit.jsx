@@ -112,7 +112,7 @@ export default function EmployeeDocumentEditForm({
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.error);
+      toast.error(" Upload document");
     } finally {
       setLoader(false);
     }

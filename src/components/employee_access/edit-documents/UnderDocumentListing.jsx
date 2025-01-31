@@ -22,7 +22,8 @@ export default function UnderDocumentListing({ cid, uid, documentName }) {
     setUser: state.setUser,
     user: state.user,
   }));
-  const u_id = user.id;
+
+  const u_id = user?.user?.id;
   // Fetch List
   const { data: employeeDocumentsListing, isLoading } = useQuery({
     queryKey: ["employeeDocumentsListing", currentPage, keyword, u_id, cid],
@@ -41,13 +42,13 @@ export default function UnderDocumentListing({ cid, uid, documentName }) {
         }),
     enabled: !!cid,
   });
-
+ 
   useEffect(() => {
     if (employeeDocumentsListing) {
       setTotalPages(employeeDocumentsListing?.last_page);
     }
   }, [employeeDocumentsListing]);
-
+ 
   const columns = React.useMemo(
     () => [
       {
@@ -81,6 +82,23 @@ export default function UnderDocumentListing({ cid, uid, documentName }) {
             className={`flex h-8 w-20 items-center justify-center rounded-md px-3 font-semibold ${row?.original?.status == 1 ? "bg-active/15 text-active" : "bg-inactive/15 text-inactive"}`}
           >
             {row?.original?.status == 1 ? "Active" : "Inactive"}
+          </div>
+        ),
+      },
+      {
+        header: "Document",
+        accessorKey: "document",
+        cell: ({ row }) => (
+          <div className="flex">
+             <a
+              href={row.original?.upload_documents}
+              target="_blank"
+              className={`${row.original?.upload_documents? 'text-[#1A75FF] underline underline-offset-2':''}`}
+              rel="noopener noreferrer"
+            >
+              {row.original?.upload_documents?'document':'No document'}
+              
+            </a>
           </div>
         ),
       },
