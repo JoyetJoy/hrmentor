@@ -181,7 +181,7 @@ function CandidatesList() {
         </div>
         <div className="flex items-center gap-7">
           <Link
-            to={"/admin/recruiter/candidate/save"}
+            to={"/admin/recruiter/candidate/save?types=2"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-5" strokeWidth={2} />

@@ -1,6 +1,7 @@
 import { ArrowUpFromLine } from "lucide-react";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
+import toast from "react-hot-toast";
 
 export default function ResumeDragzone({
   file,
@@ -11,6 +12,10 @@ export default function ResumeDragzone({
 }) {
   const onDrop = (acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
+    if (selectedFile.size > 1024 * 1024) {
+      toast.error("File size exceeds 1MB. Please upload a smaller file.");
+      return;
+    }
     setFile(selectedFile);
 
     // Generate a preview for images or PDFs
@@ -24,6 +29,7 @@ export default function ResumeDragzone({
       setFilePreview(null); // Clear preview if file is not supported
     }
   };
+console.log(types);
 
   return (
     <>

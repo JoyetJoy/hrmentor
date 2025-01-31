@@ -4,6 +4,17 @@ import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
+import Expense from "@/components/payroll/LineChart";
+import dayjs from "dayjs";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
+import SemiDonutChart from "@/components/payroll/DonutChart";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const years = Array.from({ length: 11 }, (_, i) => ({
+  value: 2020 + i,
+  label: (2020 + i).toString(),
+}));
 
 export default function Payroll() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,6 +22,13 @@ export default function Payroll() {
   const [selectedRoster, setSelectedRoster] = useState(null);
   const pageLimit = 10;
   const [keyword, setKeyword]= useState('')
+  const [date, setDate] = useState(new Date());
+  const year = dayjs(date).year();
+  const [monthValue, setMonthValue] = useState("1");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [startDate2, setStartDate2] = useState("");
+      const [endDate2, setEndDate2] = useState("");
 
   const { data: rosterDetailss } = useQuery({
     queryKey: ["rosterDetailss", currentPage, keyword],
@@ -36,6 +54,105 @@ export default function Payroll() {
       }
     }
   }, [rosterDetailss, selectedRoster]);
+
+  const handleYearChange = (selectedOption) => {
+      const updatedDate = dayjs(date).year(selectedOption.value).toDate();
+      setDate(updatedDate);
+      
+    };
+
+    // useEffect(() => {
+    //     if (monthValue === "1" && data) {
+    //       const { star_day, end_day } = data;
+    
+    //       const startDate = getWeekDayDate(star_day);
+    //       const endDate = getWeekDayDate(
+    //         end_day,
+    //         new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000),
+    //       ); // Add 7 days for the next week
+    
+    //       setStartDate(formatDateRange(startDate));
+    //       setEndDate(formatDateRange(endDate));
+    //     } else if (monthValue === "2" && data) {
+    //       setStartDate(formatDateRange(data?.start_date));
+    //       setEndDate(formatDateRange(data?.end_date));
+    //     } else if (monthValue === "3" && data) {
+    //       setStartDate(formatDateRange(data?.first_pay_term?.start_date));
+    //       setEndDate(formatDateRange(data?.first_pay_term?.end_date));
+    //       setStartDate2(formatDateRange(data?.second_pay_term?.start_date));
+    //       setEndDate2(formatDateRange(data?.second_pay_term?.end_date));
+    //     }
+    //   }, [monthValue, data]);
+    
+      const handlePreviousPeriod = () => {
+        const newEndDate = new Date(
+          new Date(startDate).getTime() - 24 * 60 * 60 * 1000,
+        ); // Decrement startDate by 1 day
+    
+        if (monthValue === "1") {
+          const newStartDate = new Date(
+            newEndDate.getTime() - 6 * 24 * 60 * 60 * 1000,
+          ); // Weekly: Subtract 6 days
+          setStartDate(formatDateRange(newStartDate));
+          setEndDate(formatDateRange(newEndDate));
+        } else if (monthValue === "2") {
+          const prevMonth = new Date(newEndDate);
+          prevMonth.setMonth(prevMonth.getMonth() - 1, 1); // Monthly: Start of the previous month
+          setStartDate(formatDateRange(prevMonth));
+          setEndDate(formatDateRange(newEndDate));
+        } else if (monthValue === "3") {
+          const endOfPreviousMonth = new Date(newEndDate);
+          endOfPreviousMonth.setMonth(endOfPreviousMonth.getMonth(), 0); // End of previous month
+          const midMonth = new Date(endOfPreviousMonth);
+          midMonth.setDate(15); // Set to the 15th of the month
+          setStartDate(formatDateRange(midMonth));
+          setEndDate(formatDateRange(endOfPreviousMonth));
+          setStartDate2(formatDateRange(prevMonth));
+          setEndDate2(formatDateRange(midMonth));
+        }
+      };
+    
+      const handleNextPeriod = () => {
+        const newStartDate = new Date(
+          new Date(endDate).getTime() + 24 * 60 * 60 * 1000,
+        ); // Increment endDate by 1 day
+    
+        if (monthValue === "1") {
+          const newEndDate = new Date(
+            newStartDate.getTime() + 6 * 24 * 60 * 60 * 1000,
+          ); // Weekly: Add 6 days
+          setStartDate(formatDateRange(newStartDate));
+          setEndDate(formatDateRange(newEndDate));
+        } else if (monthValue === "2") {
+          const endDate = new Date(newStartDate);
+          endDate.setDate(endDate.getDate() + 30); // Add 30 days to newStartDate
+    
+          setStartDate(formatDateRange(newStartDate));
+          setEndDate(formatDateRange(endDate));
+        } else if (monthValue === "3") {
+          // Set startDate to newStartDate + 1 day
+          const start_Date = new Date(endDate2);
+          start_Date.setDate(start_Date.getDate() + 1);
+        
+          // Set endDate to startDate + 15 days
+          const end_Date = new Date(start_Date);
+          end_Date.setDate(end_Date.getDate() + 15);
+        
+          // Set startDate2 to endDate + 1 day
+          const start_Date2 = new Date(end_Date);
+          start_Date2.setDate(start_Date2.getDate() + 1);
+        
+          // Set endDate2 to startDate2 + 15 days
+          const end_Date2 = new Date(start_Date2);
+          end_Date2.setDate(end_Date2.getDate() + 15);
+        
+          setStartDate(formatDateRange(start_Date));
+          setEndDate(formatDateRange(end_Date));
+          setStartDate2(formatDateRange(start_Date2));
+          setEndDate2(formatDateRange(end_Date2));
+        }
+        
+      };
 
   const columns = React.useMemo(
     () => [
@@ -67,13 +184,60 @@ export default function Payroll() {
       <PayrollHeader page={1} />
       <div className="grid grid-cols-10 gap-4">
         {/* Left Section */}
-        <div className="col-span-7 w-full gap-4 rounded-md bg-white px-6 py-4">
-          <img src={"/assets/images/employee_access/FlowChart.png"} />
+        <div className="col-span-7 w-full gap-4 rounded-md bg-white px-10 h-[26rem] py-12">
+          <div className="flex justify-between ">
+            <h1 className="text-lg font-semibold">Expense</h1>
+            <p className="flex gap-3 items-center mb-3">
+              <h2 className="text-xs font-semibold">01 Jan {year} to 31 Dec {year}</h2>
+              <Select
+            options={years}
+            isSearchable={true}
+            onChange={handleYearChange}
+            styles={customSelectStyles}
+            value={years.find(
+              (yearOption) => yearOption.value === dayjs(date).year(),
+            )}
+            placeholder={dayjs(date).format("YYYY")}
+            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+          />
+            </p>
+          </div>
+          <Expense/>
         </div>
 
         {/* Right Section */}
-        <div className="col-span-3 w-full bg-white p-6">
-          <img src={"/assets/images/employee_access/PAYMENT.png"} />
+        <div className="col-span-3 w-full bg-white p-10">
+          <div>
+            <h1 className="text-md font-semibold">Payroll Summary</h1>
+            <div className="flex justify-between">
+              <div className="flex items-center gap-2 pb-3 text-xs font-semibold">
+            <button className="p-2" onClick={() => handlePreviousPeriod()}>
+              <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
+            </button>
+
+            <p>
+              {startDate} to {endDate}
+            </p>
+            {monthValue === "3" && (
+              <>
+                <span>|</span>
+                <p>
+                  {" "}
+                  {startDate2} to {endDate2}
+                </p>
+              </>
+            )}
+            <button className="p-2" onClick={() => handleNextPeriod()}>
+              <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
+            </button>
+          </div>
+          <select className="w-[7rem] h-[2rem] ml-4 rounded-md border border-gray-300 bg-white px-4 py-1 text-sm text-gray-600 focus:outline-none">
+                <option onClick={() => setMonthValue("1")}>Weekly</option>
+                <option onClick={() => setMonthValue("2")}>Monthly</option>
+              </select>
+          </div>
+          </div>
+          <SemiDonutChart/>
         </div>
       </div>
       <div className="mt-4 grid grid-cols-10 gap-4">
