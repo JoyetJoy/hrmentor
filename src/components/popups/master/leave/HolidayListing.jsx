@@ -62,7 +62,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
 
   useEffect(() => {
     if (data) {
-      setTotalPages(data?.original?.pagination);
+      setTotalPages(data?.original?.pagination?.total);
       removeIdFromLocalStorage();
     }
   }, [data]);

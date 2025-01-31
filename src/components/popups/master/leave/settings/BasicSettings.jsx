@@ -53,7 +53,8 @@ const leaveSchema = Yup.object().shape({
   valid_from: Yup.date()
     .required("Valid from date is required")
     .typeError("Invalid date format"),
-  status: Yup.string(),
+  status: Yup.string()
+  .required("Status is required"),
 });
 
 const BasicSettings = ({ formtype = "save" }) => {
@@ -397,7 +398,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
               {/* Status */}
               <div className="group flex flex-col gap-1.5 py-2">
-                <label className="label-text">Status</label>
+                <label className="required label-text">Status</label>
                 <Controller
                   name="status"
                   control={control}
