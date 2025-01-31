@@ -6,8 +6,8 @@ export default function LeaveSideBar(isActive) {
   const isActives = isActive?.isActive;
 
   return (
-    <div className="h-screen min-w-64 rounded-md bg-white">
-      <div className="flex w-full flex-col rounded-md bg-white px-5 py-7">
+    <div className="h-screen min-w-[15%] rounded-md bg-white">
+      <div className="flex w-full flex-col rounded-md bg-white px-3 py-7">
         <NavLink
           to="/employee-access/leave/request"
           className={({ isActive }) =>

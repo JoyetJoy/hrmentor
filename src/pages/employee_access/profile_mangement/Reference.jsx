@@ -93,13 +93,13 @@ export default function Reference() {
             );
           },
         },
-        {
-          header: "Personal Email",
-          accessorKey: "personal-email",
-          cell: ({ row }) => (
-            <div className="flex">{row.original?.personal_email}</div>
-          ),
-        },
+        // {
+        //   header: "Personal Email",
+        //   accessorKey: "personal-email",
+        //   cell: ({ row }) => (
+        //     <div className="flex">{row.original?.personal_email}</div>
+        //   ),
+        // },
         {
           header: "Company Name",
           accessorKey: "condtion",
