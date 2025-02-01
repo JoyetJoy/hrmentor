@@ -103,7 +103,7 @@ console.log(user);
                   <Menu.Item key={index}>
                     {({ active }) => (
                       <Link
-                        onClick={() => handleNavigation(item.path)}
+                        to={item.path}
                         className={`flex cursor-pointer items-center gap-3 whitespace-nowrap text-xs font-semibold ${
                           active ? "" : ""
                         }`}

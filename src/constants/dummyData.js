@@ -525,7 +525,7 @@ export const employeeAccessActivityList = [
   {
     icon: "/assets/icons/admin/newsEvent.svg",
     label: "News & Events ",
-    path: "employee-access/news-event/news",
+    path: "/employee-access/news-events/view",
   },
 
   {

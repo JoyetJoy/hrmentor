@@ -1,5 +1,5 @@
 import QueryTable from "@/components/table/QueryTable";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { useNavigate } from "react-router-dom";
@@ -264,10 +264,7 @@ export default function PayrollList() {
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
+              <Eye className="size-3" />
             </button>
           </div>
         ),
