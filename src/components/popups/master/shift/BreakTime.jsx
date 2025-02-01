@@ -46,7 +46,9 @@ export default function BreakTime({
 
   const handleShift = async (data) => {
     let formData;
-    if(data?.start_time&&data?.end_time&&!data?.time){
+    console.log(data);
+    
+    if(data?.start_time||data?.time){
       formData = {
         id: uuidv4(),
         type_name: data.type_name,
@@ -56,6 +58,7 @@ export default function BreakTime({
         time: data.time,
       };
     }else{
+      toast.error('Failed to add break time')
       return;
     }
 

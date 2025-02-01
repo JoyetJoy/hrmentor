@@ -11,12 +11,9 @@ export default function Break({ setNew_break, new_break, error }) {
   const [deleteId, setDeleteId] = useState("");
 
   const deleteBreakTime = (id) => {
-    console.log(id);
-
     setDeleteId(id);
     setDeletePopup(true);
   };
-  console.log(new_break);
 
   const [totalPages, setTotalPages] = useState(10);
   const handleCreate = () => {
