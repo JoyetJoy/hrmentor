@@ -4,7 +4,7 @@ export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,sel
 
     const toggleDaySelection = (day) => {
         setSelectedDays((prev) =>
-          prev.includes(day)
+          prev?.includes(day)
             ? prev.filter((d) => d !== day) 
             : [...prev, day] 
         );
