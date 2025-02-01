@@ -1,31 +1,21 @@
+import { newRequest } from "@/api";
+import { NOTIFICATIONS } from "@/api/hiring";
 import Pagination from "@/components/table/Pagination";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ChevronRight, Link, Search } from "lucide-react";
 import React from "react";
 
 export default function Notification() {
-  const notifications = [
-    {
-      id: 1,
-      title: "Ameya responded to your offer letter",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim",
-      time: "8h ago",
-    },
-    {
-      id: 2,
-      title: "Ameya responded to your offer letter",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim",
-      time: "Today",
-    },
-    {
-      id: 3,
-      title: "Ameya responded to your offer letter",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim",
-      time: "1 Week ago",
-    },
-  ];
+
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notification"],
+    queryFn: () =>
+      newRequest.get(NOTIFICATIONS).then((res) => {
+        return res.data;
+      }),
+   
+  });
+
   return (
     <div className="h-screen">
       <div className="my-2 flex w-full flex-row items-center justify-between rounded-md bg-white px-4 py-2">
@@ -59,7 +49,7 @@ export default function Notification() {
       </div>
       <div className="flex h-full flex-col gap-3 rounded-md bg-white">
         <div className="p-4">
-          {notifications.map((notification) => (
+          {notifications?.data?.map((notification) => (
             <div
               key={notification.id}
               className="mb-4 border-b border-gray-200 pb-4"

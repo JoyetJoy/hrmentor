@@ -8,6 +8,9 @@ export const HIRING_TEMPLATE = "hiring-document-templates";
 // READY TO HIRING
 export const HIRING_READY = "hiring-candidates";
 
+//NOTIFICATIONS
+export const NOTIFICATIONS = "current-notification";
+
 // CONDITIONAL OFFER LETTER
 // DOCUMENT TEMPLATES
 export const HIRING_CONDITIONAL_OFFER_LETTER_TEMPLATE =

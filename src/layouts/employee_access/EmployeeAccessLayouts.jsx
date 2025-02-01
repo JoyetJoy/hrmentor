@@ -30,8 +30,8 @@ export default function EmployeeAccessLayouts() {
   }, [profile]);
 console.log(location);
 
-  if (location.pathname === "/employee_access") {
-    return <Navigate to="/employee_access/dashboard" replace />;
+  if (location.pathname === "/employee-access") {
+    return <Navigate to="/employee-access/dashboard" replace />;
   }
   return token?(
     <>

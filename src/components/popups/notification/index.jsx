@@ -1,4 +1,8 @@
+import { newRequest } from "@/api";
+import { GET_USER } from "@/api/auth";
+import { NOTIFICATIONS } from "@/api/hiring";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -9,31 +13,17 @@ export default function Notification({
 }) {
   function close() {
     setNotificationPopupOpen(false);
-    reset();
   }
-  const notifications = [
-    {
-      id: 1,
-      title: "Ameya responded to your offer letter",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim",
-      time: "8h ago",
-    },
-    {
-      id: 2,
-      title: "Ameya responded to your offer letter",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim",
-      time: "Today",
-    },
-    {
-      id: 3,
-      title: "Ameya responded to your offer letter",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim",
-      time: "1 Week ago",
-    },
-  ];
+
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notification"],
+    queryFn: () =>
+      newRequest.get(NOTIFICATIONS).then((res) => {
+        return res.data;
+      }),
+   
+  });
+
   return (
     <>
       <Dialog
@@ -53,7 +43,7 @@ export default function Notification({
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <div className="mx-auto max-w-md p-4">
-                  {notifications.map((notification) => (
+                  {notifications?.data?.map((notification) => (
                     <div
                       key={notification.id}
                       className="mb-4 border-b border-gray-200 pb-4"
@@ -72,7 +62,8 @@ export default function Notification({
                       </p>
                     </div>
                   ))}
-                  <div className="mt-4 text-right">
+                  {notifications?.data?.length>0?(
+                    <div className="mt-4 text-right">
                     <Link
                       to="/admin/notification"
                       onClick={close}
@@ -81,6 +72,17 @@ export default function Notification({
                       Show all notifications
                     </Link>
                   </div>
+                  ):(
+                    <div className="mt-4 text-right">
+                    <p
+                      className="text-sm font-semibold text-hrmprimaryorange"
+                    >
+                      No notifications
+                    </p>
+                  </div>
+                  )
+                  }
+                  
                 </div>
               </div>
             </DialogPanel>
