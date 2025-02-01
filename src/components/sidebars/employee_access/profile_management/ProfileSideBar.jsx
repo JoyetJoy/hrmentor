@@ -7,7 +7,7 @@ function ProfileSidebar({ sidebarList = profileSidebarList }) {
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
   return (
-    <div className="min-h-full min-w-56 rounded-md bg-white px-5 py-4">
+    <div className="min-h-full min-w-52 rounded-md bg-white px-5 py-4">
       <ul className="flex flex-col justify-center gap-5 text-[0.9rem] font-medium text-gray-dark">
         {sidebarList?.map((item) => {
           const linkTo = uid ? `${item?.link}?uid=${uid}` : item?.link;
