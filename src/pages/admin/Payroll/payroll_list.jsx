@@ -260,7 +260,7 @@ export default function PayrollList() {
             <button
               type="button"
               onClick={() => {
-                navigate("/admin/payroll/paylistedit");
+                navigate("/admin/payroll/paylistdetail");
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >

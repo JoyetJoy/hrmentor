@@ -1,5 +1,6 @@
 import Payroll from "@/pages/admin/Payroll/Payroll_dashboard";
 import PayrollList from "@/pages/admin/Payroll/payroll_list";
+import PayListDetails from "@/pages/admin/Payroll/payroll_list_details";
 import PayrollListEdit from "@/pages/admin/Payroll/payroll_list_edit";
 import PayrollOff from "@/pages/admin/Payroll/payroll_off";
 import PayrollOffEdit from "@/pages/admin/Payroll/payroll_off_edit";
@@ -29,5 +30,9 @@ export const PayrollRoute = [
   {
     path: "paylistedit",
     element: <PayrollListEdit />,
+  },
+  {
+    path: "paylistdetail",
+    element: <PayListDetails />,
   },
 ];

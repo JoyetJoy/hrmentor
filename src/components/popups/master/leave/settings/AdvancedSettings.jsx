@@ -80,6 +80,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     enabled: !!user?.id && !!id,
   });
 
+ console.log(user?.id,"user_id")
   useEffect(() => {
     if (AdvanceholidayDetails) {
       reset({
@@ -167,8 +168,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
       setLoader(false);
     }
   };
-
-  console.log(leaveType, "leaveTypeleaveType");
 
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">

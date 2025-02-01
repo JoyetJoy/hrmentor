@@ -88,15 +88,22 @@ export const AdminDashboard = () => {
                 card.details.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between gap-4 rounded-full bg-gray-100 p-2"
+                    className="flex items-center justify-between gap-4 rounded-full bg-gray-100 p-1 hover:bg-[#E95D394D]"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="rounded-full border border-gray-soft">
-                        <img
-                          src="/assets/images/employee_access/profile.png"
-                          alt=""
-                          className=""
-                        />
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full border bg-hrmprimaryorange p-1">
+                        {card.title === "People on leave" ? (
+                          <img
+                            src="/assets/images/profile.jpg"
+                            alt="People on Leave"
+                            className="h-full w-full rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="text-center text-xs font-medium text-white">
+                            <p>{dayjs(item?.date).format("ddd")}</p>
+                            <p>{dayjs(item?.date).format("DD")}</p>
+                          </div>
+                        )}
                       </div>
                       <label className="text-xs text-black">
                         <h1>{item?.type}</h1>
