@@ -6,8 +6,12 @@ import { LoginSchema } from "@/schema/auth/login.schema";
 import { basicXFormRequest } from "@/api";
 import { LOGIN } from "@/api/auth";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import { Eye } from "lucide-react";
 
 function Login() {
+  const [loader, setLoader] = useState(false);
+  const [passwordVisible, ispasswordVisible] = useState(false);
   const {
     register,
     handleSubmit,
@@ -23,14 +27,13 @@ function Login() {
 
   const saveForm = async (data) => {
     try {
+      setLoader(true);
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
       const res = await basicXFormRequest.post(LOGIN, formData);
       if (res?.data?.success === true) {
         toast.success("Login successful");
-        console.log(res?.data?.data);
-        
         if(res?.data?.data?.roles?.length===1){
           if(res?.data?.data?.roles?.includes(1)){
             localStorage.removeItem('employee_token')
@@ -48,8 +51,6 @@ function Login() {
             navigate("/employee-access/dashboard");
           }
         }else{
-          console.log('lpp');
-          
           if(res?.data?.data?.roles?.includes(1)){
             localStorage.setItem("super_token", res?.data?.data?.token);
             navigate("/admin/dashboard");
@@ -62,12 +63,11 @@ function Login() {
             navigate("/employee-access/dashboard");
           }
         }
-        
+        setLoader(false);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error?.response?.data?.error);
-      toast.error("Failed to login");
+      setLoader(false);
+      toast.error(error?.response?.data?.message||"Failed to login");
     }
   };
 
@@ -116,14 +116,32 @@ function Login() {
             <label className="text-base font-semibold text-textcolor-darkCharcoal">
               Password
             </label>
-            <input
+            {/* <input
               type="password"
               placeholder="Enter Password"
-              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark ${
-                errors.password ? "border-red-500" : "border-tdarkblue"
-              }`}
+              className={``}
               {...register("password")}
+            /> */}
+            <div className={`relative h-11 min-h-11 w-full rounded-md border overflow-hidden font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark ${
+                errors.password ? "border-red-500" : "border-tdarkblue"
+              }`}>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              {...register("password", { required: true })}
+              autoComplete="off"
+              spellCheck="false"
+              placeholder="*****************"
+              className=" placeholder:text-[#8b8b8b] bg-transparent px-4 py-2 flex-grow h-11 w-full"
             />
+            <div className="absolute top-3 right-3">
+              <Eye
+                onClick={() => ispasswordVisible(!passwordVisible)}
+                className={`h-4 cursor-pointer ${
+                  passwordVisible ? "text-black" : "text-[#7e7e7e]"
+                }`}
+              />
+            </div>
+          </div>
             {errors.password && (
               <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
@@ -132,7 +150,14 @@ function Login() {
             type="submit"
             className="h-12 w-full rounded-md bg-neutralmedium text-center text-base font-medium text-white hover:bg-neutralmedium"
           >
-            Log In
+            {loader ? (
+              <div className="w-full h-full flex justify-center items-center gap-3">
+                <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                Signing you in
+              </div>
+            ) : (
+              "Login"
+            )}
           </button>
           <Link
             to="/forgot-password"
