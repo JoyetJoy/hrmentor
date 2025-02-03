@@ -156,7 +156,7 @@ export default function EmployeeDbsCheckEdit() {
         api={EMPLOYEE_DBS_CHECK}
         uid={uid}
       />
-      <div className="flex min-h-screen flex-col">
+      <div className="flex  flex-col">
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}
