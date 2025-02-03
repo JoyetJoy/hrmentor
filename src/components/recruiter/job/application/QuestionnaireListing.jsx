@@ -11,12 +11,13 @@ export default function QuestionnaireListing({ jobProfileQuestionnaire, jid }) {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
+  console.log(jobProfileQuestionnaire[0]?.id,"jobProfileQuestionnaire")
   return (
     <>
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"jobProfileQuestionnaire"}
         api={DELETE_PROFILE_QUESTIONNAIRE}
       />
@@ -29,9 +30,10 @@ export default function QuestionnaireListing({ jobProfileQuestionnaire, jid }) {
         api={GET_PROFILE_QUESTIONNAIRE}
         jid={jid}
       />
+
       <div className="w-full rounded-md border border-[#ECE9F1]">
         <h1 className="rounded-t-sm bg-gray-soft px-5 py-5 text-sm font-semibold text-hrmdarkblue">
-          Candidate profile questions
+          Candidate Profile Questions
         </h1>
         {jobProfileQuestionnaire?.length ? (
           <div className="flex h-60 min-h-60 flex-col gap-2 px-4 py-4">

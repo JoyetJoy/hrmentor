@@ -514,7 +514,7 @@ function RecruiterJobPost() {
               <div className="grid grid-cols-3 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text">
-                    Job title <span className="text-red-500">*</span>
+                    Job Title <span className="text-red-500">*</span>
                   </label>
                   <input
                     autoComplete="off"
@@ -530,7 +530,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
                   <label className="label-text flex flex-row items-center gap-1">
-                    Employment type <span className="text-red-500">*</span>
+                    Employment Type <span className="text-red-500">*</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -705,7 +705,7 @@ function RecruiterJobPost() {
                 </div>
                 <div className="group col-span-2 flex w-full flex-col space-y-1 px-3 py-2">
                   <label className="required label-text flex flex-row items-center gap-1">
-                    Job description
+                    Job Description
                     <button
                       onClick={() => {
                         handleOpenSaveMaster("job_description");
@@ -790,7 +790,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group flex flex-col space-y-1 px-3 py-2">
-                  <label className="required label-text">Country of residence</label>
+                  <label className="required label-text">Country of Residence</label>
                   <Controller
                     name="country_id"
                     control={control}
@@ -885,7 +885,7 @@ function RecruiterJobPost() {
                   )}
                 </div>
                 <div className="group col-span-3 flex w-full flex-col space-y-1 px-3 py-2">
-                  <label className="label-text">Work type</label>
+                  <label className="label-text">Work Type</label>
                   <div className="flex flex-row items-start gap-4">
                     <label className="label flex w-[20%] cursor-pointer flex-row items-center justify-start gap-3 rounded-md border border-gray-300 focus:border-[#C7C7C7]">
                       <input
@@ -934,14 +934,14 @@ function RecruiterJobPost() {
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
-                    Advanced job details{" "}
+                    Advanced Job Details{" "}
                   </p>
                   <div className="h-px w-full bg-gray-light"></div>
                 </DisclosureButton>
                 <DisclosurePanel className="my-4 text-sm/5 text-black/50">
                   <div className="mt-4 grid w-8/12 grid-cols-2 items-center justify-center gap-y-2">
                     <div className="group flex flex-col space-y-1 px-3 py-2">
-                      <label className="required label-text">Job code</label>
+                      <label className="required label-text">Job Code</label>
                       <div className="input-box flex">
                         <input
                           {...register("job_code")}
@@ -1105,7 +1105,7 @@ function RecruiterJobPost() {
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
                   </div>
                   <p className="flex flex-row whitespace-nowrap text-sm font-semibold">
-                    Sensitive data
+                    Sensitive Data
                   </p>
                   <div className="bg- gray-light h-[0.5px] w-full"></div>
                 </DisclosureButton>
