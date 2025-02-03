@@ -155,7 +155,7 @@ export default function EmployeeLists() {
   );
 
   return (
-    <div className="h-screen">
+    <div className="">
       <MenuHeader
         menu={"Menu"}
         currentpath={"Employee"}
