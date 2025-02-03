@@ -584,4 +584,5 @@ export const employeeaccessItems = [
 export const newsEventHeaderList = [
   { id: 1, name: "News", link: "/admin/news-event/news" },
   { id: 2, name: "Events", link: "/admin/news-event/event" },
+  { id: 3, name: "News & Events", link: "/admin/news-event/view" },
 ];

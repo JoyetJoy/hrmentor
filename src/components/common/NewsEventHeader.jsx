@@ -23,10 +23,9 @@ export default function NewsEventHeader({ page }) {
           Menu
           <ChevronRight className="size-3" />
           <Link className="capitalize text-hrmprimaryorange" to={""}>
-            New and Events
+            News and Events
           </Link>
         </div>
-        {shouldRenderList && (
           <div className="flex items-center gap-5 text-sm font-semibold">
             {newsEventHeaderList.map((item) => (
               <Link
@@ -42,7 +41,6 @@ export default function NewsEventHeader({ page }) {
               </Link>
             ))}
           </div>
-        )}
       </div>
     </>
   );

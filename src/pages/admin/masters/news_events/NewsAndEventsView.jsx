@@ -26,7 +26,7 @@ export default function NewsAndEventsView() {
   ];
   return (
     <div className="h-full">
-      <NewsEventHeader />
+      <NewsEventHeader page={3} />
       <div className="w-full bg-gray-100">
         <div className="">
           <img src="/assets/images/employee_access/EventNews.png" alt="" />
