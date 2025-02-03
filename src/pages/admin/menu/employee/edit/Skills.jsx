@@ -174,7 +174,7 @@ export default function SkillsQualifications() {
         api={EMPLOYEE_SKILLS}
         uid={uid}
       />
-      <div className="flex min-h-screen flex-col">
+      <div className="flex flex-col">
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}

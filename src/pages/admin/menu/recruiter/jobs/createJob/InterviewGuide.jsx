@@ -152,7 +152,9 @@ function RecJobInterviewGuide() {
               /> */}
               Create New Job
               <div className="h-4 w-[.07rem] bg-gray-dimlight"></div>
-              <span className="text-sm font-medium text-textcolor-darkCharcoal">Interview Guides</span>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">
+                Interview Guides
+              </span>
             </h1>
             <button
               onClick={() => {
@@ -170,22 +172,26 @@ function RecJobInterviewGuide() {
               </p>
             </div>
             <div className="my-4 flex items-center justify-between gap-7">
-              <div className="input-box flex min-h-11 w-fit min-w-96 items-center gap-2 rounded-md border border-gray-soft placeholder:text-black">
-                <Search className="h-4 w-4 text-gray-dark" />
+              <label className="input flex h-10 min-h-10 min-w-80 flex-row items-center gap-2 rounded-md border border-gray-platinum outline-none hover:border-gray-platinum">
+                <Search
+                  className="size-4 object-contain text-gray-dark"
+                  strokeWidth={2}
+                />
                 <input
                   type="text"
                   onChange={(e) => {
                     setKeyword(e.target.value);
                   }}
-                  className="h-full w-full placeholder:text-gray-dark"
+                  value={keyword}
+                  className="grow text-sm text-black placeholder:text-sm placeholder:font-medium placeholder:text-black/50 focus:outline-none"
                   placeholder="Search"
                 />
-              </div>
+              </label>
               <Link
                 onClick={() => {
                   setPopupOpen(true);
                 }}
-                className="btn flex h-11 min-h-11 min-w-44 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-black/80 text-xs text-white hover:bg-bgColor-100"
+                className="hover:bg-bgColor-100 btn flex h-11 min-h-11 min-w-44 flex-row items-center gap-1 whitespace-nowrap rounded-[0.3rem] bg-black/80 text-xs text-white"
               >
                 <Plus className="h-4 w-4" />
                 Add Interview Guides

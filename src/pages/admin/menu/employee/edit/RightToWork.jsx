@@ -156,7 +156,7 @@ export default function EmployeeRightToWorkEdit() {
         api={EMPLOYEE_RIGHT_TO_WORK}
         uid={uid}
       />
-      <div className="flex min-h-screen flex-col">
+      <div className="flex flex-col">
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}

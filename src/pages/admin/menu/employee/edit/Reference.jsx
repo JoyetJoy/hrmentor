@@ -223,7 +223,7 @@ export default function EmployeeReferenceEdit() {
         api={EMPLOYEE_REFERENCE}
         uid={uid}
       /> */}
-      <div className="flex min-h-screen flex-col">
+      <div className="flex flex-col">
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}

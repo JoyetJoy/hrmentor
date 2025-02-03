@@ -137,7 +137,7 @@ export default function EmployeeMembershipEdit() {
         api={EMPLOYEE_MEMBERSHIP}
         uid={uid}
       />
-      <div className="flex min-h-screen flex-col">
+      <div className="flex  flex-col">
         <MenuHeader
           menu={"Menu"}
           subMenu={"Employee"}
