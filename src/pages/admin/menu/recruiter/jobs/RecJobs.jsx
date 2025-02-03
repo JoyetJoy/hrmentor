@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Filter, Eye, Plus, Search, Trash2 } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
@@ -17,6 +17,13 @@ function RecruiterJobs() {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
+  const location = useLocation();
+  const draft = location.state?.type || "";
+  useEffect(() => {
+    if (draft) {
+      setByStatus(draft);
+    }
+  }, []);
 
   // Fetch List
   const { data: jobListing, isLoading } = useQuery({

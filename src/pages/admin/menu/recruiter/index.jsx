@@ -14,9 +14,11 @@ import WeeklyCalendarPicker from "@/components/common/WeeklyCanlendarPicker";
 import dayjs from "dayjs";
 import RecDashboardInterviews from "@/components/recruiter/dashboard/Interviews";
 import RecJobCandidates from "@/components/recruiter/dashboard/Candidates";
+import { useNavigate } from "react-router-dom";
 
 export default function RecruiterDashbaord() {
   const [selectedDate, setSelectedDate] = useState(dayjs());
+  const Navigate = useNavigate();
   // REC DASHBOARD COUNT
   const { data: recDashboardCount } = useQuery({
     queryKey: ["recDashboardCount"],
@@ -25,6 +27,11 @@ export default function RecruiterDashbaord() {
         return res.data;
       }),
   });
+
+  const handleClick = (api,type)=>{
+    Navigate(api, { state: { type } })
+
+  }
 
   return (
     <>
@@ -36,7 +43,9 @@ export default function RecruiterDashbaord() {
         activeMenu={"Dashboard"}
       />
       <div className="grid grid-cols-6 gap-5">
-        <div className="flex items-center gap-2 rounded-md bg-white p-4">
+        <div 
+          onClick={()=>handleClick('/admin/recruiter/jobs',2)}
+          className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
             style={{ backgroundColor: "mutedruby" }}
@@ -60,7 +69,9 @@ export default function RecruiterDashbaord() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 rounded-md bg-white p-4">
+        <div 
+          onClick={()=>handleClick('/admin/recruiter/candidate')}
+          className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
             style={{ backgroundColor: "sunlit" }}
@@ -83,7 +94,9 @@ export default function RecruiterDashbaord() {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-md bg-white p-4">
+        <div
+          onClick={()=>handleClick('/admin/recruiter/jobs')}
+          className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
             style={{ backgroundColor: " #B380FE1A" }}
@@ -106,7 +119,9 @@ export default function RecruiterDashbaord() {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-md bg-white p-4">
+        <div
+          onClick={()=>handleClick('/admin/recruiter/interviews')}
+          className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
             style={{ backgroundColor: "#35AEBE1A" }}
@@ -129,7 +144,9 @@ export default function RecruiterDashbaord() {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-md bg-white p-4">
+        <div
+          onClick={()=>handleClick('/admin/recruiter/jobs')}
+          className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
             style={{ backgroundColor: "#2FBC451A" }}
@@ -152,7 +169,9 @@ export default function RecruiterDashbaord() {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-md bg-white p-4">
+        <div
+          onClick={()=>handleClick('/admin/recruiter/jobs',1)}
+          className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
             style={{ backgroundColor: " #7626781A" }}
