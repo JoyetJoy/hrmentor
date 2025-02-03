@@ -215,14 +215,13 @@ export default function ProfileManagement() {
                           className="hidden"
                         />
                       </label>
-
-                      <div className="flex items-center gap-2">
+                      {/* <div className="flex items-center gap-2">
                         <img
                           className="h-40 w-40 rounded-md object-cover"
                           src={imageURL ?? profileManagement?.profile_image}
                           alt="Preview"
                         />
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-span-2 flex justify-start space-x-3 pt-5">
                       <button
