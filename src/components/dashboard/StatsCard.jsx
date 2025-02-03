@@ -25,6 +25,7 @@ export default function StatsCard({data}) {
     {
       title: "Job Applied",
       value: `${data?.total_job_applications||'0'}`,
+      path: "/admin/recruiter/candidate",
       percentage: `${data?.total_job_applications_percentage}`,
       trend: "minus",
       description: "Applicants",

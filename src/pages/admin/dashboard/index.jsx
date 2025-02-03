@@ -23,6 +23,7 @@ export const AdminDashboard = () => {
       details: admindashboard?.upcoming_shifts?.map((shift) => ({
         type: shift?.shift?.name,
         date: shift?.shift?.people_required,
+        path: `/admin/shift/save-shift?id=${shift?.shift?.id}`
       })),
     },
     {
@@ -80,9 +81,12 @@ export const AdminDashboard = () => {
             >
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
-                <p className="flex items-center gap-2 text-sm font-medium text-gray-600">
-                  View <Eye className="size-4 text-black/70" />
-                </p>
+                <Link
+                 to={`/admin/shift`}
+                 className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  View 
+                  <Eye className="size-4 text-black/70" />
+                </Link>
               </label>
               {card.details?.length > 0 ? (
                 card.details.map((item, idx) => (
@@ -103,12 +107,14 @@ export const AdminDashboard = () => {
                         <h1>{item?.count || item?.date}</h1>
                       </label>
                     </div>
-                    <div className="rounded-full border bg-gray-soft p-2">
+                    <Link
+                     to={item?.path}
+                     className="rounded-full border bg-gray-soft p-2">
                       <MoveDiagonal
                         className="size-3 text-black"
                         strokeWidth={1.7}
                       />
-                    </div>
+                    </Link>
                   </div>
                 ))
               ) : (

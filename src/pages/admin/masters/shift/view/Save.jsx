@@ -82,24 +82,31 @@ export default function SaveMasterShift({ formtype, sid }) {
 
   useEffect(() => {
     if (startTime && endTime) {
-      const isValidTime = (time) => /^([01]\d|2[0-3]):([0-5]\d)$/.test(time);
-  
+      const isValidTime = (time) =>
+        /^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/.test(time);
+
       if (isValidTime(startTime) && isValidTime(endTime)) {
-        const [startHours, startMinutes] = startTime.split(":").map(Number);
-        const [endHours, endMinutes] = endTime.split(":").map(Number);
-  
+        // Ensure both `HH:mm` and `HH:mm:ss` formats are handled
+        const formattedStartTime = startTime.split(":").slice(0, 2).join(":");
+        const formattedEndTime = endTime.split(":").slice(0, 2).join(":");
+
+        const [startHours, startMinutes] = formattedStartTime
+          .split(":")
+          .map(Number);
+        const [endHours, endMinutes] = formattedEndTime.split(":").map(Number);
+
         let startTotalMinutes = startHours * 60 + startMinutes;
         let endTotalMinutes = endHours * 60 + endMinutes;
-  
+
         if (endTotalMinutes < startTotalMinutes) {
           endTotalMinutes += 24 * 60;
         }
-  
+
         const diffMinutes = endTotalMinutes - startTotalMinutes;
-  
+
         const hours = String(Math.floor(diffMinutes / 60)).padStart(2, "0");
         const minutes = String(diffMinutes % 60).padStart(2, "0");
-  
+
         setDuration(`${hours}:${minutes}`);
       } else {
         setDuration("00:00"); // Invalid time format
@@ -108,8 +115,6 @@ export default function SaveMasterShift({ formtype, sid }) {
       setDuration("00:00"); // Missing time input
     }
   }, [startTime, endTime, shiftDetails]);
-  
-  console.log(requireDays);
 
   const handleInputChange = (index) => (event) => {
     const value = parseInt(event.target.value) || 0;
@@ -137,12 +142,12 @@ export default function SaveMasterShift({ formtype, sid }) {
 
   const onSubmit = async (data) => {
     console.log(data);
-    
+
     if (recurrencePattern === "weekly") {
       if (validateInputs()) {
-        if(calculationType === "perhour"){
+        if (calculationType === "perhour") {
           await handleShift(data);
-        }else{
+        } else {
           if (data.fullday === "" && data.halfday === "") {
             toast.error("Either full day or half day is required");
           } else {
@@ -209,7 +214,7 @@ export default function SaveMasterShift({ formtype, sid }) {
     try {
       const api = id ? `${SHIFT_LIST}/${id}` : SHIFT_LIST;
       const res = await newRequest.post(api, formdata);
-      if (res?.status === 201||200) {
+      if (res?.status === 201 || 200) {
         toast.success(
           id
             ? "Updated shift details successfully"
@@ -248,9 +253,10 @@ export default function SaveMasterShift({ formtype, sid }) {
       setValue("weekly_shifts", shiftDetails?.weekly_shifts);
       setValue("people_count", shiftDetails?.people_count);
       setNew_break(shiftDetails?.breakTime);
-      setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks||[]);
-      setRequireDays(shiftDetails?.weekly_shifts[0]?.people_count||[0, 0, 0, 0, 0, 0, 0]);
-      
+      setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks || []);
+      setRequireDays(
+        shiftDetails?.weekly_shifts[0]?.people_count || [0, 0, 0, 0, 0, 0, 0],
+      );
     }
   }, [shiftDetails, setValue]);
 
@@ -686,6 +692,8 @@ export default function SaveMasterShift({ formtype, sid }) {
                   recurrencePattern={recurrencePattern}
                   selectedDays={selectedDays}
                   type={"recurrence"}
+                  requireDays={requireDays}
+                  setRequireDays={setRequireDays}
                   setDayerror={setDayerror}
                   dayerror={dayerror}
                   setSelectedDays={setSelectedDays}

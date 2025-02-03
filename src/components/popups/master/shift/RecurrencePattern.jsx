@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 
-export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,selectedDays,type,days,setDayerror }) {
+export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,selectedDays,type,days,setDayerror,requireDays,setRequireDays }) {
 
-    const toggleDaySelection = (day) => {
+    const toggleDaySelection = (day,index) => {
+      const value = 0;
+    const newRequireDays = [...requireDays];
+    
+    
+    
+    newRequireDays[index] = value;
+    console.log(newRequireDays);
+    setRequireDays(newRequireDays);
+      
         setSelectedDays((prev) =>
           prev?.includes(day)
             ? prev.filter((d) => d !== day) 
@@ -26,10 +35,10 @@ export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,sel
             </h3>
         )}
         <div className="grid h-8 grid-cols-7 overflow-hidden rounded-md border">
-          {days.map((day) => (
+          {days.map((day,index) => (
             <h1
               key={day}
-              onClick={() => toggleDaySelection(day)}
+              onClick={() => toggleDaySelection(day,index)}
               className={`px-2 py-2 text-center text-xs border-r border-black-300 cursor-pointer ${
                 selectedDays?.includes(day)
                   ? "bg-[#e95d39] text-white" 
