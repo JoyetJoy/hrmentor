@@ -152,7 +152,7 @@ function RecJobInterviewGuide() {
               /> */}
               Create New Job
               <div className="h-4 w-[.07rem] bg-gray-dimlight"></div>
-              <span className="text-sm font-medium text-textcolor-darkCharcoal">Team</span>
+              <span className="text-sm font-medium text-textcolor-darkCharcoal">Interview Guides</span>
             </h1>
             <button
               onClick={() => {
