@@ -116,11 +116,11 @@ export default function RecViewJobRefer() {
             </div>
             <div className="group flex w-3/4 flex-col gap-1.5 px-3 py-2">
               <label className="label-text">Message</label>
-              <input
+              <textarea
                 autoComplete="off"
                 type="text"
                 {...register("message", { required: true })}
-                className="input-box h-48 placeholder:text-[0.8rem]"
+                className="input-box min-h-48 pt-2 placeholder:text-[0.8rem]"
               />
               {errors.message && (
                 <span className="text-xs font-medium text-red-500">
