@@ -203,12 +203,12 @@ function JobApplicationQuestion() {
             <div className="flex flex-row items-center justify-between">
               <div className="flex flex-col gap-1">
                 <p className="text-base font-medium text-textcolor-darkCharcoal">
-                  Customize the application that candidate will complete when
+                  Customize the application that candidates will complete when
                   they apply.
                 </p>
                 <p className="text-medium text-sm text-gray-dark">
                   All the preset questions and the custom questions for the
-                  application to make it easier to screen candidate later.
+                  application to make it easier to screen candidates later.
                 </p>
               </div>
               <Link
@@ -222,24 +222,21 @@ function JobApplicationQuestion() {
             </div>
             <div>
               <p className="my-7 flex flex-row items-center gap-4 whitespace-nowrap text-sm font-bold">
-                Job application
+                Job Application
                 <div className="h-px w-full bg-gray-light"></div>
               </p>
               <div className="mb-7 flex flex-col gap-1">
                 <p className="text-base font-medium text-textcolor-darkCharcoal">
-                  Select the standard profile questions you want all candidate
-                  to answer.
+                Select the standard profile questions you want all candidates to answer.
                 </p>
                 <p className="text-medium text-sm text-gray-dark">
-                  Some field are required and cannot be removed from the
-                  application, while other field are optional, including the
-                  resume.
+                Some fields are required and cannot be removed from the application, while other fields are optional, including the resume.
                 </p>
               </div>
               <div className="flex flex-row gap-4">
                 <div className="w-full rounded-md border border-gray-light">
                   <h1 className="rounded-t-sm bg-gray-soft px-5 py-5 text-sm font-semibold text-hrmdarkblue">
-                    Candidate profile questions
+                    Candidate Profile Questions
                   </h1>
                   <div className="flex flex-col gap-2 px-4 pb-16 pt-4">
                     {jobProfileQuestions?.default_profile_questions?.map(
@@ -276,7 +273,7 @@ function JobApplicationQuestion() {
                 </div>
                 <div className="w-full rounded-md border border-gray-light">
                   <h1 className="rounded-t-sm bg-gray-soft px-5 py-5 text-sm font-semibold text-hrmdarkblue">
-                    Select profile questions
+                    Select Profile Questions
                   </h1>
                   <div className="flex flex-col gap-2 px-4 py-4">
                     {jobProfileQuestions?.profile_questions?.map((i) => {
@@ -329,7 +326,7 @@ function JobApplicationQuestion() {
                       <ChevronRight className="size-6 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
                     </div>
                     <p className="flex w-full flex-row items-center gap-1 whitespace-nowrap text-sm">
-                      Screening questionnaire(Optional)
+                      Screening Questionnaire(Optional)
                       <div className="h-px w-full bg-gray-light"></div>
                     </p>
                   </DisclosureButton>
@@ -337,13 +334,10 @@ function JobApplicationQuestion() {
                     <div>
                       <div className="mb-10 flex flex-col gap-1">
                         <p className="text-base font-medium text-textcolor-darkCharcoal">
-                          Get answer to job-specific questions by attaching a
-                          questionnaire.
+                        Get answers to job-specific questions by attaching a questionnaire.
                         </p>
                         <p className="text-medium text-sm text-gray-dark">
-                          Questionnaire are reusable template that can be
-                          attached to the job application or Sent to candidates
-                          after they apply
+                        Questionnaires are reusable templates that can be attached to the job application or sent to candidates after they apply.
                         </p>
                       </div>
                       <div className="mt-3 flex flex-row items-start justify-between gap-8">
@@ -352,11 +346,11 @@ function JobApplicationQuestion() {
                           className="w-full"
                         >
                           <h1 className="mb-5 text-sm font-bold text-textcolor-darkCharcoal">
-                            Create questionnaire
+                            Create Questionnaire
                           </h1>
                           <div className="group flex flex-col gap-1 py-2">
                             <label className="text-s label-text font-medium">
-                              Name the questionnaire
+                              Name the Questionnaire
                             </label>
                             <input
                               autoComplete="off"
@@ -382,7 +376,7 @@ function JobApplicationQuestion() {
                             </label>
                           </div>
                           <div className="group flex flex-col gap-1 py-2">
-                            <label className="label-text">Answer type</label>
+                            <label className="label-text">Answer Type</label>
                             <Controller
                               name="answer_type"
                               control={control}
@@ -404,7 +398,7 @@ function JobApplicationQuestion() {
                               </span>
                             )}
                           </div>
-                          <div className="mt-6 flex flex-row items-center justify-between">
+                          <div className="mt-6 flex flex-row items-center gap-3">
                             <div
                               onClick={() => {
                                 reset();
@@ -415,7 +409,7 @@ function JobApplicationQuestion() {
                             </div>
                             <button
                               type="submit"
-                              className="btn h-11 min-h-11 bg-bgColor-100 px-12 text-white hover:bg-bgColor-100"
+                              className="btn h-11 min-h-11 bg-hrmdarkblue px-12 text-white hover:bg-hrmdarkblue"
                             >
                               {loader ? (
                                 <div className="flex items-center gap-3">
