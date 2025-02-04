@@ -19,15 +19,37 @@ export default function CareerDetail() {
         return res.data;
       }),
   });
-
+ 
   console.log(careerDetails);
+
+  // const handleShare = () => {
+  //   setPopupOpen(true); // ✅ Open popup before sharing
+
+  //   setTimeout(() => {
+  //     const currentUrl = window.location.href; 
+
+  //     if (navigator.share) {
+  //       navigator
+  //         .share({
+  //           title: "Check this out!",
+  //           text: "Here's a job you might be interested in.",
+  //           url: currentUrl,
+  //         })
+  //         .then(() => setPopupOpen(true)) // ✅ Close popup after sharing
+  //         .catch((error) => console.log("Sharing failed", error));
+  //     } else {
+  //       navigator.clipboard.writeText(currentUrl);
+  //       alert("Link copied to clipboard!");
+  //     }
+  //   }, 500); // ✅ Small delay for popup to open first
+  // };
 
   return (
     <>
       <ShareJob
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        text={selectedJob}
+        text={careerDetails}
       />
       {isLoading ? (
         <Loader />
@@ -80,6 +102,7 @@ export default function CareerDetail() {
                       onClick={() => {
                         setPopupOpen(true);
                         setSelectedJob(careerDetails);
+                        // handleShare();
                       }}
                       className="btn flex h-10 min-h-10 w-36 flex-row items-center rounded-md border border-[#2F324D] bg-black/80 text-sm text-white"
                     >
