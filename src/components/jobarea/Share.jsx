@@ -10,7 +10,7 @@ import {
 export default function ShareJob({ popupOpen, setPopupOpen, text }) {
 const emailSubject = `Job title - ${text?.job_title}`;
 const emailBody = `${text?.job_description}`;
-const jobUrl = `${window.location}/career/job/${text?.id}`;  // Plain URL
+const jobUrl = `${window.location}/${text?.id}`;  // Plain URL
 const jobContent = `${emailBody} \n\nApply here: ${jobUrl}`;
 const handleEmailShare = () => {
   const subject = encodeURIComponent(emailSubject);
