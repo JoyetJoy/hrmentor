@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import * as Yup from "yup";
 import { Plus, Minus } from "lucide-react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -37,7 +37,29 @@ const monthOptions = [
 ];
 
 // Validation Schema
+
 const leaveSchema = Yup.object().shape({
+  accrualType: Yup.string().required("Accrual Type is required"),
+
+  applicable: Yup.string()
+    .required("All Employee Type is required")
+    .oneOf(["all_employee", "based_on_exp"], "Invalid selection"),
+
+  emp_no_days: Yup.string()
+    .nullable()
+    .when("applicable", (applicable, schema) => {
+      return applicable === "all_employee"
+        ? schema.required("Number of days is required for 'By Cycle'")
+        : schema.notRequired();
+    }),
+
+  based_on_exp: Yup.string()
+    .nullable()
+    .when("applicable", (applicable, schema) => {
+      return applicable === "based_on_exp"
+        ? schema.required("Experience is required for 'By Working'")
+        : schema.notRequired();
+    }),
   leave_name: Yup.string().required("Name of the leave is required"),
   display_name: Yup.string().required("Display name is required"),
   code: Yup.string()
@@ -53,8 +75,117 @@ const leaveSchema = Yup.object().shape({
   valid_from: Yup.date()
     .required("Valid from date is required")
     .typeError("Invalid date format"),
-  status: Yup.string()
-  .required("Status is required"),
+  status: Yup.string().required("Status is required"),
+
+  accural_period: Yup.string().test(
+    "accrual-period-test",
+    "Accrual period is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      console.log(accrualType);
+
+      if (
+        (accrualType === "bycycle" || accrualType === "byworking") &&
+        !value
+      ) {
+        return false;
+      }
+      return true;
+    },
+  ),
+  accural_day: Yup.string().test(
+    "accrual-day-test",
+    "Accrual day is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      console.log(accrualType);
+
+      if (accrualType === "bycycle" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
+  accural_monthly: Yup.string().test(
+    "accrual-monthly-test",
+    "Accrual monthly is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      if (accrualType === "bycycle" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
+  accrual_leave: Yup.string().test(
+    "accrual-leave-test",
+    "Accrual leave is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      if (accrualType === "byworking" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
+  accural_at: Yup.string().test(
+    "accrual-at-test",
+    "Accrual at is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      if (accrualType === "byworking" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
+  specific_days: Yup.string().test(
+    "specific-days-test",
+    "Specific days are required",
+    function (value) {
+      const { accrualType } = this.parent;
+      if (accrualType === "byworking" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
+  emp_no_days: Yup.number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? NaN : Number(originalValue),
+    )
+    .typeError("Number of days must be a valid number")
+    .required("Number of days is required")
+    .positive("Number of days must be greater than 0")
+    .when("applicable", {
+      is: "bycycle",
+      then: (schema) =>
+        schema.required("Number of days is required for 'By Cycle'"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+  experience: Yup.array()
+    .of(
+      Yup.object().shape({
+        year: Yup.number()
+          .typeError("Year must be a number")
+          .required("Year is required")
+          .min(0, "Year cannot be negative"),
+
+        month: Yup.number()
+          .typeError("Month must be a number")
+          .required("Month is required")
+          .min(0, "Month cannot be negative")
+          .max(11, "Month should be between 0-11"),
+
+        daysLeave: Yup.number()
+          .typeError("Days must be a number")
+          .required("Days are required")
+          .min(0, "Days cannot be negative")
+          .max(31, "Days should be between 0-31"),
+      }),
+    )
+    .min(1, "At least one experience section is required"),
 });
 
 const BasicSettings = ({ formtype = "save" }) => {
@@ -65,24 +196,29 @@ const BasicSettings = ({ formtype = "save" }) => {
     reset,
     formState: { errors },
     setValue,
+    watch,
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(leaveSchema),
     defaultValues: {
       pay_type: "paid", // Default value
+      experience: [{ year: "", month: "", daysLeave: "" }],
     },
   });
-
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "experience",
+  });
   const close = () => {
     setPopupOpen(false);
     reset();
   };
-
+  const { applicable } = watch();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
-  const [accrualType, setAccrualType] = useState('bycycle');
-  const [applicable, setApplicable] = useState('all_employee');
+  const [accrualType, setAccrualType] = useState("bycycle");
+  // const [applicable, setApplicable] = useState("all_employee");
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
@@ -108,23 +244,23 @@ const BasicSettings = ({ formtype = "save" }) => {
   const id = searchParams.get("id") || storedData?.id || null;
 
   const [boxes, setBoxes] = useState([
-    { id: 1, years: "", months: "", daysleave: "" },
+    { id: 1, years: "", months: "", daysleave: "" }, // First row by default
   ]);
 
   const addBox = () => {
-    setBoxes([
-      ...boxes,
-      { id: boxes.length + 1, years: "", months: "", daysleave: "" },
-    ]);
+    append({ year: "", month: "", daysLeave: "" });
   };
 
+  console.log(boxes);
   const removeBox = (id) => {
-    setBoxes(boxes.filter((box) => box.id !== id));
+    setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== id));
   };
 
   const handleInputChange = (id, field, value) => {
-    setBoxes(
-      boxes.map((box) => (box.id === id ? { ...box, [field]: value } : box)),
+    setBoxes((prevBoxes) =>
+      prevBoxes.map((box) =>
+        box.id === id ? { ...box, [field]: value } : box,
+      ),
     );
   };
 
@@ -142,6 +278,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         .then((res) => res.data),
     enabled: !!id,
   });
+  console.log(accrualType, applicable);
 
   useEffect(() => {
     if (basicholidayDetails) {
@@ -171,7 +308,7 @@ const BasicSettings = ({ formtype = "save" }) => {
       setAccuralDays(basicholidayDetails?.accural_day);
       setAccuralMonth(basicholidayDetails?.accural_monthly);
       setAccrualType(basicholidayDetails?.accural_type);
-      setApplicable(basicholidayDetails?.application_to);
+      // setApplicable(basicholidayDetails?.application_to);
       setAccuralAt(basicholidayDetails?.accural_at);
       setEncashmentsPay(basicholidayDetails?.max_encashments);
     }
@@ -180,6 +317,8 @@ const BasicSettings = ({ formtype = "save" }) => {
   const handledSubmit = async (data) => {
     try {
       setLoader(true);
+      console.log(data);
+
       const formData = {
         leave_name: data.leave_name,
         display_name: data.display_name,
@@ -198,7 +337,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         specific_days: data.specific_days,
         application_to: applicable,
         emp_no_days: data.emp_no_days,
-        based_experience_details: boxes,
+        based_experience_details: data.experience,
         carry_forword: isOn ?? 0,
         max_no_days: data.max_no_days ?? 0,
         carry_expire: isOn2 ?? 0,
@@ -210,10 +349,6 @@ const BasicSettings = ({ formtype = "save" }) => {
       };
 
       let res;
-
-      if (!applicable || !formData.emp_no_days) {
-        return toast.error("Please Fill Applicate to");
-      }
 
       if (id) {
         res = await newRequest.post(`${HOLIDAY_STATUS}/${id}`, formData);
@@ -242,6 +377,7 @@ const BasicSettings = ({ formtype = "save" }) => {
       setLoader(false);
     }
   };
+  console.log(errors);
 
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
@@ -329,10 +465,10 @@ const BasicSettings = ({ formtype = "save" }) => {
                   </div>
                 </div>
                 {errors.pay_type && (
-                <span className="text-xs font-medium text-red-500">
-                  {errors.pay_type.message}
-                </span>
-              )}
+                  <span className="text-xs font-medium text-red-500">
+                    {errors.pay_type.message}
+                  </span>
+                )}
               </div>
               <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
                 <label className="required label-text">Units</label>
@@ -436,6 +572,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="accrualStatus"
+                    {...register("accrualType")}
                     value="bycycle"
                     onClick={() => setAccrualType("bycycle")}
                     className="radio-black"
@@ -449,6 +586,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     type="radio"
                     name="accrualStatus"
                     value="byworking"
+                    {...register("accrualType")}
                     onClick={() => setAccrualType("byworking")}
                     className="radio-black"
                     checked={accrualType === "byworking"}
@@ -461,7 +599,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual period</label>
+                  <label className="required label-text">Accrual period</label>
                   <Controller
                     name="accural_period"
                     control={control}
@@ -474,8 +612,18 @@ const BasicSettings = ({ formtype = "save" }) => {
                           { value: "monthly", label: "Monthly" },
                         ]}
                         placeholder="Select a period"
+                        value={
+                          field.value
+                            ? {
+                                value: field.value,
+                                label:
+                                  field.value.charAt(0).toUpperCase() +
+                                  field.value.slice(1),
+                              }
+                            : null
+                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption);
+                          field.onChange(selectedOption.value);
                           setAccuralPeriod(selectedOption.value);
                         }}
                         className="input-box w-full"
@@ -491,7 +639,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
                 {/* Accrual Days */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual day(s)</label>
+                  <label className="required label-text">Accrual day(s)</label>
                   <Controller
                     name="accural_day"
                     control={control}
@@ -505,8 +653,18 @@ const BasicSettings = ({ formtype = "save" }) => {
                           })),
                           { value: "lastDay", label: "Last day" }, // Adding the "last day" option
                         ]}
+                        value={
+                          field.value
+                            ? {
+                                value: field.value,
+                                label:
+                                  field.value.charAt(0).toUpperCase() +
+                                  field.value.slice(1),
+                              }
+                            : null
+                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption);
+                          field.onChange(selectedOption.value);
                           setAccuralDays(selectedOption.value);
                         }}
                         className="input-box w-full"
@@ -522,7 +680,9 @@ const BasicSettings = ({ formtype = "save" }) => {
 
                 {/* Accrual Month */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual month(s)</label>
+                  <label className="required label-text">
+                    Accrual month(s)
+                  </label>
                   <Controller
                     name="accural_monthly"
                     control={control}
@@ -555,7 +715,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">
+                  <label className="required label-text">
                     Number of working days to accrual leave
                   </label>
                   <input
@@ -573,7 +733,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
 
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual period</label>
+                  <label className="required label-text">Accrual period</label>
                   <Controller
                     name="accural_period"
                     control={control}
@@ -586,8 +746,18 @@ const BasicSettings = ({ formtype = "save" }) => {
                           { value: "monthly", label: "Monthly" },
                         ]}
                         placeholder="Select accrual period"
+                        value={
+                          field.value
+                            ? {
+                                value: field.value,
+                                label:
+                                  field.value.charAt(0).toUpperCase() +
+                                  field.value.slice(1),
+                              }
+                            : null
+                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption);
+                          field.onChange(selectedOption.value);
                           setAccuralPeriod(selectedOption.value);
                         }}
                         className="input-box w-full"
@@ -603,7 +773,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
                 {/* Accrual Days */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual at</label>
+                  <label className="required label-text">Accrual at</label>
                   <Controller
                     name="accural_at"
                     control={control}
@@ -620,8 +790,18 @@ const BasicSettings = ({ formtype = "save" }) => {
                           },
                         ]}
                         placeholder="Select accrual at"
+                        value={
+                          field.value
+                            ? {
+                                value: field.value,
+                                label:
+                                  field.value.charAt(0).toUpperCase() +
+                                  field.value.slice(1),
+                              }
+                            : null
+                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption);
+                          field.onChange(selectedOption.value);
                           setAccuralAt(selectedOption.value);
                         }}
                         className="input-box w-full"
@@ -662,7 +842,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                     type="radio"
                     name="application_to"
                     value="all_employee"
-                    onClick={() => setApplicable("all_employee")}
+                    {...register("applicable")}
+                    // onClick={() => setApplicable("all_employee")}
                     className="radio-black"
                     checked={applicable === "all_employee"}
                   />
@@ -672,8 +853,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="application_to"
+                    {...register("applicable")}
                     value="based_on_exp"
-                    onClick={() => setApplicable("based_on_exp")}
+                    // onClick={() => setApplicable("based_on_exp")}
                     className="radio-black"
                     checked={applicable === "based_on_exp"}
                   />
@@ -707,8 +889,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                   Please make sure that you have covered values from beginning
                   to end
                 </p>
+
                 <div className="w-full">
-                  {boxes.map((box, index) => (
+                  {fields.map((box, index) => (
                     <div
                       key={box.id}
                       className={`mb-4 ${index > 0 ? "px-2 py-5" : "p-5"} flex w-full flex-row justify-around rounded-lg border border-dashed border-black`}
@@ -722,14 +905,21 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
-                          id={`years-${box.id}`}
-                          value={box.years}
-                          onChange={(e) =>
-                            handleInputChange(box.id, "years", e.target.value)
-                          }
+                          // id={`years-${box.id}`}
+                          {...register(`experience.${index}.year`)}
+                          // value={box.years}
+                          // onChange={(e) =>
+                          //   handleInputChange(box.id, "years", e.target.value)
+                          // }
                           className="input-box h-10 rounded-md border"
                         />
+                        {errors?.experience?.year && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors?.experience?.year.message}
+                          </span>
+                        )}
                       </div>
+
                       <div className="flex w-1/5 flex-col">
                         <label
                           htmlFor={`months-${box.id}`}
@@ -739,17 +929,25 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
-                          id={`months-${box.id}`}
-                          value={box.months}
-                          onChange={(e) =>
-                            handleInputChange(box.id, "months", e.target.value)
-                          }
+                          {...register(`experience.${index}.month`)}
+                          // id={`months-${box.id}`}
+                          // value={box.months}
+                          // onChange={(e) =>
+                          //   handleInputChange(box.id, "months", e.target.value)
+                          // }
                           className="input-box h-10 rounded-md border"
                         />
+                        {errors?.experience?.month && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors?.experience?.month.message}
+                          </span>
+                        )}
                       </div>
+
                       <div className="flex w-1/6 items-center justify-center text-sm font-normal">
                         Will get
                       </div>
+
                       <div className="flex w-1/5 flex-col">
                         <label
                           htmlFor={`days-${box.id}`}
@@ -759,26 +957,24 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
+                          {...register(`experience.${index}.daysLeave`)}
                           min={0}
-                          id={`days-${box.id}`}
-                          value={box.daysleave}
-                          onChange={(e) =>
-                            handleInputChange(
-                              box.id,
-                              "daysleave",
-                              e.target.value,
-                            )
-                          }
                           className="input-box h-10 rounded-md border"
                         />
+                        {errors?.experience?.daysLeave && (
+                          <span className="text-xs font-medium text-red-500">
+                            {errors?.experience?.daysLeave.message}
+                          </span>
+                        )}
                       </div>
+
                       <div
                         className={`flex w-1/12 items-center justify-center space-x-2 ${index > 0 ? "w-[5rem]" : "w-1/12"}`}
                       >
                         {index > 0 && (
                           <div
                             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black text-white"
-                            onClick={() => removeBox(box.id)}
+                            onClick={() => remove(index)}
                           >
                             <Minus className="size-5" strokeWidth={2} />
                           </div>
@@ -786,12 +982,18 @@ const BasicSettings = ({ formtype = "save" }) => {
                         <div
                           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-hrmprimaryorange text-white"
                           onClick={addBox}
+                          type="button"
                         >
                           <Plus className="size-5" strokeWidth={2} />
                         </div>
                       </div>
                     </div>
                   ))}
+                  {errors.experience && applicable === "by working" && (
+                    <span className="text-xs text-red-500">
+                      {errors.experience.message}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
