@@ -8,16 +8,16 @@ import {
 } from "react-share";
 
 export default function ShareJob({ popupOpen, setPopupOpen, text }) {
-  const emailSubject = `Job title - ${text?.job_title}`;
-  const emailBody = `${text?.job_description}`;
-  const jobUrl = `<a href="/career/job/${text?.id}">Url to Apply</a>`;
-  const jobContent = `${emailBody} url to apply to ${jobUrl}`;
-  const handleEmailShare = () => {
-    window.location.href = `mailto:?subject=${encodeURIComponent(
-      emailSubject,
-    )}&body=${encodeURIComponent(jobContent)}`;
-  };
-
+const emailSubject = `Job title - ${text?.job_title}`;
+const emailBody = `${text?.job_description}`;
+const jobUrl = `${window.location}/career/job/${text?.id}`;  // Plain URL
+const jobContent = `${emailBody} \n\nApply here: ${jobUrl}`;
+const handleEmailShare = () => {
+  const subject = encodeURIComponent(emailSubject);
+  const body = encodeURIComponent(jobContent);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+};
+console.log(text,"")
   // Function to handle sharing via WhatsApp
   const handleWhatsappShare = () => {
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(

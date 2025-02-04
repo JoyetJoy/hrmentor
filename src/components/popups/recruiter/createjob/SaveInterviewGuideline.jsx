@@ -232,6 +232,15 @@ function InterviewGuideline({
                         type="text"
                         placeholder="Hrs"
                         className="input-box"
+                        onKeyPress={(event) => {
+                          // Allow only digits (0-9) and prevent input if length is already 11
+                          if (
+                            !/^[0-9]$/.test(event.key) || // Check if the key is a number
+                            event.target.value.length >= 4 // Prevent typing if length is 11
+                          ) {
+                            event.preventDefault();
+                          }
+                        }}
                       />
                       {errors.duration_hr && (
                         <span className="text-xs font-medium text-red-500">
@@ -246,6 +255,14 @@ function InterviewGuideline({
                         type="text"
                         placeholder="Min"
                         className="input-box"
+                        onKeyPress={(event) => {
+                          if (
+                            !/^[0-9]$/.test(event.key) || 
+                            event.target.value.length >= 4 
+                          ) {
+                            event.preventDefault();
+                          }
+                        }}
                       />
                       {errors.duration_minute && (
                         <span className="text-xs font-medium text-red-500">
