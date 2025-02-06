@@ -10,6 +10,7 @@ import Select from "react-select";
 
 function RecruiterSideBar({ jid, jobDetailView }) {
   const queryClient = useQueryClient();
+  console.log(jobDetailView);
 
   const [enabled, setEnabled] = useState(false);
 
@@ -71,6 +72,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
       const res = await newRequest.post(`job-status-update/${jid}`, {
         career_page: value ? "1" : "0",
       });
+
       if (res?.data?.status === 201) {
         queryClient.invalidateQueries(["jobDetailView"]);
         toast.success(res?.data?.message);
@@ -135,14 +137,21 @@ function RecruiterSideBar({ jid, jobDetailView }) {
       <hr className="border-1 my-2 border-gray-soft" />
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
         Job status
-        <Select
+        {/* <Select
           name="status"
           aria-label="Project status"
           placeholder="Select status"
           options={statusOptions}
           styles={statusDataSelecter}
           className="h-10 min-h-10 w-7/12 rounded-md bg-gray-soft px-3 py-1 pl-3 text-xs"
-        />
+        /> */}
+        <div className="h-10 min-h-10 w-7/12 rounded-md bg-gray-soft px-3 py-1 pl-3 text-xs">
+          {" "}
+          <p className="mt-2 flex justify-center">
+            {" "}
+            {jobDetailView?.jobDetail?.job_status?.status_name}
+          </p>
+        </div>
       </div>
       <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
         Hiring manager
