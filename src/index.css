@@ -370,9 +370,9 @@ select:focus {
 }
 
 .ql-editor {
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
   padding: 15px;
-  min-height: 200px;
+  /* min-height: 200px; */
   border-radius: 4px;
 }
 
