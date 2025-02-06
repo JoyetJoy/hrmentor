@@ -139,7 +139,7 @@ function RecViewJobDetail() {
             className="size-4 cursor-pointer"
           /> */}
           {/* {jobDetailView?.jobDetail?.job_title} */}
-          Project Manager
+          {jobDetailView?.jobDetail?.job_title}
         </h1>
         <div className="flex items-center gap-7 text-sm">
           <Link
