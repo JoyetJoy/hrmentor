@@ -283,7 +283,7 @@ export default function SaveRecruiterMasterForm({
 
                 {type === "Profile Questions" ? (
                   <div className="group flex w-full items-center gap-3">
-                    <label className="required label-text">Is Default</label>
+                    <label className="label-text">Is Default</label>
                     <div className="flex">
                       <input
                         onChange={(e) => {

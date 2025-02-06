@@ -108,7 +108,7 @@ function CandidateDocuments() {
     ],
     [],
   );
-
+console.log(selectedField,"selectedId")
   return (
     <>
       <SaveCandidateDocument
@@ -123,7 +123,7 @@ function CandidateDocuments() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"recCandidateDocuments"}
         api={CANIDATE_DOCUMENTS}
       />

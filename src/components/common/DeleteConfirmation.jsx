@@ -67,6 +67,7 @@ export default function DeleteConfirmation({
       console.error(error);
     }
   };
+  console.log(id,"selectedIdselectedId");
 
   return (
     <>
