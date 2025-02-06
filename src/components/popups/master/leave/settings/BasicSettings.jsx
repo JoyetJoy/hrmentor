@@ -53,6 +53,45 @@ const leaveSchema = Yup.object().shape({
         : schema.notRequired();
     }),
 
+  CarryForward_isOn: Yup.boolean(),
+  mx_no_days: Yup.number().when("CarryForward_isOn", {
+    is: true, // Only validate if `isOn` is true
+    then: (schema) =>
+      schema
+        .required("Max number of days is required")
+        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
+    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
+  }),
+  CarryForwardExpire_isOn: Yup.boolean(),
+  exp_days: Yup.number().when("CarryForwardExpire_isOn", {
+    is: true,
+    then: (schema) =>
+      schema
+        .required("Expiry days for unused carry forwarded is required")
+        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
+    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
+  }),
+
+  Encashments_isOn: Yup.boolean(),
+  specific_no_days: Yup.string()
+    .nullable()
+    .when("Encashments_isOn", {
+      is: true,
+      then: (schema) =>
+        schema
+          .required("Specific number of days is required")
+          .oneOf(["0", "1"], "Invalid selection"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+  no_of_days: Yup.number().when("Encashments_isOn", {
+    is: true,
+    then: (schema) =>
+      schema
+        .required("Number of days is required")
+        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
+    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
+  }),
+
   based_on_exp: Yup.string()
     .nullable()
     .when("applicable", (applicable, schema) => {
@@ -150,42 +189,59 @@ const leaveSchema = Yup.object().shape({
       return true;
     },
   ),
+
   emp_no_days: Yup.number()
     .transform((value, originalValue) =>
       originalValue === "" ? NaN : Number(originalValue),
     )
     .typeError("Number of days must be a valid number")
-    .required("Number of days is required")
-    .positive("Number of days must be greater than 0")
     .when("applicable", {
       is: "bycycle",
       then: (schema) =>
-        schema.required("Number of days is required for 'By Cycle'"),
-      otherwise: (schema) => schema.notRequired(),
+        schema
+          .required("Number of days is required for 'By Cycle'")
+          .min(1, "Number of days must be greater than 0"), // Changed from `.positive()`
+      otherwise: (schema) => schema.notRequired().nullable(),
     }),
 
   experience: Yup.array()
     .of(
       Yup.object().shape({
         year: Yup.number()
-          .typeError("Year must be a number")
+          .transform((value) => (value === "" ? NaN : Number(value)))
           .required("Year is required")
           .min(0, "Year cannot be negative"),
 
         month: Yup.number()
-          .typeError("Month must be a number")
+          .transform((value) => (value === "" ? NaN : Number(value)))
           .required("Month is required")
           .min(0, "Month cannot be negative")
           .max(11, "Month should be between 0-11"),
 
         daysLeave: Yup.number()
-          .typeError("Days must be a number")
+          .transform((value) => (value === "" ? NaN : Number(value)))
           .required("Days are required")
           .min(0, "Days cannot be negative")
-          .max(31, "Days should be between 0-31"),
+          .max(31, "Days should be between 0-31")
+          .when(["year", "month"], {
+            is: (year, month) => year === 0 && month === 0,
+            then: (schema) =>
+              schema.max(0, "Days leave cannot be given if experience is 0"),
+          }),
       }),
     )
-    .min(1, "At least one experience section is required"),
+    .when("applicable", {
+      is: "based_on_exp",
+      then: (schema) =>
+        schema
+          .min(1, "At least one experience section is required")
+          .test("at-least-one-valid", "Experience is required", (value) => {
+            return value?.some(
+              (exp) => exp.year > 0 || exp.month > 0 || exp.daysLeave > 0,
+            );
+          }),
+      otherwise: (schema) => schema.notRequired(),
+    }),
 });
 
 const BasicSettings = ({ formtype = "save" }) => {
@@ -197,12 +253,13 @@ const BasicSettings = ({ formtype = "save" }) => {
     formState: { errors },
     setValue,
     watch,
+    setError,
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(leaveSchema),
     defaultValues: {
       pay_type: "paid", // Default value
-      experience: [{ year: "", month: "", daysLeave: "" }],
+      experience: [{ year: 0, month: 0, daysLeave: 0 }],
     },
   });
   const { fields, append, remove } = useFieldArray({
@@ -213,12 +270,20 @@ const BasicSettings = ({ formtype = "save" }) => {
     setPopupOpen(false);
     reset();
   };
-  const { applicable } = watch();
+  const {
+    applicable,
+    CarryForward_isOn,
+    CarryForwardExpire_isOn,
+    Encashments_isOn,
+  } = watch();
+
+  console.log(CarryForward_isOn);
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [accrualType, setAccrualType] = useState("bycycle");
-  // const [applicable, setApplicable] = useState("all_employee");
+  const [applicableTo, setApplicableTo] = useState("all_employee");
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
@@ -265,6 +330,20 @@ const BasicSettings = ({ formtype = "save" }) => {
   };
 
   const onSubmit = async (data) => {
+    if (applicable === "based_on_exp") {
+      const allZero = data.experience.every(
+        (exp) => exp.year === 0 && exp.month === 0 && exp.daysLeave === 0,
+      );
+
+      if (allZero) {
+        setError("experience", {
+          type: "manual",
+          message: "At least one field must have a non-zero value.",
+        });
+        return;
+      }
+    }
+
     handledSubmit(data);
   };
 
@@ -843,9 +922,10 @@ const BasicSettings = ({ formtype = "save" }) => {
                     name="application_to"
                     value="all_employee"
                     {...register("applicable")}
-                    // onClick={() => setApplicable("all_employee")}
+                    // onClick={() => setApplicableTo("all_employee")}
                     className="radio-black"
-                    checked={applicable === "all_employee"}
+                    defaultChecked
+                    // checked={applicableTo === "all_employee"}
                   />
                   <label className="label-text">All employees</label>
                 </div>
@@ -855,9 +935,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                     name="application_to"
                     {...register("applicable")}
                     value="based_on_exp"
-                    // onClick={() => setApplicable("based_on_exp")}
+                    // onClick={() => setApplicableTo("based_on_exp")}
                     className="radio-black"
-                    checked={applicable === "based_on_exp"}
+                    // checked={applicableTo === "based_on_exp"}
                   />
                   <label className="label-text">Based on experience</label>
                 </div>
@@ -870,7 +950,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                     autoComplete="off"
                     placeholder={`Number of ${units}`}
                     type="number"
-                    min={0}
+                    min={1}
+                    defaultValue={0}
                     className="input-box"
                     name="emp_no_days"
                     {...register("emp_no_days")}
@@ -906,6 +987,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         <input
                           type="number"
                           // id={`years-${box.id}`}
+                          defaultValue={0}
                           {...register(`experience.${index}.year`)}
                           // value={box.years}
                           // onChange={(e) =>
@@ -929,12 +1011,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
+                          defaultValue={0}
                           {...register(`experience.${index}.month`)}
-                          // id={`months-${box.id}`}
-                          // value={box.months}
-                          // onChange={(e) =>
-                          //   handleInputChange(box.id, "months", e.target.value)
-                          // }
                           className="input-box h-10 rounded-md border"
                         />
                         {errors?.experience?.month && (
@@ -957,6 +1035,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
+                          defaultValue={0}
                           {...register(`experience.${index}.daysLeave`)}
                           min={0}
                           className="input-box h-10 rounded-md border"
@@ -989,9 +1068,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                       </div>
                     </div>
                   ))}
-                  {errors.experience && applicable === "by working" && (
+                  {errors.experience && (
                     <span className="text-xs text-red-500">
-                      {errors.experience.message}
+                      {errors?.experience?.root?.message}
                     </span>
                   )}
                 </div>
@@ -1001,19 +1080,22 @@ const BasicSettings = ({ formtype = "save" }) => {
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <div className="flex justify-between">
                 <p className="text-[0.9rem] font-bold">Carry Forward</p>
+
                 <div
                   onClick={() => {
-                    if (isOn) {
-                      setIsOn(false);
-                    } else {
-                      setIsOn(true);
-                    }
+                    setValue("CarryForward_isOn", !CarryForward_isOn); // Updating form field correctly
                   }}
-                  className={`h-5 w-10 rounded-full p-[1px] ${isOn ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white pt-[1.5px]"}`}
+                  className={`h-5 w-10 rounded-full p-[1px] ${
+                    CarryForward_isOn
+                      ? "bg-[#8be691] pt-[2.1px]"
+                      : "border border-[#888888] bg-white pt-[1.5px]"
+                  }`}
                 >
                   <div
-                    className={`h-4 w-4 ${isOn ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
-                      isOn ? "translate-x-5" : "translate-x-0"
+                    className={`h-4 w-4 ${
+                      CarryForward_isOn ? "bg-[#00b448]" : "bg-black"
+                    } transform rounded-full transition-transform ${
+                      CarryForward_isOn ? "translate-x-5" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
@@ -1022,7 +1104,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 Number of unused leaves of an employee can be carry forwarded
               </p>
             </div>
-            {isOn && (
+            {CarryForward_isOn && (
               <>
                 <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
                   <p className="text-[0.85rem] font-normal">
@@ -1041,12 +1123,14 @@ const BasicSettings = ({ formtype = "save" }) => {
                       type="number"
                       min={0}
                       className="input-box"
-                      name="max_no_days"
-                      {...register("max_no_days")}
+                      name="mx_no_days"
+                      defaultValue={0}
+                      {...register("mx_no_days")}
                     />
-                    {errors.max_no_days && (
-                      <span className="text-xs text-red-500">
-                        {errors.max_no_days.message}
+
+                    {errors.mx_no_days && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors ? "Max no of days is required" : null}
                       </span>
                     )}
                   </div>
@@ -1056,25 +1140,33 @@ const BasicSettings = ({ formtype = "save" }) => {
                     <p className="text-[0.85rem] font-semibold">
                       Carry forward expires
                     </p>
+
                     <div
                       onClick={() => {
-                        if (isOn2) {
-                          setIsOn2(false);
-                        } else {
-                          setIsOn2(true);
-                        }
+                        setValue(
+                          "CarryForwardExpire_isOn",
+                          !CarryForwardExpire_isOn,
+                        ); // Updating form field correctly
                       }}
-                      className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2px]" : "border border-[#888888] bg-white pt-[0.5px]"}`}
+                      className={`h-5 w-10 rounded-full p-[1px] ${
+                        CarryForwardExpire_isOn
+                          ? "bg-[#8be691] pt-[2.1px]"
+                          : "border border-[#888888] bg-white pt-[1.5px]"
+                      }`}
                     >
                       <div
-                        className={`h-4 w-4 ${isOn2 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
-                          isOn2 ? "translate-x-5" : "translate-x-0"
+                        className={`h-4 w-4 ${
+                          CarryForwardExpire_isOn ? "bg-[#00b448]" : "bg-black"
+                        } transform rounded-full transition-transform ${
+                          CarryForwardExpire_isOn
+                            ? "translate-x-5"
+                            : "translate-x-0"
                         }`}
                       ></div>
                     </div>
                   </div>
                 </div>
-                {isOn2 && (
+                {CarryForwardExpire_isOn && (
                   <>
                     <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
                       <p className="text-[0.85rem] font-normal">
@@ -1095,7 +1187,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                         />
                         {errors.exp_days && (
                           <span className="text-xs text-red-500">
-                            {errors.exp_days.message}
+                            {errors
+                              ? "expiry days for unused carry forwarded is required"
+                              : null}
                           </span>
                         )}
                       </div>
@@ -1107,19 +1201,22 @@ const BasicSettings = ({ formtype = "save" }) => {
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <div className="flex justify-between">
                 <p className="text-[0.9rem] font-bold">Encashments</p>
+
                 <div
                   onClick={() => {
-                    if (isOn3) {
-                      setIsOn3(false);
-                    } else {
-                      setIsOn3(true);
-                    }
+                    setValue("Encashments_isOn", !Encashments_isOn); // Updating form field correctly
                   }}
-                  className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1px]"}`}
+                  className={`h-5 w-10 rounded-full p-[1px] ${
+                    Encashments_isOn
+                      ? "bg-[#8be691] pt-[2.1px]"
+                      : "border border-[#888888] bg-white pt-[1.5px]"
+                  }`}
                 >
                   <div
-                    className={`h-4 w-4 ${isOn3 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
-                      isOn3 ? "translate-x-5" : "translate-x-0"
+                    className={`h-4 w-4 ${
+                      Encashments_isOn ? "bg-[#00b448]" : "bg-black"
+                    } transform rounded-full transition-transform ${
+                      Encashments_isOn ? "translate-x-5" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
@@ -1128,7 +1225,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 Number of unused leaves of an employee can be encashed
               </p>
             </div>
-            {isOn3 && (
+            {Encashments_isOn && (
               <div className={`group col-span-2 flex flex-col gap-1.5 py-2`}>
                 <div className="flex justify-between">
                   <p className="text-[0.85rem] font-bold">
@@ -1143,42 +1240,41 @@ const BasicSettings = ({ formtype = "save" }) => {
                       Max number of {units} can be encashed
                     </label>
                     <Controller
-                      name="max_encashments" // Assuming "status" is the field you're using here
+                      name="specific_no_days" // This should match the schema field
                       control={control}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          value={
-                            encashmentsPay === `0`
-                              ? {
-                                  value: `0`,
-                                  label: `All the remaining ${units}`,
-                                }
-                              : {
-                                  value: `1`,
-                                  label: `Specific number of ${units}`,
-                                }
-                          }
-                          isSearchable
-                          options={[
-                            {
-                              value: `0`,
-                              label: `All the remaining ${units}`, // Correct plural/singular form
-                            },
-                            {
-                              value: `1`,
-                              label: `Specific number of ${units}`, // Correct plural/singular form
-                            },
-                          ]}
-                          placeholder={`Select a ${units}`} // Using the plural form correctly
-                          onChange={(selectedOption) => {
-                            field.onChange(selectedOption.value); // Update react-hook-form field value
-                            setEncashmentsPay(selectedOption.value); // Update local state
-                          }}
-                          className="input-box w-full"
-                        />
-                      )}
+                      render={({ field }) => {
+                        // Define options inside the render function
+                        const options = [
+                          { value: "0", label: `All the remaining ${units}` },
+                          { value: "1", label: `Specific number of ${units}` },
+                        ];
+
+                        return (
+                          <Select
+                            {...field}
+                            value={
+                              options.find(
+                                (option) => option.value === field.value,
+                              ) || null
+                            } // Ensure correct option is selected
+                            options={options} // Pass the options here
+                            isSearchable
+                            placeholder={`Select a ${units}`}
+                            onChange={(selectedOption) => {
+                              field.onChange(selectedOption.value); // Updates form value
+                              setEncashmentsPay(selectedOption.value); // Updates local state
+                            }}
+                            className="input-box w-full"
+                          />
+                        );
+                      }}
                     />
+
+                    {errors.specific_no_days && (
+                      <span className="text-xs text-red-500">
+                        {errors?.specific_no_days?.message}
+                      </span>
+                    )}
                   </div>
 
                   <div className="group flex flex-col gap-1.5 py-2">
@@ -1194,7 +1290,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                     />
                     {errors.no_of_days && (
                       <span className="text-xs text-red-500">
-                        {errors.no_of_days.message}
+                        {errors.no_of_days
+                          ? "Number of days is required"
+                          : null}
                       </span>
                     )}
                   </div>
