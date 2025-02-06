@@ -40,6 +40,21 @@ export const recColumnKeysForQualification = {
   field1: { key: "qualification_name", label: "Qualification Name" },
   field2: { key: "status", label: "Status" },
 };
+// Employment type
+export const recColumnKeysForEmploymentType = {
+  field1: { key: "employment_type_name", label: "Employee Type" },
+  field2: { key: "employment_type_status", label: "Status" },
+};
+// Designation
+export const recColumnKeysForDesignation = {
+  field1: { key: "designation_name", label: "Designation" },
+  field2: { key: "designation_status", label: "Status" },
+};
+// Department
+export const recColumnKeysForDepartment = {
+  field1: { key: "department_name", label: "Department" },
+  field2: { key: "department_status", label: "Status" },
+};
 
 // interview type
 export const recColumnKeysForInterviewType = {

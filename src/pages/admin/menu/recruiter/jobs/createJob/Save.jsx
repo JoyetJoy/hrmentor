@@ -459,6 +459,7 @@ function RecruiterJobPost() {
       });
     }
   };
+console.log(type);
 
   return (
     <>

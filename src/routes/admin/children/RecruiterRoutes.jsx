@@ -20,6 +20,7 @@ import { RecruiterSettingDocumentType } from "@/pages/admin/menu/recruiter/setti
 import { RecruiterSettingMinimumExperience } from "@/pages/admin/menu/recruiter/settings/MinimumExperience";
 import { RecruiterSettingProfileQuestion } from "@/pages/admin/menu/recruiter/settings/ProfileQuestions";
 import { RecruiterSettingSources } from "@/pages/admin/menu/recruiter/settings/Sources";
+
 import SaveCandidates from "@/pages/admin/menu/recruiter/candidate/Save";
 import CandidateProfile from "@/pages/admin/menu/recruiter/candidate/details/CandidateProfile";
 import JobApplicationQuestion from "@/pages/admin/menu/recruiter/jobs/createJob/RecJobApplication";
@@ -35,6 +36,10 @@ import CandidateHistoryTimeline from "@/pages/admin/menu/recruiter/candidate/det
 import RecInterviews from "@/pages/admin/menu/recruiter/interview/RecInterviews";
 import RecViewJobPromote from "@/pages/admin/menu/recruiter/jobs/view/Promote";
 import RecViewJobRefer from "@/pages/admin/menu/recruiter/jobs/view/Refer";
+
+import { RecruiterSettingEmployment } from "@/pages/admin/menu/recruiter/settings/EmploymentType";
+import { RecruiterSettingDepartment } from "@/pages/admin/menu/recruiter/settings/Department";
+import { RecruiterSettingDesignation } from "@/pages/admin/menu/recruiter/settings/Designation";
 
 export const RecruiterRoutes = [
   {
@@ -106,6 +111,18 @@ export const RecruiterRoutes = [
       {
         path: "education-qualification",
         element: <RecruiterSettingQualification />,
+      },
+      {
+        path: "employment-type",
+        element: <RecruiterSettingEmployment />,
+      },
+      {
+        path: "designation",
+        element: <RecruiterSettingDesignation />,
+      },
+      {
+        path: "department",
+        element: <RecruiterSettingDepartment />,
       },
       {
         path: "interview-type",
