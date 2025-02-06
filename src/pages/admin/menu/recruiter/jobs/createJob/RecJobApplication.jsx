@@ -48,6 +48,7 @@ function JobApplicationQuestion() {
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(recruiterApplicationQuestionSchema),
+    
   });
 
   // GET PROFILE QUESTIONS;
@@ -134,6 +135,8 @@ function JobApplicationQuestion() {
     handleSave(data);
   };
   const handleSave = async (data) => {
+    console.log(data);
+    
     const formData = new FormData();
     formData.append("job_list_id", jid);
     formData.append("answer_type", data.answer_type?.id);
@@ -368,6 +371,7 @@ function JobApplicationQuestion() {
                               <input
                                 type="checkbox"
                                 {...register("is_required", { required: true })}
+                                defaultChecked={false}
                                 className="checkbox size-4 rounded-sm checked:accent-slate-600"
                               />
                               <span className="label-text text-xs">

@@ -233,10 +233,9 @@ function InterviewGuideline({
                         placeholder="Hrs"
                         className="input-box"
                         onKeyPress={(event) => {
-                          // Allow only digits (0-9) and prevent input if length is already 11
                           if (
-                            !/^[0-9]$/.test(event.key) || // Check if the key is a number
-                            event.target.value.length >= 4 // Prevent typing if length is 11
+                            !/^[0-9]$/.test(event.key) || 
+                            event.target.value.length >= 2
                           ) {
                             event.preventDefault();
                           }
@@ -258,7 +257,7 @@ function InterviewGuideline({
                         onKeyPress={(event) => {
                           if (
                             !/^[0-9]$/.test(event.key) || 
-                            event.target.value.length >= 4 
+                            event.target.value.length >= 2 
                           ) {
                             event.preventDefault();
                           }

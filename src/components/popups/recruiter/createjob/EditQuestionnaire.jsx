@@ -91,7 +91,7 @@ export default function EditQuestionnaireForm({
       const formData = {
         id: selectedField || null,
         question: data.question,
-        is_required: data.is_required ? 1 : 0,
+        is_required: data.is_required,
         options: options
           .filter((opt) => opt.value)
           .map((opt) => ({ value: opt.value })),
@@ -108,7 +108,7 @@ export default function EditQuestionnaireForm({
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.error);
+      toast.error("Please Add New Option");
     } finally {
       setLoader(false);
     }

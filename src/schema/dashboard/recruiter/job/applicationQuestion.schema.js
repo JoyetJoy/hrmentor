@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 export const recruiterApplicationQuestionSchema = Yup.object({
   question: Yup.string().required("Question is required"),
-  is_required: Yup.string().required("Is required is required"),
+  is_required: Yup.boolean().required("Is required is required"),
   answer_type: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

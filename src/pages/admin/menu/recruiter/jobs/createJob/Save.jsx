@@ -694,6 +694,7 @@ function RecruiterJobPost() {
                         onChange={handlePostChange}
                         type="file"
                         className="hidden"
+                        accept=".pdf, .jpeg, .jpg"
                       />
                     </label>
                   )}
@@ -780,6 +781,7 @@ function RecruiterJobPost() {
                         onChange={handleGuidelineChange}
                         type="file"
                         className="hidden"
+                        accept=".pdf, .jpeg, .jpg"
                       />
                     </label>
                   )}
