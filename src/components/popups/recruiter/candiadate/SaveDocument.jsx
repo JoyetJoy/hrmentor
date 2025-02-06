@@ -103,7 +103,7 @@ export default function SaveCandidateDocument({
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.error);
+      toast.error("File must be in DOCX,DOC,PDF(up to 1 MB");
     } finally {
       setLoader(false);
     }

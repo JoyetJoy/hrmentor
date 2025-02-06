@@ -55,13 +55,13 @@ export default function RecCandidateInterviewActions({
             <div className="mb-7 flex flex-col items-center gap-3">
               <h1 className="text-base font-bold leading-7 text-neutral-700">
                 {selectedField === 3
-                  ? "Shortlist the candidate ?"
-                  : "Move candidate ?"}
+                  ? "Shortlist the Candidate"
+                  : "Move Candidate"}
               </h1>
               <p className="text-sm font-medium text-black/70">
                 {selectedField === 3
-                  ? "Do you want to Shortlist the candidate ?"
-                  : "Do you want to move to hiring candidate ?"}
+                  ? "Do you want to shortlist this candidate?"
+                  : "Do you want to move this candidate to the hiring stage?"}
               </p>
             </div>
             <div className="mt-7 flex flex-row items-center justify-center gap-4 px-7">
