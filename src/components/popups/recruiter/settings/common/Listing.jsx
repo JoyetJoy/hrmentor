@@ -139,7 +139,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [(data, type, api, qrkey, colKeys)],
   );
-console.log(data?.listing);
+// console.log(fieldValue,"fieldValuefieldValue");
 
   return (
     <>
