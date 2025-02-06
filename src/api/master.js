@@ -120,7 +120,7 @@ export const CANDIDATE_TYPE = "CandidateTypes";
 // CANDIDATE TYPE LIST
 export const CANDIDATE_TYPE_LIST = "Active-CandidateTypes";
 //DOCUMENTS TYPE LIST
-export const DOCUMENTS_TYPE = "Active-CandidateTypes";
+export const DOCUMENTS_TYPE = "CandidateDocumentTypes";
 // Experience
 export const MINIMUM_Experience = "MinimumExperience";
 // LIST
