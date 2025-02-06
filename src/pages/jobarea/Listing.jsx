@@ -118,7 +118,7 @@ export default function JobAreaListing() {
                         <div className="flex items-center gap-1">
                           <div className="size-2 rounded-full bg-green-500" />
                           <p className="text-xs font-medium text-black/50">
-                            3days ago
+                            {career?.days_since_creation} days ago
                           </p>
                         </div>
                       </div>

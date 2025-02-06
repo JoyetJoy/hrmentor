@@ -456,7 +456,7 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
 
             <div className="group flex flex-col gap-1.5 py-2">
-              <label className="required label-text">Date of birth</label>
+              <label className="required label-text">Date of Birth</label>
               <input
                 {...register("date_of_birth", { required: true })}
                 autoComplete="off"
@@ -472,7 +472,7 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
 
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="required label-text">Country of residence</label>
+              <label className="required label-text">Country of Residence</label>
               <Controller
                 name="country_id"
                 control={control}
@@ -570,7 +570,7 @@ export default function RecSaveFormCandidate({ type }) {
               )}
             </div>
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="required label-text">Languages spoken</label>
+              <label className="required label-text">Languages Spoken</label>
               <Controller
                 name="language_spoken"
                 className=""
@@ -597,7 +597,7 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
             <div className="group flex flex-col space-y-1 py-2">
               <label className="required label-text">
-                Highest education level
+                Highest Education Level
               </label>
               <Controller
                 name="highest_education_level"
@@ -675,7 +675,7 @@ export default function RecSaveFormCandidate({ type }) {
                     }}
                   />
                   <span className="mt-0.5 whitespace-nowrap text-[0.5rem] font-medium text-gray-dim md:text-xs">
-                    Same as home
+                    Same as Home
                   </span>
                 </div>
               </label>
@@ -692,7 +692,7 @@ export default function RecSaveFormCandidate({ type }) {
               )}
             </div>
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="label-text">Source</label>
+              <label className="label-text required">Source</label>
               <Controller
                 name="source"
                 control={control}
@@ -732,7 +732,7 @@ export default function RecSaveFormCandidate({ type }) {
             </div>
 
             <div className="group flex flex-col space-y-1 py-2">
-              <label className="required label-text">Recruiting job</label>
+              <label className="required label-text">Recruiting Job</label>
               <Controller
                 name="job_id"
                 control={control}

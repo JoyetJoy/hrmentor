@@ -133,7 +133,7 @@ export default function Apply() {
         setLoader(false);
         navigate("/careers");
       } else {
-        toast.error("Failed to apply some error");
+        toast.error("Resume must be in DOCX, DOC, or PDF (up to 1 MB)");
         setLoader(false);
       }
     } catch (error) {
