@@ -18,7 +18,6 @@ export default function DeleteConfirmation({
 }) {
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
-  console.log(selectedId);
   
   const handleDelete = async () => {
     if(type==='rosterdelete'){
@@ -67,7 +66,6 @@ export default function DeleteConfirmation({
       console.error(error);
     }
   };
-
   return (
     <>
       {open && (

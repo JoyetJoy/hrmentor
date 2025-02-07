@@ -172,7 +172,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrkey={qrkey}
         api={api}
       />

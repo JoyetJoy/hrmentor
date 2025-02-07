@@ -119,6 +119,8 @@ export const ROASTER_LIST_GET = "/team-employee-rosters-list";
 export const CANDIDATE_TYPE = "CandidateTypes";
 // CANDIDATE TYPE LIST
 export const CANDIDATE_TYPE_LIST = "Active-CandidateTypes";
+//DOCUMENTS TYPE LIST
+export const DOCUMENTS_TYPE = "CandidateDocumentTypes";
 // Experience
 export const MINIMUM_Experience = "MinimumExperience";
 // LIST

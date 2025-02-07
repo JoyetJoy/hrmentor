@@ -23,7 +23,10 @@ export default function SaveRecruiterMasterForm({
   type,
   colKeys,
   api,
-}) {
+})
+ {
+  console.log(qrKey, type, colKeys, api);
+  
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
@@ -37,6 +40,7 @@ export default function SaveRecruiterMasterForm({
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
     enabled: enableKey,
   });
+console.log(type);
 
   const {
     register,
@@ -283,7 +287,7 @@ export default function SaveRecruiterMasterForm({
 
                 {type === "Profile Questions" ? (
                   <div className="group flex w-full items-center gap-3">
-                    <label className="required label-text">Is Default</label>
+                    <label className="label-text">Is Default</label>
                     <div className="flex">
                       <input
                         onChange={(e) => {

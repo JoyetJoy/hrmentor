@@ -85,7 +85,7 @@ console.log(types);
                 Resume Upload
               </h1>
               <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-lightSoft py-2">
-                <p className="text-sm font-semibold">Upload or drag and drop</p>
+                <p className="text-sm font-semibold">Upload or Drag and Drop</p>
                 <p className="text-sm text-gray-dark">
                   (Preferred), DOCX, DOC, PDF up to 1 MB
                 </p>

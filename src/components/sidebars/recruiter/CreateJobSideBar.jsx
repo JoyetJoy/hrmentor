@@ -79,8 +79,8 @@ function CreateJobSideBar({ stepCounter }) {
                 <div className="ml-5 flex flex-col gap-3 rounded px-3 text-sm">
                   {postSubSteps.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
-                      <div
-                        className={`flex size-5 items-center justify-center rounded-full border ${
+                      {/* <div
+                        className={`flex size-1 items-center justify-center rounded-full border ${
                           stepCounter >= subStep.step
                             ? "border-textcolor-darkgreen bg-[#F0FFF1]"
                             : "border-textcolor-gray bg-gray-lightcool"
@@ -89,7 +89,8 @@ function CreateJobSideBar({ stepCounter }) {
                         {stepCounter >= subStep.step && (
                           <Check className="size-3 bg-textcolor-lightgreen" />
                         )}
-                      </div>
+                      </div> */}
+                      <li className="text-gray-dark"></li>
                       <p
                         className={
                           stepCounter >= subStep.step

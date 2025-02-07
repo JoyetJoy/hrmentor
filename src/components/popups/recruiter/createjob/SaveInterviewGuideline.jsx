@@ -232,6 +232,14 @@ function InterviewGuideline({
                         type="text"
                         placeholder="Hrs"
                         className="input-box"
+                        onKeyPress={(event) => {
+                          if (
+                            !/^[0-9]$/.test(event.key) || 
+                            event.target.value.length >= 2
+                          ) {
+                            event.preventDefault();
+                          }
+                        }}
                       />
                       {errors.duration_hr && (
                         <span className="text-xs font-medium text-red-500">
@@ -246,6 +254,14 @@ function InterviewGuideline({
                         type="text"
                         placeholder="Min"
                         className="input-box"
+                        onKeyPress={(event) => {
+                          if (
+                            !/^[0-9]$/.test(event.key) || 
+                            event.target.value.length >= 2 
+                          ) {
+                            event.preventDefault();
+                          }
+                        }}
                       />
                       {errors.duration_minute && (
                         <span className="text-xs font-medium text-red-500">

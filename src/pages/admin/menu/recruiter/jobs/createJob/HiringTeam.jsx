@@ -170,11 +170,10 @@ function RecJobHiringTeam() {
           <div className="w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">
               <p className="text-base font-medium text-textcolor-darkCharcoal">
-                Choose the right team for the job.
+              Choose the right team for the job.
               </p>
               <p className="text-medium text-sm text-gray-dark">
-                This job's hiring team can include group or individual people
-                who are helping you fill this position.
+              This job's hiring team can include groups or individuals who are helping you fill this position.
               </p>
             </div>
             <div className="my-4 flex items-center justify-between gap-7">

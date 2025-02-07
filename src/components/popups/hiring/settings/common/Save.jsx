@@ -30,7 +30,7 @@ export default function SaveHiringMasterForm({
     HIRING_DOCUMENT_TYPE,
     "documentTypesHiring",
   );
-
+ console.log(documentTypesHiring,"documentTypesHiring")
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
@@ -133,7 +133,6 @@ export default function SaveHiringMasterForm({
       setLoader(false);
     }
   };
-
   return (
     <Dialog
       open={popupOpen}
@@ -256,7 +255,7 @@ export default function SaveHiringMasterForm({
                         setIsDefault(e.target.checked);
                       }}
                       checked={isdefault}
-                      className="size-5"
+                      className="size-4"
                       type="checkbox"
                       name=""
                       id=""
@@ -269,7 +268,7 @@ export default function SaveHiringMasterForm({
                   )}
                 </div>
 
-                <div className="mt-7 flex flex-row items-center justify-center gap-3">
+                <div className=" flex flex-row items-center justify-center gap-3">
                   <button
                     type="submit"
                     className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
