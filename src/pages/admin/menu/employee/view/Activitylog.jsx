@@ -42,8 +42,10 @@ export default function EmployeeActivitylogDetails() {
         activeMenu={"Employee"}
       />
       <Reschedule
+        data={employeeViewDetails?.basic_details?.employmentStatus}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
+        id={employeeViewDetails?.basic_details?.employee_id}
         type={type}
       />
       {isLoading ? (
@@ -81,7 +83,7 @@ export default function EmployeeActivitylogDetails() {
                   }}
                   className="text-mediumred ml-5 flex h-7 cursor-pointer items-center rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold"
                 >
-                  On Leave
+                  {employeeViewDetails?.basic_details?.employmentStatus?.value}
                 </div>
               </div>
               <div className="mt-5 rounded-md border">
