@@ -931,7 +931,7 @@ console.log(type);
               </div>
             </div>
             <div className="flex flex-col gap-2.5 pb-7">
-              <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
+              <Disclosure as="div" className="px-5 py-2" defaultOpen={true}>
                 <DisclosureButton className="group flex w-full items-center gap-x-2">
                   <div className="flex size-5 min-w-5 items-center justify-center rounded-full bg-gray-darklight">
                     <ChevronRight className="size-4 group-data-[open]:rotate-90" />
