@@ -61,7 +61,7 @@ export default function Share({ sharePopupOpen, setSharePopupOpen, uid }) {
               </button>
             </div>
             <p className="mt-2 text-sm text-black">
-              Do u want to share the form?
+            Do you want to share the onboarding form?
             </p>
             <div className="mt-3 flex flex-row gap-3">
               <button

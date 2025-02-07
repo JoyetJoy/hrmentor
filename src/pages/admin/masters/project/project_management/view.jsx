@@ -186,7 +186,7 @@ export default function ProjectManagementView() {
       },
     ],
   };
-
+ console.log(projectListDetails,"projectListDetailsprojectListDetails")
   return (
     <>
       <ProjectHeader
@@ -267,7 +267,7 @@ export default function ProjectManagementView() {
             </div>
           </div>
           <button className="flex w-fit items-center justify-center gap-2 rounded-md border border-[#448FFF] bg-[#448FFF33] px-6 py-2 text-base font-medium text-[#448FFF] focus:outline-none">
-            In progress{" "}
+          {projectListDetails?.status?.label}
           </button>
         </div>
         <div className="flex items-center gap-8">
@@ -328,7 +328,7 @@ export default function ProjectManagementView() {
             <div>
               <p className="text-gray-dark">Status</p>
               <p className="font-semibold">
-                {projectListDetails?.status_details?.project_status_name}
+                {projectListDetails?.status?.label}
               </p>
             </div>
             <div>
@@ -353,10 +353,6 @@ export default function ProjectManagementView() {
             </div>
             <div>
               <p className="text-gray-dark">Total Logged Hours</p>
-              <p className="font-semibold"></p>
-            </div>
-            <div>
-              <p className="text-gray-dark">Deadline</p>
               <p className="font-semibold"></p>
             </div>
             <div>
@@ -412,7 +408,7 @@ export default function ProjectManagementView() {
             >
               <div className="mb-7 flex items-center justify-between">
                 <h1 className="text-[0.99rem] font-bold leading-7 text-neutral-700">
-                  Add New Project
+                  Add New Task
                 </h1>
                 <button
                   onClick={close}
@@ -426,7 +422,7 @@ export default function ProjectManagementView() {
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group mt-3 flex flex-col space-y-1 text-[0.85rem] font-medium">
-                  <label>Project name</label>
+                  <label>Task Name</label>
                   <input
                     autoComplete="off"
                     type="text"
