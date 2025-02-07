@@ -45,7 +45,7 @@ export default function EmployeeActivitylogDetails() {
         data={employeeViewDetails?.basic_details?.employmentStatus}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        id={uid}
+        id={employeeViewDetails?.basic_details?.employee_id}
         type={type}
       />
       {isLoading ? (

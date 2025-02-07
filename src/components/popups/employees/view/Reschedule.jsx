@@ -17,12 +17,12 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
   };
 
   const options = [
-    { label: "On Leave", value: 3 },
-    { label: "Onboarding Pending", value: 1 },
-    { label: "Active", value: 4 },
-    { label: "Awaiting Joining", value: 5 },
-    { label: "Resigned", value: 6 },
-    { label: "Terminated", value: 7 },
+    { label: "On Leave", value: "On Leave", id: 3 },
+    { label: "Onboarding Pending", value: "Onboarding Pending", id: 1 },
+    { label: "Active", value: "Active", id: 4 },
+    { label: "Awaiting Joining", value: "Awaiting Joining", id: 5 },
+    { label: "Resigned", value: "Resigned", id: 6 },
+    { label: "Terminated", value: "Terminated", id: 7 },
   ];
 
   const [status, setStatus] = useState(null);
@@ -43,8 +43,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
       if (response?.status === 200) {
         setPopupOpen(false);
         toast.success("Approve successfully");
-        window.location.reload()
-        // navigate(`/admin/employee/details/?uid=${uid}`);
+        // navigate(`/admin/employee/details/?uid=${id}`);
       } else {
         toast.error("Failed to approve,");
       }
@@ -102,7 +101,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
                   options={options}
                   styles={customSelectStyles}
                   defaultValue={options[0]} // Default to the first option object
-                  onChange={(selectedOption) => setStatus(selectedOption.value)} // Update status with the selected value
+                  onChange={(selectedOption) => setStatus(selectedOption.id)} // Update status with the selected value
                 />
               </div>
             )}
