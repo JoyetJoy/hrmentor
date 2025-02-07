@@ -43,7 +43,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
           return res.data;
         }),
   });
-
+console.log(type,"typetype")
   useEffect(() => {
     if (data) {
       setTotalPages(data?.last_page);
@@ -139,8 +139,6 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [(data, type, api, qrkey, colKeys)],
   );
-// console.log(fieldValue,"fieldValuefieldValue");
-
   return (
     <>
       <SaveRecruiterMasterForm

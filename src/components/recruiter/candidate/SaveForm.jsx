@@ -264,7 +264,6 @@ export default function RecSaveFormCandidate({ type }) {
       });
     }
   };
-
   return (
     <>
       <Addtransfer popupOpen={popupOpen} setPopupOpen={setPopupOpen} cid={cid} />
