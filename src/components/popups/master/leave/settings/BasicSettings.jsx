@@ -21,20 +21,20 @@ const accrualPeriodOptions = [
   { value: "monthly", label: "Monthly" },
 ];
 
-const monthOptions = [
-  { value: "jan", label: "January" },
-  { value: "feb", label: "February" },
-  { value: "mar", label: "March" },
-  { value: "apr", label: "April" },
-  { value: "may", label: "May" },
-  { value: "jun", label: "June" },
-  { value: "jul", label: "July" },
-  { value: "aug", label: "August" },
-  { value: "sep", label: "September" },
-  { value: "oct", label: "October" },
-  { value: "nov", label: "November" },
-  { value: "dec", label: "December" },
-];
+const monthDaysMap = {
+  January: 31,
+  February: 28, // Leap year logic can be added if required
+  March: 31,
+  April: 30,
+  May: 31,
+  June: 30,
+  July: 31,
+  August: 31,
+  September: 30,
+  October: 31,
+  November: 30,
+  December: 31,
+};
 
 // Validation Schema
 
@@ -116,45 +116,63 @@ const leaveSchema = Yup.object().shape({
     .typeError("Invalid date format"),
   status: Yup.string().required("Status is required"),
 
-  accural_period: Yup.string().test(
+  accural_period: Yup.object()
+  .shape({
+    value: Yup.string().required("Accrual period is required"),
+    label: Yup.string().required(),
+  })
+  .test(
     "accrual-period-test",
     "Accrual period is required",
     function (value) {
       const { accrualType } = this.parent;
-      console.log(accrualType);
+      console.log(accrualType, value);
 
       if (
         (accrualType === "bycycle" || accrualType === "byworking") &&
-        !value
+        !value?.value // Checking value inside the object
       ) {
         return false;
       }
       return true;
-    },
+    }
   ),
-  accural_day: Yup.string().test(
+  accural_day: Yup.object()
+  .shape({
+    value: Yup.string().required("Accrual day is required"),
+    label: Yup.string().required(),
+  })
+  .test(
     "accrual-day-test",
     "Accrual day is required",
     function (value) {
       const { accrualType } = this.parent;
-      console.log(accrualType);
+      console.log("Accrual Type:", accrualType, "Selected Day:", value);
 
-      if (accrualType === "bycycle" && !value) {
+      if (accrualType === "bycycle" && !value?.value) {
         return false;
       }
       return true;
-    },
+    }
   ),
-  accural_monthly: Yup.string().test(
+
+accural_monthly: Yup.object()
+  .shape({
+    value: Yup.string().required("Accrual monthly is required"),
+    label: Yup.string().required(),
+  })
+  .test(
     "accrual-monthly-test",
     "Accrual monthly is required",
     function (value) {
       const { accrualType } = this.parent;
-      if (accrualType === "bycycle" && !value) {
+      console.log("Accrual Type:", accrualType, "Selected Month:", value);
+
+      if (accrualType === "bycycle" && !value?.value) {
         return false;
       }
       return true;
-    },
+    }
   ),
   accrual_leave: Yup.string().test(
     "accrual-leave-test",
@@ -274,7 +292,7 @@ const BasicSettings = ({ formtype = "save" }) => {
     applicable,
     CarryForward_isOn,
     CarryForwardExpire_isOn,
-    Encashments_isOn,
+    Encashments_isOn
   } = watch();
 
   console.log(CarryForward_isOn);
@@ -295,6 +313,10 @@ const BasicSettings = ({ formtype = "save" }) => {
   const [accuralAt, setAccuralAt] = useState("");
   const [encashmentsPay, setEncashmentsPay] = useState("");
   const { user } = useUserStore((state) => ({ user: state.user }));
+  const selectedMonthValue = watch("accural_monthly");
+  const daysInMonth = selectedMonthValue
+    ? monthDaysMap[selectedMonthValue]
+    : 31;
 
   const getStoredData = () => {
     const storedData = localStorage.getItem("myData");
@@ -378,12 +400,39 @@ const BasicSettings = ({ formtype = "save" }) => {
         exp_days: basicholidayDetails?.exp_days,
         encashments_pay: "basicpay",
         no_of_days: basicholidayDetails?.no_of_days,
+        accural_period: {
+          value: basicholidayDetails.accural_period,
+          label:
+            basicholidayDetails.accural_period.charAt(0).toUpperCase() +
+            basicholidayDetails.accural_period.slice(1),
+        },
+        accural_day: {
+          value: basicholidayDetails.accural_day,
+          label: basicholidayDetails.accural_day
+        },
       });
       setIsOn(basicholidayDetails?.carry_forword);
       setIsOn2(basicholidayDetails?.carry_expire);
       setIsOn3(basicholidayDetails?.encashments);
       setUnits(basicholidayDetails?.units);
-      setAccuralPeriod(basicholidayDetails?.accural_period);
+      if (basicholidayDetails?.accural_period) {
+        setAccuralPeriod([
+          {
+            value: basicholidayDetails.accural_period,
+            label:
+              basicholidayDetails.accural_period.charAt(0).toUpperCase() +
+              basicholidayDetails.accural_period.slice(1),
+          },
+        ]);
+      }
+      if (basicholidayDetails?.accural_day) {
+        setAccuralDays([
+          {
+            value: basicholidayDetails.accural_day,
+            label: basicholidayDetails.accural_day
+          },
+        ]);
+      }
       setAccuralDays(basicholidayDetails?.accural_day);
       setAccuralMonth(basicholidayDetails?.accural_monthly);
       setAccrualType(basicholidayDetails?.accural_type);
@@ -408,7 +457,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         status: data.status,
         valid_from: moment(data.valid_from).format("YYYY-MM-DD"),
         accural_type: accrualType,
-        accural_period: accuralPeriod,
+        accural_period: accuralPeriod?.value,
         accural_day: accuralDays,
         accural_monthly: accuralMonth,
         accural_at: accuralAt,
@@ -456,6 +505,39 @@ const BasicSettings = ({ formtype = "save" }) => {
       setLoader(false);
     }
   };
+
+  const getOrdinalSuffix = (num) => {
+    if (num >= 11 && num <= 13) return num + "th"; // Handle 11th, 12th, 13th
+    const lastDigit = num % 10;
+    switch (lastDigit) {
+      case 1:
+        return num + "st";
+      case 2:
+        return num + "nd";
+      case 3:
+        return num + "rd";
+      default:
+        return num + "th";
+    }
+  };
+
+  // Generate days dynamically
+  const dayOptions = [
+    ...Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      return {
+        value: getOrdinalSuffix(day),
+        label: getOrdinalSuffix(day),
+      };
+    }),
+    { value: "lastDay", label: "Last day" }, // Last day option
+  ];
+
+  // List of month options for dropdown
+const monthOptions = Object.keys(monthDaysMap).map((month) => ({
+  value: month,
+  label: month,
+}));
   console.log(errors);
 
   return (
@@ -690,20 +772,11 @@ const BasicSettings = ({ formtype = "save" }) => {
                           { value: "annually", label: "Annually" },
                           { value: "monthly", label: "Monthly" },
                         ]}
+                        value={accuralPeriod}
                         placeholder="Select a period"
-                        value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
-                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value);
-                          setAccuralPeriod(selectedOption.value);
+                          field.onChange(selectedOption);
+                          setAccuralPeriod([selectedOption]);
                         }}
                         className="input-box w-full"
                       />
@@ -716,52 +789,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                   )}
                 </div>
 
-                {/* Accrual Days */}
-                <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual day(s)</label>
-                  <Controller
-                    name="accural_day"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        options={[
-                          ...Array.from({ length: 28 }, (_, i) => ({
-                            value: i + 1 + "st",
-                            label: (i + 1).toString() + "st",
-                          })),
-                          { value: "lastDay", label: "Last day" }, // Adding the "last day" option
-                        ]}
-                        value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
-                        }
-                        onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value);
-                          setAccuralDays(selectedOption.value);
-                        }}
-                        className="input-box w-full"
-                      />
-                    )}
-                  />
-                  {errors.accural_day && (
-                    <span className="text-xs text-red-500">
-                      {errors.accural_day.message}
-                    </span>
-                  )}
-                </div>
-
                 {/* Accrual Month */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">
-                    Accrual month(s)
-                  </label>
+                  <label className="label-text">Accrual month(s)</label>
                   <Controller
                     name="accural_monthly"
                     control={control}
@@ -775,8 +805,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                         isSearchable
                         placeholder="Select a month"
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value); // Update the form value
-                          setAccuralMonth(selectedOption.value); // Update local state with selected month
+                          field.onChange(selectedOption.value); // Update form value
+                          setAccuralMonth(selectedOption.value); // Store in state
                         }}
                         className="input-box w-full"
                       />
@@ -785,6 +815,31 @@ const BasicSettings = ({ formtype = "save" }) => {
                   {errors.accural_monthly && (
                     <span className="text-xs text-red-500">
                       {errors.accural_monthly.message}
+                    </span>
+                  )}
+                </div>
+                {/* Accrual Days */}
+                <div className="group flex flex-col gap-1.5 py-2">
+                  <label className="label-text">Accrual day(s)</label>
+                  <Controller
+                    name="accural_day"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={dayOptions} // Updated dynamically based on month
+                        placeholder="Select a day"
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption);
+                          setAccuralDays(selectedOption.value);
+                        }}
+                        className="input-box w-full"
+                      />
+                    )}
+                  />
+                  {errors.accural_day && (
+                    <span className="text-xs text-red-500">
+                      {errors.accural_day.message}
                     </span>
                   )}
                 </div>
