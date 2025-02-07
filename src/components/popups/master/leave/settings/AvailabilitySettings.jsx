@@ -62,13 +62,11 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
   // Determine `id` with priority: searchParams -> routeId -> storedData
   const id = searchParams.get("id") || routeId || storedData?.id || null;
 
-
   useEffect(() => {
     const data = { id };
     localStorage.setItem("myData", JSON.stringify(data));
   }, [id]);
 
- 
   const [availabilitySelection, setAvailabilitySelection] = useState({
     department_availability: [],
     department_except: [],
@@ -80,7 +78,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     role_except: [],
   });
   console.log(user?.id);
-  
 
   const { isLoading: isLocation, data: location } = useQuery({
     queryKey: ["location", user?.id],
@@ -100,7 +97,10 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
         .get(SALARY_DEFAULT_MASTERS, {
           params: { user_id: user?.id },
         })
-        .then((res) => res.data.genders),
+        .then((res) => {
+          return res.data.genders;
+        }),
+
     enabled: !!user?.id,
   });
 
@@ -249,7 +249,9 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
                 <div className="grid w-full grid-cols-2 gap-3">
                   {fields.map((field, idx) => (
                     <div className="group flex flex-col gap-1.5" key={field}>
-                      <label className="required label-text">
+                      <label
+                        className={`label-text ${idx === 0 ? "required" : ""}`}
+                      >
                         {idx === 0 ? "Available to" : "Except"}
                       </label>
                       <Controller
