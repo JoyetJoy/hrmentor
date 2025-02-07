@@ -37,7 +37,6 @@ const monthDaysMap = {
 };
 
 // Validation Schema
-
 const leaveSchema = Yup.object().shape({
   accrualType: Yup.string().required("Accrual Type is required"),
 
