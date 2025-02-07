@@ -72,16 +72,16 @@ export const SettingsList = [
 ];
 
 export const LeaveSidebarList = [
-  { id: 1, name: "Basic settings", link: "/admin/leave/settings/basesettings" },
+  { id: 1, name: "Basic settings", link: "" },
   {
     id: 2,
     name: "Availability settings",
-    link: "/admin/leave/settings/basesettings",
+    link: "",
   },
   {
     id: 3,
     name: "Advanced settings",
-    link: "/admin/leave/settings/basesettings",
+    link: "",
   },
 ];
 
