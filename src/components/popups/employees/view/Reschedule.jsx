@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { newFormRequest } from "@/api";
 import toast from "react-hot-toast";
 
-const Reschedule = ({ popupOpen, setPopupOpen, type, id }) => {
+const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
@@ -26,6 +26,8 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id }) => {
   ];
 
   const [status, setStatus] = useState(null);
+  console.log(id);
+  
 
   const handleSave = async () => {
     setPopupOpen(false);
