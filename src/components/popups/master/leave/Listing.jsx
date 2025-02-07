@@ -83,7 +83,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
           accessorKey: colKeys?.field1?.key,
           cell: ({ row }) => (
             <td>
-              {`${row.original.employee.first_name || ""} ${row.original.employee.middle_name || ""}`}
+              {`${row.original.employee?.first_name || ""} ${row.original.employee?.middle_name || ""}`}
             </td>
           ),
         },

@@ -870,14 +870,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         ]}
                         placeholder="Select accrual at"
                         value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
+                          accuralPeriod
                         }
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption.value);
