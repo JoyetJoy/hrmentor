@@ -205,6 +205,8 @@ export default function HiringCandidateDetails() {
 
       const errorMessage =
         error?.response?.data?.error || "Email Is Duplicate ,Please check";
+        console.log(error);
+        
       toast.error(errorMessage);
     } finally {
       // Ensure the loader is deactivated after the API call
@@ -430,7 +432,7 @@ console.log(candidateDetails);
               <DisclosureButton className="group flex w-full items-center gap-4 py-5">
                 <CircleArrowDown className="size-5 !fill-white/60 text-black/30 group-data-[open]:rotate-180 group-data-[hover]:fill-white/50" />
                 <span className="text-sm/6 font-medium group-data-[hover]:text-black/80">
-                  View uploaded document
+                  View conditional offer letter
                 </span>
               </DisclosureButton>
               <DisclosurePanel className="mt-2 h-fit">
