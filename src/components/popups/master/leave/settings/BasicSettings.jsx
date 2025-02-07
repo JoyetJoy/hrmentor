@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { Plus, Minus } from "lucide-react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,84 +21,23 @@ const accrualPeriodOptions = [
   { value: "monthly", label: "Monthly" },
 ];
 
-const monthOptions = [
-  { value: "jan", label: "January" },
-  { value: "feb", label: "February" },
-  { value: "mar", label: "March" },
-  { value: "apr", label: "April" },
-  { value: "may", label: "May" },
-  { value: "jun", label: "June" },
-  { value: "jul", label: "July" },
-  { value: "aug", label: "August" },
-  { value: "sep", label: "September" },
-  { value: "oct", label: "October" },
-  { value: "nov", label: "November" },
-  { value: "dec", label: "December" },
-];
+const monthDaysMap = {
+  January: 31,
+  February: 28, // Leap year logic can be added if required
+  March: 31,
+  April: 30,
+  May: 31,
+  June: 30,
+  July: 31,
+  August: 31,
+  September: 30,
+  October: 31,
+  November: 30,
+  December: 31,
+};
 
 // Validation Schema
-
 const leaveSchema = Yup.object().shape({
-  accrualType: Yup.string().required("Accrual Type is required"),
-
-  applicable: Yup.string()
-    .required("All Employee Type is required")
-    .oneOf(["all_employee", "based_on_exp"], "Invalid selection"),
-
-  emp_no_days: Yup.string()
-    .nullable()
-    .when("applicable", (applicable, schema) => {
-      return applicable === "all_employee"
-        ? schema.required("Number of days is required for 'By Cycle'")
-        : schema.notRequired();
-    }),
-
-  CarryForward_isOn: Yup.boolean(),
-  mx_no_days: Yup.number().when("CarryForward_isOn", {
-    is: true, // Only validate if `isOn` is true
-    then: (schema) =>
-      schema
-        .required("Max number of days is required")
-        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
-  }),
-  CarryForwardExpire_isOn: Yup.boolean(),
-  exp_days: Yup.number().when("CarryForwardExpire_isOn", {
-    is: true,
-    then: (schema) =>
-      schema
-        .required("Expiry days for unused carry forwarded is required")
-        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
-  }),
-
-  Encashments_isOn: Yup.boolean(),
-  specific_no_days: Yup.string()
-    .nullable()
-    .when("Encashments_isOn", {
-      is: true,
-      then: (schema) =>
-        schema
-          .required("Specific number of days is required")
-          .oneOf(["0", "1"], "Invalid selection"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-  no_of_days: Yup.number().when("Encashments_isOn", {
-    is: true,
-    then: (schema) =>
-      schema
-        .required("Number of days is required")
-        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
-  }),
-
-  based_on_exp: Yup.string()
-    .nullable()
-    .when("applicable", (applicable, schema) => {
-      return applicable === "based_on_exp"
-        ? schema.required("Experience is required for 'By Working'")
-        : schema.notRequired();
-    }),
   leave_name: Yup.string().required("Name of the leave is required"),
   display_name: Yup.string().required("Display name is required"),
   code: Yup.string()
@@ -115,133 +54,6 @@ const leaveSchema = Yup.object().shape({
     .required("Valid from date is required")
     .typeError("Invalid date format"),
   status: Yup.string().required("Status is required"),
-
-  accural_period: Yup.string().test(
-    "accrual-period-test",
-    "Accrual period is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      console.log(accrualType);
-
-      if (
-        (accrualType === "bycycle" || accrualType === "byworking") &&
-        !value
-      ) {
-        return false;
-      }
-      return true;
-    },
-  ),
-  accural_day: Yup.string().test(
-    "accrual-day-test",
-    "Accrual day is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      console.log(accrualType);
-
-      if (accrualType === "bycycle" && !value) {
-        return false;
-      }
-      return true;
-    },
-  ),
-  accural_monthly: Yup.string().test(
-    "accrual-monthly-test",
-    "Accrual monthly is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      if (accrualType === "bycycle" && !value) {
-        return false;
-      }
-      return true;
-    },
-  ),
-  accrual_leave: Yup.string().test(
-    "accrual-leave-test",
-    "Accrual leave is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      if (accrualType === "byworking" && !value) {
-        return false;
-      }
-      return true;
-    },
-  ),
-  accural_at: Yup.string().test(
-    "accrual-at-test",
-    "Accrual at is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      if (accrualType === "byworking" && !value) {
-        return false;
-      }
-      return true;
-    },
-  ),
-  specific_days: Yup.string().test(
-    "specific-days-test",
-    "Specific days are required",
-    function (value) {
-      const { accrualType } = this.parent;
-      if (accrualType === "byworking" && !value) {
-        return false;
-      }
-      return true;
-    },
-  ),
-
-  emp_no_days: Yup.number()
-    .transform((value, originalValue) =>
-      originalValue === "" ? NaN : Number(originalValue),
-    )
-    .typeError("Number of days must be a valid number")
-    .when("applicable", {
-      is: "bycycle",
-      then: (schema) =>
-        schema
-          .required("Number of days is required for 'By Cycle'")
-          .min(1, "Number of days must be greater than 0"), // Changed from `.positive()`
-      otherwise: (schema) => schema.notRequired().nullable(),
-    }),
-
-  experience: Yup.array()
-    .of(
-      Yup.object().shape({
-        year: Yup.number()
-          .transform((value) => (value === "" ? NaN : Number(value)))
-          .required("Year is required")
-          .min(0, "Year cannot be negative"),
-
-        month: Yup.number()
-          .transform((value) => (value === "" ? NaN : Number(value)))
-          .required("Month is required")
-          .min(0, "Month cannot be negative")
-          .max(11, "Month should be between 0-11"),
-
-        daysLeave: Yup.number()
-          .transform((value) => (value === "" ? NaN : Number(value)))
-          .required("Days are required")
-          .min(0, "Days cannot be negative")
-          .max(31, "Days should be between 0-31")
-          .when(["year", "month"], {
-            is: (year, month) => year === 0 && month === 0,
-            then: (schema) =>
-              schema.max(0, "Days leave cannot be given if experience is 0"),
-          }),
-      }),
-    )
-    .when("applicable", {
-      is: "based_on_exp",
-      then: (schema) =>
-        schema
-          .min(1, "At least one experience section is required")
-          .test("at-least-one-valid", "Experience is required", (value) => {
-            return value?.some(
-              (exp) => exp.year > 0 || exp.month > 0 || exp.daysLeave > 0,
-            );
-          }),
-      otherwise: (schema) => schema.notRequired(),
-    }),
 });
 
 const BasicSettings = ({ formtype = "save" }) => {
@@ -250,40 +62,27 @@ const BasicSettings = ({ formtype = "save" }) => {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors },
     setValue,
-    watch,
-    setError,
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(leaveSchema),
     defaultValues: {
       pay_type: "paid", // Default value
-      experience: [{ year: 0, month: 0, daysLeave: 0 }],
     },
   });
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "experience",
-  });
+
   const close = () => {
     setPopupOpen(false);
     reset();
   };
-  const {
-    applicable,
-    CarryForward_isOn,
-    CarryForwardExpire_isOn,
-    Encashments_isOn,
-  } = watch();
-
-  console.log(CarryForward_isOn);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [accrualType, setAccrualType] = useState("bycycle");
-  const [applicableTo, setApplicableTo] = useState("all_employee");
+  const [applicable, setApplicable] = useState("all_employee");
   const [isOn, setIsOn] = useState(false);
   const [isOn2, setIsOn2] = useState(false);
   const [isOn3, setIsOn3] = useState(false);
@@ -295,6 +94,10 @@ const BasicSettings = ({ formtype = "save" }) => {
   const [accuralAt, setAccuralAt] = useState("");
   const [encashmentsPay, setEncashmentsPay] = useState("");
   const { user } = useUserStore((state) => ({ user: state.user }));
+  const selectedMonthValue = watch("accural_monthly");
+  const daysInMonth = selectedMonthValue
+    ? monthDaysMap[selectedMonthValue]
+    : 31;
 
   const getStoredData = () => {
     const storedData = localStorage.getItem("myData");
@@ -309,41 +112,27 @@ const BasicSettings = ({ formtype = "save" }) => {
   const id = searchParams.get("id") || storedData?.id || null;
 
   const [boxes, setBoxes] = useState([
-    { id: 1, years: "", months: "", daysleave: "" }, // First row by default
+    { id: 1, years: "", months: "", daysleave: "" },
   ]);
 
   const addBox = () => {
-    append({ year: "", month: "", daysLeave: "" });
+    setBoxes([
+      ...boxes,
+      { id: boxes.length + 1, years: "", months: "", daysleave: "" },
+    ]);
   };
 
-  console.log(boxes);
   const removeBox = (id) => {
-    setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== id));
+    setBoxes(boxes.filter((box) => box.id !== id));
   };
 
   const handleInputChange = (id, field, value) => {
-    setBoxes((prevBoxes) =>
-      prevBoxes.map((box) =>
-        box.id === id ? { ...box, [field]: value } : box,
-      ),
+    setBoxes(
+      boxes.map((box) => (box.id === id ? { ...box, [field]: value } : box)),
     );
   };
 
   const onSubmit = async (data) => {
-    if (applicable === "based_on_exp") {
-      const allZero = data.experience.every(
-        (exp) => exp.year === 0 && exp.month === 0 && exp.daysLeave === 0,
-      );
-
-      if (allZero) {
-        setError("experience", {
-          type: "manual",
-          message: "At least one field must have a non-zero value.",
-        });
-        return;
-      }
-    }
-
     handledSubmit(data);
   };
 
@@ -357,7 +146,6 @@ const BasicSettings = ({ formtype = "save" }) => {
         .then((res) => res.data),
     enabled: !!id,
   });
-  console.log(accrualType, applicable);
 
   useEffect(() => {
     if (basicholidayDetails) {
@@ -383,11 +171,21 @@ const BasicSettings = ({ formtype = "save" }) => {
       setIsOn2(basicholidayDetails?.carry_expire);
       setIsOn3(basicholidayDetails?.encashments);
       setUnits(basicholidayDetails?.units);
-      setAccuralPeriod(basicholidayDetails?.accural_period);
+      if (basicholidayDetails?.accural_period) {
+        setAccuralPeriod([
+          {
+            value: basicholidayDetails.accural_period,
+            label:
+              basicholidayDetails.accural_period.charAt(0).toUpperCase() +
+              basicholidayDetails.accural_period.slice(1),
+          },
+        ]);
+      }
+
       setAccuralDays(basicholidayDetails?.accural_day);
       setAccuralMonth(basicholidayDetails?.accural_monthly);
       setAccrualType(basicholidayDetails?.accural_type);
-      // setApplicable(basicholidayDetails?.application_to);
+      setApplicable(basicholidayDetails?.application_to);
       setAccuralAt(basicholidayDetails?.accural_at);
       setEncashmentsPay(basicholidayDetails?.max_encashments);
     }
@@ -396,8 +194,6 @@ const BasicSettings = ({ formtype = "save" }) => {
   const handledSubmit = async (data) => {
     try {
       setLoader(true);
-      console.log(data);
-
       const formData = {
         leave_name: data.leave_name,
         display_name: data.display_name,
@@ -408,7 +204,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         status: data.status,
         valid_from: moment(data.valid_from).format("YYYY-MM-DD"),
         accural_type: accrualType,
-        accural_period: accuralPeriod,
+        accural_period: accuralPeriod?.value,
         accural_day: accuralDays,
         accural_monthly: accuralMonth,
         accural_at: accuralAt,
@@ -416,7 +212,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         specific_days: data.specific_days,
         application_to: applicable,
         emp_no_days: data.emp_no_days,
-        based_experience_details: data.experience,
+        based_experience_details: boxes,
         carry_forword: isOn ?? 0,
         max_no_days: data.max_no_days ?? 0,
         carry_expire: isOn2 ?? 0,
@@ -428,6 +224,10 @@ const BasicSettings = ({ formtype = "save" }) => {
       };
 
       let res;
+
+      if (!applicable || !formData.emp_no_days) {
+        return toast.error("Please Fill Applicate to");
+      }
 
       if (id) {
         res = await newRequest.post(`${HOLIDAY_STATUS}/${id}`, formData);
@@ -456,7 +256,40 @@ const BasicSettings = ({ formtype = "save" }) => {
       setLoader(false);
     }
   };
-  console.log(errors);
+
+  const getOrdinalSuffix = (num) => {
+    if (num >= 11 && num <= 13) return num + "th"; // Handle 11th, 12th, 13th
+    const lastDigit = num % 10;
+    switch (lastDigit) {
+      case 1:
+        return num + "st";
+      case 2:
+        return num + "nd";
+      case 3:
+        return num + "rd";
+      default:
+        return num + "th";
+    }
+  };
+
+  // Generate days dynamically
+  const dayOptions = [
+    ...Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      return {
+        value: getOrdinalSuffix(day),
+        label: getOrdinalSuffix(day),
+      };
+    }),
+    { value: "lastDay", label: "Last day" }, // Last day option
+  ];
+
+  // List of month options for dropdown
+const monthOptions = Object.keys(monthDaysMap).map((month) => ({
+  value: month,
+  label: month,
+}));
+
 
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
@@ -651,7 +484,6 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="accrualStatus"
-                    {...register("accrualType")}
                     value="bycycle"
                     onClick={() => setAccrualType("bycycle")}
                     className="radio-black"
@@ -665,7 +497,6 @@ const BasicSettings = ({ formtype = "save" }) => {
                     type="radio"
                     name="accrualStatus"
                     value="byworking"
-                    {...register("accrualType")}
                     onClick={() => setAccrualType("byworking")}
                     className="radio-black"
                     checked={accrualType === "byworking"}
@@ -678,7 +509,7 @@ const BasicSettings = ({ formtype = "save" }) => {
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual period</label>
+                  <label className="label-text">Accrual period</label>
                   <Controller
                     name="accural_period"
                     control={control}
@@ -690,20 +521,11 @@ const BasicSettings = ({ formtype = "save" }) => {
                           { value: "annually", label: "Annually" },
                           { value: "monthly", label: "Monthly" },
                         ]}
+                        value={accuralPeriod}
                         placeholder="Select a period"
-                        value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
-                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value);
-                          setAccuralPeriod(selectedOption.value);
+                          field.onChange(selectedOption);
+                          setAccuralPeriod([selectedOption]);
                         }}
                         className="input-box w-full"
                       />
@@ -716,52 +538,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                   )}
                 </div>
 
-                {/* Accrual Days */}
-                <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual day(s)</label>
-                  <Controller
-                    name="accural_day"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        options={[
-                          ...Array.from({ length: 28 }, (_, i) => ({
-                            value: i + 1 + "st",
-                            label: (i + 1).toString() + "st",
-                          })),
-                          { value: "lastDay", label: "Last day" }, // Adding the "last day" option
-                        ]}
-                        value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
-                        }
-                        onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value);
-                          setAccuralDays(selectedOption.value);
-                        }}
-                        className="input-box w-full"
-                      />
-                    )}
-                  />
-                  {errors.accural_day && (
-                    <span className="text-xs text-red-500">
-                      {errors.accural_day.message}
-                    </span>
-                  )}
-                </div>
-
                 {/* Accrual Month */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">
-                    Accrual month(s)
-                  </label>
+                  <label className="label-text">Accrual month(s)</label>
                   <Controller
                     name="accural_monthly"
                     control={control}
@@ -775,8 +554,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                         isSearchable
                         placeholder="Select a month"
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value); // Update the form value
-                          setAccuralMonth(selectedOption.value); // Update local state with selected month
+                          field.onChange(selectedOption.value); // Update form value
+                          setAccuralMonth(selectedOption.value); // Store in state
                         }}
                         className="input-box w-full"
                       />
@@ -788,13 +567,38 @@ const BasicSettings = ({ formtype = "save" }) => {
                     </span>
                   )}
                 </div>
+                {/* Accrual Days */}
+                <div className="group flex flex-col gap-1.5 py-2">
+                  <label className="label-text">Accrual day(s)</label>
+                  <Controller
+                    name="accural_day"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        options={dayOptions} // Updated dynamically based on month
+                        placeholder="Select a day"
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption);
+                          setAccuralDays(selectedOption.value);
+                        }}
+                        className="input-box w-full"
+                      />
+                    )}
+                  />
+                  {errors.accural_day && (
+                    <span className="text-xs text-red-500">
+                      {errors.accural_day.message}
+                    </span>
+                  )}
+                </div>
               </div>
             )}
             {accrualType === "byworking" && (
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">
+                  <label className="label-text">
                     Number of working days to accrual leave
                   </label>
                   <input
@@ -812,7 +616,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
 
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual period</label>
+                  <label className="label-text">Accrual period</label>
                   <Controller
                     name="accural_period"
                     control={control}
@@ -825,18 +629,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                           { value: "monthly", label: "Monthly" },
                         ]}
                         placeholder="Select accrual period"
-                        value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
-                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value);
+                          field.onChange(selectedOption);
                           setAccuralPeriod(selectedOption.value);
                         }}
                         className="input-box w-full"
@@ -852,7 +646,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
                 {/* Accrual Days */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual at</label>
+                  <label className="label-text">Accrual at</label>
                   <Controller
                     name="accural_at"
                     control={control}
@@ -869,18 +663,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                           },
                         ]}
                         placeholder="Select accrual at"
-                        value={
-                          field.value
-                            ? {
-                                value: field.value,
-                                label:
-                                  field.value.charAt(0).toUpperCase() +
-                                  field.value.slice(1),
-                              }
-                            : null
-                        }
                         onChange={(selectedOption) => {
-                          field.onChange(selectedOption.value);
+                          field.onChange(selectedOption);
                           setAccuralAt(selectedOption.value);
                         }}
                         className="input-box w-full"
@@ -921,11 +705,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                     type="radio"
                     name="application_to"
                     value="all_employee"
-                    {...register("applicable")}
-                    // onClick={() => setApplicableTo("all_employee")}
+                    onClick={() => setApplicable("all_employee")}
                     className="radio-black"
-                    defaultChecked
-                    // checked={applicableTo === "all_employee"}
+                    checked={applicable === "all_employee"}
                   />
                   <label className="label-text">All employees</label>
                 </div>
@@ -933,11 +715,10 @@ const BasicSettings = ({ formtype = "save" }) => {
                   <input
                     type="radio"
                     name="application_to"
-                    {...register("applicable")}
                     value="based_on_exp"
-                    // onClick={() => setApplicableTo("based_on_exp")}
+                    onClick={() => setApplicable("based_on_exp")}
                     className="radio-black"
-                    // checked={applicableTo === "based_on_exp"}
+                    checked={applicable === "based_on_exp"}
                   />
                   <label className="label-text">Based on experience</label>
                 </div>
@@ -950,8 +731,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     autoComplete="off"
                     placeholder={`Number of ${units}`}
                     type="number"
-                    min={1}
-                    defaultValue={0}
+                    min={0}
                     className="input-box"
                     name="emp_no_days"
                     {...register("emp_no_days")}
@@ -970,9 +750,8 @@ const BasicSettings = ({ formtype = "save" }) => {
                   Please make sure that you have covered values from beginning
                   to end
                 </p>
-
                 <div className="w-full">
-                  {fields.map((box, index) => (
+                  {boxes.map((box, index) => (
                     <div
                       key={box.id}
                       className={`mb-4 ${index > 0 ? "px-2 py-5" : "p-5"} flex w-full flex-row justify-around rounded-lg border border-dashed border-black`}
@@ -986,22 +765,14 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
-                          // id={`years-${box.id}`}
-                          defaultValue={0}
-                          {...register(`experience.${index}.year`)}
-                          // value={box.years}
-                          // onChange={(e) =>
-                          //   handleInputChange(box.id, "years", e.target.value)
-                          // }
+                          id={`years-${box.id}`}
+                          value={box.years}
+                          onChange={(e) =>
+                            handleInputChange(box.id, "years", e.target.value)
+                          }
                           className="input-box h-10 rounded-md border"
                         />
-                        {errors?.experience?.year && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors?.experience?.year.message}
-                          </span>
-                        )}
                       </div>
-
                       <div className="flex w-1/5 flex-col">
                         <label
                           htmlFor={`months-${box.id}`}
@@ -1011,21 +782,17 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
-                          defaultValue={0}
-                          {...register(`experience.${index}.month`)}
+                          id={`months-${box.id}`}
+                          value={box.months}
+                          onChange={(e) =>
+                            handleInputChange(box.id, "months", e.target.value)
+                          }
                           className="input-box h-10 rounded-md border"
                         />
-                        {errors?.experience?.month && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors?.experience?.month.message}
-                          </span>
-                        )}
                       </div>
-
                       <div className="flex w-1/6 items-center justify-center text-sm font-normal">
                         Will get
                       </div>
-
                       <div className="flex w-1/5 flex-col">
                         <label
                           htmlFor={`days-${box.id}`}
@@ -1035,25 +802,26 @@ const BasicSettings = ({ formtype = "save" }) => {
                         </label>
                         <input
                           type="number"
-                          defaultValue={0}
-                          {...register(`experience.${index}.daysLeave`)}
                           min={0}
+                          id={`days-${box.id}`}
+                          value={box.daysleave}
+                          onChange={(e) =>
+                            handleInputChange(
+                              box.id,
+                              "daysleave",
+                              e.target.value,
+                            )
+                          }
                           className="input-box h-10 rounded-md border"
                         />
-                        {errors?.experience?.daysLeave && (
-                          <span className="text-xs font-medium text-red-500">
-                            {errors?.experience?.daysLeave.message}
-                          </span>
-                        )}
                       </div>
-
                       <div
                         className={`flex w-1/12 items-center justify-center space-x-2 ${index > 0 ? "w-[5rem]" : "w-1/12"}`}
                       >
                         {index > 0 && (
                           <div
                             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black text-white"
-                            onClick={() => remove(index)}
+                            onClick={() => removeBox(box.id)}
                           >
                             <Minus className="size-5" strokeWidth={2} />
                           </div>
@@ -1061,18 +829,12 @@ const BasicSettings = ({ formtype = "save" }) => {
                         <div
                           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-hrmprimaryorange text-white"
                           onClick={addBox}
-                          type="button"
                         >
                           <Plus className="size-5" strokeWidth={2} />
                         </div>
                       </div>
                     </div>
                   ))}
-                  {errors.experience && (
-                    <span className="text-xs text-red-500">
-                      {errors?.experience?.root?.message}
-                    </span>
-                  )}
                 </div>
               </div>
             )}
@@ -1080,22 +842,19 @@ const BasicSettings = ({ formtype = "save" }) => {
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <div className="flex justify-between">
                 <p className="text-[0.9rem] font-bold">Carry Forward</p>
-
                 <div
                   onClick={() => {
-                    setValue("CarryForward_isOn", !CarryForward_isOn); // Updating form field correctly
+                    if (isOn) {
+                      setIsOn(false);
+                    } else {
+                      setIsOn(true);
+                    }
                   }}
-                  className={`h-5 w-10 rounded-full p-[1px] ${
-                    CarryForward_isOn
-                      ? "bg-[#8be691] pt-[2.1px]"
-                      : "border border-[#888888] bg-white pt-[1.5px]"
-                  }`}
+                  className={`h-5 w-10 rounded-full p-[1px] ${isOn ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white pt-[1.5px]"}`}
                 >
                   <div
-                    className={`h-4 w-4 ${
-                      CarryForward_isOn ? "bg-[#00b448]" : "bg-black"
-                    } transform rounded-full transition-transform ${
-                      CarryForward_isOn ? "translate-x-5" : "translate-x-0"
+                    className={`h-4 w-4 ${isOn ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                      isOn ? "translate-x-5" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
@@ -1104,7 +863,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 Number of unused leaves of an employee can be carry forwarded
               </p>
             </div>
-            {CarryForward_isOn && (
+            {isOn && (
               <>
                 <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
                   <p className="text-[0.85rem] font-normal">
@@ -1123,14 +882,12 @@ const BasicSettings = ({ formtype = "save" }) => {
                       type="number"
                       min={0}
                       className="input-box"
-                      name="mx_no_days"
-                      defaultValue={0}
-                      {...register("mx_no_days")}
+                      name="max_no_days"
+                      {...register("max_no_days")}
                     />
-
-                    {errors.mx_no_days && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors ? "Max no of days is required" : null}
+                    {errors.max_no_days && (
+                      <span className="text-xs text-red-500">
+                        {errors.max_no_days.message}
                       </span>
                     )}
                   </div>
@@ -1140,33 +897,25 @@ const BasicSettings = ({ formtype = "save" }) => {
                     <p className="text-[0.85rem] font-semibold">
                       Carry forward expires
                     </p>
-
                     <div
                       onClick={() => {
-                        setValue(
-                          "CarryForwardExpire_isOn",
-                          !CarryForwardExpire_isOn,
-                        ); // Updating form field correctly
+                        if (isOn2) {
+                          setIsOn2(false);
+                        } else {
+                          setIsOn2(true);
+                        }
                       }}
-                      className={`h-5 w-10 rounded-full p-[1px] ${
-                        CarryForwardExpire_isOn
-                          ? "bg-[#8be691] pt-[2.1px]"
-                          : "border border-[#888888] bg-white pt-[1.5px]"
-                      }`}
+                      className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2px]" : "border border-[#888888] bg-white pt-[0.5px]"}`}
                     >
                       <div
-                        className={`h-4 w-4 ${
-                          CarryForwardExpire_isOn ? "bg-[#00b448]" : "bg-black"
-                        } transform rounded-full transition-transform ${
-                          CarryForwardExpire_isOn
-                            ? "translate-x-5"
-                            : "translate-x-0"
+                        className={`h-4 w-4 ${isOn2 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                          isOn2 ? "translate-x-5" : "translate-x-0"
                         }`}
                       ></div>
                     </div>
                   </div>
                 </div>
-                {CarryForwardExpire_isOn && (
+                {isOn2 && (
                   <>
                     <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
                       <p className="text-[0.85rem] font-normal">
@@ -1187,9 +936,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                         />
                         {errors.exp_days && (
                           <span className="text-xs text-red-500">
-                            {errors
-                              ? "expiry days for unused carry forwarded is required"
-                              : null}
+                            {errors.exp_days.message}
                           </span>
                         )}
                       </div>
@@ -1201,22 +948,19 @@ const BasicSettings = ({ formtype = "save" }) => {
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <div className="flex justify-between">
                 <p className="text-[0.9rem] font-bold">Encashments</p>
-
                 <div
                   onClick={() => {
-                    setValue("Encashments_isOn", !Encashments_isOn); // Updating form field correctly
+                    if (isOn3) {
+                      setIsOn3(false);
+                    } else {
+                      setIsOn3(true);
+                    }
                   }}
-                  className={`h-5 w-10 rounded-full p-[1px] ${
-                    Encashments_isOn
-                      ? "bg-[#8be691] pt-[2.1px]"
-                      : "border border-[#888888] bg-white pt-[1.5px]"
-                  }`}
+                  className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1px]"}`}
                 >
                   <div
-                    className={`h-4 w-4 ${
-                      Encashments_isOn ? "bg-[#00b448]" : "bg-black"
-                    } transform rounded-full transition-transform ${
-                      Encashments_isOn ? "translate-x-5" : "translate-x-0"
+                    className={`h-4 w-4 ${isOn3 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                      isOn3 ? "translate-x-5" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
@@ -1225,7 +969,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 Number of unused leaves of an employee can be encashed
               </p>
             </div>
-            {Encashments_isOn && (
+            {isOn3 && (
               <div className={`group col-span-2 flex flex-col gap-1.5 py-2`}>
                 <div className="flex justify-between">
                   <p className="text-[0.85rem] font-bold">
@@ -1240,41 +984,42 @@ const BasicSettings = ({ formtype = "save" }) => {
                       Max number of {units} can be encashed
                     </label>
                     <Controller
-                      name="specific_no_days" // This should match the schema field
+                      name="max_encashments" // Assuming "status" is the field you're using here
                       control={control}
-                      render={({ field }) => {
-                        // Define options inside the render function
-                        const options = [
-                          { value: "0", label: `All the remaining ${units}` },
-                          { value: "1", label: `Specific number of ${units}` },
-                        ];
-
-                        return (
-                          <Select
-                            {...field}
-                            value={
-                              options.find(
-                                (option) => option.value === field.value,
-                              ) || null
-                            } // Ensure correct option is selected
-                            options={options} // Pass the options here
-                            isSearchable
-                            placeholder={`Select a ${units}`}
-                            onChange={(selectedOption) => {
-                              field.onChange(selectedOption.value); // Updates form value
-                              setEncashmentsPay(selectedOption.value); // Updates local state
-                            }}
-                            className="input-box w-full"
-                          />
-                        );
-                      }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={
+                            encashmentsPay === `0`
+                              ? {
+                                  value: `0`,
+                                  label: `All the remaining ${units}`,
+                                }
+                              : {
+                                  value: `1`,
+                                  label: `Specific number of ${units}`,
+                                }
+                          }
+                          isSearchable
+                          options={[
+                            {
+                              value: `0`,
+                              label: `All the remaining ${units}`, // Correct plural/singular form
+                            },
+                            {
+                              value: `1`,
+                              label: `Specific number of ${units}`, // Correct plural/singular form
+                            },
+                          ]}
+                          placeholder={`Select a ${units}`} // Using the plural form correctly
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption.value); // Update react-hook-form field value
+                            setEncashmentsPay(selectedOption.value); // Update local state
+                          }}
+                          className="input-box w-full"
+                        />
+                      )}
                     />
-
-                    {errors.specific_no_days && (
-                      <span className="text-xs text-red-500">
-                        {errors?.specific_no_days?.message}
-                      </span>
-                    )}
                   </div>
 
                   <div className="group flex flex-col gap-1.5 py-2">
@@ -1290,9 +1035,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     />
                     {errors.no_of_days && (
                       <span className="text-xs text-red-500">
-                        {errors.no_of_days
-                          ? "Number of days is required"
-                          : null}
+                        {errors.no_of_days.message}
                       </span>
                     )}
                   </div>
