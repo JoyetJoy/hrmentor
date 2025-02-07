@@ -118,6 +118,7 @@ const BasicSettings = ({ formtype = "save" }) => {
     ]);
   };
 
+  
   const removeBox = (id) => {
     setBoxes(boxes.filter((box) => box.id !== id));
   };
