@@ -22,7 +22,11 @@ export default function EmployeeDetails() {
   const navigate = useNavigate();
 
   // EMPLOYEE DETAILS;
-  const { data: employeeViewDetails, isLoading } = useQuery({
+  const {
+    data: employeeViewDetails,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["employeeViewDetails", uid],
     queryFn: () =>
       newRequest.get(`${EMPLOYEE_DETAILS}/${uid}`).then((res) => {
@@ -40,9 +44,11 @@ export default function EmployeeDetails() {
         activeMenu={"Employee"}
       />
       <Reschedule
+        data={employeeViewDetails?.basic_details}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         type={type}
+        refetch={refetch}
         id={employeeViewDetails?.basic_details?.employee_id}
       />
       <Share
@@ -70,7 +76,9 @@ export default function EmployeeDetails() {
                     ) {
                       setSharePopupOpen(true);
                     } else {
-                      navigate(`/onboarding-form?uid=${uid}&employee_id=${employeeViewDetails?.basic_details?.employee_id}`);
+                      navigate(
+                        `/onboarding-form?uid=${uid}&employee_id=${employeeViewDetails?.basic_details?.employee_id}`,
+                      );
                     }
                   }}
                 >
@@ -162,7 +170,9 @@ export default function EmployeeDetails() {
                   <>
                     <div className="text-xs">
                       <p>Date of joining</p>
-                      <p className="font-semibold">{employeeViewDetails?.basic_details?.date_of_joining}</p>
+                      <p className="font-semibold">
+                        {employeeViewDetails?.basic_details?.date_of_joining}
+                      </p>
                     </div>
                     <button
                       onClick={() => {

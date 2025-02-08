@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
 import Select from "react-select";
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { newFormRequest } from "@/api";
 import toast from "react-hot-toast";
 
-const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
+const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
@@ -27,10 +27,17 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
 
   const [status, setStatus] = useState(null);
   console.log(id);
-  
+
+  useEffect(() => {
+    if (data?.employmentStatus) {
+      const selectedOption = options.find(
+        (option) => option.id === data?.employmentStatus?.id,
+      );
+      setStatus(selectedOption?.id);
+    }
+  }, [data]);
 
   const handleSave = async () => {
-    setPopupOpen(false);
     try {
       const onboarding = {
         employee_id: id,
@@ -43,6 +50,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
       if (response?.status === 200) {
         setPopupOpen(false);
         toast.success("Approve successfully");
+        refetch();
         // navigate(`/admin/employee/details/?uid=${id}`);
       } else {
         toast.error("Failed to approve,");
@@ -65,7 +73,9 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
               <DialogTitle as="h1" className="text-md font-bold">
-                {type === "reschedule" ?'Reschedule date of joining' : 'Change Status'}
+                {type === "reschedule"
+                  ? "Reschedule date of joining"
+                  : "Change Status"}
               </DialogTitle>
               <button
                 onClick={onClose}
@@ -100,7 +110,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data }) => {
                   className="mt-1 h-10 rounded border pl-3 pr-2 text-sm"
                   options={options}
                   styles={customSelectStyles}
-                  defaultValue={options[0]} // Default to the first option object
+                  defaultValue={data?.employmentStatus || options[0]} // Default to the first option object
                   onChange={(selectedOption) => setStatus(selectedOption.id)} // Update status with the selected value
                 />
               </div>

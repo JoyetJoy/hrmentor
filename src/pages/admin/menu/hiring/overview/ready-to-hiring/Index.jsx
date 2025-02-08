@@ -63,7 +63,7 @@ export const ReadyToHiring = () => {
       },
       {
         header: "Department",
-        accessorKey: "designation",
+        accessorKey: "department",
       },
       {
         header: "Location",

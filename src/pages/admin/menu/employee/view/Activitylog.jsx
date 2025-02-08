@@ -24,7 +24,11 @@ export default function EmployeeActivitylogDetails() {
   const uid = searchParams.get("uid");
 
   // EMPLOYEE DETAILS;
-  const { data: employeeViewDetails, isLoading } = useQuery({
+  const {
+    data: employeeViewDetails,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["employeeViewDetails", uid],
     queryFn: () =>
       newRequest.get(`${EMPLOYEE_DETAILS}/${uid}`).then((res) => {
@@ -42,8 +46,9 @@ export default function EmployeeActivitylogDetails() {
         activeMenu={"Employee"}
       />
       <Reschedule
-        data={employeeViewDetails?.basic_details?.employmentStatus}
+        data={employeeViewDetails?.basic_details}
         popupOpen={popupOpen}
+        refetch={refetch}
         setPopupOpen={setPopupOpen}
         id={employeeViewDetails?.basic_details?.employee_id}
         type={type}
@@ -54,7 +59,7 @@ export default function EmployeeActivitylogDetails() {
         </div>
       ) : (
         <>
-          <div className="mt-2 grid min-h-[520px] w-full grid-cols-3 gap-16 bg-white px-10 py-10">
+          <div className="mt-2 grid min-h-[520px] w-full grid-cols-3 gap-11 bg-white px-10 py-10">
             <div>
               <div className="flex items-center">
                 <div className="relative">
@@ -81,7 +86,7 @@ export default function EmployeeActivitylogDetails() {
                     setPopupOpen(true);
                     setType("status");
                   }}
-                  className="text-mediumred ml-5 flex h-7 cursor-pointer items-center rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold"
+                  className="text-mediumred ml-5 flex h-7 cursor-pointer items-center justify-center rounded bg-textcolor-mediumred/5 px-3 text-[0.8rem] font-bold"
                 >
                   {employeeViewDetails?.basic_details?.employmentStatus?.value}
                 </div>
