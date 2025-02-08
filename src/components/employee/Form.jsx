@@ -749,7 +749,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   )}
                 </div>
                 <div className="group flex flex-col gap-1.5 px-3 py-2">
-                  <label className="label-text">Blood Group</label>
+                  <label className="label-text required">Blood Group</label>
                   <Controller
                     name="blood_group"
                     control={control}
