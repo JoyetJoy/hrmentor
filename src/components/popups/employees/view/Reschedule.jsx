@@ -4,17 +4,19 @@ import { X } from "lucide-react";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import { useNavigate } from "react-router-dom";
-import { newFormRequest } from "@/api";
+import { EMPLOYEE_RESCHEDULE, EMPLOYEE_STATUS, newRequest } from "@/api";
 import toast from "react-hot-toast";
 
-const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch }) => {
+const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
+  const [date, setDate] = useState(joinDate);
   const uid = searchParams.get("uid");
   const onClose = () => {
     // setSelectedEmployee("");
     setPopupOpen(false);
   };
+console.log(joinDate);
 
   const options = [
     { label: "On Leave", value: "On Leave", id: 3 },
@@ -26,7 +28,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch }) => {
   ];
 
   const [status, setStatus] = useState(null);
-  console.log(id);
+  console.log(date);
 
   useEffect(() => {
     if (data?.employmentStatus) {
@@ -39,17 +41,25 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch }) => {
 
   const handleSave = async () => {
     try {
-      const onboarding = {
-        employee_id: id,
-        status: status,
-      };
-      const response = await newFormRequest.post(
-        `employee-status-update`,
+      let onboarding;
+      if(type==="reschedule"){
+        onboarding = {
+          employee_id: id,
+          reschedule_date: date,
+      }
+    }else{
+        onboarding = {
+          employee_id: id,
+          status: status,
+        };
+      }
+      const api=type==="reschedule" ? EMPLOYEE_RESCHEDULE :EMPLOYEE_STATUS
+      const response = await newRequest.post(api,
         onboarding,
       );
       if (response?.status === 200) {
         setPopupOpen(false);
-        toast.success("Approve successfully");
+        toast.success(response?.data?.message);
         refetch();
         // navigate(`/admin/employee/details/?uid=${id}`);
       } else {
@@ -95,13 +105,15 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch }) => {
                 <input
                   type="date"
                   id="start_date"
+                  value={date}
+                  onChange={(e)=>setDate(e.target.value)}
                   className="mt-2 h-9 rounded-md border border-[#c2c1c1] px-3 text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
                 />
               </div>
             ) : (
               <div className="flex flex-col">
                 <label
-                  htmlFor="start_date"
+                  htmlFor="Status"
                   className="text-sm font-medium text-gray-700"
                 >
                   Status

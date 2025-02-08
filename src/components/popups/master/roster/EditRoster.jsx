@@ -69,6 +69,7 @@ export default function EditRoster({
     console.log("Selected shift:", selectedOption);
     setSelectedShiftId(selectedOption.value);
   };
+console.log(selectedEmployees);
 
   const handleDeleteEmployee = (employeeId) => {
     setSelectedEmployees((prevEmployees) =>
@@ -76,6 +77,7 @@ export default function EditRoster({
     );
     toast.success("Employee deleted successfully");
   };
+console.log(selectedEmployee);
 
   const handleAddEmployee = () => {
     if (selectedEmployee) {
@@ -84,7 +86,8 @@ export default function EditRoster({
         {
           employee_id: selectedEmployee.value,
           first_name: selectedEmployee.label,
-        },
+          unique_id: selectedEmployee.unique_id
+        }
       ]);
       setEmployeesdetails((prev) => [
         ...prev,
@@ -223,6 +226,7 @@ export default function EditRoster({
         selectedRoster.employees.map((employee) => ({
           employee_id: employee.id,
           first_name: employee.first_name,
+          unique_id: employee.unique_id
         })),
       );
     }
@@ -430,6 +434,7 @@ export default function EditRoster({
                             options={rosterEmpList?.employees?.map((item) => ({
                               label: item?.first_name,
                               value: item?.id,
+                              unique_id:item?.unique_id
                             }))}
                             onChange={(selectedOption) => {
                               field.onChange(selectedOption);

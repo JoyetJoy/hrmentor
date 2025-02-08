@@ -63,6 +63,10 @@ export const EMPLOYEE_UNIQUE_ID = "employee-unique-id";
 
 // EMPLOYEE
 export const EMPLOYEE = "employee";
+// EMPLOYEE RESCHEDULE
+export const EMPLOYEE_RESCHEDULE = "employee-reschedule";
+// EMPLOYEE STATUS
+export const EMPLOYEE_STATUS = "employee-status-update";
 // EMPLOYEE DETAILS
 export const EMPLOYEE_DETAILS = "view-employee-page";
 // ACTIVE EMPLOYEE

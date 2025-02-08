@@ -143,9 +143,9 @@ export default function SaveMasterShift({ formtype, sid }) {
   const onSubmit = async (data) => {
     console.log(data);
 
-    if (recurrencePattern === "weekly") {
+    if (data?.recur_pattern === "weekly") {
       if (validateInputs()) {
-        if (calculationType === "perhour") {
+        if (data?.calculation_type === "perhour") {
           await handleShift(data);
         } else {
           if (data.fullday === "" && data.halfday === "") {
@@ -157,8 +157,16 @@ export default function SaveMasterShift({ formtype, sid }) {
       } else {
         toast.error("Please enter the count for the selected days");
       }
-    } else {
-      await handleShift(data);
+    } else if(data?.calculation_type){
+      if (data?.calculation_type === "perhour") {
+        await handleShift(data);
+      } else {
+        if (data.fullday === "" && data.halfday === "") {
+          toast.error("Either full day or half day is required");
+        } else {
+          await handleShift(data);
+        }
+      }
     }
   };
   const handleShift = async (data) => {
@@ -244,10 +252,10 @@ export default function SaveMasterShift({ formtype, sid }) {
       setValue("end_time", shiftDetails?.end_time);
       setValue("people_required", shiftDetails?.people_required);
       setValue("calculation_type", shiftDetails?.calculation_type);
-      setValue("fullday", shiftDetails?.fullday);
-      setValue("fulltolerence", shiftDetails?.fulltolerence);
-      setValue("halfday", shiftDetails?.halfday);
-      setValue("halfdaytolerence", shiftDetails?.halfdaytolerence);
+      setValue("fullday", shiftDetails?.fullday||'');
+      setValue("fulltolerence", shiftDetails?.fulltolerence||'');
+      setValue("halfday", shiftDetails?.halfday||'');
+      setValue("halfdaytolerence", shiftDetails?.halfdaytolerence||'');
       setValue("recur_pattern", shiftDetails?.recur_pattern);
       setValue("week_def", shiftDetails?.week_def);
       setValue("weekly_shifts", shiftDetails?.weekly_shifts);

@@ -47,6 +47,7 @@ export default function EmployeeDetails() {
         data={employeeViewDetails?.basic_details}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
+        joinDate={employeeViewDetails?.basic_details?.date_of_joining}
         type={type}
         refetch={refetch}
         id={employeeViewDetails?.basic_details?.employee_id}
