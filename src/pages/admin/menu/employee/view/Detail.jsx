@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Reschedule from "@/components/popups/employees/view/Reschedule";
 import Share from "@/components/popups/employees/view/Share";
-import { set } from "date-fns";
 
 export default function EmployeeDetails() {
   const [type, setType] = useState("");
@@ -65,8 +64,7 @@ export default function EmployeeDetails() {
           <div className="flex items-center justify-between gap-7">
             <h5 className="text-lg font-bold">Employee Details </h5>
             <div className="flex items-center gap-2">
-              {employeeViewDetails?.basic_details?.employmentStatus?.id !==
-                9 && (
+              {employeeViewDetails?.basic_details?.employmentStatus?.id !==9 && (
                 <button
                   type="button"
                   className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
@@ -107,7 +105,7 @@ export default function EmployeeDetails() {
                   <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-hrmprimaryorange">
                     <img
                       className="h-full w-full object-cover"
-                      src={employeeViewDetails?.basic_details?.profile_image}
+                      src={employeeViewDetails?.basic_details?.profile_image || '/assets/icons/user_image.jpg'}
                       alt={employeeViewDetails?.basic_details?.first_name}
                     />
                   </div>

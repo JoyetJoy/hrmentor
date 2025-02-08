@@ -237,22 +237,22 @@ export const ConditionalOfferLetter = ({ candidate }) => {
           />
           <p className="text-[0.9rem] font-medium">{candidate?.city.label}</p>
         </div>
-        {/* <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <img
             className="h-7 w-7"
             src="/assets/images/hiring/offer/4.png"
             alt=""
           />
-          <p className="text-[0.9rem] font-medium">Sales & Marketing</p>
+          <p className="text-[0.9rem] font-medium">{candidate?.email}</p>
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <img
             className="h-7 w-7"
             src="/assets/images/hiring/offer/5.png"
             alt=""
           />
           <p className="text-[0.9rem] font-medium">Sales & Marketing</p>
-        </div> */}
+        </div>  */}
       </div>
       <div className="mt-7 flex flex-col gap-3">
         <div className="flex gap-3">
