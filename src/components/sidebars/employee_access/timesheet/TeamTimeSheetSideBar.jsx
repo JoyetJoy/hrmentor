@@ -11,6 +11,7 @@ export default function TeamTimeSheetSideBar({
   months,
   weeks,
   handleWeekChange,
+  handleMonthChange,
   selectedWeek,
   setSelectedEmployee,
   date,
@@ -107,6 +108,20 @@ export default function TeamTimeSheetSideBar({
           )}
           {type === "timesheet" && (
             <>
+               <div className="group flex flex-col gap-1.5 px-3 py-2">
+              <label className="label-text">Month</label>
+              <Select
+              options={months}
+              isSearchable={true}
+              onChange={handleMonthChange}
+              styles={customSelectStyles}
+              value={months.find(
+                (monthOption) => monthOption.value === dayjs(date).month(),
+              )}
+              placeholder={dayjs(date).format("MMMM")}
+              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+            />
+            </div>
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="label-text">Week</label>
               <Select

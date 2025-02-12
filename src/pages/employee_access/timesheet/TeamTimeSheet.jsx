@@ -213,7 +213,7 @@ export default function TeamTimeSheet() {
     setPopupOpen(true);
   };
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen">
       <TeamTimeTracker
         teamTimeTrackerPopupOpen={teamTimeTrackerPopupOpen}
         setTeamTimeTrackerPopupOpen={setTeamTimeTrackerPopupOpen}
@@ -246,7 +246,7 @@ export default function TeamTimeSheet() {
           </Link>
         </div>
       </div>
-      <div className="max-w-8xl mb-10 mt-2 flex w-full gap-3">
+      <div className="max-w-8xl mb-10 mt-2 flex  w-full gap-3">
         <TeamTimeSheetSideBar
           years={years}
           months={months}

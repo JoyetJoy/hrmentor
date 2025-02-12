@@ -150,7 +150,7 @@ export const AdminDashboard = () => {
                 key={index}
                 className="flex flex-row rounded-md border border-gray-300"
               >
-                <h1 className="flex w-16 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
+                <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(event.start_date).format("D")} <br />
                   <span>{dayjs(event.start_date).format(" MMM")}</span>
                 </h1>
@@ -169,7 +169,7 @@ export const AdminDashboard = () => {
                 key={index}
                 className="flex flex-row rounded-md border border-gray-300"
               >
-                <h1 className="flex w-16 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
+                <h1 className="flex min-w-14  flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(newss.start_date).format("D")} <br />
                   <span>{dayjs(newss.start_date).format(" MMM")}</span>
                 </h1>
