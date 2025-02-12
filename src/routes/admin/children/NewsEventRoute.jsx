@@ -27,7 +27,7 @@ export const  NewsEventRoute = [
         element:<NewsAndEventsView/>
     },
     {
-        path:"detail",
+        path:"detail/:id",
         element:<NewsAndEventDetails/>
     },
 
