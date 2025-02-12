@@ -20,6 +20,10 @@ export default function TimeTracker({
   function close() {
     setTimeTrackerPopupOpen(false);
   }
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(":");
+    return `${hours} hr ${minutes} min`;
+  };
   console.log(weekDays, "weekDaysweekDays");
   return (
     <Dialog

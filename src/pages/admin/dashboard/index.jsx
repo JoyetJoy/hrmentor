@@ -23,15 +23,17 @@ export const AdminDashboard = () => {
       details: admindashboard?.upcoming_shifts?.map((shift) => ({
         type: shift?.shift?.name,
         date: shift?.shift?.people_required,
-        path: `/admin/shift/save-shift?id=${shift?.shift?.id}`
+        path: `/admin/shift/save-shift?id=${shift?.shift?.id}`, // Individual shift path
       })),
+      path: "/admin/shift", // Default path for the card
     },
     {
-      title: "Available slot",
+      title: "Available Slot",
       details: admindashboard?.available_slots?.map((holiday) => ({
         type: holiday.holiday_name,
         date: holiday.date,
       })),
+      path: "/admin/shift/available-slots", // Add a default path
     },
     {
       title: "Upcoming Holidays",
@@ -39,15 +41,18 @@ export const AdminDashboard = () => {
         type: holiday.holiday_name,
         date: holiday.date,
       })),
+      path: "/admin/leave/bankholidays", // Existing path
     },
     {
-      title: "People on leave",
+      title: "People on Leave",
       details: admindashboard?.people_on_leave?.map((holiday) => ({
         type: holiday.holiday_name,
         date: holiday.date,
       })),
+      path: "/admin/leave/people-on-leave", // Add a default path
     },
   ];
+  
   console.log(
     admindashboard?.upcoming_shifts?.shift?.name,
     "admindashboardadmindashboard",
@@ -82,7 +87,8 @@ export const AdminDashboard = () => {
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
                 <Link
-                 to={`/admin/shift`}
+                //  to={`/admin/shift`}
+                to={card.path}
                  className="flex items-center gap-2 text-sm font-medium text-gray-600">
                   View 
                   <Eye className="size-4 text-black/70" />
