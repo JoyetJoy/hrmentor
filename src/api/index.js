@@ -167,6 +167,12 @@ export const AVAILABLE_SLOT = "shift-claim-request";
 // ADMIN NEWS
 export const NEWS_LISt = "news";
 
+//NEWS ALL VIEW
+export const ALL_NEWS ="news-list"
+
+// EVENT ALL VIEW
+export const ALL_EVENT ="event-list"
+
 // ROSTER CLAIM DETAILS
 export const ROSTER_CLAIM = "get-and-show-roster-count-details";
 

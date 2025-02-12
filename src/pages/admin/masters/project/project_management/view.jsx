@@ -334,12 +334,14 @@ export default function ProjectManagementView() {
             <div>
               <p className="text-gray-dark">Date Created</p>
               <p className="font-semibold">
-                {projectListDetails?.created_at
+                {projectListDetails?.created_date
+
                   ? new Intl.DateTimeFormat("en-US", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
-                    }).format(new Date(projectListDetails.created_at))
+                    }).format(new Date(projectListDetails.created_date
+                    ))
                   : "N/A"}
               </p>
             </div>
