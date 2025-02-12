@@ -28,6 +28,29 @@ export default function TimeSheet() {
   }));
 
   // Calculate weeks based on selected month and year
+  // useEffect(() => {
+  //   const daysInMonth = dayjs(date).daysInMonth();
+  //   const newWeeks = Array.from(
+  //     { length: Math.ceil(daysInMonth / 7) },
+  //     (_, i) => ({
+  //       value: i + 1,
+  //       label: `Week ${i + 1}`,
+  //     }),
+  //   );
+  //   setWeeks(newWeeks);
+  //   // Find the default week based on today's date
+  //   const today = dayjs(); // Current date
+  //   if (
+  //     today.month() === dayjs(date).month() &&
+  //     today.year() === dayjs(date).year()
+  //   ) {
+  //     const today = new Date();
+  //     const currentWeek = getISOWeek(today);
+  //     setSelectedWeek(currentWeek);
+  //   } else {
+  //     setSelectedWeek(1);
+  //   }
+  // }, [date]);
   useEffect(() => {
     const daysInMonth = dayjs(date).daysInMonth();
     const newWeeks = Array.from(
@@ -35,23 +58,26 @@ export default function TimeSheet() {
       (_, i) => ({
         value: i + 1,
         label: `Week ${i + 1}`,
-      }),
+      })
     );
+  
     setWeeks(newWeeks);
-    // Find the default week based on today's date
-    const today = dayjs(); // Current date
-    if (
-      today.month() === dayjs(date).month() &&
-      today.year() === dayjs(date).year()
-    ) {
-      const today = new Date();
-      const currentWeek = getISOWeek(today);
-      setSelectedWeek(currentWeek);
-    } else {
+  
+    // Reset selectedWeek when a new month is selected
+    if (selectedWeek > newWeeks.length) {
       setSelectedWeek(1);
+    } else {
+      // Automatically set current week if within selected month & year
+      const today = dayjs();
+      if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
+        const currentWeek = Math.min(getISOWeek(new Date()), newWeeks.length);
+        setSelectedWeek(currentWeek);
+      } else {
+        setSelectedWeek(1);
+      }
     }
   }, [date]);
-
+  
   // Handle month change
   const handleMonthChange = (selectedOption) => {
     const updatedDate = dayjs(date).month(selectedOption.value).toDate();
@@ -123,11 +149,11 @@ export default function TimeSheet() {
     const [hours, minutes] = time.split(":");
     return `${hours} hr ${minutes} min`;
   };
-
+console.log(selectedWeek,"selectedWeek...")
   return (
     <>
       <AddManually popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-      <div className="flex h-screen flex-col">
+      <div className="flex flex-col h-screen">
         <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Time Sheet"} />
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex items-center gap-4">
