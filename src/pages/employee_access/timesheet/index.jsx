@@ -9,11 +9,15 @@ import AddManually from "@/components/popups/employee_access/timesheet/AddManual
 import { TIME_SHEET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 import { getISOWeek, format } from "date-fns";
+import TimeTracker from "@/components/popups/employee_access/timesheet/TimeTracker";
 
 export default function TimeSheet() {
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
+  const [timeTrackerPopupOpen, setTimeTrackerPopupOpen] = useState(false)
   const [selectedWeek, setSelectedWeek] = useState(1);
+  const [selectedId, setSelectedId] = useState();
+
   const [weeks, setWeeks] = useState([]);
 
   // Calculate months and years
@@ -152,6 +156,7 @@ export default function TimeSheet() {
 console.log(selectedWeek,"selectedWeek...")
   return (
     <>
+    <TimeTracker timeTrackerPopupOpen={timeTrackerPopupOpen} setTimeTrackerPopupOpen={setTimeTrackerPopupOpen} selectedId={end} weekDays={weekDays} />
       <AddManually popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex flex-col h-screen">
         <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Time Sheet"} />
@@ -193,14 +198,14 @@ console.log(selectedWeek,"selectedWeek...")
             />
           </div>
           <div className="flex items-center gap-3">
-            <Link
+            {/* <Link
               to=""
               onClick={() => setPopupOpen(true)}
               className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
             >
               <PlusIcon />
               Add Manually
-            </Link>
+            </Link> */}
             <Link
               to="/employee-access/timesheet/team"
               className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
@@ -209,7 +214,6 @@ console.log(selectedWeek,"selectedWeek...")
             </Link>
           </div>
         </div>
-
         <div className="w-full rounded-md border border-gray-300 bg-white pb-2">
           <div className="table mx-auto w-full">
             <table style={{ borderSpacing: "0", width: "100%" }}>
@@ -283,12 +287,15 @@ console.log(selectedWeek,"selectedWeek...")
                     );
                   })}
                   <td className="flex items-center justify-start gap-3 text-xs">
-                    <Link
-                      to={""}
+                    <div
+                      onClick={()=>{setTimeTrackerPopupOpen(true)
+                        // setSelectedId(row.original.id);
+
+                      }}
                       className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                     >
                       <Eye className="size-3" />
-                    </Link>
+                    </div>
                   </td>
                 </tr>
               </tbody>
