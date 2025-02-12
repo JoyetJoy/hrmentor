@@ -31,7 +31,7 @@ function BankHoliday() {
       setTotalPages(employeeBankHolidays?.last_page);
     }
   }, [employeeBankHolidays]);
-
+ console.log(employeeBankHolidays,"employeeBankHolidaysemployeeBankHolidays")
   const columns = React.useMemo(
     () => [
       {
@@ -83,7 +83,7 @@ function BankHoliday() {
       <div className="flex gap-3">
         <LeaveSideBar />
         <div className="max-w-8xl mb-10 w-full rounded-md bg-white p-5">
-          <div className="mb-2 flex w-full items-center justify-between py-2">
+          {/* <div className="mb-2 flex w-full items-center justify-between py-2">
             <Select
               isSearchable={true}
               onChange={handleYearChange}
@@ -101,7 +101,7 @@ function BankHoliday() {
                 placeholder="Search"
               />
             </label>
-          </div>
+          </div> */}
           <QueryTable
             columns={columns}
             list={employeeBankHolidays?.listing ?? []}
