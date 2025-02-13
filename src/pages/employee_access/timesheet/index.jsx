@@ -206,12 +206,12 @@ console.log(selectedWeek,"selectedWeek...")
               <PlusIcon />
               Add Manually
             </Link> */}
-            <Link
+            {/* <Link
               to="/employee-access/timesheet/team"
               className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
             >
               Team Time Sheet
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className="w-full rounded-md border border-gray-300 bg-white pb-2">
