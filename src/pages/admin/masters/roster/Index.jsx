@@ -246,15 +246,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
                     {selectedRoster?.shift_details?.name || ""}
                   </h3>
                   <p className="text-sm">
-                    {moment(
-                      selectedRoster.shift_details.start_time,
-                      "HH:mm:ss",
-                    ).format("hh:mm A")}{" "}
-                    -{" "}
-                    {moment(
-                      selectedRoster.shift_details.end_time,
-                      "HH:mm:ss",
-                    ).format("hh:mm A")}
+                    {selectedRoster.shift_details.start_time} - {selectedRoster.shift_details.end_time}
                   </p>
                 </div>
               </div>
@@ -289,19 +281,13 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               <div>
                 <p className="text-black">Start Time</p>
                 <p className="font-semibold">
-                  {moment(
-                    selectedRoster.shift_details.start_time,
-                    "HH:mm:ss",
-                  ).format("hh:mm A") || ""}
+                  {selectedRoster.shift_details.start_time}
                 </p>
               </div>
               <div>
                 <p className="text-black">End Time</p>
                 <p className="font-semibold">
-                  {moment(
-                    selectedRoster.shift_details.end_time,
-                    "HH:mm:ss",
-                  ).format("hh:mm A") || ""}
+                  {selectedRoster.shift_details.end_time}
                 </p>
               </div>
               <div>
