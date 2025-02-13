@@ -370,12 +370,14 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <div className="group flex w-full flex-col gap-1.5 py-2 pl-3">
                     <label className="required label-text">Start Time</label>
                     <input
-                      {...register("start_time", { required: true })}
+                      {...register("start_time")}
                       autoComplete="off"
-                      name="start_time"
-                      type="time"
-                      placeholder="hh:mm"
-                      className="input-box"
+                      // type="time"
+                      placeholder="HH:MM"
+                      className="input-box pr-2"
+                      onChange={(e) => {
+                        e.target.value = formatTime(e.target.value); // Call the helper function
+                      }}
                     />
                     {errors.start_time && (
                       <span className="text-xs font-medium text-red-500">
@@ -386,12 +388,14 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <div className="group flex w-full flex-col gap-1.5 py-2 pr-3">
                     <label className="required label-text">End Time</label>
                     <input
-                      {...register("end_time", { required: true })}
+                      {...register("end_time")}
                       autoComplete="off"
-                      type="time"
-                      name="end_time"
-                      placeholder="hh:mm"
-                      className="input-box"
+                      // type="time"
+                      placeholder="HH:MM"
+                      className="input-box pr-2"
+                      onChange={(e) => {
+                        e.target.value = formatTime(e.target.value); // Call the helper function
+                      }}
                     />
                     {errors.end_time && (
                       <span className="text-xs font-medium text-red-500">
