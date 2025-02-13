@@ -125,6 +125,7 @@ export default function EmployeeMembershipEdit() {
         open={deletePopup}
         onCancel={setDeletePopup}
         selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeMemberships"}
         api={EMPLOYEE_MEMBERSHIP}
       />

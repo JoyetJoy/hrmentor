@@ -44,6 +44,7 @@ export default function SkillEditForm({
     SKILL_FIELD_TYPE,
     "skillTypeList",
   );
+console.log(skillTypeList);
 
   // Get selected data
   const { data: employeeSkillDetailByid, isLoading } = useQuery({
@@ -277,12 +278,34 @@ export default function SkillEditForm({
 
                 <div className="group flex flex-col gap-1.5">
                   {image ? (
-                    <div className="relative">
+                    // <div className="relative">
+                    //   <img
+                    //     src={image}
+                    //     alt="Uploaded"
+                    //     className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                    //   />
+                    //   <X
+                    //     onClick={clearImage}
+                    //     className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                    //   />
+                    // </div>
+                    <div className="relative flex w-full items-center justify-center">
                       <img
                         src={image}
                         alt="Uploaded"
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                        onError={(e) => {
+                          e.target.style.display = "none"; // Hide broken image
+                          e.target.nextElementSibling.style.display = "flex"; // Show alt text
+                        }}
                       />
+
+                      {/* Styled Alt Text Overlay with Border */}
+                      <div className="absolute inset-0 hidden items-center text-sm justify-center rounded-md border border-gray-400 bg-gray-200 p-4 text-gray-600">
+                      Document Uploaded
+                      </div>
+
+                      {/* Close Button */}
                       <X
                         onClick={clearImage}
                         className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
@@ -309,7 +332,9 @@ export default function SkillEditForm({
                     </label>
                   )}
                 </div>
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                <div
+                  className={`${image ? "mt-8" : ""} flex flex-row items-center justify-center gap-3`}
+                >
                   <button
                     type="submit"
                     className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"

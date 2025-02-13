@@ -9,11 +9,15 @@ import AddManually from "@/components/popups/employee_access/timesheet/AddManual
 import { TIME_SHEET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 import { getISOWeek, format } from "date-fns";
+import TimeTracker from "@/components/popups/employee_access/timesheet/TimeTracker";
 
 export default function TimeSheet() {
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
+  const [timeTrackerPopupOpen, setTimeTrackerPopupOpen] = useState(false)
   const [selectedWeek, setSelectedWeek] = useState(1);
+  const [selectedId, setSelectedId] = useState();
+
   const [weeks, setWeeks] = useState([]);
 
   // Calculate months and years
@@ -28,6 +32,29 @@ export default function TimeSheet() {
   }));
 
   // Calculate weeks based on selected month and year
+  // useEffect(() => {
+  //   const daysInMonth = dayjs(date).daysInMonth();
+  //   const newWeeks = Array.from(
+  //     { length: Math.ceil(daysInMonth / 7) },
+  //     (_, i) => ({
+  //       value: i + 1,
+  //       label: `Week ${i + 1}`,
+  //     }),
+  //   );
+  //   setWeeks(newWeeks);
+  //   // Find the default week based on today's date
+  //   const today = dayjs(); // Current date
+  //   if (
+  //     today.month() === dayjs(date).month() &&
+  //     today.year() === dayjs(date).year()
+  //   ) {
+  //     const today = new Date();
+  //     const currentWeek = getISOWeek(today);
+  //     setSelectedWeek(currentWeek);
+  //   } else {
+  //     setSelectedWeek(1);
+  //   }
+  // }, [date]);
   useEffect(() => {
     const daysInMonth = dayjs(date).daysInMonth();
     const newWeeks = Array.from(
@@ -35,23 +62,26 @@ export default function TimeSheet() {
       (_, i) => ({
         value: i + 1,
         label: `Week ${i + 1}`,
-      }),
+      })
     );
+  
     setWeeks(newWeeks);
-    // Find the default week based on today's date
-    const today = dayjs(); // Current date
-    if (
-      today.month() === dayjs(date).month() &&
-      today.year() === dayjs(date).year()
-    ) {
-      const today = new Date();
-      const currentWeek = getISOWeek(today);
-      setSelectedWeek(currentWeek);
-    } else {
+  
+    // Reset selectedWeek when a new month is selected
+    if (selectedWeek > newWeeks.length) {
       setSelectedWeek(1);
+    } else {
+      // Automatically set current week if within selected month & year
+      const today = dayjs();
+      if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
+        const currentWeek = Math.min(getISOWeek(new Date()), newWeeks.length);
+        setSelectedWeek(currentWeek);
+      } else {
+        setSelectedWeek(1);
+      }
     }
   }, [date]);
-
+  
   // Handle month change
   const handleMonthChange = (selectedOption) => {
     const updatedDate = dayjs(date).month(selectedOption.value).toDate();
@@ -123,11 +153,12 @@ export default function TimeSheet() {
     const [hours, minutes] = time.split(":");
     return `${hours} hr ${minutes} min`;
   };
-
+console.log(selectedWeek,"selectedWeek...")
   return (
     <>
+    <TimeTracker timeTrackerPopupOpen={timeTrackerPopupOpen} setTimeTrackerPopupOpen={setTimeTrackerPopupOpen} selectedId={end} weekDays={weekDays} />
       <AddManually popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-      <div className="flex h-screen flex-col">
+      <div className="flex flex-col h-screen">
         <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Time Sheet"} />
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex items-center gap-4">
@@ -167,14 +198,14 @@ export default function TimeSheet() {
             />
           </div>
           <div className="flex items-center gap-3">
-            <Link
+            {/* <Link
               to=""
               onClick={() => setPopupOpen(true)}
               className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
             >
               <PlusIcon />
               Add Manually
-            </Link>
+            </Link> */}
             <Link
               to="/employee-access/timesheet/team"
               className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
@@ -183,7 +214,6 @@ export default function TimeSheet() {
             </Link>
           </div>
         </div>
-
         <div className="w-full rounded-md border border-gray-300 bg-white pb-2">
           <div className="table mx-auto w-full">
             <table style={{ borderSpacing: "0", width: "100%" }}>
@@ -257,12 +287,15 @@ export default function TimeSheet() {
                     );
                   })}
                   <td className="flex items-center justify-start gap-3 text-xs">
-                    <Link
-                      to={""}
+                    <div
+                      onClick={()=>{setTimeTrackerPopupOpen(true)
+                        // setSelectedId(row.original.id);
+
+                      }}
                       className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
                     >
                       <Eye className="size-3" />
-                    </Link>
+                    </div>
                   </td>
                 </tr>
               </tbody>

@@ -95,7 +95,7 @@ export default function ClockOut({
               </div>
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Tota in-time
+                  Total in-time
                 </label>
                 <p className="text-sm font-semibold">{loggedTime}</p>
               </div>

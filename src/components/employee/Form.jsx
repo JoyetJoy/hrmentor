@@ -468,7 +468,7 @@ export default function SaveEmployeeForm({ formtype }) {
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1">
                     <div className="flex h-11 w-fit items-center justify-between gap-3 font-semibold text-black">
-                      <label className="label-text text-sm">Employee ID</label>
+                      <label className="label-text text-sm">Unique ID</label>
                       <input
                         disabled={formtype === "update"}
                         {...register("unique_id", { required: true })}
