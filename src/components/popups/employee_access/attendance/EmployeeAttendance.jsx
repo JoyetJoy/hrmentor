@@ -1,3 +1,4 @@
+import { extractTime } from "@/utils/helpers";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
 import React from "react";
@@ -69,7 +70,7 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
                 <label className="label-text">Shift</label>
                 <p className="text-sm font-semibold">{selected?.shift_detail ? selected?.shift_detail?.name : 'Present'} <br/>
                   {selected?.shift_detail && (
-                    <span>({selected?convertTo12HourFormat(selected?.shift_start_time||selected?.shift_detail?.start_time):' 00:00'}-{selected?convertTo12HourFormat(selected?.shift_end_time||selected?.shift_detail?.end_time):' 00:00'})</span>
+                    <span>({selected?.shift_start_time||selected?.shift_detail?.start_time||' 00:00:00'} - {selected?.shift_end_time||selected?.shift_detail?.end_time||' 00:00:00'})</span>
                   )}
                 </p>
               </div>
@@ -81,11 +82,11 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock-in time</label>
-                <p className="text-sm font-semibold">{selected?.clock_in_time? convertTo12HourFormat(selected?.clock_in_time):'00:00'}</p>
+                <p className="text-sm font-semibold">{selected?.clock_in_time? extractTime(selected?.clock_in_time):'00:00:00'}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock-out time</label>
-                <p className="text-sm font-semibold">{selected?.clock_out_time? convertTo12HourFormat(selected?.clock_out_time):'00:00'}</p>
+                <p className="text-sm font-semibold">{selected?.clock_out_time? extractTime(selected?.clock_out_time):'00:00:00'}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Total Working Hours</label>

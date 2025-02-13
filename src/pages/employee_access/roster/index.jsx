@@ -225,8 +225,7 @@ const EmployeeAccessRosterCalendar = () => {
                           {event.shift_name}
                         </span>
                         <span className="float-start flex text-[12px]">
-                          {convertTo12HourFormat(event?.shift?.start_time)}-
-                          {convertTo12HourFormat(event?.shift?.end_time)}
+                          {event?.shift?.start_time} - {event?.shift?.end_time}
                         </span>
                       </div>
                     ))}

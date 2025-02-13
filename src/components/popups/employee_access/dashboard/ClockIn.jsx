@@ -71,6 +71,7 @@ export default function ClockIn({
       const response = await newRequest.post(api, payload);
       if (response.status === 200) {
         setNote("");
+        localStorage.removeItem("shiftid");
         localStorage.setItem(
           "shiftid",
           JSON.stringify({ id: selected?.shift_id, rosterid: selected?.id }),

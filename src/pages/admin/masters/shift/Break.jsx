@@ -75,11 +75,7 @@ export default function Break({ setNew_break, new_break, error }) {
 
             duration = formattedDuration;
           } else {
-            const formattedTime = row.original.time
-              .split(":")
-              .slice(0, 2)
-              .join(":");
-            duration = formattedTime;
+            duration = row.original.time
           }
           return `${duration} mins`;
         },

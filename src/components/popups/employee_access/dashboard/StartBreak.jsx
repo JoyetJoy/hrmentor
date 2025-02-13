@@ -85,7 +85,7 @@ export default function StartBreak({
             <form className="grid grid-cols-1" onSubmit={handleSubmit}>
               <div className="w-full">
                 <div className="mx-auto w-full max-w-md">
-                  <div className="space-y-4">
+                  <div className="space-y-4 max-h-[13rem] overflow-y-auto  overflow-y-min">
                     {(breaklist || []).map((breakTime) => (
                       <>
                       {breakTime?.break_status ?(
@@ -119,7 +119,7 @@ export default function StartBreak({
                 {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
               </div>
 
-              <div className="col-span-2 mt-6 flex w-full flex-row items-center justify-center gap-3">
+              <div className="col-span-2 mt-4 flex w-full flex-row items-center justify-center gap-3">
                 <button
                   type="button"
                   onClick={close}

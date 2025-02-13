@@ -23,11 +23,6 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
     setPopupOpen(false);
   }
 
-  function convertToHourMinutes(time){
-    const [hours, minutes] = time.split(":");
-    return `${hours}:${minutes}`;
-  }
-
   return (
     <Dialog
       open={popupOpen}
@@ -58,17 +53,17 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   {data?.shift?.name}
                 </label>
-                <p className="text-sm font-semibold">{convertTo12HourFormat(data?.shift?.start_time||'')}-{convertTo12HourFormat(data?.shift?.end_time||'')}</p>
+                <p className="text-sm font-semibold">{data?.shift?.start_time||''}-{data?.shift?.end_time||''}</p>
               </div>
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Clock in time
                 </label>
-                <p className="text-sm font-semibold">{convertTo12HourFormat(data?.shift?.start_time||'')}</p>
+                <p className="text-sm font-semibold">{data?.shift?.start_time||''}</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Clock Out</label>
-                <p className="text-sm font-semibold">{convertTo12HourFormat(data?.shift?.end_time||'')}</p>
+                <p className="text-sm font-semibold">{data?.shift?.end_time||''}</p>
               </div>
               {/* <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Over time</label>
@@ -76,11 +71,11 @@ export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedFiel
               </div> */}
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Break time</label>
-                <p className="text-sm font-semibold">{convertToHourMinutes(data?.shift?.break_time||'00:00:00')} Hrs</p>
+                <p className="text-sm font-semibold">{data?.shift?.break_time||'00:00:00'} Hrs</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Total work time</label>
-                <p className="text-sm font-semibold">{convertToHourMinutes(data?.shift?.shift_duration||'00:00:00')} Hrs</p>
+                <p className="text-sm font-semibold">{data?.shift?.shift_duration||'00:00:00'} Hrs</p>
               </div>
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Members</label>

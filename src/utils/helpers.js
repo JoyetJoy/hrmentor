@@ -15,3 +15,7 @@ export const getRandomPastelColor = () => {
 export const parseDateString = (value) => {
   return value ? new Date(value) : null;
 };
+
+export function extractTime(timestamp) {
+  return timestamp.split(" ")[1]; // Extracts the time part
+}

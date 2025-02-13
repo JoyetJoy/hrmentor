@@ -46,7 +46,6 @@ export default function BreakTime({
 
   const handleShift = async (data) => {
     let formData;
-    console.log(data);
     
     if(data?.start_time||data?.time){
       formData = {
