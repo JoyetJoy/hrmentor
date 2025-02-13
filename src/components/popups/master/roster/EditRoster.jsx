@@ -128,7 +128,6 @@ console.log(selectedEmployee);
       setEmployeeError("Employee is required");
     } else {
       await handleRoster(data);
-      close();
     }
   };
 
@@ -154,9 +153,12 @@ console.log(selectedEmployee);
         reset();
         setEditPopupOpen(false);
       } else {
+        console.log(res);
+        
         toast.error("Failed to update roster.");
       }
     } catch (error) {
+      toast.error(error?.response?.data?.error);
       console.log(error);
     }
   };

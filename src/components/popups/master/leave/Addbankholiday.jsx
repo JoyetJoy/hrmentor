@@ -18,6 +18,7 @@ export default function AddBankHoliday({
   setPopupOpen,
   selectedField,
   setSelectedField,
+  type
 }) {
   const [selectedlocationId, setSelectedlocationId] = useState(null);
   const [percentage, setPercentage] = useState("");
@@ -144,11 +145,11 @@ export default function AddBankHoliday({
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel className="w-full max-w-[26rem] rounded bg-white p-10">
             <div className="mb-5 flex justify-between">
-              {selectedField ? (
-                <h1 className="text-md font-bold">Edit Bank Holiday</h1>
-              ) : (
-                <h1 className="text-md font-bold">Add Bank Holiday</h1>
-              )}
+              {type==='View' ?
+              <h1 className="text-md font-bold">View Bank Holiday</h1>
+            :type==='Edit' ?
+            <h1 className="text-md font-bold">Edit Bank Holiday</h1>
+          : <h1 className="text-md font-bold">Add Bank Holiday</h1>}
               <button onClick={close}>
                 <X />
               </button>
@@ -161,6 +162,7 @@ export default function AddBankHoliday({
                   <input
                     autoComplete="off"
                     type="text"
+                    disabled={type === "View"}
                     placeholder="Enter Holiday Name"
                     {...register("holiday_name")}
                     className="input-box"
@@ -177,6 +179,7 @@ export default function AddBankHoliday({
                   <label className="required label-text">Date</label>
                   <input
                     type="date"
+                    disabled={type === "View"}
                     {...register("date")}
                     className="input-box w-full"
                   />
@@ -192,6 +195,7 @@ export default function AddBankHoliday({
                   <label className="required label-text">Location</label>
                   <Controller
                     name="location_id"
+                    disabled={type === "View"}
                     control={control}
                     render={({ field }) => (
                       <Select
@@ -228,6 +232,7 @@ export default function AddBankHoliday({
                         type="radio"
                         name="type"
                         value="paid"
+                        disabled={type === "View"}
                         onClick={() => setPercentage("paid")}
                         className="radio-black"
                         checked={percentage === "paid"}
@@ -237,6 +242,7 @@ export default function AddBankHoliday({
                     <div className="flex items-center gap-2">
                       <input
                         type="radio"
+                        disabled={type === "View"}
                         name="type"
                         value="unpaid"
                         onClick={() => setPercentage("unpaid")}
@@ -257,6 +263,7 @@ export default function AddBankHoliday({
                     <input
                       autoComplete="off"
                       type="number"
+                      disabled={type === "View"}
                       placeholder="Enter Additional Percentage"
                       {...register("percentage", {
                         required: {
@@ -280,6 +287,7 @@ export default function AddBankHoliday({
                   <textarea
                     className="input-box h-20 w-full rounded-md border border-[#cecdcd] p-1"
                     placeholder="Enter description here..."
+                    disabled={type === "View"}
                     {...register("description")}
                   ></textarea>
                   {errors.description && (
@@ -290,7 +298,8 @@ export default function AddBankHoliday({
                 </div>
 
                 {/* Buttons */}
-                <div className="mt-4 flex gap-3">
+                {type !== "View" && (
+                  <div className="mt-4 flex gap-3">
                   <button
                     type="button"
                     onClick={close}
@@ -305,6 +314,8 @@ export default function AddBankHoliday({
                     Save
                   </button>
                 </div>
+                )}
+                
               </div>
             </form>
           </DialogPanel>

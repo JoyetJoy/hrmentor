@@ -58,6 +58,7 @@ export default function SaveMasterShift({ formtype, sid }) {
     resolver: yupResolver(ShiftSchema),
   });
   console.log(selectedDays);
+    console.log(workArea);
 
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
@@ -218,6 +219,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       };
     }
     console.log(formdata);
+    
 
     try {
       const api = id ? `${SHIFT_LIST}/${id}` : SHIFT_LIST;
@@ -435,7 +437,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                         isSearchable={true}
                         styles={customSelectStyles}
                         options={departmentList}
-                        placeholder="Select Work Area"
+                        placeholder="Select Department"
                         className="input-box"
                       />
                     )}

@@ -153,7 +153,7 @@ export default function EmployeeMembershipEditForm({
                   <input
                     {...register("professional_reg_number", { required: true })}
                     type="text"
-                    placeholder="Enter employer name"
+                    placeholder="Enter registration number"
                     className="input-box h-10 w-full"
                   />
                   {errors.professional_reg_number && (
