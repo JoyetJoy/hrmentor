@@ -29,7 +29,7 @@ export default function SkillsQualifications() {
   }, [selectedField]);
 
   // Fetch List
-  const { data: employeeSkills, isLoading } = useQuery({
+  const { data: employeeSkills, isLoading,refetch } = useQuery({
     queryKey: ["employeeSkills", currentPage, uid, keyword],
     queryFn: () =>
       newRequest
@@ -164,6 +164,7 @@ export default function SkillsQualifications() {
         id={selectedId}
         qrKey={"employeeSkills"}
         api={EMPLOYEE_SKILLS}
+        refetch={refetch}
       />
       <SkillEditForm
         popupOpen={popupOpen}

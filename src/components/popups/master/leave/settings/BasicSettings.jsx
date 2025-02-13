@@ -925,6 +925,8 @@ const monthOptions = Object.keys(monthDaysMap).map((month) => ({
   value: month,
   label: month,
 }));
+console.log(monthOptions);
+
   console.log(errors);
 
   return (
@@ -1185,7 +1187,7 @@ const monthOptions = Object.keys(monthDaysMap).map((month) => ({
                     render={({ field }) => (
                       <Select
                         {...field}
-                        value={monthOptions?.find((option)=>option.value == field.value)}
+                        // value={monthOptions?.find((option)=>option.value == field.value)}
                         options={monthOptions}
                         isSearchable
                         placeholder="Select a month"

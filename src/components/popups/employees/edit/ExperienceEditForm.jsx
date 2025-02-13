@@ -139,7 +139,7 @@ export default function EmployeeExperienceEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex w-full flex-col gap-1">
-                  <label className="required label-text">Job role </label>
+                  <label className="required label-text">Job Role </label>
                   <input
                     {...register("job_role", { required: true })}
                     type="text"
@@ -172,7 +172,7 @@ export default function EmployeeExperienceEditForm({
 
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Employer details
+                    Employer Details
                   </label>
                   <textarea
                     {...register("employer_details", { required: true })}
@@ -217,17 +217,28 @@ export default function EmployeeExperienceEditForm({
                 </div>
                 <div className="group flex flex-col gap-1.5">
                   {image ? (
-                    <div className="relative">
-                      <img
-                        src={image}
-                        alt="Uploaded"
-                        className="max-h-24 w-full rounded-md border border-black/20 object-contain"
-                      />
-                      <X
-                        onClick={clearImage}
-                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                      />
+                    <div className="relative flex w-full items-center justify-center">
+                    <img
+                      src={image}
+                      alt="Uploaded"
+                      className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                      onError={(e) => {
+                        e.target.style.display = "none"; // Hide broken image
+                        e.target.nextElementSibling.style.display = "flex"; // Show alt text
+                      }}
+                    />
+
+                    {/* Styled Alt Text Overlay with Border */}
+                    <div className="absolute inset-0 hidden items-center text-sm justify-center rounded-md border border-gray-400 bg-gray-200 p-4 text-gray-600">
+                    Document Uploaded
                     </div>
+
+                    {/* Close Button */}
+                    <X
+                      onClick={clearImage}
+                      className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                    />
+                  </div>
                   ) : (
                     <label
                       htmlFor="employee-profile-pic"
@@ -249,8 +260,9 @@ export default function EmployeeExperienceEditForm({
                     </label>
                   )}
                 </div>
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
-                  <button
+                <div
+                  className={`${image ? "mt-8" : ""} flex flex-row items-center justify-center gap-3`}
+                >                  <button
                     type="submit"
                     className="bg-hrmblack flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-normal text-white focus:outline-none"
                     disabled={loader}

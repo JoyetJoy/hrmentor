@@ -19,9 +19,10 @@ function BankHolidays() {
   const [byStatus, setByStatus] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
-  const [selectedField, setSelectedField] = useState('');
+  const [selectedField, setSelectedField] = useState("");
   const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
+  const [type, setType] = useState("");
   const pageLimit = 10;
   const { user } = useUserStore((state) => ({
     user: state.user,
@@ -102,13 +103,17 @@ function BankHolidays() {
           </p>
         ),
       },
-      {
-        header: "Description",
-        accessorKey: "description",
-        cell: ({ row }) => (
-          <p className="">{row.original?.description || "N/A"}</p>
-        ),
-      },
+      // {
+      //   header: "Description",
+      //   accessorKey: "description",
+      //   cell: ({ row }) => (
+      //     <p className="">
+      //       {row.original?.description === "null"
+      //         ? ""
+      //         : row.original?.description}
+      //     </p>
+      //   ),
+      // },
       {
         header: "Location",
         accessorKey: "location",
@@ -132,6 +137,31 @@ function BankHolidays() {
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               onClick={() => {
                 setPopupOpen(true);
+                setType("View");
+                setSelectedField(row?.original?.id);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye"
+              >
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </Link>
+            <Link
+              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              onClick={() => {
+                setPopupOpen(true);
+                setType("Edit");
                 setSelectedField(row?.original?.id);
               }}
             >
@@ -140,6 +170,7 @@ function BankHolidays() {
                 className="w-full object-contain"
               />
             </Link>
+
             <button
               onClick={() => {
                 setDeletePopup(true);
@@ -162,6 +193,7 @@ function BankHolidays() {
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
         setSelectedField={setSelectedField}
+        type={type}
       />
       <DeleteConfirmation
         open={deletePopup}
@@ -214,7 +246,10 @@ function BankHolidays() {
             />
           </div>
           <button
-            onClick={() => setPopupOpen(true)}
+            onClick={() => {
+              setPopupOpen(true);
+              setType("Add");
+            }}
             className="btn flex h-10 min-h-10 items-center rounded-md bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-5" strokeWidth={2} />
