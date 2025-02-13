@@ -373,6 +373,7 @@ export default function SaveEmployeeForm({ formtype }) {
         toast.error("Failed to save employee.");
         setLoader(false);
       }
+      
     } catch (error) {
       console.log(error);
       toast.error(
@@ -471,6 +472,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <label className="label-text text-sm">Unique ID</label>
                       <input
                         disabled={formtype === "update"}
+                        value={employeeDetails?.employee_id}
                         {...register("unique_id", { required: true })}
                         onChange={(e) => {
                           if (e.target.value.length > 0) {
