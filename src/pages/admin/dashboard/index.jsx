@@ -52,7 +52,7 @@ export const AdminDashboard = () => {
       path: "/admin/leave/people-on-leave", // Add a default path
     },
   ];
-  
+
   console.log(
     admindashboard?.upcoming_shifts?.shift?.name,
     "admindashboardadmindashboard",
@@ -87,10 +87,11 @@ export const AdminDashboard = () => {
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
                 <Link
-                //  to={`/admin/shift`}
-                to={card.path}
-                 className="flex items-center gap-2 text-sm font-medium text-gray-600">
-                  View 
+                  //  to={`/admin/shift`}
+                  to={card.path}
+                  className="flex items-center gap-2 text-sm font-medium text-gray-600"
+                >
+                  View
                   <Eye className="size-4 text-black/70" />
                 </Link>
               </label>
@@ -121,8 +122,9 @@ export const AdminDashboard = () => {
                       </label>
                     </div>
                     <Link
-                     to={item?.path}
-                     className="rounded-full border bg-gray-soft p-2">
+                      to={item?.path}
+                      className="rounded-full border bg-gray-soft p-2"
+                    >
                       <MoveDiagonal
                         className="size-3 text-black"
                         strokeWidth={1.7}
@@ -150,7 +152,7 @@ export const AdminDashboard = () => {
               View <Eye className="size-4 text-black/70" />
             </Link>
           </h1>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 overflow-y-auto overflow-y-min overflow-x-hidden max-h-[14.3rem]">
             {admindashboard?.newsandevents?.events.map((event, index) => (
               <div
                 key={index}
@@ -161,7 +163,10 @@ export const AdminDashboard = () => {
                   <span>{dayjs(event.start_date).format(" MMM")}</span>
                 </h1>
                 <h2 className="p-4 text-sm font-semibold text-black">
-                  {event.event_title} <br />
+                  {event.event_title.length > 12
+                    ? event.event_title.substring(0, 25) + "..."
+                    : event.event_title}
+                  <br />
                   <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
                     {event.start_time}{" "}
                     <div className="h-3 border border-gray-dark"></div>You and
@@ -175,12 +180,15 @@ export const AdminDashboard = () => {
                 key={index}
                 className="flex flex-row rounded-md border border-gray-300"
               >
-                <h1 className="flex min-w-14  flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
+                <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(newss.start_date).format("D")} <br />
                   <span>{dayjs(newss.start_date).format(" MMM")}</span>
                 </h1>
                 <h2 className="p-4 text-sm font-semibold text-black">
-                  {newss.news_title} <br />
+                  {newss.news_title.length > 12
+                    ? newss.news_title.substring(0, 25) + "..."
+                    : newss.news_title}
+                  <br />
                   <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
                     {newss.start_time} 11.30{" "}
                     <div className="h-3 border border-gray-dark"></div>You and

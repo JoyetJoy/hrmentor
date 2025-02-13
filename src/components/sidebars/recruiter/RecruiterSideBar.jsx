@@ -153,7 +153,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           </p>
         </div>
       </div>
-      <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
+      {/* <div className="mb-3 flex items-center justify-between text-sm font-medium text-black">
         Hiring manager
         <Select
           name="status"
@@ -174,7 +174,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
           styles={statusDataSelecter}
           className="h-10 min-h-10 w-7/12 rounded-md bg-gray-soft px-3 py-1 pl-3 text-xs"
         />
-      </div>
+      </div> */}
     </div>
   );
 }
