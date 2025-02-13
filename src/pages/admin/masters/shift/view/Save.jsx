@@ -502,7 +502,7 @@ export default function SaveMasterShift({ formtype, sid }) {
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
                   <h1 className="text-sm font-semibold">
-                    Pay calculation type
+                    Pay Calculation Type
                   </h1>
                   <div className="flex items-center gap-7">
                     <div className="flex items-center gap-2">
@@ -669,7 +669,7 @@ export default function SaveMasterShift({ formtype, sid }) {
               </div>
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
-                  <h1 className="text-sm font-semibold">Recurrence pattern</h1>
+                  <h1 className="text-sm font-semibold">Recurrence Pattern</h1>
                   <div className="flex items-center gap-7">
                     <div className="flex items-center gap-2">
                       <input
@@ -693,9 +693,9 @@ export default function SaveMasterShift({ formtype, sid }) {
                     </div>
                   </div>
                 </div>
-
+                
                 <p className="text-sm text-gray-dark">
-                  This shift occurs every single day, and no weekend is defined.
+                 {recurrencePattern === "daily" ? "This shift occurs every single day, and no weekend is defined.":""} 
                 </p>
                 <WeeklyRecurrence
                   days={days}
@@ -711,7 +711,7 @@ export default function SaveMasterShift({ formtype, sid }) {
               </div>
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
-                  <h1 className="text-sm font-semibold">Weekend definition</h1>
+                  <h1 className="text-sm font-semibold">Weekend Definition</h1>
                   <div className="flex items-center gap-7">
                     <div className="flex items-center gap-2">
                       <input
@@ -740,7 +740,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                   </div>
                 </div>
                 <p className="text-sm text-gray-dark">
-                  Calendar-based weekend definition will be considered
+                {WeekEnd === "basedoncalender"?"Calendar-based weekend definition will be considered" :"Shift-based weekend definition will be considered"}  
                 </p>
               </div>
               {recurrencePattern === "weekly" && (

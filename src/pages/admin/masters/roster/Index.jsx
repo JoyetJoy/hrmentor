@@ -152,7 +152,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
             >
               <Eye className="size-3" />
             </Link>
-            <button
+            {/* <button
               type="button"
               onClick={() => {
                 setDeletePopup(true);
@@ -161,7 +161,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
               className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
             >
               <Trash2 className="size-3" />
-            </button>
+            </button> */}
           </div>
         ),
       },

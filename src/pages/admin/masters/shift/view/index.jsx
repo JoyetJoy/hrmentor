@@ -104,7 +104,7 @@ function ShiftList() {
                 alt="Edit"
               />
             </Link>
-            <button
+            {/* <button
               type="button"
               onClick={() => {
                 setDeletePopup(true);
@@ -113,7 +113,7 @@ function ShiftList() {
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
             >
               <Trash2 className="size-3" />
-            </button>
+            </button> */}
           </div>
         ),
       },
