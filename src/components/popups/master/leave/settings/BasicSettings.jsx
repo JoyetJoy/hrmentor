@@ -157,13 +157,20 @@ const leaveSchema = Yup.object().shape({
   // ),
 
   
-  accural_day: Yup.mixed()
-  .nullable()
-  .when("accrualType", {
-    is: "bycycle",
-    then: (schema) => Yup.string().required("Accrual day is required"),
-    otherwise: (schema) => Yup.mixed().notRequired(),
-  }),
+  accural_day: Yup.object().test(
+    "accrual-day-test",
+    "Accrual day is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      console.log("Accrual Type:", accrualType, "Selected Day:", value);
+  
+      if (accrualType === "bycycle" && !value?.value) {
+        return false;
+      }
+      return true;
+    }
+  ),
+  
 
 
   accural_monthly: Yup.object().test(

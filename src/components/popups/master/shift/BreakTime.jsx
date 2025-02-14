@@ -173,7 +173,7 @@ export default function BreakTime({
                   autoComplete="off"
                   name="time"
                   type="text"
-                  placeholder="hh:mm"
+                  placeholder="HH:MM"
                   className="input-box"
                   onChange={(e) => {
                     e.target.value = formatTime(e.target.value); // Call the helper function
@@ -202,7 +202,7 @@ export default function BreakTime({
                       {...register("start_time")}
                       autoComplete="off"
                       // type="time"
-                      placeholder="hh:mm"
+                      placeholder="HH:MM"
                       className="input-box pr-2"
                       onChange={(e) => {
                         e.target.value = formatTime(e.target.value); // Call the helper function
@@ -220,7 +220,7 @@ export default function BreakTime({
                       {...register("end_time", { required: true })}
                       autoComplete="off"
                       // type="time"
-                      placeholder="hh:mm"
+                      placeholder="HH:MM"
                       className="input-box pr-2"
                       onChange={(e) => {
                         e.target.value = formatTime(e.target.value); // Call the helper function

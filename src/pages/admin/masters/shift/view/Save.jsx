@@ -58,7 +58,6 @@ export default function SaveMasterShift({ formtype, sid }) {
     resolver: yupResolver(ShiftSchema),
   });
   console.log(selectedDays);
-    console.log(workArea);
 
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
@@ -144,9 +143,9 @@ export default function SaveMasterShift({ formtype, sid }) {
   const onSubmit = async (data) => {
     console.log(data);
 
-    if (data?.recur_pattern === "weekly") {
+    if (recurrencePattern === "weekly") {
       if (validateInputs()) {
-        if (data?.calculation_type === "perhour") {
+        if (calculationType === "perhour") {
           await handleShift(data);
         } else {
           if (data.fullday === "" && data.halfday === "") {
@@ -158,16 +157,8 @@ export default function SaveMasterShift({ formtype, sid }) {
       } else {
         toast.error("Please enter the count for the selected days");
       }
-    } else if(data?.calculation_type){
-      if (data?.calculation_type === "perhour") {
-        await handleShift(data);
-      } else {
-        if (data.fullday === "" && data.halfday === "") {
-          toast.error("Either full day or half day is required");
-        } else {
-          await handleShift(data);
-        }
-      }
+    } else {
+      await handleShift(data);
     }
   };
   const handleShift = async (data) => {
@@ -219,7 +210,6 @@ export default function SaveMasterShift({ formtype, sid }) {
       };
     }
     console.log(formdata);
-    
 
     try {
       const api = id ? `${SHIFT_LIST}/${id}` : SHIFT_LIST;
@@ -254,10 +244,10 @@ export default function SaveMasterShift({ formtype, sid }) {
       setValue("end_time", shiftDetails?.end_time);
       setValue("people_required", shiftDetails?.people_required);
       setValue("calculation_type", shiftDetails?.calculation_type);
-      setValue("fullday", shiftDetails?.fullday||'');
-      setValue("fulltolerence", shiftDetails?.fulltolerence||'');
-      setValue("halfday", shiftDetails?.halfday||'');
-      setValue("halfdaytolerence", shiftDetails?.halfdaytolerence||'');
+      setValue("fullday", shiftDetails?.fullday);
+      setValue("fulltolerence", shiftDetails?.fulltolerence);
+      setValue("halfday", shiftDetails?.halfday);
+      setValue("halfdaytolerence", shiftDetails?.halfdaytolerence);
       setValue("recur_pattern", shiftDetails?.recur_pattern);
       setValue("week_def", shiftDetails?.week_def);
       setValue("weekly_shifts", shiftDetails?.weekly_shifts);
@@ -370,14 +360,12 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <div className="group flex w-full flex-col gap-1.5 py-2 pl-3">
                     <label className="required label-text">Start Time</label>
                     <input
-                      {...register("start_time")}
+                      {...register("start_time", { required: true })}
                       autoComplete="off"
-                      // type="time"
-                      placeholder="HH:MM"
-                      className="input-box pr-2"
-                      onChange={(e) => {
-                        e.target.value = formatTime(e.target.value); // Call the helper function
-                      }}
+                      name="start_time"
+                      type="time"
+                      placeholder="hh:mm"
+                      className="input-box"
                     />
                     {errors.start_time && (
                       <span className="text-xs font-medium text-red-500">
@@ -388,14 +376,12 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <div className="group flex w-full flex-col gap-1.5 py-2 pr-3">
                     <label className="required label-text">End Time</label>
                     <input
-                      {...register("end_time")}
+                      {...register("end_time", { required: true })}
                       autoComplete="off"
-                      // type="time"
-                      placeholder="HH:MM"
-                      className="input-box pr-2"
-                      onChange={(e) => {
-                        e.target.value = formatTime(e.target.value); // Call the helper function
-                      }}
+                      type="time"
+                      name="end_time"
+                      placeholder="hh:mm"
+                      className="input-box"
                     />
                     {errors.end_time && (
                       <span className="text-xs font-medium text-red-500">
@@ -441,7 +427,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                         isSearchable={true}
                         styles={customSelectStyles}
                         options={departmentList}
-                        placeholder="Select Department"
+                        placeholder="Select Work Area"
                         className="input-box"
                       />
                     )}
@@ -506,7 +492,7 @@ export default function SaveMasterShift({ formtype, sid }) {
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
                   <h1 className="text-sm font-semibold">
-                    Pay Calculation Type
+                    Pay calculation type
                   </h1>
                   <div className="flex items-center gap-7">
                     <div className="flex items-center gap-2">
@@ -673,7 +659,7 @@ export default function SaveMasterShift({ formtype, sid }) {
               </div>
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
-                  <h1 className="text-sm font-semibold">Recurrence Pattern</h1>
+                  <h1 className="text-sm font-semibold">Recurrence pattern</h1>
                   <div className="flex items-center gap-7">
                     <div className="flex items-center gap-2">
                       <input
@@ -697,9 +683,9 @@ export default function SaveMasterShift({ formtype, sid }) {
                     </div>
                   </div>
                 </div>
-                
+
                 <p className="text-sm text-gray-dark">
-                 {recurrencePattern === "daily" ? "This shift occurs every single day, and no weekend is defined.":""} 
+                  This shift occurs every single day, and no weekend is defined.
                 </p>
                 <WeeklyRecurrence
                   days={days}
@@ -715,7 +701,7 @@ export default function SaveMasterShift({ formtype, sid }) {
               </div>
               <div className="flex flex-col gap-5 px-3 py-3">
                 <div className="flex items-center gap-14">
-                  <h1 className="text-sm font-semibold">Weekend Definition</h1>
+                  <h1 className="text-sm font-semibold">Weekend definition</h1>
                   <div className="flex items-center gap-7">
                     <div className="flex items-center gap-2">
                       <input
@@ -744,7 +730,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                   </div>
                 </div>
                 <p className="text-sm text-gray-dark">
-                {WeekEnd === "basedoncalender"?"Calendar-based weekend definition will be considered" :"Shift-based weekend definition will be considered"}  
+                  Calendar-based weekend definition will be considered
                 </p>
               </div>
               {recurrencePattern === "weekly" && (
