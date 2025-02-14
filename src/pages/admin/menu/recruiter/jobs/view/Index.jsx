@@ -143,19 +143,19 @@ function RecViewJobDetail() {
         </h1>
         <div className="flex items-center gap-7 text-sm">
           <Link
-            to="/admin/recruiter/jobs/view"
+            to={`/admin/recruiter/jobs/view?jid=${jid}`}
             className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
           >
             Candidates
           </Link>
           <Link
-            to="/admin/recruiter/jobs/promote"
+            to={`/admin/recruiter/jobs/promote?jid=${jid}`}
             className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Promote
           </Link>
           <Link
-            to="/admin/recruiter/jobs/refer"
+            to={`/admin/recruiter/jobs/refer?jid=${jid}`}
             className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Refer

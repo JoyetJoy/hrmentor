@@ -9,6 +9,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 export default function RecViewJobRefer() {
+  const searchParams = new URLSearchParams(location.search);
+  const jid = searchParams.get("jid");
   const {
     register,
     handleSubmit,
@@ -39,19 +41,19 @@ export default function RecViewJobRefer() {
         </h1>
         <div className="flex items-center gap-7 text-sm">
           <Link
-            to="/admin/recruiter/jobs/view"
+            to={`/admin/recruiter/jobs/view?jid=${jid}`}
             className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Candidates
           </Link>
           <Link
-            to="/admin/recruiter/jobs/promote"
+            to={`/admin/recruiter/jobs/promote?jid=${jid}`}
             className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Promote
           </Link>
           <Link
-            to="/admin/recruiter/jobs/refer"
+            to={`/admin/recruiter/jobs/refer?jid=${jid}`}
             className="flex gap-5 text-sm font-semibold text-hrmprimaryorange"
           >
             Refer
