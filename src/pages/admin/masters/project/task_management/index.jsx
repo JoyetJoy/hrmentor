@@ -127,7 +127,7 @@ export default function TaskManagement() {
     }
   }, [statusList]);
 
-  const { data: taskList } = useQuery({
+  const { data: taskList,refetch } = useQuery({
     queryKey: ["taskList", currentPage, keyword],
     queryFn: () =>
       newRequest
@@ -138,8 +138,9 @@ export default function TaskManagement() {
             per_limit: pageLimit,
           },
         })
-        .then((res) => res.data?.original?.data),
+        .then((res) => res.data),
   });
+console.log(taskList);
 
   const { data: taskListDetails } = useQuery({
     queryKey: ["taskListDetails", selectedId],
@@ -398,7 +399,7 @@ export default function TaskManagement() {
       if (res) {
         toast.success(res?.data?.message);
         close();
-        window.location.reload();
+        refetch();
       }
     } catch (error) {
       console.log(error);
