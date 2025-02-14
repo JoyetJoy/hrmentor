@@ -9,6 +9,18 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+import {
+  ROLES_LIST,
+  EMPLOYEE_DESIGNATION_LIST,
+  EMPLOYEE_WORK_LOCATION_LIST,
+  EMPLOYEE_TYPE_LIST,
+  EMPLOYEE_DEPARTMENT_LIST
+} from "@/api/master";
+import {
+  maritalStatuses,
+  pentionStatuses,
+} from "@/constants/data";
+import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { ChevronRight, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -35,6 +47,33 @@ export default function WorkInfo({ formtype }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
+
+  // ROLES LIST
+  const { data: rolesList } = useEmployeeMaster(ROLES_LIST, "rolesList");
+
+   // DESIGNATION LISTING
+   const { data: designationListing } = useEmployeeMaster(
+    EMPLOYEE_DESIGNATION_LIST,
+    "employeeDesignationList",
+  );
+
+  // WORK LOCATION LISTING
+  const { data: workLocationListing } = useEmployeeMaster(
+    EMPLOYEE_WORK_LOCATION_LIST,
+    "employeeWorkLocationList",
+  );
+  
+  // EMOPLOYEE TYPE LIST
+  const { data: employeeTypeList } = useEmployeeMaster(
+    EMPLOYEE_TYPE_LIST,
+    "employeeTypeList",
+  );
+
+  // DEPARTMENT LISTING
+  const { data: departmentListing } = useEmployeeMaster(
+    EMPLOYEE_DEPARTMENT_LIST,
+    "employeeDepartmentList",
+  );
 
   const { data: employeeDetails, isLoading } = useQuery({
     queryKey: ["employeeDetails", uid, formtype],
@@ -97,6 +136,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={departmentListing}
                     placeholder="Select Department"
                     className="input-box"
                   />
@@ -115,6 +155,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={rolesList}
                     isMulti
                     placeholder="Select Role"
                     className="input-box h-fit"
@@ -135,6 +176,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={designationListing}
                     placeholder="Select Designation"
                     className="input-box"
                   />
@@ -163,6 +205,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={workLocationListing}
                     placeholder="Select Work location"
                     className="input-box"
                   />
@@ -182,6 +225,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={employeeTypeList}
                     placeholder="Select Employement Type"
                     className="input-box"
                   />
@@ -217,6 +261,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={maritalStatuses}
                     placeholder="Select Marital status"
                     className="input-box"
                   />
@@ -258,6 +303,7 @@ export default function WorkInfo({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
+                    options={pentionStatuses}
                     placeholder="Select status"
                     className="input-box"
                   />

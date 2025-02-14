@@ -11,11 +11,14 @@ import { ChevronRight, Eye, RotateCw, X } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import { EmployeeSchema } from "@/schema/dashboard/employee/form/employee.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import {
+  bloodGroups,
+} from "@/constants/data";
 import {
   COUNTRY,
   COUNTRY_CITY,
   ROLES_LIST,
+  NATIONALITY,
   SALARY_DEFAULT_MASTERS,
 } from "@/api/master";
 import useImageUpload from "@/hooks/useImageUpload";
@@ -56,6 +59,14 @@ export default function BasicDetails({ formtype }) {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+
+  const { data: nationalityList } = useEmployeeMaster(
+    NATIONALITY,
+    "nationalityList",
+  );
+
+  // COUNTRY LISTING
+  const { data: countryList } = useEmployeeMaster(COUNTRY, "countryList");
 
   // MASTERS LISTING
   const { data: employeeMasters } = useEmployeeMaster(
@@ -135,22 +146,38 @@ export default function BasicDetails({ formtype }) {
     }
   }, [employeeDetails, sameAsHome]);
 
-  // GET CITY BY STATE ID AND SEARCH KEY
-  const loadCitiesOptions = async (inputValue) => {
-    if (inputValue?.length < 3) {
-      return [];
-    }
-    const response = await newRequest.get(COUNTRY_CITY, {
-      params: { state_id: parseInt(state_id?.id), search: inputValue },
-    });
-    return response?.data;
-  };
-
   // EMPLOYEE UNIQUE ID
   const { data: uniqueId } = useEmployeeMaster(
     EMPLOYEE_UNIQUE_ID,
     "employeeUniqueId",
   );
+
+  // GET CITY BY STATE ID AND SEARCH KEY
+    const loadCitiesOptions = async (inputValue) => {
+      if (inputValue?.length < 3) {
+        return [];
+      }
+      const response = await newRequest.get(COUNTRY_CITY, {
+        params: {
+          state_id: parseInt(state_id?.id),
+          search: inputValue,
+          country_id: parseInt(country_id?.id),
+        },
+      });
+      return response?.data?.data;
+    };
+
+  // Function to display state of the selected city
+  const handleCitySelect = (selectedCity) => {
+    if (selectedCity?.state_name) {
+      setState(selectedCity.state_name);
+      setValue("state_id", {
+        id: selectedCity.state_id,
+        label: selectedCity.state_name,
+        value: selectedCity.state_id,
+      });
+    }
+  };
 
   useEffect(() => {
     if (employeeDetails?.unique_id) {
@@ -335,7 +362,7 @@ export default function BasicDetails({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    // options={employeeMasters?.genders}
+                    options={employeeMasters?.genders}
                     placeholder="Select Gender"
                     className="input-box"
                   />
@@ -350,20 +377,20 @@ export default function BasicDetails({ formtype }) {
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Nationality</label>
               <Controller
-                name="nationality_id"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    isSearchable={true}
-                    styles={customSelectStyles}
-                    // options={nationalityList}
-                    placeholder="Select Nationality"
-                    className="input-box"
+                    name="nationality_id"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        options={nationalityList}
+                        placeholder="Select Nationality"
+                        className="input-box"
+                      />
+                    )}
                   />
-                )}
-              />
               {/* {errors.nationality_id && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.nationality_id?.message}
@@ -381,7 +408,7 @@ export default function BasicDetails({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    // options={countryList}
+                    options={countryList}
                     placeholder="Select Country"
                     className="input-box"
                   />
@@ -396,25 +423,34 @@ export default function BasicDetails({ formtype }) {
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">City</label>
               <Controller
-                name="city_id"
-                control={control}
-                rules={{ required: "City is required" }} // Custom error message
-                render={({ field }) => (
-                  <AsyncSelect
-                    {...field}
-                    placeholder="Search ..."
-                    loadOptions={loadCitiesOptions}
-                    isSearchable={true}
-                    noOptionsMessage={() => "Type city name"}
-                    // onChange={(selectedOption) => {
-                    //   field.onChange(selectedOption); // Update form state
-                    //   handleCitySelect(selectedOption);
-                    // }}
-                    value={field.value} // Ensure the value is controlled
-                    className="input-box"
+                    name="city_id"
+                    control={control}
+                    rules={{
+                      required: country_id
+                        ? "City is required"
+                        : "Please select a country first",
+                    }}
+                    render={({ field }) => (
+                      <AsyncSelect
+                        {...field}
+                        placeholder="Search ..."
+                        loadOptions={country_id ? loadCitiesOptions : () => []} // Only load options when country is selected
+                        isSearchable={true}
+                        noOptionsMessage={() =>
+                          country_id
+                            ? "No cities found"
+                            : "Select a country first"
+                        }
+                        isDisabled={!country_id} // Disable if no country is selected
+                        onChange={(selectedOption) => {
+                          field.onChange(selectedOption); // Update form state
+                          handleCitySelect(selectedOption);
+                        }}
+                        value={field.value} // Ensure the value is controlled
+                        className="input-box"
+                      />
+                    )}
                   />
-                )}
-              />
             </div>
 
             <div className="group flex flex-col gap-1.5 px-3 py-2">
@@ -446,7 +482,7 @@ export default function BasicDetails({ formtype }) {
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    // options={bloodGroups}
+                    options={bloodGroups}
                     placeholder="Select Blood Group"
                     className="input-box"
                   />
