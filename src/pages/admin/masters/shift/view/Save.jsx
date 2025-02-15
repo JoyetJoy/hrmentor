@@ -364,7 +364,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                       autoComplete="off"
                       name="start_time"
                       type="time"
-                      placeholder="hh:mm"
+                      placeholder="HH:MM"
                       className="input-box"
                     />
                     {errors.start_time && (
@@ -380,7 +380,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                       autoComplete="off"
                       type="time"
                       name="end_time"
-                      placeholder="hh:mm"
+                      placeholder="HH:MM"
                       className="input-box"
                     />
                     {errors.end_time && (

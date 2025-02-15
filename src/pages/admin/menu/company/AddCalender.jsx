@@ -24,6 +24,13 @@ const CompanyCalenderSchema = Yup.object({
   full_tolarance: Yup.string(),
   half_day: Yup.string(),
   half_day_tolarance: Yup.string(),
+  location: Yup.array()
+    .of(Yup.object().shape({
+      label: Yup.string().required('Location is required'),
+      value: Yup.string().required('Location is required')
+    }))
+    .required('Location is required')
+    .min(1, 'Please select at least one location'),
 });
 
 const monthOptions = [
@@ -721,10 +728,10 @@ export default function CompanyAddCalender() {
           <div className="w-full rounded-md bg-white px-5 py-7">
             <div className="grid w-1/2 grid-cols-1 items-baseline justify-center gap-y-2 rounded-md px-5 py-4">
               <div className="group col-span-2 flex flex-col space-y-1 px-3 py-1">
-                <label className="label-text font-normal">Location</label>
+                <label className="required label-text font-normal">Location</label>
                 <div className="flex items-center gap-2">
                   <Controller
-                    name="accural_monthly"
+                    name="location"
                     control={control}
                     render={({ field }) => (
                       <Select
@@ -741,10 +748,12 @@ export default function CompanyAddCalender() {
                       />
                     )}
                   />
-                  <div className="rounded-full bg-hrmprimaryorange">
-                    {/* <Plus className="size-6 text-white" /> */}
-                  </div>
                 </div>
+                {errors.location&&
+                  <div className="text-red-500 text-xs">
+                    {errors?.location?.message }
+                  </div>
+                  }
               </div>
               <div className="group col-span-2 flex items-center gap-4 space-y-1 px-3 py-1">
                 <label className="text-sm font-normal">Fiscal calender</label>
