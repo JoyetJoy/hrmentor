@@ -1,23 +1,27 @@
 import { ArrowUpFromLine } from "lucide-react";
 import React, { useState } from "react";
 import Dropzone from "react-dropzone";
+import toast from "react-hot-toast";
 
 export default function ResumeDragzoneApplyJob({ file, setFile }) {
-  const [filePreview, setFilePreview] = useState(null); // For file preview
+  const [filePreview, setFilePreview] = useState(null);
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/jpg", "application/pdf"];
 
-  const onDrop = (acceptedFiles) => {
+  const onDrop = (acceptedFiles, rejectedFiles) => {
+    if (rejectedFiles.length > 0) {
+      toast.error("Invalid file. Only PDF and image formats up to 5MB are allowed.");
+      return;
+    }
+    
     const selectedFile = acceptedFiles[0];
     setFile(selectedFile);
 
-    // Generate a preview for images or PDFs
-    if (
-      selectedFile.type.includes("image") ||
-      selectedFile.type.includes("pdf")
-    ) {
+    if (selectedFile.type.includes("image") || selectedFile.type.includes("pdf")) {
       const previewUrl = URL.createObjectURL(selectedFile);
       setFilePreview(previewUrl);
     } else {
-      setFilePreview(null); // Clear preview if file is not supported
+      setFilePreview(null);
     }
   };
 
@@ -28,7 +32,10 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
           <div className="flex items-center gap-4 pb-1 pt-10">
             <h1 className="required text-[0.84rem] font-bold">Resume Upload</h1>
             <div
-              onClick={() => setFile(null)}
+              onClick={() => {
+                setFile(null);
+                setFilePreview(null);
+              }}
               className="cursor-pointer rounded border border-hrmprimaryorange px-2 py-1.5 text-xs font-bold text-black/90"
             >
               Change File
@@ -58,7 +65,11 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
           </div>
         </div>
       ) : (
-        <Dropzone onDrop={onDrop}>
+        <Dropzone
+          onDrop={onDrop}
+          accept={ALLOWED_TYPES.join(", ")}
+          maxSize={MAX_FILE_SIZE}
+        >
           {({ getRootProps, getInputProps }) => (
             <div {...getRootProps()} className="flex flex-col justify-center">
               <input {...getInputProps()} />
@@ -68,7 +79,7 @@ export default function ResumeDragzoneApplyJob({ file, setFile }) {
               <div className="flex h-full flex-col items-center justify-center gap-3 rounded-lg border border-gray-lightSoft py-7">
                 <p className="text-sm font-semibold">Upload or drag and drop</p>
                 <p className="text-sm text-gray-dark">
-                  (Preferred), DOCX, DOC, PDF up to 1 MB
+                  (Preferred) PDF, PNG, JPG up to 5 MB
                 </p>
                 <button
                   type="button"

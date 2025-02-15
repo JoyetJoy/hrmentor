@@ -35,7 +35,7 @@ function ShiftList() {
 
   useEffect(() => {
     if (shiftDetails) {
-      setTotalPages(shiftDetails?.last_page);
+      setTotalPages(shiftDetails?.data?.original?.pagination?.last_page);
     }
   }, [shiftDetails]);
 
