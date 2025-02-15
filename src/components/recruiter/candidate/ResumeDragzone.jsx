@@ -12,8 +12,8 @@ export default function ResumeDragzone({
 }) {
   const onDrop = (acceptedFiles) => {
     const selectedFile = acceptedFiles[0];
-    if (selectedFile.size > 1024 * 1024) {
-      toast.error("File size exceeds 1MB. Please upload a smaller file.");
+    if (selectedFile.size > 1024 * 1024 * 5) {
+      toast.error("File size exceeds 5MB. Please upload a smaller file.");
       return;
     }
     setFile(selectedFile);
@@ -87,7 +87,7 @@ console.log(types);
               <div className="flex h-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-lightSoft py-2">
                 <p className="text-sm font-semibold">Upload or Drag and Drop</p>
                 <p className="text-sm text-gray-dark">
-                  (Preferred), DOCX, DOC, PDF up to 1 MB
+                  (Preferred), DOCX, DOC, PDF up to 5 MB
                 </p>
                 <button
                   type="button"
