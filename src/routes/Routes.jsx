@@ -44,5 +44,4 @@ export const appRoutes = createBrowserRouter([
     path: "onboarding-form",
     element: <OnboardingForm/>,
   },
-
 ]);
