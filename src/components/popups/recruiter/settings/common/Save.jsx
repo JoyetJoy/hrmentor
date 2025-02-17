@@ -203,10 +203,10 @@ console.log(type);
                     {generateLoader ? (
                       <div className="flex items-center gap-3">
                         <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                        Generating
+                        AI Generating
                       </div>
                     ) : (
-                      <span>Generate</span>
+                      <span>AI Generate</span>
                     )}
                   </button>
                 )}

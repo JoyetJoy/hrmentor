@@ -9,7 +9,7 @@ const data = [
     slNo: 1,
     department: "IT department",
     totalEmployees: 5,
-    otHours: "20hr 0min",
+    otHours: "00hr 0min",
     otPay: "£3500",
     netPay: "£25000",
     paymentDate: "30/11/2024",

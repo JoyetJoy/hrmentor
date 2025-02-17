@@ -47,12 +47,12 @@ function TeamLeave() {
         },
       },
       {
-        header: "Employee nmae & ID",
+        header: "Employee Name & ID",
         accessorKey: "employee_name",
         cell: ({ row }) => (
           <div className="">
             <p>
-              {row?.original?.employee_name} &{row?.original?.unique_id} || "NA"
+              {row?.original?.employee_name} &{row?.original?.unique_id || "NA"} 
             </p>
           </div>
         ),
@@ -61,7 +61,7 @@ function TeamLeave() {
         header: "Casual Leave(days)",
         accessorKey: "date",
         cell: ({ row }) => (
-          <p className="">{row?.original?.employee?.unique_id || "NA"}</p>
+          <p className="">{row?.original?.leave_count || "NA"}</p>
         ),
       },
       {
@@ -69,7 +69,7 @@ function TeamLeave() {
         accessorKey: "sick leve",
         cell: ({ row }) => (
           <p className="">
-            {row?.original?.employee?.designation?.designation_name || "NA"}
+            {row?.original?.employee?.designation?.designation_name || "0"}
           </p>
         ),
       },
@@ -79,7 +79,7 @@ function TeamLeave() {
         cell: ({ row }) => (
           <p className="">
             {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
+              "0"}
           </p>
         ),
       },
@@ -89,7 +89,7 @@ function TeamLeave() {
         cell: ({ row }) => (
           <p className="">
             {row?.original?.employee?.employment_type?.employment_type_name ||
-              "NA"}
+              "0"}
           </p>
         ),
       },
@@ -137,7 +137,7 @@ function TeamLeave() {
           </div>
           <QueryTable
             columns={columns}
-            list={ "NA"}
+            list={ employeeTeamHolidays?.data}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             totalPages={totalPages}

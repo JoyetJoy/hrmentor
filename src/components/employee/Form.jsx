@@ -808,7 +808,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     autoComplete="off"
                     type="text"
                     {...register("home_address", { required: true })}
-                    className="input-box min-h-28 py-1"
+                    className="input-box min-h-28 py-1 px-2"
                     onInput={(e) => {
                       const value = e.target.value;
                       e.target.value = value.replace(/^\s+/g, ""); // Remove leading spaces from the first line
