@@ -52,7 +52,7 @@ export const AdminDashboard = () => {
       path: "/admin/leave/people-on-leave", // Add a default path
     },
   ];
-
+  
   console.log(
     admindashboard?.upcoming_shifts?.shift?.name,
     "admindashboardadmindashboard",
@@ -87,11 +87,10 @@ export const AdminDashboard = () => {
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
                 <Link
-                  //  to={`/admin/shift`}
-                  to={card.path}
-                  className="flex items-center gap-2 text-sm font-medium text-gray-600"
-                >
-                  View
+                //  to={`/admin/shift`}
+                to={card.path}
+                 className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  View 
                   <Eye className="size-4 text-black/70" />
                 </Link>
               </label>
