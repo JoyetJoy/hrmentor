@@ -104,7 +104,7 @@ export default function NewsAndEventDetails() {
           <div className="w-1/2 bg-white p-6">
             <h2 className="mb-4 text-sm font-semibold">Related News</h2>
             <div className="space-y-6">
-              {events?.map((event, index) => (
+              {/* {events?.map((event, index) => (
                 <div key={index} className="items-star flex flex-col gap-3">
                   <div>
                     <img
@@ -134,7 +134,7 @@ export default function NewsAndEventDetails() {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>

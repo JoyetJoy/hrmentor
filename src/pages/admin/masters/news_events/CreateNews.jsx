@@ -130,7 +130,7 @@ export default function CreateNews({
 
       setImageFile(croppedFile);
       setCroppedImage(URL.createObjectURL(croppedFile));
-      setModalIsOpen(false);
+      setIsOpen(false);
     } catch (error) {
       console.error("Error cropping image:", error);
     }

@@ -161,7 +161,7 @@ export default function CreateEvent() {
   
         setImageFile(croppedFile);
         setCroppedImage(URL.createObjectURL(croppedFile));
-        setModalIsOpen(false);
+        setIsOpen(false);
       } catch (error) {
         console.error("Error cropping image:", error);
       }
@@ -452,11 +452,11 @@ export default function CreateEvent() {
                         leaveFrom="opacity-100 scale-100"
                         leaveTo="opacity-0 scale-95"
                       >
-                        <Dialog.Panel className="relative w-full max-w-md rounded-lg bg-gray-100 p-8 shadow-xl">
+                        <Dialog.Panel className="relative w-full max-w-md rounded-lg bg-gray-100 px-8 pt-10 pb-8 shadow-xl">
                           {/* Close Button */}
                           <button
                             onClick={() => setIsOpen(false)}
-                            className="absolute right-2 top-2 z-10 text-black"
+                            className="absolute right-2 top-2  z-10 text-black"
                           >
                             <X className="h-6 w-6" />
                           </button>
