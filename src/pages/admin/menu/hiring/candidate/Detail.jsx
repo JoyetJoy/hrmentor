@@ -46,11 +46,11 @@ export default function HiringCandidateDetails() {
   const [conditionalOfferLetter, setConditionalOfferLetter] = useState(null);
   const [statusList, setStatusList] = useState([]);
   const [popup, setPopup] = useState(false);
-  const [statusPopup,setStatusPopup] = useState(false);
-  const [status,setStatus] = useState({
-    id:'',
-    status_name:''
-  })
+  const [statusPopup, setStatusPopup] = useState(false);
+  const [status, setStatus] = useState({
+    id: "",
+    status_name: "",
+  });
 
   const [loader, setLoader] = useState(false);
   const queryClient = useQueryClient();
@@ -71,7 +71,11 @@ export default function HiringCandidateDetails() {
 
   //
   // GET DETAILS IN CASE OF UPDATE
-  const { data: candidateDetails, isLoading,refetch } = useQuery({
+  const {
+    data: candidateDetails,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["candidateDetails", cid, type],
     queryFn: () =>
       newRequest.get(`${GET_CANDIDATES_VIEW}/${cid}`).then((res) => {
@@ -205,15 +209,15 @@ export default function HiringCandidateDetails() {
 
       const errorMessage =
         error?.response?.data?.error || "Email Is Duplicate ,Please check";
-        console.log(error);
-        
+      console.log(error);
+
       toast.error(errorMessage);
     } finally {
       // Ensure the loader is deactivated after the API call
       setLoader(false);
     }
   };
-console.log(candidateDetails);
+  console.log(candidateDetails);
 
   return (
     <>
@@ -229,11 +233,11 @@ console.log(candidateDetails);
         selectedField={selectedField}
       />
       <ChangeStatus
-      statusList={statusList}
-      candidateDetails={candidateDetails}
-      open={statusPopup}
-      setOpen={setStatusPopup}
-      handleCandidateStatus={handleCandidateStatus}
+        statusList={statusList}
+        candidateDetails={candidateDetails}
+        open={statusPopup}
+        setOpen={setStatusPopup}
+        handleCandidateStatus={handleCandidateStatus}
       />
       <div>
         <div className="flex items-center justify-between gap-2 font-semibold text-white">
@@ -313,16 +317,20 @@ console.log(candidateDetails);
               </div>
               {candidateDetails?.status?.id === 11 ? (
                 <>
-                  <span className="group flex w-1/6 flex-col items-center text-[0.80rem] text-[#3a3a3a] bg-[#f2f4f5] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
+                  <span className="group mt-2 flex h-9 w-1/6 cursor-pointer flex-col items-center space-y-1 rounded-md bg-[#f2f4f5] py-2 pl-1 text-[0.80rem] text-[#3a3a3a]">
                     {candidateDetails?.status?.status_name}
                   </span>
                 </>
               ) : (
                 <>
-                  <div className="group flex w-3/4 flex-col border border-[#8be691] text-[0.80rem] text-[#3a3a3a] bg-[#f0fff1] pl-1 rounded-md space-y-1 h-9 mt-2 py-2 cursor-pointer">
-                  <p 
-                  onClick={()=>setStatusPopup(true)}
-                  className="flex gap-2">{candidateDetails?.status?.status_name}<ChevronDown size={20} color="#8c8989" /></p>
+                  <div className="group mt-2 flex h-9 w-3/4 cursor-pointer flex-col space-y-1 rounded-md border border-[#8be691] bg-[#f0fff1] py-2 pl-1 text-[0.80rem] text-[#3a3a3a]">
+                    <p
+                      onClick={() => setStatusPopup(true)}
+                      className="flex gap-2"
+                    >
+                      {candidateDetails?.status?.status_name}
+                      <ChevronDown size={20} color="#8c8989" />
+                    </p>
                   </div>
                   <div className="ml-3 mt-2 w-1/2">
                     <button
@@ -338,69 +346,73 @@ console.log(candidateDetails);
                 </>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-x-3 rounded border-t bg-white py-4">
-              <div className="group flex flex-col space-y-1 py-2">
-                <label className="label-text">Joining Date</label>
-                <input
-                  {...register("joining_date")}
-                  autoComplete="off"
-                  type="date"
-                  className="input-box pr-2"
-                  value={candidateDetails?.joining_date}
-                />
-                {errors.joining_date && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.joining_date?.message}
-                  </span>
-                )}
-              </div>
-              <div className="mb-2 mt-8 flex items-center space-y-1 rounded-md border p-2 text-sm font-semibold text-[#71717a]">
-                Reschedule
-              </div>
-              <div className="group flex flex-col space-y-1 py-2">
-                <label className="label-text">Per</label>
-                <Controller
-                  name="pay_type"
-                  className=""
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      isSearchable={true}
-                      styles={customSelectStyles}
-                      value={recruiterMasters?.pers.find(
-                        (option) =>
-                          option.id === candidateDetails?.pay_type?.id,
-                      )}
-                      options={recruiterMasters?.pers}
-                      placeholder="Select type"
-                      className="input-box"
-                    />
+            {candidateDetails?.joining_date ? (
+              <div className="grid grid-cols-2 gap-x-3 rounded border-t bg-white py-4">
+                <div className="group flex flex-col space-y-1 py-2">
+                  <label className="label-text">Joining Date</label>
+                  <input
+                    {...register("joining_date")}
+                    autoComplete="off"
+                    type="date"
+                    className="input-box pr-2"
+                    value={candidateDetails?.joining_date}
+                  />
+                  {errors.joining_date && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.joining_date?.message}
+                    </span>
                   )}
-                />
-                {errors.pay_type && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.pay_type?.message}
-                  </span>
-                )}
+                </div>
+                <div className="mb-2 mt-8 flex items-center space-y-1 rounded-md border p-2 text-sm font-semibold text-[#71717a]">
+                  Reschedule
+                </div>
+                <div className="group flex flex-col space-y-1 py-2">
+                  <label className="label-text">Per</label>
+                  <Controller
+                    name="pay_type"
+                    className=""
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isSearchable={true}
+                        styles={customSelectStyles}
+                        value={recruiterMasters?.pers.find(
+                          (option) =>
+                            option.id === candidateDetails?.pay_type?.id,
+                        )}
+                        options={recruiterMasters?.pers}
+                        placeholder="Select type"
+                        className="input-box"
+                      />
+                    )}
+                  />
+                  {errors.pay_type && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.pay_type?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="group flex flex-col space-y-1 py-2">
+                  <label className="label-text">Salary</label>
+                  <input
+                    {...register("salary")}
+                    autoComplete="off"
+                    type="text"
+                    className="input-box"
+                    value={candidateDetails?.salary}
+                  />
+                  {errors.salary && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.salary?.message}
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className="group flex flex-col space-y-1 py-2">
-                <label className="label-text">Salary</label>
-                <input
-                  {...register("salary")}
-                  autoComplete="off"
-                  type="text"
-                  className="input-box"
-                  value={candidateDetails?.salary}
-                />
-                {errors.salary && (
-                  <span className="text-xs font-medium text-red-500">
-                    {errors.salary?.message}
-                  </span>
-                )}
-              </div>
-            </div>
+            ) : (
+              <hr className="mb-2 mt-2" />
+            )}
             {candidateDetails?.status?.id !== 11 && (
               <div className="flex gap-3">
                 <button
