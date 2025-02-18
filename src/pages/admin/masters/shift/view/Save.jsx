@@ -544,7 +544,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="fullday"
                           type="text"
-                          placeholder="hh:mm"
+                          placeholder="HH:MM"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function
@@ -575,7 +575,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="fulltolerence"
                           type="text"
-                          placeholder="hh:mm"
+                          placeholder="HH:MM"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function
@@ -606,7 +606,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="halfday"
                           type="text"
-                          placeholder="hh:mm"
+                          placeholder="HH:MM"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function
@@ -637,7 +637,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                           autoComplete="off"
                           name="halfdaytolerence"
                           type="text" // Change type to text for manual input (no time picker)
-                          placeholder="hh:mm"
+                          placeholder="HH:MM"
                           className="input-box"
                           onChange={(e) => {
                             e.target.value = formatTime(e.target.value); // Call the helper function for formatting
@@ -683,9 +683,10 @@ export default function SaveMasterShift({ formtype, sid }) {
                     </div>
                   </div>
                 </div>
-
                 <p className="text-sm text-gray-dark">
-                  This shift occurs every single day, and no weekend is defined.
+                  {recurrencePattern === "daily"
+                    ? " This shift occurs every single day, and no weekend isdefined."
+                    : "This shift occurs on the selected days, and remaining days will be considered as off."}
                 </p>
                 <WeeklyRecurrence
                   days={days}
@@ -730,7 +731,9 @@ export default function SaveMasterShift({ formtype, sid }) {
                   </div>
                 </div>
                 <p className="text-sm text-gray-dark">
-                  Calendar-based weekend definition will be considered
+                  {WeekEnd === "basedoncalender"
+                    ? "Calendar-based weekend definition will be considered"
+                    : "Shift-based weekend definition will be considered"}
                 </p>
               </div>
               {recurrencePattern === "weekly" && (

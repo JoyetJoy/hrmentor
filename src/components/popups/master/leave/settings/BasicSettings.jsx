@@ -55,12 +55,12 @@ const leaveSchema = Yup.object().shape({
 
   CarryForward_isOn: Yup.boolean(),
   mx_no_days: Yup.number().when("CarryForward_isOn", {
-    is: true, // Only validate if `isOn` is true
+    is: true,
     then: (schema) =>
       schema
         .required("Max number of days is required")
-        .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
+        .min(1, "Max number of days must be at least 1"),
+    otherwise: (schema) => schema.notRequired().nullable(),
   }),
   CarryForwardExpire_isOn: Yup.boolean(),
   exp_days: Yup.number().when("CarryForwardExpire_isOn", {
@@ -69,9 +69,8 @@ const leaveSchema = Yup.object().shape({
       schema
         .required("Expiry days for unused carry forwarded is required")
         .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-    otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
+    otherwise: (schema) => schema.notRequired().nullable(), // No validation required if `isOn` is false
   }),
-
   Encashments_isOn: Yup.boolean(),
   specific_no_days: Yup.string()
     .nullable()
@@ -117,26 +116,26 @@ const leaveSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
 
   accural_period: Yup.object()
-  .shape({
-    value: Yup.string().required("Accrual period is required"),
-    label: Yup.string().required(),
-  })
-  .test(
-    "accrual-period-test",
-    "Accrual period is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      console.log(accrualType, value);
+    .shape({
+      value: Yup.string().required("Accrual period is required"),
+      label: Yup.string().required(),
+    })
+    .test(
+      "accrual-period-test",
+      "Accrual period is required",
+      function (value) {
+        const { accrualType } = this.parent;
+        console.log(accrualType, value);
 
-      if (
-        (accrualType === "bycycle" || accrualType === "byworking") &&
-        !value?.value // Checking value inside the object
-      ) {
-        return false;
-      }
-      return true;
-    }
-  ),
+        if (
+          (accrualType === "bycycle" || accrualType === "byworking") &&
+          !value?.value // Checking value inside the object
+        ) {
+          return false;
+        }
+        return true;
+      },
+    ),
   // accural_day: Yup.object()
   // .shape({
   //   value: Yup.string().required("Accrual day is required"),
@@ -156,23 +155,19 @@ const leaveSchema = Yup.object().shape({
   //   }
   // ),
 
-  
   accural_day: Yup.object().test(
     "accrual-day-test",
     "Accrual day is required",
     function (value) {
       const { accrualType } = this.parent;
       console.log("Accrual Type:", accrualType, "Selected Day:", value);
-  
+
       if (accrualType === "bycycle" && !value?.value) {
         return false;
       }
       return true;
-    }
+    },
   ),
-  
-
-
   accural_monthly: Yup.object().test(
     "accrual-monthly-test",
     "Accrual monthly is required",
@@ -184,49 +179,49 @@ const leaveSchema = Yup.object().shape({
         return false;
       }
       return true;
-    }
+    },
   ),
-    accrual_leave: Yup.string().test(
-      "accrual-leave-test",
-      "Accrual leave is required",
-      function (value) {
-        const { accrualType } = this.parent;
-        if (accrualType === "byworking" && !value) {
-          return false;
-        }
-        return true;
-      },
-    ),
-  
-// accural_monthly: Yup.object()
-//   .shape({
-//     value: Yup.string().required("Accrual monthly is required"),
-//     label: Yup.string().required(),
-//   })
-//   .test(
-//     "accrual-monthly-test",
-//     "Accrual monthly is required",
-//     function (value) {
-//       const { accrualType } = this.parent;
-//       console.log("Accrual Type:", accrualType, "Selected Month:", value);
+  accrual_leave: Yup.string().test(
+    "accrual-leave-test",
+    "Accrual leave is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      if (accrualType === "byworking" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
 
-//       if (accrualType === "bycycle" && !value?.value) {
-//         return false;
-//       }
-//       return true;
-//     }
-//   ),
-accural_monthly: Yup.object().test(
-  "accrual-monthly-test",
-  "Accrual monthly is required",
-  function (value) {
-    const { accrualType } = this.parent;
-    if (accrualType === "bycycle" && !value) {
-      return false;
-    }
-    return true;
-  },
-),
+  // accural_monthly: Yup.object()
+  //   .shape({
+  //     value: Yup.string().required("Accrual monthly is required"),
+  //     label: Yup.string().required(),
+  //   })
+  //   .test(
+  //     "accrual-monthly-test",
+  //     "Accrual monthly is required",
+  //     function (value) {
+  //       const { accrualType } = this.parent;
+  //       console.log("Accrual Type:", accrualType, "Selected Month:", value);
+
+  //       if (accrualType === "bycycle" && !value?.value) {
+  //         return false;
+  //       }
+  //       return true;
+  //     }
+  //   ),
+  accural_monthly: Yup.object().test(
+    "accrual-monthly-test",
+    "Accrual monthly is required",
+    function (value) {
+      const { accrualType } = this.parent;
+      if (accrualType === "bycycle" && !value) {
+        return false;
+      }
+      return true;
+    },
+  ),
   accrual_leave: Yup.string().test(
     "accrual-leave-test",
     "Accrual leave is required",
@@ -254,7 +249,7 @@ accural_monthly: Yup.object().test(
     "Accrual at is required",
     function (value) {
       const { accrualType } = this.parent;
-  
+
       // If accrualType is "byworking", check for a valid value
       if (accrualType === "byworking") {
         if (!value || (typeof value === "object" && !value.value)) {
@@ -262,9 +257,9 @@ accural_monthly: Yup.object().test(
         }
       }
       return true;
-    }
+    },
   ),
-  
+
   specific_days: Yup.string().test(
     "specific-days-test",
     "Specific days are required",
@@ -330,303 +325,6 @@ accural_monthly: Yup.object().test(
       otherwise: (schema) => schema.notRequired(),
     }),
 });
-// const leaveSchema = Yup.object().shape({
-//   accrualType: Yup.string().required("Accrual Type is required"),
-
-//   applicable: Yup.string()
-//     .required("All Employee Type is required")
-//     .oneOf(["all_employee", "based_on_exp"], "Invalid selection"),
-
-//   emp_no_days: Yup.string()
-//     .nullable()
-//     .when("applicable", (applicable, schema) => {
-//       return applicable === "all_employee"
-//         ? schema.required("Number of days is required for 'By Cycle'")
-//         : schema.notRequired();
-//     }),
-
-//   CarryForward_isOn: Yup.boolean(),
-//   mx_no_days: Yup.number().when("CarryForward_isOn", {
-//     is: true, // Only validate if `isOn` is true
-//     then: (schema) =>
-//       schema
-//         .required("Max number of days is required")
-//         .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-//     otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
-//   }),
-//   CarryForwardExpire_isOn: Yup.boolean(),
-//   exp_days: Yup.number().when("CarryForwardExpire_isOn", {
-//     is: true,
-//     then: (schema) =>
-//       schema
-//         .required("Expiry days for unused carry forwarded is required")
-//         .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-//     otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
-//   }),
-
-//   Encashments_isOn: Yup.boolean(),
-//   specific_no_days: Yup.string()
-//     .nullable()
-//     .when("Encashments_isOn", {
-//       is: true,
-//       then: (schema) =>
-//         schema
-//           .required("Specific number of days is required")
-//           .oneOf(["0", "1"], "Invalid selection"),
-//       otherwise: (schema) => schema.notRequired(),
-//     }),
-//   no_of_days: Yup.number().when("Encashments_isOn", {
-//     is: true,
-//     then: (schema) =>
-//       schema
-//         .required("Number of days is required")
-//         .min(1, "Max number of days must be at least 1"), // Optional: Ensure value is >= 1
-//     otherwise: (schema) => schema.notRequired(), // No validation required if `isOn` is false
-//   }),
-
-//   based_on_exp: Yup.string()
-//     .nullable()
-//     .when("applicable", (applicable, schema) => {
-//       return applicable === "based_on_exp"
-//         ? schema.required("Experience is required for 'By Working'")
-//         : schema.notRequired();
-//     }),
-//   leave_name: Yup.string().required("Name of the leave is required"),
-//   display_name: Yup.string().required("Display name is required"),
-//   code: Yup.string()
-//     .required("Code is required")
-//     .matches(
-//       /^[A-Za-z0-9_-]+$/,
-//       "Code must be alphanumeric and can include dashes or underscores",
-//     ),
-//   pay_type: Yup.string().required("Type is required"),
-//   description: Yup.string()
-//     .max(200, "Description cannot exceed 200 characters")
-//     .required("Description is required"),
-//   valid_from: Yup.date()
-//     .required("Valid from date is required")
-//     .typeError("Invalid date format"),
-//   status: Yup.string().required("Status is required"),
-
-//   accural_period: Yup.object()
-//   .shape({
-//     value: Yup.string().required("Accrual period is required"),
-//     label: Yup.string().required(),
-//   })
-//   .test(
-//     "accrual-period-test",
-//     "Accrual period is required",
-//     function (value) {
-//       const { accrualType } = this.parent;
-//       console.log(accrualType, value);
-
-//       if (
-//         (accrualType === "bycycle" || accrualType === "byworking") &&
-//         !value?.value // Checking value inside the object
-//       ) {
-//         return false;
-//       }
-//       return true;
-//     }
-//   ),
-//   // accural_day: Yup.object()
-//   // .shape({
-//   //   value: Yup.string().required("Accrual day is required"),
-//   //   label: Yup.string().required(),
-//   // })
-//   // .test(
-//   //   "accrual-day-test",
-//   //   "Accrual day is required",
-//   //   function (value) {
-//   //     const { accrualType } = this.parent;
-//   //     console.log("Accrual Type:", accrualType, "Selected Day:", value);
-
-//   //     if (accrualType === "bycycle" && !value?.value) {
-//   //       return false;
-//   //     }
-//   //     return true;
-//   //   }
-//   // ),
-
-  
-//   accural_day: Yup.mixed()
-//   .nullable()
-//   .when("accrualType", {
-//     is: "bycycle",
-//     then: (schema) => Yup.string().required("Accrual day is required"),
-//     otherwise: (schema) => Yup.mixed().notRequired(),
-//   }),
-
-
-//   // accural_monthly: Yup.object().test(
-//   //   "accrual-monthly-test",
-//   //   "Accrual monthly is required",
-//   //   function (value) {
-//   //     const { accrualType } = this.parent;
-//   //     if (accrualType === "bycycle" && !value) {
-//   //       return false;
-//   //     }
-//   //     return true;
-//   //   },
-//   // ),
-//     accrual_leave: Yup.string().test(
-//       "accrual-leave-test",
-//       "Accrual leave is required",
-//       function (value) {
-//         const { accrualType } = this.parent;
-//         if (accrualType === "byworking" && !value) {
-//           return false;
-//         }
-//         return true;
-//       },
-//     ),
-  
-// accural_monthly: Yup.object()
-//   .shape({
-//     value: Yup.string().required("Accrual monthly is required"),
-//     label: Yup.string().required(),
-//   })
-//   .test(
-//     "accrual-monthly-test",
-//     "Accrual monthly is required",
-//     function (value) {
-//       const { accrualType } = this.parent;
-//       console.log("Accrual Type:", accrualType, "Selected Month:", value);
-
-//       if (accrualType === "bycycle" && !value?.value) {
-//         return false;
-//       }
-//       return true;
-//     }
-//   ),
-// // accural_monthly: Yup.object().test(
-// //   "accrual-monthly-test",
-// //   "Accrual monthly is required",
-// //   function (value) {
-// //     const { accrualType } = this.parent;
-// //     if (accrualType === "bycycle" && !value) {
-// //       return false;
-// //     }
-// //     return true;
-// //   },
-// // ),
-//   accrual_leave: Yup.string().test(
-//     "accrual-leave-test",
-//     "Accrual leave is required",
-//     function (value) {
-//       const { accrualType } = this.parent;
-//       if (accrualType === "byworking" && !value) {
-//         return false;
-//       }
-//       return true;
-//     },
-//   ),
-//   // accural_at: Yup.string().test(
-//   //   "accrual-at-test",
-//   //   "Accrual at is required",
-//   //   function (value) {
-//   //     const { accrualType } = this.parent;
-//   //     if (accrualType === "byworking" && !value) {
-//   //       return false;
-//   //     }
-//   //     return true;
-//   //   },
-//   // ),
-//   // accural_at: Yup.mixed().test(
-//   //   "accrual-at-test",
-//   //   "Accrual at is required",
-//   //   function (value) {
-//   //     const { accrualType } = this.parent;
-  
-//   //     // If accrualType is "byworking", check for a valid value
-//   //     if (accrualType === "byworking") {
-//   //       if (!value || (typeof value === "object" && !value.value)) {
-//   //         return false;
-//   //       }
-//   //     }
-//   //     return true;
-//   //   }
-//   // ),
-//   accural_day: Yup.mixed()
-//   .nullable()
-//   .when("accrualType", {
-//     is: "bycycle",
-//     then: (schema) =>
-//       Yup.string()
-//         .transform((value) => (typeof value === "object" && value !== null ? value.value : value))
-//         .required("Accrual day is required"),
-//     otherwise: (schema) => Yup.mixed().notRequired(),
-//   }),
-
-  
-//   specific_days: Yup.string().test(
-//     "specific-days-test",
-//     "Specific days are required",
-//     function (value) {
-//       const { accrualType } = this.parent;
-//       if (accrualType === "byworking" && !value) {
-//         return false;
-//       }
-//       return true;
-//     },
-//   ),
-
-//   emp_no_days: Yup.number()
-//     .transform((value, originalValue) =>
-//       originalValue === "" ? NaN : Number(originalValue),
-//     )
-//     .typeError("Number of days must be a valid number")
-//     .when("applicable", {
-//       is: "bycycle",
-//       then: (schema) =>
-//         schema
-//           .required("Number of days is required for 'By Cycle'")
-//           .min(1, "Number of days must be greater than 0"), // Changed from `.positive()`
-//       otherwise: (schema) => schema.notRequired().nullable(),
-//     }),
-
-//   experience: Yup.array()
-//     .of(
-//       Yup.object().shape({
-//         year: Yup.number()
-//           .transform((value) => (value === "" ? NaN : Number(value)))
-//           .required("Year is required")
-//           .min(0, "Year cannot be negative"),
-
-//         month: Yup.number()
-//           .transform((value) => (value === "" ? NaN : Number(value)))
-//           .required("Month is required")
-//           .min(0, "Month cannot be negative")
-//           .max(11, "Month should be between 0-11"),
-
-//         daysLeave: Yup.number()
-//           .transform((value) => (value === "" ? NaN : Number(value)))
-//           .required("Days are required")
-//           .min(0, "Days cannot be negative")
-//           .max(31, "Days should be between 0-31")
-//           .when(["year", "month"], {
-//             is: (year, month) => year === 0 && month === 0,
-//             then: (schema) =>
-//               schema.max(0, "Days leave cannot be given if experience is 0"),
-//           }),
-//       }),
-//     )
-//     .when("applicable", {
-//       is: "based_on_exp",
-//       then: (schema) =>
-//         schema
-//           .min(1, "At least one experience section is required")
-//           .test("at-least-one-valid", "Experience is required", (value) => {
-//             return value?.some(
-//               (exp) => exp.year > 0 || exp.month > 0 || exp.daysLeave > 0,
-//             );
-//           }),
-//       otherwise: (schema) => schema.notRequired(),
-//     }),
-// });
-
-
-
 const BasicSettings = ({ formtype = "save" }) => {
   const {
     register,
@@ -657,7 +355,7 @@ const BasicSettings = ({ formtype = "save" }) => {
     applicable,
     CarryForward_isOn,
     CarryForwardExpire_isOn,
-    Encashments_isOn
+    Encashments_isOn,
   } = watch();
 
   console.log(CarryForward_isOn);
@@ -681,7 +379,7 @@ const BasicSettings = ({ formtype = "save" }) => {
   const selectedMonthValue = watch("accural_monthly")?.value;
   console.log(selectedMonthValue);
   const [dayOptions, setDayOptions] = useState([]);
-  
+
   const daysInMonth = selectedMonthValue
     ? monthDaysMap[selectedMonthValue]
     : 31;
@@ -777,15 +475,15 @@ const BasicSettings = ({ formtype = "save" }) => {
         // accural_day: basicholidayDetails?.accural_day,
         accural_day: {
           value: basicholidayDetails?.accural_day,
-          label: basicholidayDetails?.accural_day
+          label: basicholidayDetails?.accural_day,
         },
         accural_monthly: {
           value: basicholidayDetails?.accural_monthly,
-          label: basicholidayDetails?.accural_monthly
+          label: basicholidayDetails?.accural_monthly,
         },
         accural_at: {
           value: basicholidayDetails?.accural_at,
-          label: basicholidayDetails?.accural_at
+          label: basicholidayDetails?.accural_at,
         },
       });
       setIsOn(basicholidayDetails?.carry_forword);
@@ -806,7 +504,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         setAccuralDays([
           {
             value: basicholidayDetails.accural_day,
-            label: basicholidayDetails.accural_day
+            label: basicholidayDetails.accural_day,
           },
         ]);
       }
@@ -814,7 +512,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         setAccuralMonth([
           {
             value: basicholidayDetails.accural_monthly,
-            label: basicholidayDetails.accural_monthly
+            label: basicholidayDetails.accural_monthly,
           },
         ]);
       }
@@ -878,7 +576,7 @@ const BasicSettings = ({ formtype = "save" }) => {
       }
     } catch (error) {
       console.log(error);
-      
+
       console.error("Error Details:", error);
       console.error("Error Response Data:", error?.response?.data);
 
@@ -893,7 +591,7 @@ const BasicSettings = ({ formtype = "save" }) => {
 
   const getOrdinalSuffix = (num) => {
     console.log(num);
-    
+
     if (num >= 11 && num <= 13) return num + "th"; // Handle 11th, 12th, 13th
     const lastDigit = num % 10;
     switch (lastDigit) {
@@ -907,35 +605,31 @@ const BasicSettings = ({ formtype = "save" }) => {
         return num + "th";
     }
   };
-console.log(daysInMonth);
+  console.log(daysInMonth);
 
-useEffect(() => {
-  console.log("Days in selected month:", daysInMonth);
-  
-  const newDayOptions = [
-    ...Array.from({ length: daysInMonth }, (_, i) => {
-      const day = i + 1;
-      return {
-        value: getOrdinalSuffix(day),
-        label: getOrdinalSuffix(day),
-      };
-    }),
-    { value: "lastDay", label: "Last day" }, // Ensure "Last day" option remains
-  ];
+  useEffect(() => {
+    console.log("Days in selected month:", daysInMonth);
 
-  console.log("Updated Day Options:", newDayOptions);
-  setDayOptions(newDayOptions);
-}, [selectedMonthValue]); 
+    const newDayOptions = [
+      ...Array.from({ length: daysInMonth }, (_, i) => {
+        const day = i + 1;
+        return {
+          value: getOrdinalSuffix(day),
+          label: getOrdinalSuffix(day),
+        };
+      }),
+      { value: "lastDay", label: "Last day" }, // Ensure "Last day" option remains
+    ];
+
+    console.log("Updated Day Options:", newDayOptions);
+    setDayOptions(newDayOptions);
+  }, [selectedMonthValue]);
 
   // List of month options for dropdown
-const monthOptions = Object.keys(monthDaysMap).map((month) => ({
-  value: month,
-  label: month,
-}));
-console.log(monthOptions);
-
-  console.log(errors);
-
+  const monthOptions = Object.keys(monthDaysMap).map((month) => ({
+    value: month,
+    label: month,
+  }));
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full p-5">
@@ -961,7 +655,6 @@ console.log(monthOptions);
                   </span>
                 )}
               </div>
-
               {/* Display Name */}
               <div className="group col-span-2 flex w-[50%] flex-col gap-1.5 py-2">
                 <label className="required label-text">Display Name</label>
@@ -997,7 +690,7 @@ console.log(monthOptions);
             </div>
             <div className="grid grid-cols-2">
               <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
-                <label className="required label-text">Pay type</label>
+                <label className="required label-text">Pay Type</label>
                 <div className="flex gap-3">
                   <div className="flex items-center gap-2">
                     <input
@@ -1055,7 +748,6 @@ console.log(monthOptions);
                 </div>
               </div>
             </div>
-
             {/* Description */}
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <label className="required label-text">Description</label>
@@ -1071,7 +763,6 @@ console.log(monthOptions);
                 </span>
               )}
             </div>
-
             <div className="grid grid-cols-2 gap-3">
               {/* Valid From */}
               <div className="group flex flex-col gap-1.5 py-2">
@@ -1080,7 +771,8 @@ console.log(monthOptions);
                   autoComplete="off"
                   type="date"
                   {...register("valid_from")}
-                  className="input-box"
+                  className="input-box pr-2  sm:placeholder:text-gray-500"
+                  placeholder="DD-MM-YY"
                 />
                 {errors.valid_from && (
                   <span className="text-xs font-medium text-red-500">
@@ -1120,10 +812,10 @@ console.log(monthOptions);
             </div>
 
             <div className="mt-3 text-[0.9rem] font-semibold">
-              Leave accrual
+              Leave Accrual
             </div>
             <div className="group mt-2 flex flex-col gap-3 text-[0.89rem] font-medium">
-              <label className="required label-text">Accrual type</label>
+              <label className="required label-text">Accrual Type</label>
               <div className="flex gap-4">
                 <div className="flex items-center gap-2">
                   <input
@@ -1136,7 +828,7 @@ console.log(monthOptions);
                     defaultChecked
                     checked={accrualType === "bycycle"}
                   />
-                  <label className="label-text">By cycle</label>
+                  <label className="label-text">By Cycle</label>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -1148,7 +840,7 @@ console.log(monthOptions);
                     className="radio-black"
                     checked={accrualType === "byworking"}
                   />
-                  <label className="label-text">By Working days</label>
+                  <label className="label-text">By Working Days</label>
                 </div>
               </div>
             </div>
@@ -1156,7 +848,7 @@ console.log(monthOptions);
               <div className="grid grid-cols-2 gap-3">
                 {/* Accrual Period */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual period</label>
+                  <label className="required label-text">Accrual Period</label>
                   <Controller
                     name="accural_period"
                     control={control}
@@ -1184,10 +876,9 @@ console.log(monthOptions);
                     </span>
                   )}
                 </div>
-
                 {/* Accrual Month */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual month(s)</label>
+                  <label className="label-text">Accrual Month(s)</label>
                   <Controller
                     name="accural_monthly"
                     control={control}
@@ -1214,7 +905,7 @@ console.log(monthOptions);
                 </div>
                 {/* Accrual Days */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="label-text">Accrual day(s)</label>
+                  <label className="label-text">Accrual Day(s)</label>
                   <Controller
                     name="accural_day"
                     control={control}
@@ -1260,9 +951,8 @@ console.log(monthOptions);
                     </span>
                   )}
                 </div>
-
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual period</label>
+                  <label className="required label-text">Accrual Period</label>
                   <Controller
                     name="accural_period"
                     control={control}
@@ -1290,10 +980,9 @@ console.log(monthOptions);
                     </span>
                   )}
                 </div>
-
                 {/* Accrual Days */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Accrual at</label>
+                  <label className="required label-text">Accrual At</label>
                   <Controller
                     name="accural_at"
                     control={control}
@@ -1310,9 +999,7 @@ console.log(monthOptions);
                           },
                         ]}
                         placeholder="Select accrual at"
-                        value={
-                          accuralAt
-                        }
+                        value={accuralAt}
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption);
                           setAccuralAt(selectedOption);
@@ -1327,10 +1014,9 @@ console.log(monthOptions);
                     </span>
                   )}
                 </div>
-
                 {/* Accrual Month */}
                 <div className="group flex flex-col gap-1.5 py-2">
-                  <label className="required label-text">Specific days </label>
+                  <label className="required label-text">Specific Days </label>
                   <input
                     autoComplete="off"
                     type="number"
@@ -1348,7 +1034,7 @@ console.log(monthOptions);
               </div>
             )}
             <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
-              <label className="required label-text">Applicable to </label>
+              <label className="required label-text">Applicable To </label>
               <div className="flex gap-4">
                 <div className="flex items-center gap-2">
                   <input
@@ -1361,7 +1047,7 @@ console.log(monthOptions);
                     defaultChecked
                     // checked={applicableTo === "all_employee"}
                   />
-                  <label className="label-text">All employees</label>
+                  <label className="label-text">All Employees</label>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -1373,7 +1059,7 @@ console.log(monthOptions);
                     className="radio-black"
                     // checked={applicableTo === "based_on_exp"}
                   />
-                  <label className="label-text">Based on experience</label>
+                  <label className="label-text">Based on Experience</label>
                 </div>
               </div>
             </div>
@@ -1404,7 +1090,6 @@ console.log(monthOptions);
                   Please make sure that you have covered values from beginning
                   to end
                 </p>
-
                 <div className="w-full">
                   {fields.map((box, index) => (
                     <div
@@ -1480,7 +1165,6 @@ console.log(monthOptions);
                           </span>
                         )}
                       </div>
-
                       <div
                         className={`flex w-1/12 items-center justify-center space-x-2 ${index > 0 ? "w-[5rem]" : "w-1/12"}`}
                       >
@@ -1502,6 +1186,12 @@ console.log(monthOptions);
                       </div>
                     </div>
                   ))}
+                  {fields.length > 1 && (
+                    <p className="label-text mt-2 text-xs text-red-500">
+                      Two or more service period should not be same years and
+                      month
+                    </p>
+                  )}
                   {errors.experience && (
                     <span className="text-xs text-red-500">
                       {errors?.experience?.root?.message}
@@ -1510,11 +1200,9 @@ console.log(monthOptions);
                 </div>
               </div>
             )}
-
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <div className="flex justify-between">
                 <p className="text-[0.9rem] font-bold">Carry Forward</p>
-
                 <div
                   onClick={() => {
                     setValue("CarryForward_isOn", !CarryForward_isOn); // Updating form field correctly
@@ -1561,7 +1249,6 @@ console.log(monthOptions);
                       defaultValue={0}
                       {...register("mx_no_days")}
                     />
-
                     {errors.mx_no_days && (
                       <span className="text-xs font-medium text-red-500">
                         {errors ? "Max no of days is required" : null}
@@ -1574,7 +1261,6 @@ console.log(monthOptions);
                     <p className="text-[0.85rem] font-semibold">
                       Carry forward expires
                     </p>
-
                     <div
                       onClick={() => {
                         setValue(
@@ -1682,7 +1368,6 @@ console.log(monthOptions);
                           { value: "0", label: `All the remaining ${units}` },
                           { value: "1", label: `Specific number of ${units}` },
                         ];
-
                         return (
                           <Select
                             {...field}
@@ -1703,14 +1388,12 @@ console.log(monthOptions);
                         );
                       }}
                     />
-
                     {errors.specific_no_days && (
                       <span className="text-xs text-red-500">
                         {errors?.specific_no_days?.message}
                       </span>
                     )}
                   </div>
-
                   <div className="group flex flex-col gap-1.5 py-2">
                     <label className="label-text">Number of {units}</label>
                     <input
@@ -1733,7 +1416,6 @@ console.log(monthOptions);
                 </div>
               </div>
             )}
-
             {/* Buttons Section */}
             <div className="mt-6 flex items-center justify-end gap-4">
               <button
