@@ -118,16 +118,15 @@ const RosterCalendar = () => {
     handleDateChange(updatedDate);
   };
 
-  const getTileClass = (date, event) => {
-    if (event?.assigned_total_employee_count !== event?.people_required)
-      return "bg-slate-300 border-[#283277] hover:bg-slate-400";
+  const getTileClass = (date) => {
+    // if (event?.assigned_total_employee_count !== event?.people_required)
+    //   return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
     if (dayjs(date).isSame(dayjs(), "day"))
       return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
     if (dayjs(date).isBefore(dayjs(), "day"))
       return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
     return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
   };
-
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
     const holidayEvents = events?.result?.filter((event) =>
