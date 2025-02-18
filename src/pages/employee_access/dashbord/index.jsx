@@ -12,6 +12,7 @@ import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak
 import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 
 export const EmployeeDashboard = () => {
   const cardsData = [
@@ -29,14 +30,15 @@ export const EmployeeDashboard = () => {
         { type: "HR", count: "2/20" },
         { type: "Engineers", count: "10/50" },
         { type: "Designers", count: "5/30" },
+        { type: "Designers", count: "5/30" },
       ],
     },
     {
       title: "Bank Holidays",
       details: [
-        { type: "2024", count: "10/12" },
-        { type: "2025", count: "8/10" },
-        { type: "2026", count: "5/8" },
+        { type: "2024", date: "2024-12-25" },
+        { type: "2025", date: "2025-01-01" },
+        { type: "2026", date: "2026-03-15" },
       ],
     },
     {
@@ -65,7 +67,7 @@ export const EmployeeDashboard = () => {
     enabled: true,
     staleTime: 0,
   });
-console.log(dashboard);
+  console.log(dashboard);
 
   // Fetch clock-in data
   const { data: clockin, refetch } = useQuery({
@@ -212,45 +214,75 @@ console.log(dashboard);
               </label>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {cardsData.map((card, index) => (
               <div
                 key={index}
                 className="flex flex-col gap-4 rounded-md bg-white p-6 shadow-sm"
               >
-                <label className="mb-4 flex items-center justify-between">
+                {/* Header */}
+                <div className="mb-4 flex items-center justify-between">
                   <h1 className="text-base font-bold text-black">
                     {card.title}
                   </h1>
                   <p className="flex items-center gap-2 text-sm font-medium text-gray-600">
                     View <Eye className="size-4 text-black/70" />
                   </p>
-                </label>
-                {card.details.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between gap-4 rounded-full bg-gray-100 p-2"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="rounded-full border border-gray-300 p-2">
-                        <SquareMenu
-                          className="size-5 text-black/20"
-                          strokeWidth={1.2}
+                </div>
+
+                {/* Card Items */}
+                <div className="overflow-y-min flex max-h-[12rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+                  {card.details.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="mr-5 flex items-center justify-between gap-4 rounded-full bg-gray-100 p-1"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 ${
+                            card.title === "Bank Holidays"
+                              ? "bg-hrmprimaryorange text-white"
+                              : "bg-gray-100"
+                          }`}
+                        >
+                          {card.title === "Documents Expiry" ? (
+                            <SquareMenu
+                              className="size-5 text-black/20"
+                              strokeWidth={1.2}
+                            />
+                          ) : card.title === "Bank Holidays" ? (
+                            <div className="text-center text-xs font-medium text-white">
+                              <p>{dayjs(item.date).format("ddd")}</p>
+                              <p>{dayjs(item.date).format("DD")}</p>
+                            </div>
+                          ) : (
+                            <img
+                              src="/assets/images/profile.jpg"
+                              alt="Profile"
+                              className="h-full rounded-full object-cover"
+                            />
+                          )}
+                        </div>
+                        {/* Text Details */}
+                        <div className="text-xs text-black">
+                          <h1>{item.type}</h1>
+                          <h1>
+                            {item.count ??
+                              dayjs(item.date).format("DD-MM-YYYY")}
+                          </h1>
+                        </div>
+                      </div>
+
+                      {/* Move Icon */}
+                      <div className="rounded-full border bg-gray-soft p-2">
+                        <MoveDiagonal
+                          className="size-3 text-black"
+                          strokeWidth={1.7}
                         />
                       </div>
-                      <label className="text-xs text-black">
-                        <h1>{item.type}</h1>
-                        <h1>{item.count}</h1>
-                      </label>
                     </div>
-                    <div className="rounded-full border bg-gray-soft p-2">
-                      <MoveDiagonal
-                        className="size-3 text-black"
-                        strokeWidth={1.7}
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -267,11 +299,11 @@ console.log(dashboard);
                 View <Eye className="size-4 text-black/70" />
               </span>
             </Link>
-            <div className="flex flex-col gap-3">
+            <div className="overflow-y-min flex max-h-[15.3rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
               {meetings.map((meeting, index) => (
                 <div
                   key={index}
-                  className="flex flex-row rounded-md border border-gray-300"
+                  className="mr-5 flex flex-row rounded-md border border-gray-300"
                 >
                   <h1 className="flex w-16 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                     {meeting.date} <br />
