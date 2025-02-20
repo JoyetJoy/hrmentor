@@ -290,32 +290,6 @@ export default function EmailSetupSave() {
               </div>
             </div>
 
-            {/* Content Note (ReactQuill Editor) */}
-            <div
-              style={{ fontFamily: "Poppins, sans-serif", maxWidth: "700px" }}
-            >
-              <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
-                Content Note
-              </label>
-              <ReactQuill
-                value={content}
-                onChange={handleContentChange}
-                modules={{
-                  toolbar: [
-                    ["bold", "italic", "underline", "strike"],
-                    [{ header: [1, 2, false] }],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    [{ align: [] }],
-                    [{ color: [] }, { background: [] }],
-                    ["link", "image"],
-                    ["clean"],
-                  ],
-                }}
-                placeholder="Type your content here..."
-              />
-            </div>
-
-            {/* Day Selector */}
             {emailTypeId && (
               <div className="group flex w-full flex-col space-y-1">
                 <label className="label-text flex flex-row items-center gap-1">
@@ -346,6 +320,30 @@ export default function EmailSetupSave() {
                 />
               </div>
             )}
+            {/* Content Note (ReactQuill Editor) */}
+            <div
+              style={{ fontFamily: "Poppins, sans-serif", maxWidth: "700px" }}
+            >
+              <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
+                Content Note
+              </label>
+              <ReactQuill
+                value={content}
+                onChange={handleContentChange}
+                modules={{
+                  toolbar: [
+                    ["bold", "italic", "underline", "strike"],
+                    [{ header: [1, 2, false] }],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    [{ align: [] }],
+                    [{ color: [] }, { background: [] }],
+                    ["link", "image"],
+                    ["clean"],
+                  ],
+                }}
+                placeholder="Type your content here..."
+              />
+            </div>
           </div>
         </form>
       </div>

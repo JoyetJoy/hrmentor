@@ -52,7 +52,7 @@ export const AdminDashboard = () => {
       path: "/admin/leave/people-on-leave", // Add a default path
     },
   ];
-  
+
   console.log(
     admindashboard?.upcoming_shifts?.shift?.name,
     "admindashboardadmindashboard",
@@ -78,7 +78,7 @@ export const AdminDashboard = () => {
           </div>
         </div>
         <StatsCard data={admindashboard} />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {cardsData.map((card, index) => (
             <div
               key={index}
@@ -87,53 +87,58 @@ export const AdminDashboard = () => {
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
                 <Link
-                //  to={`/admin/shift`}
-                to={card.path}
-                 className="flex items-center gap-2 text-sm font-medium text-gray-600">
-                  View 
+                  //  to={`/admin/shift`}
+                  to={card.path}
+                  className="flex items-center gap-2 text-sm font-medium text-gray-600"
+                >
+                  View
                   <Eye className="size-4 text-black/70" />
                 </Link>
               </label>
-              {card.details?.length > 0 ? (
-                card.details.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between gap-4 rounded-full bg-gray-100 p-1 hover:bg-[#E95D394D]"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full border bg-hrmprimaryorange p-1">
-                        {card.title === "People on leave" ? (
-                          <img
-                            src="/assets/images/profile.jpg"
-                            alt="People on Leave"
-                            className="h-full w-full rounded-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-center text-xs font-medium text-white">
-                            <p>{dayjs(item?.date).format("ddd")}</p>
-                            <p>{dayjs(item?.date).format("DD")}</p>
-                          </div>
-                        )}
-                      </div>
-                      <label className="text-xs text-black">
-                        <h1>{item?.type}</h1>
-                        <h1>{item?.count || item?.date}</h1>
-                      </label>
-                    </div>
-                    <Link
-                      to={item?.path}
-                      className="rounded-full border bg-gray-soft p-2"
+              <div className="overflow-y-min flex max-h-[12rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+                {card.details?.length > 0 ? (
+                  card.details.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="mr-5 flex items-center justify-between gap-4 rounded-full bg-gray-100 p-1 hover:bg-[#E95D394D]"
                     >
-                      <MoveDiagonal
-                        className="size-3 text-black"
-                        strokeWidth={1.7}
-                      />
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-dark">Data not available</p>
-              )}
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`flex h-11 w-11 items-center justify-center rounded-full border p-1 ${card.title === "Upcoming Holidays" || "Upcoming Shift" ? "bg-hrmprimaryorange" : "bg-gray-100"}`}
+                        >
+                          {card.title === "People on leave" ? (
+                            <img
+                              src="/assets/images/profile.jpg"
+                              alt="People on Leave"
+                              className="h-full w-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center text-xs font-medium text-white">
+                              <p>{dayjs(item?.date).format("ddd")}</p>
+                              <p>{dayjs(item?.date).format("DD")}</p>
+                            </div>
+                          )}
+                        </div>
+                        <label className="text-xs text-black">
+                          <h1>{item?.type}</h1>
+                          <h1>{item?.count || item?.date}</h1>
+                        </label>
+                      </div>
+                      <Link
+                        to={item?.path}
+                        className="rounded-full border bg-gray-soft p-2"
+                      >
+                        <MoveDiagonal
+                          className="size-3 text-black"
+                          strokeWidth={1.7}
+                        />
+                      </Link>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-dark">Data not available</p>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -151,11 +156,11 @@ export const AdminDashboard = () => {
               View <Eye className="size-4 text-black/70" />
             </Link>
           </h1>
-          <div className="flex flex-col gap-3 overflow-y-auto overflow-y-min overflow-x-hidden max-h-[14.3rem]">
+          <div className="overflow-y-min  flex max-h-[14.3rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
             {admindashboard?.newsandevents?.events.map((event, index) => (
               <div
                 key={index}
-                className="flex flex-row rounded-md border border-gray-300"
+                className="flex flex-row rounded-md border border-gray-300 mr-5 min-h-20"
               >
                 <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(event.start_date).format("D")} <br />
@@ -168,8 +173,8 @@ export const AdminDashboard = () => {
                   <br />
                   <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
                     {event.start_time}{" "}
-                    <div className="h-3 border border-gray-dark"></div>You and
-                    13+ more
+                    {/* <div className="h-3 border border-gray-dark"></div>You and
+                    13+ more */}
                   </span>
                 </h2>
               </div>
@@ -177,7 +182,7 @@ export const AdminDashboard = () => {
             {admindashboard?.newsandevents?.news.map((newss, index) => (
               <div
                 key={index}
-                className="flex flex-row rounded-md border border-gray-300"
+                className="flex flex-row rounded-md  min-h-20 border border-gray-300 mr-5"
               >
                 <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(newss.start_date).format("D")} <br />
@@ -188,11 +193,11 @@ export const AdminDashboard = () => {
                     ? newss.news_title.substring(0, 25) + "..."
                     : newss.news_title}
                   <br />
-                  <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
+                  {/* <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
                     {newss.start_time} 11.30{" "}
                     <div className="h-3 border border-gray-dark"></div>You and
                     13+ more
-                  </span>
+                  </span> */}
                 </h2>
               </div>
             ))}
