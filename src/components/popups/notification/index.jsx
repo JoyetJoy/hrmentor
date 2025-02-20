@@ -4,7 +4,7 @@ import { NOTIFICATIONS } from "@/api/hiring";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function Notification({
@@ -14,6 +14,16 @@ export default function Notification({
   function close() {
     setNotificationPopupOpen(false);
   }
+
+  useEffect(() => {
+    if (window.Echo) {
+        window.Echo.private(`notification-${user_id}`)
+            .notification((notification) => {
+                console.log('New Notification:', notification);
+                // Handle your notification here (e.g., update state, show a toast, etc.)
+            });
+    }
+}, []);
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notification"],

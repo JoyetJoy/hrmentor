@@ -31,30 +31,6 @@ export default function TimeSheet() {
     label: (2020 + i).toString(),
   }));
 
-  // Calculate weeks based on selected month and year
-  // useEffect(() => {
-  //   const daysInMonth = dayjs(date).daysInMonth();
-  //   const newWeeks = Array.from(
-  //     { length: Math.ceil(daysInMonth / 7) },
-  //     (_, i) => ({
-  //       value: i + 1,
-  //       label: `Week ${i + 1}`,
-  //     }),
-  //   );
-  //   setWeeks(newWeeks);
-  //   // Find the default week based on today's date
-  //   const today = dayjs(); // Current date
-  //   if (
-  //     today.month() === dayjs(date).month() &&
-  //     today.year() === dayjs(date).year()
-  //   ) {
-  //     const today = new Date();
-  //     const currentWeek = getISOWeek(today);
-  //     setSelectedWeek(currentWeek);
-  //   } else {
-  //     setSelectedWeek(1);
-  //   }
-  // }, [date]);
   useEffect(() => {
     const daysInMonth = dayjs(date).daysInMonth();
     const newWeeks = Array.from(
@@ -106,35 +82,37 @@ export default function TimeSheet() {
     const startOfWeek = dayjs(date)
       .startOf("month")
       .add((selectedWeek - 1) * 7, "day")
-      .startOf("week");
-
-    // Get the ending day of the calendar week (e.g., Saturday)
-    const endOfWeek = startOfWeek.endOf("week");
+      .startOf("week") // Start of the week (Sunday)
+      .add(1, "day"); // Adjust to Monday
+  
+    const endOfWeek = startOfWeek.add(6, "day"); // Sunday
+  
     return {
       start: startOfWeek.format("YYYY-MM-DD"),
       end: endOfWeek.format("YYYY-MM-DD"),
     };
   };
+  
 
   // Calculate week dates for the selected week
   const weekDays = Array.from({ length: 7 }, (_, i) => {
-    // Calculate the start of the week (Monday)
     const startOfWeek = dayjs(date)
-      .startOf("month") // Start of the month
-      .add((selectedWeek - 1) * 7, "day") // Adjust for the selected week
-      .startOf("week") // Start of the week (Sunday by default)
-      .add(1, "day") // Adjust to Monday (add one day)
-      .add(i, "day"); // Add days to get Monday to Sunday
-
+      .startOf("month")
+      .add((selectedWeek - 1) * 7, "day")
+      .startOf("week") // Start of the week (Sunday)
+      .add(1, "day") // Adjust to Monday
+      .add(i, "day"); // Get the rest of the week (Monday - Sunday)
+  
     return {
       day: startOfWeek.format("ddd"), // Abbreviated day (Mon, Tue, ...)
       date: startOfWeek.format("MMM DD"), // Display the date (e.g., Jan 01)
       fullDate: startOfWeek.format("YYYY-MM-DD"),
     };
   });
+  
 
-  const { end } = getStartAndEndOfWeek();
-  console.log(end);
+  const { start,end } = getStartAndEndOfWeek();
+  console.log(start,end);
   // Fetch the data for the selected week
   const { data: events, refetch } = useQuery({
     queryKey: ["events", selectedWeek, date], // Unique query key

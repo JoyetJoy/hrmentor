@@ -1,7 +1,7 @@
 import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
 import ShiftList from "@/pages/admin/masters/shift/view";
 import SaveMasterShift from "@/pages/admin/masters/shift/view/Save";
-import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/Index";
+import EmployeeAttendanceCalendar from "@/pages/admin/menu/attendance/employeeAttendance";
 
 export const ShiftRoutes =[
     {

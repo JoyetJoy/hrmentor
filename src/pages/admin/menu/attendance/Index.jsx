@@ -1,243 +1,188 @@
-import React, { useEffect, useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import Select from "react-select";
-import { customSelectStyles } from "@/utils/customStyles";
 import MenuHeader from "@/components/common/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
-import { EMPLOYEE_LIST, newRequest, TEAM_ATTENDANCE } from "@/api/master";
-import { ACTIVE_EMPLOYEE } from "@/api";
-import EmployeeAttendance from "@/components/popups/employee_access/attendance/EmployeeAttendance";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
+import { TEAM_ATTENDANCE, newRequest } from "@/api/master";
 
-const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i + 1,
-  label: dayjs().month(i).format("MMMM"),
-}));
-
-const years = Array.from({ length: 11 }, (_, i) => ({
-  value: 2020 + i,
-  label: (2020 + i).toString(),
-}));
-
-const EmployeeAttendanceCalendar = () => {
+export default function Attendance() {
   const [date, setDate] = useState(new Date());
-  const year = dayjs(date).year();
-  const month = dayjs(date).month() + 1;
-  const [activeEmployee, setActiveEmployee] = useState("");
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [selected, setSelected] = useState('');
 
-  const { data: employee } = useQuery({
-    queryKey: ["employee"],
-    queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
-  });
+  // Dummy Data (With Status)
+  const dummyEmployees = [
+    {
+      name: "John Doe",
+      days_status: [
+        { date: "2024-02-01", status: "Present" },
+        { date: "2024-02-02", status: "Absent" },
+        { date: "2024-02-03", status: "Leave" },
+      ],
+    },
+    {
+      name: "Jane Smith",
+      days_status: [
+        { date: "2024-02-01", status: "Present" },
+        { date: "2024-02-02", status: "Present" },
+        { date: "2024-02-03", status: "Leave" },
+      ],
+    },
+  ];
 
-  useEffect(() => {
-    if (employee?.length > 0 && !activeEmployee) {
-      setActiveEmployee(employee[0]?.employee_id);
-    }
-  }, [employee, activeEmployee]);
+  // Generate months and years
+  const months = Array.from({ length: 12 }, (_, i) => ({
+    value: i,
+    label: dayjs().month(i).format("MMMM"),
+  }));
 
-  // Fetch TEAM_ATTENDANCE only when activeEmployee is set
-  const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year, activeEmployee],
-    queryFn: () =>
-      newRequest
-        .get(TEAM_ATTENDANCE, {
-          params: {
-            month,
-            year,
-            employee_id: activeEmployee,
-          },
-        })
-        .then((res) => res.data),
-    enabled: !!activeEmployee, // Call only if activeEmployee exists
-    staleTime: 0,
-  });
+  const years = Array.from({ length: 11 }, (_, i) => ({
+    value: 2020 + i,
+    label: (2020 + i).toString(),
+  }));
 
-  // Refetch when date or activeEmployee changes
-  useEffect(() => {
-    if (activeEmployee) {
-      refetch();
-    }
-  }, [date, refetch, activeEmployee]);
-
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-  };
-
+  // Handle month and year selection
   const handleMonthChange = (selectedOption) => {
-    const currentDay = dayjs(date).date();
-    const updatedDate = dayjs(date)
-      .month(selectedOption.value - 1)
-      .date(1)
-      .date(
-        Math.min(
-          currentDay,
-          dayjs(date)
-            .month(selectedOption.value - 1)
-            .daysInMonth(),
-        ),
-      )
-      .toDate();
-    handleDateChange(updatedDate);
+    setDate(dayjs(date).month(selectedOption.value).toDate());
   };
 
   const handleYearChange = (selectedOption) => {
-    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    handleDateChange(updatedDate);
+    setDate(dayjs(date).year(selectedOption.value).toDate());
   };
 
-  const getTileClass = (date, event) => {
-    if (event?.assigned_total_employee_count !== event?.people_required)
-      return "bg-slate-300 border-[#283277] hover:bg-slate-400";
-    if (dayjs(date).isSame(dayjs(), "day"))
-      return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
-    if (dayjs(date).isBefore(dayjs(), "day"))
-      return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
-    return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
+  // Generate all days in the selected month
+  const getMonthDays = () => {
+    const startOfMonth = dayjs(date).startOf("month");
+    const daysInMonth = dayjs(date).daysInMonth();
+
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = startOfMonth.add(i, "day");
+      return {
+        day: day.format("ddd"),
+        date: day.format("MMM DD"),
+        fullDate: day.format("YYYY-MM-DD"),
+      };
+    });
   };
 
-  const findEvents = (date) => {
-    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+  const monthDays = getMonthDays();
+const events = {
+    employees:dummyEmployees
+}
+  // Fetch Data using React Query
+//   const { data: events = {}, refetch } = useQuery({
+//     queryKey: ["events", date],
+//     queryFn: () =>
+//       newRequest
+//         .get(TEAM_ATTENDANCE, {
+//           params: { month: dayjs(date).format("MM"), year: dayjs(date).format("YYYY") },
+//         })
+//         .then((res) => res.data)
+//         .catch(() => ({ employees: dummyEmployees })), // Use dummy data if API fails
+//     staleTime: 0,
+//   });
 
-    const holidayEvents = events?.result?.filter((event) =>
-      event?.holidays?.includes(formattedDate),
-    );
-    const shiftEvents = events?.filter((event) =>
-      event?.attendance_date?.includes(formattedDate),
-    );
-    // console.log(shiftEvents);
+//   useEffect(() => {
+//     refetch();
+//   }, [date, refetch]);
 
-    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
-    const requestedSlots = events?.requested_details?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
-    return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
+  // Function to return Present, Absent, or Leave
+  const formatStatus = (status) => {
+    if (!status) return "Absent"; // Default to Absent if no data is found
+    return status;
   };
 
-  const handleClick = (event) => {
-    setSelected(event);
-    setPopupOpen(true);
-  };
-  console.log(selected);
-  
   return (
-    <div className="flex flex-col">
-      <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen} selected= {selected} />
-      <MenuHeader
-        menu={"Menu"}
-        subMenu={""}
-        currentpath={"Attendance"}
-        icon={""}
-        activeMenu={""}
-      />
-      <div className="flex w-full items-center justify-between bg-white px-4 py-2">
-        <div className="flex items-center gap-4">
-          <h5 className="text-lg font-bold">Team Attendance</h5>
-          <Select
-            options={years}
-            isSearchable={true}
-            onChange={handleYearChange}
-            styles={customSelectStyles}
-            value={years.find(
-              (yearOption) => yearOption.value === dayjs(date).year(),
-            )}
-            placeholder={dayjs(date).format("YYYY")}
-            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-          />
-          <Select
-            options={months}
-            isSearchable={true}
-            onChange={handleMonthChange}
-            styles={customSelectStyles}
-            value={months.find(
-              (monthOption) => monthOption.value === dayjs(date).month() + 1,
-            )}
-            placeholder={dayjs(date).format("MMMM")}
-            className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-          />
+    <>
+      <div className="flex flex-col h-screen">
+        <MenuHeader menu={"Menu"} subMenu={""} currentpath={"Attendance"} icon={""} activeMenu={""} />
+
+        {/* Filters */}
+        <div className="flex w-full items-center justify-between px-4 py-2">
+          <div className="flex items-center gap-4">
+            <h5 className="text-md font-bold">Attendance</h5>
+            <Select
+              options={years}
+              onChange={handleYearChange}
+              styles={customSelectStyles}
+              value={years.find((y) => y.value === dayjs(date).year())}
+              placeholder={dayjs(date).format("YYYY")}
+              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+            />
+            <Select
+              options={months}
+              onChange={handleMonthChange}
+              styles={customSelectStyles}
+              value={months.find((m) => m.value === dayjs(date).month())}
+              placeholder={dayjs(date).format("MMMM")}
+              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+            />
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Select
-            options={employee?.map((emp) => ({
-              value: emp.employee_id,
-              label: emp.label || emp.value,
-            }))} // Ensure options are in the correct format
-            isSearchable={true}
-            onChange={(option) => setActiveEmployee(option?.value || "")}
-            styles={customSelectStyles}
-            placeholder={employee?.[0]?.label}
-            defaultValue={
-              employee?.[0]
-                ? {
-                    value: employee[0].employee_id,
-                    label: employee[0].label || employee[0].value,
-                  }
-                : null
-            }
-            className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 caret-white focus:border-[#C2C1C1]"
-          />
 
-          {/* <button className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white">
-            Team Attendance
-          </button> */}
-        </div>
-      </div>
-
-      <div className="max-w-8xl mb-10 mt-7 w-full">
-        <Calendar
-          key={date}
-          onChange={handleDateChange}
-          value={date}
-          showNavigation={false}
-          className="w-full font-monorope"
-          locale="en-US"
-          formatShortWeekday={(locale, date) => dayjs(date).format("dddd")}
-          tileContent={({ date, view }) => {
-            if (view === "month") {
-              const {
-                holidayEvents,
-                shiftEvents,
-                availableSlots,
-                requestedSlots,
-              } = findEvents(date);
-
-              return events ? (
-                <div className="overflow-y-min flex h-full w-full flex-col gap-2 overflow-y-auto">
-                  <>
-                    {shiftEvents?.map((event, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleClick(event)}
-                        className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 ${getTileClass(
-                          date,
-                        )} justify-center text-gray-800`}
-                      >
-                        <span className="float-start flex text-[0.8rem] font-semibold">
-                          {event?.shift_detail
-                            ? event.shift_detail?.name
-                            : "Present"}
-                        </span>
-                        <span className="float-start flex text-[12px]">
-                          {event?.total_working_hour}
-                        </span>
-                      </div>
+        {/* Attendance Table */}
+        <div className="w-full overflow-x-auto overflow-x-min rounded-md border border-gray-300 bg-white pb-2">
+          <div className="table mx-auto w-full">
+            <table style={{ borderSpacing: "0", width: "100%" }}>
+              <thead className="bg-gray-soft">
+                <tr>
+                  <th className="text-sm font-bold capitalize text-gray-darkpale sticky left-0 bg-[#ebebf0]">
+                    Employee Name
+                  </th>
+                  {monthDays.map((dayObj, index) => (
+                    <th key={index} className="text-sm font-bold capitalize text-gray-darkpale">
+                      {dayObj.day}
+                      <p className="font-medium">{dayObj.date}</p>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {events?.employees?.length > 0
+                  ? events.employees.map((employee, empIndex) => (
+                      <tr key={empIndex} className="border-b-2 text-left">
+                        <td className="text-[0.8rem] font-medium capitalize text-gray-darkpale sticky left-0 bg-white">
+                          {employee.name}
+                        </td>
+                        {monthDays.map((dayObj, index) => {
+                          const formattedDate = dayObj.fullDate;
+                          console.log(formattedDate,employee?.days_status);
+                          
+                          const dayStatus = employee?.days_status?.find(
+                            (event) => dayjs(event.date).format("YYYY-MM-DD") == formattedDate
+                          );console.log(dayStatus);
+                                                    
+                          
+                          return (
+                            <td key={index} className="text-[0.8rem] font-medium text-center text-gray-darkpale">
+                              {formatStatus(dayStatus?.status)}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))
+                  : dummyEmployees.map((employee, empIndex) => (
+                      <tr key={empIndex} className="border-b-2 text-left">
+                        <td className="text-[0.8rem] font-medium capitalize text-gray-darkpale sticky left-0 bg-white">
+                          {employee.name}
+                        </td>
+                        {monthDays.map((dayObj, index) => {
+                          const formattedDate = dayObj.fullDate;
+                          const dayStatus = employee?.days_status?.find(
+                            (event) => event.date === formattedDate
+                          );
+                          return (
+                            <td key={index} className="text-[0.8rem] font-medium text-center text-gray-darkpale">
+                              {formatStatus(dayStatus?.status)}
+                            </td>
+                          );
+                        })}
+                      </tr>
                     ))}
-                  </>
-                </div>
-              ) : null;
-            }
-          }}
-        />
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
-};
-
-export default EmployeeAttendanceCalendar;
+}
