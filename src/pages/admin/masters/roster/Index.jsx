@@ -188,7 +188,7 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         setCopy={setCopy}
       />
 
-      <RosterHeader page={1} />
+      {/* <RosterHeader page={1} /> */}
       <div className="mb-4 mt-1 flex items-center justify-between">
         <label className="input flex h-10 min-h-10 min-w-96 items-center gap-2 rounded-md border border-gray-soft outline-none">
           <Search className="size-4 object-contain text-gray-dark" />

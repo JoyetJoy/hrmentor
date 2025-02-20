@@ -26,10 +26,10 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
   };
 
   return (
-    <div className="min-h-full min-w-64 rounded-md bg-white">
-      <div className="w-full rounded-md bg-white px-5 py-7">
+    <div className="absolute z-50 min-h-full min-w-64 rounded-md bg-white shadow-sm shadow-black">
+      <div className= "relative w-full rounded-md bg-white px-5 py-7">
         <Disclosure as="div" className="py-1" defaultOpen={false}>
-          <DisclosureButton className="group flex w-full items-center justify-between">
+          <DisclosureButton className="group flex w-full items-center justify-between ">
             <p className="flex flex-row whitespace-nowrap text-sm font-bold text-black">
               Department
             </p>

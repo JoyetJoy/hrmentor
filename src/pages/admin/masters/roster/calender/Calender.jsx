@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Plus, ArrowRight } from "lucide-react";
+import { Plus, ArrowRight, AlignJustify } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import RosterHeader from "@/components/common/RosterHeader";
@@ -48,6 +48,7 @@ const RosterCalendar = () => {
   const [activeDepartment, setActiveDepartment] = useState("");
   const [activeWorkArea, setActiveWorkArea] = useState("");
   const [activeLocation, setActiveLocation] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
@@ -147,12 +148,14 @@ const RosterCalendar = () => {
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
 
-  const handleClick = (event,date) => {
+  const handleClick = (event, date) => {
     if (!event?.isHoliday) {
       const selectdate = dayjs(date).format("YYYY-MM-DD");
-        if(date){
-          navigate(`/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`);
-        }
+      if (date) {
+        navigate(
+          `/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`,
+        );
+      }
     }
   };
 
@@ -169,20 +172,22 @@ const RosterCalendar = () => {
 
   return (
     <div className="flex gap-2">
-      <RosterItemList
-        activeDepartment={activeDepartment}
-        setActiveDepartment={setActiveDepartment}
-        activeLocation={activeLocation}
-        setActiveLocation={setActiveLocation}
-        activeWorkArea={activeWorkArea}
-        setActiveWorkArea={setActiveWorkArea}
-      />
       <>
         <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
         <div className="flex flex-row py-4">
           <div>
-            <div className="flex w-full items-center justify-between px-4 py-2">
+            <div className="flex w-full items-center justify-between py-2">
               <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="text-black underline transition-transform duration-300"
+                >
+                  <AlignJustify
+                    className={`transform transition-transform duration-700 ${
+                      isExpanded ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
+                </button>
                 <Select
                   options={years}
                   isSearchable={true}
@@ -192,7 +197,7 @@ const RosterCalendar = () => {
                     (yearOption) => yearOption.value === dayjs(date).year(),
                   )}
                   placeholder={dayjs(date).format("YYYY")}
-                  className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+                  className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
                 />
                 <Select
                   options={months}
@@ -204,7 +209,7 @@ const RosterCalendar = () => {
                       monthOption.value === dayjs(date).month() + 1,
                   )}
                   placeholder={dayjs(date).format("MMMM")}
-                  className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+                  className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
                 />
               </div>
               <div className="flex gap-2">
@@ -214,7 +219,7 @@ const RosterCalendar = () => {
                   onChange={(option) => setActiveEmployee(option?.id || "")}
                   styles={customSelectStyles}
                   placeholder={"All employee"}
-                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] p-0 caret-white focus:border-[#C2C1C1]"
+                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
                 />
                 <button
                   onClick={() => addRoster()}
@@ -225,7 +230,17 @@ const RosterCalendar = () => {
                 </button>
               </div>
             </div>
-            <div className="ml-4 mt-7 w-full max-w-6xl">
+            <div className="mt-7 w-full max-w-7xl">
+              {isExpanded && (
+                <RosterItemList
+                  activeDepartment={activeDepartment}
+                  setActiveDepartment={setActiveDepartment}
+                  activeLocation={activeLocation}
+                  setActiveLocation={setActiveLocation}
+                  activeWorkArea={activeWorkArea}
+                  setActiveWorkArea={setActiveWorkArea}
+                />
+              )}
               <Calendar
                 key={date}
                 onChange={handleDateChange}
@@ -245,7 +260,6 @@ const RosterCalendar = () => {
                       requestedSlots,
                     } = findEvents(date);
                     console.log(shiftEvents);
-                    
 
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
@@ -273,8 +287,8 @@ const RosterCalendar = () => {
                           {shiftEvents?.slice(0, 2)?.map((event, index) => (
                             <div
                               key={index}
-                              onClick={() => handleClick(event,date)}
-                              className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 px-3 py-3 lg:w-36 xl:w-44 ${getTileClass(
+                              onClick={() => handleClick(event, date)}
+                              className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 pr-3 pl-2 py-3 lg:w-36 xl:w-44 ${getTileClass(
                                 date,
                                 event,
                               )} justify-center text-gray-800`}
@@ -288,7 +302,7 @@ const RosterCalendar = () => {
                                 )}
                                 -{convertTo12HourFormat(event?.shift?.end_time)}
                               </span>
-                              <div className="flex w-full items-center justify-between">
+                              <div className="flex w-full items-center justify-between pr-2">
                                 <span className="float-start flex text-[12.2px] font-semibold">
                                   Employee:{" "}
                                   {event?.assigned_total_employee_count || 0}/

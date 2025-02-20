@@ -4,6 +4,8 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 export default function RosterHeader({page}) {
+  console.log(page);
+  
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
