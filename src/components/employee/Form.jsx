@@ -808,7 +808,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     autoComplete="off"
                     type="text"
                     {...register("home_address", { required: true })}
-                    className="input-box min-h-28 py-1 px-2"
+                    className="input-box  min-h-28 py-2 text-start"
                     onInput={(e) => {
                       const value = e.target.value;
                       e.target.value = value.replace(/^\s+/g, ""); // Remove leading spaces from the first line
@@ -842,7 +842,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     disabled={sameAsHome}
                     autoComplete="off"
                     {...register("communication_address", { required: true })}
-                    className="input-box min-h-28 py-1"
+                    className="input-box min-h-28 p-2"
                   />
                   {errors.communication_address && (
                     <span className="text-xs font-medium text-red-500">
