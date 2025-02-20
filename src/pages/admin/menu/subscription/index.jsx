@@ -22,61 +22,66 @@ export const MenuSubscription = () => {
         subMenu={"Account Management"}
         currentpath={"Subscription"}
         activeMenu={"Subscription"}
-        icon={  <ChevronRight className="size-3" />}
+        icon={<ChevronRight className="size-3" />}
       />
-       
-        <div className="w-full bg-white px-6 mt-1 rounded-md">
-          <ArrowLeft className="relative top-10 left-5 size-7" />
-         <div className="flex flex-col  px-56  ">
-        <div className="flex flex-col  mt-4  mb-6">
-          <p className="text-hrmprimaryorange text-[15px] font-bold mb-3">Pricing</p>
-          <h1 className="text-4xl text-black font-bold ">
-            Select Your Plan to Enhance
-            <br /> HR Management
-          </h1>
-          <div className="px-20 py-8 bg-subcription h-full w-full rounded-xl bg-cover bg-no-repeat my-6">
-            <div className="flex flex-row items-center gap-1 mb-7 bg-white bg-opacity-25 rounded-full py-1 px-3 whitespace-nowrap w-fit h-full">
-              <div className="size-6">
-                <img src={"/assets/images/cube.svg"} alt="cube" className="object-contain w-full" />
-              </div>
-              <h1 className="text-white font-normal  text-sm">
-                Current Plan Details
-              </h1>
-            </div>
-            <h3 className="text-lg text-white font-semibold">Basic Plan</h3>
-            <h1 className="text-white text-4xl font-semibold my-1">
-              $10<span className="text-xl font-normal tracking-wider">/User/Month/Build annually</span>
+
+      <div className="mt-1 w-full rounded-md bg-white px-6">
+        <ArrowLeft className="relative left-5 top-10 size-5" />
+        <div className="flex flex-col px-32">
+          <div className="mb-6 mt-4 flex flex-col">
+            <p className="mb-3 text-[15px] font-bold text-hrmprimaryorange">
+              Pricing
+            </p>
+            <h1 className="text-3xl font-bold text-black">
+              Select Your Plan to Enhance
+              <br /> HR Management
             </h1>
-            <hr className="my-3 text-white opacity-35" />
-            <div className="flex flex-row  items-center justify-between mt-6">
-              <h1 className=" flex flex-col text-[18px] font-thin text-white   ">
-                Number Of License:10
-                <span className=" text-hrmprimaryorange font-semibold ">
-                  Valid till 22th July 2024
+            <div className="my-6 h-full w-full rounded-xl bg-subcription bg-cover bg-no-repeat px-20 py-8">
+              <div className="mb-7 flex h-full w-fit flex-row items-center gap-1 whitespace-nowrap rounded-full bg-white bg-opacity-25 px-3 py-1">
+                <div className="size-6">
+                  <img
+                    src={"/assets/images/cube.svg"}
+                    alt="cube"
+                    className="w-full object-contain"
+                  />
+                </div>
+                <h1 className="text-sm font-normal text-white">
+                  Current Plan Details
+                </h1>
+              </div>
+              <h3 className="text-lg font-semibold text-white">Basic Plan</h3>
+              <h1 className="my-1 text-4xl font-semibold text-white">
+                $10
+                <span className="text-xl font-normal tracking-wider">
+                  /User/Month/Build annually
                 </span>
               </h1>
-              <button className="btn  bg-white  hover:bg-white text-lg font-bold  text-hrmblue px-12 min-h-14 rounded-md ">
-                Add More License
-              </button>
+              <hr className="my-3 text-white opacity-35" />
+              <div className="mt-6 flex flex-row items-center justify-between">
+                <h1 className="flex flex-col text-[18px] font-thin text-white">
+                  Number Of License:10
+                  <span className="font-semibold text-hrmprimaryorange">
+                    Valid till 22th July 2024
+                  </span>
+                </h1>
+                <button className="btn min-h-14 rounded-md bg-white px-12 text-lg font-bold text-hrmblue hover:bg-white">
+                  Add More License
+                </button>
+              </div>
             </div>
           </div>
-
-
-        </div>
-        {/* ----plans----- */}
-        <div className="h-[1px] w-full bg-black/10" />
-        <h1 className="font-extrabold text-textcolor-blue  my-7 text-[21px]">
-          Available Plans
-        </h1>
-        <div className="grid grid-cols-3 mb-12">
-          {availablePlanData.map((plan, planIndex) => (
-            <AvailablePlans data={plan} key={planIndex} />
-          ))}
+          {/* ----plans----- */}
+          <div className="h-[1px] w-full bg-black/10" />
+          <h1 className="text-textcolor-blue my-7 text-xl font-bold">
+            Available Plans
+          </h1>
+          <div className="mb-12 grid grid-cols-3">
+            {availablePlanData.map((plan, planIndex) => (
+              <AvailablePlans data={plan} key={planIndex} />
+            ))}
+          </div>
         </div>
       </div>
-          </div>
-       
-     
     </>
   );
 };

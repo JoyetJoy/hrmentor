@@ -160,7 +160,7 @@ export const AdminDashboard = () => {
             {admindashboard?.newsandevents?.events.map((event, index) => (
               <div
                 key={index}
-                className="flex flex-row rounded-md border border-gray-300 mr-5"
+                className="flex flex-row rounded-md border border-gray-300 mr-5 min-h-20"
               >
                 <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(event.start_date).format("D")} <br />
@@ -182,7 +182,7 @@ export const AdminDashboard = () => {
             {admindashboard?.newsandevents?.news.map((newss, index) => (
               <div
                 key={index}
-                className="flex flex-row rounded-md border border-gray-300 mr-5"
+                className="flex flex-row rounded-md  min-h-20 border border-gray-300 mr-5"
               >
                 <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(newss.start_date).format("D")} <br />

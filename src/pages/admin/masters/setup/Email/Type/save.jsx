@@ -147,10 +147,11 @@ export default function EmailTypeSave() {
                     styles={customSelectStyles}
                     isMulti
                     placeholder="Select Email Folder"
-                    className="input-box"
+                    className="w-full h-auto rounded-md border border-[#A7A7A7] border-opacity-60 text-sm  text-zinc-500 placeholder:text-sm placeholder:text-[#7F7F7F]"
                     value={tokens}
                     onChange={(selectedOption) => {
                       setTokens(selectedOption);
+                      field.onChange(selectedOption);
                     }}
                   />
                 )}
