@@ -14,17 +14,21 @@ export default function Attendance() {
     {
       name: "John Doe",
       days_status: [
-        { date: "2024-02-01", status: "Present" },
-        { date: "2024-02-02", status: "Absent" },
-        { date: "2024-02-03", status: "Leave" },
+        { date: "2025-02-01", status: "Present" },
+        { date: "2025-02-02", status: "Absent" },
+        { date: "2025-02-03", status: "Annual Leave" },
+        { date: "2025-02-04", status: "Company Leave" },
+        { date: "2025-02-05", status: "Leave" },
+        { date: "2025-02-06", status: "Leave" },
+        { date: "2025-02-07", status: "Holiday" },
       ],
     },
     {
       name: "Jane Smith",
       days_status: [
-        { date: "2024-02-01", status: "Present" },
-        { date: "2024-02-02", status: "Present" },
-        { date: "2024-02-03", status: "Leave" },
+        { date: "2025-02-01", status: "Present" },
+        { date: "2025-02-02", status: "Present" },
+        { date: "2025-02-03", status: "Leave" },
       ],
     },
   ];
@@ -106,7 +110,7 @@ const events = {
               styles={customSelectStyles}
               value={years.find((y) => y.value === dayjs(date).year())}
               placeholder={dayjs(date).format("YYYY")}
-              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted bg-white"
             />
             <Select
               options={months}
@@ -114,7 +118,7 @@ const events = {
               styles={customSelectStyles}
               value={months.find((m) => m.value === dayjs(date).month())}
               placeholder={dayjs(date).format("MMMM")}
-              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
+              className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted bg-white"
             />
           </div>
         </div>
@@ -125,7 +129,7 @@ const events = {
             <table style={{ borderSpacing: "0", width: "100%" }}>
               <thead className="bg-gray-soft">
                 <tr>
-                  <th className="text-sm font-bold capitalize text-gray-darkpale sticky left-0 bg-[#ebebf0]">
+                  <th className="text-sm font-bold capitalize text-gray-darkpale sticky left-0 w-full bg-[#ebebf0]">
                     Employee Name
                   </th>
                   {monthDays.map((dayObj, index) => (
@@ -140,7 +144,7 @@ const events = {
                 {events?.employees?.length > 0
                   ? events.employees.map((employee, empIndex) => (
                       <tr key={empIndex} className="border-b-2 text-left">
-                        <td className="text-[0.8rem] font-medium capitalize text-gray-darkpale sticky left-0 bg-white">
+                        <td className="text-[0.8rem] font-medium capitalize text-gray-darkpale border-r-2 sticky left-0 bg-white">
                           {employee.name}
                         </td>
                         {monthDays.map((dayObj, index) => {
@@ -153,8 +157,11 @@ const events = {
                                                     
                           
                           return (
-                            <td key={index} className="text-[0.8rem] font-medium text-center text-gray-darkpale">
-                              {formatStatus(dayStatus?.status)}
+                            <td key={index} className={`text-[0.8rem] font-semibold text-center 
+                              ${dayStatus?.status === 'Present' ? 'text-green-700' : 
+                                ['Absent', 'Company Leave', 'Annual Leave', 'Holiday'].includes(dayStatus?.status) ? 'text-red-500' 
+                                : 'text-gray-darkpale bg-[#c5c5cb]'} border-r-2`}>                            
+                              {dayStatus?.status === 'Present' ? 'P' : dayStatus?.status === 'Absent' ? 'A' : dayStatus?.status === 'Annual Leave'?'AL': dayStatus?.status=== 'Company Leave'?'CL': dayStatus?.status==='Holiday'?'H': 'DO'}
                             </td>
                           );
                         })}
