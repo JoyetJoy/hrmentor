@@ -15,7 +15,6 @@ export default function Break({ setNew_break, new_break, error }) {
     setDeletePopup(true);
   };
 
-  
   const [totalPages, setTotalPages] = useState(10);
   const handleCreate = () => {
     setPopupOpen(true);
@@ -76,7 +75,7 @@ export default function Break({ setNew_break, new_break, error }) {
 
             duration = formattedDuration;
           } else {
-            duration = row.original.time
+            duration = row.original.time;
           }
           return `${duration} mins`;
         },
