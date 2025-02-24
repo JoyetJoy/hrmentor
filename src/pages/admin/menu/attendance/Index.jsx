@@ -6,10 +6,17 @@ import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import { TEAM_ATTENDANCE, newRequest } from "@/api/master";
 import Atendance from "../../../../components/attendance/Index";
+import DatePicker from "react-datepicker";
 
 export default function Attendance() {
   const [date, setDate] = useState(new Date());
   const [attendance, setAttendance] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(dayjs(startDate).add(6, "day").toDate());
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("weekly");
+
   // Dummy Data (With Status)
   const dummyEmployees = [
     {
@@ -54,6 +61,50 @@ export default function Attendance() {
     setDate(dayjs(date).year(selectedOption.value).toDate());
   };
 
+  // Handle range change (weekly/monthly)
+  const handleRangeChange = (option) => {
+    setSelectedOption(option);
+    if (option === "weekly") {
+      setEndDate(dayjs(startDate).add(6, "day").toDate());
+    } else if (option === "monthly") {
+      setEndDate(dayjs(startDate).endOf("month").toDate());
+    }
+  };
+
+  const handlePrev = () => {
+    let newStartDate;
+    if (selectedOption === "daily") {
+      newStartDate = dayjs(startDate).subtract(1, "day").toDate();
+    } else if (selectedOption === "weekly") {
+      newStartDate = dayjs(startDate).subtract(1, "week").toDate();
+    } else {
+      newStartDate = dayjs(startDate).subtract(1, "month").toDate();
+    }
+    setStartDate(newStartDate);
+    setEndDate(
+      dayjs(newStartDate)
+        .add(selectedOption === "monthly" ? 1 : 6, "day")
+        .toDate(),
+    );
+  };
+
+  const handleNext = () => {
+    let newStartDate;
+    if (selectedOption === "daily") {
+      newStartDate = dayjs(startDate).add(1, "day").toDate();
+    } else if (selectedOption === "weekly") {
+      newStartDate = dayjs(startDate).add(1, "week").toDate();
+    } else {
+      newStartDate = dayjs(startDate).add(1, "month").toDate();
+    }
+    setStartDate(newStartDate);
+    setEndDate(
+      dayjs(newStartDate)
+        .add(selectedOption === "monthly" ? 1 : 6, "day")
+        .toDate(),
+    );
+  };
+
   // Generate all days in the selected month
   const getMonthDays = () => {
     const startOfMonth = dayjs(date).startOf("month");
@@ -69,33 +120,29 @@ export default function Attendance() {
     });
   };
 
+  // Generate all days in the selected week
+  const getWeekDays = () => {
+    return Array.from({ length: 7 }, (_, i) => {
+      const day = dayjs(startDate).add(i, "day");
+      return {
+        day: day.format("ddd"),
+        date: day.format("MMM DD"),
+        fullDate: day.format("YYYY-MM-DD"),
+      };
+    });
+  };
+
   const monthDays = getMonthDays();
+  const weekDays = getWeekDays();
   const events = {
     employees: dummyEmployees,
   };
-  // Fetch Data using React Query
-  //   const { data: events = {}, refetch } = useQuery({
-  //     queryKey: ["events", date],
-  //     queryFn: () =>
-  //       newRequest
-  //         .get(TEAM_ATTENDANCE, {
-  //           params: { month: dayjs(date).format("MM"), year: dayjs(date).format("YYYY") },
-  //         })
-  //         .then((res) => res.data)
-  //         .catch(() => ({ employees: dummyEmployees })), // Use dummy data if API fails
-  //     staleTime: 0,
-  //   });
-
-  //   useEffect(() => {
-  //     refetch();
-  //   }, [date, refetch]);
 
   // Function to return Present, Absent, or Leave
   const formatStatus = (status) => {
     if (!status) return "Absent"; // Default to Absent if no data is found
     return status;
   };
-  console.log(events?.employees);
 
   return (
     <>
@@ -108,27 +155,138 @@ export default function Attendance() {
           activeMenu={""}
         />
         {/* Filters */}
-        <div className="flex flex-col w-full items-center justify-between px-4 py-2">
-          <div className="flex items-center gap-4">
-            <h5 className="text-md font-bold">Attendance</h5>
-            <Select
-              options={years}
-              onChange={handleYearChange}
-              styles={customSelectStyles}
-              value={years.find((y) => y.value === dayjs(date).year())}
-              placeholder={dayjs(date).format("YYYY")}
-              className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-            />
-            <Select
-              options={months}
-              onChange={handleMonthChange}
-              styles={customSelectStyles}
-              value={months.find((m) => m.value === dayjs(date).month())}
-              placeholder={dayjs(date).format("MMMM")}
-              className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-            />
+        <div className="flex w-full flex-col items-center justify-between px-4 py-2 gap-4">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
+              {/* Daily, Weekly, Monthly Buttons */}
+              {["weekly", "monthly"].map((option) => (
+                <button
+                  key={option}
+                  className={`btn-sm flex items-center rounded-md px-4 py-2 ${
+                    selectedOption === option
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => handleRangeChange(option)}
+                >
+                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                </button>
+              ))}
+
+              {/* Previous Button */}
+              <button
+                onClick={handlePrev}
+                className="btn-sm flex items-center justify-center rounded-md bg-gray-200 p-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#434242"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-left"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+
+              {/* Date Range Input */}
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={`${dayjs(startDate).format("DD/MM/YYYY")} - ${dayjs(endDate).format("DD/MM/YYYY")}`}
+                  readOnly
+                  className="w-44 rounded-md border border-gray-300 bg-white px-3 py-1 text-center text-xs"
+                />
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={handleNext}
+                className="btn-sm flex items-center justify-center rounded-md bg-gray-200 p-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#434242"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-right"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+
+              {/* Calendar Icon */}
+              <div className="relative">
+                {/* Year Picker Button */}
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex items-center justify-center rounded-md bg-gray-200 p-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#464444"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-calendar"
+                  >
+                    <path d="M8 2v4" />
+                    <path d="M16 2v4" />
+                    <rect width="18" height="18" x="3" y="4" rx="2" />
+                    <path d="M3 10h18" />
+                  </svg>
+                </button>
+
+                {/* Year Picker (Appears Below) */}
+                {isOpen && (
+                  <div
+                    className="absolute -right-12 top-10 z-50 p-2"
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      borderRadius: "0px",
+                    }}
+                  >
+                    <DatePicker
+                      selected={selectedYear}
+                      onChange={(date) => {
+                        setSelectedYear(date);
+
+                        const newYear = dayjs(date).year();
+
+                        const newStartDate = dayjs(`${newYear}-01-01`).toDate();
+                        const newEndDate = dayjs(`${newYear}-12-31`).toDate();
+
+                        setStartDate(newStartDate);
+                        setEndDate(newEndDate);
+
+                        setIsOpen(false);
+                      }}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      inline
+                      className="w-full"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="flex items-center w-full justify-between gap-8">
+          <div className="flex w-full items-center justify-between gap-8">
             <div className="flex gap-2 text-sm">
               <img
                 className="h-5 object-contain"
@@ -181,122 +339,31 @@ export default function Attendance() {
         {/* Attendance Table */}
         <div className="overflow-x-min w-full overflow-x-auto rounded-md border border-gray-300 bg-white">
           <div className="table mx-auto w-full">
-            {/* <table style={{ borderSpacing: "0", width: "100%" }}>
-              <thead className="bg-gray-soft">
-                <tr>
-                  <th className="sticky left-0 w-full bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
-                    Employee Name
-                  </th>
-                  {monthDays.map((dayObj, index) => (
-                    <th
-                      key={index}
-                      className="text-sm font-bold capitalize text-gray-darkpale"
-                    >
-                      {dayObj.day}
-                      <p className="font-medium">{dayObj.date}</p>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {events?.employees?.length > 0
-                  ? events.employees.map((employee, empIndex) => (
-                      <tr key={empIndex} className="border-b-2 text-left">
-                        <td className="sticky left-0 z-10 border-r-2 bg-white text-[0.8rem] font-medium capitalize text-gray-darkpale">
-                          {employee.name}
-                        </td>
-                        {monthDays.map((dayObj, index) => {
-                          const formattedDate = dayObj.fullDate;
-                          console.log(formattedDate, employee?.days_status);
-
-                          const dayStatus = employee?.days_status?.find(
-                            (event) =>
-                              dayjs(event.date).format("YYYY-MM-DD") ==
-                              formattedDate,
-                          );
-                          console.log(dayStatus);
-
-                          return (
-                            <td
-                              key={index}
-                              className={`relative text-center text-[0.8rem] font-semibold ${
-                                dayStatus?.status === "Present"
-                                  ? "bg-[#9fe28e] text-green-700"
-                                  : dayStatus?.status === "Holiday"
-                                    ? "bg-[#eba2e4] text-[#ce32be]"
-                                    : dayStatus?.status === "Company Leave"
-                                      ? "bg-[#ebcba2] text-[#a36a20]"
-                                      : dayStatus?.status === "Annual Leave"
-                                        ? "bg-[#f17b69] text-[#be3333]"
-                                        : dayStatus?.status === "Absent"
-                                          ? "bg-[#f8a1a1] text-red-500"
-                                          : "bg-[#c5c5cb] text-gray-darkpale"
-                              } border-r-2`}
-                            >
-                              {dayStatus?.status === "Present" ? (
-                                <>
-                                  <span>P</span>
-                                  <img
-                                    className="absolute right-1 top-1 w-5 object-contain"
-                                    src="/assets/icons/tort.svg"
-                                    alt="late"
-                                  />
-                                </>
-                              ) : dayStatus?.status === "Absent" ? (
-                                "A"
-                              ) : dayStatus?.status === "Annual Leave" ? (
-                                "AL"
-                              ) : dayStatus?.status === "Company Leave" ? (
-                                "CL"
-                              ) : dayStatus?.status === "Holiday" ? (
-                                "H"
-                              ) : (
-                                "DO"
-                              )}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))
-                  : dummyEmployees.map((employee, empIndex) => (
-                      <tr key={empIndex} className="border-b-2 text-left">
-                        <td className="sticky left-0 bg-white text-[0.8rem] font-medium capitalize text-gray-darkpale">
-                          {employee.name}
-                        </td>
-                        {monthDays.map((dayObj, index) => {
-                          const formattedDate = dayObj.fullDate;
-                          const dayStatus = employee?.days_status?.find(
-                            (event) => event.date === formattedDate,
-                          );
-                          return (
-                            <td
-                              key={index}
-                              className="text-center text-[0.8rem] font-medium text-gray-darkpale"
-                            >
-                              {formatStatus(dayStatus?.status)}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-              </tbody>
-            </table> */}
-
             <table style={{ borderSpacing: "0", width: "100%" }}>
               <thead className="bg-gray-soft">
                 <tr>
-                  <th className="sticky left-0 w-full border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
+                  <th className="sticky z-10 left-0 w-full border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
                     Employee Name
                   </th>
-                  {monthDays.map((dayObj, index) => (
-                    <th
-                      key={index}
-                      className="border border-gray-300 text-sm font-bold capitalize text-gray-darkpale"
-                    >
-                      {dayObj.day}
-                      <p className="font-medium">{dayObj.date}</p>
-                    </th>
-                  ))}
+                  {selectedOption === "weekly"
+                    ? weekDays.map((dayObj, index) => (
+                        <th
+                          key={index}
+                          className="sticky top-0 border border-gray-300 text-sm font-bold bg-[#ebebf0] capitalize text-gray-darkpale"
+                        >
+                          {dayObj.day}
+                          <p className="font-medium">{dayObj.date}</p>
+                        </th>
+                      ))
+                    : monthDays.map((dayObj, index) => (
+                        <th
+                          key={index}
+                          className="sticky top-0 border border-gray-300 text-sm font-bold bg-[#ebebf0] capitalize text-gray-darkpale"
+                        >
+                          {dayObj.day}
+                          <p className="font-medium">{dayObj.date}</p>
+                        </th>
+                      ))}
                 </tr>
               </thead>
               <tbody>

@@ -54,9 +54,9 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
     <Dialog open={addEntry} as="div" className="relative z-10" onClose={close}>
       <div className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 z-10 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg p-6">
+        <DialogPanel className="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
           {/* Header */}
-          <div className="flex justify-between bg-[#354ff3] px-6 py-4">
+          <div className="flex justify-between bg-[#376dff] px-6 py-4">
             <p className="text-lg font-semibold text-white">Add Entry</p>
             <button onClick={close} className="text-lg font-extrabold text-white">
               <X />
@@ -64,10 +64,11 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4 px-6 py-4">
             {/* ✅ Check-in Time */}
+            <div className="flex gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Check-in Time</label>
+              <label className="block text-sm font-medium text-gray-700">Clock-in Time</label>
               <input
                 type="text"
                 {...register("checkIn")}
@@ -95,6 +96,7 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
               {errors.checkOut && <p className="text-red-500 text-xs">{errors.checkOut.message}</p>}
             </div>
 
+            </div>
             {/* ✅ Remarks */}
             <div>
               <label className="block text-sm font-medium text-gray-700">Remarks</label>
@@ -108,15 +110,15 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
             </div>
 
             {/* ✅ Buttons */}
-            <div className="flex justify-end gap-3">
+            <div className="flex  gap-3">
               <button
                 type="button"
                 onClick={close}
-                className="px-3 py-2 bg-gray-500 text-white rounded-md"
+                className="px-3 py-2 w-full bg-gray-500 text-white rounded-md"
               >
                 Cancel
               </button>
-              <button type="submit" className="px-3 py-2 bg-blue-700 text-white rounded-md">
+              <button type="submit" className="px-3 w-full py-2 bg-blue-700 text-white rounded-md">
                 Save
               </button>
             </div>
