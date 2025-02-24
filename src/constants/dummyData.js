@@ -301,6 +301,15 @@ export const rosterHeaderList = [
     link: "/admin/roster/list",
   },
 ];
+export const shiftHeaderList = [
+  { id: 1, name: "Shift Calendar", link: "/admin/shift" },
+
+  {
+    id: 2,
+    name: "Shift List",
+    link: "/admin/shift/list",
+  },
+];
 export const activityItems = [
   {
     icon: "/assets/icons/admin/projectTask.svg",
