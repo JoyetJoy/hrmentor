@@ -15,6 +15,7 @@ export default function Break({ setNew_break, new_break, error }) {
     setDeletePopup(true);
   };
 
+  
   const [totalPages, setTotalPages] = useState(10);
   const handleCreate = () => {
     setPopupOpen(true);
