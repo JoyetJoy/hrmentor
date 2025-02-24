@@ -16,6 +16,7 @@ import { ACTIVE_EMPLOYEE } from "@/api";
 import { dividerClasses } from "@mui/material";
 import RosterItemList from "@/components/sidebars/roster/Index";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const departmentOptions = [
   { value: "emergency", label: "Emergency Department" },
   { value: "cardiology", label: "Cardiology" },
@@ -171,6 +172,9 @@ const ShiftCalendar = () => {
   };
   const [selectedOption, setSelectedOption] = useState("weekly");
   const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [endDate, setEndDate] = useState(
     dayjs(startDate).add(6, "day").toDate(),
   );
@@ -237,7 +241,9 @@ const ShiftCalendar = () => {
       shifts: { Mon: ["T2", "09:00 - 17:30"] },
     },
   ];
-  
+  console.log(startDate);
+  console.log(endDate);
+
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   return (
     <div className="flex gap-2">
@@ -245,18 +251,142 @@ const ShiftCalendar = () => {
         <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
         <div className="flex flex-row py-4">
           <div>
+            <div className="flex items-center justify-center">
+              <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
+                {/* Daily, Weekly, Monthly Buttons */}
+                {["weekly", "monthly"].map((option) => (
+                  <button
+                    key={option}
+                    className={`btn-sm flex items-center rounded-md px-4 py-2 ${
+                      selectedOption === option
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleRangeChange(option)}
+                  >
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </button>
+                ))}
+
+                {/* Previous Button */}
+                <button
+                  onClick={handlePrev}
+                  className="btn-sm flex items-center justify-center rounded-md bg-gray-200 p-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#434242"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-chevron-left"
+                  >
+                    <path d="m15 18-6-6 6-6" />
+                  </svg>
+                </button>
+
+                {/* Date Range Input */}
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    value={`${dayjs(startDate).format("DD/MM/YYYY")} - ${dayjs(endDate).format("DD/MM/YYYY")}`}
+                    readOnly
+                    className="w-44 rounded-md border border-gray-300 bg-white px-3 py-1 text-center text-xs"
+                  />
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={handleNext}
+                  className="btn-sm flex items-center justify-center rounded-md bg-gray-200 p-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#434242"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-chevron-right"
+                  >
+                    <path d="m9 18 6-6-6-6" />
+                  </svg>
+                </button>
+
+                {/* Calendar Icon */}
+                <div className="relative">
+                  {/* Year Picker Button */}
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center justify-center rounded-md bg-gray-200 p-2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#464444"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-calendar"
+                    >
+                      <path d="M8 2v4" />
+                      <path d="M16 2v4" />
+                      <rect width="18" height="18" x="3" y="4" rx="2" />
+                      <path d="M3 10h18" />
+                    </svg>
+                  </button>
+
+                  {/* Year Picker (Appears Below) */}
+                  {isOpen && (
+                    <div
+                      className="absolute -right-12 top-10 z-50 p-2"
+                      style={{
+                        width: "200px",
+                        height: "200px",
+                        borderRadius: "0px",
+                      }} 
+                    >
+                      
+                      <DatePicker
+                        selected={selectedYear}
+                        onChange={(date) => {
+                          setSelectedYear(date);
+
+                          const newYear = dayjs(date).year();
+
+                          const newStartDate = dayjs(
+                            `${newYear}-01-01`,
+                          ).toDate();
+                          const newEndDate = dayjs(`${newYear}-12-31`).toDate();
+
+                          setStartDate(newStartDate);
+                          setEndDate(newEndDate);
+
+                          setIsOpen(false);
+                        }}
+                        showYearPicker
+                        dateFormat="yyyy"
+                        inline
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="flex w-full items-center justify-between py-2">
               <div className="flex items-center gap-4">
-                {/* <button
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-black underline transition-transform duration-300"
-                >
-                  <AlignJustify
-                    className={`transform transition-transform duration-700 ${
-                      isExpanded ? "rotate-180" : "rotate-0"
-                    }`}
-                  />
-                </button> */}
                 <Select
                   options={[
                     { value: "HR", label: "HR" },
@@ -283,6 +413,28 @@ const ShiftCalendar = () => {
                   className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
                 />
 
+                {/* <Select
+                  options={[
+                    { value: "Office", label: "Office" },
+                    { value: "Remote", label: "Remote" },
+                    { value: "Hybrid", label: "Hybrid" },
+                  ]}
+                  isSearchable={true}
+                  //   onChange={handleWorkAreaChange}
+                  styles={customSelectStyles}
+                  placeholder="Select Work Area"
+                  className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                />
+                <Select
+                  options={employee}
+                  isSearchable={true}
+                  onChange={(option) => setActiveEmployee(option?.id || "")}
+                  styles={customSelectStyles}
+                  placeholder={"All employee"}
+                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
+                /> */}
+              </div>
+              <div className="flex items-center gap-4">
                 <Select
                   options={[
                     { value: "Office", label: "Office" },
@@ -295,9 +447,17 @@ const ShiftCalendar = () => {
                   placeholder="Select Work Area"
                   className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
                 />
+                <Select
+                  options={employee}
+                  isSearchable={true}
+                  onChange={(option) => setActiveEmployee(option?.id || "")}
+                  styles={customSelectStyles}
+                  placeholder={"All employee"}
+                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
+                />
               </div>
-              <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
-                {/* Daily, Weekly, Monthly Buttons */}
+
+              {/* <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
                 {["daily", "weekly", "monthly"].map((option) => (
                   <button
                     key={option}
@@ -312,7 +472,6 @@ const ShiftCalendar = () => {
                   </button>
                 ))}
 
-                {/* Previous Button */}
                 <button
                   onClick={handlePrev}
                   className="rounded-md bg-gray-200 px-2 py-1"
@@ -333,7 +492,6 @@ const ShiftCalendar = () => {
                   </svg>
                 </button>
 
-                {/* Date Range Display */}
                 <input
                   type="text"
                   value={`${dayjs(startDate).format("DD/MM/YYYY")} - ${dayjs(endDate).format("DD/MM/YYYY")}`}
@@ -341,7 +499,6 @@ const ShiftCalendar = () => {
                   className="rounded-md border px-2 py-1 text-center text-sm"
                 />
 
-                {/* Next Button */}
                 <button
                   onClick={handleNext}
                   className="rounded-md bg-gray-200 px-2 py-1"
@@ -362,7 +519,6 @@ const ShiftCalendar = () => {
                   </svg>
                 </button>
 
-                {/* Calendar Icon */}
                 <DatePicker
                   selected={startDate}
                   onChange={(date) => setStartDate(date)}
@@ -373,7 +529,9 @@ const ShiftCalendar = () => {
                     </button>
                   }
                 />
-              </div>
+                
+              </div> */}
+
               {/* <div className="flex gap-2">
                 <Select
                   options={employee}
@@ -424,64 +582,63 @@ const ShiftCalendar = () => {
                     console.log(shiftEvents);
 
                     return (
-                        <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
-                          <>
-                            <div className="absolute -top-6 right-0 flex flex-col items-end">
-                              {availableSlots?.map((slot, index) => (
-                                <img
-                                  key={`available-slot-${index}`}
-                                  onClick={() => {
-                                    setClaimPopup(true);
-                                    setSelectedField(slot);
-                                  }}
-                                  src="/assets/icons/employee_access/header/availableshift.svg"
-                                  alt=""
-                                />
-                              ))}
-                              {requestedSlots?.map((slot, index) => (
-                                <img
-                                  key={index}
-                                  src="/assets/icons/employee_access/header/requested_slot.svg"
-                                  alt=""
-                                />
-                              ))}
-                            </div>
-                            {shiftEvents?.slice(0, 2)?.map((event, index) => (
-                              <div
-                                key={index}
-                                onClick={() => handleClick(event, date)}
-                                className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 py-3 pl-2 pr-3 lg:w-36 xl:w-44 ${getTileClass(
-                                  date,
-                                  event,
-                                )} justify-center text-gray-800`}
-                              >
-                                <span className="float-start flex text-[0.8rem] font-semibold">
-                                  {event.shift_name}
-                                </span>
-                                <span className="float-start flex text-[12px]">
-                                  {convertTo12HourFormat(
-                                    event?.shift?.start_time,
-                                  )}
-                                  -{convertTo12HourFormat(event?.shift?.end_time)}
-                                </span>
-                                <div className="flex w-full items-center justify-between pr-2">
-                                  <span className="float-start flex text-[12.2px] font-semibold">
-                                    Employee:{" "}
-                                    {event?.assigned_total_employee_count || 0}/
-                                    {event?.people_required || 0}
-                                  </span>
-                                  <ArrowRight
-                                    onClick={() => handleClick(event)}
-                                    size={16}
-                                    color="#848484"
-                                    strokeWidth={1.5}
-                                  />
-                                </div>
-                              </div>
+                      <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
+                        <>
+                          <div className="absolute -top-6 right-0 flex flex-col items-end">
+                            {availableSlots?.map((slot, index) => (
+                              <img
+                                key={`available-slot-${index}`}
+                                onClick={() => {
+                                  setClaimPopup(true);
+                                  setSelectedField(slot);
+                                }}
+                                src="/assets/icons/employee_access/header/availableshift.svg"
+                                alt=""
+                              />
                             ))}
-                          </>
-                        </div>
-                      
+                            {requestedSlots?.map((slot, index) => (
+                              <img
+                                key={index}
+                                src="/assets/icons/employee_access/header/requested_slot.svg"
+                                alt=""
+                              />
+                            ))}
+                          </div>
+                          {shiftEvents?.slice(0, 2)?.map((event, index) => (
+                            <div
+                              key={index}
+                              onClick={() => handleClick(event, date)}
+                              className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 py-3 pl-2 pr-3 lg:w-36 xl:w-44 ${getTileClass(
+                                date,
+                                event,
+                              )} justify-center text-gray-800`}
+                            >
+                              <span className="float-start flex text-[0.8rem] font-semibold">
+                                {event.shift_name}
+                              </span>
+                              <span className="float-start flex text-[12px]">
+                                {convertTo12HourFormat(
+                                  event?.shift?.start_time,
+                                )}
+                                -{convertTo12HourFormat(event?.shift?.end_time)}
+                              </span>
+                              <div className="flex w-full items-center justify-between pr-2">
+                                <span className="float-start flex text-[12.2px] font-semibold">
+                                  Employee:{" "}
+                                  {event?.assigned_total_employee_count || 0}/
+                                  {event?.people_required || 0}
+                                </span>
+                                <ArrowRight
+                                  onClick={() => handleClick(event)}
+                                  size={16}
+                                  color="#848484"
+                                  strokeWidth={1.5}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      </div>
                     );
                   }
                   return null;

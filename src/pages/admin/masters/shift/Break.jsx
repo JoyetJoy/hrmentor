@@ -75,7 +75,7 @@ export default function Break({ setNew_break, new_break, error }) {
 
             duration = formattedDuration;
           } else {
-            duration = row.original.time
+            duration = row.original.time;
           }
           return `${duration} mins`;
         },
