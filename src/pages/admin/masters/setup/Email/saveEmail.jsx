@@ -1,18 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect} from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import SetUpHeader from "@/components/common/SetupMenuHeader";
-import Select from "react-select"; // Import React Select instead of MUI's Select
+import Select from "react-select"; 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -43,13 +38,11 @@ export default function EmailSetupSave() {
   const [tokenId, setTokenId] = useState("");
   const [tokenValue, setTokenValue] = useState("");
   const [tokens, setTokens] = useState([]);
+  const [lastToken, setLastToken] = useState("");
   const [content, setContent] = useState(`
     Dear [Candidate First and Last Name],<br><br>
     Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.${tokenValue}
   `);
-
-  console.log(id, "idididididididid");
-
   const {
     register,
     control,
@@ -125,7 +118,6 @@ export default function EmailSetupSave() {
         content: content,
         token_id: tokenId,
       };
-
       const res = await newRequest.post(
         `${EMAIL_TEMPLATE}`, // URL with dynamic ID
         formData, // formData should be the second argument, which is the request body
@@ -152,8 +144,14 @@ export default function EmailSetupSave() {
 
   useEffect(() => {
     if (tokenValue) {
-      setContent(`Dear [Candidate First and Last Name],<br><br>
-    Congratulations on your offer from [Company Name]! We are delighted to offer you the position of [Job Title] with an anticipated start date of [start date]. As discussed [over the phone, during your interview, etc.], please find attached your detailed offer letter.${tokenValue}`);
+      setContent((prevContent) => {
+        if (lastToken) {
+          return prevContent.replace(lastToken, tokenValue);
+        }
+        return `${prevContent} ${tokenValue}`;
+      });
+      setLastToken(tokenValue);
+      setTokenValue("");
     }
   }, [tokenValue]);
 
@@ -171,12 +169,10 @@ export default function EmailSetupSave() {
           Save
         </button>
       </div>
-
       <div className="mx-auto h-full w-[98%] rounded-md bg-white px-3 py-4">
         <form className="grid w-full max-w-5xl grid-cols-12 gap-16 p-3">
           <div className="col-span-8 grid w-full grid-cols-1 gap-3">
             <h6 className="text-lg font-semibold">Create Email Template</h6>
-
             {/* Template Name Input */}
             <div
               className="group flex w-full flex-col space-y-1"
@@ -194,7 +190,6 @@ export default function EmailSetupSave() {
                 className="input-box h-10 w-full rounded border border-black/10 px-2 text-sm"
               />
             </div>
-
             {/* Subject Input */}
             <div className="group flex w-full flex-col space-y-1">
               <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
@@ -233,7 +228,6 @@ export default function EmailSetupSave() {
                   </span>
                 )}
               </div>
-
               {/* Email Type Selector */}
               <div className="group flex flex-col">
                 <label className="required text-[0.8rem] font-medium text-[#3A3A3A]">
@@ -289,7 +283,6 @@ export default function EmailSetupSave() {
                 ></div>
               </div>
             </div>
-
             {emailTypeId && (
               <div className="group flex w-full flex-col space-y-1">
                 <label className="label-text flex flex-row items-center gap-1">
