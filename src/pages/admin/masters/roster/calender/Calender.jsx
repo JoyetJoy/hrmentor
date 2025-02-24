@@ -230,7 +230,7 @@ const RosterCalendar = () => {
                 </button>
               </div>
             </div>
-            <div className="mt-7 w-full max-w-7xl">
+            <div className="mt-7 w-full">
               {isExpanded && (
                 <RosterItemList
                   activeDepartment={activeDepartment}

@@ -8,6 +8,7 @@ import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import ShiftHeader from "@/components/common/ShiftHeader";
 
 function ShiftList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -131,7 +132,8 @@ function ShiftList() {
         type={'Shift'}
         api={SHIFT_BREAK_TIME}
       />
-      <MenuHeader menu="Menu" currentpath="Shift" />
+      {/* <MenuHeader menu="Menu" currentpath="Shift" /> */}
+      {/* <ShiftHeader page={2}/> */}
       <div className="flex flex-col gap-x-3">
         {/* <Setup /> */}
         <div className="mb-4 mt-1 flex items-center justify-between">
