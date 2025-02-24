@@ -9,9 +9,11 @@ import { newFormRequest, newRequest, XFormRequest } from "@/api";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MenuHeader from "@/components/common/MenuHeader";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Palette } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import WeeklyRecurrence from "@/components/popups/master/shift/RecurrencePattern";
+import GradientColorPicker from "react-best-gradient-color-picker";
+
 import {
   EMPLOYEE_DEPARTMENT_LIST,
   EMPLOYEE_WORK_AREA,
@@ -33,6 +35,8 @@ export default function SaveMasterShift({ formtype, sid }) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get("id");
+  const [color, setColor] = useState("#030E5C");
+  const [showPicker, setShowPicker] = useState(false);
   const [dayerror, setDayerror] = useState([
     false,
     false,
@@ -340,21 +344,50 @@ export default function SaveMasterShift({ formtype, sid }) {
               className={`mb-5 flex flex-col gap-3 rounded-md border border-gray-300 bg-white py-4 lg:mb-0 lg:rounded-b-none lg:border-b-0 ${formtype === "update" ? "px-2" : "px-5"}`}
             >
               <div className="mt-4 grid w-full lg:grid-cols-2">
-                <div className="group col-span-2 flex flex-col gap-1.5 px-3 py-2">
-                  <label className="required label-text">Shift Name</label>
-                  <input
-                    autoComplete="off"
-                    type="text"
-                    name="name"
-                    placeholder="Enter Shift Name"
-                    {...register("name", { required: true })}
-                    className="input-box"
-                  />
-                  {errors.name && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.name?.message}
-                    </span>
-                  )}
+                <div className="group col-span-2 flex gap-1.5 px-3 py-2">
+                  <div className="w-full">
+                    <label className="required label-text">Shift Name</label>
+                    <input
+                      autoComplete="off"
+                      type="text"
+                      name="name"
+                      placeholder="Enter Shift Name"
+                      {...register("name", { required: true })}
+                      className="input-box"
+                    />
+                    {errors.name && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.name?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative">
+                    {/* Color Picker Trigger */}
+                    <div className="flex items-center gap-2">
+                      <label className="label-text">Color</label>
+                      <div
+                        className="cursor-pointer rounded-full border border-gray-300 p-1"
+                        style={{ background: color }}
+                        onClick={() => setShowPicker(!showPicker)}
+                      >
+                        <Palette className="size-8 p-1 text-white" />
+                      </div>
+                    </div>
+                    {showPicker && (
+                      <div className="absolute z-10 mt-2 rounded-lg bg-gray-200 p-3 shadow-lg">
+                        <GradientColorPicker
+                          value={color}
+                          onChange={setColor}
+                        />
+                        <button
+                          className="mt-2 rounded bg-blue-500 px-4 py-1 text-white"
+                          onClick={() => setShowPicker(false)}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="gap flex items-center justify-center gap-2">
                   <div className="group flex w-full flex-col gap-1.5 py-2 pl-3">
