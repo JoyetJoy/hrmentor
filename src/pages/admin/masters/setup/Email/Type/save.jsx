@@ -64,28 +64,65 @@ export default function EmailTypeSave() {
     }
   }, [id, user?.id]);
 
+  useEffect(() => {
+    if (id) {
+      newRequest
+        .get(`/${EMAIL_TOKENS}/${id}`, {
+          params: { user_id: user?.id },
+        })
+        .then((res) => {
+          const formattedTokens = res.data.map((token) => ({
+            value: token.id, 
+            label: token.token, 
+          }));
+
+          setTokens(formattedTokens);
+        })
+        .catch((error) => {
+          console.error("Error fetching tokens:", error);
+        });
+    }
+  }, [id, user?.id]);
+
+  // const onSubmit = async () => {
+  //   setLoader(true);
+  //   try {
+  //     const ids = tokens.map((item) => item.value); // Extract only token IDs
+
+  //     const formData = { tokens: ids };
+
+  //     const res = await newRequest.post(
+  //       `${UPDATE_EMAIL_TYPE}/${id}`,
+  //       formData,
+  //       { params: { user_id: user?.id } }
+  //     );
+
+  //     if (res) {
+  //       toast.success(res?.data?.message);
+  //       navigate(`/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error?.response?.data?.error);
+  //   } finally {
+  //     setLoader(false);
+  //   }
+  // };
+
   const onSubmit = async () => {
     setLoader(true);
     try {
-      const ids = tokens.map((item) => item.id);
-      const formData = {
-        tokens: ids,
-      };
-
-      const res = await newRequest.post(
-        `${UPDATE_EMAIL_TYPE}/${id}`, // URL with dynamic ID
-        formData, // formData should be the second argument, which is the request body
-        {
-          params: {
-            user_id: user?.id,
-          },
-        },
-      );
+      const ids = tokens.map((item) => item.value); // Ensure only IDs are extracted
+  
+      const formData = { tokens: ids };
+  
+      const res = await newRequest.post(`${UPDATE_EMAIL_TYPE}/${id}`, formData, {
+        params: { user_id: user?.id },
+      });
+  
       if (res) {
         toast.success(res?.data?.message);
-        navigate(
-          `/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`,
-        );
+        navigate(`/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`);
       }
     } catch (error) {
       console.log(error);
@@ -94,6 +131,7 @@ export default function EmailTypeSave() {
       setLoader(false);
     }
   };
+  
 
   return (
     <>
@@ -110,7 +148,7 @@ export default function EmailTypeSave() {
         </button>
       </div>
 
-      <div className="mx-auto h-full w-[98%] rounded-md bg-white px-3 py-4">
+      <div className="mx-auto h-screen w-[98%] rounded-md bg-white px-3 py-4">
         <form className="grid w-full max-w-5xl grid-cols-12 gap-16 p-3">
           <div className="col-span-8 grid w-full grid-cols-1 gap-3">
             <h6 className="text-lg font-semibold">Edit Email Type</h6>
@@ -147,11 +185,10 @@ export default function EmailTypeSave() {
                     styles={customSelectStyles}
                     isMulti
                     placeholder="Select Email Folder"
-                    className="w-full h-auto rounded-md border border-[#A7A7A7] border-opacity-60 text-sm  text-zinc-500 placeholder:text-sm placeholder:text-[#7F7F7F]"
+                    className="h-auto w-full rounded-md border border-[#A7A7A7] border-opacity-60 text-sm text-zinc-500 placeholder:text-sm placeholder:text-[#7F7F7F]"
                     value={tokens}
                     onChange={(selectedOption) => {
-                      setTokens(selectedOption);
-                      field.onChange(selectedOption);
+                      setTokens(selectedOption.map((item) => ({ value: item.value, label: item.label })));
                     }}
                   />
                 )}

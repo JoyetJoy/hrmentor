@@ -84,6 +84,13 @@ export default function RightToWork() {
         {
           header: "Expiry Date",
           accessorKey: "expiry_date",
+          cell: ({ row }) => {
+            return (
+              <div className="flex px-2">
+                {row.original?.expiry_date || "--"}
+              </div>
+            );
+          }
         },
         {
           header: "Reviewed by",

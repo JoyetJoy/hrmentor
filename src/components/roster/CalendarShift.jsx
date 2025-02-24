@@ -2,7 +2,7 @@ import { newRequest, ROSTER_CLAIM } from "@/api";
 import { DASHBOARD_CANDIDATES_LIST } from "@/api/recruiter";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { Maximize2, ChevronRight } from "lucide-react";
+import { Maximize2, ChevronRight, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeaveRequest from "../popups/master/roster/Calendar/LeaveRequest";
@@ -90,17 +90,16 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <ChevronRight
+                <ChevronDown 
                   size={16}
                   strokeWidth={1.5}
                   onClick={() => setLeaveOpen(!leaveOpen)}
-                  className={`cursor-pointer transition-transform duration-300 ${leaveOpen ? "rotate-90" : ""}`}
+                  className={`cursor-pointer transition-transform duration-300 ${leaveOpen ? "-rotate-90" : ""}`}
                 />
-                <p className="text-sm font-semibold">Leave Requests</p>
+                <p className="text-sm font-semibold whitespace-nowrap">Leave Requests</p>
                 <hr className="float-end ml-3 w-[69.3%]" />
               </div>
-
-              {leaveOpen && (
+              {!leaveOpen && (
                 <div className="flex w-full items-center justify-center">
                 {rosterCalim?.roster_details?.leave_employees.map((employee)=>(
                     <div
@@ -140,7 +139,6 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                 }
                 </div>
               )}
-
               <div className="flex items-center gap-1">
                 <ChevronRight
                   size={16}
@@ -148,10 +146,9 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                   onClick={() => setClaimOpen(!claimOpen)}
                   className={`cursor-pointer transition-transform duration-300 ${claimOpen ? "rotate-90" : ""}`}
                 />
-                <p className="text-sm font-semibold">Claimed Requests</p>
+                <p className="text-sm font-semibold whitespace-nowrap">Claimed Requests</p>
                 <hr className="float-end ml-3 w-[66.2%]" />
               </div>
-
               {claimOpen && (
                 <div className="flex w-full flex-col gap-3 items-center justify-center">
                   {rosterCalim?.roster_details?.shift_claim_requests?.map((claimedEmployee)=>(
