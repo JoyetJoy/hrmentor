@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-
 export default function RightToWorkEdit({
   popupOpen,
   setPopupOpen,
@@ -38,6 +37,7 @@ export default function RightToWorkEdit({
 
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
+  const [indefinite, setIndefinite] = useState(false);
 
   // Get selected data
   const { data: employeeRightToWorkDetailByid, isLoading } = useQuery({
@@ -67,7 +67,9 @@ export default function RightToWorkEdit({
     setSelectedField(0);
     reset();
   }
-
+  const handleCheckboxChange = (e) => {
+    setIndefinite(e.target.checked);
+  };
   const onSubmit = async (data) => {
     setLoader(true);
     try {
@@ -99,7 +101,7 @@ export default function RightToWorkEdit({
       setLoader(false);
     }
   };
-  console.log(errors,"errorserrorserrors")
+  console.log(errors, "errorserrorserrors");
   return (
     <Dialog
       open={popupOpen}
@@ -134,6 +136,14 @@ export default function RightToWorkEdit({
                 className="grid grid-cols-2 gap-3"
                 onSubmit={handleSubmit(onSubmit)}
               >
+                <label className="col-span-2 flex items-center justify-end gap-1 text-xs font-medium text-[#3A3A3A]">
+                  Indefinite leave to remain (ILR){" "}
+                  <input
+                    type="checkbox"
+                    onChange={handleCheckboxChange}
+                    checked={indefinite}
+                  />
+                </label>
                 <div className="group flex w-full flex-col gap-1">
                   <label className="required label-text">Reference No</label>
                   <input
@@ -148,21 +158,25 @@ export default function RightToWorkEdit({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Expiry Date
-                  </label>
-                  <input
-                    {...register("expiry_date", { required: true })}
-                    type="date"
-                    className="input-box h-10 w-full pr-2"
-                  />
-                  {errors.expiry_date && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.expiry_date?.message}
-                    </span>
-                  )}
-                </div>
+                {!indefinite && (
+                  <div className="group flex flex-col space-y-1">
+                    <div className="flex justify-between">
+                      <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Expiry Date
+                      </label>
+                    </div>
+                    <input
+                      {...register("expiry_date", { required: true })}
+                      type="date"
+                      className="input-box h-10 w-full pr-2"
+                    />
+                    {errors.expiry_date && (
+                      <span className="text-xs font-medium text-red-500">
+                        {errors.expiry_date.message}
+                      </span>
+                    )}
+                  </div>
+                )}
                 <div className="group col-span-2 flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Condition
@@ -258,5 +272,5 @@ export default function RightToWorkEdit({
         </div>
       </div>
     </Dialog>
-  )
+  );
 }
