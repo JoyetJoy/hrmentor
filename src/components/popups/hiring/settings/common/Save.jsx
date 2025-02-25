@@ -237,7 +237,7 @@ export default function SaveHiringMasterForm({
                       value={description}
                       onChange={setDescription}
                       placeholder={"Type here.."}
-                      className="max-h-56 min-h-36 w-full flex-grow rounded-md border border-black/10 placeholder:text-gray-mediumDark"
+                      className="w-full flex-grow rounded-md border border-black/10 placeholder:text-gray-mediumDark"
                     />
                     {errors?.description && (
                       <span className="text-xs font-medium text-red-500">

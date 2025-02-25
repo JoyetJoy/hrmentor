@@ -24,11 +24,13 @@ function Rosteroveview({ rosterCalim }) {
 
   // Save checkbox state to localStorage when isChecked changes
   useEffect(() => {
-    localStorage.setItem("shiftClaimChecked", isChecked ? "true" : "false");
+    if (isChecked) {
+      localStorage.setItem("shiftClaimChecked", "true");
+    }
   }, [isChecked]);
 
   const handleUpdateCheck = () => {
-    setIsChecked(true); 
+    setIsChecked(true);
   };
 
   return (
@@ -49,7 +51,10 @@ function Rosteroveview({ rosterCalim }) {
             <p className="pr-2 text-[0.8rem]">Shift Claim</p>
             <p
               className="cursor-pointer text-[0.8rem] text-slate-600"
-              onClick={() => setIsChecked(false)}
+              onClick={() => {
+                setIsChecked(false),
+                  localStorage.setItem("shiftClaimChecked", "false");
+              }}
             >
               Close
             </p>
