@@ -161,7 +161,7 @@ const RosterCalendar = () => {
       const selectdate = dayjs(date).format("YYYY-MM-DD");
       if (date) {
         navigate(
-          `/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`
+          `/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`,
         );
       }
     }
@@ -203,7 +203,7 @@ const RosterCalendar = () => {
         : { row: rowIndex, col: colIndex },
     );
   };
-  
+
   const [endDate, setEndDate] = useState(
     dayjs(startDate).add(6, "day").toDate(),
   );
@@ -246,6 +246,8 @@ const RosterCalendar = () => {
       name: "Mammutty P S",
 
       shifts: ["TI", "MT"],
+      shiftTime: ["09:00", "17:30"],
+
       shiftType: "Morning Shift",
       shiftType2: "Night Shift",
     },
@@ -254,6 +256,8 @@ const RosterCalendar = () => {
       name: "Tojo Thomas",
 
       shifts: [],
+      shiftTime: ["09:00", "17:30"],
+
       shiftType: "",
     },
     {
@@ -261,6 +265,8 @@ const RosterCalendar = () => {
       name: "Valsakh T G",
 
       shifts: ["T2", "OS"],
+      shiftTime: ["09:00", "17:30"],
+
       shiftType: "Evening Shift",
     },
     {
@@ -268,6 +274,8 @@ const RosterCalendar = () => {
       name: "Vishnu S L",
 
       shifts: ["TI", "IT"],
+      shiftTime: ["09:00", "17:30"],
+
       shiftType: "Night Shift",
     },
     {
@@ -275,6 +283,8 @@ const RosterCalendar = () => {
       name: "Mariya S L",
 
       shifts: ["TI", "IT"],
+      shiftTime: ["09:00", "17:30"],
+
       shiftType: "Night Shift",
     },
     {
@@ -282,6 +292,8 @@ const RosterCalendar = () => {
       name: "John Doe",
 
       shifts: [],
+      shiftTime: ["09:00", "17:30"],
+
       shiftType: "Afternoon Shift",
     },
     {
@@ -289,6 +301,8 @@ const RosterCalendar = () => {
       name: "Dudy St",
 
       shifts: [],
+      shiftTime: ["12:00", "17:30"],
+
       shiftType: "Afternoon Shift",
     },
     {
@@ -296,6 +310,7 @@ const RosterCalendar = () => {
       name: "Leo Doe",
 
       shifts: [],
+      shiftTime: ["09:00", "17:30"],
       shiftType: "Afternoon Shift",
     },
   ];
@@ -369,6 +384,21 @@ const RosterCalendar = () => {
     return date;
   });
   console.log(weekDate);
+  const getWeekDays = () => {
+    // Ensure startDate is in the correct week
+    const startOfWeek = dayjs(startDate).startOf("week").add(1, "day"); // Monday as start
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const day = startOfWeek.add(i, "day");
+      return {
+        day: day.format("ddd"),
+        date: day.format("MMM DD"),
+        fullDate: day.format("YYYY-MM-DD"),
+      };
+    });
+  };
+
+  const weekDays = getWeekDays();
 
   return (
     <>
@@ -543,22 +573,31 @@ const RosterCalendar = () => {
             </div>
           </div>
 
-          <div className="mt-4 min-h-screen w-full bg-gray-100">
+          <div className="overflow-x-min mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
             <div className="mt-4 w-full overflow-x-auto bg-white shadow-md">
-              <table className="min-h-screen w-full border-collapse rounded-md overflow-hidden">
-                
-                <thead className="bg-gray-soft border">
-                  <tr className="border bg-[#00000036] border-gray-300 text-sm text-gray-600">
+              <table className="overflow-x-min min-h-screen w-full border-collapse overflow-x-auto rounded-md">
+                <thead className="border bg-gray-soft">
+                  <tr className="border border-gray-300 bg-[#00000036] text-sm text-gray-600">
                     <th className="p-5 text-left">Employee Name</th>
-                    {days.map((day, index) => (
-                      <th
-                        key={index}
-                        className="border border-gray-300 text-sm font-bold capitalize text-gray-darkpale"
-                      >
-                        {day}
-                        <p className="font-medium">{weekDates[index]}</p>{" "}
-                      </th>
-                    ))}
+                    {selectedOption === "weekly"
+                      ? weekDays.map((dayObj, index) => (
+                          <th
+                            key={index}
+                            className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                          >
+                            {dayObj.day}
+                            <p className="font-medium">{dayObj.date}</p>
+                          </th>
+                        ))
+                      : monthDays.map((dayObj, index) => (
+                          <th
+                            key={index}
+                            className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                          >
+                            {dayObj.day}
+                            <p className="font-medium">{dayObj.date}</p>
+                          </th>
+                        ))}
                   </tr>
                 </thead>
 
@@ -585,7 +624,7 @@ const RosterCalendar = () => {
                             {emp.shifts.length > 0 ? (
                               <>
                                 <div
-                                  className={`rounded-md py-2 text-white ${
+                                  className={`rounded-md py-2 text-white min-w-44 ${
                                     emp.shiftType === "Morning Shift"
                                       ? "bg-[#439393]"
                                       : emp.shiftType === "Evening Shift"
@@ -598,15 +637,15 @@ const RosterCalendar = () => {
                                   }`}
                                 >
                                   <div>
-                                    <p className="text-sm">
-                                      {emp.shifts.join(", ")}
-                                    </p>
                                     <p className="text-xs">{emp.shiftType}</p>
+                                    <p className="text-sm">
+                                      {emp.shiftTime.join(" - ")}
+                                    </p>
                                   </div>
                                 </div>
                                 {emp.shiftType2 && (
                                   <div
-                                    className={`mt-3 rounded-md py-2 text-white ${
+                                    className={`mt-3 rounded-md py-2 text-white min-w-44 ${
                                       emp.shiftType2 === "Morning Shift"
                                         ? "bg-[#439393]"
                                         : emp.shiftType2 === "Evening Shift"
@@ -620,11 +659,11 @@ const RosterCalendar = () => {
                                     }`}
                                   >
                                     <div>
-                                      <p className="text-sm">
-                                        {emp.shifts.join(", ")}
-                                      </p>
                                       <p className="text-xs">
                                         {emp.shiftType2}
+                                      </p>
+                                      <p className="text-sm">
+                                        {emp.shiftTime.join(" - ")}
                                       </p>
                                     </div>
                                   </div>
