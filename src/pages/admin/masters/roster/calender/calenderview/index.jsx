@@ -8,7 +8,6 @@ import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import RosterHeader from "@/components/common/RosterHeader";
 import Rosteroveview from "@/components/roster/Rosteroveview";
 import CalanderShift from "@/components/roster/CalendarShift";
 import CalendarEmployees from "@/components/roster/CalendarEmployees";
@@ -16,8 +15,9 @@ import CalendarShiftHistory from "@/components/roster/CalendarShiftHistory";
 import { useLocation } from "react-router-dom";
 import { ADD_EMPLOYEE_ROSTER, DELETE_EMPLOYEE_ROSTER, ROSTER_EMPLIST, SWAP_EMPLOYEE_ROSTER } from "@/api/setup";
 import toast from "react-hot-toast";
+import ShiftHeader from "@/components/common/ShiftHeader";
 
-export const RosterCalendarView = ({ api, selectedId, selecteDate }) => {
+export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
   // hiring-dashboard
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -148,7 +148,7 @@ export const RosterCalendarView = ({ api, selectedId, selecteDate }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   return (
     <>
-      <RosterHeader page={1} />
+      <ShiftHeader page={1} />
       {isLoading ? (
         <Loader />
       ) : (
