@@ -15,6 +15,13 @@ import { newRequest, ROASTER_LIST_GET } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import { dividerClasses } from "@mui/material";
 import RosterItemList from "@/components/sidebars/roster/Index";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import {
+  EMPLOYEE_DEPARTMENT_LIST,
+  EMPLOYEE_WORK_AREA,
+  EMPLOYEE_WORK_LOCATION_LIST,
+} from "@/api/master";
 
 const departmentOptions = [
   { value: "emergency", label: "Emergency Department" },
@@ -49,6 +56,7 @@ const RosterCalendar = () => {
   const [activeWorkArea, setActiveWorkArea] = useState("");
   const [activeLocation, setActiveLocation] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
@@ -153,7 +161,7 @@ const RosterCalendar = () => {
       const selectdate = dayjs(date).format("YYYY-MM-DD");
       if (date) {
         navigate(
-          `/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`,
+          `/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`
         );
       }
     }
@@ -169,166 +177,573 @@ const RosterCalendar = () => {
   const addRoster = () => {
     setPopupOpen(true);
   };
+  const getMonthDays = () => {
+    const startOfMonth = dayjs(date).startOf("month");
+    const daysInMonth = dayjs(date).daysInMonth();
+
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = startOfMonth.add(i, "day");
+      return {
+        day: day.format("ddd"),
+        date: day.format("MMM DD"),
+        fullDate: day.format("YYYY-MM-DD"),
+      };
+    });
+  };
+  const [selectedOption, setSelectedOption] = useState("weekly");
+  const [startDate, setStartDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const [popup, setPopUp] = useState(false);
+  const [openPopup, setOpenPopup] = useState(null); // Track which popup is open
+
+  const handleOpen = (rowIndex, colIndex) => {
+    setOpenPopup((prev) =>
+      prev?.row === rowIndex && prev?.col === colIndex
+        ? null
+        : { row: rowIndex, col: colIndex },
+    );
+  };
+  // const handleOpen = () => setPopUp(!popup);
+  // const handleClose = () => setPopUp(false);
+
+  const [endDate, setEndDate] = useState(
+    dayjs(startDate).add(6, "day").toDate(),
+  );
+  const handlePrev = () => {
+    let newStartDate;
+    if (selectedOption === "daily") {
+      newStartDate = dayjs(startDate).subtract(1, "day").toDate();
+    } else if (selectedOption === "weekly") {
+      newStartDate = dayjs(startDate).subtract(1, "week").toDate();
+    } else {
+      newStartDate = dayjs(startDate).subtract(1, "month").toDate();
+    }
+    setStartDate(newStartDate);
+    setEndDate(
+      dayjs(newStartDate)
+        .add(selectedOption === "monthly" ? 1 : 6, "day")
+        .toDate(),
+    );
+  };
+  const handleNext = () => {
+    let newStartDate;
+    if (selectedOption === "daily") {
+      newStartDate = dayjs(startDate).add(1, "day").toDate();
+    } else if (selectedOption === "weekly") {
+      newStartDate = dayjs(startDate).add(1, "week").toDate();
+    } else {
+      newStartDate = dayjs(startDate).add(1, "month").toDate();
+    }
+    setStartDate(newStartDate);
+    setEndDate(
+      dayjs(newStartDate)
+        .add(selectedOption === "monthly" ? 1 : 6, "day")
+        .toDate(),
+    );
+  };
+  const monthDays = getMonthDays();
+  const employees = [
+    {
+      id: "BTRV002",
+      name: "Mammutty P S",
+
+      shifts: ["TI", "MT"],
+      shiftType: "Morning Shift",
+      shiftType2: "Night Shift",
+    },
+    {
+      id: "BTRV001",
+      name: "Tojo Thomas",
+
+      shifts: [],
+      shiftType: "",
+    },
+    {
+      id: "BTRV21",
+      name: "Valsakh T G",
+
+      shifts: ["T2", "OS"],
+      shiftType: "Evening Shift",
+    },
+    {
+      id: "BTRV24",
+      name: "Vishnu S L",
+
+      shifts: ["TI", "IT"],
+      shiftType: "Night Shift",
+    },
+    {
+      id: "BTRV24",
+      name: "Mariya S L",
+
+      shifts: ["TI", "IT"],
+      shiftType: "Night Shift",
+    },
+    {
+      id: "BTRV0027",
+      name: "John Doe",
+
+      shifts: [],
+      shiftType: "Afternoon Shift",
+    },
+    {
+      id: "BTRV0029",
+      name: "Dudy St",
+
+      shifts: [],
+      shiftType: "Afternoon Shift",
+    },
+    {
+      id: "BTRV0027",
+      name: "Leo Doe",
+
+      shifts: [],
+      shiftType: "Afternoon Shift",
+    },
+  ];
+  const shifts = [
+    { name: "Morning Shift", time: "09:00 - 17:30" },
+    { name: "Saturday Shift", time: "09:00 - 16:30" },
+  ];
+
+  const [search, setSearch] = useState("");
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const currentDate = new Date();
+  const weekDates = days.map((_, index) => {
+    const date = new Date(currentDate);
+    date.setDate(currentDate.getDate() + index);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  });
+  const filteredShifts = shifts.filter((shift) =>
+    shift.name.toLowerCase().includes(search.toLowerCase()),
+  );
+  const handleRangeChange = (option) => {
+    setSelectedOption(option);
+    let newEndDate;
+
+    if (option === "daily") {
+      newEndDate = startDate;
+    } else if (option === "weekly") {
+      newEndDate = dayjs(startDate).add(6, "day").toDate();
+    } else if (option === "monthly") {
+      newEndDate = dayjs(startDate).add(1, "month").subtract(1, "day").toDate();
+    }
+
+    setEndDate(newEndDate);
+  };
+  const useFetchData = (key, url) => {
+    return useQuery({
+      queryKey: [key],
+      queryFn: () => newRequest.get(url).then((res) => res.data),
+    });
+  };
+
+  // Fetch data from APIs
+  const { data: department } = useFetchData(
+    "department",
+    EMPLOYEE_DEPARTMENT_LIST,
+  );
+  const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
+  const { data: location } = useFetchData(
+    "location",
+    EMPLOYEE_WORK_LOCATION_LIST,
+  );
+
+  // Debugging
+  console.log("work_area data:", work_area);
+  console.log("department data:", department);
+  console.log("location data:", location);
+
+  // Ensure the data is an array
+  const departmentOptions = Array.isArray(department)
+    ? department.map((dep) => ({ value: dep.id, label: dep.value }))
+    : [];
+  const locationOptions = Array.isArray(location)
+    ? location.map((loc) => ({ value: loc.id, label: loc.value }))
+    : [];
+  const workAreaOptions = work_area
+    ? work_area?.data?.original?.data?.map((area) => ({
+        value: area.id,
+        label: area.name,
+      }))
+    : [];
+  const weekDate = weekDates.map((date, index) => {
+    return date;
+  });
+  console.log(weekDate);
 
   return (
-    <div className="flex gap-2">
-      <>
-        <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-        <div className="flex flex-row py-4">
-          <div>
-            <div className="flex w-full items-center justify-between py-2">
-              <div className="flex items-center gap-4">
+    <>
+      <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <div className="flex py-4">
+        <div className="w-full">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
+              {/* Daily, Weekly, Monthly Buttons */}
+              {["weekly", "monthly"].map((option) => (
                 <button
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-black underline transition-transform duration-300"
+                  key={option}
+                  className={`btn-sm flex items-center rounded-md px-4 py-2 ${
+                    selectedOption === option
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                  onClick={() => handleRangeChange(option)}
                 >
-                  <AlignJustify
-                    className={`transform transition-transform duration-700 ${
-                      isExpanded ? "rotate-180" : "rotate-0"
-                    }`}
-                  />
+                  {option.charAt(0).toUpperCase() + option.slice(1)}
                 </button>
-                <Select
-                  options={years}
-                  isSearchable={true}
-                  onChange={handleYearChange}
-                  styles={customSelectStyles}
-                  value={years.find(
-                    (yearOption) => yearOption.value === dayjs(date).year(),
-                  )}
-                  placeholder={dayjs(date).format("YYYY")}
-                  className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-                />
-                <Select
-                  options={months}
-                  isSearchable={true}
-                  onChange={handleMonthChange}
-                  styles={customSelectStyles}
-                  value={months.find(
-                    (monthOption) =>
-                      monthOption.value === dayjs(date).month() + 1,
-                  )}
-                  placeholder={dayjs(date).format("MMMM")}
-                  className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+              ))}
+
+              {/* Previous Button */}
+              <button
+                onClick={handlePrev}
+                className="btn-sm flex items-center justify-center rounded-md bg-gray-200 p-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#434242"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-left"
+                >
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+
+              {/* Date Range Input */}
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={`${dayjs(startDate).format("DD/MM/YYYY")} - ${dayjs(endDate).format("DD/MM/YYYY")}`}
+                  readOnly
+                  className="w-44 rounded-md border border-gray-300 bg-white px-3 py-1 text-center text-xs"
                 />
               </div>
-              <div className="flex gap-2">
-                <Select
-                  options={employee}
-                  isSearchable={true}
-                  onChange={(option) => setActiveEmployee(option?.id || "")}
-                  styles={customSelectStyles}
-                  placeholder={"All employee"}
-                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
-                />
-                <button
-                  onClick={() => addRoster()}
-                  className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-[#030E5C]/70 data-[focus]:outline-1 data-[focus]:outline-white"
+
+              {/* Next Button */}
+              <button
+                onClick={handleNext}
+                className="btn-sm flex items-center justify-center rounded-md bg-gray-200 p-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#434242"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-chevron-right"
                 >
-                  <Plus className="size-4" />
-                  Add Roster
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+
+              {/* Calendar Icon */}
+              <div className="relative">
+                {/* Year Picker Button */}
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex items-center justify-center rounded-md bg-gray-200 p-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#464444"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-calendar"
+                  >
+                    <path d="M8 2v4" />
+                    <path d="M16 2v4" />
+                    <rect width="18" height="18" x="3" y="4" rx="2" />
+                    <path d="M3 10h18" />
+                  </svg>
                 </button>
+
+                {/* Year Picker (Appears Below) */}
+                {isOpen && (
+                  <div
+                    className="absolute -right-12 top-10 z-50 p-2"
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      borderRadius: "0px",
+                    }}
+                  >
+                    <DatePicker
+                      selected={selectedYear}
+                      onChange={(date) => {
+                        setSelectedYear(date);
+
+                        const newYear = dayjs(date).year();
+
+                        const newStartDate = dayjs(`${newYear}-01-01`).toDate();
+                        const newEndDate = dayjs(`${newYear}-12-31`).toDate();
+
+                        setStartDate(newStartDate);
+                        setEndDate(newEndDate);
+
+                        setIsOpen(false);
+                      }}
+                      showYearPicker
+                      dateFormat="yyyy"
+                      inline
+                      className="w-full"
+                    />
+                  </div>
+                )}
               </div>
             </div>
-            <div className="mt-7 w-full">
-              {isExpanded && (
-                <RosterItemList
-                  activeDepartment={activeDepartment}
-                  setActiveDepartment={setActiveDepartment}
-                  activeLocation={activeLocation}
-                  setActiveLocation={setActiveLocation}
-                  activeWorkArea={activeWorkArea}
-                  setActiveWorkArea={setActiveWorkArea}
-                />
-              )}
-              <Calendar
-                key={date}
-                onChange={handleDateChange}
-                value={date}
-                showNavigation={false}
-                className="w-full font-monorope"
-                locale="en-US"
-                formatShortWeekday={(locale, date) =>
-                  dayjs(date).format("dddd")
-                }
-                tileContent={({ date, view }) => {
-                  if (view === "month") {
-                    const {
-                      holidayEvents,
-                      shiftEvents,
-                      availableSlots,
-                      requestedSlots,
-                    } = findEvents(date);
-                    console.log(shiftEvents);
+          </div>
+          <div className="flex w-full items-center justify-between py-2">
+            <div className="flex items-center gap-4">
+              <Select
+                options={departmentOptions}
+                isSearchable={true}
+                styles={customSelectStyles}
+                placeholder="Select Department"
+                className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+              />
 
-                    return (
-                      <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
-                        <>
-                          <div className="absolute -top-6 right-0 flex flex-col items-end">
-                            {availableSlots?.map((slot, index) => (
-                              <img
-                                key={`available-slot-${index}`}
-                                onClick={() => {
-                                  setClaimPopup(true);
-                                  setSelectedField(slot);
-                                }}
-                                src="/assets/icons/employee_access/header/availableshift.svg"
-                                alt=""
-                              />
-                            ))}
-                            {requestedSlots?.map((slot, index) => (
-                              <img
-                                key={index}
-                                src="/assets/icons/employee_access/header/requested_slot.svg"
-                                alt=""
-                              />
-                            ))}
-                          </div>
-                          {shiftEvents?.slice(0, 2)?.map((event, index) => (
-                            <div
-                              key={index}
-                              onClick={() => handleClick(event, date)}
-                              className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 pr-3 pl-2 py-3 lg:w-36 xl:w-44 ${getTileClass(
-                                date,
-                                event,
-                              )} justify-center text-gray-800`}
-                            >
-                              <span className="float-start flex text-[0.8rem] font-semibold">
-                                {event.shift_name}
-                              </span>
-                              <span className="float-start flex text-[12px]">
-                                {convertTo12HourFormat(
-                                  event?.shift?.start_time,
-                                )}
-                                -{convertTo12HourFormat(event?.shift?.end_time)}
-                              </span>
-                              <div className="flex w-full items-center justify-between pr-2">
-                                <span className="float-start flex text-[12.2px] font-semibold">
-                                  Employee:{" "}
-                                  {event?.assigned_total_employee_count || 0}/
-                                  {event?.people_required || 0}
-                                </span>
-                                <ArrowRight
-                                  onClick={() => handleClick(event)}
-                                  size={16}
-                                  color="#848484"
-                                  strokeWidth={1.5}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
+              <Select
+                options={locationOptions}
+                isSearchable={true}
+                styles={customSelectStyles}
+                placeholder="Select Location"
+                className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Select
+                options={workAreaOptions}
+                isSearchable={true}
+                styles={customSelectStyles}
+                placeholder="Select Work Area"
+                className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+              />
+              <Select
+                options={employee}
+                isSearchable={true}
+                onChange={(option) => setActiveEmployee(option?.id || "")}
+                styles={customSelectStyles}
+                placeholder={"All employee"}
+                className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
               />
             </div>
           </div>
+
+          <div className="mt-4 min-h-screen w-full bg-gray-100">
+            <div className="mt-4 w-full overflow-x-auto bg-white shadow-md">
+              <table className="min-h-screen w-full border-collapse rounded-md overflow-hidden">
+                
+                <thead className="bg-gray-soft border">
+                  <tr className="border bg-[#00000036] border-gray-300 text-sm text-gray-600">
+                    <th className="p-5 text-left">Employee Name</th>
+                    {days.map((day, index) => (
+                      <th
+                        key={index}
+                        className="border border-gray-300 text-sm font-bold capitalize text-gray-darkpale"
+                      >
+                        {day}
+                        <p className="font-medium">{weekDates[index]}</p>{" "}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+
+                <tbody className="border">
+                  {employees
+                    .filter((emp) =>
+                      emp.name.toLowerCase().includes(search.toLowerCase()),
+                    )
+                    .map((emp, rowIndex) => (
+                      <tr key={rowIndex} className="border">
+                        <td className="flex items-center space-x-3 p-3">
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                            {emp.name.charAt(0)}
+                          </span>
+                          <span className="text-xs font-bold text-gray-600">
+                            {emp.name}
+                          </span>
+                        </td>
+                        {days.map((_, colIndex) => (
+                          <td
+                            key={colIndex}
+                            className="relative border p-2 text-center"
+                          >
+                            {emp.shifts.length > 0 ? (
+                              <>
+                                <div
+                                  className={`rounded-md py-2 text-white ${
+                                    emp.shiftType === "Morning Shift"
+                                      ? "bg-[#439393]"
+                                      : emp.shiftType === "Evening Shift"
+                                        ? "bg-[#e5881f]"
+                                        : emp.shiftType === "Night Shift"
+                                          ? "bg-[#b670d7]"
+                                          : emp.shiftType === "Afternoon Shift"
+                                            ? "bg-yellow-500"
+                                            : "bg-gray-400"
+                                  }`}
+                                >
+                                  <div>
+                                    <p className="text-sm">
+                                      {emp.shifts.join(", ")}
+                                    </p>
+                                    <p className="text-xs">{emp.shiftType}</p>
+                                  </div>
+                                </div>
+                                {emp.shiftType2 && (
+                                  <div
+                                    className={`mt-3 rounded-md py-2 text-white ${
+                                      emp.shiftType2 === "Morning Shift"
+                                        ? "bg-[#439393]"
+                                        : emp.shiftType2 === "Evening Shift"
+                                          ? "bg-[#e5881f]"
+                                          : emp.shiftType2 === "Night Shift"
+                                            ? "bg-[#af70d7]"
+                                            : emp.shiftType2 ===
+                                                "Afternoon Shift"
+                                              ? "bg-yellow-500"
+                                              : "bg-gray-400"
+                                    }`}
+                                  >
+                                    <div>
+                                      <p className="text-sm">
+                                        {emp.shifts.join(", ")}
+                                      </p>
+                                      <p className="text-xs">
+                                        {emp.shiftType2}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                                <button
+                                  onClick={() => handleOpen(rowIndex, colIndex)}
+                                  className="cursor-pointer text-2xl font-bold text-blue-500"
+                                >
+                                  +
+                                </button>
+                                {openPopup?.row === rowIndex &&
+                                  openPopup?.col === colIndex && (
+                                    <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
+                                      {/* Close Button */}
+                                      <div className="flex items-center justify-between border-b pb-2">
+                                        <span className="text-sm font-semibold">
+                                          Select Shift
+                                        </span>
+                                        <button
+                                          className="text-lg font-bold text-gray-500 hover:text-gray-700"
+                                          onClick={() => setOpenPopup(null)} // Close popup when clicked
+                                        >
+                                          &times;
+                                        </button>
+                                      </div>
+
+                                      {/* Search Input */}
+                                      <input
+                                        type="text"
+                                        placeholder="Search shift name"
+                                        className="mt-2 w-full rounded-md border p-2 outline-none"
+                                      />
+
+                                      {/* Shift List */}
+                                      <div className="mt-2">
+                                        {filteredShifts.map((shift, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex justify-between border-b p-2 text-sm last:border-none"
+                                          >
+                                            <span>{shift.name}</span>
+                                            <span className="text-gray-500">
+                                              {shift.time}
+                                            </span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                              </>
+                            ) : colIndex > 4 ? (
+                              <div className="text-xs text-gray-500">
+                                DAY OFF
+                              </div>
+                            ) : (
+                              <div>
+                                {/* Button to Open Popup */}
+                                <button
+                                  className="text-2xl font-bold text-blue-500"
+                                  onClick={() => handleOpen(rowIndex, colIndex)}
+                                >
+                                  +
+                                </button>
+
+                                {/* Popup Box (only opens for clicked cell) */}
+                                {openPopup?.row === rowIndex &&
+                                  openPopup?.col === colIndex && (
+                                    <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
+                                      {/* Close Button */}
+                                      <div className="flex items-center justify-between border-b pb-2">
+                                        <span className="text-sm font-semibold">
+                                          Select Shift
+                                        </span>
+                                        <button
+                                          className="text-lg font-bold text-gray-500 hover:text-gray-700"
+                                          onClick={() => setOpenPopup(null)} // Close popup when clicked
+                                        >
+                                          &times;
+                                        </button>
+                                      </div>
+
+                                      {/* Search Input */}
+                                      <input
+                                        type="text"
+                                        placeholder="Search shift name"
+                                        className="mt-2 w-full rounded-md border p-2 outline-none"
+                                      />
+
+                                      {/* Shift List */}
+                                      <div className="mt-2">
+                                        {filteredShifts.map((shift, index) => (
+                                          <div
+                                            key={index}
+                                            className="flex justify-between border-b p-2 text-sm last:border-none"
+                                          >
+                                            <span>{shift.name}</span>
+                                            <span className="text-gray-500">
+                                              {shift.time}
+                                            </span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </>
-    </div>
+      </div>
+    </>
   );
 };
 
