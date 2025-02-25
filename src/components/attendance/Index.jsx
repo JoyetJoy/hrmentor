@@ -11,14 +11,14 @@ const Index = ({ attendance, setAttendance }) => {
       <AddEntryModal addEntry={addEntry} setAddEntry={setAddEntry} />
       {attendance && (
         <div className="absolute right-10 top-32 z-10 w-5/12 overflow-hidden rounded-lg bg-white shadow-lg shadow-black">
-          <div className="flex justify-between bg-blue-700 px-10 py-7">
-            <p className="text-lg font-semibold text-white">
+          <div className="flex justify-between bg-[#dadae4] px-10 py-7">
+            <p className="text-lg font-semibold text-[#555c5f]">
               Clock In / Clock Out
             </p>
             <button
               type="button"
               onClick={() => setAttendance(false)}
-              className="text-lg font-extrabold text-white"
+              className="text-lg font-extrabold text-[#555c5f]"
             >
               <X />
             </button>

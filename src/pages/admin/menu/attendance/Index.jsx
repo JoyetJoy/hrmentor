@@ -16,7 +16,7 @@ export default function Attendance() {
     dayjs(startDate).add(6, "day").toDate(),
   );
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
 
   // Dummy Data (With Status)
@@ -53,7 +53,6 @@ export default function Attendance() {
     value: 2020 + i,
     label: (2020 + i).toString(),
   }));
-  
 
   const handlePrev = () => {
     let newStartDate;
@@ -108,7 +107,7 @@ export default function Attendance() {
   const getWeekDays = () => {
     // Ensure startDate is in the correct week
     const startOfWeek = dayjs(startDate).startOf("week").add(1, "day"); // Monday as start
-  
+
     return Array.from({ length: 7 }, (_, i) => {
       const day = startOfWeek.add(i, "day");
       return {
@@ -118,7 +117,7 @@ export default function Attendance() {
       };
     });
   };
-  
+
   const monthDays = getMonthDays();
   const weekDays = getWeekDays();
   const events = {
@@ -128,28 +127,23 @@ export default function Attendance() {
   const handleYearChange = (date) => {
     const newYear = dayjs(date).year();
     setSelectedYear(date);
-  
+
     // Preserve the selected month while changing the year
     setStartDate(dayjs(startDate).year(newYear).format("YYYY-MM-DD"));
     setEndDate(dayjs(endDate).year(newYear).format("YYYY-MM-DD"));
-  
+
     setIsOpen(false);
   };
-  
 
   useEffect(() => {
     if (selectedOption === "weekly") {
       setStartDate(weekDays[0].fullDate);
       setEndDate(weekDays[weekDays.length - 1].fullDate);
     } else if (selectedOption === "monthly") {
-      
     }
   }, [selectedOption]);
-  console.log(startDate, endDate);
 
   const getCurrentWeek = (year) => {
-    console.log(year);
-    
     const today = dayjs().year(year).toDate();
     const dayOfWeek = today.getDay();
     const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
@@ -160,36 +154,34 @@ export default function Attendance() {
   };
 
   const getCurrentMonth = (year, month) => {
-    console.log(year);
-    
-    const start = dayjs(`${year}-${month + 1}-01`).startOf("month").format("YYYY-MM-DD");
-    const end = dayjs(`${year}-${month + 1}-01`).endOf("month").format("YYYY-MM-DD");
-    console.log(start,end);
-    
+    const start = dayjs(`${year}-${month + 1}-01`)
+      .startOf("month")
+      .format("YYYY-MM-DD");
+    const end = dayjs(`${year}-${month + 1}-01`)
+      .endOf("month")
+      .format("YYYY-MM-DD");
+
     return { start, end };
   };
-  
 
   const handleFilter = (filterType) => {
     setSelectedOption(filterType);
-  
+
     let dateRange;
-    const year = dayjs(selectedYear).year(); // Ensure we're using the selected year
-  
+
     if (filterType === "weekly") {
-      dateRange = getCurrentWeek(year);
+      dateRange = getCurrentWeek(selectedYear);
     } else if (filterType === "monthly") {
       const selectedMonth = dayjs(startDate).month(); // Get the currently selected month
-      dateRange = getCurrentMonth(year, selectedMonth);
+      dateRange = getCurrentMonth(selectedYear, selectedMonth);
     }
-  
+
     setStartDate(dateRange.start);
     setEndDate(dateRange.end);
-  
+
     console.log("Start Date:", dateRange.start);
     console.log("End Date:", dateRange.end);
   };
-  
 
   return (
     <>
@@ -309,7 +301,9 @@ export default function Attendance() {
                     }}
                   >
                     <DatePicker
-                      selected={selectedYear}
+                      selected={
+                        selectedYear ? new Date(selectedYear, 0, 1) : new Date()
+                      } // Ensure it selects the current year
                       onChange={handleYearChange}
                       showYearPicker
                       dateFormat="yyyy"

@@ -56,7 +56,7 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
       <div className="fixed inset-0 z-10 flex items-center justify-center p-4">
         <DialogPanel className="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
           {/* Header */}
-          <div className="flex justify-between bg-[#376dff] px-6 py-4">
+          <div className="flex justify-between bg-[#555c5f] px-6 py-4">
             <p className="text-lg font-semibold text-white">Add Entry</p>
             <button onClick={close} className="text-lg font-extrabold text-white">
               <X />
