@@ -174,13 +174,7 @@ export default function ClockIn({
                                   "Unnamed Shift"}
                               </p>
                               <p className="font-bold text-textcolor-darkCharcoal">
-                                {formatTime(
-                                  clockindata?.shift_detail?.start_time,
-                                )}{" "}
-                                -{" "}
-                                {formatTime(
-                                  clockindata?.shift_detail?.end_time,
-                                )}
+                                {clockindata?.shift_detail?.start_time} - {clockindata?.shift_detail?.end_time}
                               </p>
                             </div>
                           )}
@@ -215,8 +209,7 @@ export default function ClockIn({
                                       {times?.shift?.name}
                                     </p>
                                     <p className="font-bold text-textcolor-darkCharcoal">
-                                      {formatTime(times?.shift?.start_time)} -{" "}
-                                      {formatTime(times?.shift?.end_time)}
+                                      {times?.shift?.start_time} - {times?.shift?.end_time}
                                     </p>
                                   </div>
                                 )}
