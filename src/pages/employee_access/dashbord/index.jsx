@@ -19,34 +19,34 @@ export const EmployeeDashboard = () => {
     {
       title: "Documents Expiry",
       details: [
-        { type: "Visa", count: "5/233" },
-        { type: "Passport", count: "3/150" },
-        { type: "ID Card", count: "8/300" },
+        { type: "Visa", count: "1/12/24" },
+        { type: "Passport", count: "3/11/24" },
+        { type: "ID Card", count: "8/5/20" },
       ],
     },
     {
       title: "New Joiners",
       details: [
-        { type: "HR", count: "2/20" },
-        { type: "Engineers", count: "10/50" },
-        { type: "Designers", count: "5/30" },
-        { type: "Designers", count: "5/30" },
+        { name:"Krishnapriya",type: "HR", count: "1/12/24" },
+        { name:"Krishnapriya",type: "Engineers", count: "1/12/24" },
+        { name:"Krishnapriya",type: "Designers", count: "1/12/24" },
+        { name:"Krishnapriya",type: "Designers", count: "1/12/24" },
       ],
     },
     {
       title: "Bank Holidays",
       details: [
-        { type: "2024", date: "2024-12-25" },
-        { type: "2025", date: "2025-01-01" },
-        { type: "2026", date: "2026-03-15" },
+        {  name:"Krishnapriya",type: "2024", date: "2024-12-25" },
+        {  name:"Krishnapriya",type: "2025", date: "2025-01-01" },
+        {  name:"Krishnapriya",type: "2026", date: "2026-03-15" },
       ],
     },
     {
       title: "Birthday in next 30 days",
       details: [
-        { type: "HR", count: "2/12" },
-        { type: "Engineers", count: "3/15" },
-        { type: "Designers", count: "1/10" },
+        {name:"Krishnapriya", type: "HR", count: "1/12/24" },
+        { name:"Krishnapriya",type: "Engineers", count: "1/12/24" },
+        { name:"Krishnapriya",type: "Designers", count: "1/12/24" },
       ],
     },
   ];

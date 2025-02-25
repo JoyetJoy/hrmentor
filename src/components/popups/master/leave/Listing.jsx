@@ -15,7 +15,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(0);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const [ViewEdit, setViewEdit] = useState("");
@@ -202,7 +202,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [currentPage, pageLimit, colKeys],
   );
-
+console.log(selectedId,"selectedIdselectedIdselectedId")
   return (
     <>
       <DeleteConfirmation

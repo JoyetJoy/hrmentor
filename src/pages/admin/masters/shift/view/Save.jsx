@@ -21,6 +21,7 @@ import {
 } from "@/api/master";
 import { SHIFT_LIST, SHIFT_BREAK_TIME } from "@/api/setup";
 import Break from "../Break";
+import tinycolor from "tinycolor2";
 
 export default function SaveMasterShift({ formtype, sid }) {
   const navigate = useNavigate();
@@ -197,6 +198,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       recur_pattern: data.recur_pattern,
       week_def: data.week_def,
       break_times: new_break,
+      color: color,
     };
 
     // Add weekly specific fields if recurrence pattern is weekly
@@ -257,6 +259,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       setValue("weekly_shifts", shiftDetails?.weekly_shifts);
       setValue("people_count", shiftDetails?.people_count);
       setNew_break(shiftDetails?.breakTime);
+      setColor(shiftDetails?.color);
       setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks || []);
       setRequireDays(
         shiftDetails?.weekly_shifts[0]?.people_count || [0, 0, 0, 0, 0, 0, 0],
@@ -298,6 +301,10 @@ export default function SaveMasterShift({ formtype, sid }) {
     }
 
     return value;
+  };
+  const handleColorChange = (newColor) => {
+    const hexColor = tinycolor(newColor).toHexString(); // Convert to HEX
+    setColor(hexColor);
   };
 
   return (
@@ -363,7 +370,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                   </div>
                   <div className="relative">
                     {/* Color Picker Trigger */}
-                    <div className="flex  flex-col items-center">
+                    <div className="flex flex-col items-center">
                       <label className="label-text">Color</label>
                       <div
                         className="cursor-pointer rounded-full border border-gray-300 p-1"
@@ -377,7 +384,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                       <div className="absolute z-10 mt-2 rounded-lg bg-gray-200 p-3 shadow-lg">
                         <GradientColorPicker
                           value={color}
-                          onChange={setColor}
+                          onChange={handleColorChange}
                         />
                         <button
                           className="mt-2 rounded bg-blue-500 px-4 py-1 text-white"
