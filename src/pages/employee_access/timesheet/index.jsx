@@ -244,7 +244,7 @@ console.log(selectedWeek,"selectedWeek...")
                             </span>
 
                             <span className="text-[0.75rem] font-medium">
-                              BT: {formatTime(dayData.over_time || "00:00:00")}
+                              BT: {formatTime(dayData.break_time || "00:00:00")}
                             </span>
                             <p className="text-[0.75rem] font-medium text-red-500">
                               [OT:{formatTime(dayData.over_time)}]

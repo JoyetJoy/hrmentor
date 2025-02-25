@@ -65,9 +65,9 @@ export default function Attendance() {
     }
     setStartDate(newStartDate);
     setEndDate(
-      dayjs(newStartDate)
-        .add(selectedOption === "monthly" ? 1 : 6, "day")
-        .toDate(),
+      selectedOption === "monthly"
+        ? dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate() // Corrected for full month
+        : dayjs(newStartDate).add(6, "day").toDate() // Weekly case
     );
   };
 
@@ -82,16 +82,16 @@ export default function Attendance() {
     }
     setStartDate(newStartDate);
     setEndDate(
-      dayjs(newStartDate)
-        .add(selectedOption === "monthly" ? 1 : 6, "day")
-        .toDate(),
+      selectedOption === "monthly"
+        ? dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate() // Corrected for full month
+        : dayjs(newStartDate).add(6, "day").toDate() // Weekly case
     );
   };
 
   // Generate all days in the selected month
   const getMonthDays = () => {
-    const startOfMonth = dayjs(date).startOf("month");
-    const daysInMonth = dayjs(date).daysInMonth();
+    const startOfMonth = dayjs(startDate).startOf("month");
+    const daysInMonth = dayjs(startDate).daysInMonth();
 
     return Array.from({ length: daysInMonth }, (_, i) => {
       const day = startOfMonth.add(i, "day");
@@ -140,6 +140,8 @@ export default function Attendance() {
       setStartDate(weekDays[0].fullDate);
       setEndDate(weekDays[weekDays.length - 1].fullDate);
     } else if (selectedOption === "monthly") {
+      setStartDate(monthDays[0].fullDate);
+      setEndDate(monthDays[monthDays.length - 1].fullDate);
     }
   }, [selectedOption]);
 
@@ -182,7 +184,6 @@ export default function Attendance() {
     console.log("Start Date:", dateRange.start);
     console.log("End Date:", dateRange.end);
   };
-console.log(selectedYear);
 
   return (
     <>
