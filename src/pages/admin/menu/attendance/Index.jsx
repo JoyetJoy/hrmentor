@@ -126,7 +126,7 @@ export default function Attendance() {
 
   const handleYearChange = (date) => {
     const newYear = dayjs(date).year();
-    setSelectedYear(date);
+    setSelectedYear(newYear);
 
     // Preserve the selected month while changing the year
     setStartDate(dayjs(startDate).year(newYear).format("YYYY-MM-DD"));
@@ -182,6 +182,7 @@ export default function Attendance() {
     console.log("Start Date:", dateRange.start);
     console.log("End Date:", dateRange.end);
   };
+console.log(selectedYear);
 
   return (
     <>
