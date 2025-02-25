@@ -3,6 +3,7 @@ import PayrollList from "@/pages/admin/Payroll/payroll_list";
 import PayListDetails from "@/pages/admin/Payroll/payroll_list_details";
 import PayrollListEdit from "@/pages/admin/Payroll/payroll_list_edit";
 import PayrollOff from "@/pages/admin/Payroll/payroll_off";
+import PayrollOffDetails from "@/pages/admin/Payroll/payroll_off_details";
 import PayrollOffEdit from "@/pages/admin/Payroll/payroll_off_edit";
 import PayrollSettings from "@/pages/admin/Payroll/payroll_settings";
 
@@ -26,6 +27,10 @@ export const PayrollRoute = [
   {
     path: "payoffedit",
     element: <PayrollOffEdit />,
+  },
+  {
+    path: "payoffdetail",
+    element: <PayrollOffDetails />,
   },
   {
     path: "paylistedit",
