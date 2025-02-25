@@ -1,4 +1,4 @@
-import RosterDepartment from "@/pages/admin/masters/roster/calender/Department";
+import { ShiftCalendarView } from "@/pages/admin/masters/roster/calender/calenderview";
 import ShiftDepartment from "@/pages/admin/masters/shift/calender/Department";
 import ShiftLists from "@/pages/admin/masters/shift/ShiftList";
 import SaveMasterShift from "@/pages/admin/masters/shift/view/Save";
@@ -21,13 +21,12 @@ export const ShiftRoutes =[
         path: "calender",
         element: <EmployeeAttendanceCalendar />,
       },
-      
       {
         path: "save-shift",
         element: <SaveMasterShift />,
       },
       {
-        path: "calender-department",
-        element: <RosterDepartment />,
-      },
+        path: "calendarview",
+        element: <ShiftCalendarView />,
+      }
 ]
