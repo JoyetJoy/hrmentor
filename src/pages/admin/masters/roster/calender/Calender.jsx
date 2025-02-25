@@ -203,9 +203,7 @@ const RosterCalendar = () => {
         : { row: rowIndex, col: colIndex },
     );
   };
-  // const handleOpen = () => setPopUp(!popup);
-  // const handleClose = () => setPopUp(false);
-
+  
   const [endDate, setEndDate] = useState(
     dayjs(startDate).add(6, "day").toDate(),
   );
