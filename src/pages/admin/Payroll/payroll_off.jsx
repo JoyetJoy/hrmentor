@@ -85,7 +85,7 @@ export default function PayrollOff() {
             <button
               type="button"
               onClick={() => {
-                navigate("/admin/payroll/payoffedit");
+                navigate("/admin/payroll/payoffdetail");
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >

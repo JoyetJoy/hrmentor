@@ -313,7 +313,7 @@ export default function PayrollList() {
             </label>
             <Controller
               name="department_id"
-              className=""
+              className=" "
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
@@ -323,7 +323,7 @@ export default function PayrollList() {
                   styles={customSelectStyles}
                   options={departmentListing}
                   placeholder="Select Department"
-                  className="input-box min-w-[13rem]"
+                  className="input-box min-w-[13rem] bg-white"
                 />
               )}
             />

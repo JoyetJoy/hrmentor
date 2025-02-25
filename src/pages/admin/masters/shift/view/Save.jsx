@@ -363,7 +363,7 @@ export default function SaveMasterShift({ formtype, sid }) {
                   </div>
                   <div className="relative">
                     {/* Color Picker Trigger */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex  flex-col items-center">
                       <label className="label-text">Color</label>
                       <div
                         className="cursor-pointer rounded-full border border-gray-300 p-1"
