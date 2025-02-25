@@ -18,7 +18,7 @@ const Index = ({ attendance, setAttendance }) => {
             <button
               type="button"
               onClick={() => setAttendance(false)}
-              className="text-lg font-extrabold text-[#00000080]"
+              className="text-lg font-extrabold text-white"
             >
               <X />
             </button>

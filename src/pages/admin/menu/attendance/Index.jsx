@@ -12,7 +12,9 @@ export default function Attendance() {
   const [date, setDate] = useState(new Date());
   const [attendance, setAttendance] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(dayjs(startDate).add(6, "day").toDate());
+  const [endDate, setEndDate] = useState(
+    dayjs(startDate).add(6, "day").toDate(),
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedOption, setSelectedOption] = useState("weekly");
@@ -51,25 +53,7 @@ export default function Attendance() {
     value: 2020 + i,
     label: (2020 + i).toString(),
   }));
-
-  // Handle month and year selection
-  const handleMonthChange = (selectedOption) => {
-    setDate(dayjs(date).month(selectedOption.value).toDate());
-  };
-
-  const handleYearChange = (selectedOption) => {
-    setDate(dayjs(date).year(selectedOption.value).toDate());
-  };
-
-  // Handle range change (weekly/monthly)
-  const handleRangeChange = (option) => {
-    setSelectedOption(option);
-    if (option === "weekly") {
-      setEndDate(dayjs(startDate).add(6, "day").toDate());
-    } else if (option === "monthly") {
-      setEndDate(dayjs(startDate).endOf("month").toDate());
-    }
-  };
+  
 
   const handlePrev = () => {
     let newStartDate;
@@ -122,8 +106,11 @@ export default function Attendance() {
 
   // Generate all days in the selected week
   const getWeekDays = () => {
+    // Ensure startDate is in the correct week
+    const startOfWeek = dayjs(startDate).startOf("week").add(1, "day"); // Monday as start
+  
     return Array.from({ length: 7 }, (_, i) => {
-      const day = dayjs(startDate).add(i, "day");
+      const day = startOfWeek.add(i, "day");
       return {
         day: day.format("ddd"),
         date: day.format("MMM DD"),
@@ -131,18 +118,78 @@ export default function Attendance() {
       };
     });
   };
-
+  
   const monthDays = getMonthDays();
   const weekDays = getWeekDays();
   const events = {
     employees: dummyEmployees,
   };
 
-  // Function to return Present, Absent, or Leave
-  const formatStatus = (status) => {
-    if (!status) return "Absent"; // Default to Absent if no data is found
-    return status;
+  const handleYearChange = (date) => {
+    const newYear = dayjs(date).year();
+    setSelectedYear(date);
+  
+    // Preserve the selected month while changing the year
+    setStartDate(dayjs(startDate).year(newYear).format("YYYY-MM-DD"));
+    setEndDate(dayjs(endDate).year(newYear).format("YYYY-MM-DD"));
+  
+    setIsOpen(false);
   };
+  
+
+  useEffect(() => {
+    if (selectedOption === "weekly") {
+      setStartDate(weekDays[0].fullDate);
+      setEndDate(weekDays[weekDays.length - 1].fullDate);
+    } else if (selectedOption === "monthly") {
+      
+    }
+  }, [selectedOption]);
+  console.log(startDate, endDate);
+
+  const getCurrentWeek = (year) => {
+    console.log(year);
+    
+    const today = dayjs().year(year).toDate();
+    const dayOfWeek = today.getDay();
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const sundayOffset = mondayOffset + 6;
+    const monday = dayjs(today).add(mondayOffset, "day").format("YYYY-MM-DD");
+    const sunday = dayjs(today).add(sundayOffset, "day").format("YYYY-MM-DD");
+    return { start: monday, end: sunday };
+  };
+
+  const getCurrentMonth = (year, month) => {
+    console.log(year);
+    
+    const start = dayjs(`${year}-${month + 1}-01`).startOf("month").format("YYYY-MM-DD");
+    const end = dayjs(`${year}-${month + 1}-01`).endOf("month").format("YYYY-MM-DD");
+    console.log(start,end);
+    
+    return { start, end };
+  };
+  
+
+  const handleFilter = (filterType) => {
+    setSelectedOption(filterType);
+  
+    let dateRange;
+    const year = dayjs(selectedYear).year(); // Ensure we're using the selected year
+  
+    if (filterType === "weekly") {
+      dateRange = getCurrentWeek(year);
+    } else if (filterType === "monthly") {
+      const selectedMonth = dayjs(startDate).month(); // Get the currently selected month
+      dateRange = getCurrentMonth(year, selectedMonth);
+    }
+  
+    setStartDate(dateRange.start);
+    setEndDate(dateRange.end);
+  
+    console.log("Start Date:", dateRange.start);
+    console.log("End Date:", dateRange.end);
+  };
+  
 
   return (
     <>
@@ -155,7 +202,7 @@ export default function Attendance() {
           activeMenu={""}
         />
         {/* Filters */}
-        <div className="flex w-full flex-col items-center justify-between px-4 py-2 gap-4">
+        <div className="flex w-full flex-col items-center justify-between gap-4 px-4 py-2">
           <div className="flex items-center justify-center">
             <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
               {/* Daily, Weekly, Monthly Buttons */}
@@ -167,7 +214,7 @@ export default function Attendance() {
                       ? "bg-green-500 text-white"
                       : "bg-gray-200"
                   }`}
-                  onClick={() => handleRangeChange(option)}
+                  onClick={() => handleFilter(option)}
                 >
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </button>
@@ -263,19 +310,7 @@ export default function Attendance() {
                   >
                     <DatePicker
                       selected={selectedYear}
-                      onChange={(date) => {
-                        setSelectedYear(date);
-
-                        const newYear = dayjs(date).year();
-
-                        const newStartDate = dayjs(`${newYear}-01-01`).toDate();
-                        const newEndDate = dayjs(`${newYear}-12-31`).toDate();
-
-                        setStartDate(newStartDate);
-                        setEndDate(newEndDate);
-
-                        setIsOpen(false);
-                      }}
+                      onChange={handleYearChange}
                       showYearPicker
                       dateFormat="yyyy"
                       inline
@@ -342,14 +377,14 @@ export default function Attendance() {
             <table style={{ borderSpacing: "0", width: "100%" }}>
               <thead className="bg-gray-soft">
                 <tr>
-                  <th className="sticky z-10 left-0 w-full border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
+                  <th className="sticky left-0 z-10 w-full border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
                     Employee Name
                   </th>
                   {selectedOption === "weekly"
                     ? weekDays.map((dayObj, index) => (
                         <th
                           key={index}
-                          className="sticky top-0 border border-gray-300 text-sm font-bold bg-[#ebebf0] capitalize text-gray-darkpale"
+                          className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
                         >
                           {dayObj.day}
                           <p className="font-medium">{dayObj.date}</p>
@@ -358,7 +393,7 @@ export default function Attendance() {
                     : monthDays.map((dayObj, index) => (
                         <th
                           key={index}
-                          className="sticky top-0 border border-gray-300 text-sm font-bold bg-[#ebebf0] capitalize text-gray-darkpale"
+                          className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
                         >
                           {dayObj.day}
                           <p className="font-medium">{dayObj.date}</p>
