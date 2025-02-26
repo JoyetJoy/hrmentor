@@ -10,7 +10,7 @@ const Index = ({ attendance, setAttendance }) => {
     <div className="flex justify-end">
       <AddEntryModal addEntry={addEntry} setAddEntry={setAddEntry} />
       {attendance && (
-        <div className="absolute right-10 top-32 z-10 w-5/12 overflow-hidden rounded-lg bg-white shadow-lg shadow-black">
+        <div className="absolute right-10 top-32 z-20 w-5/12 overflow-hidden rounded-lg bg-white shadow-lg shadow-black">
           <div className="flex justify-between bg-[#dadae4] px-10 py-7">
             <p className="text-lg font-semibold text-[#555c5f]">
               Clock In / Clock Out
@@ -27,19 +27,19 @@ const Index = ({ attendance, setAttendance }) => {
             <div className="flex flex-col gap-1">
               <div className="flex w-full justify-between">
                 <p>Name</p>
-                <p>Joyet</p>
+                <p>Jennifer Gilbert</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Date</p>
-                <p>12-02-2025</p>
+                <p>24-02-2025</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Clock In</p>
-                <p>09:00 AM</p>
+                <p>09:00:00</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Duration</p>
-                <p>00:00</p>
+                <p>04:00</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Shift Name</p>
@@ -57,7 +57,7 @@ const Index = ({ attendance, setAttendance }) => {
               </div>
               <div className="flex w-full justify-between">
                 <p>Clock Out</p>
-                <p>06:00 PM</p>
+                <p>13:00:00</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Status</p>
@@ -65,7 +65,7 @@ const Index = ({ attendance, setAttendance }) => {
               </div>
               <div className="flex w-full justify-between">
                 <p>Shift Time</p>
-                <p>Morning</p>
+                <p>09:00:00 - 13:00:00</p>
               </div>
             </div>
           </div>
@@ -81,13 +81,13 @@ const Index = ({ attendance, setAttendance }) => {
               <span>
                 <Clock3 size={16} />
               </span>
-              00:00
+              09:00:00
             </p>
             <p className="flex w-1/2 gap-2">
               <span>
                 <Clock3 size={16} />
               </span>
-              00:00
+              13:00:00
             </p>
             <Link
               // to={`/admin/employee/primary/?uid=${row.original.id}`}
@@ -135,9 +135,9 @@ const Index = ({ attendance, setAttendance }) => {
             {/* <button className="bg-blue-700 px-3 py-2 rounded-lg">RECALCULATE</button> */}
             <button
               onClick={() => setAttendance(false)}
-              className="rounded-lg bg-red-600 px-3 py-2"
+              className="rounded-lg bg-green-600 px-5 py-2"
             >
-              CLOSE
+              SAVE
             </button>
           </div>
         </div>

@@ -574,11 +574,11 @@ const RosterCalendar = () => {
           </div>
 
           <div className="overflow-x-min mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
-            <div className="mt-4 w-full overflow-x-auto bg-white shadow-md">
+            <div className="mt-4 w-full overflow-x-auto overflow-x-min bg-white shadow-md">
               <table className="overflow-x-min min-h-screen w-full border-collapse overflow-x-auto rounded-md">
                 <thead className="border bg-gray-soft">
-                  <tr className="border border-gray-300 bg-[#00000036] text-sm text-gray-600">
-                    <th className="p-5 text-left">Employee Name</th>
+                  <tr className="border border-gray-300 bg-[#00000036] text-sm w-[20rem] text-gray-600">
+                    <th className="p-5 text-left w-[20rem]">Employee Name</th>
                     {selectedOption === "weekly"
                       ? weekDays.map((dayObj, index) => (
                           <th
@@ -608,7 +608,7 @@ const RosterCalendar = () => {
                     )
                     .map((emp, rowIndex) => (
                       <tr key={rowIndex} className="border">
-                        <td className="flex items-center space-x-3 p-3">
+                        <td className="flex items-center space-x-3 p-3 min-w-[14rem]">
                           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
                             {emp.name.charAt(0)}
                           </span>

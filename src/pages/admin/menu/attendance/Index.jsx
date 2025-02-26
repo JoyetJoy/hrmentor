@@ -4,7 +4,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
-import { TEAM_ATTENDANCE, newRequest } from "@/api/master";
+import { ATTENDANCES, TEAM_ATTENDANCE, newRequest } from "@/api/master";
 import Atendance from "../../../../components/attendance/Index";
 import DatePicker from "react-datepicker";
 
@@ -19,40 +19,17 @@ export default function Attendance() {
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
 
-  // Dummy Data (With Status)
-  const dummyEmployees = [
-    {
-      name: "John Doe",
-      days_status: [
-        { date: "2025-02-01", status: "Present" },
-        { date: "2025-02-02", status: "Absent" },
-        { date: "2025-02-03", status: "Annual Leave" },
-        { date: "2025-02-04", status: "Company Leave" },
-        { date: "2025-02-05", status: "Leave" },
-        { date: "2025-02-06", status: "Leave" },
-        { date: "2025-02-07", status: "Holiday" },
-      ],
-    },
-    {
-      name: "Jane Smith",
-      days_status: [
-        { date: "2025-02-01", status: "Present" },
-        { date: "2025-02-02", status: "Present" },
-        { date: "2025-02-03", status: "Leave" },
-      ],
-    },
-  ];
-
-  // Generate months and years
-  const months = Array.from({ length: 12 }, (_, i) => ({
-    value: i,
-    label: dayjs().month(i).format("MMMM"),
-  }));
-
-  const years = Array.from({ length: 11 }, (_, i) => ({
-    value: 2020 + i,
-    label: (2020 + i).toString(),
-  }));
+  const { data } = useQuery({
+    queryKey: ["attendance",startDate,endDate],
+    queryFn: () =>
+      newRequest
+        .get(
+          `${ATTENDANCES}?start_date=${startDate}&end_date=${endDate}&role=hrmanager`,
+        )
+        .then((res) => res.data),
+        enabled: !!startDate && !!endDate,
+  });
+  console.log(data);
 
   const handlePrev = () => {
     let newStartDate;
@@ -67,7 +44,7 @@ export default function Attendance() {
     setEndDate(
       selectedOption === "monthly"
         ? dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate() // Corrected for full month
-        : dayjs(newStartDate).add(6, "day").toDate() // Weekly case
+        : dayjs(newStartDate).add(6, "day").toDate(), // Weekly case
     );
   };
 
@@ -84,7 +61,7 @@ export default function Attendance() {
     setEndDate(
       selectedOption === "monthly"
         ? dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate() // Corrected for full month
-        : dayjs(newStartDate).add(6, "day").toDate() // Weekly case
+        : dayjs(newStartDate).add(6, "day").toDate(), // Weekly case
     );
   };
 
@@ -120,9 +97,6 @@ export default function Attendance() {
 
   const monthDays = getMonthDays();
   const weekDays = getWeekDays();
-  const events = {
-    employees: dummyEmployees,
-  };
 
   const handleYearChange = (date) => {
     const newYear = dayjs(date).year();
@@ -373,14 +347,14 @@ export default function Attendance() {
             <table style={{ borderSpacing: "0", width: "100%" }}>
               <thead className="bg-gray-soft">
                 <tr>
-                  <th className="sticky left-0 z-10 w-full border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
+                  <th className="sticky top-0 left-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
                     Employee Name
                   </th>
                   {selectedOption === "weekly"
                     ? weekDays.map((dayObj, index) => (
                         <th
                           key={index}
-                          className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                          className="sticky top-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
                         >
                           {dayObj.day}
                           <p className="font-medium">{dayObj.date}</p>
@@ -389,7 +363,7 @@ export default function Attendance() {
                     : monthDays.map((dayObj, index) => (
                         <th
                           key={index}
-                          className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                          className="sticky top-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
                         >
                           {dayObj.day}
                           <p className="font-medium">{dayObj.date}</p>
@@ -398,516 +372,111 @@ export default function Attendance() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "John Doe",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "Jane Smith",
-                    days_status: [
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Company Leave",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "David Brown",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Company Leave",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Absent",
-                    ],
-                  },
-                  {
-                    name: "Emma Wilson",
-                    days_status: [
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                    ],
-                  },
-                  {
-                    name: "Michael Johnson",
-                    days_status: [
-                      "Present",
-                      "Present",
-                      "Annual Leave",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                    ],
-                  },
-                  {
-                    name: "Sophia Lee",
-                    days_status: [
-                      "Present",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Company Leave",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                      "Absent",
-                      "Holiday",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Absent",
-                      "Present",
-                      "Present",
-                      "Day Off",
-                      "Present",
-                      "Present",
-                    ],
-                  },
-                ].map((employee, empIndex) => (
+                {data?.map((employee, empIndex) => (
                   <tr key={empIndex} className="border-b-2 text-left">
-                    <td className="sticky left-0 z-10 border-r-2 bg-gray-300 text-[0.8rem] font-medium capitalize text-gray-darkpale">
-                      {employee.name}
+                    <td className="sticky left-0 w-auto border-r-2 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
+                      {employee.employee_name}
                     </td>
-                    {employee.days_status.map((status, index) => (
-                      <td
-                        key={index}
-                        className={`text-center text-[0.8rem] font-semibold ${
-                          status === "Present"
-                            ? "bg-[#77c477d5] text-black"
-                            : status === "Holiday"
-                              ? "bg-[#e68ecf] text-black"
-                              : status === "Company Leave"
-                                ? "bg-[#FDE3AA] text-black"
-                                : status === "Annual Leave"
-                                  ? "bg-[#AEB6E7] text-black"
-                                  : status === "Absent"
-                                    ? "bg-[#e47f7f] text-black"
-                                    : "bg-[#c5c5cb] text-black"
-                        } border-r-2`}
-                      >
-                        {status === "Present" ? (
-                          <div
-                            onClick={() => setAttendance(true)}
-                            className="flex items-center justify-between p-4 text-sm font-extrabold"
+                    {selectedOption === 'weekly' ?
+                    weekDays.map((day) => {
+                        // Find attendance status for the given date
+                        const attendanceEntry = employee.attendances.find(
+                          (att) => att.attendance_date === day.fullDate,
+                        );
+                        return (
+                          <td
+                            key={day.fullDate}
+                            className={`text-center text-[0.8rem] font-semibold ${
+                              attendanceEntry?.status === "Present"
+                                ? "bg-[#77c477d5] text-black"
+                                : attendanceEntry?.status === "Holiday"
+                                  ? "bg-[#e68ecf] text-black"
+                                  : attendanceEntry?.status === "Company Leave"
+                                    ? "bg-[#FDE3AA] text-black"
+                                    : attendanceEntry?.status === "Annual Leave"
+                                      ? "bg-[#AEB6E7] text-black"
+                                      : attendanceEntry?.status === "Absent"
+                                        ? "bg-[#e47f7f] text-black"
+                                        : "bg-[#c5c5cb] text-black"
+                            } border-r-2`}
                           >
-                            <span>P</span>
-                            <img
-                              className="ml-2 w-5 object-contain"
-                              src="/assets/icons/tort.svg"
-                              alt="late"
-                            />
-                          </div>
-                        ) : status === "Absent" ? (
-                          <span className="text-sm font-extrabold">A</span>
-                        ) : status === "Annual Leave" ? (
-                          <span className="font-extrabold">AL</span>
-                        ) : status === "Company Leave" ? (
-                          <span className="font-extrabold">CL</span>
-                        ) : status === "Holiday" ? (
-                          <span className="text-sm font-extrabold">H</span>
-                        ) : (
-                          <span className="font-extrabold">DO</span>
-                        )}
-                      </td>
-                    ))}
+                            {attendanceEntry?.status === "Present" ? (
+                              <div
+                                onClick={() => setAttendance(true)}
+                                className="flex items-center justify-center text-sm font-extrabold"
+                              >
+                                <span>P</span>
+                                {attendanceEntry?.delay_status && (
+                                  <img
+                                    className="ml-2 w-5 object-contain"
+                                    src="/assets/icons/tort.svg"
+                                    alt="late"
+                                  />
+                                )}
+                              </div>
+                            ) : attendanceEntry?.status === "Absent" ? (
+                              <span className="text-sm font-extrabold">A</span>
+                            ) : attendanceEntry?.status === "Annual Leave" ? (
+                              <span className="font-extrabold">AL</span>
+                            ) : attendanceEntry?.status === "Company Leave" ? (
+                              <span className="font-extrabold">CL</span>
+                            ) : attendanceEntry?.status === "Holiday" ? (
+                              <span className="text-sm font-extrabold">H</span>
+                            ) : (
+                              <span className="font-extrabold">DO</span>
+                            )}
+                          </td>
+                        );
+                      }):monthDays.map((day)=>{
+                        // Find attendance status for the given date
+                        const attendanceEntry = employee.attendances.find(
+                          (att) => att.attendance_date === day.fullDate,
+                        );
+                        return (
+                          <td
+                            key={day.fullDate}
+                            className={`text-center text-[0.8rem] font-semibold ${
+                              attendanceEntry?.status === "Present"
+                                ? "bg-[#77c477d5] text-black"
+                                : attendanceEntry?.status === "Holiday"
+                                  ? "bg-[#e68ecf] text-black"
+                                  : attendanceEntry?.status === "Company Leave"
+                                    ? "bg-[#FDE3AA] text-black"
+                                    : attendanceEntry?.status === "Annual Leave"
+                                      ? "bg-[#AEB6E7] text-black"
+                                      : attendanceEntry?.status === "Absent"
+                                        ? "bg-[#e47f7f] text-black"
+                                        : "bg-[#c5c5cb] text-black"
+                            } border-r-2`}
+                          >
+                            {attendanceEntry?.status === "Present" ? (
+                              <div
+                                onClick={() => setAttendance(true)}
+                                className="flex items-center justify-center text-sm font-extrabold"
+                              >
+                                <span>P</span>
+                                {attendanceEntry?.delay_status && (
+                                  <img
+                                    className="ml-2 w-5 object-contain"
+                                    src="/assets/icons/tort.svg"
+                                    alt="late"
+                                  />
+                                )}
+                              </div>
+                            ) : attendanceEntry?.status === "Absent" ? (
+                              <span className="text-sm font-extrabold">A</span>
+                            ) : attendanceEntry?.status === "Annual Leave" ? (
+                              <span className="font-extrabold">AL</span>
+                            ) : attendanceEntry?.status === "Company Leave" ? (
+                              <span className="font-extrabold">CL</span>
+                            ) : attendanceEntry?.status === "Holiday" ? (
+                              <span className="text-sm font-extrabold">H</span>
+                            ) : (
+                              <span className="font-extrabold">DO</span>
+                            )}
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
               </tbody>

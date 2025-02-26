@@ -51,14 +51,14 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
 
 
   return (
-    <Dialog open={addEntry} as="div" className="relative z-10" onClose={close}>
+    <Dialog open={addEntry} as="div" className="relative z-30" onClose={close}>
       <div className="fixed inset-0 bg-black/30" />
-      <div className="fixed inset-0 z-10 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg">
+      <div className="fixed inset-0 z-30 flex items-center justify-center p-5">
+        <DialogPanel className="w-full max-w-md overflow-hidden rounded-xl bg-white shadow-lg">
           {/* Header */}
-          <div className="flex justify-between bg-[#555c5f] px-6 py-4">
-            <p className="text-lg font-semibold text-white">Add Entry</p>
-            <button onClick={close} className="text-lg font-extrabold text-white">
+          <div className="flex justify-between bg-[#dadae4] px-6 py-4">
+            <p className="text-lg font-semibold text-[#555c5f]">Add Entry</p>
+            <button onClick={close} className="text-lg font-extrabold text-[#555c5f]">
               <X />
             </button>
           </div>
