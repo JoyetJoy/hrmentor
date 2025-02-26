@@ -21,28 +21,62 @@ console.log(data);
   const onClose = () => {
     setPopupOpen(false);
     setType("");
-    setNote(""); // Clear note field on close
   };
 
-  const saveRequest = async(id) => {
-    if (type === "claimed") {
-      const response = await newRequest.post(`${api}/${selectedId}`, {
-        status_id:id,
-        accepted_note: note,
-      });
-      if (response.status === 200) {
-        toast.success(response.data?.message || "Claim request accepted successfully!");
-        setDeletePopup(false);
-        refetch();
-      } else {
-        toast.error(response.data?.message || "Failed to save claim request.");
+  // const saveRequest = async(id) => {
+  //   if (type === "claimed") {
+  //     const response = await newRequest.post(`${api}/${selectedId}`, {
+  //       status_id:id,
+  //       accepted_note: note,
+  //     });
+  //     if (response.status === 200) {
+  //       toast.success(response.data?.message || "Claim request accepted successfully!");
+  //       setDeletePopup(false);
+  //       refetch();
+  //     } else {
+  //       toast.error(response.data?.message || "Failed to save claim request.");
+  //     }
+  //   }
+
+  //   // Pass data to parent callback
+  //   handleSave({ type, note });
+  //   onClose();
+  // };
+  const saveRequest = async (statusId) => {
+    try {
+      if (!selectedId) {
+        toast.error("Invalid request: No selected request ID");
+        return;
       }
+  
+      if (type === "claimed") {
+        const response = await newRequest.post(`${api}/${selectedId}`, {
+          status_id: statusId,
+          accepted_note: note,
+        });
+  
+        if (response.status === 200) {
+          toast.success(response.data?.message || "Claim request processed successfully!");
+  
+          // Close the popup
+          setPopupOpen(false);
+          setType("");
+          setNote("");
+  
+          // Ensure UI updates
+          if (typeof handleSave === "function") {
+            handleSave({ type, note });
+          }
+        } else {
+          toast.error(response.data?.message || "Failed to process request.");
+        }
+      }
+    } catch (error) {
+      console.error("Error processing request:", error);
+      toast.error("Something went wrong. Please try again.");
     }
-
-    // Pass data to parent callback
-    handleSave({ type, note });
-    onClose();
   };
+  
 console.log(data?.request_details?.employee?.first_name[0]);
 
   return (
