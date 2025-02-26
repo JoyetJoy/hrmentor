@@ -208,7 +208,7 @@ console.log(selectedId,"selectedIdselectedIdselectedId")
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrkey={qrkey}
         api={api}
       />

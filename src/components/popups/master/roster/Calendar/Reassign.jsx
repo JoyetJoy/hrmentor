@@ -23,6 +23,9 @@ function Reassign({
   const [claimcount, setClaimcount] = useState(0);
   const { control } = useForm();
 
+  const onClose = () => {
+    setPopupOpen(false);
+  };
   // Function to handle saving shift claim updates
   const handleSave = async () => {
     try {
@@ -63,9 +66,8 @@ function Reassign({
 
             {type === "reassign" ? (
               <>
-                {/* Employee Selection */}
-                <p className="mb-2 text-sm font-semibold">Search Employee</p>
-                <div className="flex flex-col gap-1.5 min-w-52">
+                <p className="mb-2 text-sm">Select Employee</p>
+                <div className="group flex h-10 min-h-10 min-w-52 flex-col gap-1.5">
                   <Controller
                     name="employees"
                     control={control}
@@ -88,64 +90,18 @@ function Reassign({
                     )}
                   />
                 </div>
-
-                {/* Employee List - Mapping */}
-                {rosterEmpList?.employees?.length > 0 && (
-                  <ul className="mt-2 max-h-40 overflow-y-auto rounded border bg-white shadow">
-                    {rosterEmpList.employees.map((employee) => (
-                      <li
-                        key={employee.id}
-                        className="cursor-pointer p-2 hover:bg-gray-100"
-                        onClick={() => setSelectedEmployee(employee)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
-                            {employee.first_name.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold">
-                              {employee.first_name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {employee.role}
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {/* Display selected employee */}
-                {setSelectedEmployee && (
-                  <div className="mt-4 flex items-center gap-2 rounded bg-gray-100 p-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-hrmprimaryorange/10 text-sm font-bold uppercase">
-                      {setSelectedEmployee.name?.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">
-                        {setSelectedEmployee.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {setSelectedEmployee.role}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Action Buttons */}
                 <div className="mt-4 flex gap-3">
                   <button
                     type="button"
-                    onClick={() => setPopupOpen(false)}
+                    onClick={onClose}
                     className="w-full rounded border border-black px-4 py-3"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    onClick={handleReassign}
                     className="w-full rounded bg-black px-7 py-3 text-white"
+                    onClick={() => handleReassign()}
                   >
                     Reassign
                   </button>
@@ -154,11 +110,11 @@ function Reassign({
             ) : (
               <>
                 {/* Shift Claim Input */}
-                <div className="text-sm flex gap-2 items-center mt-3">
+                <div className="mt-3 flex items-center gap-2 text-sm">
                   <p>Auto Close at</p>
                   <input
                     type="number"
-                    className="border h-8 w-40 rounded-md text-sm px-2"
+                    className="h-8 w-40 rounded-md border px-2 text-sm"
                     value={claimcount}
                     onChange={(e) =>
                       setClaimcount(e.target.value.replace(/[eE]/g, ""))
@@ -168,7 +124,7 @@ function Reassign({
                 </div>
 
                 {/* Update Button */}
-                <div className="w-full flex mt-5 justify-center items-center">
+                <div className="mt-5 flex w-full items-center justify-center">
                   <button
                     type="button"
                     onClick={handleSave}

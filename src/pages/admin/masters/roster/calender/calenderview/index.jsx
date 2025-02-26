@@ -152,16 +152,16 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex min-h-[32rem] flex-col gap-2 pt-2">
+        <div className="flex h-screen flex-col gap-2 pt-2">
           <Rosteroveview rosterCalim={rosterCalim} />
-          <div className="grid h-full grid-cols-3 gap-2">
-            <div className="flex h-fit flex-col gap-y-3 rounded-md">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex  flex-col gap-y-3 rounded-md">
               <CalanderShift
                 rosterCalim={rosterCalim}
                 isLoading={isLoading}
               />
             </div>
-            <div className="min-h-[29rem] rounded-md bg-white pb-7">
+            <div className=" rounded-md bg-white pb-7">
               <CalendarEmployees
                 rosterCalim={rosterCalim}
                 isLoading={isLoading}
@@ -177,12 +177,12 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
                 setDeletePopup={setDeletePopup}
               />
             </div>
-            <div className="min-h-[29rem] flex-col gap-y-3 rounded-md bg-white">
+            {/* <div className="min-h-[29rem] flex-col gap-y-3 rounded-md bg-white">
               <CalendarShiftHistory
                 rosterCalim={rosterCalim}
                 isLoading={isLoading}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       )}
