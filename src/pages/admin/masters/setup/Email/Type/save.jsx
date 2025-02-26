@@ -56,24 +56,8 @@ export default function EmailTypeSave() {
         })
         .then((res) => {
           const formattedTokens = res.data.map((token) => ({
-            value: token.id,
+            id: token.id,
             label: token.token,
-          }));
-          setTokens(formattedTokens);
-        });
-    }
-  }, [id, user?.id]);
-
-  useEffect(() => {
-    if (id) {
-      newRequest
-        .get(`/${EMAIL_TOKENS}/${id}`, {
-          params: { user_id: user?.id },
-        })
-        .then((res) => {
-          const formattedTokens = res.data.map((token) => ({
-            value: token.id, 
-            label: token.token, 
           }));
 
           setTokens(formattedTokens);
@@ -84,45 +68,24 @@ export default function EmailTypeSave() {
     }
   }, [id, user?.id]);
 
-  // const onSubmit = async () => {
-  //   setLoader(true);
-  //   try {
-  //     const ids = tokens.map((item) => item.value); // Extract only token IDs
-
-  //     const formData = { tokens: ids };
-
-  //     const res = await newRequest.post(
-  //       `${UPDATE_EMAIL_TYPE}/${id}`,
-  //       formData,
-  //       { params: { user_id: user?.id } }
-  //     );
-
-  //     if (res) {
-  //       toast.success(res?.data?.message);
-  //       navigate(`/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error?.response?.data?.error);
-  //   } finally {
-  //     setLoader(false);
-  //   }
-  // };
-
   const onSubmit = async () => {
     setLoader(true);
     try {
-      const ids = tokens.map((item) => item.value); // Ensure only IDs are extracted
-  
+      const ids = tokens.map((item) => item.id); // Extract only token IDs
+
       const formData = { tokens: ids };
-  
-      const res = await newRequest.post(`${UPDATE_EMAIL_TYPE}/${id}`, formData, {
-        params: { user_id: user?.id },
-      });
-  
+
+      const res = await newRequest.post(
+        `${UPDATE_EMAIL_TYPE}/${id}`,
+        formData,
+        { params: { user_id: user?.id } },
+      );
+
       if (res) {
         toast.success(res?.data?.message);
-        navigate(`/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`);
+        navigate(
+          `/admin/setup/type?id=${id}&label=${encodeURIComponent(label)}`,
+        );
       }
     } catch (error) {
       console.log(error);
@@ -131,8 +94,6 @@ export default function EmailTypeSave() {
       setLoader(false);
     }
   };
-  
-
   return (
     <>
       <SetUpHeader menu="Menu" currentpath="Folder" page={2} />
@@ -188,7 +149,12 @@ export default function EmailTypeSave() {
                     className="h-auto w-full rounded-md border border-[#A7A7A7] border-opacity-60 text-sm text-zinc-500 placeholder:text-sm placeholder:text-[#7F7F7F]"
                     value={tokens}
                     onChange={(selectedOption) => {
-                      setTokens(selectedOption.map((item) => ({ value: item.value, label: item.label })));
+                      setTokens(
+                        selectedOption.map((item) => ({
+                          id: item.id,
+                          label: item.label,
+                        })),
+                      );
                     }}
                   />
                 )}

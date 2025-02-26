@@ -105,7 +105,7 @@ function RecInterviews() {
         header: "Department ",
         accessorKey: "department",
         cell: ({ row }) => (
-          <div>{row?.original?.interview?.scheduled_dat || "NA"}</div>
+          <div>{row?.original?.interviewers[0]?.department?.department_name || "NA"}</div>
         ),
       },
       {

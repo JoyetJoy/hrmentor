@@ -100,7 +100,7 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
     [],
   );
   return (
-    <div className="overflow-y-min flex h-full flex-col overflow-y-auto overflow-x-hidden p-2">
+    <div className="overflow-y-min flex h-full flex-col overflow-y-auto overflow-x-hidden p-5">
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
