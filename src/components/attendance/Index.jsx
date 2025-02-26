@@ -6,9 +6,21 @@ import { Link } from "react-router-dom";
 const Index = ({ attendance, setAttendance }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
+  const [entry, setEntry] = useState([]);
+  const [leave, setLeave] = useState("");
+  const [type, setType] = useState("");
   return (
     <div className="flex justify-end">
-      <AddEntryModal addEntry={addEntry} setAddEntry={setAddEntry} />
+      <AddEntryModal
+        addEntry={addEntry}
+        setAddEntry={setAddEntry}
+        type={type}
+        setType={setType}
+        entry={entry}
+        setEntry={setEntry}
+        leave={leave}
+        setLeave={setLeave}
+      />
       {attendance && (
         <div className="absolute right-10 top-32 z-20 w-5/12 overflow-hidden rounded-lg bg-white shadow-lg shadow-black">
           <div className="flex justify-between bg-[#dadae4] px-10 py-7">
@@ -77,35 +89,42 @@ const Index = ({ attendance, setAttendance }) => {
           </div>
           <hr className="h-[0.10rem] bg-[#d1d2d5]" />
           <div className="flex min-h-[13rem] w-full px-10 py-5 text-sm font-semibold text-[#686868]">
-            <p className="flex w-1/2 gap-2">
-              <span>
-                <Clock3 size={16} />
-              </span>
-              09:00:00
-            </p>
-            <p className="flex w-1/2 gap-2">
-              <span>
-                <Clock3 size={16} />
-              </span>
-              13:00:00
-            </p>
-            <Link
-              // to={`/admin/employee/primary/?uid=${row.original.id}`}
-              className="mr-2 flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-            >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
-            </Link>
-            <Link className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
-              <Trash2 size={20} />
-            </Link>
+            {entry.map((data, index) => (
+              <div key={index} className="flex w-full">
+                <p className="flex w-1/2 gap-2">
+                  <span>
+                    <Clock3 size={16} />
+                  </span>
+                  {data?.checkIn}
+                </p>
+                <p className="flex w-1/2 gap-2">
+                  <span>
+                    <Clock3 size={16} />
+                  </span>
+                  {data?.checkOut}
+                </p>
+                <Link
+                  // to={`/admin/employee/primary/?uid=${row.original.id}`}
+                  className="mr-2 flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+                >
+                  <img
+                    src="/assets/icons/admin/marker.svg"
+                    className="w-full object-contain"
+                  />
+                </Link>
+                <Link className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+                  <Trash2 size={20} />
+                </Link>
+              </div>
+            ))}
           </div>
           <hr className="h-[0.10rem] bg-[#d1d2d5]" />
           <div className="flex gap-3 p-2 text-sm font-semibold text-white">
             <button
-              onClick={() => setAddEntry(true)}
+              onClick={() => {
+                setAddEntry(true);
+                setType("Entry");
+              }}
               className="flex items-center gap-1 rounded-lg bg-blue-700 px-3 py-2"
             >
               <span>ADD ENTRIES</span> <ChevronDown />
@@ -126,7 +145,13 @@ const Index = ({ attendance, setAttendance }) => {
                   <li className="cursor-pointer p-2 hover:bg-gray-200">
                     Absent
                   </li>
-                  <li className="cursor-pointer p-2 hover:bg-gray-200">
+                  <li
+                    onClick={() => {
+                      setAddEntry(true);
+                      setType("Leave");
+                    }}
+                    className="cursor-pointer p-2 hover:bg-gray-200"
+                  >
                     Leave
                   </li>
                 </ul>

@@ -1,8 +1,10 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { customSelectStyles } from "@/utils/customStyles";
+import Select from "react-select";
 
 // ✅ Validation Schema
 const schema = yup.object().shape({
@@ -14,31 +16,65 @@ const schema = yup.object().shape({
     .string()
     .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:mm)")
     .required("Check-out time is required"),
-  remarks: yup.string().min(5, "Remarks should be at least 5 characters").optional(),
+  remarks: yup
+    .string()
+    .min(5, "Remarks should be at least 5 characters")
+    .optional(),
 });
 
-const AddEntryModal = ({ addEntry, setAddEntry }) => {
+const leaveSchema = yup.object().shape({
+  leave: yup.object().required("Leave Type is required"),
+});
+
+const leaveType = [
+  {
+    already_taked_leaves: 8,
+    id: 7,
+    leave_name: "Absent",
+    display_name: "Absent",
+    code: "Ab",
+    valid_from: "2024-12-09",
+    emp_no_days: "9",
+  },
+  {
+    already_taked_leaves: 0,
+    id: 25,
+    leave_name: "Test Leave",
+    display_name: "TL",
+    code: "TL",
+    valid_from: "2025-01-01",
+    emp_no_days: "11",
+  },
+];
+
+const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, leave, setLeave}) => {
   const close = () => {
     setAddEntry(false);
   };
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(type === "Leave" ? leaveSchema : schema),
   });
 
   // ✅ Handle Form Submission
   const onSubmit = (data) => {
+    if(type === 'Leave'){
+      setLeave(data?.leave)
+    }else if (type === 'Entry'){
+      setEntry((prev) => [...prev, data]); 
+    }
     console.log("Form Data:", data);
-    close(); // Close modal after submission
+    close();
   };
 
   const formatTime = (input) => {
     console.log(input);
-    
+
     let value = input.replace(/[^0-9]/g, ""); // Remove non-numeric characters
 
     // Format input as HH:MM
@@ -49,80 +85,161 @@ const AddEntryModal = ({ addEntry, setAddEntry }) => {
     return value;
   };
 
-
   return (
     <Dialog open={addEntry} as="div" className="relative z-30" onClose={close}>
       <div className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 z-30 flex items-center justify-center p-5">
-        <DialogPanel className="w-full max-w-md overflow-hidden rounded-xl bg-white shadow-lg">
+        <DialogPanel className="w-full max-w-md rounded-xl bg-white shadow-lg">
           {/* Header */}
-          <div className="flex justify-between bg-[#dadae4] px-6 py-4">
-            <p className="text-lg font-semibold text-[#555c5f]">Add Entry</p>
-            <button onClick={close} className="text-lg font-extrabold text-[#555c5f]">
+          <div className="flex justify-between rounded-t-xl bg-[#dadae4] px-6 py-4">
+            <p className="text-lg font-semibold text-[#555c5f]">Add {type}</p>
+            <button
+              onClick={close}
+              className="text-lg font-extrabold text-[#555c5f]"
+            >
               <X />
             </button>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4 px-6 py-4">
-            {/* ✅ Check-in Time */}
-            <div className="flex gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Clock-in Time</label>
-              <input
-                type="text"
-                {...register("checkIn")}
-                onChange={(e) => {
-                    e.target.value = formatTime(e.target.value); // Call the helper function
-                  }}
-                className="w-full p-2 border rounded-md mt-1"
-                placeholder="Enter time (HH:mm)"
-              />
-              {errors.checkIn && <p className="text-red-500 text-xs">{errors.checkIn.message}</p>}
-            </div>
+          {type === "Entry" ? (
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="mt-4 space-y-4 px-6 py-4"
+            >
+              {/* ✅ Check-in Time */}
+              <div className="flex gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Clock-in Time
+                  </label>
+                  <input
+                    type="text"
+                    {...register("checkIn")}
+                    onChange={(e) => {
+                      e.target.value = formatTime(e.target.value); // Call the helper function
+                    }}
+                    className="mt-1 w-full rounded-md border p-2"
+                    placeholder="Enter time (HH:mm)"
+                  />
+                  {errors.checkIn && (
+                    <p className="text-xs text-red-500">
+                      {errors.checkIn.message}
+                    </p>
+                  )}
+                </div>
 
-            {/* ✅ Check-out Time */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Check-out Time</label>
-              <input
-                type="text"
-                {...register("checkOut")}
-                onChange={(e) => {
-                    e.target.value = formatTime(e.target.value); // Call the helper function
-                  }}
-                className="w-full p-2 border rounded-md mt-1"
-                placeholder="Enter time (HH:MM)"
-              />
-              {errors.checkOut && <p className="text-red-500 text-xs">{errors.checkOut.message}</p>}
-            </div>
+                {/* ✅ Check-out Time */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Check-out Time
+                  </label>
+                  <input
+                    type="text"
+                    {...register("checkOut")}
+                    onChange={(e) => {
+                      e.target.value = formatTime(e.target.value); // Call the helper function
+                    }}
+                    className="mt-1 w-full rounded-md border p-2"
+                    placeholder="Enter time (HH:MM)"
+                  />
+                  {errors.checkOut && (
+                    <p className="text-xs text-red-500">
+                      {errors.checkOut.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {/* ✅ Remarks */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Remarks
+                </label>
+                <textarea
+                  {...register("remarks")}
+                  className="mt-1 w-full rounded-md border p-2"
+                  rows="3"
+                  placeholder="Optional"
+                ></textarea>
+                {errors.remarks && (
+                  <p className="text-xs text-red-500">
+                    {errors.remarks.message}
+                  </p>
+                )}
+              </div>
 
-            </div>
-            {/* ✅ Remarks */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Remarks</label>
-              <textarea
-                {...register("remarks")}
-                className="w-full p-2 border rounded-md mt-1"
-                rows="3"
-                placeholder="Optional"
-              ></textarea>
-              {errors.remarks && <p className="text-red-500 text-xs">{errors.remarks.message}</p>}
-            </div>
+              {/* ✅ Buttons */}
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={close}
+                  className="w-full rounded-md bg-gray-500 px-3 py-2 text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="w-full rounded-md bg-blue-700 px-3 py-2 text-white"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          ) : (
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-4 px-6 py-4"
+            >
+              <div className="flex w-full flex-col gap-2">
+                <label className="text-sm font-medium">
+                  Leave Type{" "}
+                  {leaveType.length === 0 && (
+                    <span className="text-red-500">
+                      [No Leave Available For You]
+                    </span>
+                  )}
+                </label>
+                <Controller
+                  name="leave"
+                  control={control}
+                  rules={{ required: "Leave Type is required" }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      isSearchable={true}
+                      styles={customSelectStyles}
+                      options={leaveType.map((lt) => ({
+                        label: lt.display_name,
+                        value: lt.id,
+                      }))}
+                      placeholder="Select Leave Type"
+                      className="input-box w-full text-black caret-white"
+                      onChange={(selected) => field.onChange(selected)}
+                    />
+                  )}
+                />
+                {errors.leave && (
+                  <p className="text-xs text-red-500">{errors.leave.message}</p>
+                )}
+              </div>
 
-            {/* ✅ Buttons */}
-            <div className="flex  gap-3">
-              <button
-                type="button"
-                onClick={close}
-                className="px-3 py-2 w-full bg-gray-500 text-white rounded-md"
-              >
-                Cancel
-              </button>
-              <button type="submit" className="px-3 w-full py-2 bg-blue-700 text-white rounded-md">
-                Save
-              </button>
-            </div>
-          </form>
+              <div className="mt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={close}
+                  className="w-full rounded-md bg-gray-500 px-3 py-2 text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="w-full rounded-md bg-blue-700 px-3 py-2 text-white"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          )}
         </DialogPanel>
       </div>
     </Dialog>

@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import MenuHeader from "@/components/common/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
-import Select from "react-select";
-import { customSelectStyles } from "@/utils/customStyles";
-import { ATTENDANCES, TEAM_ATTENDANCE, newRequest } from "@/api/master";
+import { ATTENDANCES, newRequest } from "@/api/master";
 import Atendance from "../../../../components/attendance/Index";
 import DatePicker from "react-datepicker";
 import { formatDate } from "@/utils/date";
@@ -12,10 +10,8 @@ import { formatDate } from "@/utils/date";
 export default function Attendance() {
   const [date, setDate] = useState(new Date());
   const [attendance, setAttendance] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(
-    dayjs(startDate).add(6, "day").toDate(),
-  );
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
@@ -449,7 +445,8 @@ export default function Attendance() {
                           return (
                             <td
                               key={day.fullDate}
-                              className={`text-center text-[0.8rem] font-semibold ${
+                              onClick={() => setAttendance(true)}
+                              className={`text-center text-[0.8rem] cursor-pointer font-semibold ${
                                 attendanceEntry?.status === "Present"
                                   ? "bg-[#77c477d5] text-black"
                                   : attendanceEntry?.status === "Holiday"
@@ -467,7 +464,6 @@ export default function Attendance() {
                             >
                               {attendanceEntry?.status === "Present" ? (
                                 <div
-                                  onClick={() => setAttendance(true)}
                                   className="flex items-center justify-center text-sm font-extrabold"
                                 >
                                   <span>P</span>
