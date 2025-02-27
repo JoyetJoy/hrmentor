@@ -259,7 +259,7 @@ export default function SaveMasterShift({ formtype, sid }) {
       setValue("weekly_shifts", shiftDetails?.weekly_shifts);
       setValue("people_count", shiftDetails?.people_count);
       setNew_break(shiftDetails?.breakTime);
-      setColor(shiftDetails?.color);
+      setColor(shiftDetails?.color ||" #030E5C");
       setSelectedDays(shiftDetails?.weekly_shifts[0]?.weeks || []);
       setRequireDays(
         shiftDetails?.weekly_shifts[0]?.people_count || [0, 0, 0, 0, 0, 0, 0],

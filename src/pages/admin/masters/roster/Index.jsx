@@ -203,13 +203,13 @@ export default function RosterList({ rosterDetails, setRosterDetails }) {
         </label>
 
         <div className="flex items-center gap-3">
-          <Link
+          {/* <Link
             to={"/admin/roster/calendar"}
             className="flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-medium text-black"
           >
             <Calendar className="size-4 text-black" />
             <span>Calendar View</span>
-          </Link>
+          </Link> */}
           <button
             type="button"
             onClick={() => handleCreate()}

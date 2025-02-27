@@ -13,18 +13,7 @@ import { ACTIVE_EMPLOYEE } from "@/api";
 import RosterItemList from "@/components/sidebars/roster/Index";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// const departmentOptions = [
-//   { value: "emergency", label: "Emergency Department" },
-//   { value: "cardiology", label: "Cardiology" },
-//   { value: "radiology", label: "Radiology" },
-//   { value: "pediatrics", label: "Pediatrics" },
-//   { value: "oncology", label: "Oncology" },
-// ];
 
-// const employee = [
-//   { value: "Harshal", label: "Harshal" },
-//   { value: "Amit", label: "Amit" },
-// ];
 // const months = Array.from({ length: 12 }, (_, i) => ({
 //   value: i + 1,
 //   label: dayjs().month(i).format("MMMM"),
@@ -123,17 +112,6 @@ const ShiftCalendar = () => {
   //   handleDateChange(updatedDate);
   // };
 
-  const getTileClass = (date) => {
-    // if (event?.assigned_total_employee_count !== event?.people_required)
-    //   return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
-    if (dayjs(date).isSame(dayjs(), "day"))
-      return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
-    if (dayjs(date).isBefore(dayjs(), "day"))
-      return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
-    return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
-  };
-  //  console.log(events?.result[0]?.shift_name
-  //   ,"colorrrr")
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
     const holidayEvents = events?.result?.filter((event) =>
@@ -171,11 +149,6 @@ const ShiftCalendar = () => {
     const formattedHours = hours % 12 || 12;
     return `${formattedHours}:${minutes} ${period}`;
   }
-
-  // const addRoster = () => {
-  //   setPopupOpen(true);
-  // };
-
   const handleRangeChange = (option) => {
     setSelectedOption(option);
     let newEndDate;
@@ -224,24 +197,6 @@ const ShiftCalendar = () => {
         .toDate(),
     );
   };
-  // const employees = [
-  //   {
-  //     name: "Mammutty P S",
-  //     shifts: { Mon: ["T1", "09:00 - 17:30", "MT", "Morning Shift"] },
-  //   },
-  //   {
-  //     name: "Tojo Thomas",
-  //     shifts: {},
-  //   },
-  //   {
-  //     name: "Valsakth T G",
-  //     shifts: { Mon: ["T2", "09:00 - 17:30"] },
-  //   },
-  // ];
-  console.log(startDate);
-  console.log(endDate);
-
-  // const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   return (
     <div className="flex gap-2">
       <>
@@ -575,6 +530,8 @@ const ShiftCalendar = () => {
                       availableSlots,
                       requestedSlots,
                     } = findEvents(date);
+                    console.log(shiftEvents);
+
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
                         <>
@@ -602,10 +559,10 @@ const ShiftCalendar = () => {
                             <div
                               key={index}
                               onClick={() => handleClick(event, date)}
-                              className={`mt-2 flex h-[3.8rem] w-auto flex-col rounded-sm border-l-4 py-3 pl-2 pr-3 lg:w-36 xl:w-44 ${getTileClass(
-                                date,
-                                event,
-                              )} justify-center text-gray-800`}
+                              style={{
+                                backgroundColor: event?.shift?.shift_color,
+                              }}
+                              className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm bg-blue-200 py-3 pl-2 pr-3 text-gray-800 lg:w-36 xl:w-44`}
                             >
                               <span className="float-start flex text-[0.8rem] font-semibold">
                                 {event.shift_name}

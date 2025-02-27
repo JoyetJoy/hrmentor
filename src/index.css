@@ -290,7 +290,7 @@ select:focus {
   color: #2c2c2c !important;
 }
 .react-calendar__tile--now {
-  background: rgba(233, 93, 57, 0.1) !important;
+  background: #cffdcf  !important;
 }
 
 .ql-toolbar.ql-snow {

@@ -100,7 +100,7 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                 <hr className="float-end ml-3 w-[69.3%]" />
               </div>
               {!leaveOpen && (
-                <div className="flex w-full items-center justify-center">
+                <div className="flex  flex-col gap-3 w-full items-center justify-center">
                 {rosterCalim?.roster_details?.leave_employees.map((employee)=>(
                     <div
                     key={employee?.id}
