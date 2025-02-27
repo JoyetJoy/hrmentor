@@ -84,7 +84,7 @@ export default function SkillsQualifications() {
         },
         {
           header: "Start Date",
-          accessorKey: "end_date",
+          accessorKey: "start_date",
           Cell: ({ row }) => {
             return <div className="flex px-2">{row.original?.start_date}</div>;
           },

@@ -86,10 +86,7 @@ export default function Experience() {
         },
         {
           header: "Start Date",
-          accessorKey: "end_date",
-          Cell: ({ row }) => {
-            return <div className="flex px-2">{row.original?.start_date}</div>;
-          },
+          accessorKey: "start_date",
         },
         {
           header: "End Date",

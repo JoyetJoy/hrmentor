@@ -53,6 +53,11 @@ export default function RightToWorkEdit({
       setValue("condtion", employeeRightToWorkDetailByid.condtion);
       setValue("expiry_date", employeeRightToWorkDetailByid.expiry_date);
       setValue("reviewedBy", employeeRightToWorkDetailByid.reviewedBy);
+      if (!employeeRightToWorkDetailByid.expiry_date) {
+        setIndefinite(true);
+      } else {
+        setIndefinite(false);
+      }
     }
   }, [employeeRightToWorkDetailByid]);
 
