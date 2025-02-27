@@ -132,8 +132,8 @@ const ShiftCalendar = () => {
       return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
     return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
   };
-   console.log(events?.result[0]?.shift_name
-    ,"colorrrr")
+  //  console.log(events?.result[0]?.shift_name
+  //   ,"colorrrr")
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
     const holidayEvents = events?.result?.filter((event) =>
