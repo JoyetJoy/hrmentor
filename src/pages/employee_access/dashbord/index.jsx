@@ -225,9 +225,9 @@ export const EmployeeDashboard = () => {
                   <h1 className="text-base font-bold text-black">
                     {card.title}
                   </h1>
-                  <p className="flex items-center gap-2 text-sm font-medium text-gray-600">
+                  {/* <p className="flex items-center gap-2 text-sm font-medium text-gray-600">
                     View <Eye className="size-4 text-black/70" />
-                  </p>
+                  </p> */}
                 </div>
 
                 {/* Card Items */}

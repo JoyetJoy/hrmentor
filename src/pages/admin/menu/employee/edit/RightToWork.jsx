@@ -69,17 +69,13 @@ export default function EmployeeRightToWorkEdit() {
           header: "Reference No",
           accessorKey: "reference_no",
         },
-        // {
-        //   header: "Condition",
-        //   accessorKey: "condtion",
-        // },
         {
           header: "Expiry Date",
           accessorKey: "expiry_date",
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
-                {row.original?.expiry_date || "--"}
+                {row.original?.expiry_date || "ILR"}
               </div>
             );
           }

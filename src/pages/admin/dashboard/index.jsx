@@ -86,14 +86,6 @@ export const AdminDashboard = () => {
             >
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
-                <Link
-                  //  to={`/admin/shift`}
-                  to={card.path}
-                  className="flex items-center gap-2 text-sm font-medium text-gray-600"
-                >
-                  View
-                  <Eye className="size-4 text-black/70" />
-                </Link>
               </label>
               <div className="overflow-y-min flex max-h-[12rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
                 {card.details?.length > 0 ? (
