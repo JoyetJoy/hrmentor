@@ -191,21 +191,7 @@ export default function RightToWorkEdit({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Reviewed by
-                  </label>
-                  <input
-                    {...register("reviewedBy", { required: true })}
-                    className="input-box h-10 w-full"
-                  />
-                  {errors.reviewedBy && (
-                    <span className="text-xs font-medium text-red-500">
-                      {errors.reviewedBy?.message}
-                    </span>
-                  )}
-                </div>
-                <div className="group flex flex-col space-y-1">
+                <div className="group flex flex-col space-y-1 col-span-2 w-1/2">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Document
                   </label>

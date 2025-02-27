@@ -42,9 +42,9 @@ function Rosteroveview({ rosterCalim }) {
         id={rosterCalim?.roster_details?.roster_id}
         onConfirm={handleUpdateCheck} // Callback for confirmation
       />
-      <div className="flex items-center gap-2 font-semibold text-black">
-        <div className="flex gap-36">
-          <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
+      <div className="flex w-full items-center justify-between gap-4 font-semibold text-black">
+        <div className="flex w-1/2 items-center gap-48">
+          <div className="text flex items-center gap-1 pr-2 text-sm font-semibold text-black">
             {rosterCalim?.roster_details?.shift_details?.shift_name}
           </div>
           <div className="flex gap-2">
@@ -71,18 +71,19 @@ function Rosteroveview({ rosterCalim }) {
             <p className="text-[0.8rem] text-slate-600">Open</p>
           </div>
         </div>
-      </div>
-      <div className="flex gap-20 text-sm font-semibold text-[#2c2c2c]">
-        <p>
-          Shift Date -{" "}
-          {dayjs(rosterCalim?.roster_details?.roster_start_date).format(
-            "DD-MM-YYYY",
-          )}
-        </p>
-        <p>
-          Shift Time -{" "}
-          {rosterCalim?.roster_details?.shift_details?.shift_start_time}
-        </p>
+        <div className="flex w-1/2 items-center justify-between">
+          <p className="text-sm font-semibold text-[#2c2c2c]">
+            Shift Date -{" "}
+            {dayjs(rosterCalim?.roster_details?.roster_start_date).format(
+              "DD-MM-YYYY",
+            )}
+          </p>
+          <p className="text-sm font-semibold text-[#2c2c2c]">
+            Shift Time - (
+            {rosterCalim?.roster_details?.shift_details?.shift_start_time} -{" "}
+            {rosterCalim?.roster_details?.shift_details?.shift_end_time})
+          </p>
+        </div>
       </div>
     </div>
   );

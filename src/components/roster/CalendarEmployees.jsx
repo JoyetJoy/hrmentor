@@ -71,7 +71,7 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex items-center gap-12 text-xs">
             <button
               type="button"
               onClick={() => {
@@ -124,7 +124,6 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
         <div
             className={`group flex flex-col gap-1.5 h-10 min-h-10 min-w-52`}
           >
-
             <Controller
               name="employees"
               control={control}
