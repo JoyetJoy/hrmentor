@@ -5,6 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
+import { v4 as uuidv4 } from "uuid";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { EMPLOYEE_LEAVE_TYPE } from "@/api/master";
+import { newRequest } from "@/api";
 
 // ✅ Validation Schema
 const schema = yup.object().shape({
@@ -16,10 +21,7 @@ const schema = yup.object().shape({
     .string()
     .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:mm)")
     .required("Check-out time is required"),
-  remarks: yup
-    .string()
-    .min(5, "Remarks should be at least 5 characters")
-    .optional(),
+  remarks: yup.string().optional(),
 });
 
 const leaveSchema = yup.object().shape({
@@ -47,7 +49,15 @@ const leaveType = [
   },
 ];
 
-const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, leave, setLeave}) => {
+const AddEntryModal = ({
+  addEntry,
+  setAddEntry,
+  type,
+  entry,
+  setEntry,
+  setLeave,
+  id,
+}) => {
   const close = () => {
     setAddEntry(false);
   };
@@ -56,19 +66,52 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
     register,
     control,
     handleSubmit,
+    reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(type === "Leave" ? leaveSchema : schema),
   });
+  const uniqueId = uuidv4();
+
+  const { data } = useQuery({
+    queryKey: ["leavetype"],
+    queryFn: () =>
+      newRequest
+        .get(
+          EMPLOYEE_LEAVE_TYPE,
+        )
+        .then((res) => res.data),
+  });
+  console.log(data);
+
+  useEffect(() => {
+    if (type === "Edit" && id) {
+      const editData = entry.find((item) => item.id === id);
+      console.log(editData);
+      if (editData) {
+        setValue("checkIn", editData?.clockIn);
+        setValue("checkOut", editData?.clockOut);
+        setValue("remarks", editData?.remarks || " ");
+      }
+    }
+  }, [type]);
 
   // ✅ Handle Form Submission
   const onSubmit = (data) => {
-    if(type === 'Leave'){
-      setLeave(data?.leave)
-    }else if (type === 'Entry'){
-      setEntry((prev) => [...prev, data]); 
+    if (type === "Leave") {
+      setLeave(data?.leave);
+    } else if (type === "Entry") {
+      const newentry = {
+        id: uniqueId,
+        clockIn: data?.checkIn,
+        clockOut: data?.checkOut,
+        remarks: data?.remarks || "",
+      };
+      setEntry((prev) => [...prev, newentry]);
     }
-    console.log("Form Data:", data);
+    console.log("Form Data:", entry);
+    reset();
     close();
   };
 
@@ -84,6 +127,7 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
 
     return value;
   };
+  console.log(type);
 
   return (
     <Dialog open={addEntry} as="div" className="relative z-30" onClose={close}>
@@ -92,7 +136,10 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
         <DialogPanel className="w-full max-w-md rounded-xl bg-white shadow-lg">
           {/* Header */}
           <div className="flex justify-between rounded-t-xl bg-[#dadae4] px-6 py-4">
-            <p className="text-lg font-semibold text-[#555c5f]">Add {type}</p>
+            <p className="text-lg font-semibold text-[#555c5f]">
+              {" "}
+              {type === "Edit" ? "Edit Entry" : `Add ${type}`}
+            </p>
             <button
               onClick={close}
               className="text-lg font-extrabold text-[#555c5f]"
@@ -102,14 +149,14 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
           </div>
 
           {/* Form */}
-          {type === "Entry" ? (
+          {type === "Entry" || type === "Edit" ? (
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="mt-4 space-y-4 px-6 py-4"
             >
               {/* ✅ Check-in Time */}
-              <div className="flex gap-4">
-                <div>
+              <div className="flex gap-4 w-full">
+                <div className="w-1/2">
                   <label className="block text-sm font-medium text-gray-700">
                     Clock-in Time
                   </label>
@@ -119,7 +166,7 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
                     onChange={(e) => {
                       e.target.value = formatTime(e.target.value); // Call the helper function
                     }}
-                    className="mt-1 w-full rounded-md border p-2"
+                    className="mt-1 w-full rounded-md border p-2 text-sm"
                     placeholder="Enter time (HH:mm)"
                   />
                   {errors.checkIn && (
@@ -130,7 +177,7 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
                 </div>
 
                 {/* ✅ Check-out Time */}
-                <div>
+                <div className="w-1/2">
                   <label className="block text-sm font-medium text-gray-700">
                     Check-out Time
                   </label>
@@ -140,7 +187,7 @@ const AddEntryModal = ({ addEntry, setAddEntry, type, setType, entry, setEntry, 
                     onChange={(e) => {
                       e.target.value = formatTime(e.target.value); // Call the helper function
                     }}
-                    className="mt-1 w-full rounded-md border p-2"
+                    className="mt-1 w-full rounded-md border p-2 text-sm"
                     placeholder="Enter time (HH:MM)"
                   />
                   {errors.checkOut && (

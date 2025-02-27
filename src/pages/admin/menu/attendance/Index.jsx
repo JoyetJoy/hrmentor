@@ -192,7 +192,8 @@ export default function Attendance() {
     console.log("Start Date:", dateRange.start);
     console.log("End Date:", dateRange.end);
   };
-
+ console.log();
+ 
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -432,8 +433,8 @@ export default function Attendance() {
               </thead>
               <tbody>
                 {data?.map((employee, empIndex) => (
-                  <tr key={empIndex} className="border-b-2 text-left">
-                    <td className="sticky left-0 w-auto border-r-2 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
+                  <tr key={empIndex} className="border-b-[3px] border-[#d1d5db] text-left">
+                    <td className="sticky left-0 w-auto border-r-2 border-b-slate-500 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
                       {employee.employee_name}
                     </td>
                     {selectedOption === "weekly"
@@ -459,8 +460,10 @@ export default function Attendance() {
                                         ? "bg-[#AEB6E7] text-black"
                                         : attendanceEntry?.status === "Absent"
                                           ? "bg-[#e47f7f] text-black"
-                                          : "bg-[#c5c5cb] text-black"
-                              } border-r-2`}
+                                          : attendanceEntry?.status === "Day off"
+                                          ? "bg-[#c5c5cb] text-black"
+                                          : "bg-[#ebebf0] text-black"
+                              } border-r-[3px] border-[#d1d5db]`}
                             >
                               {attendanceEntry?.status === "Present" ? (
                                 <div
@@ -488,18 +491,22 @@ export default function Attendance() {
                                 <span className="text-sm font-extrabold">
                                   H
                                 </span>
-                              ) : (
-                                <span className="font-extrabold">DO</span>
-                              )}
+                              ): attendanceEntry?.status === "Day off" ? (
+                                <span className="text-sm font-extrabold">
+                                  DO
+                                </span>
+                              ) : ''}
                             </td>
                           );
                         })
-                      : selectedOption === "weekly"
+                      : selectedOption === "monthly"
                         ? monthDays.map((day) => {
                             // Find attendance status for the given date
                             const attendanceEntry = employee.attendances.find(
                               (att) => att.attendance_date === day.fullDate,
                             );
+                            console.log(attendanceEntry);
+                            
                             return (
                               <td
                                 key={day.fullDate}
@@ -517,7 +524,7 @@ export default function Attendance() {
                                           : attendanceEntry?.status === "Absent"
                                             ? "bg-[#e47f7f] text-black"
                                             : "bg-[#c5c5cb] text-black"
-                                } border-r-2`}
+                                } border-r-[3px] border-[#d1d5db]`}
                               >
                                 {attendanceEntry?.status === "Present" ? (
                                   <div
@@ -547,9 +554,11 @@ export default function Attendance() {
                                   <span className="text-sm font-extrabold">
                                     H
                                   </span>
-                                ) : (
-                                  <span className="font-extrabold">DO</span>
-                                )}
+                                ) : attendanceEntry?.status === "Day off" ? (
+                                  <span className="text-sm font-extrabold">
+                                    DO
+                                  </span>
+                                ) : ''}
                               </td>
                             );
                           })
@@ -575,7 +584,7 @@ export default function Attendance() {
                                           : attendanceEntry?.status === "Absent"
                                             ? "bg-[#e47f7f] text-black"
                                             : "bg-[#c5c5cb] text-black"
-                                } border-r-2`}
+                                } border-r-[3px] border-[#d1d5db]`}
                               >
                                 {attendanceEntry?.status === "Present" ? (
                                   <div
@@ -605,9 +614,11 @@ export default function Attendance() {
                                   <span className="text-sm font-extrabold">
                                     H
                                   </span>
-                                ) : (
-                                  <span className="font-extrabold">DO</span>
-                                )}
+                                ): attendanceEntry?.status === "Day off" ? (
+                                  <span className="text-sm font-extrabold">
+                                    DO
+                                  </span>
+                                ) : ''}
                               </td>
                             );
                           })}

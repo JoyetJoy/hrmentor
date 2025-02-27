@@ -604,7 +604,7 @@ const ShiftCalendar = () => {
                               />
                             ))}
                           </div>
-                          {shiftEvents?.slice(0, 2)?.map((event, index) => (
+                          {shiftEvents?.map((event, index) => (
                             <div
                               key={index}
                               onClick={() => handleClick(event, date)}
