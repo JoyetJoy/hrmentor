@@ -18,10 +18,8 @@ export default function SetUpHeader({ page,currentPage }) {
           />
           Menu
           <ChevronRight className="size-3" />
-          Setup
-          <ChevronRight className="size-3" />
           <Link className="capitalize text-hrmprimaryorange" to={""}>
-            {currentPage}
+          Setup
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">

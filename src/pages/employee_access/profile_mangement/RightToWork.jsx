@@ -87,14 +87,10 @@ export default function RightToWork() {
           cell: ({ row }) => {
             return (
               <div className="flex px-2">
-                {row.original?.expiry_date || "--"}
+                {row.original?.expiry_date || "ILR"}
               </div>
             );
           }
-        },
-        {
-          header: "Reviewed by",
-          accessorKey: "reviewedBy",
         },
         {
           header: "Document",

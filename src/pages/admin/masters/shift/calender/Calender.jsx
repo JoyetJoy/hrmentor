@@ -4,40 +4,36 @@ import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Plus, ArrowRight, AlignJustify } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import RosterHeader from "@/components/common/RosterHeader";
+import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest, ROASTER_LIST_GET } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
-import { dividerClasses } from "@mui/material";
 import RosterItemList from "@/components/sidebars/roster/Index";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const departmentOptions = [
-  { value: "emergency", label: "Emergency Department" },
-  { value: "cardiology", label: "Cardiology" },
-  { value: "radiology", label: "Radiology" },
-  { value: "pediatrics", label: "Pediatrics" },
-  { value: "oncology", label: "Oncology" },
-];
+// const departmentOptions = [
+//   { value: "emergency", label: "Emergency Department" },
+//   { value: "cardiology", label: "Cardiology" },
+//   { value: "radiology", label: "Radiology" },
+//   { value: "pediatrics", label: "Pediatrics" },
+//   { value: "oncology", label: "Oncology" },
+// ];
 
-const employee = [
-  { value: "Harshal", label: "Harshal" },
-  { value: "Amit", label: "Amit" },
-];
-const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i + 1,
-  label: dayjs().month(i).format("MMMM"),
-}));
+// const employee = [
+//   { value: "Harshal", label: "Harshal" },
+//   { value: "Amit", label: "Amit" },
+// ];
+// const months = Array.from({ length: 12 }, (_, i) => ({
+//   value: i + 1,
+//   label: dayjs().month(i).format("MMMM"),
+// }));
 
-const years = Array.from({ length: 11 }, (_, i) => ({
-  value: 2020 + i,
-  label: (2020 + i).toString(),
-}));
+// const years = Array.from({ length: 11 }, (_, i) => ({
+//   value: 2020 + i,
+//   label: (2020 + i).toString(),
+// }));
 
 const ShiftCalendar = () => {
   const [date, setDate] = useState(new Date());
@@ -50,6 +46,13 @@ const ShiftCalendar = () => {
   const [activeWorkArea, setActiveWorkArea] = useState("");
   const [activeLocation, setActiveLocation] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("weekly");
+  const [startDate, setStartDate] = useState(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [endDate, setEndDate] = useState(
+    dayjs(startDate).add(6, "day").toDate(),
+  );
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
@@ -98,27 +101,27 @@ const ShiftCalendar = () => {
     setDate(newDate);
   };
 
-  const handleMonthChange = (selectedOption) => {
-    const currentDay = dayjs(date).date();
-    const updatedDate = dayjs(date)
-      .month(selectedOption.value - 1)
-      .date(1)
-      .date(
-        Math.min(
-          currentDay,
-          dayjs(date)
-            .month(selectedOption.value - 1)
-            .daysInMonth(),
-        ),
-      )
-      .toDate();
-    handleDateChange(updatedDate);
-  };
+  // const handleMonthChange = (selectedOption) => {
+  //   const currentDay = dayjs(date).date();
+  //   const updatedDate = dayjs(date)
+  //     .month(selectedOption.value - 1)
+  //     .date(1)
+  //     .date(
+  //       Math.min(
+  //         currentDay,
+  //         dayjs(date)
+  //           .month(selectedOption.value - 1)
+  //           .daysInMonth(),
+  //       ),
+  //     )
+  //     .toDate();
+  //   handleDateChange(updatedDate);
+  // };
 
-  const handleYearChange = (selectedOption) => {
-    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    handleDateChange(updatedDate);
-  };
+  // const handleYearChange = (selectedOption) => {
+  //   const updatedDate = dayjs(date).year(selectedOption.value).toDate();
+  //   handleDateChange(updatedDate);
+  // };
 
   const getTileClass = (date) => {
     // if (event?.assigned_total_employee_count !== event?.people_required)
@@ -129,6 +132,8 @@ const ShiftCalendar = () => {
       return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
     return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
   };
+   console.log(events?.result[0]?.shift_name
+    ,"colorrrr")
   const findEvents = (date) => {
     const formattedDate = dayjs(date).format("YYYY-MM-DD");
     const holidayEvents = events?.result?.filter((event) =>
@@ -167,17 +172,9 @@ const ShiftCalendar = () => {
     return `${formattedHours}:${minutes} ${period}`;
   }
 
-  const addRoster = () => {
-    setPopupOpen(true);
-  };
-  const [selectedOption, setSelectedOption] = useState("weekly");
-  const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(null);
-  const [endDate, setEndDate] = useState(
-    dayjs(startDate).add(6, "day").toDate(),
-  );
+  // const addRoster = () => {
+  //   setPopupOpen(true);
+  // };
 
   const handleRangeChange = (option) => {
     setSelectedOption(option);
@@ -227,24 +224,24 @@ const ShiftCalendar = () => {
         .toDate(),
     );
   };
-  const employees = [
-    {
-      name: "Mammutty P S",
-      shifts: { Mon: ["T1", "09:00 - 17:30", "MT", "Morning Shift"] },
-    },
-    {
-      name: "Tojo Thomas",
-      shifts: {},
-    },
-    {
-      name: "Valsakth T G",
-      shifts: { Mon: ["T2", "09:00 - 17:30"] },
-    },
-  ];
+  // const employees = [
+  //   {
+  //     name: "Mammutty P S",
+  //     shifts: { Mon: ["T1", "09:00 - 17:30", "MT", "Morning Shift"] },
+  //   },
+  //   {
+  //     name: "Tojo Thomas",
+  //     shifts: {},
+  //   },
+  //   {
+  //     name: "Valsakth T G",
+  //     shifts: { Mon: ["T2", "09:00 - 17:30"] },
+  //   },
+  // ];
   console.log(startDate);
   console.log(endDate);
 
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  // const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   return (
     <div className="flex gap-2">
       <>
@@ -354,9 +351,8 @@ const ShiftCalendar = () => {
                         width: "200px",
                         height: "200px",
                         borderRadius: "0px",
-                      }} 
+                      }}
                     >
-                      
                       <DatePicker
                         selected={selectedYear}
                         onChange={(date) => {
@@ -579,8 +575,6 @@ const ShiftCalendar = () => {
                       availableSlots,
                       requestedSlots,
                     } = findEvents(date);
-                    console.log(shiftEvents);
-
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
                         <>
