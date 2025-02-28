@@ -115,6 +115,8 @@ export const QUALIFICATION = "EducationQualifications";
 export const INTERVIEW_TYPE = "InterviewTypes";
 // ROASTER LIST
 export const ROASTER_LIST_GET = "/team-employee-rosters-list";
+// ROASTER LISTING
+export const ROASTER_LISTING = "/roaster-table"
 // CANDIDATE TYPE
 export const CANDIDATE_TYPE = "CandidateTypes";
 // CANDIDATE TYPE LIST

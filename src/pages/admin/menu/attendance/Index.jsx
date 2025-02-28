@@ -12,6 +12,7 @@ export default function Attendance() {
   const [attendance, setAttendance] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [days, setDays] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
@@ -145,13 +146,17 @@ export default function Attendance() {
 
   useEffect(() => {
     if (selectedOption === "weekly") {
+      setDays(weekDays);
       setStartDate(weekDays[0].fullDate);
       setEndDate(weekDays[weekDays.length - 1].fullDate);
     } else if (selectedOption === "monthly") {
+      setDays(monthDays);
       setStartDate(monthDays[0].fullDate);
       setEndDate(monthDays[monthDays.length - 1].fullDate);
+    } else if (selectedOption === "custom") {
+      setDays(customDays);
     }
-  }, [selectedOption]);
+  }, [selectedOption, startDate, endDate]);
 
   const getCurrentWeek = (year) => {
     const today = dayjs().year(year).toDate();
@@ -192,8 +197,8 @@ export default function Attendance() {
     console.log("Start Date:", dateRange.start);
     console.log("End Date:", dateRange.end);
   };
- console.log();
- 
+  console.log();
+
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -400,228 +405,78 @@ export default function Attendance() {
                   <th className="sticky left-0 top-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
                     Employee Name
                   </th>
-                  {selectedOption === "weekly"
-                    ? weekDays.map((dayObj, index) => (
-                        <th
-                          key={index}
-                          className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
-                        >
-                          {dayObj.day}
-                          <p className="font-medium">{dayObj.date}</p>
-                        </th>
-                      ))
-                    : selectedOption === "monthly"
-                      ? monthDays.map((dayObj, index) => (
-                          <th
-                            key={index}
-                            className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
-                          >
-                            {dayObj.day}
-                            <p className="font-medium">{dayObj.date}</p>
-                          </th>
-                        ))
-                      : customDays.map((dayObj, index) => (
-                          <th
-                            key={index}
-                            className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
-                          >
-                            {dayObj.day}
-                            <p className="font-medium">{dayObj.date}</p>
-                          </th>
-                        ))}
+                  {days.map((dayObj, index) => (
+                    <th
+                      key={index}
+                      className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                    >
+                      {dayObj.day}
+                      <p className="font-medium">{dayObj.date}</p>
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {data?.map((employee, empIndex) => (
-                  <tr key={empIndex} className="border-b-[3px] border-[#d1d5db] text-left">
+                  <tr
+                    key={empIndex}
+                    className="border-b-[3px] border-[#d1d5db] text-left"
+                  >
                     <td className="sticky left-0 w-auto border-r-2 border-b-slate-500 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
                       {employee.employee_name}
                     </td>
-                    {selectedOption === "weekly"
-                      ? weekDays.map((day) => {
-                          // Find attendance status for the given date
-                          const attendanceEntry = employee.attendances.find(
-                            (att) => att.attendance_date === day.fullDate,
-                          );
-                          return (
-                            <td
-                              key={day.fullDate}
-                              onClick={() => setAttendance(true)}
-                              className={`text-center text-[0.8rem] cursor-pointer font-semibold ${
-                                attendanceEntry?.status === "Present"
-                                  ? "bg-[#77c477d5] text-black"
-                                  : attendanceEntry?.status === "Holiday"
-                                    ? "bg-[#e68ecf] text-black"
-                                    : attendanceEntry?.status ===
-                                        "Company Leave"
-                                      ? "bg-[#FDE3AA] text-black"
-                                      : attendanceEntry?.status ===
-                                          "Annual Leave"
-                                        ? "bg-[#AEB6E7] text-black"
-                                        : attendanceEntry?.status === "Absent"
-                                          ? "bg-[#e47f7f] text-black"
-                                          : attendanceEntry?.status === "Day off"
-                                          ? "bg-[#c5c5cb] text-black"
-                                          : "bg-[#ebebf0] text-black"
-                              } border-r-[3px] border-[#d1d5db]`}
-                            >
-                              {attendanceEntry?.status === "Present" ? (
-                                <div
-                                  className="flex items-center justify-center text-sm font-extrabold"
-                                >
-                                  <span>P</span>
-                                  {attendanceEntry?.delay_status && (
-                                    <img
-                                      className="ml-2 w-5 object-contain"
-                                      src="/assets/icons/tort.svg"
-                                      alt="late"
-                                    />
-                                  )}
-                                </div>
-                              ) : attendanceEntry?.status === "Absent" ? (
-                                <span className="text-sm font-extrabold">
-                                  A
-                                </span>
-                              ) : attendanceEntry?.status === "Annual Leave" ? (
-                                <span className="font-extrabold">AL</span>
-                              ) : attendanceEntry?.status ===
-                                "Company Leave" ? (
-                                <span className="font-extrabold">CL</span>
-                              ) : attendanceEntry?.status === "Holiday" ? (
-                                <span className="text-sm font-extrabold">
-                                  H
-                                </span>
-                              ): attendanceEntry?.status === "Day off" ? (
-                                <span className="text-sm font-extrabold">
-                                  DO
-                                </span>
-                              ) : ''}
-                            </td>
-                          );
-                        })
-                      : selectedOption === "monthly"
-                        ? monthDays.map((day) => {
-                            // Find attendance status for the given date
-                            const attendanceEntry = employee.attendances.find(
-                              (att) => att.attendance_date === day.fullDate,
-                            );
-                            console.log(attendanceEntry);
-                            
-                            return (
-                              <td
-                                key={day.fullDate}
-                                className={`text-center text-[0.8rem] font-semibold ${
-                                  attendanceEntry?.status === "Present"
-                                    ? "bg-[#77c477d5] text-black"
-                                    : attendanceEntry?.status === "Holiday"
-                                      ? "bg-[#e68ecf] text-black"
-                                      : attendanceEntry?.status ===
-                                          "Company Leave"
-                                        ? "bg-[#FDE3AA] text-black"
-                                        : attendanceEntry?.status ===
-                                            "Annual Leave"
-                                          ? "bg-[#AEB6E7] text-black"
-                                          : attendanceEntry?.status === "Absent"
-                                            ? "bg-[#e47f7f] text-black"
-                                            : "bg-[#c5c5cb] text-black"
-                                } border-r-[3px] border-[#d1d5db]`}
-                              >
-                                {attendanceEntry?.status === "Present" ? (
-                                  <div
-                                    onClick={() => setAttendance(true)}
-                                    className="flex items-center justify-center text-sm font-extrabold"
-                                  >
-                                    <span>P</span>
-                                    {attendanceEntry?.delay_status && (
-                                      <img
-                                        className="ml-2 w-5 object-contain"
-                                        src="/assets/icons/tort.svg"
-                                        alt="late"
-                                      />
-                                    )}
-                                  </div>
-                                ) : attendanceEntry?.status === "Absent" ? (
-                                  <span className="text-sm font-extrabold">
-                                    A
-                                  </span>
-                                ) : attendanceEntry?.status ===
-                                  "Annual Leave" ? (
-                                  <span className="font-extrabold">AL</span>
-                                ) : attendanceEntry?.status ===
-                                  "Company Leave" ? (
-                                  <span className="font-extrabold">CL</span>
-                                ) : attendanceEntry?.status === "Holiday" ? (
-                                  <span className="text-sm font-extrabold">
-                                    H
-                                  </span>
-                                ) : attendanceEntry?.status === "Day off" ? (
-                                  <span className="text-sm font-extrabold">
-                                    DO
-                                  </span>
-                                ) : ''}
-                              </td>
-                            );
-                          })
-                        : customDays.map((day) => {
-                            // Find attendance status for the given date
-                            const attendanceEntry = employee.attendances.find(
-                              (att) => att.attendance_date === day.fullDate,
-                            );
-                            return (
-                              <td
-                                key={day.fullDate}
-                                className={`text-center text-[0.8rem] font-semibold ${
-                                  attendanceEntry?.status === "Present"
-                                    ? "bg-[#77c477d5] text-black"
-                                    : attendanceEntry?.status === "Holiday"
-                                      ? "bg-[#e68ecf] text-black"
-                                      : attendanceEntry?.status ===
-                                          "Company Leave"
-                                        ? "bg-[#FDE3AA] text-black"
-                                        : attendanceEntry?.status ===
-                                            "Annual Leave"
-                                          ? "bg-[#AEB6E7] text-black"
-                                          : attendanceEntry?.status === "Absent"
-                                            ? "bg-[#e47f7f] text-black"
-                                            : "bg-[#c5c5cb] text-black"
-                                } border-r-[3px] border-[#d1d5db]`}
-                              >
-                                {attendanceEntry?.status === "Present" ? (
-                                  <div
-                                    onClick={() => setAttendance(true)}
-                                    className="flex items-center justify-center text-sm font-extrabold"
-                                  >
-                                    <span>P</span>
-                                    {attendanceEntry?.delay_status && (
-                                      <img
-                                        className="ml-2 w-5 object-contain"
-                                        src="/assets/icons/tort.svg"
-                                        alt="late"
-                                      />
-                                    )}
-                                  </div>
-                                ) : attendanceEntry?.status === "Absent" ? (
-                                  <span className="text-sm font-extrabold">
-                                    A
-                                  </span>
-                                ) : attendanceEntry?.status ===
-                                  "Annual Leave" ? (
-                                  <span className="font-extrabold">AL</span>
-                                ) : attendanceEntry?.status ===
-                                  "Company Leave" ? (
-                                  <span className="font-extrabold">CL</span>
-                                ) : attendanceEntry?.status === "Holiday" ? (
-                                  <span className="text-sm font-extrabold">
-                                    H
-                                  </span>
-                                ): attendanceEntry?.status === "Day off" ? (
-                                  <span className="text-sm font-extrabold">
-                                    DO
-                                  </span>
-                                ) : ''}
-                              </td>
-                            );
-                          })}
+                    {days?.map((day) => {
+                      // Find attendance status for the given date
+                      const attendanceEntry = employee.attendances.find(
+                        (att) => att.attendance_date === day.fullDate,
+                      );
+                      return (
+                        <td
+                          key={day.fullDate}
+                          onClick={() => setAttendance(true)}
+                          className={`cursor-pointer text-center text-[0.8rem] font-semibold ${
+                            attendanceEntry?.status === "Present"
+                              ? "bg-[#77c477d5] text-black"
+                              : attendanceEntry?.status === "Holiday"
+                                ? "bg-[#e68ecf] text-black"
+                                : attendanceEntry?.status === "Company Leave"
+                                  ? "bg-[#FDE3AA] text-black"
+                                  : attendanceEntry?.status === "Annual Leave"
+                                    ? "bg-[#AEB6E7] text-black"
+                                    : attendanceEntry?.status === "Absent"
+                                      ? "bg-[#e47f7f] text-black"
+                                      : attendanceEntry?.status === "Day off"
+                                        ? "bg-[#c5c5cb] text-black"
+                                        : "bg-[#ebebf0] text-black"
+                          } border-r-[3px] border-[#d1d5db]`}
+                        >
+                          {attendanceEntry?.status === "Present" ? (
+                            <div className="flex items-center justify-center text-sm font-extrabold">
+                              <span>P</span>
+                              {attendanceEntry?.delay_status && (
+                                <img
+                                  className="ml-2 w-5 object-contain"
+                                  src="/assets/icons/tort.svg"
+                                  alt="late"
+                                />
+                              )}
+                            </div>
+                          ) : attendanceEntry?.status === "Absent" ? (
+                            <span className="text-sm font-extrabold">A</span>
+                          ) : attendanceEntry?.status === "Annual Leave" ? (
+                            <span className="font-extrabold">AL</span>
+                          ) : attendanceEntry?.status === "Company Leave" ? (
+                            <span className="font-extrabold">CL</span>
+                          ) : attendanceEntry?.status === "Holiday" ? (
+                            <span className="text-sm font-extrabold">H</span>
+                          ) : attendanceEntry?.status === "Day off" ? (
+                            <span className="text-sm font-extrabold">DO</span>
+                          ) : (
+                            ""
+                          )}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))}
               </tbody>

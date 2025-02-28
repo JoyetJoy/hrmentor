@@ -11,7 +11,7 @@ import RosterHeader from "@/components/common/RosterHeader";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest, ROASTER_LIST_GET } from "@/api/master";
+import { newRequest, ROASTER_LIST_GET, ROASTER_LISTING } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import { dividerClasses } from "@mui/material";
 import RosterItemList from "@/components/sidebars/roster/Index";
@@ -22,179 +22,71 @@ import {
   EMPLOYEE_WORK_AREA,
   EMPLOYEE_WORK_LOCATION_LIST,
 } from "@/api/master";
-
-const departmentOptions = [
-  { value: "emergency", label: "Emergency Department" },
-  { value: "cardiology", label: "Cardiology" },
-  { value: "radiology", label: "Radiology" },
-  { value: "pediatrics", label: "Pediatrics" },
-  { value: "oncology", label: "Oncology" },
-];
-
-const employee = [
-  { value: "Harshal", label: "Harshal" },
-  { value: "Amit", label: "Amit" },
-];
-const months = Array.from({ length: 12 }, (_, i) => ({
-  value: i + 1,
-  label: dayjs().month(i).format("MMMM"),
-}));
-
-const years = Array.from({ length: 11 }, (_, i) => ({
-  value: 2020 + i,
-  label: (2020 + i).toString(),
-}));
+import { formatDate } from "@/utils/date";
 
 const RosterCalendar = () => {
-  const [date, setDate] = useState(new Date());
   const [popupOpen, setPopupOpen] = useState(false);
-  const year = dayjs(date).year();
-  const month = dayjs(date).month() + 1;
   const navigate = useNavigate();
-  const [activeEmployee, setActiveEmployee] = useState("");
   const [activeDepartment, setActiveDepartment] = useState("");
   const [activeWorkArea, setActiveWorkArea] = useState("");
   const [activeLocation, setActiveLocation] = useState("");
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(dayjs().year());
+  const [selectedOption, setSelectedOption] = useState("weekly");
+  const [days, setDays] = useState([]);
+  const [startDate, setStartDate] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const [openPopup, setOpenPopup] = useState(null); // Track which popup is open
+  const [endDate, setEndDate] = useState();
 
-  const { data: employee } = useQuery({
-    queryKey: ["employee"],
-    queryFn: () => newRequest.get(ACTIVE_EMPLOYEE).then((res) => res.data),
-  });
+  const useFetchData = (key, url) => {
+    return useQuery({
+      queryKey: [key],
+      queryFn: () => newRequest.get(url).then((res) => res.data),
+    });
+  };
 
-  const { data: events = [], refetch } = useQuery({
+  console.log(startDate);
+  console.log(endDate);
+
+  const { data, refetch } = useQuery({
     queryKey: [
       "events",
-      month,
-      year,
-      activeEmployee,
+      startDate,
+      endDate,
       activeDepartment,
       activeLocation,
       activeWorkArea,
     ],
     queryFn: () =>
       newRequest
-        .get(ROASTER_LIST_GET, {
-          params: {
-            month,
-            year,
-            employee: activeEmployee,
-            department: activeDepartment,
-            location: activeLocation,
-            work_area: activeWorkArea,
+        .get(
+          `${ROASTER_LISTING}?start_date=${startDate}&end_date=${endDate}&role=hrmanager  `,
+          {
+            // params: {
+            //   department: activeDepartment,
+            //   location: activeLocation,
+            //   work_area: activeWorkArea,
+            // },
           },
-        })
+        )
         .then((res) => res.data),
-    enabled: true,
-    staleTime: 0,
+    enabled: Boolean(startDate) && Boolean(endDate),
   });
 
   useEffect(() => {
     refetch();
   }, [
-    date,
     refetch,
-    activeEmployee,
+    startDate,
+    endDate,
     activeDepartment,
     activeLocation,
     activeWorkArea,
   ]);
 
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-  };
-
-  const handleMonthChange = (selectedOption) => {
-    const currentDay = dayjs(date).date();
-    const updatedDate = dayjs(date)
-      .month(selectedOption.value - 1)
-      .date(1)
-      .date(
-        Math.min(
-          currentDay,
-          dayjs(date)
-            .month(selectedOption.value - 1)
-            .daysInMonth(),
-        ),
-      )
-      .toDate();
-    handleDateChange(updatedDate);
-  };
-
-  const handleYearChange = (selectedOption) => {
-    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    handleDateChange(updatedDate);
-  };
-
-  const getTileClass = (date) => {
-    // if (event?.assigned_total_employee_count !== event?.people_required)
-    //   return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
-    if (dayjs(date).isSame(dayjs(), "day"))
-      return "bg-green-200 border-green-500 hover:bg-[#c0e9c0]";
-    if (dayjs(date).isBefore(dayjs(), "day"))
-      return "bg-blue-200 border-blue-500 hover:bg-[#b4d1f3]";
-    return "bg-yellow-200 border-yellow-500 hover:bg-[#f1e584]";
-  };
-  const findEvents = (date) => {
-    const formattedDate = dayjs(date).format("YYYY-MM-DD");
-    const holidayEvents = events?.result?.filter((event) =>
-      event?.holidays?.includes(formattedDate),
-    );
-    const shiftEvents = events?.result?.filter((event) =>
-      event?.date_range?.includes(formattedDate),
-    );
-
-    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
-    const requestedSlots = events?.requested_details?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
-    return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
-  };
-
-  const handleClick = (event, date) => {
-    if (!event?.isHoliday) {
-      const selectdate = dayjs(date).format("YYYY-MM-DD");
-      if (date) {
-        navigate(
-          `/admin/roster/calendarview?id=${event?.id}&date=${selectdate}`,
-        );
-      }
-    }
-  };
-
-  function convertTo12HourFormat(time) {
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
-  }
-
   const addRoster = () => {
     setPopupOpen(true);
   };
-  const getMonthDays = () => {
-    const startOfMonth = dayjs(date).startOf("month");
-    const daysInMonth = dayjs(date).daysInMonth();
-
-    return Array.from({ length: daysInMonth }, (_, i) => {
-      const day = startOfMonth.add(i, "day");
-      return {
-        day: day.format("ddd"),
-        date: day.format("MMM DD"),
-        fullDate: day.format("YYYY-MM-DD"),
-      };
-    });
-  };
-  const [selectedOption, setSelectedOption] = useState("weekly");
-  const [startDate, setStartDate] = useState(new Date());
-  const [isOpen, setIsOpen] = useState(false);
-  const [popup, setPopUp] = useState(false);
-  const [openPopup, setOpenPopup] = useState(null); // Track which popup is open
 
   const handleOpen = (rowIndex, colIndex) => {
     setOpenPopup((prev) =>
@@ -204,11 +96,9 @@ const RosterCalendar = () => {
     );
   };
 
-  const [endDate, setEndDate] = useState(
-    dayjs(startDate).add(6, "day").toDate(),
-  );
   const handlePrev = () => {
     let newStartDate;
+    let newEndDate;
     if (selectedOption === "daily") {
       newStartDate = dayjs(startDate).subtract(1, "day").toDate();
     } else if (selectedOption === "weekly") {
@@ -216,15 +106,27 @@ const RosterCalendar = () => {
     } else {
       newStartDate = dayjs(startDate).subtract(1, "month").toDate();
     }
-    setStartDate(newStartDate);
-    setEndDate(
-      dayjs(newStartDate)
-        .add(selectedOption === "monthly" ? 1 : 6, "day")
-        .toDate(),
-    );
+    const start = formatDate(newStartDate);
+    setStartDate(start);
+
+    if (selectedOption === "daily") {
+      newEndDate = dayjs(newStartDate).add(6, "day").toDate();
+    } else if (selectedOption === "weekly") {
+      newEndDate = dayjs(newStartDate).add(6, "day").toDate();
+    } else {
+      newEndDate = dayjs(newStartDate)
+        .add(1, "month")
+        .subtract(1, "day")
+        .toDate();
+    }
+    const end = formatDate(newEndDate);
+    setEndDate(end);
   };
+
   const handleNext = () => {
     let newStartDate;
+    let newEndDate;
+
     if (selectedOption === "daily") {
       newStartDate = dayjs(startDate).add(1, "day").toDate();
     } else if (selectedOption === "weekly") {
@@ -232,14 +134,23 @@ const RosterCalendar = () => {
     } else {
       newStartDate = dayjs(startDate).add(1, "month").toDate();
     }
-    setStartDate(newStartDate);
-    setEndDate(
-      dayjs(newStartDate)
-        .add(selectedOption === "monthly" ? 1 : 6, "day")
-        .toDate(),
-    );
+    const start = formatDate(newStartDate);
+    setStartDate(start);
+
+    if (selectedOption === "daily") {
+      newEndDate = dayjs(newStartDate).add(6, "day").toDate();
+    } else if (selectedOption === "weekly") {
+      newEndDate = dayjs(newStartDate).add(6, "day").toDate();
+    } else {
+      newEndDate = dayjs(newStartDate)
+        .add(1, "month")
+        .subtract(1, "day")
+        .toDate();
+    }
+
+    const end = formatDate(newEndDate);
+    setEndDate(end);
   };
-  const monthDays = getMonthDays();
   const employees = [
     {
       id: "BTRV002",
@@ -320,36 +231,10 @@ const RosterCalendar = () => {
   ];
 
   const [search, setSearch] = useState("");
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const currentDate = new Date();
-  const weekDates = days.map((_, index) => {
-    const date = new Date(currentDate);
-    date.setDate(currentDate.getDate() + index);
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  });
+
   const filteredShifts = shifts.filter((shift) =>
     shift.name.toLowerCase().includes(search.toLowerCase()),
   );
-  const handleRangeChange = (option) => {
-    setSelectedOption(option);
-    let newEndDate;
-
-    if (option === "daily") {
-      newEndDate = startDate;
-    } else if (option === "weekly") {
-      newEndDate = dayjs(startDate).add(6, "day").toDate();
-    } else if (option === "monthly") {
-      newEndDate = dayjs(startDate).add(1, "month").subtract(1, "day").toDate();
-    }
-
-    setEndDate(newEndDate);
-  };
-  const useFetchData = (key, url) => {
-    return useQuery({
-      queryKey: [key],
-      queryFn: () => newRequest.get(url).then((res) => res.data),
-    });
-  };
 
   // Fetch data from APIs
   const { data: department } = useFetchData(
@@ -380,10 +265,23 @@ const RosterCalendar = () => {
         label: area.name,
       }))
     : [];
-  const weekDate = weekDates.map((date, index) => {
-    return date;
-  });
-  console.log(weekDate);
+
+  // Generate all days in the selected month
+  const getMonthDays = () => {
+    const startOfMonth = dayjs(startDate).startOf("month");
+    const daysInMonth = dayjs(startDate).daysInMonth();
+
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = startOfMonth.add(i, "day");
+      return {
+        day: day.format("ddd"),
+        date: day.format("MMM DD"),
+        fullDate: day.format("YYYY-MM-DD"),
+      };
+    });
+  };
+
+  // Generate all days in the selected week
   const getWeekDays = () => {
     // Ensure startDate is in the correct week
     const startOfWeek = dayjs(startDate).startOf("week").add(1, "day"); // Monday as start
@@ -398,8 +296,70 @@ const RosterCalendar = () => {
     });
   };
 
+  const monthDays = getMonthDays();
   const weekDays = getWeekDays();
 
+  useEffect(() => {
+    if (selectedOption === "weekly") {
+      setDays(weekDays);
+      setStartDate(weekDays[0].fullDate);
+      setEndDate(weekDays[weekDays.length - 1].fullDate);
+    } else if (selectedOption === "monthly") {
+      setDays(monthDays);
+      setStartDate(monthDays[0].fullDate);
+      setEndDate(monthDays[monthDays.length - 1].fullDate);
+    }
+  }, [selectedOption]);
+
+  const handleYearChange = (date) => {
+    const newYear = dayjs(date).year();
+    setSelectedYear(newYear);
+
+    // Preserve the selected month while changing the year
+    setStartDate(dayjs(startDate).year(newYear).format("YYYY-MM-DD"));
+    setEndDate(dayjs(endDate).year(newYear).format("YYYY-MM-DD"));
+
+    setIsOpen(false);
+  };
+  const getCurrentWeek = (year) => {
+    const today = dayjs().year(year).toDate();
+    const dayOfWeek = today.getDay();
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const sundayOffset = mondayOffset + 6;
+    const monday = dayjs(today).add(mondayOffset, "day").format("YYYY-MM-DD");
+    const sunday = dayjs(today).add(sundayOffset, "day").format("YYYY-MM-DD");
+    return { start: monday, end: sunday };
+  };
+
+  const getCurrentMonth = (year, month) => {
+    const start = dayjs(`${year}-${month + 1}-01`)
+      .startOf("month")
+      .format("YYYY-MM-DD");
+    const end = dayjs(`${year}-${month + 1}-01`)
+      .endOf("month")
+      .format("YYYY-MM-DD");
+
+    return { start, end };
+  };
+
+  const handleFilter = (filterType) => {
+    setSelectedOption(filterType);
+
+    let dateRange;
+
+    if (filterType === "weekly") {
+      dateRange = getCurrentWeek(selectedYear);
+    } else if (filterType === "monthly") {
+      const selectedMonth = dayjs(startDate).month(); // Get the currently selected month
+      dateRange = getCurrentMonth(selectedYear, selectedMonth);
+    }
+
+    setStartDate(dateRange.start);
+    setEndDate(dateRange.end);
+
+    console.log("Start Date:", dateRange.start);
+    console.log("End Date:", dateRange.end);
+  };
   return (
     <>
       <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
@@ -416,7 +376,7 @@ const RosterCalendar = () => {
                       ? "bg-green-500 text-white"
                       : "bg-gray-200"
                   }`}
-                  onClick={() => handleRangeChange(option)}
+                  onClick={() => handleFilter(option)}
                 >
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </button>
@@ -447,7 +407,7 @@ const RosterCalendar = () => {
               <div className="relative flex items-center">
                 <input
                   type="text"
-                  value={`${dayjs(startDate).format("DD/MM/YYYY")} - ${dayjs(endDate).format("DD/MM/YYYY")}`}
+                  value={`${startDate} - ${endDate}`}
                   readOnly
                   className="w-44 rounded-md border border-gray-300 bg-white px-3 py-1 text-center text-xs"
                 />
@@ -511,20 +471,10 @@ const RosterCalendar = () => {
                     }}
                   >
                     <DatePicker
-                      selected={selectedYear}
-                      onChange={(date) => {
-                        setSelectedYear(date);
-
-                        const newYear = dayjs(date).year();
-
-                        const newStartDate = dayjs(`${newYear}-01-01`).toDate();
-                        const newEndDate = dayjs(`${newYear}-12-31`).toDate();
-
-                        setStartDate(newStartDate);
-                        setEndDate(newEndDate);
-
-                        setIsOpen(false);
-                      }}
+                      selected={
+                        selectedYear ? new Date(selectedYear, 0, 1) : new Date()
+                      } // Ensure it selects the current year
+                      onChange={handleYearChange}
                       showYearPicker
                       dateFormat="yyyy"
                       inline
@@ -562,118 +512,81 @@ const RosterCalendar = () => {
                 placeholder="Select Work Area"
                 className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
               />
-              <Select
-                options={employee}
-                isSearchable={true}
-                onChange={(option) => setActiveEmployee(option?.id || "")}
-                styles={customSelectStyles}
-                placeholder={"All employee"}
-                className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
-              />
             </div>
           </div>
 
           <div className="overflow-x-min mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
-            <div className="mt-4 w-full overflow-x-auto overflow-x-min bg-white shadow-md">
-              <table className="overflow-x-min min-h-screen w-full border-collapse overflow-x-auto rounded-md">
-                <thead className="border bg-gray-soft">
-                  <tr className="border border-gray-300 bg-[#00000036] text-sm w-[20rem] text-gray-600">
-                    <th className="p-5 text-left w-[20rem]">Employee Name</th>
-                    {selectedOption === "weekly"
-                      ? weekDays.map((dayObj, index) => (
-                          <th
-                            key={index}
-                            className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
-                          >
-                            {dayObj.day}
-                            <p className="font-medium">{dayObj.date}</p>
-                          </th>
-                        ))
-                      : monthDays.map((dayObj, index) => (
-                          <th
-                            key={index}
-                            className="sticky top-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
-                          >
-                            {dayObj.day}
-                            <p className="font-medium">{dayObj.date}</p>
-                          </th>
-                        ))}
+            <div className="overflow-x-min mt-4 w-full overflow-x-auto bg-white shadow-md">
+              <table className="min-h-screen w-full border-collapse overflow-x-auto rounded-md">
+                <thead className="w-full border bg-gray-soft">
+                  <tr className="border border-gray-300 bg-[#00000036] text-sm text-gray-600">
+                    <th className="min-w-[12rem] p-5 text-left">
+                      Employee Name
+                    </th>
+                    {days.map((dayObj, index) => (
+                      <th
+                        key={index}
+                        className="sticky top-0 min-w-[8rem] border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                      >
+                        {dayObj.day}
+                        <p className="font-medium">{dayObj.date}</p>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
-
                 <tbody className="border">
-                  {employees
-                    .filter((emp) =>
-                      emp.name.toLowerCase().includes(search.toLowerCase()),
-                    )
-                    .map((emp, rowIndex) => (
-                      <tr key={rowIndex} className="border">
-                        <td className="flex items-center space-x-3 p-3 min-w-[14rem]">
-                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
-                            {emp.name.charAt(0)}
-                          </span>
-                          <span className="text-xs font-bold text-gray-600">
-                            {emp.name}
-                          </span>
-                        </td>
-                        {days.map((_, colIndex) => (
+                  {data?.employees?.map((emp, rowIndex) => (
+                    <tr key={rowIndex} className="border">
+                      <td className="flex min-w-[14rem] items-center space-x-3 p-3">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                          {emp.name.charAt(0)}
+                        </span>
+                        <span className="text-xs font-bold text-gray-600">
+                          {emp.name}
+                        </span>
+                      </td>
+                      {days.map((day, index) => {
+                        // Find attendance status for the given date
+                        const attendanceEntry = emp.rosters.find(
+                          (att) => att.date === day.fullDate,
+                        );
+
+                        return (
                           <td
-                            key={colIndex}
+                            key={index}
                             className="relative border p-2 text-center"
                           >
-                            {emp.shifts.length > 0 ? (
-                              <>
-                                <div
-                                  className={`rounded-md py-2 text-white min-w-44 ${
-                                    emp.shiftType === "Morning Shift"
-                                      ? "bg-[#439393]"
-                                      : emp.shiftType === "Evening Shift"
-                                        ? "bg-[#e5881f]"
-                                        : emp.shiftType === "Night Shift"
-                                          ? "bg-[#b670d7]"
-                                          : emp.shiftType === "Afternoon Shift"
-                                            ? "bg-yellow-500"
-                                            : "bg-gray-400"
-                                  }`}
-                                >
-                                  <div>
-                                    <p className="text-xs">{emp.shiftType}</p>
-                                    <p className="text-sm">
-                                      {emp.shiftTime.join(" - ")}
-                                    </p>
-                                  </div>
-                                </div>
-                                {emp.shiftType2 && (
+                            {!attendanceEntry?.is_day_off ? (
+                              <div className="flex h-full flex-col items-start gap-2">
+                                {attendanceEntry?.shifts?.map((shift) => (
                                   <div
-                                    className={`mt-3 rounded-md py-2 text-white min-w-44 ${
-                                      emp.shiftType2 === "Morning Shift"
-                                        ? "bg-[#439393]"
-                                        : emp.shiftType2 === "Evening Shift"
-                                          ? "bg-[#e5881f]"
-                                          : emp.shiftType2 === "Night Shift"
-                                            ? "bg-[#af70d7]"
-                                            : emp.shiftType2 ===
-                                                "Afternoon Shift"
-                                              ? "bg-yellow-500"
-                                              : "bg-gray-400"
-                                    }`}
+                                    style={{
+                                      background:
+                                        shift?.shift_color || "#bfdbfe",
+                                    }}
+                                    className={`min-w-44 rounded-md py-2 text-black`}
                                   >
                                     <div>
-                                      <p className="text-xs">
-                                        {emp.shiftType2}
+                                      <p className="text-xs font-semibold">
+                                        {shift.shift_name}
                                       </p>
                                       <p className="text-sm">
-                                        {emp.shiftTime.join(" - ")}
+                                        {shift.start_time} - {shift?.end_time}
                                       </p>
                                     </div>
                                   </div>
-                                )}
-                                <button
-                                  onClick={() => handleOpen(rowIndex, colIndex)}
-                                  className="cursor-pointer text-2xl font-bold text-blue-500"
-                                >
-                                  +
-                                </button>
+                                ))}
+
+                                <p className="flex w-full items-center justify-center">
+                                  <button
+                                    onClick={() =>
+                                      handleOpen(rowIndex, colIndex)
+                                    }
+                                    className="cursor-pointer text-2xl font-bold text-blue-500"
+                                  >
+                                    +
+                                  </button>
+                                </p>
                                 {openPopup?.row === rowIndex &&
                                   openPopup?.col === colIndex && (
                                     <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
@@ -713,8 +626,8 @@ const RosterCalendar = () => {
                                       </div>
                                     </div>
                                   )}
-                              </>
-                            ) : colIndex > 4 ? (
+                              </div>
+                            ) : attendanceEntry.is_day_off ? (
                               <div className="text-xs text-gray-500">
                                 DAY OFF
                               </div>
@@ -771,9 +684,10 @@ const RosterCalendar = () => {
                               </div>
                             )}
                           </td>
-                        ))}
-                      </tr>
-                    ))}
+                        );
+                      })}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
