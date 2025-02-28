@@ -18,7 +18,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
             </span>
           </h1>
         </Menu.Button>
-        <Menu.Items className="absolute top-12 z-20 ml-7 w-48 rounded-lg bg-white p-4 shadow-lg">
+        <Menu.Items className="absolute top-12 z-30 ml-7 w-48 rounded-lg bg-white p-4 shadow-lg">
           <ul className="flex flex-col gap-4">
             {adminItems.map((item, index) => (
               <Menu.Item key={index}>
