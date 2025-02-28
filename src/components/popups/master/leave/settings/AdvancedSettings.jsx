@@ -11,21 +11,26 @@ import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 
 const AdvancedSettings = ({ formtype = "save" }) => {
-  const [isOn1, setIsOn1] = useState("false"); // For applyDays
-  const [isOn4, setIsOn4] = useState("false"); // For documentsMandatoryDays
+  const [isOn1, setIsOn1] = useState(false);
+  const [isOn4, setIsOn4] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [isOn, setIsOn] = useState(false);
+  const [isOn2, setIsOn2] = useState(false);
+  const [isOn3, setIsOn3] = useState(false);
+  const [isOn5, setIsOn5] = useState(false);
+  const [leaveBalance, setLeaveBalance] = useState();
+  const [leaveType, setLeaveType] = useState([]);
   const { user } = useUserStore((state) => ({ user: state.user }));
   const navigate = useNavigate();
 
   const getStoredData = () => {
     const storedData = localStorage.getItem("myData");
-    return storedData ? JSON.parse(storedData) : null; // Parse only if storedData exists
+    return storedData ? JSON.parse(storedData) : null;
   };
 
   const storedData = getStoredData();
-  const { id: routeId } = useParams(); // Use `routeId` to avoid naming conflicts
+  const { id: routeId } = useParams();
   const [searchParams] = useSearchParams();
-
-  // Determine `id` with priority: searchParams -> routeId -> storedData
   const id = searchParams.get("id") || routeId || storedData?.id || null;
 
   const advancedSettingsSchema = Yup.object().shape({
@@ -48,27 +53,17 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(advancedSettingsSchema),
-    defaultValues: {
-      isOn1: "false",
-      isOn4: "false",
-    },
   });
-
-  const [loader, setLoader] = useState(false);
-  const [isOn, setIsOn] = useState("false");
-  const [isOn2, setIsOn2] = useState("false");
-  const [isOn3, setIsOn3] = useState("false");
-  const [isOn5, setIsOn5] = useState("false");
-  const [leaveBalance, setLeaveBalance] = useState();
-  const [leaveType, setLeaveType] = useState([]);
-
   const close = () => {
     reset();
   };
-
+  // const {isOn,isOn2,isOn3,isOn5} = watch();
+  const { half_day_leave } = watch();
   const { data: AdvanceholidayDetails } = useQuery({
     queryKey: ["AdvanceholidayDetails", user?.id, id],
     queryFn: () =>
@@ -80,7 +75,7 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     enabled: !!user?.id && !!id,
   });
 
- console.log(user?.id,"user_id")
+  console.log(user?.id, "user_id");
   useEffect(() => {
     if (AdvanceholidayDetails) {
       reset({
@@ -89,9 +84,10 @@ const AdvancedSettings = ({ formtype = "save" }) => {
         taken_past_leave_days: AdvanceholidayDetails?.taken_past_leave_days,
         before_leave_apply: AdvanceholidayDetails?.before_leave_apply,
         support_document_leave: AdvanceholidayDetails?.support_document_leave,
+        half_day_leave: AdvanceholidayDetails?.half_day_leave,
       });
       setLeaveBalance(AdvanceholidayDetails?.leave_balance);
-      setIsOn(AdvanceholidayDetails?.half_day_leave);
+      // setIsOn(AdvanceholidayDetails?.half_day_leave);
       setIsOn1(AdvanceholidayDetails?.taken_past_leave);
       setIsOn2(AdvanceholidayDetails?.holiday_leaves);
       setIsOn3(AdvanceholidayDetails?.weekend_leaves);
@@ -138,15 +134,15 @@ const AdvancedSettings = ({ formtype = "save" }) => {
         leave_type: data.leave_type,
         leave_balance: leaveBalance,
         consecutive_leave_allow: data.consecutive_leave_allow ?? 0,
-        half_day_leave: isOn,
-        taken_past_leave: isOn1,
+        half_day_leave: data.half_day_leave ?? false,
+        taken_past_leave: isOn1 ?? false,
         taken_past_leave_days: data.taken_past_leave_days ?? 0,
-        holiday_leaves: isOn2,
-        weekend_leaves: isOn3,
+        holiday_leaves: isOn2 ?? false,
+        weekend_leaves: isOn3 ?? false,
         before_leave_apply: data.before_leave_apply ?? 0,
-        support_documents: isOn4,
+        support_documents: isOn4 ?? false,
         support_document_leave: data.support_document_leave ?? 0,
-        notice_period_leave: isOn5,
+        notice_period_leave: isOn5 ?? false,
         holiday_id: Number(id),
       };
       // Make the API call
@@ -159,8 +155,8 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     } catch (error) {
       console.error("Error Details:", error);
       console.error("Error Response Data:", error?.response?.data);
+      console.log(error, "error");
 
-      // Display a specific error message from the server if available
       const errorMessage =
         error?.response?.data?.error || "An unexpected error occurred";
       toast.error(errorMessage);
@@ -168,7 +164,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
       setLoader(false);
     }
   };
-
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full p-5">
@@ -282,18 +277,12 @@ const AdvancedSettings = ({ formtype = "save" }) => {
               <div className="flex justify-between">
                 <p className="label-text">Allow half day leave</p>
                 <div
-                  onClick={() => {
-                    if (isOn) {
-                      setIsOn("false");
-                    } else {
-                      setIsOn("true");
-                    }
-                  }}
-                  className={`h-5 w-10 rounded-full p-[1px] ${isOn ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                  onClick={() => setValue("half_day_leave", !half_day_leave)}
+                  className={`h-5 w-10 cursor-pointer rounded-full p-[1px] ${half_day_leave ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
                 >
                   <div
-                    className={`h-4 w-4 ${isOn ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
-                      isOn ? "translate-x-5" : "translate-x-0"
+                    className={`h-4 w-4 ${half_day_leave ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
+                      half_day_leave ? "translate-x-5" : "translate-x-0"
                     }`}
                   ></div>
                 </div>
@@ -306,14 +295,8 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                   past
                 </p>
                 <div
-                  onClick={() => {
-                    if (isOn1) {
-                      setIsOn1("false");
-                    } else {
-                      setIsOn1("true");
-                    }
-                  }}
-                  className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn1 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
+                  onClick={() => setIsOn1((isOn1) => !isOn1)}
+                  className={`h-[1.30rem] w-10 cursor-pointer rounded-full p-[1px] ${isOn1 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
                 >
                   <div
                     className={`h-4 w-4 ${isOn1 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -361,13 +344,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 </p>
                 <div
                   onClick={() => {
-                    if (isOn2) {
-                      setIsOn2("false");
-                    } else {
-                      setIsOn2("true");
-                    }
+                    setIsOn2((isOn2) => !isOn2);
                   }}
-                  className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                  className={`h-[1.30rem] w-10 cursor-pointer rounded-full p-[1px] ${isOn2 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
                 >
                   <div
                     className={`h-4 w-4 ${isOn2 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -385,13 +364,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 </p>
                 <div
                   onClick={() => {
-                    if (isOn3) {
-                      setIsOn3("false");
-                    } else {
-                      setIsOn3("true");
-                    }
+                    setIsOn3((isOn3) => !isOn3);
                   }}
-                  className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                  className={`h-[1.30rem] w-10 cursor-pointer rounded-full p-[1px] ${isOn3 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
                 >
                   <div
                     className={`h-4 w-4 ${isOn3 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -439,13 +414,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 </p>
                 <div
                   onClick={() => {
-                    if (isOn4) {
-                      setIsOn4("false");
-                    } else {
-                      setIsOn4("true");
-                    }
+                    setIsOn4((isOn4) => !isOn4);
                   }}
-                  className={`h-5 w-10 rounded-full p-[1px] ${isOn4 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
+                  className={`h-5 w-10 cursor-pointer rounded-full p-[1px] ${isOn4 ? "bg-[#8be691] pt-[2.1px]" : "border border-[#888888] bg-white"}`}
                 >
                   <div
                     className={`h-4 w-4 ${isOn4 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
@@ -495,13 +466,9 @@ const AdvancedSettings = ({ formtype = "save" }) => {
                 </p>
                 <div
                   onClick={() => {
-                    if (isOn5) {
-                      setIsOn5("false");
-                    } else {
-                      setIsOn5("true");
-                    }
+                    setIsOn5((isOn5) => !isOn5);
                   }}
-                  className={`h-[1.30rem] w-10 rounded-full p-[1px] ${isOn5 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
+                  className={`h-[1.30rem] w-10 cursor-pointer rounded-full p-[1px] ${isOn5 ? "bg-[#8be691] pt-[2.5px]" : "border border-[#888888] bg-white pt-[1.1px]"}`}
                 >
                   <div
                     className={`h-4 w-4 ${isOn5 ? "bg-[#00b448]" : "bg-black"} transform rounded-full transition-transform ${
