@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
-import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { EMPLOYEE_LEAVE_TYPE } from "@/api/master";
@@ -24,39 +23,12 @@ const schema = yup.object().shape({
   remarks: yup.string().optional(),
 });
 
-const leaveSchema = yup.object().shape({
-  leave: yup.object().required("Leave Type is required"),
-});
-
-const leaveType = [
-  {
-    already_taked_leaves: 8,
-    id: 7,
-    leave_name: "Absent",
-    display_name: "Absent",
-    code: "Ab",
-    valid_from: "2024-12-09",
-    emp_no_days: "9",
-  },
-  {
-    already_taked_leaves: 0,
-    id: 25,
-    leave_name: "Test Leave",
-    display_name: "TL",
-    code: "TL",
-    valid_from: "2025-01-01",
-    emp_no_days: "11",
-  },
-];
-
 const AddEntryModal = ({
   addEntry,
   setAddEntry,
   type,
   entry,
   setEntry,
-  setLeave,
-  id,
 }) => {
   const close = () => {
     setAddEntry(false);
@@ -70,9 +42,8 @@ const AddEntryModal = ({
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(type === "Leave" ? leaveSchema : schema),
+    resolver: yupResolver( schema),
   });
-  const uniqueId = uuidv4();
 
   const { data } = useQuery({
     queryKey: ["leavetype"],
@@ -86,30 +57,22 @@ const AddEntryModal = ({
   console.log(data);
 
   useEffect(() => {
-    if (type === "Edit" && id) {
-      const editData = entry.find((item) => item.id === id);
-      console.log(editData);
-      if (editData) {
-        setValue("checkIn", editData?.clockIn);
-        setValue("checkOut", editData?.clockOut);
-        setValue("remarks", editData?.remarks || " ");
-      }
+    if (type === "Edit") {
+     
+        setValue("checkIn", entry?.clockIn);
+        setValue("checkOut", entry?.clockOut);
+        setValue("remarks", entry?.remarks || " ");
+      
     }
   }, [type]);
 
   // ✅ Handle Form Submission
   const onSubmit = (data) => {
-    if (type === "Leave") {
-      setLeave(data?.leave);
-    } else if (type === "Entry") {
-      const newentry = {
-        id: uniqueId,
+      setEntry( {
         clockIn: data?.checkIn,
         clockOut: data?.checkOut,
         remarks: data?.remarks || "",
-      };
-      setEntry((prev) => [...prev, newentry]);
-    }
+      })
     console.log("Form Data:", entry);
     reset();
     close();
@@ -149,7 +112,6 @@ const AddEntryModal = ({
           </div>
 
           {/* Form */}
-          {type === "Entry" || type === "Edit" ? (
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="mt-4 space-y-4 px-6 py-4"
@@ -232,61 +194,6 @@ const AddEntryModal = ({
                 </button>
               </div>
             </form>
-          ) : (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="space-y-4 px-6 py-4"
-            >
-              <div className="flex w-full flex-col gap-2">
-                <label className="text-sm font-medium">
-                  Leave Type{" "}
-                  {leaveType.length === 0 && (
-                    <span className="text-red-500">
-                      [No Leave Available For You]
-                    </span>
-                  )}
-                </label>
-                <Controller
-                  name="leave"
-                  control={control}
-                  rules={{ required: "Leave Type is required" }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      isSearchable={true}
-                      styles={customSelectStyles}
-                      options={leaveType.map((lt) => ({
-                        label: lt.display_name,
-                        value: lt.id,
-                      }))}
-                      placeholder="Select Leave Type"
-                      className="input-box w-full text-black caret-white"
-                      onChange={(selected) => field.onChange(selected)}
-                    />
-                  )}
-                />
-                {errors.leave && (
-                  <p className="text-xs text-red-500">{errors.leave.message}</p>
-                )}
-              </div>
-
-              <div className="mt-4 flex gap-3">
-                <button
-                  type="button"
-                  onClick={close}
-                  className="w-full rounded-md bg-gray-500 px-3 py-2 text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="w-full rounded-md bg-blue-700 px-3 py-2 text-white"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          )}
         </DialogPanel>
       </div>
     </Dialog>

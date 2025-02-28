@@ -6,33 +6,35 @@ import toast from "react-hot-toast";
 const Index = ({ attendance, setAttendance }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
-  const [entry, setEntry] = useState([]);
+  const [entry, setEntry] = useState("");
   const [leave, setLeave] = useState("");
-  const [id, setId] = useState('');
   const [type, setType] = useState("");
   const [fullData, setFullData] = useState({
-    entries : '',
-    daystatus : '',
-    leave : ''
+    clockIn: "",
+    clockOut: "",
+    remarks: "",
+    status: "",
   });
 
-  const deleteEntry = (id)=>{
-    setEntry(entry.filter((item)=> item.id !== id))
-  } 
+  const deleteEntry = () => {
+    setEntry("");
+  };
 
-  useEffect(()=>{
-    setFullData(prevState => ({
+  useEffect(() => {
+    setFullData((prevState) => ({
       ...prevState,
-      entries : entry,
-      leave : leave
+      clockIn: entry?.clockIn,
+      clockOut: entry?.clockOut,
+      remarks: entry?.remarks,
+      status: leave,
     }));
-  },[entry,leave])
+  }, [entry, leave]);
 
-  const save =()=>{
+  const save = () => {
     console.log(fullData);
-    
-    setAttendance(false);
-  }
+
+    // setAttendance(false);
+  };
   return (
     <div className="flex justify-end">
       <AddEntryModal
@@ -41,8 +43,6 @@ const Index = ({ attendance, setAttendance }) => {
         type={type}
         entry={entry}
         setEntry={setEntry}
-        setLeave={setLeave}
-        id = {id}
       />
       {attendance && (
         <div className="absolute right-10 top-32 z-20 w-5/12 overflow-hidden rounded-lg bg-white shadow-lg shadow-black">
@@ -111,25 +111,24 @@ const Index = ({ attendance, setAttendance }) => {
             <p className=" ">Action</p>
           </div>
           <hr className="h-[0.10rem] bg-[#d1d2d5]" />
-          <div className="flex flex-col gap-2 min-h-[13rem] max-h-[18rem] overflow-y-auto overflow-y-min w-full px-10 py-5 text-sm font-semibold text-[#686868]">
-            {entry.map((data, index) => (
-              <div key={index} className="flex w-full">
+          <div className="overflow-y-min flex max-h-[18rem] min-h-[13rem] w-full flex-col gap-2 overflow-y-auto px-10 py-5 text-sm font-semibold text-[#686868]">
+            {entry && (
+              <div className="flex w-full">
                 <p className="flex w-1/2 gap-2">
                   <span>
                     <Clock3 size={16} />
                   </span>
-                  {data?.clockIn}
+                  {entry?.clockIn}
                 </p>
                 <p className="flex w-1/2 gap-2">
                   <span>
                     <Clock3 size={16} />
                   </span>
-                  {data?.clockOut}
+                  {entry?.clockOut}
                 </p>
                 <p
-                  onClick={()=> {
-                    setType('Edit');
-                    setId(data?.id);
+                  onClick={() => {
+                    setType("Edit");
                     setAddEntry(true);
                   }}
                   className="mr-2 flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -139,13 +138,14 @@ const Index = ({ attendance, setAttendance }) => {
                     className="w-full object-contain"
                   />
                 </p>
-                <p 
-                  onClick={()=> deleteEntry(data?.id)}
-                  className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2">
+                <p
+                  onClick={() => deleteEntry()}
+                  className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+                >
                   <Trash2 size={20} />
                 </p>
               </div>
-            ))}
+            )}
           </div>
           <hr className="h-[0.10rem] bg-[#d1d2d5]" />
           <div className="flex gap-3 p-2 text-sm font-semibold text-white">
@@ -168,30 +168,28 @@ const Index = ({ attendance, setAttendance }) => {
             {isDropdownOpen && (
               <div className="absolute bottom-14 left-36 mt-2 w-32 rounded-lg bg-white text-black shadow-lg">
                 <ul className="p-2">
-                  <li 
-                    onClick={()=> setFullData(prevState => ({
-                      ...prevState,   // Spread previous state
-                      daystatus: 'present'  // Update only `daystatus`
-                    }))}
-                    className="cursor-pointer p-2 hover:bg-gray-200">
+                  <li
+                    onClick={() => {
+                      setLeave("present");
+                      setIsDropdownOpen(false);
+                    }}
+                    className="cursor-pointer p-2 hover:bg-gray-200"
+                  >
                     Present
                   </li>
                   <li
-                    onClick={()=> setFullData(prevState => ({
-                      ...prevState,   // Spread previous state
-                      daystatus: 'absent'  // Update only `daystatus`
-                    }))}
-                    className="cursor-pointer p-2 hover:bg-gray-200">
+                    onClick={() => {
+                      setLeave("absent");
+                      setIsDropdownOpen(false);
+                    }}
+                    className="cursor-pointer p-2 hover:bg-gray-200"
+                  >
                     Absent
                   </li>
                   <li
                     onClick={() => {
-                      setFullData(prevState => ({
-                        ...prevState,   // Spread previous state
-                        daystatus: 'leave'  // Update only `daystatus`
-                      }))
-                      setAddEntry(true);
-                      setType("Leave");
+                      setLeave("leave");
+                      setIsDropdownOpen(false);
                     }}
                     className="cursor-pointer p-2 hover:bg-gray-200"
                   >
