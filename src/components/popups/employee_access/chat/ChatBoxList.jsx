@@ -20,10 +20,10 @@ export default function ChatBoxList({ popupOpen, setPopupOpen }) {
     <Dialog
       open={popupOpen}
       as="div"
-      className="relative z-10"
+      className="relative z-40"
       onClose={close}
     >
-      <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto bg-black/10">
+      <div className="fixed inset-0 z-40 h-screen w-screen overflow-y-auto bg-black/10">
         <div className="flex min-h-full items-left justify-end">
           <DialogPanel className="w-full max-w-sm rounded bg-white px-10 py-10">
             <div className="mb-5 flex justify-between">

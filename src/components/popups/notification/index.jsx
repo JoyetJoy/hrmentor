@@ -39,7 +39,7 @@ export default function Notification({
       <Dialog
         open={notificationPopupOpen}
         as="div"
-        className="relative z-10"
+        className="relative z-30"
         onClose={close}
       >
         <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto bg-black/10">

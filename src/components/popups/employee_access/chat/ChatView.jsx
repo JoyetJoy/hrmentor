@@ -15,10 +15,10 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
       <Dialog
         open={chatPopupOpen}
         as="div"
-        className="relative z-10 "
+        className="relative z-50 "
         onClose={close}
       >
-        <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto">
+        <div className="fixed inset-0 z-50 h-screen w-screen overflow-y-auto">
           <div className="flex min-h-full items-end justify-center">
             <DialogPanel className="w-full max-w-md rounded bg-white px-7 pb-3 pt-6 ml-64">
               <div className="mb-3 flex justify-between">

@@ -64,9 +64,9 @@ const RosterCalendar = () => {
             start_date: startDate,
             end_date: endDate,
             role: "hrmanager",
-            department: activeDepartment,
-            location: activeLocation,
-            work_area: activeWorkArea,
+            department_id: activeDepartment,
+            location_id: activeLocation,
+            work_area_id: activeWorkArea,
           },
         })
         .then((res) => res.data),

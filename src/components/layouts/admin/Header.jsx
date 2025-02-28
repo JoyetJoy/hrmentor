@@ -101,7 +101,7 @@ export const AdminHeader = () => {
                 <LayoutGrid className="size-5 text-hrmblue" />
               </Menu.Button>
             </div>
-            <Menu.Items className="absolute top-12 z-20 w-36 rounded-lg bg-white p-4 shadow-lg">
+            <Menu.Items className="absolute top-12 z-30 w-36 rounded-lg bg-white p-4 shadow-lg">
               <ul className="flex flex-col gap-5">
                 {activityItems.map((item, index) => (
                   <Menu.Item key={index}>
