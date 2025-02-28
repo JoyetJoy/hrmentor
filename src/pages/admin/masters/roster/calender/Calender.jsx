@@ -27,9 +27,9 @@ import { formatDate } from "@/utils/date";
 const RosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const navigate = useNavigate();
-  const [activeDepartment, setActiveDepartment] = useState("");
-  const [activeWorkArea, setActiveWorkArea] = useState("");
-  const [activeLocation, setActiveLocation] = useState("");
+  const [activeDepartment, setActiveDepartment] = useState([]);
+  const [activeWorkArea, setActiveWorkArea] = useState([]);
+  const [activeLocation, setActiveLocation] = useState([]);
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
   const [days, setDays] = useState([]);
@@ -45,7 +45,7 @@ const RosterCalendar = () => {
     });
   };
 
-  console.log(startDate);
+  console.log(activeDepartment);
   console.log(endDate);
 
   const { data, refetch, isLoading } = useQuery({
@@ -59,16 +59,16 @@ const RosterCalendar = () => {
     ],
     queryFn: () =>
       newRequest
-        .get(
-          `${ROASTER_LISTING}?start_date=${startDate}&end_date=${endDate}&role=hrmanager  `,
-          {
-            // params: {
-            //   department: activeDepartment,
-            //   location: activeLocation,
-            //   work_area: activeWorkArea,
-            // },
+        .get(ROASTER_LISTING, {
+          params: {
+            start_date: startDate,
+            end_date: endDate,
+            role: "hrmanager",
+            department: activeDepartment,
+            location: activeLocation,
+            work_area: activeWorkArea,
           },
-        )
+        })
         .then((res) => res.data),
     enabled: Boolean(startDate) && Boolean(endDate),
   });
@@ -151,80 +151,7 @@ const RosterCalendar = () => {
     const end = formatDate(newEndDate);
     setEndDate(end);
   };
-  const employees = [
-    {
-      id: "BTRV002",
-      name: "Mammutty P S",
 
-      shifts: ["TI", "MT"],
-      shiftTime: ["09:00", "17:30"],
-
-      shiftType: "Morning Shift",
-      shiftType2: "Night Shift",
-    },
-    {
-      id: "BTRV001",
-      name: "Tojo Thomas",
-
-      shifts: [],
-      shiftTime: ["09:00", "17:30"],
-
-      shiftType: "",
-    },
-    {
-      id: "BTRV21",
-      name: "Valsakh T G",
-
-      shifts: ["T2", "OS"],
-      shiftTime: ["09:00", "17:30"],
-
-      shiftType: "Evening Shift",
-    },
-    {
-      id: "BTRV24",
-      name: "Vishnu S L",
-
-      shifts: ["TI", "IT"],
-      shiftTime: ["09:00", "17:30"],
-
-      shiftType: "Night Shift",
-    },
-    {
-      id: "BTRV24",
-      name: "Mariya S L",
-
-      shifts: ["TI", "IT"],
-      shiftTime: ["09:00", "17:30"],
-
-      shiftType: "Night Shift",
-    },
-    {
-      id: "BTRV0027",
-      name: "John Doe",
-
-      shifts: [],
-      shiftTime: ["09:00", "17:30"],
-
-      shiftType: "Afternoon Shift",
-    },
-    {
-      id: "BTRV0029",
-      name: "Dudy St",
-
-      shifts: [],
-      shiftTime: ["12:00", "17:30"],
-
-      shiftType: "Afternoon Shift",
-    },
-    {
-      id: "BTRV0027",
-      name: "Leo Doe",
-
-      shifts: [],
-      shiftTime: ["09:00", "17:30"],
-      shiftType: "Afternoon Shift",
-    },
-  ];
   const shifts = [
     { name: "Morning Shift", time: "09:00 - 17:30" },
     { name: "Saturday Shift", time: "09:00 - 16:30" },
@@ -491,16 +418,22 @@ const RosterCalendar = () => {
                 options={departmentOptions}
                 isSearchable={true}
                 styles={customSelectStyles}
+                onChange={(selectedOption) =>
+                  setActiveDepartment([selectedOption.value])
+                }
                 placeholder="Select Department"
-                className="input-box h-10 z-30 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                className="input-box z-30 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
               />
 
               <Select
                 options={locationOptions}
                 isSearchable={true}
                 styles={customSelectStyles}
+                onChange={(selectedOption) =>
+                  setActiveLocation([selectedOption.value])
+                }
                 placeholder="Select Location"
-                className="input-box h-10 z-20 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                className="input-box z-20 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
               />
             </div>
 
@@ -509,8 +442,11 @@ const RosterCalendar = () => {
                 options={workAreaOptions}
                 isSearchable={true}
                 styles={customSelectStyles}
+                onChange={(selectedOption) =>
+                  setActiveWorkArea([selectedOption.value])
+                }
                 placeholder="Select Work Area"
-                className="input-box h-10 z-20 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                className="input-box z-20 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
               />
             </div>
           </div>
