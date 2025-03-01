@@ -187,7 +187,7 @@ export default function Attendance() {
     if (filterType === "weekly") {
       dateRange = getCurrentWeek(selectedYear);
     } else if (filterType === "monthly") {
-      const selectedMonth = dayjs(startDate).month(); // Get the currently selected month
+      const selectedMonth = dayjs().month(); // Get the current month dynamically
       dateRange = getCurrentMonth(selectedYear, selectedMonth);
     }
 

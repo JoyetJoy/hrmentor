@@ -14,13 +14,13 @@ import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 import moment from "moment";
 
-export default function EditRoster({
-  editpopupOpen,
-  setEditPopupOpen,
-  selectedRoster,
-  copy,
-  setCopy,
-}) {
+const EditRoster = React.memo(({ 
+  editpopupOpen, 
+  setEditPopupOpen, 
+  selectedRoster, 
+  copy, 
+  setCopy 
+}) => {
   const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -46,7 +46,7 @@ export default function EditRoster({
   }
   useEffect(() => {
     setSelectedShiftId(selectedRoster?.shift_details?.shift_id);
-  });
+  }, [selectedRoster]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -79,26 +79,24 @@ console.log(selectedEmployees);
   };
 console.log(selectedEmployee);
 
-  const handleAddEmployee = () => {
-    if (selectedEmployee) {
-      setSelectedEmployees((prev) => [
-        ...prev,
-        {
-          employee_id: selectedEmployee.value,
-          first_name: selectedEmployee.label,
-          unique_id: selectedEmployee.unique_id
-        }
-      ]);
-      setEmployeesdetails((prev) => [
-        ...prev,
-        {
-          employee_id: Number(selectedEmployee.value),
-        },
-      ]);
-    } else {
-      console.log("No employee selected to add.");
+const handleAddEmployee = () => {
+  if (selectedEmployee) {
+    const include = selectedEmployees.find((employee) => employee.employee_id === selectedEmployee.value);
+    if (include) {
+      toast.error("Employee already added");
+      return;
     }
-  };
+    setSelectedEmployees((prev) => [
+      ...prev,
+      {
+        employee_id: selectedEmployee.value,
+        first_name: selectedEmployee.label,
+        unique_id: selectedEmployee.unique_id,
+      },
+    ]);
+  }
+};
+
 
   //GET EMP DETAILS
   const { data: rosterEmpList } = useQuery({
@@ -175,7 +173,7 @@ console.log(selectedEmployee);
       setValue("start_date", rosterDetail?.roster_details?.start_date);
       setValue("end_date", rosterDetail?.roster_details?.end_date);
     }
-  }, [selectedRoster, setValue]);
+  }, [selectedRoster, setValue]);  
 
   let shift;
   if (selectedRoster) {
@@ -301,10 +299,10 @@ console.log(selectedEmployee);
                         <input
                           type="date"
                           defaultValue={
-                            moment(
-                              rosterDetail?.roster_details?.start_date,
-                            ).format("YYYY-MM-DD") || ""
-                          }
+                            rosterDetail?.roster_details?.start_date
+                              ? moment.utc(rosterDetail.roster_details.start_date).format("YYYY-MM-DD")
+                              : ""
+                          }                          
                           {...register("start_date", { required: true })}
                           className="input-box w-full"
                         />
@@ -472,4 +470,6 @@ console.log(selectedEmployee);
       </Dialog>
     </>
   );
-}
+});
+
+export default EditRoster;

@@ -69,10 +69,6 @@ const Index = ({ attendance, setAttendance }) => {
                 <p>24-02-2025</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Clock In</p>
-                <p>09:00:00</p>
-              </div>
-              <div className="flex w-full justify-between">
                 <p>Duration</p>
                 <p>04:00</p>
               </div>
@@ -89,10 +85,6 @@ const Index = ({ attendance, setAttendance }) => {
               <div className="flex w-full justify-between">
                 <p>Day</p>
                 <p>Monday</p>
-              </div>
-              <div className="flex w-full justify-between">
-                <p>Clock Out</p>
-                <p>13:00:00</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Status</p>
