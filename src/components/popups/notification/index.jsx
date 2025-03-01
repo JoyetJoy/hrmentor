@@ -43,9 +43,11 @@ export default function Notification({
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
-                <div className="mx-auto max-w-md p-4">
+                <div className="mx-auto w-full max-h-[35rem] overflow-y-auto overflow-y-min p-4">
                   {notifications?.data?.map((notification) => (
-                    <div
+                    <Link
+                      to={'/admin/leave/request/awaitingapproval'}
+                      onClick={()=>close()}
                       key={notification.id}
                       className="mb-4 border-b border-gray-200 pb-4"
                     >
@@ -59,9 +61,9 @@ export default function Notification({
                         {notification.data}
                       </p>
                       <p className="mt-1 text-xs text-gray-400">
-                        {dayjs(notification.time).format('DD/MM/YYYY')}
+                        {dayjs(notification.created_at).format('DD/MM/YYYY')}
                       </p>
-                    </div>
+                    </Link>
                   ))}
                   {notifications?.data?.length>0?(
                     <div className="mt-4 text-right">

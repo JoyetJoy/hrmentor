@@ -9,16 +9,35 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import ProfileDropdown from "../employee_access/ProfileDropdown";
 import { Menu } from "@headlessui/react";
 import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
+import { NOTIFICATIONS } from "@/api/hiring";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import Notification from "@/components/popups/notification";
 
 export default function EmployeeAccessHeader() {
   const { setUser, user } = useUserStore((state) => ({
     setUser: state.setUser,
     user: state.user,
   }));
-console.log(user);
+  console.log(user);
 
+  const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notification"],
+    queryFn: () =>
+      newRequest.get(NOTIFICATIONS).then((res) => {
+        return res.data;
+      }),
+    refetchInterval: 5000, // Fetch every 5 seconds
+    staleTime: 60000,
+  });
+
+  const handleNotificationClick = () => {
+    setNotificationPopupOpen(true);
+  };
 
   const handleNavigation = (path) => {
     if (path === "/logout") {
@@ -38,6 +57,11 @@ console.log(user);
 
   return (
     <>
+      <Notification
+        notifications={notifications}
+        notificationPopupOpen={notificationPopupOpen}
+        setNotificationPopupOpen={setNotificationPopupOpen}
+      />
       <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link
@@ -82,8 +106,16 @@ console.log(user);
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+          <div
+            onClick={handleNotificationClick}
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+          >
             <Bell className="size-5 text-hrmblue" />
+            {notifications?.unread_count > 0 && (
+              <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                {notifications?.unread_count}
+              </div>
+            )}
           </div>
           <div
             onClick={handleClick}
@@ -123,7 +155,7 @@ console.log(user);
               </ul>
             </Menu.Items>
           </Menu>
-          <ProfileDropdown handleNavigation={handleNavigation} user={user}/>
+          <ProfileDropdown handleNavigation={handleNavigation} user={user} />
         </div>
       </div>
     </>

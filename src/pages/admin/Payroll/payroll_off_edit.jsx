@@ -5,14 +5,14 @@ import { ArrowLeft } from "@mui/icons-material";
 import { Check, ChevronUp } from "lucide-react";
 
 const summaryData = [
-  { label: "Total Working hours", value: "240 hr 00 min" },
-  { label: "Overtime", value: "02 hr 30 min" },
-  { label: "Overtime per week", value: "£300" },
-  { label: "Paid Holidays", value: "5" },
-  { label: "Paid holiday credit", value: "120" },
-  { label: "Unpaid Holiday", value: "5" },
-  { label: "Unpaid Leave deduction", value: "5" },
-  { label: "Salary per Month", value: "£25250" },
+  { label: "Total Working hours", value: "00 hr 00 min" },
+  { label: "Overtime", value: "00 hr 00 min" },
+  { label: "Overtime per week", value: "£0" },
+  { label: "Paid Holidays", value: "0" },
+  { label: "Paid holiday credit", value: "0" },
+  { label: "Unpaid Holiday", value: "0" },
+  { label: "Unpaid Leave deduction", value: "0" },
+  { label: "Salary per Month", value: "£0" },
   { label: "Payment status", value: "Not paid" },
 ];
 
@@ -45,20 +45,20 @@ const tableData = [
   {
     date: "01/11/2023",
     shift: "Morning Shift",
-    clockedIn: "08:00 AM",
-    clockedOut: "11:00 AM",
-    totalBT: "30 Min",
-    otHours: "02 hr 0 min",
-    totalWorked: "09 hr 0 min",
+    clockedIn: "00:00",
+    clockedOut: "00:00",
+    totalBT: "00 Min",
+    otHours: "00 hr 0 min",
+    totalWorked: "00 hr 0 min",
   },
   {
     date: "01/11/2023",
     shift: "Morning Shift",
-    clockedIn: "08:00 AM",
-    clockedOut: "11:00 AM",
-    totalBT: "30 Min",
-    otHours: "02 hr 0 min",
-    totalWorked: "09 hr 0 min",
+    clockedIn: "00:00",
+    clockedOut: "00:00",
+    totalBT: "00 Min",
+    otHours: "00 hr 0 min",
+    totalWorked: "00 hr 0 min",
   },
 ];
 
@@ -192,27 +192,7 @@ export default function PayrollOffEdit() {
               ))}
             </div>
           </div>
-          <div className="mt-4">
-            <div className="summary-header mb-4">
-              <h4 className="text-sm font-bold">
-                Monday, 11 Nov 2024 to Saturday, 15 Nov 2024{" "}
-                <button className="toggle-button text-sm text-gray-600">
-                <ChevronUp size={16} strokeWidth={1.5} />
-                </button>
-              </h4>
-            </div>
-            <div className="summary-body">
-              {summaryData.map((item, index) => (
-                <div
-                  key={index}
-                  className="summary-row flex justify-between border-b py-2"
-                >
-                  <span className="label text-gray-700">{item.label}</span>
-                  <span className="value text-gray-900">{item.value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          
         </div>
 
         {/* Overview Section - col-span-8 */}

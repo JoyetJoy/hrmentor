@@ -13,39 +13,6 @@ import { newRequest } from "@/api";
 import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
 
-const data = [
-  {
-    slNo: 1,
-    department: "IT department",
-    totalEmployees: 5,
-    otHours: "20hr 0min",
-    otPay: "£3500",
-    netPay: "£25000",
-    paymentDate: "30/11/2024",
-    status: "Processing",
-  },
-  {
-    slNo: 2,
-    department: "Accountant",
-    totalEmployees: 4,
-    otHours: "20hr 0min",
-    otPay: "£2500",
-    netPay: "£25000",
-    paymentDate: "30/11/2024",
-    status: "Approval Pending",
-  },
-  {
-    slNo: 3,
-    department: "HR department",
-    totalEmployees: 3,
-    otHours: "20hr 0min",
-    otPay: "£2950",
-    netPay: "£29500",
-    paymentDate: "30/11/2024",
-    status: "All Approved",
-  },
-];
-
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const referenceDayIndex = referenceDate.getDay();

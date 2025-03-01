@@ -70,7 +70,7 @@ const Index = ({ attendance, setAttendance }) => {
               </div>
               <div className="flex w-full justify-between">
                 <p>Duration</p>
-                <p>04:00</p>
+                <p>00:00</p>
               </div>
               <div className="flex w-full justify-between">
                 <p>Shift Name</p>
