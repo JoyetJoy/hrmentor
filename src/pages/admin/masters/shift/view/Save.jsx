@@ -84,6 +84,7 @@ export default function SaveMasterShift({ formtype, sid }) {
 
   const startTime = watch("start_time");
   const endTime = watch("end_time");
+console.log(startTime,endTime);
 
   useEffect(() => {
     if (startTime && endTime) {
@@ -400,12 +401,23 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <div className="group flex w-full flex-col gap-1.5 py-2 pl-3">
                     <label className="required label-text">Start Time</label>
                     <input
-                      {...register("start_time", { required: true })}
+                      {...register("start_time", {
+                        required: "Time is required",
+                        pattern: {
+                          value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                          message:
+                            "Please enter a valid time format (HH:MM)",
+                        },
+                      })}
                       autoComplete="off"
                       name="start_time"
-                      type="time"
+                      type="text"
                       placeholder="HH:MM"
                       className="input-box"
+                      onChange={(e) => {
+                            const data = formatTime(e.target.value); // Call the helper function
+                            setValue("start_time", data, { shouldValidate: true });
+                          }}
                     />
                     {errors.start_time && (
                       <span className="text-xs font-medium text-red-500">
@@ -416,12 +428,23 @@ export default function SaveMasterShift({ formtype, sid }) {
                   <div className="group flex w-full flex-col gap-1.5 py-2 pr-3">
                     <label className="required label-text">End Time</label>
                     <input
-                      {...register("end_time", { required: true })}
+                      {...register("end_time", {
+                        required: "Time is required",
+                        pattern: {
+                          value: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                          message:
+                            "Please enter a valid time format (HH:MM)",
+                        },
+                      })}
                       autoComplete="off"
-                      type="time"
+                      type="text"
                       name="end_time"
                       placeholder="HH:MM"
                       className="input-box"
+                      onChange={(e) => {
+                        const data = formatTime(e.target.value); // Call the helper function
+                        setValue("end_time", data, { shouldValidate: true });
+                      }}
                     />
                     {errors.end_time && (
                       <span className="text-xs font-medium text-red-500">
