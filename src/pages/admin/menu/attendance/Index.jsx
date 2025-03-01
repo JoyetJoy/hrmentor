@@ -16,6 +16,8 @@ export default function Attendance() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
+  const [empId, setEmpId] = useState();
+  const [selectedDate, setSelectedDate] = useState();
 
   const { data, isLoading } = useQuery({
     queryKey: ["attendance", startDate, endDate],
@@ -198,6 +200,14 @@ export default function Attendance() {
     console.log("End Date:", dateRange.end);
   };
   console.log();
+
+  const eventClick=((id,date)=>{
+    if(id&&date){
+      setSelectedDate(date);
+      setEmpId(id);
+      setAttendance(true);
+    }
+  })
 
   return (
     <>
@@ -392,7 +402,7 @@ export default function Attendance() {
               </p>
               <p className="text-sm">Day Off</p>
             </div>
-            <Atendance attendance={attendance} setAttendance={setAttendance} />
+            <Atendance attendance={attendance} setAttendance={setAttendance} selectedDate={selectedDate} empId={empId}/>
           </div>
         </div>
 
@@ -428,7 +438,7 @@ export default function Attendance() {
                       className="border-b-[3px] border-[#d1d5db] text-left"
                     >
                       <td className="sticky left-0 w-auto border-r-2 border-b-slate-500 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
-                        {employee.employee_name}
+                        {employee?.employee_name}
                       </td>
                       {days?.map((day) => {
                         // Find attendance status for the given date
@@ -438,7 +448,7 @@ export default function Attendance() {
                         return (
                           <td
                             key={day.fullDate}
-                            onClick={() => setAttendance(true)}
+                            onClick={() => eventClick(employee?.employee_id, day.fullDate)}
                             className={`cursor-pointer text-center text-[0.8rem] font-semibold ${
                               attendanceEntry?.status === "Present"
                                 ? "bg-[#77c477d5] text-black"

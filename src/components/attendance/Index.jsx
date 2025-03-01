@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ChevronDown, Clock3, Trash2, X } from "lucide-react";
 import AddEntryModal from "./AddEntry";
 import toast from "react-hot-toast";
+import { newRequest } from "@/api";
 
-const Index = ({ attendance, setAttendance }) => {
+const Index = ({ attendance, setAttendance,empId, selectedDate }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
   const [entry, setEntry] = useState("");
@@ -30,7 +31,16 @@ const Index = ({ attendance, setAttendance }) => {
     }));
   }, [entry, leave]);
 
-  const save = () => {
+  const save = async() => {
+    try{
+      const response = await newRequest.post()
+      if(response.status===200){
+        toast.success('Created successfully')
+      }
+
+    }catch(error){
+      toast.error('Something went wrong , Try after sometimes')
+    }
     console.log(fullData);
 
     // setAttendance(false);
