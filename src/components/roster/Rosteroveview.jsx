@@ -49,17 +49,16 @@ function Rosteroveview({ rosterCalim }) {
           </div>
           <div className="flex gap-2">
             <p className="pr-2 text-[0.8rem]">Shift Claim</p>
-            <p
-              className="cursor-pointer text-[0.8rem] text-slate-600"
-              onClick={() => {
-                setIsChecked(false),
-                  localStorage.setItem("shiftClaimChecked", "false");
-              }}
-            >
-              Close
-            </p>
+            <p className="text-[0.8rem] text-slate-600">Close</p>
             <div
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                if (!isChecked) {
+                  setIsModalOpen(true);
+                } else {
+                  setIsChecked(false);
+                  localStorage.setItem("shiftClaimChecked", "false");
+                }
+              }}
               className={`h-[1.30rem] w-[2.45rem] cursor-pointer rounded-full p-[1px] ${isChecked ? "bg-[#00b448] pt-[2.2px]" : "border border-[#888888] bg-white pt-[1.3px]"}`}
             >
               <div

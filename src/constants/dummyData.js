@@ -536,48 +536,47 @@ export const employeeAccessActivityList = [
     label: "News & Events ",
     path: "/employee-access/news-events/view",
   },
+  // {
+  //   icon: "/assets/icons/admin/payroll.svg",
+  //   label: "Payroll",
+  //   path: "/employee-access/payroll",
+  // },
+  // {
+  //   icon: "/assets/icons/admin/leaveday.svg",
+  //   label: "Leave",
+  //   // path: "/admin/leave/request",
+  // },
+  // {
+  //   icon: "/assets/icons/admin/shift.svg",
+  //   label: "Shift",
+  //   // path: "/admin/shift",
+  // },
+  // {
+  //   icon: "/assets/icons/admin/roster.svg",
+  //   label: "Roster",
+  //   // path: "/admin/roster",
+  // },
 
-  {
-    icon: "/assets/icons/admin/payroll.svg",
-    label: "Payroll",
-    path: "/employee-access/payroll",
-  },
-  {
-    icon: "/assets/icons/admin/leaveday.svg",
-    label: "Leave",
-    // path: "/admin/leave/request",
-  },
-  {
-    icon: "/assets/icons/admin/shift.svg",
-    label: "Shift",
-    // path: "/admin/shift",
-  },
-  {
-    icon: "/assets/icons/admin/roster.svg",
-    label: "Roster",
-    // path: "/admin/roster",
-  },
-
-  {
-    icon: "/assets/icons/admin/setup.svg",
-    label: "Setup",
-    // path: "/admin/setup/email",
-  },
-  {
-    icon: "/assets/icons/admin/recruiter-black.svg",
-    label: "Recruiter",
-    // path: "/admin/recruiter",
-  },
-  {
-    icon: "/assets/icons/admin/hiring-black.svg",
-    label: "Hiring",
-    // path: "/admin/hiring",
-  },
-  {
-    icon: "/assets/icons/admin/employee-black.svg",
-    label: "Employee",
-    // path: "/admin/employee",
-  },
+  // {
+  //   icon: "/assets/icons/admin/setup.svg",
+  //   label: "Setup",
+  //   // path: "/admin/setup/email",
+  // },
+  // {
+  //   icon: "/assets/icons/admin/recruiter-black.svg",
+  //   label: "Recruiter",
+  //   // path: "/admin/recruiter",
+  // },
+  // {
+  //   icon: "/assets/icons/admin/hiring-black.svg",
+  //   label: "Hiring",
+  //   // path: "/admin/hiring",
+  // },
+  // {
+  //   icon: "/assets/icons/admin/employee-black.svg",
+  //   label: "Employee",
+  //   // path: "/admin/employee",
+  // },
 ];
 export const employeeaccessItems = [
   {

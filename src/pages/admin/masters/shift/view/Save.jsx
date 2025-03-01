@@ -228,7 +228,7 @@ export default function SaveMasterShift({ formtype, sid }) {
         );
         queryClient.invalidateQueries(["shiftDetails"]);
         reset();
-        navigate("/admin/shift");
+        navigate("/admin/shift/list");
       } else {
         toast.error("Failed to save shift details");
       }
