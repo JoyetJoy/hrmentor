@@ -99,7 +99,7 @@ export const AdminHeader = () => {
         <div className="flex items-center gap-3 py-2.5">
           <div
             onClick={handleNotificationClick}
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+            className="flex h-10 relative w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <Bell className="size-5 text-hrmblue" />
             {notifications?.unread_count > 0 && (
