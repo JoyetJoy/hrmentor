@@ -3,6 +3,7 @@ import { ChevronDown, Clock3, Trash2, X } from "lucide-react";
 import AddEntryModal from "./AddEntry";
 import toast from "react-hot-toast";
 import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
 
 const Index = ({ attendance, setAttendance,empId, selectedDate }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -15,6 +16,17 @@ const Index = ({ attendance, setAttendance,empId, selectedDate }) => {
     clockOut: "",
     remarks: "",
     status: "",
+  });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["clockin", empId, selectedDate],
+    queryFn: () =>
+      newRequest
+        .get(
+          `${ATTENDANCES}?start_date=${startDate}&end_date=${endDate}&role=hrmanager`,
+        )
+        .then((res) => res.data),
+    enabled: !!empId && !!selectedDate,
   });
 
   const deleteEntry = () => {

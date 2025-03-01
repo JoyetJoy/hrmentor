@@ -520,9 +520,9 @@ const RosterCalendar = () => {
 
                                   <p className="flex w-full items-center justify-center">
                                     <button
-                                      onClick={() =>
-                                        handleOpen(rowIndex, colIndex)
-                                      }
+                                      // onClick={() =>
+                                      //   handleOpen(emp?.id)
+                                      // }
                                       className="cursor-pointer text-2xl font-bold text-blue-500"
                                     >
                                       +
@@ -580,7 +580,7 @@ const RosterCalendar = () => {
                                   <button
                                     className="text-2xl font-bold text-blue-500"
                                     onClick={() =>
-                                      handleOpen(rowIndex, colIndex)
+                                      handleOpen(emp?.id)
                                     }
                                   >
                                     +
