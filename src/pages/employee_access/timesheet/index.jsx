@@ -49,8 +49,17 @@ export default function TimeSheet() {
     } else {
       // Automatically set current week if within selected month & year
       const today = dayjs();
+      
       if (today.month() === dayjs(date).month() && today.year() === dayjs(date).year()) {
-        const currentWeek = Math.min(getISOWeek(new Date()), newWeeks.length);
+        // Get the first Monday of the current month
+        const firstMonday = dayjs().startOf("month").day(1);
+        
+        // If the first day of the month is after Monday, shift to the next Monday
+        const adjustedFirstMonday = firstMonday.date() > 1 ? firstMonday.add(7, "day") : firstMonday;
+      
+        // Calculate the current week relative to the first Monday
+        const currentWeek = Math.ceil(today.diff(adjustedFirstMonday, "day") / 7) + 1;
+      
         setSelectedWeek(currentWeek);
       } else {
         setSelectedWeek(1);
