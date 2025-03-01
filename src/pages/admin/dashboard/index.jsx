@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 export const AdminDashboard = () => {
   // Fetch dashboard data
+  
   const { data: admindashboard } = useQuery({
     queryKey: ["admindashboard"],
     queryFn: () => newRequest.get(ADMIN_DASHBOARD).then((res) => res.data),
@@ -17,14 +18,30 @@ export const AdminDashboard = () => {
     staleTime: 0,
   });
 
+  const handleClick = (event, date) => {
+     if (!event?.isHoliday) {
+       const selectdate = dayjs(date).format("YYYY-MM-DD");
+       if (date) {
+         navigate(
+           `/admin/shift/calendarview?id=${event?.id}&date=${selectdate}`,
+         );
+       }
+     }
+   };
+
   const cardsData = [
     {
       title: "Upcoming Shift",
-      details: admindashboard?.upcoming_shifts?.map((shift) => ({
-        type: shift?.shift?.name,
-        date: shift?.shift?.people_required,
-        path: `/admin/shift/save-shift?id=${shift?.shift?.id}`, // Individual shift path
-      })),
+      details: admindashboard?.upcoming_shifts?.map((shift) => {
+        const selectdate = dayjs(shift?.shift?.date).format("YYYY-MM-DD");
+        return {
+          type: shift?.shift?.name,
+          date: shift?.shift?.people_required,
+          path: shift?.shift?.isHoliday
+            ? ``
+            : `/admin/shift/calendarview?id=${shift?.shift?.id}&date=${selectdate}`,
+        };
+      }),
       path: "/admin/shift", // Default path for the card
     },
     {
@@ -54,7 +71,7 @@ export const AdminDashboard = () => {
   ];
 
   console.log(
-    admindashboard?.upcoming_shifts?.shift?.name,
+    admindashboard?.upcoming_shifts,
     "admindashboardadmindashboard",
   );
   return (
