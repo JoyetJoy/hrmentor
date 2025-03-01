@@ -35,7 +35,7 @@ const ShiftCalendar = () => {
   const [activeWorkArea, setActiveWorkArea] = useState("");
   const [activeLocation, setActiveLocation] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("weekly");
+  const [selectedOption, setSelectedOption] = useState("monthly");
   const [startDate, setStartDate] = useState(new Date());
   const [isOpen, setIsOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
@@ -174,11 +174,7 @@ const ShiftCalendar = () => {
       newStartDate = dayjs(startDate).subtract(1, "month").toDate();
     }
     setStartDate(newStartDate);
-    setEndDate(
-      dayjs(newStartDate)
-        .add(selectedOption === "monthly" ? 1 : 6, "day")
-        .toDate(),
-    );
+    setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
 
   const handleNext = () => {
@@ -191,11 +187,7 @@ const ShiftCalendar = () => {
       newStartDate = dayjs(startDate).add(1, "month").toDate();
     }
     setStartDate(newStartDate);
-    setEndDate(
-      dayjs(newStartDate)
-        .add(selectedOption === "monthly" ? 1 : 6, "day")
-        .toDate(),
-    );
+    setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
   const adjustLightness = (hex, percent) => {
     hex = hex.replace("#", "");
@@ -209,6 +201,30 @@ const ShiftCalendar = () => {
     hsl[2] = Math.min(100, Math.max(0, hsl[2] + percent)); // Adjust Lightness
     return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
   };
+
+  const getMonthDays = () => {
+    const startOfMonth = dayjs(startDate).startOf("month");
+    const daysInMonth = dayjs(startDate).daysInMonth();
+
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = startOfMonth.add(i, "day");
+      return {
+        day: day.format("ddd"),
+        date: day.format("MMM DD"),
+        fullDate: day.format("YYYY-MM-DD"),
+      };
+    });
+  };
+
+  const monthDays = getMonthDays();
+
+  useEffect(() => {
+    if (selectedOption === "monthly") {
+      // setDays(monthDays);
+      setStartDate(monthDays[0].fullDate);
+      setEndDate(monthDays[monthDays.length - 1].fullDate);
+    }
+  }, [selectedOption, startDate, endDate]);
 
   // RGB to HSL Conversion
   const rgbToHsl = (r, g, b) => {
@@ -600,9 +616,8 @@ const ShiftCalendar = () => {
                               style={{
                                 backgroundColor: event?.shift?.shift_color,
                                 borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
-                  
                               }}
-                              className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm border-l-4  hover:opacity-65  border-blue-400 bg-blue-200 py-3 pl-2 pr-3 text-gray-800 lg:w-36 xl:w-44`}
+                              className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm border-l-4 border-blue-400 bg-blue-200 py-3 pl-2 pr-3 text-gray-800 hover:opacity-65 lg:w-36 xl:w-44`}
                             >
                               <span className="float-start flex text-[0.8rem] font-semibold">
                                 {event.shift_name}
