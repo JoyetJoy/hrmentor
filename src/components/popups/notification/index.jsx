@@ -1,13 +1,13 @@
-import { newRequest } from "@/api";
 import { GET_USER } from "@/api/auth";
-import { NOTIFICATIONS } from "@/api/hiring";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { X } from "lucide-react";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function Notification({
+  notifications,
   notificationPopupOpen,
   setNotificationPopupOpen,
 }) {
@@ -25,15 +25,6 @@ export default function Notification({
     }
 }, []);
 
-  const { data: notifications, isLoading } = useQuery({
-    queryKey: ["notification"],
-    queryFn: () =>
-      newRequest.get(NOTIFICATIONS).then((res) => {
-        return res.data;
-      }),
-   
-  });
-
   return (
     <>
       <Dialog
@@ -46,7 +37,7 @@ export default function Notification({
           <div className="flex min-h-full items-center justify-center">
             <DialogPanel className="ml-96 w-full max-w-md rounded bg-white px-7 pb-3 pt-6">
               <div className="mb-3 flex justify-between">
-                <h1 className="text-base font-bold">Notification</h1>
+                <h1 className="text-base font-bold">Notifications</h1>
                 <button onClick={close}>
                   <X className="text-black/50" />
                 </button>
@@ -65,10 +56,10 @@ export default function Notification({
                         </h4>
                       </div>
                       <p className="mt-1 text-sm text-gray-600">
-                        {notification.description}
+                        {notification.data}
                       </p>
                       <p className="mt-1 text-xs text-gray-400">
-                        {notification.time}
+                        {dayjs(notification.time).format('DD/MM/YYYY')}
                       </p>
                     </div>
                   ))}

@@ -8,6 +8,9 @@ import ProfileDropdown from "./ProfileDropdown";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
 import Notification from "@/components/popups/notification";
+import { NOTIFICATIONS } from "@/api/hiring";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
 
 export const AdminHeader = () => {
   const { setUser, user } = useUserStore((state) => ({
@@ -19,6 +22,16 @@ export const AdminHeader = () => {
   const navigate = useNavigate();
   const [popupOpen, setPopupOpen] = useState(false);
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
+
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notification"],
+    queryFn: () =>
+      newRequest.get(NOTIFICATIONS).then((res) => {
+        return res.data;
+      }),
+    refetchInterval: 5000, // Fetch every 5 seconds
+    staleTime: 60000,
+  });
 
   const handleClick = () => {
     setPopupOpen(true);
@@ -40,6 +53,7 @@ export const AdminHeader = () => {
     <>
       <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <Notification
+        notifications={notifications}
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
       />
@@ -75,7 +89,7 @@ export const AdminHeader = () => {
                     : item.iconSrcBlack
                 }
                 alt={item.name}
-                className="h-4 w-4 "
+                className="h-4 w-4"
               />
               <p className="text-sm">{item.name}</p>
             </NavLink>
@@ -85,9 +99,14 @@ export const AdminHeader = () => {
         <div className="flex items-center gap-3 py-2.5">
           <div
             onClick={handleNotificationClick}
-            className="flex h-10 w-10 items-center  cursor-pointer justify-center rounded-full bg-gray-100"
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <Bell className="size-5 text-hrmblue" />
+            {notifications?.unread_count > 0 && (
+              <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                {notifications?.unread_count}
+              </div>
+            )}
           </div>
           <div
             onClick={handleClick}
@@ -116,7 +135,7 @@ export const AdminHeader = () => {
                           <img
                             src={item.icon}
                             alt={`${item.label} icon`}
-                            className="w-full h-full object-contain"
+                            className="h-full w-full object-contain"
                           />
                         </div>
                         {item.label}
