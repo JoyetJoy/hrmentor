@@ -1,4 +1,9 @@
-import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST } from "@/api/setup";
+import {
+  GET_SHIFT,
+  ROSTER_EMPLIST,
+  ROSTER_LIST,
+  SHIFT_LIST,
+} from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -13,7 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 
-export default function ChangeShift({ popupOpen, setPopupOpen }) {
+export default function ChangeShift({ popupOpen, setPopupOpen, data }) {
   const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -39,25 +44,17 @@ export default function ChangeShift({ popupOpen, setPopupOpen }) {
 
   const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
 
-  const { data: rosterEmpList } = useQuery({
-    queryKey: ["rosterEmpList", selectedShiftId],
+  const { data: shiftlist } = useQuery({
+    queryKey: ["rosterEmpList", data],
     queryFn: () => {
-      console.log(`Fetching employee list for shift ID: ${selectedShiftId}`);
-      return newRequest
-        .get(`${ROSTER_EMPLIST}/${selectedShiftId}`)
-        .then((res) => {
-          return res.data;
-        });
+      return newRequest.get(`${GET_SHIFT}?shift_id=${data?.shiftId}&employee_id=${data?.empId}&date=${data?.date}`).then((res) => {
+        return res.data;
+      });
     },
-    enabled: !!selectedShiftId,
-    onSuccess: (data) => {
-      console.log("Fetched employee list:", data);
-    },
-    onError: (error) => {
-      console.error("Error fetching employee list:", error?.message || error);
-    },
+    enabled: !!data,
   });
-console.log(selectedShiftId);
+
+  console.log(shiftlist);
 
   const selectedShift = shiftList?.data?.original?.data.find(
     (item) => item.id === selectedShiftId,
@@ -75,7 +72,7 @@ console.log(selectedShiftId);
     toast.success("Employee deleted successfully");
   };
   console.log(selectedEmployee);
-  
+
   const handleAddEmployee = () => {
     if (selectedEmployee) {
       setSelectedEmployees((prev) => [
@@ -143,55 +140,24 @@ console.log(selectedShiftId);
     }
   }, [selectedShiftId]);
 
-  const columns = React.useMemo(
-    () => [
-      {
-        header: "Emp:ID",
-        accessorKey: "unique_id",
-        cell: ({ row }) => row?.original?.unique_id || "NA",
-      },
-      {
-        header: "Emp:Name",
-        accessorKey: "first_name",
-        cell: ({ row }) => row?.original?.first_name || "NA",
-      },
-
-      {
-        header: "Action",
-        accessorKey: "action",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <button
-              type="button"
-              onClick={() => handleDeleteEmployee(row.original.unique_id)}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-[#EBEBF0] p-2 text-[#2C2C2C]"
-            >
-              <Trash2 className="size-3" />
-            </button>
-          </div>
-        ),
-      },
-    ],
-    [],
-  );
   return (
     <>
       <Dialog
         open={popupOpen}
         as="div"
-        className="relative z-10"
+        className="relative z-30"
         onClose={close}
       >
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
+        <div className="fixed inset-0 z-10 overflow-y-auto bg-black/20">
           <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel className="w-full max-w-4xl rounded bg-white p-6">
+            <DialogPanel className="min-w-[28rem] rounded bg-white p-6">
               <div className="mb-5 flex justify-between">
-                <h1 className="text-md font-bold">Create New Roster</h1>
+                <h1 className="text-md font-bold">{data?.type === 'change' ? 'Change Shift' : 'Add Shift' }</h1>
                 <button onClick={close}>
                   <X />
                 </button>
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="gap-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div>
                     <div className="flex flex-col gap-4">
@@ -317,63 +283,22 @@ console.log(selectedShiftId);
                       </table> */}
                       <div className="mt-4 flex gap-3">
                         <button
-                          type="submit"
-                          className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
-                        >
-                          Save
-                        </button>
-                        <button
                           type="button"
                           onClick={close}
                           className="w-full rounded border border-black px-4 py-3"
                         >
                           Cancel
                         </button>
+                        <button
+                          type="submit"
+                          className="w-full rounded bg-hrmprimaryorange px-7 py-3 text-white"
+                        >
+                          Save
+                        </button>
                       </div>
                     </div>
                   </div>
                 </form>
-                <div className="mt-1 flex h-full flex-col gap-4">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium">Add Employee</label>
-                    <div className="flex gap-2">
-                      <Controller
-                        name="employees"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                          <Select
-                            isSearchable={true}
-                            styles={customSelectStyles}
-                            placeholder="Select Employee"
-                            className="input-box w-full"
-                            options={rosterEmpList?.employees?.map((item) => ({
-                              label: item.first_name,
-                              value: item?.id,
-                            }))}
-                            onChange={(selectedOption) => {
-                              field.onChange(selectedOption);
-                              setSelectedEmployee(selectedOption);
-                            }}
-                          />
-                        )}
-                      />
-                      <button
-                        type="submit"
-                        className="flex items-center whitespace-nowrap rounded bg-black px-3 py-2 text-sm text-white"
-                        onClick={handleAddEmployee}
-                      >
-                        <Plus className="size-4" /> Add
-                      </button>
-                    </div>
-                    {employeeError !== "" && (
-                      <span className="mt-2 text-xs text-red-500">
-                        {employeeError}
-                      </span>
-                    )}
-                  </div>
-                  <QueryTable columns={columns} list={selectedEmployees} />
-                </div>
               </div>
             </DialogPanel>
           </div>

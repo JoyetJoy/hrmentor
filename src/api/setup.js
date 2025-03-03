@@ -39,6 +39,9 @@ export const EMAIL_TEMPLATE = "email-templates";
 export const UPDATE_EMAIL_TEMPLATE ="update-email-template"
 
 export const ROSTER_EMPLIST = "get-employee-details";
+
+// SHIFT GET
+export const GET_SHIFT = "/get-shift-roaster";
 export const UPDATE_ROSTER_LIST = "employee-roster-list ";
 //swap employee roster
 export const SWAP_EMPLOYEE_ROSTER = "swap-shift-roster-employee";

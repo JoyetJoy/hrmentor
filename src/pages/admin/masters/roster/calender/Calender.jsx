@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
-import { Plus, ArrowRight, AlignJustify } from "lucide-react";
+import { Plus, ArrowRight, AlignJustify, ChevronDown } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import RosterHeader from "@/components/common/RosterHeader";
@@ -23,6 +23,7 @@ import {
   EMPLOYEE_WORK_LOCATION_LIST,
 } from "@/api/master";
 import { formatDate } from "@/utils/date";
+import ChangeShift from "@/components/popups/master/roster/ChangeShift";
 
 const RosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -37,6 +38,14 @@ const RosterCalendar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openPopup, setOpenPopup] = useState(null); // Track which popup is open
   const [endDate, setEndDate] = useState();
+  const [shiftPopup, setShiftPopup] = useState(false);
+  const [hoveredShift, setHoveredShift] = useState({id:'',date:'',type:'',empid:''});
+  const [shiftDetails, setShiftDetails] = useState({
+    empId:'',
+    date:'',
+    shiftId:'',
+    type:''
+  });
 
   const useFetchData = (key, url) => {
     return useQuery({
@@ -288,11 +297,22 @@ const RosterCalendar = () => {
     console.log("End Date:", dateRange.end);
   };
 
-  const ChangeShift = ()=>{
+  const changeShift = (empId,date,type,shiftId)=>{
+    console.log(type);
     
+    setShiftDetails({
+      empId,
+      date,
+      shiftId,
+      type
+    });
+    setShiftPopup(true);
   }
+  console.log(hoveredShift);
+  
   return (
     <>
+      <ChangeShift popupOpen={shiftPopup} setPopupOpen={setShiftPopup} data={shiftDetails}/>
       <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex py-4">
         <div className="w-full">
@@ -505,16 +525,28 @@ const RosterCalendar = () => {
                                 <div className="overflow-y-min flex h-full w-full min-w-[11.4rem] flex-col items-start gap-2 overflow-y-auto overflow-x-hidden">
                                   {attendanceEntry?.shifts?.map((shift) => (
                                     <div
-                                    onClick={()=> ChangeShift()}
+                                    key={shift?.shift_id}
+                                    onClick={()=> changeShift(emp?.id,day.fullDate,'change',shift?.shift_id)}
                                       style={{
                                         background:
                                           shift?.shift_color || "#bfdbfe",
                                       }}
-                                      className={`h-[3.5rem] min-w-44 rounded-md py-2 text-black cursor-pointer`}
+                                      className={`h-[3.5rem] min-w-44 rounded-md py-3 text-black cursor-pointer`}
                                     >
                                       <div>
-                                        <p className="text-xs font-semibold">
+                                        <p className="relative text-xs font-semibold">
                                           {shift.shift_name}
+                                          <span className="absolute right-1 -top-2"
+                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.id})}
+                                            onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
+                                          ><ChevronDown size={20} />
+                                          {/* Tooltip */}
+                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.id && (
+                                            <span className="absolute right-0 top-6 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
+                                              Change Shift
+                                            </span>
+                                          )}
+                                          </span>
                                         </p>
                                         <p className="text-sm">
                                           {shift.start_time} - {shift?.end_time}
@@ -523,15 +555,21 @@ const RosterCalendar = () => {
                                     </div>
                                   ))}
 
-                                  <p className="flex w-full items-center justify-center">
+                                  <p className="relative flex w-full items-center justify-center">
                                     <button
-                                      // onClick={() =>
-                                      //   handleOpen(emp?.id)
-                                      // }
-                                      className="cursor-pointer text-2xl font-bold text-blue-500"
+                                      onClick={()=> changeShift(emp?.id,day.fullDate,'add','')}
+                                      onMouseEnter={() => setHoveredShift({id:emp?.id,date:day.fullDate,type:'add',empid:''})}
+                                      onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
+                                      className="cursor-pointer text-2xl font-bold text-blue-500 h-10 w-10"
                                     >
                                       +
                                     </button>
+                                    {/* Tooltip */}
+                                    {hoveredShift?.id === emp?.id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'add' && (
+                                      <span className="absolute right-8 top-10 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
+                                        Add Shift
+                                      </span>
+                                    )}
                                   </p>
                                   {openPopup?.row === rowIndex &&
                                     openPopup?.col === colIndex && (
@@ -576,11 +614,11 @@ const RosterCalendar = () => {
                                     )}
                                 </div>
                               ) : attendanceEntry.is_day_off ? (
-                                <div className="text-xs text-gray-500">
+                                <div className="min-w-[11.4rem] text-xs text-gray-500">
                                   DAY OFF
                                 </div>
                               ) : (
-                                <div>
+                                <div className="min-w-[11.4rem]">
                                   {/* Button to Open Popup */}
                                   <button
                                     className="text-2xl font-bold text-blue-500"
