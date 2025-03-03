@@ -202,16 +202,16 @@ export default function Attendance() {
   };
   console.log();
 
-  const eventClick=((id,date,attendance)=>{
+  const eventClick = (id, date, attendance) => {
     console.log(attendance);
-    
-    if(id&&date&& attendance?.attendance_id){
+
+    if (id && date && attendance?.attendance_id) {
       setSelectedDate(date);
       setEmpId(id);
       setAttendanceData(attendance);
       setAttendance(true);
     }
-  })
+  };
 
   return (
     <>
@@ -362,7 +362,7 @@ export default function Attendance() {
           </div>
           <div className="flex w-full items-center justify-between gap-8">
             <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#77c477d5] pl-[0.10rem] pt-[0.15rem] text-xs font-extrabold text-black">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00b448] pl-[0.10rem] pt-[0.15rem] text-xs font-extrabold text-black">
                 P
               </p>
               <p className="text-sm">Present</p>
@@ -376,7 +376,7 @@ export default function Attendance() {
               <p className="text-sm">Late</p>
             </div>
             <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e47f7f] pt-[0.02rem] text-xs font-extrabold text-black">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e64444] pt-[0.02rem] text-xs font-extrabold text-black">
                 A
               </p>
               <p className="text-sm">Absent</p>
@@ -406,7 +406,12 @@ export default function Attendance() {
               </p>
               <p className="text-sm">Day Off</p>
             </div>
-            <Atendance attendance={attendance} setAttendance={setAttendance} selectedDate={selectedDate} empId={empId}/>
+            <Atendance
+              attendance={attendance}
+              setAttendance={setAttendance}
+              selectedDate={selectedDate}
+              empId={empId}
+            />
           </div>
         </div>
 
@@ -441,7 +446,7 @@ export default function Attendance() {
                       key={empIndex}
                       className="border-b-[3px] border-[#d1d5db] text-left"
                     >
-                      <td className="sticky left-0 w-auto border-r-2 border-b-slate-500 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
+                      <td className="sticky left-0 border-r-2 border-b-slate-500 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
                         {employee?.employee_name}
                       </td>
                       {days?.map((day) => {
@@ -449,50 +454,64 @@ export default function Attendance() {
                         const attendanceEntry = employee.attendances.find(
                           (att) => att.attendance_date === day.fullDate,
                         );
+                        console.log(attendanceEntry);
+
                         return (
-                          <td
-                            key={day.fullDate}
-                            onClick={() => eventClick(employee?.employee_id, day.fullDate,attendanceEntry)}
-                            className={`cursor-pointer text-center text-[0.8rem] font-semibold ${
-                              attendanceEntry?.status === "Present"
-                                ? "bg-[#77c477d5] text-black"
-                                : attendanceEntry?.status === "Holiday"
-                                  ? "bg-[#e68ecf] text-black"
-                                  : attendanceEntry?.status === "Company Leave"
-                                    ? "bg-[#FDE3AA] text-black"
-                                    : attendanceEntry?.status === "Annual Leave"
-                                      ? "bg-[#AEB6E7] text-black"
-                                      : attendanceEntry?.status === "Absent"
-                                        ? "bg-[#e47f7f] text-black"
-                                        : attendanceEntry?.status === "Day off"
-                                          ? "bg-[#c5c5cb] text-black"
-                                          : "bg-[#ebebf0] text-black"
-                            } border-r-[3px] border-[#d1d5db]`}
-                          >
-                            {attendanceEntry?.status === "Present" ? (
-                              <div className="flex items-center justify-center text-sm font-extrabold">
-                                <span>P</span>
-                                {attendanceEntry?.delay_status && (
-                                  <img
-                                    className="ml-2 w-5 object-contain"
-                                    src="/assets/icons/tort.svg"
-                                    alt="late"
-                                  />
-                                )}
+                          <td className="border-r-[3px] border-[#d1d5db]">
+                            {attendanceEntry?.shifts?.map((shift) => (
+                              <div
+                                key={day.fullDate}
+                                onClick={() =>
+                                  eventClick(
+                                    employee?.employee_id,
+                                    day.fullDate,
+                                    attendanceEntry,
+                                  )
+                                }
+                                className={`flex cursor-pointer justify-center gap-2 text-center text-[0.8rem] font-semibold`}
+                              >
+                                  <div
+                                    className={` mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
+                                      shift?.status === "Present"
+                                        ? "bg-[#00b448] text-black"
+                                        : shift?.status === "Holiday"
+                                          ? "bg-[#e68ecf] text-black"
+                                          : shift?.status === "Company Leave"
+                                            ? "bg-[#FDE3AA] text-black"
+                                            : shift?.status === "Annual Leave"
+                                              ? "bg-[#AEB6E7] text-black"
+                                              : shift?.status === "Absent"
+                                                ? "bg-[#db0000] text-black"
+                                                : shift?.status === "Day off"
+                                                  ? "bg-[#c5c5cb] text-black"
+                                                  : "bg-[#ebebf0] text-black"
+                                    }`}
+                                  >
+                                    <span>{
+                                      shift?.status === "Present"
+                                      ? "P"
+                                      : shift?.status === "Holiday"
+                                        ? "H"
+                                        : shift?.status === "Company Leave"
+                                          ? "CL"
+                                          : shift?.status === "Annual Leave"
+                                            ? "AL"
+                                            : shift?.status === "Absent"
+                                              ? "A"
+                                              : shift?.status === "Day off"
+                                                ? "Day Off"
+                                                : ""
+                                      }</span>
+                                    {shift?.delay_status && (
+                                      <img
+                                        className="ml-2 w-5 object-contain"
+                                        src="/assets/icons/tort.svg"
+                                        alt="late"
+                                      />
+                                    )}
+                                  </div>
                               </div>
-                            ) : attendanceEntry?.status === "Absent" ? (
-                              <span className="text-sm font-extrabold">A</span>
-                            ) : attendanceEntry?.status === "Annual Leave" ? (
-                              <span className="font-extrabold">AL</span>
-                            ) : attendanceEntry?.status === "Company Leave" ? (
-                              <span className="font-extrabold">CL</span>
-                            ) : attendanceEntry?.status === "Holiday" ? (
-                              <span className="text-sm font-extrabold">H</span>
-                            ) : attendanceEntry?.status === "Day off" ? (
-                              <span className="text-sm font-extrabold">DO</span>
-                            ) : (
-                              ""
-                            )}
+                            ))}
                           </td>
                         );
                       })}

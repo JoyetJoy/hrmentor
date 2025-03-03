@@ -522,7 +522,7 @@ const RosterCalendar = () => {
                               className="relative h-[12rem] w-full border p-2 text-center"
                             >
                               {!attendanceEntry?.is_day_off ? (
-                                <div className="overflow-y-min flex h-full w-full min-w-[11.4rem] flex-col items-start gap-2 overflow-y-auto overflow-x-hidden">
+                                <div className="overflow-y-min flex h-full w-full min-w-[11.4rem] flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden">
                                   {attendanceEntry?.shifts?.map((shift) => (
                                     <div
                                     key={shift?.shift_id}
