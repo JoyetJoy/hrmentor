@@ -29,9 +29,11 @@ export default function Notification({
 
 const handleClick = async (notificationId) => {
   if (!notificationId) return;
-
+  const data ={
+    notification_id:notificationId
+  }
   try {
-    const response = await newRequest.get(`${READ_NOTIFICATION}?notification_id=${notificationId}`);
+    const response = await newRequest.post(READ_NOTIFICATION,data);
     
     if (response.status === 200) {
       console.log("Notification marked as read", response.data);

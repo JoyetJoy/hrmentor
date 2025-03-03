@@ -287,6 +287,10 @@ const RosterCalendar = () => {
     console.log("Start Date:", dateRange.start);
     console.log("End Date:", dateRange.end);
   };
+
+  const ChangeShift = ()=>{
+    
+  }
   return (
     <>
       <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
@@ -479,10 +483,10 @@ const RosterCalendar = () => {
                     {data?.employees?.map((emp, rowIndex) => (
                       <tr key={rowIndex} className="h-[12rem] w-full border">
                         <td className="sticky left-0 z-10 flex h-[12rem] min-w-[14rem] items-center space-x-3 bg-white p-3">
-                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-sm text-white">
                             {emp.name.charAt(0)}
                           </span>
-                          <span className="text-xs font-bold text-gray-600">
+                          <span className="text-sm font-bold text-gray-800">
                             {emp.name}
                           </span>
                         </td>
@@ -501,11 +505,12 @@ const RosterCalendar = () => {
                                 <div className="overflow-y-min flex h-full w-full min-w-[11.4rem] flex-col items-start gap-2 overflow-y-auto overflow-x-hidden">
                                   {attendanceEntry?.shifts?.map((shift) => (
                                     <div
+                                    onClick={()=> ChangeShift()}
                                       style={{
                                         background:
                                           shift?.shift_color || "#bfdbfe",
                                       }}
-                                      className={`h-[3.5rem] min-w-44 rounded-md py-2 text-black`}
+                                      className={`h-[3.5rem] min-w-44 rounded-md py-2 text-black cursor-pointer`}
                                     >
                                       <div>
                                         <p className="text-xs font-semibold">
