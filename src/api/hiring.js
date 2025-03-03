@@ -11,6 +11,9 @@ export const HIRING_READY = "hiring-candidates";
 //NOTIFICATIONS
 export const NOTIFICATIONS = "current-notification";
 
+//READ NOTIFICATION
+export const READ_NOTIFICATION = "/notifications/mark-as-read"
+
 // CONDITIONAL OFFER LETTER
 // DOCUMENT TEMPLATES
 export const HIRING_CONDITIONAL_OFFER_LETTER_TEMPLATE =

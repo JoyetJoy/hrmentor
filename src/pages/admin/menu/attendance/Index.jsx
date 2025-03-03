@@ -17,6 +17,7 @@ export default function Attendance() {
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
   const [empId, setEmpId] = useState();
+  const [attendaceData, setAttendanceData] = useState();
   const [selectedDate, setSelectedDate] = useState();
 
   const { data, isLoading } = useQuery({
@@ -201,10 +202,13 @@ export default function Attendance() {
   };
   console.log();
 
-  const eventClick=((id,date)=>{
-    if(id&&date){
+  const eventClick=((id,date,attendance)=>{
+    console.log(attendance);
+    
+    if(id&&date&& attendance?.attendance_id){
       setSelectedDate(date);
       setEmpId(id);
+      setAttendanceData(attendance);
       setAttendance(true);
     }
   })
@@ -229,7 +233,7 @@ export default function Attendance() {
                   key={option}
                   className={`btn-sm flex items-center rounded-md px-4 py-2 ${
                     selectedOption === option
-                      ? "bg-green-500 text-white"
+                      ? "bg-hrmprimaryorange text-white"
                       : "bg-gray-200"
                   }`}
                   onClick={() => handleFilter(option)}
@@ -448,7 +452,7 @@ export default function Attendance() {
                         return (
                           <td
                             key={day.fullDate}
-                            onClick={() => eventClick(employee?.employee_id, day.fullDate)}
+                            onClick={() => eventClick(employee?.employee_id, day.fullDate,attendanceEntry)}
                             className={`cursor-pointer text-center text-[0.8rem] font-semibold ${
                               attendanceEntry?.status === "Present"
                                 ? "bg-[#77c477d5] text-black"

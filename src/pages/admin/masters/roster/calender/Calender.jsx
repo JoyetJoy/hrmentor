@@ -300,7 +300,7 @@ const RosterCalendar = () => {
                   key={option}
                   className={`btn-sm flex items-center rounded-md px-4 py-2 ${
                     selectedOption === option
-                      ? "bg-green-500 text-white"
+                      ? "bg-hrmprimaryorange text-white"
                       : "bg-gray-200"
                   }`}
                   onClick={() => handleFilter(option)}

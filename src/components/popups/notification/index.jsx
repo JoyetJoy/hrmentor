@@ -1,4 +1,6 @@
+import { newRequest } from "@/api";
 import { GET_USER } from "@/api/auth";
+import { READ_NOTIFICATION } from "@/api/hiring";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -25,6 +27,22 @@ export default function Notification({
     }
 }, []);
 
+const handleClick = async (notificationId) => {
+  if (!notificationId) return;
+
+  try {
+    const response = await newRequest.get(`${READ_NOTIFICATION}?notification_id=${notificationId}`);
+    
+    if (response.status === 200) {
+      console.log("Notification marked as read", response.data);
+      close();
+    }
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+  }
+};
+
+
   return (
     <>
       <Dialog
@@ -47,8 +65,8 @@ export default function Notification({
                   {notifications?.data?.map((notification) => (
                     <Link
                       to={'/admin/leave/request/awaitingapproval'}
-                      onClick={()=>close()}
-                      key={notification.id}
+                      onClick={()=>handleClick(notification?.id)}
+                      key={notification?.id}
                       className="mb-4 border-b border-gray-200 pb-4"
                     >
                       <div className="flex items-center gap-2">

@@ -4,7 +4,10 @@ export const ShiftSchema = Yup.object({
   name: Yup.string().required("Shift name is required"),
   start_time: Yup.string().required("Start time is required"),
   end_time: Yup.string().required("End time is required"),
-  people_required: Yup.string().required("People Required  is reqiued"),
+  people_required: Yup.number()
+  .typeError("People Required must be a number")
+  .required("People Required is required")
+  .min(1, "People Required must be at least 1"),
 
   department_id: Yup.object({
     id: Yup.string(),
