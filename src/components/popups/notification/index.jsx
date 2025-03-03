@@ -19,13 +19,14 @@ export default function Notification({
 
   useEffect(() => {
     if (window.Echo) {
-        window.Echo.private(`notification-${user_id}`)
-            .notification((notification) => {
-                console.log('New Notification:', notification);
-                // Handle your notification here (e.g., update state, show a toast, etc.)
-            });
+      window.Echo.private(`notification-${user_id}`).notification(
+        (notification) => {
+          console.log("New Notification:", notification);
+          // Handle your notification here (e.g., update state, show a toast, etc.)
+        },
+      );
     }
-}, []);
+  }, []);
 
 const handleClick = async (notificationId) => {
   if (!notificationId) return;
@@ -61,7 +62,7 @@ const handleClick = async (notificationId) => {
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
-                <div className="mx-auto w-full max-h-[35rem] overflow-y-auto overflow-y-min p-4">
+                <div className="overflow-y-min mx-auto max-h-[35rem] w-full overflow-y-auto">
                   {notifications?.data?.map((notification) => (
                     <Link
                       to={'/admin/leave/request/awaitingapproval'}
@@ -69,41 +70,41 @@ const handleClick = async (notificationId) => {
                       key={notification?.id}
                       className="mb-4 border-b border-gray-200 pb-4"
                     >
-                      <div className="flex items-center gap-2">
-                        <div className="h-2 w-2 rounded-full bg-red-500"></div>
-                        <h4 className="text-sm font-semibold text-black">
-                          {notification.title}
-                        </h4>
+                      <div className="flex items-start gap-2">
+                        <div className="min-h-10 min-w-10 rounded-full text-center justify-center text-white flex items-center bg-red-500  mt-2">N</div>
+                        <div className="flex flex-col border-b border-gray-200 py-2 w-full">
+                          <h4 className="text-sm font-semibold text-black">
+                            {notification.title}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            {notification.data}
+                          </p>
+                          <p className="mt-1 text-xs text-gray-400">
+                            {dayjs(notification.created_at).format(
+                              "DD/MM/YYYY",
+                            )}
+                          </p>
+                        </div>
                       </div>
-                      <p className="mt-1 text-sm text-gray-600">
-                        {notification.data}
-                      </p>
-                      <p className="mt-1 text-xs text-gray-400">
-                        {dayjs(notification.created_at).format('DD/MM/YYYY')}
-                      </p>
                     </Link>
                   ))}
-                  {notifications?.data?.length>0?(
+                  {notifications?.data?.length > 0 ? (
                     <div className="mt-4 text-right">
-                    <Link
-                      to="/admin/notification"
-                      onClick={close}
-                      className="text-sm font-semibold text-hrmprimaryorange"
-                    >
-                      Show all notifications
-                    </Link>
-                  </div>
-                  ):(
+                      <Link
+                        to="/admin/notification"
+                        onClick={close}
+                        className="text-sm font-semibold text-hrmprimaryorange"
+                      >
+                        Show all notifications
+                      </Link>
+                    </div>
+                  ) : (
                     <div className="mt-4 text-right">
-                    <p
-                      className="text-sm font-semibold text-hrmprimaryorange"
-                    >
-                      No notifications
-                    </p>
-                  </div>
-                  )
-                  }
-                  
+                      <p className="text-sm font-semibold text-hrmprimaryorange">
+                        No notifications
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </DialogPanel>
