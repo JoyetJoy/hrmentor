@@ -446,7 +446,7 @@ export default function Attendance() {
                       key={empIndex}
                       className="border-b-[3px] border-[#d1d5db] text-left"
                     >
-                      <td className="sticky left-0 border-r-2 border-b-slate-500 bg-[#ffffff] text-[0.8rem] font-medium capitalize text-gray-darkpale">
+                      <td className="sticky left-0 border-r-2 border-b-slate-500 bg-[#ffffff] text-sm font-bold capitalize text-slate-800">
                         {employee?.employee_name}
                       </td>
                       {days?.map((day) => {
@@ -465,7 +465,7 @@ export default function Attendance() {
                                   eventClick(
                                     employee?.employee_id,
                                     day.fullDate,
-                                    attendanceEntry,
+                                    shift,
                                   )
                                 }
                                 className={`flex cursor-pointer justify-center gap-2 text-center text-[0.8rem] font-semibold`}
@@ -481,7 +481,7 @@ export default function Attendance() {
                                             : shift?.status === "Annual Leave"
                                               ? "bg-[#AEB6E7] text-black"
                                               : shift?.status === "Absent"
-                                                ? "bg-[#db0000] text-black"
+                                                ? "bg-[#e64444] text-black"
                                                 : shift?.status === "Day off"
                                                   ? "bg-[#c5c5cb] text-black"
                                                   : "bg-[#ebebf0] text-black"
