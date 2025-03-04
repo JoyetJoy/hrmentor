@@ -25,32 +25,36 @@ const EmployeeAccessAttendanceCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const { data: events = [], refetch } = useQuery({
-    queryKey: ["events", month, year],
+    queryKey: ["events", month, year, startTime, endTime],
     queryFn: () =>
       newRequest
         .get(ATTENDANCE, {
-          params: { month, year },
+          params: { month, year, startTime, endTime },
         })
         .then((res) => res.data),
     enabled: true,
     staleTime: 0,
   });
 
+  console.log(events, "attendance");
+
   const handleClick = (event) => {
     setSelected(event);
     setPopupOpen(true);
   };
   useEffect(() => {
-    console.log("Initial fetch for:", { month, year });
-    refetch(); // Initial fetch when the component mounts
+    console.log("Initial fetch for:", { month, year, startTime });
+    refetch();
   }, []);
 
   useEffect(() => {
-    if (month && year) {
-      console.log("Refetching events for:", { month, year });
+    if (month && year && startTime) {
+      console.log("Refetching events for:", { month, year, startTime });
       refetch();
     }
   }, [date, month, year, refetch]);
@@ -58,7 +62,6 @@ const EmployeeAccessAttendanceCalendar = () => {
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
-
   const handleMonthChange = (selectedOption) => {
     const currentDay = dayjs(date).date();
     const updatedDate = dayjs(date)
@@ -113,7 +116,11 @@ const EmployeeAccessAttendanceCalendar = () => {
 
   return (
     <div className="flex flex-col">
-      <EmployeeAttendance popupOpen={popupOpen} setPopupOpen={setPopupOpen} selected= {selected} />
+      <EmployeeAttendance
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        selected={selected}
+      />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Attendance"} />
       <div className="flex w-full items-center justify-between px-4 py-2">
         <div className="flex items-center gap-4">
@@ -131,6 +138,9 @@ const EmployeeAccessAttendanceCalendar = () => {
             isSearchable={true}
             onChange={handleMonthChange}
             styles={customSelectStyles}
+            value={months.find(
+              (monthOption) => monthOption.value === dayjs(date).month(),
+            )}
             placeholder={dayjs(date).format("MMMM")}
             className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
           />
@@ -193,12 +203,12 @@ const EmployeeAccessAttendanceCalendar = () => {
                       <div
                         key={index}
                         onClick={() => handleClick(event)}
-                        className={`flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2  ${getTileClass(
+                        className={`flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 ${getTileClass(
                           date,
                         )} justify-center text-gray-800`}
                       >
-                        <div className="flex items-center w-full justify-between">
-                          <span className="float-start flex text-[0.8rem] font-semibold ">
+                        <div className="flex w-full items-center justify-between">
+                          <span className="float-start flex text-[0.8rem] font-semibold">
                             {event?.shift_detail
                               ? event.shift_detail?.name
                               : "Present"}
