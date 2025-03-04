@@ -97,6 +97,7 @@ export default function Attendance() {
       const day = startOfMonth.add(i, "day");
       return {
         day: day.format("ddd"),
+        fullDay: day.format("dddd"),
         date: day.format("MMM DD"),
         fullDate: day.format("YYYY-MM-DD"),
       };
@@ -112,6 +113,7 @@ export default function Attendance() {
       const day = startOfWeek.add(i, "day");
       return {
         day: day.format("ddd"),
+        fullDay: day.format("dddd"),
         date: day.format("MMM DD"),
         fullDate: day.format("YYYY-MM-DD"),
       };
@@ -127,6 +129,7 @@ export default function Attendance() {
       const day = start.add(i, "day");
       return {
         day: day.format("ddd"),
+        fullDay: day.format("dddd"),
         date: day.format("MMM DD"),
         fullDate: day.format("YYYY-MM-DD"),
       };
@@ -203,22 +206,16 @@ export default function Attendance() {
   };
   console.log();
 
-  const eventClick = (id, date, attendance,type) => {
-    console.log(attendance);
-
-    if (id && date && attendance?.attendance_id) {
-      setSelectedDate(date);
-      setEmpId(id);
-      setType('Present')
-      setAttendanceData(attendance);
-      setAttendance(true);
-    }else if(id && date && !attendance?.attendance_id){
-      setSelectedDate(date);
-      setEmpId(id);
-      setType('Absent')
-      setAttendanceData(attendance);
-      setAttendance(true);
-    }
+  const eventClick = (id,empname, date, day, attendance,type) => {
+    console.log(day);
+    setEmpId({
+      id,
+      empname,
+      date,
+      day,
+      attendance
+    });
+    setAttendance(true);
   };
 
   return (
@@ -474,7 +471,9 @@ export default function Attendance() {
                                 onClick={() =>
                                   eventClick(
                                     employee?.employee_id,
+                                    employee?.employee_name,
                                     day.fullDate,
+                                    day.fullDay,
                                     shift,
                                     'change'
                                   )

@@ -18,17 +18,17 @@ const Index = ({ attendance, setAttendance,empId, attendaceData, selectedDate, t
     remarks: "",
     status: "",
   });
-console.log(attendaceData);
+console.log(empId);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["attendanceData", attendaceData?.attendance_id],
+    queryKey: ["attendanceData", empId?.attendance?.attendance_id],
     queryFn: () =>
       newRequest
         .get(
-          `${ATTENDANCE_GET}?id=${attendaceData?.attendance_id}`,
+          `${ATTENDANCE_GET}?id=${empId?.attendance?.attendance_id}`,
         )
         .then((res) => res.data),
-    enabled: !!attendaceData?.attendance_id
+    enabled: !!empId?.attendance?.attendance_id
   });
   console.log(data);
   
@@ -72,7 +72,7 @@ console.log(attendaceData);
       />
       {attendance && (
         <div className="absolute right-10 top-32 z-20 w-5/12 overflow-hidden rounded-lg bg-white shadow-lg shadow-black">
-          <div className="flex justify-between bg-[#dadae4] px-10 py-7">
+          <div className="flex justify-between bg-[#dadae4] px-10 py-5">
             <p className="text-lg font-semibold text-[#555c5f]">
               Clock In / Clock Out
             </p>
@@ -87,38 +87,38 @@ console.log(attendaceData);
           <div className="grid grid-cols-2 gap-4 px-10 py-7 text-sm font-semibold text-[#686868]">
             <div className="flex flex-col gap-1">
               <div className="flex w-full justify-between">
-                <p>Name</p>
-                <p>Jennifer Gilbert</p>
+                <p className="text-[#2d2c2c]">Name</p>
+                <p>{empId?.attendance?.attendance_id?data :empId?.empname}</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Date</p>
-                <p>24-02-2025</p>
+                <p className="text-[#2d2c2c]">Date</p>
+                <p>{empId?.attendance?.attendance_id?data : empId?.date}</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Duration</p>
+                <p className="text-[#2d2c2c]">Duration</p>
                 <p>00:00</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Shift Name</p>
-                <p>Morning</p>
+                <p className="text-[#2d2c2c]">Shift Name</p>
+                <p>{empId?.attendance?.attendance_id?data : empId?.attendance?.shift_name}</p>
               </div>
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex w-full justify-between">
-                <p>Employee Id</p>
-                <p>EMP123</p>
+                <p className="text-[#2d2c2c]">Employee Id</p>
+                <p>{empId?.attendance?.attendance_id?data : empId?.id}</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Day</p>
-                <p>Monday</p>
+                <p className="text-[#2d2c2c]">Day</p>
+                <p>{empId?.attendance?.attendance_id?data : empId?.day}</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Status</p>
-                <p>Present</p>
+                <p className="text-[#2d2c2c]">Status</p>
+                <p>{empId?.attendance?.attendance_id?data : empId?.attendance?.status}</p>
               </div>
               <div className="flex w-full justify-between">
-                <p>Shift Time</p>
-                <p>09:00:00 - 13:00:00</p>
+                <p className="text-[#2d2c2c]">Shift Time</p>
+                <p>{empId?.attendance?.attendance_id?data : empId?.attendance?.start_time} - {empId?.attendance?.attendance_id?data : empId?.attendance?.end_time}</p>
               </div>
             </div>
           </div>
