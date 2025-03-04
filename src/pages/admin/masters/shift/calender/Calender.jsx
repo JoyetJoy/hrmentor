@@ -8,21 +8,20 @@ import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest, ROASTER_LIST_GET } from "@/api/master";
+import { EMPLOYEE_DEPARTMENT_LIST, EMPLOYEE_WORK_AREA, EMPLOYEE_WORK_LOCATION_LIST, newRequest, ROASTER_LIST_GET } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
-import RosterItemList from "@/components/sidebars/roster/Index";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// const months = Array.from({ length: 12 }, (_, i) => ({
-//   value: i + 1,
-//   label: dayjs().month(i).format("MMMM"),
-// }));
+const months = Array.from({ length: 12 }, (_, i) => ({
+  value: i + 1,
+  label: dayjs().month(i).format("MMMM"),
+}));
 
-// const years = Array.from({ length: 11 }, (_, i) => ({
-//   value: 2020 + i,
-//   label: (2020 + i).toString(),
-// }));
+const years = Array.from({ length: 11 }, (_, i) => ({
+  value: 2020 + i,
+  label: (2020 + i).toString(),
+}));
 
 const ShiftCalendar = () => {
   const [date, setDate] = useState(new Date());
@@ -42,6 +41,14 @@ const ShiftCalendar = () => {
   const [endDate, setEndDate] = useState(
     dayjs(startDate).add(6, "day").toDate(),
   );
+
+
+  const useFetchData = (key, url) => {
+      return useQuery({
+        queryKey: [key],
+        queryFn: () => newRequest.get(url).then((res) => res.data),
+      });
+    };
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
@@ -89,6 +96,46 @@ const ShiftCalendar = () => {
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
+  const handleYearChange = (date) => {
+    setSelectedYear(date);
+    const newYear = dayjs(date).year();
+    const newStartDate = dayjs(`${newYear}-01-01`).toDate();
+    const newEndDate = dayjs(`${newYear}-12-31`).toDate();
+    setDate(newStartDate)
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    setIsOpen(false);
+  };
+
+   // Fetch data from APIs
+    const { data: department } = useFetchData(
+      "department",
+      EMPLOYEE_DEPARTMENT_LIST,
+    );
+    const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
+    const { data: location } = useFetchData(
+      "location",
+      EMPLOYEE_WORK_LOCATION_LIST,
+    );
+  
+    // Debugging
+    console.log("work_area data:", work_area);
+    console.log("department data:", department);
+    console.log("location data:", location);
+  
+    // Ensure the data is an array
+    const departmentOptions = Array.isArray(department)
+      ? department.map((dep) => ({ value: dep.id, label: dep.value }))
+      : [];
+    const locationOptions = Array.isArray(location)
+      ? location.map((loc) => ({ value: loc.id, label: loc.value }))
+      : [];
+    const workAreaOptions = work_area
+      ? work_area?.data?.original?.data?.map((area) => ({
+          value: area.id,
+          label: area.name,
+        }))
+      : [];
 
   // const handleMonthChange = (selectedOption) => {
   //   const currentDay = dayjs(date).date();
@@ -173,6 +220,7 @@ const ShiftCalendar = () => {
     } else {
       newStartDate = dayjs(startDate).subtract(1, "month").toDate();
     }
+    setDate(newStartDate)
     setStartDate(newStartDate);
     setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
@@ -186,6 +234,7 @@ const ShiftCalendar = () => {
     } else {
       newStartDate = dayjs(startDate).add(1, "month").toDate();
     }
+    setDate(newStartDate)
     setStartDate(newStartDate);
     setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
@@ -260,7 +309,7 @@ const ShiftCalendar = () => {
             <div className="flex items-center justify-center">
               <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
                 {/* Daily, Weekly, Monthly Buttons */}
-                {["weekly", "monthly"].map((option) => (
+                {["monthly"].map((option) => (
                   <button
                     key={option}
                     className={`btn-sm flex items-center rounded-md px-4 py-2 ${
@@ -364,21 +413,7 @@ const ShiftCalendar = () => {
                     >
                       <DatePicker
                         selected={selectedYear}
-                        onChange={(date) => {
-                          setSelectedYear(date);
-
-                          const newYear = dayjs(date).year();
-
-                          const newStartDate = dayjs(
-                            `${newYear}-01-01`,
-                          ).toDate();
-                          const newEndDate = dayjs(`${newYear}-12-31`).toDate();
-
-                          setStartDate(newStartDate);
-                          setEndDate(newEndDate);
-
-                          setIsOpen(false);
-                        }}
+                        onChange={handleYearChange}
                         showYearPicker
                         dateFormat="yyyy"
                         inline
@@ -393,61 +428,28 @@ const ShiftCalendar = () => {
             <div className="flex w-full items-center justify-between py-2">
               <div className="flex items-center gap-4">
                 <Select
-                  options={[
-                    { value: "HR", label: "HR" },
-                    { value: "Engineering", label: "Engineering" },
-                    { value: "Marketing", label: "Marketing" },
-                  ]}
+                  options={departmentOptions}
                   isSearchable={true}
-                  //   onChange={handleDepartmentChange}
+                  onChange={(option) => setActiveDepartment(option?.value || "")}
                   styles={customSelectStyles}
                   placeholder="Select Department"
                   className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
                 />
 
                 <Select
-                  options={[
-                    { value: "New York", label: "New York" },
-                    { value: "San Francisco", label: "San Francisco" },
-                    { value: "Chicago", label: "Chicago" },
-                  ]}
+                  options={locationOptions}
                   isSearchable={true}
-                  //   onChange={handleLocationChange}
+                  onChange={(option) => setActiveLocation(option?.value || "")}
                   styles={customSelectStyles}
                   placeholder="Select Location"
                   className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
                 />
-
-                {/* <Select
-                  options={[
-                    { value: "Office", label: "Office" },
-                    { value: "Remote", label: "Remote" },
-                    { value: "Hybrid", label: "Hybrid" },
-                  ]}
-                  isSearchable={true}
-                  //   onChange={handleWorkAreaChange}
-                  styles={customSelectStyles}
-                  placeholder="Select Work Area"
-                  className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-                />
-                <Select
-                  options={employee}
-                  isSearchable={true}
-                  onChange={(option) => setActiveEmployee(option?.id || "")}
-                  styles={customSelectStyles}
-                  placeholder={"All employee"}
-                  className="input-box h-10 w-52 rounded-md border-[#C2C1C1] bg-white p-0 px-2 caret-white focus:border-[#C2C1C1]"
-                /> */}
               </div>
               <div className="flex items-center gap-4">
                 <Select
-                  options={[
-                    { value: "Office", label: "Office" },
-                    { value: "Remote", label: "Remote" },
-                    { value: "Hybrid", label: "Hybrid" },
-                  ]}
+                  options={workAreaOptions}
                   isSearchable={true}
-                  //   onChange={handleWorkAreaChange}
+                  onChange={(option) => setActiveWorkArea(option?.value || "")}
                   styles={customSelectStyles}
                   placeholder="Select Work Area"
                   className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"

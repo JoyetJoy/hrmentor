@@ -71,6 +71,8 @@ const EmployeeAccessAttendanceCalendar = () => {
         ),
       )
       .toDate();
+      console.log(updatedDate);
+      
     setDate(updatedDate); // Synchronize date state
   };
 
