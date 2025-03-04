@@ -17,6 +17,7 @@ export default function Attendance() {
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
   const [empId, setEmpId] = useState();
+  const [type, setType] = useState('');
   const [attendaceData, setAttendanceData] = useState();
   const [selectedDate, setSelectedDate] = useState();
 
@@ -202,12 +203,19 @@ export default function Attendance() {
   };
   console.log();
 
-  const eventClick = (id, date, attendance) => {
+  const eventClick = (id, date, attendance,type) => {
     console.log(attendance);
 
     if (id && date && attendance?.attendance_id) {
       setSelectedDate(date);
       setEmpId(id);
+      setType('Present')
+      setAttendanceData(attendance);
+      setAttendance(true);
+    }else if(id && date && !attendance?.attendance_id){
+      setSelectedDate(date);
+      setEmpId(id);
+      setType('Absent')
       setAttendanceData(attendance);
       setAttendance(true);
     }
@@ -410,6 +418,8 @@ export default function Attendance() {
               attendance={attendance}
               setAttendance={setAttendance}
               selectedDate={selectedDate}
+              attendaceData={attendaceData}
+              types={type}
               empId={empId}
             />
           </div>
@@ -466,6 +476,7 @@ export default function Attendance() {
                                     employee?.employee_id,
                                     day.fullDate,
                                     shift,
+                                    'change'
                                   )
                                 }
                                 className={`flex cursor-pointer justify-center gap-2 text-center text-[0.8rem] font-semibold`}

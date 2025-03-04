@@ -156,6 +156,13 @@ export default function PayrollList() {
       setStartDate(formatDateRange(newStartDate));
       setEndDate(formatDateRange(endDate));
     } else if (monthValue === "3") {
+
+      const newEndDate = new Date(
+        newStartDate.getTime() + 12 * 24 * 60 * 60 * 1000,
+      ); // Weekly: Add 6 days
+      setStartDate(formatDateRange(newStartDate));
+      setEndDate(formatDateRange(newEndDate));
+      
       // Set startDate to newStartDate + 1 day
       const start_Date = new Date(endDate2);
       start_Date.setDate(start_Date.getDate() + 1);

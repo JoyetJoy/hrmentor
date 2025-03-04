@@ -160,6 +160,8 @@ export const ATTENDANCE = "/employee-attendances";
 export const TEAM_ATTENDANCE = "/employee-team-attendances";
 // ATTENDANCES
 export const ATTENDANCES = "/role-attendances";
+// ATTENDACE GET
+export const ATTENDANCE_GET = "/attendance-by-id";
 //SHIFT EMPLOYEE DETAILS
 export const TEAMROSTER_EMPLOYEELIST = "/roster-employee-list";
 //EMPLOYEE TEAM TIMESHEET LIST

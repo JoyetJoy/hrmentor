@@ -4,8 +4,9 @@ import AddEntryModal from "./AddEntry";
 import toast from "react-hot-toast";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
+import { ATTENDANCE_GET, ATTENDANCES } from "@/api/master";
 
-const Index = ({ attendance, setAttendance,empId, selectedDate }) => {
+const Index = ({ attendance, setAttendance,empId, attendaceData, selectedDate, types }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
   const [entry, setEntry] = useState("");
@@ -17,17 +18,20 @@ const Index = ({ attendance, setAttendance,empId, selectedDate }) => {
     remarks: "",
     status: "",
   });
+console.log(attendaceData);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["clockin", empId, selectedDate],
+    queryKey: ["attendanceData", attendaceData?.attendance_id],
     queryFn: () =>
       newRequest
         .get(
-          `${ATTENDANCES}?start_date=${startDate}&end_date=${endDate}&role=hrmanager`,
+          `${ATTENDANCE_GET}?id=${attendaceData?.attendance_id}`,
         )
         .then((res) => res.data),
-    enabled: !!empId && !!selectedDate,
+    enabled: !!attendaceData?.attendance_id
   });
+  console.log(data);
+  
 
   const deleteEntry = () => {
     setEntry("");
