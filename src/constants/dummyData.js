@@ -234,11 +234,29 @@ export const menuitems = [
   {
     id: 5,
     iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/roster.svg",
+    iconSrcActive: "/assets/icons/admin/rosterfill.svg",
+    name: "Roster",
+    path: "/admin/roster",
+    active: "roster",
+  },
+  {
+    id: 6,
+    iconType: "image",
     iconSrcBlack: "/assets/icons/admin/attendance-black.svg",
     iconSrcActive: "/assets/icons/admin/attendance-color.svg",
     name: "Attendance",
     path: "/admin/attendance",
     active: "attendance",
+  },
+  {
+    id: 7,
+    iconType: "image",
+    iconSrcBlack: "/assets/icons/admin/leaveday.svg",
+    iconSrcActive: "/assets/icons/admin/leave.svg",
+    name: "Leave",
+    path: "/admin/leave/request",
+    active: "leave",
   },
 ];
 
@@ -328,21 +346,10 @@ export const activityItems = [
     path: "/admin/payroll",
   },
   {
-    icon: "/assets/icons/admin/leaveday.svg",
-    label: "Leave",
-    path: "/admin/leave/request",
-  },
-  {
     icon: "/assets/icons/admin/shift.svg",
     label: "Shift",
     path: "/admin/shift",
   },
-  {
-    icon: "/assets/icons/admin/roster.svg",
-    label: "Roster",
-    path: "/admin/roster",
-  },
-
   {
     icon: "/assets/icons/admin/setup.svg",
     label: "Setup",
