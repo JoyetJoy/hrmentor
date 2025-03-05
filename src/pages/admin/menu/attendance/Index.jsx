@@ -17,11 +17,8 @@ export default function Attendance() {
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
   const [empId, setEmpId] = useState();
-  const [type, setType] = useState('');
-  const [attendaceData, setAttendanceData] = useState();
-  const [selectedDate, setSelectedDate] = useState();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading,refetch } = useQuery({
     queryKey: ["attendance", startDate, endDate],
     queryFn: () =>
       newRequest
@@ -206,7 +203,7 @@ export default function Attendance() {
   };
   console.log();
 
-  const eventClick = (id,empname, date, day, attendance,type) => {
+  const eventClick = (id,empname, date, day, attendance) => {
     console.log(day);
     setEmpId({
       id,
@@ -414,10 +411,8 @@ export default function Attendance() {
             <Atendance
               attendance={attendance}
               setAttendance={setAttendance}
-              selectedDate={selectedDate}
-              attendaceData={attendaceData}
-              types={type}
               empId={empId}
+              refetch={refetch}
             />
           </div>
         </div>
@@ -474,8 +469,7 @@ export default function Attendance() {
                                     employee?.employee_name,
                                     day.fullDate,
                                     day.fullDay,
-                                    shift,
-                                    'change'
+                                    shift
                                   )
                                 }
                                 className={`flex cursor-pointer justify-center gap-2 text-center text-[0.8rem] font-semibold`}

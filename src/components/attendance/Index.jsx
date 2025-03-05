@@ -7,14 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ATTENDANCE_GET, CHANGE_ATTENDANCE } from "@/api/master";
 import dayjs from "dayjs";
 
-const Index = ({
-  attendance,
-  setAttendance,
-  empId,
-  attendaceData,
-  selectedDate,
-  types,
-}) => {
+const Index = ({ attendance, setAttendance, empId, refetch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
   const [entry, setEntry] = useState("");
@@ -45,7 +38,7 @@ const Index = ({
     if (data?.clock_in_time) {
       const clockin = dayjs(data?.clock_in_time).format("HH:mm");
       const clockout = dayjs(data?.clock_out_time).format("HH:mm");
-      setLeave(empId?.attendance?.status)
+      setLeave(empId?.attendance?.status);
 
       if (clockin || clockout) {
         setEntry({
@@ -73,37 +66,35 @@ const Index = ({
 
   const save = async () => {
     try {
-      if(fullData?.status=='Present'&& (!fullData?.clockIn ||!fullData?.clockOut)){
-        toast.error('Add clockin clockout data');
+      if (
+        fullData?.status == "Present" &&
+        (!fullData?.clockIn || !fullData?.clockOut)
+      ) {
+        toast.error("Add clockin clockout data");
         return;
       }
       let data;
-      if(empId?.attendance?.status==='Present'){
-        data = {
-          id : empId?.attendance?.attendance_id,
-          status : fullData?.status,
-          clock_in : fullData?.clockIn,
-          clock_out : fullData?.clockOut,
-          remarks : fullData?.remarks
 
-        }
-      }else{
-        data = {
-          status : fullData?.status,
-          shift_id : empId?.attendance?.shift_id,
-          roster_id : empId?.attendance?.roster_id,
-          attendance_date : empId?.date,
-          employee_id : empId?.id,
-          clock_in : fullData?.clockIn,
-          clock_out : fullData?.clockOut,
-          remarks : fullData?.remarks
+      data = {
+        id: empId?.attendance?.attendance_id,
+        status: fullData?.status,
+        current_status: empId?.attendance?.status,
+        shift_id: empId?.attendance?.shift_id,
+        roster_id: empId?.attendance?.roster_id,
+        attendance_date: empId?.date,
+        employee_id: empId?.id,
+        clock_in: fullData?.clockIn,
+        clock_out: fullData?.clockOut,
+        remarks: fullData?.remarks,
+      };
 
-        }
-      }
       console.log(data);
-      
-      const response = await newRequest.post(CHANGE_ATTENDANCE,data);
+
+      const response = await newRequest.post(CHANGE_ATTENDANCE, data);
       if (response.status === 200) {
+        refetch();
+        setEntry();
+        setAttendance(false);
         toast.success("Created successfully");
       }
     } catch (error) {
@@ -191,7 +182,7 @@ const Index = ({
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Status</p>
-                <p>{empId?.attendance?.status}</p>
+                <p>{fullData?.status}</p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Shift Time</p>

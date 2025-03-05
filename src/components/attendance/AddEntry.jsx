@@ -141,7 +141,7 @@ const AddEntryModal = ({
                 {/* ✅ Check-out Time */}
                 <div className="w-1/2">
                   <label className="block text-sm font-medium text-gray-700">
-                    Check-out Time
+                    Clock-out Time
                   </label>
                   <input
                     type="text"

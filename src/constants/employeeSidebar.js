@@ -88,21 +88,26 @@ export const employeeSettingSideList = [
   },
   {
     id: 5,
+    link: "/admin/employee/settings/work-area",
+    name: "Work Area",
+  },
+  {
+    id: 6,
     link: "/admin/employee/settings/document-category",
     name: "Document Category",
   },
   {
-    id: 6,
+    id: 7,
     link: "/admin/employee/settings/document-type",
     name: "Document Type",
   },
   {
-    id: 7,
+    id: 8,
     link: "/admin/employee/settings/ethnicity",
     name: "Ethnicity",
   },
   {
-    id: 8,
+    id: 9,
     link: "/admin/employee/settings/eeo-category",
     name: "EEO Job Categories",
   },
