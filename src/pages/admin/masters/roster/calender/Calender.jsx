@@ -45,6 +45,7 @@ const RosterCalendar = () => {
     shiftId:'',
     type:''
   });
+  const [shiftIds, setShiftIds] = useState([]);
 
   const useFetchData = (key, url) => {
     return useQuery({
@@ -296,13 +297,21 @@ const RosterCalendar = () => {
     console.log("End Date:", dateRange.end);
   };
 
-  const changeShift = (empId,date,type,shiftId)=>{
-    console.log(type);
+  const changeShift = (empId,date,type,shiftId,rosterid,shifts)=>{
+    console.log(shifts);
+   if(type==='add'){
+    shifts?.map((shift) => {
+      setShiftIds((prev) => {
+        return [...prev, { shift_id: shift?.shift_id }];
+      });
+    });   
+   } 
     
     setShiftDetails({
       empId,
       date,
       shiftId,
+      rosterid,
       type
     });
     setShiftPopup(true);
@@ -311,7 +320,7 @@ const RosterCalendar = () => {
   
   return (
     <>
-      <ChangeShift popupOpen={shiftPopup} setPopupOpen={setShiftPopup} data={shiftDetails}/>
+      <ChangeShift popupOpen={shiftPopup} setPopupOpen={setShiftPopup} data={shiftDetails} shiftIds={shiftIds}/>
       <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex py-4">
         <div className="w-full">
@@ -525,7 +534,7 @@ const RosterCalendar = () => {
                                   {attendanceEntry?.shifts?.map((shift) => (
                                     <div
                                     key={shift?.shift_id}
-                                    onClick={()=> changeShift(emp?.id,day.fullDate,'change',shift?.shift_id)}
+                                    onClick={()=> changeShift(emp?.id,day.fullDate,'change',shift?.shift_id,shift?.roster_id)}
                                       style={{
                                         background:
                                           shift?.shift_color || "#bfdbfe",
@@ -556,7 +565,7 @@ const RosterCalendar = () => {
 
                                   <p className="relative flex w-full items-center justify-center">
                                     <button
-                                      onClick={()=> changeShift(emp?.id,day.fullDate,'add','')}
+                                      onClick={()=> changeShift(emp?.id,day.fullDate,'add','','',attendanceEntry?.shifts)}
                                       onMouseEnter={() => setHoveredShift({id:emp?.id,date:day.fullDate,type:'add',empid:''})}
                                       onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
                                       className="cursor-pointer text-2xl font-bold text-blue-500 h-10 w-10"

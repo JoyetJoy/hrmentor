@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 
-export default function ChangeShift({ popupOpen, setPopupOpen, data }) {
+export default function ChangeShift({ popupOpen, setPopupOpen, data, shiftIds }) {
   const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
   const [employeeError, setEmployeeError] = useState("");
