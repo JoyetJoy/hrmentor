@@ -26,18 +26,16 @@ const EmployeeAccessAttendanceCalendar = () => {
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
   const [selected, setSelected] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events", month, year, startTime, endTime],
     queryFn: () =>
       newRequest
-        .get(ATTENDANCE, {
-          params: { month, year, startTime, endTime },
-        })
+        .get(ATTENDANCE, { params: { month, year, startTime, endTime } })
         .then((res) => res.data),
-    enabled: true,
+    enabled: !!startTime && !!endTime,
     staleTime: 0,
   });
 
@@ -48,13 +46,17 @@ const EmployeeAccessAttendanceCalendar = () => {
     setPopupOpen(true);
   };
   useEffect(() => {
-    console.log("Initial fetch for:", { month, year, startTime });
+    console.log("Initial fetch for:", { month, year });
     refetch();
   }, []);
-
   useEffect(() => {
-    if (month && year && startTime) {
-      console.log("Refetching events for:", { month, year, startTime });
+    if (startTime && endTime) {
+      refetch();
+    }
+  }, [startTime, endTime, refetch]);
+  useEffect(() => {
+    if (month && year) {
+      console.log("Refetching events for:", { month, year });
       refetch();
     }
   }, [date, month, year, refetch]);
