@@ -44,6 +44,7 @@ const AddEntryModal = ({
   } = useForm({
     resolver: yupResolver( schema),
   });
+console.log(entry);
 
   const { data } = useQuery({
     queryKey: ["leavetype"],
@@ -57,14 +58,17 @@ const AddEntryModal = ({
   console.log(data);
 
   useEffect(() => {
+    console.log('hiiii');
+    
     if (type === "Edit") {
+     console.log('type');
      
         setValue("checkIn", entry?.clockIn);
         setValue("checkOut", entry?.clockOut);
         setValue("remarks", entry?.remarks || " ");
       
     }
-  }, [type]);
+  }, [addEntry,type]);
 
   // ✅ Handle Form Submission
   const onSubmit = (data) => {

@@ -1,6 +1,6 @@
 import { EMPLOYEE_WORK_LOCATION } from "@/api/master";
 import { EmployeeMasters } from "@/components/popups/employees/settings/common/Listing";
-import { employeeColumnKeysForWorkLocation } from "@/lib/columns/employee";
+import { employeeColumnKeysForWorkArea } from "@/lib/columns/employee";
 
 export const EmployeeWorkArea = () => {
   return (
@@ -8,7 +8,7 @@ export const EmployeeWorkArea = () => {
       <EmployeeMasters
         api={EMPLOYEE_WORK_LOCATION}
         qryKey={"employeeWorkLocationList"}
-        colKeys={employeeColumnKeysForWorkLocation}
+        colKeys={employeeColumnKeysForWorkArea}
         type={"Work Area"}
       />
     </>
