@@ -4,9 +4,17 @@ import AddEntryModal from "./AddEntry";
 import toast from "react-hot-toast";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
-import { ATTENDANCE_GET, ATTENDANCES } from "@/api/master";
+import { ATTENDANCE_GET, CHANGE_ATTENDANCE } from "@/api/master";
+import dayjs from "dayjs";
 
-const Index = ({ attendance, setAttendance,empId, attendaceData, selectedDate, types }) => {
+const Index = ({
+  attendance,
+  setAttendance,
+  empId,
+  attendaceData,
+  selectedDate,
+  types,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
   const [entry, setEntry] = useState("");
@@ -18,20 +26,36 @@ const Index = ({ attendance, setAttendance,empId, attendaceData, selectedDate, t
     remarks: "",
     status: "",
   });
-console.log(empId);
+  console.log(empId);
 
   const { data, isLoading } = useQuery({
     queryKey: ["attendanceData", empId?.attendance?.attendance_id],
     queryFn: () =>
       newRequest
-        .get(
-          `${ATTENDANCE_GET}?id=${empId?.attendance?.attendance_id}`,
-        )
+        .get(`${ATTENDANCE_GET}?id=${empId?.attendance?.attendance_id}`)
         .then((res) => res.data),
-    enabled: !!empId?.attendance?.attendance_id
+    enabled: !!empId?.attendance?.attendance_id,
   });
   console.log(data);
-  
+  useEffect(() => {
+    if (!empId?.attendance?.attendance_id) {
+      setLeave(empId?.attendance?.status);
+      setEntry();
+    }
+    if (data?.clock_in_time) {
+      const clockin = dayjs(data?.clock_in_time).format("HH:mm");
+      const clockout = dayjs(data?.clock_out_time).format("HH:mm");
+      setLeave(empId?.attendance?.status)
+
+      if (clockin || clockout) {
+        setEntry({
+          clockIn: clockin || "00:00",
+          clockOut: clockout || "00:00",
+          remarks: "",
+        });
+      }
+    }
+  }, [data, empId]);
 
   const deleteEntry = () => {
     setEntry("");
@@ -47,19 +71,52 @@ console.log(empId);
     }));
   }, [entry, leave]);
 
-  const save = async() => {
-    try{
-      const response = await newRequest.post()
-      if(response.status===200){
-        toast.success('Created successfully')
+  const save = async () => {
+    try {
+      if(fullData?.status=='Present'&& (!fullData?.clockIn ||!fullData?.clockOut)){
+        toast.error('Add clockin clockout data');
+        return;
       }
+      let data;
+      if(empId?.attendance?.status==='Present'){
+        data = {
+          id : empId?.attendance?.attendance_id,
+          status : fullData?.status,
+          clock_in : fullData?.clockIn,
+          clock_out : fullData?.clockOut,
+          remarks : fullData?.remarks
 
-    }catch(error){
-      toast.error('Something went wrong , Try after sometimes')
+        }
+      }else{
+        data = {
+          status : fullData?.status,
+          shift_id : empId?.attendance?.shift_id,
+          roster_id : empId?.attendance?.roster_id,
+          attendance_date : empId?.date,
+          employee_id : empId?.id,
+          clock_in : fullData?.clockIn,
+          clock_out : fullData?.clockOut,
+          remarks : fullData?.remarks
+
+        }
+      }
+      console.log(data);
+      
+      const response = await newRequest.post(CHANGE_ATTENDANCE,data);
+      if (response.status === 200) {
+        toast.success("Created successfully");
+      }
+    } catch (error) {
+      toast.error("Something went wrong , Try after sometimes");
     }
     console.log(fullData);
 
     // setAttendance(false);
+  };
+
+  const onclose = () => {
+    setEntry();
+    setAttendance(false);
   };
   return (
     <div className="flex justify-end">
@@ -78,7 +135,7 @@ console.log(empId);
             </p>
             <button
               type="button"
-              onClick={() => setAttendance(false)}
+              onClick={() => onclose()}
               className="text-lg font-extrabold text-[#555c5f]"
             >
               <X />
@@ -88,37 +145,65 @@ console.log(empId);
             <div className="flex flex-col gap-1">
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Name</p>
-                <p>{empId?.attendance?.attendance_id?data :empId?.empname}</p>
+                <p>
+                  {empId?.attendance?.attendance_id
+                    ? data?.employee?.first_name + data?.employee?.sur_name
+                    : empId?.empname}
+                </p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Date</p>
-                <p>{empId?.attendance?.attendance_id?data : empId?.date}</p>
+                <p>
+                  {empId?.attendance?.attendance_id
+                    ? data?.attendance_date
+                    : empId?.date}
+                </p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Duration</p>
-                <p>00:00</p>
+                <p>
+                  {empId?.attendance?.attendance_id
+                    ? data?.shift_detail?.shift_duration
+                    : "00:00:00"}
+                </p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Shift Name</p>
-                <p>{empId?.attendance?.attendance_id?data : empId?.attendance?.shift_name}</p>
+                <p>
+                  {empId?.attendance?.attendance_id
+                    ? data?.shift_detail?.name
+                    : empId?.attendance?.shift_name}
+                </p>
               </div>
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Employee Id</p>
-                <p>{empId?.attendance?.attendance_id?data : empId?.id}</p>
+                <p>
+                  {empId?.attendance?.attendance_id
+                    ? data?.employee_id
+                    : empId?.id}
+                </p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Day</p>
-                <p>{empId?.attendance?.attendance_id?data : empId?.day}</p>
+                <p>{empId?.day}</p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Status</p>
-                <p>{empId?.attendance?.attendance_id?data : empId?.attendance?.status}</p>
+                <p>{empId?.attendance?.status}</p>
               </div>
               <div className="flex w-full justify-between">
                 <p className="text-[#2d2c2c]">Shift Time</p>
-                <p>{empId?.attendance?.attendance_id?data : empId?.attendance?.start_time} - {empId?.attendance?.attendance_id?data : empId?.attendance?.end_time}</p>
+                <p>
+                  {empId?.attendance?.attendance_id
+                    ? data?.shift_detail?.start_time
+                    : empId?.attendance?.start_time}{" "}
+                  -{" "}
+                  {empId?.attendance?.attendance_id
+                    ? data?.shift_detail?.end_time
+                    : empId?.attendance?.end_time}
+                </p>
               </div>
             </div>
           </div>
@@ -188,7 +273,7 @@ console.log(empId);
                 <ul className="p-2">
                   <li
                     onClick={() => {
-                      setLeave("present");
+                      setLeave("Present");
                       setIsDropdownOpen(false);
                     }}
                     className="cursor-pointer p-2 hover:bg-gray-200"
@@ -197,7 +282,7 @@ console.log(empId);
                   </li>
                   <li
                     onClick={() => {
-                      setLeave("absent");
+                      setLeave("Absent");
                       setIsDropdownOpen(false);
                     }}
                     className="cursor-pointer p-2 hover:bg-gray-200"
@@ -206,7 +291,7 @@ console.log(empId);
                   </li>
                   <li
                     onClick={() => {
-                      setLeave("leave");
+                      setLeave("Leave");
                       setIsDropdownOpen(false);
                     }}
                     className="cursor-pointer p-2 hover:bg-gray-200"
