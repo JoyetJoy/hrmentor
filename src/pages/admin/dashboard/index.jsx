@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 export const AdminDashboard = () => {
   // Fetch dashboard data
-  
+
   const { data: admindashboard } = useQuery({
     queryKey: ["admindashboard"],
     queryFn: () => newRequest.get(ADMIN_DASHBOARD).then((res) => res.data),
@@ -19,15 +19,15 @@ export const AdminDashboard = () => {
   });
 
   const handleClick = (event, date) => {
-     if (!event?.isHoliday) {
-       const selectdate = dayjs(date).format("YYYY-MM-DD");
-       if (date) {
-         navigate(
-           `/admin/shift/calendarview?id=${event?.id}&date=${selectdate}`,
-         );
-       }
-     }
-   };
+    if (!event?.isHoliday) {
+      const selectdate = dayjs(date).format("YYYY-MM-DD");
+      if (date) {
+        navigate(
+          `/admin/shift/calendarview?id=${event?.id}&date=${selectdate}`,
+        );
+      }
+    }
+  };
 
   const cardsData = [
     {
@@ -36,7 +36,9 @@ export const AdminDashboard = () => {
         const selectdate = dayjs(shift?.shift?.date).format("YYYY-MM-DD");
         return {
           type: shift?.shift?.name,
-          date: shift?.shift?.people_required,
+          count: shift?.shift?.people_required,
+          date: shift?.shift?.start_date,
+          dates:`${dayjs(shift?.start_date).format("DD/MM/YY")} - ${dayjs(shift?.end_date).format("DD/MM/YY")}`,
           path: shift?.shift?.isHoliday
             ? ``
             : `/admin/shift/calendarview?id=${shift?.shift?.id}&date=${selectdate}`,
@@ -46,9 +48,11 @@ export const AdminDashboard = () => {
     },
     {
       title: "Available Slot",
-      details: admindashboard?.available_slots?.map((holiday) => ({
-        type: holiday.holiday_name,
-        date: holiday.date,
+      details: admindashboard?.available_slots?.map((slot) => ({
+        type: slot?.shift?.name,
+        count: slot?.shift?.people_required,
+        date: slot?.shift?.start_date,
+        dates:`${dayjs(slot?.start_date).format("DD/MM/YY")} - ${dayjs(slot?.end_date).format("DD/MM/YY")}`
       })),
       path: "/admin/shift/available-slots", // Add a default path
     },
@@ -57,23 +61,27 @@ export const AdminDashboard = () => {
       details: admindashboard?.upcoming_holidays?.map((holiday) => ({
         type: holiday.holiday_name,
         date: holiday.date,
+        time:  dayjs(holiday.created_at).format("HH:MM")
       })),
       path: "/admin/leave/bankholidays", // Existing path
     },
     {
       title: "People on Leave",
-      details: admindashboard?.people_on_leave?.map((holiday) => ({
-        type: holiday.holiday_name,
-        date: holiday.date,
+      details: admindashboard?.people_on_leave?.map((leave) => ({
+        type: [
+          leave?.employee?.first_name,
+          leave?.employee?.middle_name,
+          leave?.employee?.sur_name,
+        ]
+          .filter(Boolean)
+          .join(" "),
+        // date: [leave?.date],
       })),
-      path: "/admin/leave/people-on-leave", // Add a default path
+      path: "/admin/leave/people-on-leave",
     },
   ];
 
-  console.log(
-    admindashboard?.upcoming_shifts,
-    "admindashboardadmindashboard",
-  );
+  console.log(admindashboard?.available_slots, "available_slots");
   return (
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
       <div className="flex min-w-[73%] flex-col gap-3">
@@ -104,7 +112,7 @@ export const AdminDashboard = () => {
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
               </label>
-              <div className="overflow-y-min flex max-h-[12rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+              <div className="overflow-y-min flex max-h-[13rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
                 {card.details?.length > 0 ? (
                   card.details.map((item, idx) => (
                     <div
@@ -115,7 +123,7 @@ export const AdminDashboard = () => {
                         <div
                           className={`flex h-11 w-11 items-center justify-center rounded-full border p-1 ${card.title === "Upcoming Holidays" || "Upcoming Shift" ? "bg-hrmprimaryorange" : "bg-gray-100"}`}
                         >
-                          {card.title === "People on leave" ? (
+                          {card.title === "People on Leave" ? (
                             <img
                               src="/assets/images/profile.jpg"
                               alt="People on Leave"
@@ -129,8 +137,13 @@ export const AdminDashboard = () => {
                           )}
                         </div>
                         <label className="text-xs text-black">
-                          <h1>{item?.type}</h1>
-                          <h1>{item?.count || item?.date}</h1>
+                          <h1 className="text-sm font-semibold">
+                            {item?.type?.charAt(0).toUpperCase() +
+                              item?.type?.slice(1)}
+                          </h1>
+                          <h1>{item?.dates  || item?.date}</h1>
+                          {/* <h1>{item?.date || ""}</h1> */}
+                          <h1>{item?.time || `Employee: ${item?.count}`}</h1>
                         </label>
                       </div>
                       <Link
@@ -165,11 +178,11 @@ export const AdminDashboard = () => {
               View <Eye className="size-4 text-black/70" />
             </Link>
           </h1>
-          <div className="overflow-y-min  flex max-h-[14.3rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+          <div className="overflow-y-min flex max-h-[14.3rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
             {admindashboard?.newsandevents?.events.map((event, index) => (
               <div
                 key={index}
-                className="flex flex-row rounded-md border border-gray-300 mr-5 min-h-20"
+                className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
               >
                 <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(event.start_date).format("D")} <br />
@@ -191,7 +204,7 @@ export const AdminDashboard = () => {
             {admindashboard?.newsandevents?.news.map((newss, index) => (
               <div
                 key={index}
-                className="flex flex-row rounded-md  min-h-20 border border-gray-300 mr-5"
+                className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
               >
                 <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
                   {dayjs(newss.start_date).format("D")} <br />
