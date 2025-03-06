@@ -574,11 +574,11 @@ const RosterCalendar = () => {
                                         <p className="relative text-xs font-semibold">
                                           {shift.shift_name}
                                           <span className="absolute right-1 -top-2"
-                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.id})}
+                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.employee?.id})}
                                             onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
                                           ><ChevronDown size={20} />
                                           {/* Tooltip */}
-                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.id && (
+                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.employee?.id && (
                                             <span className="absolute right-0 top-6 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
                                               Change Shift
                                             </span>
@@ -599,11 +599,11 @@ const RosterCalendar = () => {
                                         <p className="relative text-xs font-semibold">
                                           Holiday
                                           <span className="absolute right-1 -top-2"
-                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.id})}
+                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.employee?.id})}
                                             onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
                                           ><ChevronDown size={20} />
                                           {/* Tooltip */}
-                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.id && (
+                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.employee?.id && (
                                             <span className="absolute right-0 top-6 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
                                               Change Shift
                                             </span>
@@ -619,14 +619,14 @@ const RosterCalendar = () => {
                                   <p className="relative flex w-full items-center justify-center">
                                     <button
                                       onClick={()=> changeShift(emp?.id,day.fullDate,'add','','',attendanceEntry?.shifts)}
-                                      onMouseEnter={() => setHoveredShift({id:emp?.id,date:day.fullDate,type:'add',empid:''})}
+                                      onMouseEnter={() => setHoveredShift({id:emp?.employee?.id,date:day.fullDate,type:'add',empid:''})}
                                       onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
                                       className="cursor-pointer text-2xl font-bold text-blue-500 h-10 w-10"
                                     >
                                       +
                                     </button>
                                     {/* Tooltip */}
-                                    {hoveredShift?.id === emp?.id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'add' && (
+                                    {hoveredShift?.id === emp?.employee?.id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'add' && (
                                       <span className="absolute right-8 top-10 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
                                         Add Shift
                                       </span>
