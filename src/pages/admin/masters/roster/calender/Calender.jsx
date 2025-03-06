@@ -590,6 +590,31 @@ const RosterCalendar = () => {
                                         </p>
                                     </div>
                                   ))}
+                                  {holidayEvents?.map((shift,index) => (
+                                    <div
+                                    key={index}
+                                    onClick={()=> changeShift(emp?.id,day.fullDate,'change',shift?.shift_id,shift?.roster_id)}
+                                      className={`h-[3.5rem] min-w-44 rounded-md py-3 text-black cursor-pointer bg-[#ff89ca]`}
+                                    >
+                                        <p className="relative text-xs font-semibold">
+                                          Holiday
+                                          <span className="absolute right-1 -top-2"
+                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.id})}
+                                            onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
+                                          ><ChevronDown size={20} />
+                                          {/* Tooltip */}
+                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.id && (
+                                            <span className="absolute right-0 top-6 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
+                                              Change Shift
+                                            </span>
+                                          )}
+                                          </span>
+                                        </p>
+                                        <p className="text-sm">
+                                          {shift?.shift?.start_time} - {shift?.shift?.end_time}
+                                        </p>
+                                    </div>
+                                  ))}
 
                                   <p className="relative flex w-full items-center justify-center">
                                     <button
