@@ -534,8 +534,8 @@ const RosterCalendar = () => {
                   </thead>
                   <tbody className="border">
                     {data?.results?.map((emp, rowIndex) => (
-                      <tr key={rowIndex} className="h-[12rem] w-full border">
-                        <td className="sticky left-0 z-10 flex h-[12rem] min-w-[14rem] items-center space-x-3 bg-white p-3">
+                      <tr key={rowIndex} className="h-[12.5rem] w-full border">
+                        <td className="sticky left-0 z-10 flex h-[12.5rem] min-w-[14rem] items-center space-x-3 bg-white p-3">
                           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-sm text-white">
                             {emp?.employee?.name.charAt(0)}
                           </span>
@@ -557,10 +557,10 @@ const RosterCalendar = () => {
                           return (
                             <td
                               key={index}
-                              className="relative h-[12rem] w-full border p-2 text-center"
+                              className="relative w-full border p-2 text-center overflow-y-auto overflow-y-min "
                             >
                               {shiftEvents ? (
-                                <div className="overflow-y-min flex h-full w-full min-w-[11.4rem] flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden">
+                                <div className="flex flex-col h-[12rem] overflow-y-auto overflow-y-min gap-3 w-full min-w-[11.4rem]" >
                                   {shiftEvents?.map((shift,index) => (
                                     <div
                                     key={index}
