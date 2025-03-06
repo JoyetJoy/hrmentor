@@ -560,7 +560,7 @@ const RosterCalendar = () => {
                               key={index}
                               className="relative w-full border p-2 text-center overflow-y-auto overflow-y-min "
                             >
-                              {shiftEvents ? (
+                              {shiftEvents?.length>0 ? (
                                 <div className="flex flex-col h-[12rem] overflow-y-auto overflow-y-min gap-3 w-full min-w-[11.4rem]" >
                                   {shiftEvents?.map((shift,index) => (
                                     <div
@@ -627,7 +627,7 @@ const RosterCalendar = () => {
                                     </button>
                                     {/* Tooltip */}
                                     {hoveredShift?.id === emp?.employee?.id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'add' && (
-                                      <span className="absolute right-8 -top-7 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
+                                      <span className="absolute right-8 top-10 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
                                         Add Shift
                                       </span>
                                     )}
@@ -674,21 +674,31 @@ const RosterCalendar = () => {
                                       </div>
                                     )}
                                 </div>
-                              ) : attendanceEntry.is_day_off ? (
-                                <div className="min-w-[11.4rem] text-xs text-gray-500">
-                                  DAY OFF
-                                </div>
-                              ) : (
+                              )
+                              //  : attendanceEntry.is_day_off ? (
+                              //   <div className="min-w-[11.4rem] text-xs text-gray-500">
+                              //     DAY OFF
+                              //   </div>
+                              // )
+                               : (
                                 <div className="min-w-[11.4rem]">
                                   {/* Button to Open Popup */}
                                   <button
                                     className="text-2xl font-bold text-blue-500"
+                                    onMouseEnter={() => setHoveredShift({id:emp?.employee?.id,date:day.fullDate,type:'add',empid:''})}
+                                      onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
                                     onClick={() =>
                                       handleOpen(emp?.id)
                                     }
                                   >
                                     +
                                   </button>
+                                   {/* Tooltip */}
+                                   {hoveredShift?.id === emp?.employee?.id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'add' && (
+                                      <span className="absolute right-10 bottom-10 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
+                                        Add Shift
+                                      </span>
+                                    )}
 
                                   {/* Popup Box (only opens for clicked cell) */}
                                   {openPopup?.row === rowIndex &&
