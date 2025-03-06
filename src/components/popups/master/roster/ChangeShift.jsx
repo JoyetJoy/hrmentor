@@ -15,8 +15,9 @@ import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
+import { EMPLOYEE_LIST_SHIFT, SWAP_SHIFT } from "@/api/master";
 
-export default function ChangeShift({ popupOpen, setPopupOpen, data, shiftIds }) {
+export default function ChangeShift({ popupOpen, setPopupOpen, datas, shiftIds }) {
   const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
   const [employeeError, setEmployeeError] = useState("");
@@ -37,27 +38,50 @@ export default function ChangeShift({ popupOpen, setPopupOpen, data, shiftIds })
     setPopupOpen(false);
     reset();
   }
+console.log(errors);
 
   const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
 
   const { data: shiftlist } = useQuery({
-    queryKey: ["rosterEmpList", data],
+    queryKey: ["rosterEmpList", datas],
     queryFn: () => {
-      return newRequest.get(`${GET_SHIFT}?shift_id=${data?.shiftId}&employee_id=${data?.empId}&date=${data?.date}`).then((res) => {
+      return newRequest.get(`${GET_SHIFT}?shift_id=${datas?.shiftId}&employee_id=${datas?.empId}&date=${datas?.date}`).then((res) => {
         return res.data;
       });
     },
-    enabled: !!data,
+    enabled: datas?.type==='add',
   });
 
-  console.log(shiftlist);
+  const { data: employeeList } = useQuery({
+    queryKey: ["employeeList", datas],
+    queryFn: () => {
+      return newRequest.get(`${EMPLOYEE_LIST_SHIFT}?roster_id=${datas?.rosterid}&employee_id=${datas?.empId}&department_id=${datas?.departmentId}`).then((res) => {
+        return res.data;
+      });
+    },
+    enabled: datas?.type==='change',
+  });
+
+  console.log(employeeList);
 
   const handleShiftChange = (selectedOption) => {
     console.log("Selected shift:", selectedOption);
     setSelectedShiftId(selectedOption.value);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
+    if(datas?.type === 'change'){
+      const formdata={
+        swaping_from_employee_id:datas?.empId,
+        swaping_to_employee_id:selectedShiftId,
+        shift_id:datas?.shiftId,
+        roster_id:datas?.rosterid,
+        swaping_date:datas?.date
+      }
+      const response = await newRequest.post(SWAP_SHIFT,formdata);
+      console.log(response);
+      
+    }
     if (employeesdetails.length === 0) {
       setEmployeeError("Employee is required");
     } else {
@@ -105,7 +129,7 @@ export default function ChangeShift({ popupOpen, setPopupOpen, data, shiftIds })
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel className="min-w-[28rem] rounded bg-white p-6">
               <div className="mb-5 flex justify-between">
-                <h1 className="text-md font-bold">{data?.type === 'change' ? 'Change Shift' : 'Add Shift' }</h1>
+                <h1 className="text-md font-bold">{datas?.type === 'change' ? 'Change Shift' : 'Add Shift' }</h1>
                 <button onClick={close}>
                   <X />
                 </button>
@@ -115,10 +139,10 @@ export default function ChangeShift({ popupOpen, setPopupOpen, data, shiftIds })
                   <div>
                     <div className="flex flex-col gap-4">
                       <div>
-                        <label className="text-sm font-medium">{data?.type === 'change'? 'Employee' : 'Shift' }</label>
-                        {data?.type === 'change' ?
+                        <label className="text-sm font-medium">{datas?.type === 'change'? 'Employee' : 'Shift' }</label>
+                        {datas?.type === 'change' ?
                         <Controller
-                        name="employee"
+                        name="shift"
                         control={control}
                         rules={{ required: true }}
                         render={({ field }) => (
@@ -126,7 +150,7 @@ export default function ChangeShift({ popupOpen, setPopupOpen, data, shiftIds })
                             {...field}
                             isSearchable={true}
                             styles={customSelectStyles}
-                            options={shiftList?.data?.original?.data.map(
+                            options={employeeList?.data?.original?.map(
                               (item) => ({
                                 label: item.name,
                                 value: item.id,

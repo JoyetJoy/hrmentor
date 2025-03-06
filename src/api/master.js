@@ -69,7 +69,9 @@ export const EMPLOYEE_WORK_LOCATION_LIST = "active-worklocations";
 //work area
 export const EMPLOYEE_WORK_AREA = "employee-work-area";
 //change shift employee list
-export const EMPLOYEE_LIST_SHIFT = "get-available-employees"
+export const EMPLOYEE_LIST_SHIFT = "get-employees"
+//swap shift
+export const SWAP_SHIFT = "change-shift-roaster";
 
 // Email Onboard Mail Send
 export const EMPLOYEE_ONBOARD_MAIL_SEND = "employee-onboarding-mail-send";

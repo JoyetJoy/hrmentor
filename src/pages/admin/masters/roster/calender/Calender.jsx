@@ -11,7 +11,7 @@ import RosterHeader from "@/components/common/RosterHeader";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { EMPLOYEE_LIST_SHIFT, newRequest, ROASTER_LIST_GET, ROASTER_LISTING } from "@/api/master";
+import { newRequest, ROASTER_LIST_GET, ROASTER_LISTING } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import { dividerClasses } from "@mui/material";
 import DatePicker from "react-datepicker";
@@ -322,16 +322,8 @@ const RosterCalendar = () => {
     console.log("End Date:", dateRange.end);
   };
 
-  const changeShift = async(empId,date,type,departmentId,rosterid,shifts)=>{
-    console.log(empId,date,type,departmentId,rosterid,);
-    if(type === 'change'){
-      try{
-        const response = await newRequest.get(`${EMPLOYEE_LIST_SHIFT}?roster_id=${rosterid}&employee_id=${empId}&department_id=${departmentId}`)
-        console.log(response)
-      }catch(error){
-
-      }
-    }
+  const changeShift = async(empId,shiftId,date,type,departmentId,rosterid,shifts)=>{
+    
    if(type==='add'){
     shifts?.map((shift) => {
       setShiftIds((prev) => {
@@ -345,7 +337,8 @@ const RosterCalendar = () => {
       date,
       shiftId,
       rosterid,
-      type
+      type,
+      departmentId
     });
     setShiftPopup(true);
   }
@@ -353,7 +346,7 @@ const RosterCalendar = () => {
   
   return (
     <>
-      <ChangeShift popupOpen={shiftPopup} setPopupOpen={setShiftPopup} data={shiftDetails} shiftIds={shiftIds}/>
+      <ChangeShift popupOpen={shiftPopup} setPopupOpen={setShiftPopup} datas={shiftDetails} shiftIds={shiftIds}/>
       <NewRoster popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="flex py-4">
         <div className="w-full">
@@ -572,7 +565,7 @@ const RosterCalendar = () => {
                                   {shiftEvents?.map((shift,index) => (
                                     <div
                                     key={index}
-                                    onClick={()=> changeShift(emp?.employee?.id,day.fullDate,'change',emp?.employee?.department_id,shift?.id)}
+                                    onClick={()=> changeShift(emp?.employee?.id,shift?.shift_id,day.fullDate,'change',emp?.employee?.department_id,shift?.id)}
                                       style={{
                                         background:
                                           shift?.shift_color || "#bfdbfe",
@@ -601,7 +594,6 @@ const RosterCalendar = () => {
                                   {holidayEvents?.map((shift,index) => (
                                     <div
                                     key={index}
-                                    onClick={()=> changeShift(emp?.id,day.fullDate,'change',shift?.shift_id,shift?.roster_id,'')}
                                       className={`h-[3.5rem] min-w-44 rounded-md py-3 text-black cursor-pointer bg-[#ff89ca]`}
                                     >
                                         <p className="relative text-xs font-semibold">
@@ -626,7 +618,7 @@ const RosterCalendar = () => {
 
                                   <p className="relative flex w-full items-center justify-center">
                                     <button
-                                      onClick={()=> changeShift(emp?.id,day.fullDate,'add','','',shiftEvents)}
+                                      onClick={()=> changeShift(emp?.id,'',day.fullDate,'add','','',shiftEvents)}
                                       onMouseEnter={() => setHoveredShift({id:emp?.employee?.id,date:day.fullDate,type:'add',empid:''})}
                                       onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
                                       className="cursor-pointer text-2xl font-bold text-blue-500 h-10 w-10"
