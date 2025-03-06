@@ -581,7 +581,7 @@ const RosterCalendar = () => {
                                           {/* Tooltip */}
                                           {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.employee?.id && (
                                             <span className="absolute right-0 top-6 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
-                                              Change Shift
+                                              Reassign
                                             </span>
                                           )}
                                           </span>
@@ -599,15 +599,8 @@ const RosterCalendar = () => {
                                         <p className="relative text-xs font-semibold">
                                           Holiday
                                           <span className="absolute right-1 -top-2"
-                                            onMouseEnter={() => setHoveredShift({id:shift.shift_id,date:day.fullDate,type:'change',empid:emp?.employee?.id})}
-                                            onMouseLeave={() => setHoveredShift({id:'',date:'',type:'',empid:''})}
-                                          ><ChevronDown size={20} />
-                                          {/* Tooltip */}
-                                          {hoveredShift?.id === shift.shift_id && hoveredShift?.date === day.fullDate && hoveredShift?.type === 'change' && hoveredShift?.empid === emp?.employee?.id && (
-                                            <span className="absolute right-0 top-6 bg-gray-800 text-white w-[7rem] text-xs px-2 py-2 rounded-md shadow-md">
-                                              Change Shift
-                                            </span>
-                                          )}
+                                           
+                                          >
                                           </span>
                                         </p>
                                         <p className="text-sm">
