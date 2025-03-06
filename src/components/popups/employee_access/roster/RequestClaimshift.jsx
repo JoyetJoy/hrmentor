@@ -8,8 +8,7 @@ export default function RequestClaimshift({
   popupOpen,
   refetch,
   setPopupOpen,
-  selectedField,
-  convertTo12HourFormat,
+  selectedField
 }) {
   const [note, setNote] = useState('');
   const [error, setError] = useState(null);
@@ -84,13 +83,13 @@ console.log(selectedField);
                   Shift Time
                 </label>
                 <p className="text-sm font-semibold">
-                  {convertTo12HourFormat(
-                    selectedField?.slot?.shift?.start_time || "",
-                  )}
+                  {
+                    selectedField?.slot?.shift?.start_time || ""
+                  }
                   -
-                  {convertTo12HourFormat(
-                    selectedField?.slot?.shift?.end_time || "",
-                  )}
+                  {
+                    selectedField?.slot?.shift?.end_time || ""
+                  }
                 </p>
               </div>
               <div className="group col-span-2 flex w-full flex-col gap-1">

@@ -19,7 +19,7 @@ import RosterHeader from "@/components/common/RosterHeader";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EditRoster from "@/components/popups/master/roster/EditRoster";
 
-export default function RosterList({ rosterDetails, setRosterDetails }) {
+export default function RosterList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [popupOpen, setPopupOpen] = useState(false);

@@ -235,6 +235,31 @@ const RosterCalendar = () => {
   const monthDays = getMonthDays();
   const weekDays = getWeekDays();
 
+   const findEvents = (date,data,day) => {
+    console.log(data,'datasddd');
+    const workingDays = data?.shift?.weeks || [];
+    const allDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    const selectedDay = dayjs(date).format("ddd").toUpperCase();
+    
+      const formattedDate = date;
+      const holidayEvents = data?.filter((event) =>
+        event?.holidays?.includes(formattedDate),
+      );
+      const shiftEvents = data?.filter((event) =>
+        event?.date_range?.includes(formattedDate),
+      );
+
+      const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
+  
+      const isDayOff = weekOffDays.includes(selectedDay);
+  
+      const requestedSlots = data?.requested_details?.filter((slot) =>
+        dayjs(slot.date).isSame(dayjs(date), "day"),
+      );
+  
+      return { holidayEvents, shiftEvents, isDayOff, requestedSlots };
+    };
+
   useEffect(() => {
     if (selectedOption === "weekly") {
       setDays(weekDays);
@@ -508,32 +533,37 @@ const RosterCalendar = () => {
                     </tr>
                   </thead>
                   <tbody className="border">
-                    {data?.employees?.map((emp, rowIndex) => (
+                    {data?.results?.map((emp, rowIndex) => (
                       <tr key={rowIndex} className="h-[12rem] w-full border">
                         <td className="sticky left-0 z-10 flex h-[12rem] min-w-[14rem] items-center space-x-3 bg-white p-3">
                           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-sm text-white">
-                            {emp.name.charAt(0)}
+                            {emp?.employee?.name.charAt(0)}
                           </span>
                           <span className="text-sm font-bold text-gray-800">
-                            {emp.name}
+                            {emp?.employee?.name}
                           </span>
                         </td>
                         {days.map((day, index) => {
                           // Find attendance status for the given date
-                          const attendanceEntry = emp.rosters.find(
-                            (att) => att.date === day.fullDate,
-                          );
+                          const {
+                            holidayEvents,
+                            shiftEvents,
+                            isDayOff,
+                            requestedSlots,
+                          } = findEvents(day.fullDate,emp?.rosters,day.day);
+                          console.log(shiftEvents,'suhft');
+                          console.log(holidayEvents,'jholiuday');
 
                           return (
                             <td
                               key={index}
                               className="relative h-[12rem] w-full border p-2 text-center"
                             >
-                              {!attendanceEntry?.is_day_off ? (
+                              {shiftEvents ? (
                                 <div className="overflow-y-min flex h-full w-full min-w-[11.4rem] flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden">
-                                  {attendanceEntry?.shifts?.map((shift) => (
+                                  {shiftEvents?.map((shift,index) => (
                                     <div
-                                    key={shift?.shift_id}
+                                    key={index}
                                     onClick={()=> changeShift(emp?.id,day.fullDate,'change',shift?.shift_id,shift?.roster_id)}
                                       style={{
                                         background:
@@ -541,7 +571,6 @@ const RosterCalendar = () => {
                                       }}
                                       className={`h-[3.5rem] min-w-44 rounded-md py-3 text-black cursor-pointer`}
                                     >
-                                      <div>
                                         <p className="relative text-xs font-semibold">
                                           {shift.shift_name}
                                           <span className="absolute right-1 -top-2"
@@ -557,9 +586,8 @@ const RosterCalendar = () => {
                                           </span>
                                         </p>
                                         <p className="text-sm">
-                                          {shift.start_time} - {shift?.end_time}
+                                          {shift?.shift?.start_time} - {shift?.shift?.end_time}
                                         </p>
-                                      </div>
                                     </div>
                                   ))}
 

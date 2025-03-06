@@ -169,11 +169,13 @@ const handleAddEmployee = () => {
 
   useEffect(() => {
     if (selectedRoster) {
+      console.log('hjshdf',rosterDetail);
+      
       setValue("shift", shift);
-      setValue("start_date", rosterDetail?.roster_details?.start_date);
-      setValue("end_date", rosterDetail?.roster_details?.end_date);
+      setValue("start_date",  moment.utc(rosterDetail?.roster_details?.start_date).format("YYYY-MM-DD"));
+      setValue("end_date",  moment.utc(rosterDetail?.roster_details?.end_date).format("YYYY-MM-DD"));
     }
-  }, [selectedRoster, setValue]);  
+  }, [selectedRoster, setValue, editpopupOpen]);  
 
   let shift;
   if (selectedRoster) {

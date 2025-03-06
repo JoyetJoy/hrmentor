@@ -136,13 +136,6 @@ const EmployeeAccessRosterCalendar = () => {
     }
   };
 
-  function convertTo12HourFormat(time) {
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
-  }
-
   return (
     <div className="flex flex-col">
       <ShiftDetailsView
@@ -150,14 +143,12 @@ const EmployeeAccessRosterCalendar = () => {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}
-        convertTo12HourFormat={convertTo12HourFormat}
       />
       <RequestClaimshift
         popupOpen={claimPopup}
         refetch={refetch}
         setPopupOpen={setClaimPopup}
         selectedField={selectedField}
-        convertTo12HourFormat={convertTo12HourFormat}
       />
       <MenuHeaderEmployeeAccess pathlink={""} currentpage={"Roster"} />
       <div className="flex w-full items-center justify-between px-4 py-2">

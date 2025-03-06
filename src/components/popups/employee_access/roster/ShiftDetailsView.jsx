@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { ROASTER_GET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 
-export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedField, convertTo12HourFormat }) {
+export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedField }) {
 
   const { data, refetch } = useQuery({
     queryKey: ['shiftDetails', selectedField?.id], // Array of query keys
