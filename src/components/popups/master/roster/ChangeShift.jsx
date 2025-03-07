@@ -62,43 +62,82 @@ console.log(errors);
     enabled: datas?.type==='change',
   });
 
-  console.log(employeeList);
 
   const handleShiftChange = (selectedOption) => {
     console.log("Selected shift:", selectedOption);
     setSelectedShiftId(selectedOption.value);
   };
-
-  const onSubmit = async () => {
-    if(datas?.type === 'change'){
-      const formdata={
-        swaping_from_employee_id:datas?.empId,
-        swaping_to_employee_id:selectedShiftId,
-        shift_id:datas?.shiftId,
-        roster_id:datas?.rosterid,
-        swaping_date:datas?.date
-      }
-      const response = await newRequest.post(SWAP_SHIFT,formdata);
-      console.log(response);
+ 
+  // const onSubmit = async () => {
+  //   if(datas?.type === 'change'){
+  //     const formdata={
+  //       swaping_from_employee_id:datas?.empId,
+  //       swaping_to_employee_id:selectedShiftId,
+  //       shift_id:datas?.shiftId,
+  //       roster_id:datas?.rosterid,
+  //       swaping_date:datas?.date
+  //     }
+  //     const response = await newRequest.post(SWAP_SHIFT,formdata);
+  //     console.log(response);
       
-    }
-    if (employeesdetails.length === 0) {
-      setEmployeeError("Employee is required");
-    } else {
-      await handleRoster(data);
+  //   }
+  //   if (employeesdetails.length === 0) {
+  //     setEmployeeError("Employee is required");
+  //   } else {
+  //     await handleRoster(datas);
+  //     close();
+  //   }
+  // };
+  
+  const onSubmit = async () => {
+    try {
+      // if (employeesdetails.length === 0) {
+      //   setEmployeeError("Employee is required");
+      //   toast.error("Employee is required"); // Show error toast
+      //   return; // Stop function execution
+      // }
+      if (employeesdetails.length === 0) {
+             setEmployeeError("Employee is required");
+           } else {
+             await handleRoster(datas);
+            close();
+           }
+      if (datas?.type === "change") {
+        const formdata = {
+          swaping_from_employee_id: datas?.empId,
+          swaping_to_employee_id: selectedShiftId,
+          shift_id: datas?.shiftId,
+          roster_id: datas?.rosterid,
+          swaping_date: datas?.date,
+          swap_id: datas?.swap_id 
+        };
+  
+        const response = await newRequest.post(SWAP_SHIFT, formdata);
+        if (response.status === 201) {
+          toast.success(response?.message);
+        } else {
+          toast.error(response?.data?.message);
+        }
+      }
+      // await handleRoster(datas);
       close();
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while processing your request.");
     }
   };
+  console.log("selectedShiftId:", selectedShiftId);
+  console.log("data", datas);
 
-  const handleRoster = async (data) => {
+
+  const handleRoster = async (datas) => {
     const formData = {
-      shift_id: selectedShiftId,
-      start_date: data.start_date,
-      end_date: data.end_date,
+      shift_id: datas.shiftId,
+      start_date: datas.start_date,
+      end_date: datas.end_date,
       rosterDetails: employeesdetails,
     };
 
-    console.log(formData);
     try {
       let res;
       res = await newRequest.post(ROSTER_LIST, formData);
@@ -115,8 +154,9 @@ console.log(errors);
       console.log(error);
       toast.error(error.response.data.error || "Failed roster.");
     }
+    console.log(formData,"formDataaaaaa")
   };
-
+//  console.log(formData,"formData")
   return (
     <>
       <Dialog
