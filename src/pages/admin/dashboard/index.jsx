@@ -38,7 +38,7 @@ export const AdminDashboard = () => {
           type: shift?.shift?.name,
           count: shift?.shift?.people_required,
           date: shift?.shift?.start_date,
-          dates:`${dayjs(shift?.start_date).format("DD/MM/YY")} - ${dayjs(shift?.end_date).format("DD/MM/YY")}`,
+          dates: `${dayjs(shift?.start_date).format("DD/MM/YY")} - ${dayjs(shift?.end_date).format("DD/MM/YY")}`,
           path: shift?.shift?.isHoliday
             ? ``
             : `/admin/shift/calendarview?id=${shift?.shift?.id}&date=${selectdate}`,
@@ -52,7 +52,7 @@ export const AdminDashboard = () => {
         type: slot?.shift?.name,
         count: slot?.shift?.people_required,
         date: slot?.shift?.start_date,
-        dates:`${dayjs(slot?.start_date).format("DD/MM/YY")} - ${dayjs(slot?.end_date).format("DD/MM/YY")}`
+        dates: `${dayjs(slot?.start_date).format("DD/MM/YY")} - ${dayjs(slot?.end_date).format("DD/MM/YY")}`,
       })),
       path: "/admin/shift/available-slots", // Add a default path
     },
@@ -61,7 +61,7 @@ export const AdminDashboard = () => {
       details: admindashboard?.upcoming_holidays?.map((holiday) => ({
         type: holiday.holiday_name,
         date: holiday.date,
-        time:  dayjs(holiday.created_at).format("HH:MM")
+        time: dayjs(holiday.created_at).format("HH:MM"),
       })),
       path: "/admin/leave/bankholidays", // Existing path
     },
@@ -141,7 +141,7 @@ export const AdminDashboard = () => {
                             {item?.type?.charAt(0).toUpperCase() +
                               item?.type?.slice(1)}
                           </h1>
-                          <h1>{item?.dates  || item?.date}</h1>
+                          <h1>{item?.dates || item?.date}</h1>
                           {/* <h1>{item?.date || ""}</h1> */}
                           <h1>{item?.time || `Employee: ${item?.count}`}</h1>
                         </label>
