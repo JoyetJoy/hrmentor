@@ -456,14 +456,14 @@ export default function Attendance() {
                         const attendanceEntry = employee.attendances.find(
                           (att) => att.attendance_date === day.fullDate,
                         );
-                        console.log(attendanceEntry, "shiftshift");
+                        console.log(hoveredShift, "hoveredShifthoveredShift");
 
                         return (
                           <td className="border-r-[3px] border-[#d1d5db]">
                             {attendanceEntry?.shifts?.length > 0 ? (
                               attendanceEntry?.shifts?.map((shift, index) => (
                                 <div
-                                  key={day.fullDate}
+                                  key={`${day.fullDate}-${index}`}
                                   onClick={() => {
                                     eventClick(
                                       employee?.employee_id,
@@ -472,15 +472,6 @@ export default function Attendance() {
                                       day.fullDay,
                                       shift,
                                     );
-                                  }}
-                                  onMouseEnter={() => {
-                                    setHoveredShift({
-                                      id: employee?.employee_id,
-                                      date: day.fullDate,
-                                      shiftName:
-                                        shift?.name ||
-                                        empId?.attendance?.shift_name,
-                                    });
                                   }}
                                   className="flex cursor-pointer justify-center gap-2 text-center text-[0.8rem] font-semibold"
                                 >
@@ -500,6 +491,20 @@ export default function Attendance() {
                                                   ? "bg-[#c5c5cb] text-black"
                                                   : "bg-[#ebebf0] text-black"
                                     }`}
+                                    onMouseEnter={() => {
+                                      setHoveredShift({
+                                        id: employee?.employee_id,
+                                        date: day.fullDate,
+                                        shiftName: shift?.shift_name,
+                                      });
+                                    }}
+                                    onMouseLeave={() => {
+                                      setHoveredShift({
+                                        id: "",
+                                        date: "",
+                                        shiftName: "",
+                                      });
+                                    }}
                                   >
                                     <span>
                                       {shift?.status === "Present"
@@ -527,7 +532,9 @@ export default function Attendance() {
                                   <div className="relative">
                                     {hoveredShift?.id ===
                                       employee?.employee_id &&
-                                      hoveredShift?.date === day.fullDate && (
+                                      hoveredShift?.date === day.fullDate &&
+                                      hoveredShift?.shiftName ===
+                                        shift?.shift_name && (
                                         <span className="absolute right-9 top-14 h-9 w-[7rem] whitespace-nowrap rounded-md bg-gray-800 px-2 py-2 text-sm text-white shadow-md">
                                           {hoveredShift?.shiftName}
                                         </span>

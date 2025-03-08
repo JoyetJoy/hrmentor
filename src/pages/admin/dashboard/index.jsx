@@ -112,7 +112,7 @@ export const AdminDashboard = () => {
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
               </label>
-              <div className="overflow-y-min flex max-h-[13rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+              <div className="overflow-y-min flex min-h-[13rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
                 {card.details?.length > 0 ? (
                   card.details.map((item, idx) => (
                     <div
@@ -121,7 +121,7 @@ export const AdminDashboard = () => {
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className={`flex h-11 w-11 items-center justify-center rounded-full border p-1 ${card.title === "Upcoming Holidays" || "Upcoming Shift" ? "bg-hrmprimaryorange" : "bg-gray-100"}`}
+                          className={`flex h-11 w-11 items-center justify-center rounded-full border  ${card.title === "People on Leave" ? "bg-gray-100" : "bg-hrmprimaryorange p-1"}`}
                         >
                           {card.title === "People on Leave" ? (
                             <img
