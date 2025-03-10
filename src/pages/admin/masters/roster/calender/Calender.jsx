@@ -336,13 +336,13 @@ const RosterCalendar = () => {
     rosterid,
     shifts,
   ) => {
-    if (type === "add") {
-      shifts?.map((shift) => {
-        setShiftIds((prev) => {
-          return [...prev, { shift_id: shift?.shift_id }];
-        });
-      });
-    }
+    // if (type === "add") {
+    //   shifts?.map((shift) => {
+    //     setShiftIds((prev) => {
+    //       return [...prev, { shift_id: shift?.shift_id }];
+    //     });
+    //   });
+    // }
 
     setShiftDetails({
       empId,
@@ -752,13 +752,21 @@ const RosterCalendar = () => {
                                       }
                                       onMouseLeave={() =>
                                         setHoveredShift({
-                                          id: "",
-                                          date: "",
+                                          id: emp?.employee?.id,
+                                          date: day.fullDate,
                                           type: "",
                                           empid: "",
                                         })
                                       }
-                                      onClick={() => handleOpen(emp?.id)}
+                                      onClick={() =>
+                                        changeShift(
+                                          emp?.employee?.id,
+                                          '',
+                                          day.fullDate,
+                                          "add",
+                                          emp?.employee?.department_id,
+                                          '',
+                                        )}
                                     >
                                       +
                                     </button>

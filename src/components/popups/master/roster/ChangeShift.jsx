@@ -15,12 +15,10 @@ import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
-import { EMPLOYEE_LIST_SHIFT, SWAP_SHIFT } from "@/api/master";
+import { ADD_ROSTER, EMPLOYEE_LIST_SHIFT, SWAP_SHIFT } from "@/api/master";
 
 export default function ChangeShift({ popupOpen, setPopupOpen, datas, shiftIds ,refetch}) {
   const [selectedShiftId, setSelectedShiftId] = useState(null);
-  const [employeesdetails, setEmployeesdetails] = useState([]);
-  const [employeeError, setEmployeeError] = useState("");
   const queryClient = useQueryClient();
 
   const {
@@ -40,9 +38,9 @@ export default function ChangeShift({ popupOpen, setPopupOpen, datas, shiftIds ,
   }
 console.log(errors);
 
-  const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
+  
 
-  const { data: shiftlist } = useQuery({
+  const { data: shiftList } = useQuery({
     queryKey: ["rosterEmpList", datas],
     queryFn: () => {
       return newRequest.get(`${GET_SHIFT}?shift_id=${datas?.shiftId}&employee_id=${datas?.empId}&date=${datas?.date}`).then((res) => {
@@ -51,6 +49,7 @@ console.log(errors);
     },
     enabled: datas?.type==='add',
   });
+// console.log(shiftlist);
 
   const { data: employeeList } = useQuery({
     queryKey: ["employeeList", datas],
@@ -65,6 +64,9 @@ console.log(errors);
 
   const handleShiftChange = (selectedOption) => {
     console.log("Selected shift:", selectedOption);
+    if(datas?.type === 'add'){
+
+    }
     setSelectedShiftId(selectedOption.value);
   };
  
@@ -91,17 +93,7 @@ console.log(errors);
   
   const onSubmit = async () => {
     try {
-      // if (employeesdetails.length === 0) {
-      //   setEmployeeError("Employee is required");
-      //   toast.error("Employee is required"); // Show error toast
-      //   return; // Stop function execution
-      // }
-      if (employeesdetails.length === 0) {
-             setEmployeeError("Employee is required");
-           } else {
-             await handleRoster(datas);
-            close();
-           }
+      
       if (datas?.type === "change") {
         const formdata = {
           swaping_from_employee_id: datas?.empId,
@@ -119,6 +111,19 @@ console.log(errors);
         } else {
           toast.error(response?.data?.message);
         }
+      }else if(datas?.type === "add"){
+        const formdata = {
+          date:datas?.date,
+          shift_id:selectedShiftId,
+          employee_id:datas?.empId
+        }
+        const response = await newRequest.post(ADD_ROSTER, formdata);
+        if (response?.data?.status === 201) {
+          toast.success(response?.data?.message);
+          refetch();
+        } else {
+          toast.error(response?.data?.message);
+        }
       }
       // await handleRoster(datas);
       close();
@@ -130,34 +135,6 @@ console.log(errors);
   console.log("selectedShiftId:", selectedShiftId);
   console.log("data", datas);
 
-
-  const handleRoster = async (datas) => {
-    const formData = {
-      shift_id: datas.shiftId,
-      start_date: datas.start_date,
-      end_date: datas.end_date,
-      rosterDetails: employeesdetails,
-    };
-
-    try {
-      let res;
-      res = await newRequest.post(ROSTER_LIST, formData);
-      console.log(res);
-      if (res?.status === 200) {
-        toast.success("Saved roster details successfully");
-        queryClient.invalidateQueries([""]);
-        reset();
-        setPopupOpen(false);
-      } else {
-        toast.error("Failed to save roster.");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.error || "Failed roster.");
-    }
-    console.log(formData,"formDataaaaaa")
-  };
-//  console.log(formData,"formData")
   return (
     <>
       <Dialog
@@ -215,10 +192,10 @@ console.log(errors);
                               {...field}
                               isSearchable={true}
                               styles={customSelectStyles}
-                              options={shiftList?.data?.original?.data.map(
+                              options={shiftList?.data?.original?.map(
                                 (item) => ({
                                   label: item.name,
-                                  value: item.id,
+                                  value: item.shift_id,
                                 }),
                               )}
                               placeholder="Select Shift"
@@ -231,8 +208,11 @@ console.log(errors);
                           )}
                         />
                         }
-                        
+                        {errors?.shift&&(
+                        <p className="text-red-500 text-xs">{errors?.shift?.message}</p>
+                      )}
                       </div>
+                      
                       <div className="mt-4 flex gap-3">
                         <button
                           type="button"
