@@ -17,7 +17,7 @@ import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 import { EMPLOYEE_LIST_SHIFT, SWAP_SHIFT } from "@/api/master";
 
-export default function ChangeShift({ popupOpen, setPopupOpen, datas, shiftIds }) {
+export default function ChangeShift({ popupOpen, setPopupOpen, datas, shiftIds ,refetch}) {
   const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [employeesdetails, setEmployeesdetails] = useState([]);
   const [employeeError, setEmployeeError] = useState("");
@@ -113,8 +113,9 @@ console.log(errors);
         };
   
         const response = await newRequest.post(SWAP_SHIFT, formdata);
-        if (response.status === 201) {
-          toast.success(response?.message);
+        if (response?.data?.status === 201) {
+          toast.success(response?.data?.message);
+          refetch();
         } else {
           toast.error(response?.data?.message);
         }
