@@ -243,7 +243,7 @@ const EmployeeAccessRosterCalendar = () => {
                         />
                       ))}
                     </div>
-                    {shiftEvents.length > 0
+                    {shiftEvents?.length > 0
                       ? shiftEvents?.slice(0, 2)?.map((event, index) => (
                           <div
                             key={index}
