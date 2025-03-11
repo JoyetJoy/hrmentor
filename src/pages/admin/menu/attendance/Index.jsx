@@ -115,7 +115,6 @@ export default function Attendance() {
         fullDate: day.format("YYYY-MM-DD"),
       };
     });
-
   };
 
   const getCustomDays = () => {
@@ -204,7 +203,6 @@ export default function Attendance() {
   };
   console.log();
 
-  
   const eventClick = (id, empname, date, day, attendance) => {
     setEmpId({
       id,
@@ -215,7 +213,7 @@ export default function Attendance() {
     });
     setAttendance(true);
   };
- console.log(days,"daysdays")
+  console.log(days, "daysdays");
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -457,7 +455,10 @@ export default function Attendance() {
                         const attendanceEntry = employee.attendances.find(
                           (att) => att.attendance_date === day.fullDate,
                         );
-                        console.log(attendanceEntry, "attendanceEntryattendanceEntry");
+                        console.log(
+                          attendanceEntry,
+                          "attendanceEntryattendanceEntry",
+                        );
 
                         return (
                           <td className="border-r-[3px] border-[#d1d5db]">
@@ -474,7 +475,7 @@ export default function Attendance() {
                                       shift,
                                     );
                                   }}
-                                  className="flex cursor-pointer justify-center gap-2 text-center text-[0.8rem] font-semibold"
+                                  className={`flex justify-center gap-2 text-center text-[0.8rem] font-semibold ${shift?.status === "Day Off" ? "" : "cursor-pointer"}`}
                                 >
                                   <div
                                     className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
@@ -487,17 +488,22 @@ export default function Attendance() {
                                             : shift?.status === "Annual Leave"
                                               ? "bg-[#AEB6E7] text-black"
                                               : shift?.status === "Absent"
-                                                ? "bg-[#e64444] text-black" 
+                                                ? "bg-[#e64444] text-black"
                                                 : shift?.status === "Day off"
                                                   ? "bg-[#c5c5cb] text-black"
-                                                  : "bg-[#c5c5cb] text-black" 
+                                                  : ""
                                     }`}
                                     onMouseEnter={() => {
-                                      setHoveredShift({
-                                        id: employee?.employee_id,
-                                        date: day.fullDate,
-                                        shiftName: shift?.shift_name,
-                                      });
+                                      {
+                                        shift?.status !== "Day Off"
+                                          ? setHoveredShift({
+                                              id: employee?.employee_id,
+                                              date: day.fullDate,
+                                              shiftName: shift?.shift_name,
+                                              status: shift?.status,
+                                            })
+                                          : "";
+                                      }
                                     }}
                                     onMouseLeave={() => {
                                       setHoveredShift({
@@ -520,7 +526,7 @@ export default function Attendance() {
                                                 ? "A"
                                                 : shift?.status === "Day off"
                                                   ? "Day Off"
-                                                  : "DO"}
+                                                  : ""}
                                     </span>
                                     {shift?.delay_status && (
                                       <img
@@ -543,15 +549,11 @@ export default function Attendance() {
                                   </div>
                                 </div>
                               ))
-                              
-                            ) :  (
-                              new Date(day.fullDate) <= new Date() ? (
-                                <div className="mb-2  flex h-10 w-full items-center justify-center bg-[#c5c5cb] text-sm font-extrabold text-black">
-                                  DO
-                                </div>
-                              ) : null
-                            )
-                            }
+                            ) : new Date(day.fullDate) <= new Date() ? (
+                              <div className="mb-2 flex h-10 w-full items-center justify-center bg-[#c5c5cb] text-sm font-extrabold text-black">
+                                DO
+                              </div>
+                            ) : null}
                           </td>
                         );
                       })}
