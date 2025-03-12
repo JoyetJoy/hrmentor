@@ -180,11 +180,17 @@ const EmployeeAccessRosterCalendar = () => {
         <div className="flex items-center gap-14">
           <div className="flex items-center gap-10">
             <div className="flex items-center gap-2 text-sm">
-              <img src="/assets/icons/employee_access/header/availableshift.svg" alt="" />
+              <img
+                src="/assets/icons/employee_access/header/availableshift.svg"
+                alt=""
+              />
               <p>Available slot</p>
             </div>
             <div className="flex items-center gap-2 text-sm">
-            <img src="/assets/icons/employee_access/header/requested_slot.svg" alt="" />
+              <img
+                src="/assets/icons/employee_access/header/requested_slot.svg"
+                alt=""
+              />
               <p>Requested slot</p>
             </div>
           </div>
@@ -219,40 +225,54 @@ const EmployeeAccessRosterCalendar = () => {
                   <>
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
                       {availableSlots?.map((slot, index) => (
-                        <img 
-                        key={`available-slot-${index}`}
+                        <img
+                          key={`available-slot-${index}`}
                           onClick={() => {
                             setClaimPopup(true);
                             setSelectedField(slot);
                           }}
-                        src="/assets/icons/employee_access/header/availableshift.svg" 
-                        alt="" />
+                          src="/assets/icons/employee_access/header/availableshift.svg"
+                          alt=""
+                        />
                       ))}
                       {requestedSlots?.map((slot, index) => (
                         <img
-                        key={index}
-                         src="/assets/icons/employee_access/header/requested_slot.svg" alt="" />
+                          key={index}
+                          src="/assets/icons/employee_access/header/requested_slot.svg"
+                          alt=""
+                        />
                       ))}
                     </div>
-                    {shiftEvents?.slice(0, 2)?.map((event, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handleClick(event)}
-                        style={{
-                          backgroundColor: event?.shift?.shift_color,
-                          borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
-            
-                        }}
-                        className={`mt-2 flex h-14 w-auto flex-col rounded-sm border-l-4 px-3 py-2 justify-center text-gray-800`}
-                      >
-                        <span className="float-start flex text-[0.8rem] font-semibold">
-                          {event.shift_name}
-                        </span>
-                        <span className="float-start flex text-[12px]">
-                          {event?.shift?.start_time} - {event?.shift?.end_time}
-                        </span>
-                      </div>
-                    ))}
+                    {shiftEvents?.length > 0
+                      ? shiftEvents?.slice(0, 2)?.map((event, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleClick(event)}
+                            style={{
+                              backgroundColor: event?.shift?.shift_color,
+                              borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
+                            }}
+                            className={`mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 px-3 py-2 text-gray-800`}
+                          >
+                            <span className="float-start flex text-[0.8rem] font-semibold">
+                              {event.shift_name}
+                            </span>
+                            <span className="float-start flex text-[12px]">
+                              {event?.shift?.start_time} -{" "}
+                              {event?.shift?.end_time}
+                            </span>
+                          </div>
+                        ))
+                      : holidayEvents?.map((event, index) => (
+                          <div
+                            key={index}
+                            className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
+                          >
+                            <span className="float-start flex w-full font-semibold">
+                              Day Off
+                            </span>
+                          </div>
+                        ))}
                   </>
 
                   {/* "Count More" Button */}
@@ -269,17 +289,6 @@ const EmployeeAccessRosterCalendar = () => {
                   )} */}
 
                   {/* Available Slots */}
-
-                  {holidayEvents?.map((event, index) => (
-                    <div
-                      key={index}
-                      className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
-                    >
-                      <span className="float-start flex w-full font-semibold">
-                        Holiday
-                      </span>
-                    </div>
-                  ))}
 
                   {/* {availableSlots?.map((slot, index) => (
                     <div
