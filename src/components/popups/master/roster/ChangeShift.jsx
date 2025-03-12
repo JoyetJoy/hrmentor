@@ -127,7 +127,9 @@ export default function ChangeShift({
       }
 
       const response = await newRequest.post(apiUrl, formData);
-      toast.error(response?.data?.message);
+      toast.success(response?.data?.message);
+      refetch();
+      close();
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while processing your request.");
