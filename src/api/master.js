@@ -72,6 +72,8 @@ export const EMPLOYEE_WORK_AREA = "employee-work-area";
 export const EMPLOYEE_LIST_SHIFT = "get-employees"
 //swap shift
 export const SWAP_SHIFT = "change-shift-roaster";
+//delete shift
+export const DELETE_SHIFT = "delete-shift-roaster";
 //add roster
 export const ADD_ROSTER = "add-new-shift-roaster";
 

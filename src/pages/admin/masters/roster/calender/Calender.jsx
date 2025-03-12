@@ -323,9 +323,32 @@ const RosterCalendar = () => {
     setStartDate(dateRange.start);
     setEndDate(dateRange.end);
 
-    console.log("Start Date:", dateRange.start);
-    console.log("End Date:", dateRange.end);
   };
+
+  const addShift = (empId, shiftId, date, type, departmentId, rosterid, shifts) => {
+    setShiftDetails({
+      empId,
+      date,
+      shiftId : type === 'addshift'?shiftIds :shiftId ,
+      rosterid,
+      type,
+      departmentId,
+    });
+    setShiftIds((prev) => {
+      const newSet = new Set([...prev, ...shifts.map((shift) => shift?.shift_id)]);
+      return Array.from(newSet);
+    });
+  };
+
+  useEffect(() => {
+    if (shiftIds.length > 0) {
+      setShiftDetails((prevState)=>({
+        ...prevState,
+        shiftId:shiftIds
+      }))
+      setShiftPopup(true);
+    }
+  }, [shiftIds]); 
 
   const changeShift = async (
     empId,
@@ -335,26 +358,45 @@ const RosterCalendar = () => {
     departmentId,
     rosterid,
     shifts,
+    shift_name
   ) => {
-    // if (type === "add") {
-    //   shifts?.map((shift) => {
-    //     setShiftIds((prev) => {
-    //       return [...prev, { shift_id: shift?.shift_id }];
-    //     });
+    console.log(shifts);
+    
+    // if (type === "addshift") {
+    //   console.log('yes');
+      
+    //   setShiftIds((prev) => {
+    //     const newSet = new Set([...prev, ...shifts.map((shift) => shift?.shift_id)]);
+    //     return Array.from(newSet);
     //   });
+      
     // }
-
+    console.log(shiftIds);
+    
+  if(type === 'addshift' &&shiftIds.length>0){
     setShiftDetails({
       empId,
       date,
-      shiftId,
+      shiftId : type === 'addshift'?shiftIds :shiftId ,
       rosterid,
       type,
       departmentId,
     });
     setShiftPopup(true);
-  };
-  console.log(shiftDetails, "shiftDetails");
+  }else if(type === 'add' || type === 'change'){
+    setShiftDetails({
+      empId,
+      date,
+      shiftId : type === 'addshift'?shiftIds :shiftId ,
+      rosterid,
+      type,
+      departmentId,
+      shift_name
+    });
+    setShiftPopup(true);
+  }
+    }
+  console.log(shiftIds, "shiftDetails");
 
   return (
     <>
@@ -570,8 +612,6 @@ const RosterCalendar = () => {
                             isDayOff,
                             requestedSlots,
                           } = findEvents(day.fullDate, emp?.rosters, day.day);
-                          console.log(shiftEvents, "suhft");
-                          console.log(holidayEvents, "jholiuday");
 
                           return (
                             <td
@@ -592,6 +632,8 @@ const RosterCalendar = () => {
                                           "change",
                                           emp?.employee?.department_id,
                                           shift?.id,
+                                          '',
+                                          shift.shift_name
                                         )
                                       }
                                       style={{
@@ -631,7 +673,7 @@ const RosterCalendar = () => {
                                             hoveredShift?.empid ===
                                               emp?.employee?.id && (
                                               <span className="absolute right-0 top-6 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
-                                                Reassign
+                                                Edit
                                               </span>
                                             )}
                                         </span>
@@ -642,17 +684,17 @@ const RosterCalendar = () => {
                                       </p>
                                     </div>
                                   ))}
-                                  {/* <p className="relative flex w-full items-center justify-center">
+                                  <p className="relative flex w-full items-center justify-center">
                                     <button
                                       onClick={() =>
-                                        changeShift(
-                                          emp?.id,
-                                          "",
+                                        addShift(
+                                          emp?.employee?.id,
+                                          '',
                                           day.fullDate,
-                                          "add",
-                                          "",
-                                          "",
-                                          shiftEvents,
+                                          "addshift",
+                                          emp?.employee?.department_id,
+                                          '',
+                                          shiftEvents
                                         )
                                       }
                                       onMouseEnter={() =>
@@ -683,7 +725,7 @@ const RosterCalendar = () => {
                                           Add Shift
                                         </span>
                                       )}
-                                  </p> */}
+                                  </p>
                                   {openPopup?.row === rowIndex &&
                                     openPopup?.col === colIndex && (
                                       <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
