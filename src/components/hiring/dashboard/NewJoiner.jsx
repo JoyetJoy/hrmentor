@@ -40,7 +40,7 @@ export default function NewJoiners() {
                       {`${candidate?.first_name?.charAt(0)} ${candidate?.sur_name?.charAt(0)}`}
                     </div>
                     <div>
-                      <h3 className="text-base font-semibold">
+                      <h3 className="text-sm font-semibold">
                         <span className="mr-1">{candidate?.first_name}</span>
                         <span className="mr-1">
                           {" "}
