@@ -42,6 +42,7 @@ export default function ChangeShift({
 console.log(datas);
 
   function close() {
+    setIsDeleted(false);
     setPopupOpen(false);
     reset();
   }
@@ -88,7 +89,6 @@ console.log(datas);
 
   const onSubmit = async (data) => {
     try {
-      console.log(isDeleted);
       if (!data?.shift && !isDeleted) {
         setError("shift", {
           type: "manual",
@@ -107,7 +107,6 @@ console.log(datas);
           shift_id: datas?.shiftId,
           roster_id: datas?.rosterid,
           swaping_date: datas?.date,
-          swap_id: datas?.swap_id,
           is_swapped:datas?.is_swapped,
           swap_id:datas?.dateSwap?.swap_id
         };
@@ -118,6 +117,7 @@ console.log(datas);
           shift_id: datas?.shiftId,
           roster_id: datas?.rosterid,
           date: datas?.date,
+          swap_id:datas?.dateSwap?.swap_id
         };
         apiUrl = DELETE_SHIFT;
       } else {

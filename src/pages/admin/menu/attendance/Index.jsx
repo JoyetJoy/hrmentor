@@ -475,7 +475,7 @@ export default function Attendance() {
                                       shift,
                                     );
                                   }}
-                                  className={`flex justify-center gap-2 text-center text-[0.8rem] font-semibold ${shift?.status === "Day Off" ? "" : "cursor-pointer"}`}
+                                  className={`flex justify-center text-center text-[0.8rem] font-semibold ${shift?.status === "Day Off" ? "" : "cursor-pointer"}`}
                                 >
                                   <div
                                     className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
