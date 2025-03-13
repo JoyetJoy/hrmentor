@@ -39,6 +39,7 @@ export default function ChangeShift({
     mode: "onSubmit",
     resolver: yupResolver(RosterSchema),
   });
+console.log(datas);
 
   function close() {
     setPopupOpen(false);
@@ -107,6 +108,8 @@ export default function ChangeShift({
           roster_id: datas?.rosterid,
           swaping_date: datas?.date,
           swap_id: datas?.swap_id,
+          is_swapped:datas?.is_swapped,
+          swap_id:datas?.dateSwap?.swap_id
         };
         apiUrl = SWAP_SHIFT;
       } else if (datas?.type === "change" && isDeleted) {

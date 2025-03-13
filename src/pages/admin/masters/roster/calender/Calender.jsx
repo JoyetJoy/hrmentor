@@ -358,9 +358,16 @@ const RosterCalendar = () => {
     departmentId,
     rosterid,
     shifts,
-    shift_name
+    shift_name,
+    is_swapped,
+    date_swaps
   ) => {
-    console.log(shifts);
+    console.log(date_swaps,type);
+    let dateSwap;
+    if(type === 'change' && date_swaps){
+      dateSwap = date_swaps?.find((swap)=> swap?.date === date);
+    }
+    
     
     // if (type === "addshift") {
     //   console.log('yes');
@@ -371,7 +378,7 @@ const RosterCalendar = () => {
     //   });
       
     // }
-    console.log(shiftIds);
+    console.log(date_swaps);
     
   if(type === 'addshift' &&shiftIds.length>0){
     setShiftDetails({
@@ -391,7 +398,9 @@ const RosterCalendar = () => {
       rosterid,
       type,
       departmentId,
-      shift_name
+      shift_name,
+      is_swapped,
+      dateSwap
     });
     setShiftPopup(true);
   }
@@ -633,7 +642,9 @@ const RosterCalendar = () => {
                                           emp?.employee?.department_id,
                                           shift?.id,
                                           '',
-                                          shift.shift_name
+                                          shift.shift_name,
+                                          shift?.is_swapped,
+                                          shift?.date_swaps
                                         )
                                       }
                                       style={{
@@ -678,10 +689,13 @@ const RosterCalendar = () => {
                                             )}
                                         </span>
                                       </p>
-                                      <p className="text-sm">
+                                      {shift?.shift?.start_time && (
+                                        <p className="text-sm">
                                         {shift?.shift?.start_time} -{" "}
                                         {shift?.shift?.end_time}
                                       </p>
+                                      )}
+                                      
                                     </div>
                                   ))}
                                   <p className="relative flex w-full items-center justify-center">
