@@ -76,8 +76,8 @@ const EmployeeAccessAttendanceCalendar = () => {
         ),
       )
       .toDate();
-      console.log(updatedDate);
-      
+    console.log(updatedDate);
+
     setDate(updatedDate); // Synchronize date state
   };
 
@@ -217,11 +217,13 @@ const EmployeeAccessAttendanceCalendar = () => {
                           </span>
                           {event && (
                             <div className="float-end flex items-center gap-2 text-sm">
-                              <img
-                                className="h-4 object-contain"
-                                src="/assets/icons/tort.svg"
-                                alt="late"
-                              />
+                              {event?.late_comming_reason && (
+                                <img
+                                  className="h-4 object-contain"
+                                  src="/assets/icons/tort.svg"
+                                  alt="late"
+                                />
+                              )}
                               <div className="flex items-center gap-2 text-sm">
                                 <p className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00B448] pl-[0.10rem] pt-[0.15rem] font-bold text-white">
                                   P

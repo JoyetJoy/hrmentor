@@ -7,3 +7,7 @@ export const formatDate = (date) => {
     if (day.length < 2) day = "0" + day;
     return [year, month, day].join("-");
   };
+
+  export const isBeforeToday = (date) => {
+    return new Date(date) < new Date(new Date().setHours(0, 0, 0, 0));
+  };

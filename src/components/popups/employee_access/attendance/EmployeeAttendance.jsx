@@ -9,13 +9,6 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
     setPopupOpen(false);
   }
 
-  function convertTo12HourFormat(time) {
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
-  }
-
   const addOvertime = (overtimeArray) => {
     let totalHours = 0;
     let totalMinutes = 0;
