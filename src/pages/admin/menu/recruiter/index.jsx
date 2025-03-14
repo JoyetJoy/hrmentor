@@ -210,7 +210,7 @@ export default function RecruiterDashbaord() {
         </div>
         <div>
           <h1 className="text-[ #2C2C2C] mb-4 text-sm font-bold">Candidates</h1>
-          <div className="flex h-fit flex-col gap-y-3 rounded-md bg-white p-5">
+          <div className="flex overflow-y-scroll overflow-y-min max-h-[30rem] flex-col gap-y-3 rounded-md bg-white p-5">
             <RecJobCandidates />
           </div>
         </div>
