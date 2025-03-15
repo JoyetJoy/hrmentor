@@ -17,9 +17,9 @@ const echo = new Echo({
   wsHost: "hr-mentor.techbutomy.com", // Ensure this domain is correct
   wsPort: 8084, // Replace with the correct port number
   disableStats: true,
-  forceTLS: false, // Set to true if using wss
+  forceTLS: true, // Set to true if using wss
   enabledTransports: ['ws', 'wss'], // Explicitly enable WebSockets
-  authEndpoint: 'https://hr-mentor.vercel.app/broadcasting/auth', // Ensure this endpoint is correct
+  authEndpoint: 'https://hr-mentor.techbutomy.com/api/broadcasting/auth', // Ensure this endpoint is correct
   auth: {
     headers: {
       Authorization: `Bearer ${getToken()}`,
