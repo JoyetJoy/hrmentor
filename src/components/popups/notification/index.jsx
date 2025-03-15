@@ -4,9 +4,11 @@ import { READ_NOTIFICATION } from "@/api/hiring";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { X } from "lucide-react";
+import { LogIn, X } from "lucide-react";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import echo from "@/utils/reverb";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function Notification({
   notifications,
@@ -16,17 +18,26 @@ export default function Notification({
   function close() {
     setNotificationPopupOpen(false);
   }
+  const {user } = useUserStore((state) => ({
+      user: state.user,
+    }));
 
-  useEffect(() => {
-    if (window.Echo) {
-      window.Echo.private(`notification-${user_id}`).notification(
-        (notification) => {
-          console.log("New Notification:", notification);
-          // Handle your notification here (e.g., update state, show a toast, etc.)
-        },
-      );
-    }
-  }, []);
+  const channel = echo.private(`notification.${user?.id}`);
+
+    channel.listen(".NotificationSent", (data) => {
+        console.log("Received a new notification:", data);
+        alert("New notification received!");
+    });
+  // useEffect(() => {
+  //   if (window.Echo) {
+  //     window.Echo.private(`notification-${user_id}`).notification(
+  //       (notification) => {
+  //         console.log("New Notification:", notification);
+         
+  //       },
+  //     );
+  //   }
+  // }, []);
 
 const handleClick = async (notificationId) => {
   if (!notificationId) return;

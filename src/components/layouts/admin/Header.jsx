@@ -48,11 +48,13 @@ export const AdminHeader = () => {
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
+console.log(user);
 
   return (
     <>
       <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <Notification
+        userId={user?.id}
         notifications={notifications}
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
