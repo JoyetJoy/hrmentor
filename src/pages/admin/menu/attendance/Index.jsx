@@ -475,7 +475,7 @@ export default function Attendance() {
                                       shift,
                                     );
                                   }}
-                                  className={`flex justify-center text-center text-[0.8rem] font-semibold ${shift?.status === "Day Off" ? "" : "cursor-pointer"}`}
+                                  className={`flex justify-center text-center text-[0.8rem] font-semibold cursor-pointer`}
                                 >
                                   <div
                                     className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
@@ -489,20 +489,18 @@ export default function Attendance() {
                                               ? "bg-[#AEB6E7] text-black"
                                               : shift?.status === "Absent"
                                                 ? "bg-[#e64444] text-black"
-                                                : shift?.status === "Day off"
+                                                : shift?.status === "Day Off"
                                                   ? "bg-[#c5c5cb] text-black"
                                                   : ""
                                     }`}
                                     onMouseEnter={() => {
                                       {
-                                        shift?.status !== "Day Off"
-                                          ? setHoveredShift({
+                                        setHoveredShift({
                                               id: employee?.employee_id,
                                               date: day.fullDate,
                                               shiftName: shift?.shift_name,
                                               status: shift?.status,
                                             })
-                                          : "";
                                       }
                                     }}
                                     onMouseLeave={() => {
@@ -524,8 +522,8 @@ export default function Attendance() {
                                               ? "AL"
                                               : shift?.status === "Absent"
                                                 ? "A"
-                                                : shift?.status === "Day off"
-                                                  ? "Day Off"
+                                                : shift?.status === "Day Off"
+                                                  ? "DO"
                                                   : ""}
                                     </span>
                                     {shift?.delay_status && (
@@ -549,11 +547,7 @@ export default function Attendance() {
                                   </div>
                                 </div>
                               ))
-                            ) : new Date(day.fullDate) <= new Date() ? (
-                              <div className="mb-2 flex h-10 w-full items-center justify-center bg-[#c5c5cb] text-sm font-extrabold text-black">
-                                DO
-                              </div>
-                            ) : null}
+                            ): null}
                           </td>
                         );
                       })}

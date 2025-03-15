@@ -266,7 +266,7 @@ const EmployeeAccessRosterCalendar = () => {
                       : holidayEvents?.map((event, index) => (
                           <div
                             key={index}
-                            className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#cf127a] bg-[#f8deec] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
+                            className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#75757e] bg-[#d5d5dc] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] lg:w-36 xl:w-44"
                           >
                             <span className="float-start flex w-full font-semibold">
                               Day Off
