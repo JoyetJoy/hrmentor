@@ -105,8 +105,6 @@ export default function PayrollList() {
     } else if (monthValue === "3" && data) {
       setStartDate(formatDateRange(data?.first_pay_term?.start_date));
       setEndDate(formatDateRange(data?.first_pay_term?.end_date));
-      setStartDate2(formatDateRange(data?.second_pay_term?.start_date));
-      setEndDate2(formatDateRange(data?.second_pay_term?.end_date));
     }
   }, [monthValue, data]);
 

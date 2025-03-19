@@ -7,33 +7,36 @@ import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 const data = [
   {
     slNo: 1,
-    department: "IT department",
-    totalEmployees: 0,
-    otHours: "00hr 0min",
-    otPay: "£0",
-    netPay: "£0",
-    paymentDate: "30/11/2024",
-    status: "Processing",
+    department: "Kiran",
+    totalEmployees: 'Emp05',
+    otHours: "8hr 0min",
+    tHours: "20hr 0min",
+    otPay: "£3500",
+    netPay: "£25000",
+    paymentDate: "02/01/2024",
+    status: "Paid",
   },
   {
     slNo: 2,
-    department: "Accountant",
-    totalEmployees: 0,
-    otHours: "00hr 0min",
-    otPay: "£0",
-    netPay: "£0",
-    paymentDate: "30/11/2024",
-    status: "Approval Pending",
+    department: "Amit",
+    totalEmployees: 'Emp04',
+    otHours: "9hr 0min",
+    tHours: "20hr 0min",
+    otPay: "£2500",
+    netPay: "£25000",
+    paymentDate: "02/14/2024",
+    status: "Paid",
   },
   {
     slNo: 3,
-    department: "HR department",
-    totalEmployees: 0,
-    otHours: "00hr 0min",
-    otPay: "£0",
-    netPay: "£0",
-    paymentDate: "30/11/2024",
-    status: "All Approved",
+    department: "Raghul",
+    totalEmployees: 'Emp03',
+    otHours: "5hr 0min",
+    tHours: "20hr 0min",
+    otPay: "£2950",
+    netPay: "£29500",
+    paymentDate: "02/08/2024",
+    status: "Pay Generated",
   },
 ];
 
@@ -72,7 +75,7 @@ export default function PayrollOffDetails() {
         accessorKey: "totalEmployees",
       },
       {
-        header: "Name",
+        header: "Emp Name",
         accessorKey: "department",
       },
       {
@@ -102,6 +105,11 @@ export default function PayrollOffDetails() {
       {
         header: "Status",
         accessorKey: "status",
+        cell: ({ row }) => (
+          <div className={`flex items-center gap-2 justify-center py-2 rounded-md px-3 ${row.original.status==='Paid'? 'bg-[#ccf0da] text-[#13ba56]' : 'bg-[#fef7e7] text-[#e7b731]'}`}>
+            {row.original.status}
+          </div>
+        ),
       },
 
       {
@@ -148,12 +156,12 @@ export default function PayrollOffDetails() {
                 placeholder="Search"
               />
             </label>
-            <button
+            {/* <button
               className="bg-orange-500 rounded-md px-4 py-2 text-sm text-white"
               style={{ backgroundColor: "#e95d39" }}
             >
               Approve
-            </button>
+            </button> */}
           </div>
         </div>
         {/* Table Section */}

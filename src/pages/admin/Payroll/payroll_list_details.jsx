@@ -7,33 +7,36 @@ import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 const data = [
   {
     slNo: 1,
-    department: "IT department",
-    totalEmployees: 5,
-    otHours: "20hr 0min",
+    department: "Kiran",
+    totalEmployees: 'Emp05',
+    otHours: "8hr 0min",
+    tHours: "20hr 0min",
     otPay: "£3500",
     netPay: "£25000",
-    paymentDate: "30/11/2024",
-    status: "Processing",
+    paymentDate: "02/01/2024",
+    status: "Approved",
   },
   {
     slNo: 2,
-    department: "Accountant",
-    totalEmployees: 4,
-    otHours: "20hr 0min",
+    department: "Amit",
+    totalEmployees: 'Emp04',
+    otHours: "9hr 0min",
+    tHours: "20hr 0min",
     otPay: "£2500",
     netPay: "£25000",
-    paymentDate: "30/11/2024",
-    status: "Approval Pending",
+    paymentDate: "02/14/2024",
+    status: "Not approved",
   },
   {
     slNo: 3,
-    department: "HR department",
-    totalEmployees: 3,
-    otHours: "20hr 0min",
+    department: "Raghul",
+    totalEmployees: 'Emp03',
+    otHours: "5hr 0min",
+    tHours: "20hr 0min",
     otPay: "£2950",
     netPay: "£29500",
-    paymentDate: "30/11/2024",
-    status: "All Approved",
+    paymentDate: "02/08/2024",
+    status: "Not approved",
   },
 ];
 
@@ -72,12 +75,12 @@ export default function PayListDetails() {
         accessorKey: "totalEmployees",
       },
       {
-        header: "Name",
+        header: "Emp Name",
         accessorKey: "department",
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "otPay",
+        accessorKey: "tHours",
       },
       {
         header: "Worked hours pay",
@@ -102,6 +105,11 @@ export default function PayListDetails() {
       {
         header: "Status",
         accessorKey: "status",
+        cell: ({ row }) => (
+          <div className={`flex items-center gap-2 justify-center py-2 rounded-md px-3 ${row.original.status==='Approved'? 'bg-[#ccf0da] text-[#13ba56]' : 'bg-[#f8f2f8] text-[#7e0880]'}`}>
+            {row.original.status}
+          </div>
+        ),
       },
 
       {

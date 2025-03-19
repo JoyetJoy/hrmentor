@@ -12,7 +12,7 @@ const summaryData = [
   { label: "Paid holiday credit", value: "120" },
   { label: "Unpaid Holiday", value: "5" },
   { label: "Unpaid Leave deduction", value: "5" },
-  { label: "Salary per Month", value: "£25250" },
+  { label: "Salary", value: "£25250" },
   { label: "Payment status", value: "Not paid" },
 ];
 

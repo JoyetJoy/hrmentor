@@ -13,7 +13,7 @@ const data = [
     otPay: "£0",
     netPay: "£0",
     paymentDate: "30/11/2024",
-    status: "Processing",
+    status: "Pay off generated",
   },
   {
     slNo: 2,
@@ -23,7 +23,7 @@ const data = [
     otPay: "£0",
     netPay: "£0",
     paymentDate: "30/11/2024",
-    status: "Approval Pending",
+    status: "Pay off generated",
   },
   {
     slNo: 3,
@@ -33,7 +33,7 @@ const data = [
     otPay: "£0",
     netPay: "£0",
     paymentDate: "30/11/2024",
-    status: "All Approved",
+    status: "Pay off generated",
   },
 ];
 
@@ -75,6 +75,11 @@ export default function PayrollOff() {
       {
         header: "Status",
         accessorKey: "status",
+        cell: ({ row }) => (
+          <div className={`flex items-center gap-2 justify-center py-2 rounded-md ${row.original.status==='Pay off generated'? 'bg-[#ccf0da] text-[#13ba56]' : 'bg-[#f8f2f8] text-[#7e0880]'}`}>
+            {row.original.status}
+          </div>
+        ),
       },
 
       {
