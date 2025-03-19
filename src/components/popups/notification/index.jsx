@@ -53,7 +53,7 @@ const pusher = new Pusher("469a7dd00053f2be95f4", {
   encrypted: true,
   
   // Change this to your production URL
-  authEndpoint:"https://hr-mentor.vercel.app/broadcasting/auth",
+  authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
   auth: {
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
