@@ -5,10 +5,11 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { LogIn, X } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import echo from "@/utils/reverb";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import Pusher from "pusher-js";
 
 export default function Notification({
   notifications,
@@ -18,16 +19,14 @@ export default function Notification({
   function close() {
     setNotificationPopupOpen(false);
   }
+  const [notification,setNotification] = useState('');
   const {user } = useUserStore((state) => ({
       user: state.user,
     }));
 
-  const channel = echo.private(`notification.${user?.id}`);
+    
 
-    channel.listen(".NotificationSent", (data) => {
-        console.log("Received a new notification:", data);
-        alert("New notification received!");
-    });
+  
   // useEffect(() => {
   //   if (window.Echo) {
   //     window.Echo.private(`notification-${user_id}`).notification(
@@ -38,6 +37,52 @@ export default function Notification({
   //     );
   //   }
   // }, []);
+
+  useEffect(() => {
+  
+    // Get the token properly before using it
+const token =
+  localStorage.getItem("super_token") ||
+  localStorage.getItem("hr_token") ||
+  localStorage.getItem("manager_token") ||
+  localStorage.getItem("employee_token");
+
+const pusher = new Pusher("469a7dd00053f2be95f4", {
+  cluster: "ap2",
+  forceTLS: true,
+  encrypted: true,
+  
+  // Change this to your production URL
+  authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
+  auth: {
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  },
+});
+
+// Subscribe to the private channel
+const channel = pusher.subscribe(`private-notification.${user?.id}`);
+  
+    // Listen for the NotificationSent event
+    channel.bind("NotificationSent", (data) => {
+      console.log("Received a new notification:", data);
+  
+      // Update the notifications state with the new notification
+      setNotification((prevNotifications) => [
+        data.latest_unread_notification,
+        ...prevNotifications,
+      ]);
+    });
+  
+    // Cleanup on unmount
+    return () => {
+      channel.unbind("NotificationSent");
+      pusher.unsubscribe(`private-notification.${user?.id}`);
+      pusher.disconnect(); // Ensure clean disconnection
+    };
+  }, [user?.id]); // Consider adding `userId` or `token` as dependencies if they change
+  
 
 const handleClick = async (notificationId) => {
   if (!notificationId) return;
@@ -56,6 +101,7 @@ const handleClick = async (notificationId) => {
   }
 };
 
+console.log(notification);
 
   return (
     <>
