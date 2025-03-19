@@ -57,12 +57,12 @@ export default function PayrollOff() {
         accessorKey: "totalEmployees",
       },
       {
-        header: "OT Hours",
+        header: "Total Hours",
         accessorKey: "otHours",
       },
       {
-        header: "OT Pay",
-        accessorKey: "otPay",
+        header: "OT Hours",
+        accessorKey: "otHours",
       },
       {
         header: "Net Pay",
