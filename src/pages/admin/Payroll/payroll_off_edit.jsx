@@ -201,17 +201,17 @@ export default function PayrollOffEdit() {
           <QueryTable columns={columns} list={tableData} />
 
           {/* History Section */}
-          <div className="history-section mt-4 rounded-md bg-white p-6 shadow">
+          {/* <div className="history-section mt-4 rounded-md bg-white p-6 shadow">
             <h2 className="mb-3 text-lg font-bold">History</h2>
             <h6 className="mb-3 font-bold">12 October, 2023</h6>
             <div className="flex w-full flex-col gap-3">
               <div className="relative rounded-md bg-white p-5">
                 <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-hrmprimaryorange" />
                 <div className="flex flex-col gap-y-4">
-                  {/* Render Main Steps */}
+                 
                   {historyData.map((item, index) => (
                     <div key={index}>
-                      {/* Main Step */}
+                     
                       <div className="flex  items-start gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]" style={{height:"80px"}}>
                         <div
                           className={`z-10 size-4 rounded-full border ${
@@ -221,25 +221,25 @@ export default function PayrollOffEdit() {
                           }`}
                         />
                         <div className="flex flex-1 flex-col">
-                          {/* Title */}
+                         
                           <h3
                             className="cursor-pointer font-semibold text-gray-800"
                             onClick={() => toggleDetails(index)}
                           >
                             {item.title}
                           </h3>
-                          {/* Date */}
+                         
                           <div className="text-xs text-gray-600">
                             {item.date} | {item.time}
                           </div>
-                          {/* Description */}
+                          
                           {expandedIndex === index && (
                             <div className="details mt-2 text-sm text-gray-800">
                               <p>{item.description}</p>
                             </div>
                           )}
                         </div>
-                        {/* Toggle Button */}
+                        
                         <button
                           className="ml-2 text-gray-500"
                           onClick={() => toggleDetails(index)}
@@ -247,13 +247,12 @@ export default function PayrollOffEdit() {
                           {expandedIndex === index ? "⌃" : "⌄"}
                         </button>
                       </div>
-                      {/* Conditionally render the description and other details */}
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

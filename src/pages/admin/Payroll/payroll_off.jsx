@@ -1,5 +1,5 @@
 import QueryTable from "@/components/table/QueryTable";
-import { Search } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
@@ -94,10 +94,7 @@ export default function PayrollOff() {
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
+              <Eye className="size-3" />
             </button>
           </div>
         ),
@@ -113,7 +110,7 @@ export default function PayrollOff() {
         <div className="mb-4 flex items-center justify-between">
           {/* Left Section */}
           <div>
-            <h4 className="text-lg font-bold">IT Department</h4>
+            <h4 className="text-lg font-bold">Payoff</h4>
           </div>
 
           {/* Right Section */}

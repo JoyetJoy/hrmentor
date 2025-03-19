@@ -205,12 +205,12 @@ export default function PayrollList() {
         accessorKey: "employee_count",
       },
       {
-        header: "OT Hours",
+        header: "Total Hours",
         accessorKey: "total_overtime",
       },
       {
-        header: "OT Pay",
-        accessorKey: "total_overtime_pay",
+        header: "OT Hours",
+        accessorKey: "total_overtime",
       },
       {
         header: "Net Pay",

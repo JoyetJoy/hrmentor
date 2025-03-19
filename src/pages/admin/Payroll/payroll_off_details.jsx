@@ -1,5 +1,5 @@
 import QueryTable from "@/components/table/QueryTable";
-import { Search } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
@@ -80,7 +80,7 @@ export default function PayrollOffDetails() {
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "otPay",
+        accessorKey: "tHours",
       },
       {
         header: "Worked hours pay",
@@ -89,10 +89,6 @@ export default function PayrollOffDetails() {
       {
         header: "OT Hours",
         accessorKey: "otHours",
-      },
-      {
-        header: "OT Pay",
-        accessorKey: "otPay",
       },
       {
         header: "Net Pay",
@@ -126,10 +122,7 @@ export default function PayrollOffDetails() {
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
+              <Eye className="size-3" />
             </button>
           </div>
         ),
@@ -169,12 +162,6 @@ export default function PayrollOffDetails() {
               style={{ backgroundColor: "#e95d39" }}
             >
               Export
-            </button>
-            <button
-              className="bg-orange-500 rounded-md px-4 py-2 text-sm text-white"
-              style={{ backgroundColor: "#e95d39" }}
-            >
-              Pay now
             </button>
           </div>
         </div>
