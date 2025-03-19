@@ -126,18 +126,6 @@ export default function PayrollOff() {
                 placeholder="Search"
               />
             </label>
-            <button
-              className="rounded-md border bg-orange px-4 py-2 text-sm text-white"
-              style={{ backgroundColor: "#e95d39" }}
-            >
-              Export
-            </button>
-            <button
-              className="bg-orange-500 rounded-md px-4 py-2 text-sm text-white"
-              style={{ backgroundColor: "#e95d39" }}
-            >
-              Pay now
-            </button>
           </div>
         </div>
 

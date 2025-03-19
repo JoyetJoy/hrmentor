@@ -8,7 +8,7 @@ const data = [
   {
     slNo: 1,
     department: "Kiran",
-    totalEmployees: 'Emp05',
+    totalEmployees: "Emp05",
     otHours: "8hr 0min",
     tHours: "20hr 0min",
     otPay: "£3500",
@@ -19,7 +19,7 @@ const data = [
   {
     slNo: 2,
     department: "Amit",
-    totalEmployees: 'Emp04',
+    totalEmployees: "Emp04",
     otHours: "9hr 0min",
     tHours: "20hr 0min",
     otPay: "£2500",
@@ -30,7 +30,7 @@ const data = [
   {
     slNo: 3,
     department: "Raghul",
-    totalEmployees: 'Emp03',
+    totalEmployees: "Emp03",
     otHours: "5hr 0min",
     tHours: "20hr 0min",
     otPay: "£2950",
@@ -106,7 +106,9 @@ export default function PayrollOffDetails() {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
-          <div className={`flex items-center gap-2 justify-center py-2 rounded-md px-3 ${row.original.status==='Paid'? 'bg-[#ccf0da] text-[#13ba56]' : 'bg-[#fef7e7] text-[#e7b731]'}`}>
+          <div
+            className={`flex items-center justify-center gap-2 rounded-md px-3 py-2 ${row.original.status === "Paid" ? "bg-[#ccf0da] text-[#13ba56]" : "bg-[#fef7e7] text-[#e7b731]"}`}
+          >
             {row.original.status}
           </div>
         ),
@@ -162,6 +164,18 @@ export default function PayrollOffDetails() {
             >
               Approve
             </button> */}
+            <button
+              className="rounded-md border bg-orange px-4 py-2 text-sm text-white"
+              style={{ backgroundColor: "#e95d39" }}
+            >
+              Export
+            </button>
+            <button
+              className="bg-orange-500 rounded-md px-4 py-2 text-sm text-white"
+              style={{ backgroundColor: "#e95d39" }}
+            >
+              Pay now
+            </button>
           </div>
         </div>
         {/* Table Section */}
