@@ -29,8 +29,8 @@ export const AdminHeader = () => {
       newRequest.get(NOTIFICATIONS).then((res) => {
         return res.data;
       }),
-    refetchInterval: 5000, // Fetch every 5 seconds
-    staleTime: 60000,
+    // refetchInterval: 5000,
+    // staleTime: 60000,
   });
 
   const handleClick = () => {
