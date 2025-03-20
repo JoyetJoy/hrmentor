@@ -155,32 +155,11 @@ export default function PayrollList() {
       setEndDate(formatDateRange(endDate));
     } else if (monthValue === "3") {
 
-      const newEndDate = new Date(
-        newStartDate.getTime() + 12 * 24 * 60 * 60 * 1000,
-      ); // Weekly: Add 6 days
+      const newEndDate = new Date(newStartDate.getTime() + 15 * 24 * 60 * 60 * 1000); 
       setStartDate(formatDateRange(newStartDate));
       setEndDate(formatDateRange(newEndDate));
       
-      // Set startDate to newStartDate + 1 day
-      const start_Date = new Date(endDate2);
-      start_Date.setDate(start_Date.getDate() + 1);
-    
-      // Set endDate to startDate + 15 days
-      const end_Date = new Date(start_Date);
-      end_Date.setDate(end_Date.getDate() + 15);
-    
-      // Set startDate2 to endDate + 1 day
-      const start_Date2 = new Date(end_Date);
-      start_Date2.setDate(start_Date2.getDate() + 1);
-    
-      // Set endDate2 to startDate2 + 15 days
-      const end_Date2 = new Date(start_Date2);
-      end_Date2.setDate(end_Date2.getDate() + 15);
-    
-      setStartDate(formatDateRange(start_Date));
-      setEndDate(formatDateRange(end_Date));
-      setStartDate2(formatDateRange(start_Date2));
-      setEndDate2(formatDateRange(end_Date2));
+     
     }
     
   };

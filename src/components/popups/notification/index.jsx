@@ -37,53 +37,64 @@ export default function Notification({
   //     );
   //   }
   // }, []);
-
   useEffect(() => {
+    if (!user?.id) return; // Prevent subscription if user ID is missing
   
-    // Get the token properly before using it
-const token =
-  localStorage.getItem("super_token") ||
-  localStorage.getItem("hr_token") ||
-  localStorage.getItem("manager_token") ||
-  localStorage.getItem("employee_token");
+    const token =
+      localStorage.getItem("super_token") ||
+      localStorage.getItem("hr_token") ||
+      localStorage.getItem("manager_token") ||
+      localStorage.getItem("employee_token");
+  
+    const pusher = new Pusher("469a7dd00053f2be95f4", {
+      cluster: "ap2",
+      forceTLS: true,
+      encrypted: true,
+      enabledTransports: ["ws", "wss"],
+      authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
+      auth: {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      },
+    });
+  
+    console.log("Subscribing to:", `private-notification.${user?.id}`);
+  
+    // Subscribe to the private channel
+    const channel = pusher.subscribe(`private-notification.${user?.id}`);
+  
+    pusher.connection.bind("state_change", function (states) {
+      console.log("Pusher State Changed:", states);
+    });
+    
+    pusher.connection.bind("error", function (err) {
+      console.error("Pusher Error:", err);
+    });
 
-const pusher = new Pusher("469a7dd00053f2be95f4", {
-  cluster: "ap2",
-  forceTLS: true,
-  encrypted: true,
-  
-  // Change this to your production URL
-  authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
-  auth: {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-    },
-  },
-});
-
-// Subscribe to the private channel
-const channel = pusher.subscribe(`private-notification.${user?.id}`);
-  
-    // Listen for the NotificationSent event
+    
     channel.bind("NotificationSent", (data) => {
       console.log("Received a new notification:", data);
   
-      // Update the notifications state with the new notification
       setNotification((prevNotifications) => [
         data.latest_unread_notification,
         ...prevNotifications,
       ]);
     });
   
-    // Cleanup on unmount
-    return () => {
-      channel.unbind("NotificationSent");
-      pusher.unsubscribe(`private-notification.${user?.id}`);
-      pusher.disconnect(); // Ensure clean disconnection
-    };
-  }, [user?.id]); // Consider adding `userId` or `token` as dependencies if they change
+    pusher.connection.bind("error", (err) => {
+      console.error("Pusher Error:", err);
+    });
   
-
+    // Cleanup
+    return () => {
+      console.log("Unsubscribing from:", `private-notification.${user?.id}`);
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
+  }, [user?.id]);
+  
 const handleClick = async (notificationId) => {
   if (!notificationId) return;
   const data ={
