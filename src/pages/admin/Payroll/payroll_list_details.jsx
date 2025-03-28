@@ -55,6 +55,7 @@ export default function PayListDetails() {
   const endDate = searchParams.get("end_date");
   console.log(id);
   console.log(startDate,endDate);
+  const pageLimit = 10;
   
   
   const { data, isLoading } = useQuery({
@@ -94,36 +95,41 @@ export default function PayListDetails() {
         ),
       },
       {
-        header: "Sl.No",
-        accessorKey: "slNo",
+        header: "Sl No",
+        accessorKey: "sno",
+        cell: ({ row }) => (
+          <div className="flex px-2">
+            {row.index + 1 + (currentPage - 1) * pageLimit}
+          </div>
+        ),
       },
       {
         header: "Emp ID",
-        accessorKey: "totalEmployees",
+        accessorKey: "employee_id",
       },
       {
         header: "Emp Name",
-        accessorKey: "department",
+        accessorKey: "employee_name",
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "tHours",
+        accessorKey: "total_working_hours",
       },
       {
         header: "Worked hours pay",
-        accessorKey: "otPay",
+        accessorKey: "departmentTotalSalary",
       },
       {
         header: "OT Hours",
-        accessorKey: "otHours",
+        accessorKey: "total_overtime",
       },
       {
         header: "OT Pay",
-        accessorKey: "otPay",
+        accessorKey: "total_overtime_pay",
       },
       {
         header: "Net Pay",
-        accessorKey: "netPay",
+        accessorKey: "net_pay",
       },
       {
         header: "Payment Date",
