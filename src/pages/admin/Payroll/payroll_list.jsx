@@ -12,6 +12,19 @@ import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
+import { getCurrentDateISO } from "@/utils/helpers";
+
+const custom = [
+  {
+    label: "2 week",
+    value: '3',
+  },
+  {
+    label: "4 week",
+    value: '4',
+  },
+];
+
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -41,8 +54,8 @@ export default function PayrollList() {
   const [endDate, setEndDate] = useState("");
   const [startDate2, setStartDate2] = useState("");
   const [endDate2, setEndDate2] = useState("");
+  const [customVal, setCustomVal] = useState('');
   const pageLimit = 10;
-
 
   const { data, isLoading } = useQuery({
     queryKey: ["payperiod", monthValue],
@@ -63,7 +76,7 @@ export default function PayrollList() {
             start_date: startDate,
             end_date: endDate,
             page: currentPage,
-              per_limit: pageLimit,
+            per_limit: pageLimit,
           },
         })
         .then((res) => res.data),
@@ -154,14 +167,12 @@ export default function PayrollList() {
       setStartDate(formatDateRange(newStartDate));
       setEndDate(formatDateRange(endDate));
     } else if (monthValue === "3") {
-
-      const newEndDate = new Date(newStartDate.getTime() + 15 * 24 * 60 * 60 * 1000); 
+      const newEndDate = new Date(
+        newStartDate.getTime() + 15 * 24 * 60 * 60 * 1000,
+      );
       setStartDate(formatDateRange(newStartDate));
       setEndDate(formatDateRange(newEndDate));
-      
-     
     }
-    
   };
 
   const columns = React.useMemo(
@@ -196,10 +207,6 @@ export default function PayrollList() {
         accessorKey: "departmentTotalSalary",
       },
       {
-        header: "Payment Date",
-        accessorKey: "paymentDate",
-      },
-      {
         header: "Status",
         accessorKey: "status",
       },
@@ -211,7 +218,11 @@ export default function PayrollList() {
             <button
               type="button"
               onClick={() => {
-                navigate("/admin/payroll/paylistdetail");
+                navigate(
+                  `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}` +
+                  `?start_date=${startDate?getCurrentDateISO(startDate) : "0"}&end_date=${getCurrentDateISO(endDate) || "0"}`
+                );
+                
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
@@ -221,8 +232,10 @@ export default function PayrollList() {
         ),
       },
     ],
-    [],
+    [startDate,endDate],
   );
+  console.log(startDate);
+  
   return (
     <>
       <PayrollHeader page={2} />
@@ -238,22 +251,60 @@ export default function PayrollList() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setMonthValue("1")}
-              className={`rounded-md border px-4 py-2 text-sm ${monthValue === "1" ? "bg-[#e95d39] text-white" : "bg-white text-gray-600"} `}
+              className={`rounded-md border px-4 py-2 text-sm ${
+                monthValue === "1"
+                  ? "bg-[#e95d39] text-white"
+                  : "bg-white text-gray-600"
+              }`}
             >
               Weekly
             </button>
+
             <button
               onClick={() => setMonthValue("2")}
-              className={`rounded-md border px-4 py-2 text-sm ${monthValue === "2" ? "bg-[#e95d39] text-white" : "bg-white text-gray-600"} `}
+              className={`rounded-md border px-4 py-2 text-sm ${
+                monthValue === "2"
+                  ? "bg-[#e95d39] text-white"
+                  : "bg-white text-gray-600"
+              }`}
             >
               Monthly
             </button>
-            <button
-              onClick={() => setMonthValue("3")}
-              className={`w-full rounded-md border px-4 py-2 text-sm ${monthValue === "3" ? "bg-[#e95d39] text-white" : "bg-white text-gray-600"} `}
-            >
-              Monthly twice
-            </button>
+
+            <div className="relative">
+              <button
+                onClick={() => setMonthValue("5")}
+                className={`w-20 rounded-md border px-4 py-2 text-left text-sm ${
+                  monthValue === "5"
+                    ? "bg-[#e95d39] text-white":
+                    monthValue === "3"
+                    ? "bg-[#e95d39] text-white" :
+                    monthValue === "4"
+                    ? "bg-[#e95d39] text-white"
+                    : "bg-white text-gray-600"
+                }`}
+              >
+                {customVal? customVal :'Custom'}
+              </button>
+
+              {monthValue === "5" && (
+                <ul className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
+                  {custom.map((option) => (
+                    <li
+                      key={option.value}
+                      className="cursor-pointer px-4 py-2 text-sm hover:bg-gray-200"
+                      onClick={() => {
+                        setCustomVal(option.label);
+                        setMonthValue(option.value);
+                      }}
+                    >
+                      {option.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
             <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
               <Search className="size-4 object-contain text-gray-dark" />
               <input
@@ -283,41 +334,42 @@ export default function PayrollList() {
 
         {/* Table Section */}
         <div className="mt-2 rounded-md bg-white p-4">
-          {startDate&&endDate?(
-            <><div className="flex items-center gap-2 pb-3 text-xs font-semibold">
-            <button className="p-2" onClick={() => handlePreviousPeriod()}>
-              <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
-            </button>
+          {startDate && endDate ? (
+            <>
+              <div className="flex items-center gap-2 pb-3 text-xs font-semibold">
+                <button className="p-2" onClick={() => handlePreviousPeriod()}>
+                  <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
+                </button>
 
-            <p>
-              {startDate} to {endDate}
-            </p>
-            {monthValue === "3" && (
-              <>
-                <span>|</span>
                 <p>
-                  {" "}
-                  {startDate2} to {endDate2}
+                  {startDate} to {endDate}
                 </p>
-              </>
-            )}
-            <button className="p-2" onClick={() => handleNextPeriod()}>
-              <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
-            </button>
-          </div>
-          {payrollList?
-          <QueryTable
-          columns={columns}
-          list={payrollList}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-        />
-        :
-          <Loader />
-          }
-          </>
-          ):(
+                {monthValue === "3" && (
+                  <>
+                    <span>|</span>
+                    <p>
+                      {" "}
+                      {startDate2} to {endDate2}
+                    </p>
+                  </>
+                )}
+                <button className="p-2" onClick={() => handleNextPeriod()}>
+                  <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
+                </button>
+              </div>
+              {payrollList ? (
+                <QueryTable
+                  columns={columns}
+                  list={payrollList}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              ) : (
+                <Loader />
+              )}
+            </>
+          ) : (
             <Loader />
           )}
         </div>

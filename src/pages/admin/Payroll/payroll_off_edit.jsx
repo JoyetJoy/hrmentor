@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { ArrowLeft } from "@mui/icons-material";
 import { Check, ChevronUp } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 const summaryData = [
   { label: "Total Working hours", value: "00 hr 00 min" },
@@ -85,6 +86,15 @@ const stepCounter = 4;
 
 export default function PayrollOffEdit() {
   const [expandedIndex, setExpandedIndex] = useState(null);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["payperiod", monthValue],
+    queryFn: () =>
+      newRequest
+        .get(PAYROLL_PAYPERIOD_GET, { params: { pay_schedule: monthValue } })
+        .then((res) => res.data),
+    enabled: !!monthValue,
+  });
 
   const toggleDetails = (index) => {
     setExpandedIndex(expandedIndex === index ? null : index);

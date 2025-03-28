@@ -19,3 +19,8 @@ export const parseDateString = (value) => {
 export function extractTime(timestamp) {
   return timestamp.split(" ")[1]; // Extracts the time part
 }
+
+export const getCurrentDateISO = () => {
+  return new Date().toISOString().split('T')[0];
+};
+

@@ -1,8 +1,11 @@
 import QueryTable from "@/components/table/QueryTable";
 import { Eye, Search } from "lucide-react";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest } from "@/api";
+import { PAYROLL_GET_VIEW } from "@/api/payroll";
 
 const data = [
   {
@@ -44,6 +47,30 @@ export default function PayrollOffDetails() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const startDate = searchParams.get("start_date");
+  const endDate = searchParams.get("end_date");
+  console.log(id);
+  console.log(startDate, endDate);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["payoffdetails", id, startDate, endDate],
+    queryFn: () =>
+      newRequest
+        .get(`${PAYROLL_GET_VIEW}/${id}`, {
+          params: {
+            start_date: startDate,
+            end_date: endDate,
+          },
+        })
+        .then((res) => res.data),
+    enabled: !!id,
+  });
+
+  console.log(data);
 
   const columns = React.useMemo(
     () => [
