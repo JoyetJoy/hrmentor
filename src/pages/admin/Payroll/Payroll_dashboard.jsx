@@ -196,9 +196,10 @@ export default function Payroll() {
   return (
     <>
       <PayrollHeader page={1} />
-      <div className="grid grid-cols-10 gap-4">
+      <div className="flex gap-4">
+      <div className="flex flex-col  gap-8 w-3/4">
         {/* Left Section */}
-        <div className="col-span-7 h-[26rem] w-full gap-4 rounded-md bg-white px-10 py-12">
+        <div className="col-span-7 h-[28rem] w-full gap-4 rounded-md bg-white px-10 py-10">
           <div className="flex justify-between">
             <h1 className="text-lg font-semibold">Expense</h1>
             <p className="mb-3 flex items-center gap-3">
@@ -221,47 +222,6 @@ export default function Payroll() {
           <Expense />
         </div>
 
-        {/* Right Section */}
-        <div className="col-span-3 w-full bg-white p-6">
-          <div className="mb-6">
-            {/* Header */}
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Process pay run</h3>
-              <button
-                className="rounded-md px-4 py-2 text-white"
-                onClick={() => CreatePayrun()}
-                style={{ backgroundColor: "#e95d39" }}
-              >
-                {loader ? (
-                  <div className="flex items-center gap-3">
-                    <p className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></p>
-                    Creating
-                  </div>
-                ) : (
-                  <>Create pay run</>
-                )}
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="text-sm">
-              <div className="mb-2 flex justify-between">
-                <span className="text-gray-500">Cost of the Company</span>
-                <span className="text-gray-500">Pay day</span>
-              </div>
-              <div className="mb-2 flex justify-between">
-                <span className="font-medium">₹705000</span>
-
-                <span className="font-medium">May 25, 2024</span>
-              </div>
-              <div className="mt-4 text-gray-600">
-                <span>This payment is overdue by 174 day(s)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-4 grid grid-cols-10 gap-4">
         {/* Left Section */}
         <div className="col-span-7 w-full rounded-md bg-white px-6 py-4">
           {/* Header */}
@@ -291,7 +251,48 @@ export default function Payroll() {
             />
           </div>
         </div>
+        
+      </div>
+      <div className="flex flex-col gap-4">
+        {/* Right Section */}
+        <div className="col-span-3 h-[6rem] w-full bg-white p-6">
+          <div className="mb-6">
+            {/* Header */}
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Process pay run</h3>
+              <button
+                className="rounded-md px-4 py-2 text-white"
+                onClick={() => CreatePayrun()}
+                style={{ backgroundColor: "#e95d39" }}
+              >
+                {loader ? (
+                  <div className="flex items-center gap-3">
+                    <p className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></p>
+                    Creating
+                  </div>
+                ) : (
+                  <>Create pay run</>
+                )}
+              </button>
+            </div>
 
+            {/* Content */}
+            {/* <div className="text-sm">
+              <div className="mb-2 flex justify-between">
+                <span className="text-gray-500">Cost of the Company</span>
+                <span className="text-gray-500">Pay day</span>
+              </div>
+              <div className="mb-2 flex justify-between">
+                <span className="font-medium">₹705000</span>
+
+                <span className="font-medium">May 25, 2024</span>
+              </div>
+              <div className="mt-4 text-gray-600">
+                <span>This payment is overdue by 174 day(s)</span>
+              </div>
+            </div> */}
+          </div>
+        </div>
         {/* Right Section */}
         <div className="col-span-3 w-full bg-white p-10">
           <div>
@@ -326,6 +327,7 @@ export default function Payroll() {
           </div>
           <SemiDonutChart />
         </div>
+      </div>
       </div>
     </>
   );
