@@ -104,10 +104,10 @@ export default function PayListDetails() {
       },
       {
         header: "Worked hours pay",
-        accessorKey: "net_pay",
+        accessorKey: "departmentTotalSalary",
         cell: ({ row }) => (
           <div className="flex px-2">
-            {Number(row.original.net_pay || 0).toFixed(2)}
+            {Number(row.original.departmentTotalSalary || 0).toFixed(2)}
           </div>
         ),
       },
