@@ -20,7 +20,12 @@ export function extractTime(timestamp) {
   return timestamp.split(" ")[1]; // Extracts the time part
 }
 
-export const getCurrentDateISO = () => {
-  return new Date().toISOString().split('T')[0];
+export const getCurrentDateISO = (dateString) => {
+  if (!dateString) return new Date().toISOString().split('T')[0]; // Default to today if no date is provided
+  const localDate = new Date(dateString);
+  localDate.setMinutes(localDate.getMinutes() - localDate.getTimezoneOffset()); // Adjust for timezone shift
+
+  return localDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
 };
+
 

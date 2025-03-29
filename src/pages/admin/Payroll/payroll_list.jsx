@@ -14,33 +14,25 @@ import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
 import { getCurrentDateISO } from "@/utils/helpers";
 
-const custom = [
-  {
-    label: "2 week",
-    value: '3',
-  },
-  {
-    label: "4 week",
-    value: '4',
-  },
-];
-
-
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const referenceDayIndex = referenceDate.getDay();
-  const targetDayIndex = daysOfWeek.indexOf(targetDay);
 
-  // Ensure the target day is within the current week
-  let daysDifference = targetDayIndex - referenceDayIndex;
-  if (daysDifference < 0) {
-    daysDifference += 7; // Go backward to find the same week's day
+  // Adjust reference day index to match our array (Monday = 0, ..., Sunday = 6)
+  const referenceDayIndex = referenceDate.getDay();
+  const adjustedReferenceDayIndex =
+    referenceDayIndex === 0 ? 6 : referenceDayIndex - 1;
+
+  const targetDayIndex = daysOfWeek.indexOf(targetDay);
+  if (targetDayIndex === -1) {
+    throw new Error("Invalid targetDay provided.");
   }
 
+  let daysDifference = targetDayIndex - adjustedReferenceDayIndex;
+
+  // Ensure startDate is in the current week and endDate is after startDate
   const targetDate = new Date(referenceDate);
-  targetDate.setDate(
-    referenceDate.getDate() - referenceDayIndex + targetDayIndex,
-  );
+  targetDate.setDate(referenceDate.getDate() + daysDifference);
+
   return targetDate;
 };
 
@@ -54,7 +46,6 @@ export default function PayrollList() {
   const [endDate, setEndDate] = useState("");
   const [startDate2, setStartDate2] = useState("");
   const [endDate2, setEndDate2] = useState("");
-  const [customVal, setCustomVal] = useState('');
   const pageLimit = 10;
 
   const { data, isLoading } = useQuery({
@@ -102,22 +93,24 @@ export default function PayrollList() {
 
   useEffect(() => {
     if (monthValue === "1" && data) {
+      // Get start and end dates within the same week
       const { star_day, end_day } = data;
+      console.log("Weekday inputs:", star_day, end_day); // Expected: "Tue Mon"
 
       const startDate = getWeekDayDate(star_day);
-      const endDate = getWeekDayDate(
-        end_day,
-        new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000),
-      ); // Add 7 days for the next week
+      console.log("Start Date:", startDate);
+
+      // Get end date by adding 6 days to the start date
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6); // Ensures Mon comes after Tue in the same week
+
+      console.log("End Date:", endDate);
 
       setStartDate(formatDateRange(startDate));
       setEndDate(formatDateRange(endDate));
-    } else if (monthValue === "2" && data) {
+    } else if ((monthValue === "2" ||monthValue === "3"||monthValue === "4") && data) {
       setStartDate(formatDateRange(data?.start_date));
       setEndDate(formatDateRange(data?.end_date));
-    } else if (monthValue === "3" && data) {
-      setStartDate(formatDateRange(data?.first_pay_term?.start_date));
-      setEndDate(formatDateRange(data?.first_pay_term?.end_date));
     }
   }, [monthValue, data]);
 
@@ -134,7 +127,9 @@ export default function PayrollList() {
       setEndDate(formatDateRange(newEndDate));
     } else if (monthValue === "2") {
       const prevMonth = new Date(newEndDate);
-      prevMonth.setMonth(prevMonth.getMonth() - 1, 1); // Monthly: Start of the previous month
+      prevMonth.setMonth(prevMonth.getMonth() - 1); // Move back one month
+      prevMonth.setDate(new Date(startDate).getDate()); // Preserve the day of the month
+
       setStartDate(formatDateRange(prevMonth));
       setEndDate(formatDateRange(newEndDate));
     } else if (monthValue === "3") {
@@ -161,11 +156,12 @@ export default function PayrollList() {
       setStartDate(formatDateRange(newStartDate));
       setEndDate(formatDateRange(newEndDate));
     } else if (monthValue === "2") {
-      const endDate = new Date(newStartDate);
-      endDate.setDate(endDate.getDate() + 30); // Add 30 days to newStartDate
+      const newEndDate = new Date(newStartDate);
+      newEndDate.setMonth(newEndDate.getMonth() + 1); // Move to next month
+      newEndDate.setDate(newStartDate.getDate() - 1); // Set end date to one day before the same day next month
 
       setStartDate(formatDateRange(newStartDate));
-      setEndDate(formatDateRange(endDate));
+      setEndDate(formatDateRange(newEndDate));
     } else if (monthValue === "3") {
       const newEndDate = new Date(
         newStartDate.getTime() + 15 * 24 * 60 * 60 * 1000,
@@ -199,10 +195,6 @@ export default function PayrollList() {
         accessorKey: "total_overtime",
       },
       {
-        header: "OT Hours",
-        accessorKey: "total_overtime",
-      },
-      {
         header: "Net Pay",
         accessorKey: "departmentTotalSalary",
       },
@@ -219,10 +211,9 @@ export default function PayrollList() {
               type="button"
               onClick={() => {
                 navigate(
-                  `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}` +
-                  `?start_date=${startDate?getCurrentDateISO(startDate) : "0"}&end_date=${getCurrentDateISO(endDate) || "0"}`
+                  `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}/${monthValue}` +
+                    `?start_date=${startDate}&end_date=${endDate}`,
                 );
-                
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
@@ -232,10 +223,10 @@ export default function PayrollList() {
         ),
       },
     ],
-    [startDate,endDate],
+    [startDate, endDate],
   );
   console.log(startDate);
-  
+
   return (
     <>
       <PayrollHeader page={2} />
@@ -270,40 +261,26 @@ export default function PayrollList() {
             >
               Monthly
             </button>
-
-            <div className="relative">
-              <button
-                onClick={() => setMonthValue("5")}
-                className={`w-20 rounded-md border px-4 py-2 text-left text-sm ${
-                  monthValue === "5"
-                    ? "bg-[#e95d39] text-white":
-                    monthValue === "3"
-                    ? "bg-[#e95d39] text-white" :
-                    monthValue === "4"
-                    ? "bg-[#e95d39] text-white"
-                    : "bg-white text-gray-600"
-                }`}
-              >
-                {customVal? customVal :'Custom'}
-              </button>
-
-              {monthValue === "5" && (
-                <ul className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
-                  {custom.map((option) => (
-                    <li
-                      key={option.value}
-                      className="cursor-pointer px-4 py-2 text-sm hover:bg-gray-200"
-                      onClick={() => {
-                        setCustomVal(option.label);
-                        setMonthValue(option.value);
-                      }}
-                    >
-                      {option.label}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <button
+              onClick={() => setMonthValue("3")}
+              className={`rounded-md border px-4 py-2 text-sm whitespace-nowrap ${
+                monthValue === "3"
+                  ? "bg-[#e95d39] text-white"
+                  : "bg-white text-gray-600"
+              }`}
+            >
+              Biweekly
+            </button>
+            <button
+              onClick={() => setMonthValue("4")}
+              className={`rounded-md border px-4 py-2 text-sm whitespace-nowrap ${
+                monthValue === "4"
+                  ? "bg-[#e95d39] text-white"
+                  : "bg-white text-gray-600"
+              }`}
+            >
+              4-weekly
+            </button>
 
             <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
               <Search className="size-4 object-contain text-gray-dark" />
@@ -344,15 +321,6 @@ export default function PayrollList() {
                 <p>
                   {startDate} to {endDate}
                 </p>
-                {monthValue === "3" && (
-                  <>
-                    <span>|</span>
-                    <p>
-                      {" "}
-                      {startDate2} to {endDate2}
-                    </p>
-                  </>
-                )}
                 <button className="p-2" onClick={() => handleNextPeriod()}>
                   <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
                 </button>

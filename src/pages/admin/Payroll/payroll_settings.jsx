@@ -218,7 +218,7 @@ export default function PayrollSettings() {
                     onClick={() => setPayDuriation("monthlytwice")}
                     checked={payDuriation == "monthlytwice"}
                   />
-                  Monthly twice
+                  Biweekly
                 </label>
               </div>
               <p className="mt-2 rounded-md border-l-4 border-[#ffb233] bg-yellow-100 p-2 text-sm text-yellow-600">

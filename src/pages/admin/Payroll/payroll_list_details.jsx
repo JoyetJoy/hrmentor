@@ -6,72 +6,40 @@ import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { useQuery } from "@tanstack/react-query";
 import { PAYROLL_GET_VIEW } from "@/api/payroll";
 import { newRequest } from "@/api";
-
-const data = [
-  {
-    slNo: 1,
-    department: "Kiran",
-    totalEmployees: 'Emp05',
-    otHours: "8hr 0min",
-    tHours: "20hr 0min",
-    otPay: "£3500",
-    netPay: "£25000",
-    paymentDate: "02/01/2024",
-    status: "Approved",
-  },
-  {
-    slNo: 2,
-    department: "Amit",
-    totalEmployees: 'Emp04',
-    otHours: "9hr 0min",
-    tHours: "20hr 0min",
-    otPay: "£2500",
-    netPay: "£25000",
-    paymentDate: "02/14/2024",
-    status: "Not approved",
-  },
-  {
-    slNo: 3,
-    department: "Raghul",
-    totalEmployees: 'Emp03',
-    otHours: "5hr 0min",
-    tHours: "20hr 0min",
-    otPay: "£2950",
-    netPay: "£29500",
-    paymentDate: "02/08/2024",
-    status: "Not approved",
-  },
-];
+import { getCurrentDateISO } from "@/utils/helpers";
 
 export default function PayListDetails() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const navigate = useNavigate();
-  const {id} = useParams();
+  const {id,monthid} = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
   const startDate = searchParams.get("start_date");
   const endDate = searchParams.get("end_date");
-  console.log(id);
   console.log(startDate,endDate);
+  
+  const start = getCurrentDateISO(startDate);
+  const end = getCurrentDateISO(endDate)
+  console.log(id,monthid);
+  console.log(start,end);
   const pageLimit = 10;
   
   
   const { data, isLoading } = useQuery({
-    queryKey: ["payrolldetails",id,startDate,endDate],
+    queryKey: ["payrolldetails",id,start,end],
     queryFn: () =>
-      newRequest.get(`${PAYROLL_GET_VIEW}/${id}`,{
+      newRequest.get(PAYROLL_GET_VIEW,{
         params:{
-          start_date:startDate,
-          end_date:endDate
+          schedule: monthid,
+          department_id:id,
+          start_date:start,
+          end_date:end
         }
       }).then((res) => res.data),
     enabled: !!id
   });
-  
-  console.log(data);
-  
 
   const columns = React.useMemo(
     () => [
@@ -118,6 +86,11 @@ export default function PayListDetails() {
       {
         header: "Worked hours pay",
         accessorKey: "departmentTotalSalary",
+        cell: ({ row }) => (
+          <div className="flex px-2">
+            {Number(row.original.departmentTotalSalary || 0).toFixed(2)}
+          </div>
+        ),        
       },
       {
         header: "OT Hours",
@@ -132,15 +105,11 @@ export default function PayListDetails() {
         accessorKey: "net_pay",
       },
       {
-        header: "Payment Date",
-        accessorKey: "paymentDate",
-      },
-      {
         header: "Status",
         accessorKey: "status",
         cell: ({ row }) => (
           <div className={`flex items-center gap-2 justify-center py-2 rounded-md px-3 ${row.original.status==='Approved'? 'bg-[#ccf0da] text-[#13ba56]' : 'bg-[#f8f2f8] text-[#7e0880]'}`}>
-            {row.original.status}
+            {row.original.status === 'not_approved' ? 'Not Approved' : 'Approved'}
           </div>
         ),
       },
@@ -188,6 +157,7 @@ export default function PayListDetails() {
             </label>
             <button
               className="bg-orange-500 rounded-md px-4 py-2 text-sm text-white"
+              onClick={()=> Approve()}
               style={{ backgroundColor: "#e95d39" }}
             >
               Approve
