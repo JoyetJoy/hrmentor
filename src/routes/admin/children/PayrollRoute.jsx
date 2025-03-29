@@ -33,7 +33,7 @@ export const PayrollRoute = [
     element: <PayrollOffDetails />,
   },
   {
-    path: "paylistedit",
+    path: "paylistedit/:id",
     element: <PayrollListEdit />,
   },
   {

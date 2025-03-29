@@ -29,3 +29,12 @@ export const getCurrentDateISO = (dateString) => {
 };
 
 
+export const formatDateRange = (startDate) => {
+  const options = { day: "2-digit", month: "short", year: "numeric" };
+
+  const formattedStartDate = new Date(startDate).toLocaleDateString(
+    "en-GB",
+    options,
+  );
+  return formattedStartDate;
+};

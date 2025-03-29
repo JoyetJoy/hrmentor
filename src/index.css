@@ -432,10 +432,7 @@ select:focus {
 .pay-now {
   text-align: right;
   margin-top: 20px;
-}
-
-.pay-now button {
-  background-color: #ff5722;
+  background-color: #e95d39;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -443,6 +440,6 @@ select:focus {
   cursor: pointer;
 }
 
-.pay-now button:hover {
+.pay-now:hover {
   background-color: #e64a19;
 }

@@ -3,6 +3,17 @@ import React, { useState } from "react";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { ArrowLeft, X } from "@mui/icons-material";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import {
+  APPROVE_PAYROLL_EMPLOYEE,
+  EMPLOYEE_PAYROLL_DETAILS,
+} from "@/api/payroll";
+import { useLocation, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { newRequest } from "@/api";
+import { useQuery } from "@tanstack/react-query";
+import { formatDateRange } from "@/utils/helpers";
+import Paynow from "@/components/payroll/Paynow";
+import dayjs from "dayjs";
 
 const summaryData = [
   { label: "Total Working hours", value: "240 hr 00 min" },
@@ -14,28 +25,6 @@ const summaryData = [
   { label: "Unpaid Leave deduction", value: "5" },
   { label: "Salary", value: "£25250" },
   { label: "Payment status", value: "Not paid" },
-];
-
-const historyData = [
-  {
-    title: "Paylist approved by Team lead",
-    description: "Team lead Approved",
-    date: "12/11/2024",
-    time: "10:30AM",
-  },
-  {
-    title: "Team lead Add a note Against Disputed",
-    description: "Test note",
-    date: "12/11/2024",
-    time: "10:30AM",
-  },
-  {
-    title: "Disputed from Amal",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
-    date: "12/11/2024",
-    time: "10:30AM",
-  },
 ];
 
 const tableData = [
@@ -61,39 +50,87 @@ const tableData = [
 
 export default function PayrollListEdit() {
   const [popupOpen, setPopupOpen] = useState(false);
+  const [payPopup, setPayPopup] = useState(false);
+  const { id } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const startDate = searchParams.get("start_date");
+  const endDate = searchParams.get("end_date");
+  const empId = searchParams.get("empid");
+  console.log(startDate, endDate);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["employeepayrolldetails", empId, id, startDate, endDate],
+    queryFn: () =>
+      newRequest
+        .get(EMPLOYEE_PAYROLL_DETAILS, {
+          params: {
+            payrun_id: id,
+            emp_id: empId,
+            start_date: startDate,
+            end_date: endDate,
+          },
+        })
+        .then((res) => res.data),
+    enabled: !!empId,
+  });
+
+  console.log(data);
+
   function close() {
     setPopupOpen(false);
     reset();
   }
+
+  const Approve = async () => {
+    const body = {
+      payrun_id: id,
+    };
+
+    try {
+      const response = await newRequest.post(APPROVE_PAYROLL_EMPLOYEE, body);
+      console.log("Approval successful:", response);
+      toast.success(response.data.original.message);
+    } catch (error) {
+      console.error("Error approving payroll:", error);
+      toast.error("Failed to approve payroll. Please try again.");
+    }
+  };
   const columns = React.useMemo(
     () => [
       {
         header: "Date",
         accessorKey: "date",
+        cell: ({ row }) => (
+          <div className="flex px-2">
+            {dayjs(row.original.date).format('MM/DD/YYYY')}
+          </div>
+        ),
       },
       {
         header: "Shift",
-        accessorKey: "shift",
+        accessorKey: "shift_name",
       },
       {
         header: "Clocked In",
-        accessorKey: "clockedIn",
+        accessorKey: "clock_in",
       },
       {
         header: "Clocked Out",
-        accessorKey: "clockedOut",
+        accessorKey: "clock_out",
       },
       {
         header: "Total BT",
-        accessorKey: "totalBT",
+        accessorKey: "total_break_time",
       },
       {
         header: "OT Hours",
-        accessorKey: "otHours",
+        accessorKey: "total_overtime",
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "totalWorked",
+        accessorKey: "total_working_hour",
       },
       {
         header: "Disputes",
@@ -121,6 +158,7 @@ export default function PayrollListEdit() {
   return (
     <>
       <PayrollHeader page={2} />
+      <Paynow popupOpen={payPopup} setPopupOpen={setPayPopup} />
 
       <div className="mb-4 flex items-center justify-between">
         {/* Left Section */}
@@ -153,13 +191,19 @@ export default function PayrollListEdit() {
               fill="#2C2C2C"
             />
           </svg>
-          <h4 className="pl-4 text-lg font-bold">Amal</h4>
+          <h4 className="pl-4 text-lg font-bold">{data&&data[0]?.employee_name}</h4>
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center gap-4">
-          <div className="pay-now">
-            <button>Approve</button>
+        <div className="flex gap-3">
+          <div
+            className="flex items-center gap-4"
+            onClick={() => setPayPopup(true)}
+          >
+            <button className="pay-now">Pay Now</button>
+          </div>
+          <div className="flex items-center gap-4" onClick={() => Approve()}>
+            <button className="pay-now">Approve</button>
           </div>
         </div>
       </div>
@@ -168,23 +212,86 @@ export default function PayrollListEdit() {
         <div className="col-span-3">
           <div>
             <div className="summary-header mb-4">
-              <h4 className="text-sm font-bold">
-                Monday, 11 Nov 2024 to Saturday, 15 Nov 2024{" "}
-                <button className="toggle-button text-black-600 text-sm">
+              <h4 className="flex w-full justify-end text-sm font-bold">
+                {formatDateRange(startDate)} to {formatDateRange(endDate)}
+                {/* <button className="toggle-button text-black-600 text-sm">
                   ⌃
-                </button>
+                </button> */}
               </h4>
             </div>
             <div className="summary-body rounded-md p-4 shadow">
-              {summaryData.map((item, index) => (
-                <div
-                  key={index}
-                  className="summary-row flex justify-between border-b py-2"
-                >
-                  <span className="label text-gray-700">{item.label}</span>
-                  <span className="value text-gray-900">{item.value}</span>
-                </div>
-              ))}
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Total Working hours</span>
+                <span className="value text-md font-semibold text-gray-900">
+                {data &&data[0]?.total_working_hours}
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Overtime</span>
+                <span className="value text-md font-semibold text-gray-900">
+                {data&&data[0]?.total_overtime}
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Overtime per week</span>
+                <span className="value text-md font-semibold text-gray-900">
+                  0
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Paid Holidays</span>
+                <span className="value text-md font-semibold text-gray-900">
+                  0
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Paid holiday credit</span>
+                <span className="value text-md font-semibold text-gray-900">
+                  0
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Unpaid Holiday</span>
+                <span className="value text-md font-semibold text-gray-900">
+                  0
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Unpaid Leave deduction</span>
+                <span className="value text-md font-semibold text-gray-900">
+                  0
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Salary</span>
+                <span className="value text-md font-semibold text-gray-900">
+                {data&&data[0]?.net_pay}
+                </span>
+              </div>
+              <div
+                className="summary-row flex items-center justify-between border-b py-2"
+              >
+                <span className="label text-gray-700">Payment status</span>
+                <span className="value text-md font-semibold text-gray-900">
+                  Not Paid
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -192,7 +299,7 @@ export default function PayrollListEdit() {
         {/* Overview Section - col-span-8 */}
         <div className="col-span-9">
           <h2 className="mb-4 text-lg font-bold">Overview</h2>
-          <QueryTable columns={columns} list={tableData} />
+          <QueryTable columns={columns} list={data&&data[0]?.attendance_records} />
         </div>
       </div>
       <Dialog

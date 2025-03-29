@@ -12,7 +12,8 @@ import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
-import { getCurrentDateISO } from "@/utils/helpers";
+import { formatDateRange, getCurrentDateISO } from "@/utils/helpers";
+import dayjs from "dayjs";
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -57,21 +58,24 @@ export default function PayrollList() {
     enabled: !!monthValue,
   });
 
+  const start = dayjs(startDate).format("YYYY-MM-DD");
+  const end = dayjs(endDate).format("YYYY-MM-DD"); 
+
   const { data: payrollList } = useQuery({
-    queryKey: ["payrollList", startDate],
+    queryKey: ["payrollList", start],
     queryFn: () =>
       newRequest
         .get(PAYROLL_LIST_GET, {
           params: {
-            pay_schedule: monthValue,
-            start_date: startDate,
-            end_date: endDate,
+            schedule: monthValue,
+            start_date: start,
+            end_date: end,
             page: currentPage,
             per_limit: pageLimit,
           },
         })
         .then((res) => res.data),
-    enabled: !!startDate,
+    enabled: !!start,
   });
 
   console.log(payrollList);
@@ -80,16 +84,6 @@ export default function PayrollList() {
     EMPLOYEE_DEPARTMENT_LIST,
     "employeeDepartmentList",
   );
-
-  const formatDateRange = (startDate) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-
-    const formattedStartDate = new Date(startDate).toLocaleDateString(
-      "en-GB",
-      options,
-    );
-    return formattedStartDate;
-  };
 
   useEffect(() => {
     if (monthValue === "1" && data) {
@@ -188,19 +182,30 @@ export default function PayrollList() {
       },
       {
         header: "Total Employee",
-        accessorKey: "employee_count",
+        accessorKey: "total_employees",
       },
       {
         header: "Total Hours",
-        accessorKey: "total_overtime",
+        accessorKey: "total_hours",
       },
       {
         header: "Net Pay",
-        accessorKey: "departmentTotalSalary",
+        accessorKey: "net_pay",
       },
       {
         header: "Status",
         accessorKey: "status",
+        cell: ({ row }) => (
+          <div
+            className={`flex items-center max-w-[10rem] justify-center gap-2 rounded-md px-3 py-2 ${row.original.status === "Approved" ? "bg-[#ccf0da] text-[#13ba56]" : row.original.status === "processing" ?"bg-[#f8f2f8] text-[#7e0880]" : "bg-[#fdf3dc] text-[#ebb425]"}`}
+          >
+            {row.original.status === "not_approved"
+              ? "Not Approved"
+              : row.original.status === "pending"
+              ? "Approval Pending"
+              : "Approved"}
+          </div>
+        ),
       },
       {
         header: "Action",
@@ -212,7 +217,7 @@ export default function PayrollList() {
               onClick={() => {
                 navigate(
                   `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}/${monthValue}` +
-                    `?start_date=${startDate}&end_date=${endDate}`,
+                    `?start_date=${startDate}&end_date=${endDate}&department=${row.original.department_name}`,
                 );
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
