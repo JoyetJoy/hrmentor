@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
-import { formatDateRange, getCurrentDateISO } from "@/utils/helpers";
+import { formatDateRange } from "@/utils/helpers";
 import dayjs from "dayjs";
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
@@ -45,8 +45,6 @@ export default function PayrollList() {
   const [monthValue, setMonthValue] = useState("1");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [startDate2, setStartDate2] = useState("");
-  const [endDate2, setEndDate2] = useState("");
   const pageLimit = 10;
 
   const { data, isLoading } = useQuery({
@@ -59,7 +57,7 @@ export default function PayrollList() {
   });
 
   const start = dayjs(startDate).format("YYYY-MM-DD");
-  const end = dayjs(endDate).format("YYYY-MM-DD"); 
+  const end = dayjs(endDate).format("YYYY-MM-DD");
 
   const { data: payrollList } = useQuery({
     queryKey: ["payrollList", start],
@@ -90,9 +88,14 @@ export default function PayrollList() {
       // Get start and end dates within the same week
       const { star_day, end_day } = data;
       console.log("Weekday inputs:", star_day, end_day); // Expected: "Tue Mon"
+      // Get current date
+      let today = new Date();
 
-      const startDate = getWeekDayDate(star_day);
-      console.log("Start Date:", startDate);
+      // Find the most recent Tuesday
+      let startDate = new Date(today);
+      startDate.setDate(today.getDate() - ((today.getDay() + 5) % 7) - 7); // Previous Tuesday
+
+      console.log("Previous Tuesday Start Date:", startDate);
 
       // Get end date by adding 6 days to the start date
       const endDate = new Date(startDate);
@@ -102,7 +105,10 @@ export default function PayrollList() {
 
       setStartDate(formatDateRange(startDate));
       setEndDate(formatDateRange(endDate));
-    } else if ((monthValue === "2" ||monthValue === "3"||monthValue === "4") && data) {
+    } else if (
+      (monthValue === "2" || monthValue === "3" || monthValue === "4") &&
+      data
+    ) {
       setStartDate(formatDateRange(data?.start_date));
       setEndDate(formatDateRange(data?.end_date));
     }
@@ -133,8 +139,6 @@ export default function PayrollList() {
       midMonth.setDate(15); // Set to the 15th of the month
       setStartDate(formatDateRange(midMonth));
       setEndDate(formatDateRange(endOfPreviousMonth));
-      setStartDate2(formatDateRange(prevMonth));
-      setEndDate2(formatDateRange(midMonth));
     }
   };
 
@@ -197,13 +201,13 @@ export default function PayrollList() {
         accessorKey: "status",
         cell: ({ row }) => (
           <div
-            className={`flex items-center max-w-[10rem] justify-center gap-2 rounded-md px-3 py-2 ${row.original.status === "Approved" ? "bg-[#ccf0da] text-[#13ba56]" : row.original.status === "processing" ?"bg-[#f8f2f8] text-[#7e0880]" : "bg-[#fdf3dc] text-[#ebb425]"}`}
+            className={`flex max-w-[10rem] items-center justify-center gap-2 rounded-md px-3 py-2 ${row.original.status === "Approved" ? "bg-[#ccf0da] text-[#13ba56]" : row.original.status === "processing" ? "bg-[#f8f2f8] text-[#7e0880]" : "bg-[#fdf3dc] text-[#ebb425]"}`}
           >
             {row.original.status === "not_approved"
               ? "Not Approved"
               : row.original.status === "pending"
-              ? "Approval Pending"
-              : "Approved"}
+                ? "Approval Pending"
+                : "Approved"}
           </div>
         ),
       },
@@ -268,7 +272,7 @@ export default function PayrollList() {
             </button>
             <button
               onClick={() => setMonthValue("3")}
-              className={`rounded-md border px-4 py-2 text-sm whitespace-nowrap ${
+              className={`whitespace-nowrap rounded-md border px-4 py-2 text-sm ${
                 monthValue === "3"
                   ? "bg-[#e95d39] text-white"
                   : "bg-white text-gray-600"
@@ -278,7 +282,7 @@ export default function PayrollList() {
             </button>
             <button
               onClick={() => setMonthValue("4")}
-              className={`rounded-md border px-4 py-2 text-sm whitespace-nowrap ${
+              className={`whitespace-nowrap rounded-md border px-4 py-2 text-sm ${
                 monthValue === "4"
                   ? "bg-[#e95d39] text-white"
                   : "bg-white text-gray-600"

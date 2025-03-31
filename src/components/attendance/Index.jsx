@@ -7,6 +7,19 @@ import { useQuery } from "@tanstack/react-query";
 import { ATTENDANCE_GET, CHANGE_ATTENDANCE } from "@/api/master";
 import dayjs from "dayjs";
 
+const Options = [{
+  Title:'Present',
+  value:'Present'
+},{
+  Title:'Absent',
+  value:'Absent'
+},{
+  Title:'Leave',
+  value:'Leave'
+},{
+  Title:'Day Off',
+  value:'Day-Off'
+}]
 const Index = ({ attendance, setAttendance, empId, refetch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
@@ -263,33 +276,17 @@ const id = empId?.attendance?.attendance_id;
             {isDropdownOpen && (
               <div className="absolute bottom-14 left-36 mt-2 w-32 rounded-lg bg-white text-black shadow-lg">
                 <ul className="p-2">
-                  <li
+                  {Options.map((option)=>(
+                    <li
                     onClick={() => {
-                      setLeave("Present");
+                      setLeave(option.value);
                       setIsDropdownOpen(false);
                     }}
                     className="cursor-pointer p-2 hover:bg-gray-200"
                   >
-                    Present
+                    {option.Title}
                   </li>
-                  <li
-                    onClick={() => {
-                      setLeave("Absent");
-                      setIsDropdownOpen(false);
-                    }}
-                    className="cursor-pointer p-2 hover:bg-gray-200"
-                  >
-                    Absent
-                  </li>
-                  <li
-                    onClick={() => {
-                      setLeave("Leave");
-                      setIsDropdownOpen(false);
-                    }}
-                    className="cursor-pointer p-2 hover:bg-gray-200"
-                  >
-                    Leave
-                  </li>
+                  ))}
                 </ul>
               </div>
             )}
