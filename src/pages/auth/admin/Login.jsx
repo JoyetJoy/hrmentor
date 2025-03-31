@@ -82,11 +82,11 @@ function Login() {
       </div>
       <div className="col-span-4 -mb-10 flex flex-col lg:px-14">
         <div className="flex flex-col items-start">
-          <h1 className="mb-4 text-xl font-bold text-hrmprimaryorange">
+          {/* <h1 className="mb-4 text-xl font-bold text-hrmprimaryorange">
             <span className="text-black">Welcome,</span>
             <br />
             Techbutomy Private Limited
-          </h1>
+          </h1> */}
           <h2 className="text-xl font-bold text-black">Log In</h2>
           <p className="mt-1 text-softslate">
             Access is granted only to <br /> company employees.
