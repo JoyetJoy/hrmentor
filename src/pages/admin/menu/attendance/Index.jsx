@@ -417,7 +417,7 @@ export default function Attendance() {
         </div>
 
         {/* Attendance Table */}
-        <div className="overflow-x-min overflow-y-min w-full overflow-x-auto rounded-md border border-gray-300 bg-white">
+        <div className="overflow-y-medium w-full overflow-x-auto rounded-md border border-gray-300 bg-white">
           <div className="table mx-auto w-full">
             {isLoading ? (
               <div className="flex min-h-96 w-full items-center justify-center bg-white">

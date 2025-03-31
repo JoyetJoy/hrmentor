@@ -96,7 +96,7 @@ export default function PayrollList() {
 
       // Get end date by adding 6 days to the start date
       const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6); // Ensures Mon comes after Tue in the same week
+      endDate.setDate(startDate.getDate() + 7); // Ensures Mon comes after Tue in the same week
 
       console.log("End Date:", endDate);
 
@@ -130,7 +130,7 @@ export default function PayrollList() {
       const endOfPreviousMonth = new Date(newEndDate);
       endOfPreviousMonth.setMonth(endOfPreviousMonth.getMonth(), 0); // End of previous month
       const midMonth = new Date(endOfPreviousMonth);
-      midMonth.setDate(15); // Set to the 15th of the month
+      midMonth.setDate(13); // Set to the 15th of the month
       setStartDate(formatDateRange(midMonth));
       setEndDate(formatDateRange(endOfPreviousMonth));
       setStartDate2(formatDateRange(prevMonth));
@@ -140,7 +140,7 @@ export default function PayrollList() {
 
   const handleNextPeriod = () => {
     const newStartDate = new Date(
-      new Date(endDate).getTime() + 24 * 60 * 60 * 1000,
+      new Date(endDate).getTime() + 24 * 60 * 60 *60 * 1000,
     ); // Increment endDate by 1 day
 
     if (monthValue === "1") {
@@ -152,7 +152,7 @@ export default function PayrollList() {
     } else if (monthValue === "2") {
       const newEndDate = new Date(newStartDate);
       newEndDate.setMonth(newEndDate.getMonth() + 1); // Move to next month
-      newEndDate.setDate(newStartDate.getDate() - 1); // Set end date to one day before the same day next month
+      newEndDate.setDate(newStartDate.getDate() + 1); // Set end date to one day before the same day next month
 
       setStartDate(formatDateRange(newStartDate));
       setEndDate(formatDateRange(newEndDate));

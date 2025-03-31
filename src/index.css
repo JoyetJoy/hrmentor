@@ -73,6 +73,34 @@ input::-webkit-calendar-picker-indicator {
   border-radius: 100px;
 }
 
+.overflow-y-medium::-webkit-scrollbar {
+  width: 10px;
+}
+
+.overflow-y-medium::-webkit-scrollbar-track {
+  background-color: rgb(190, 204, 204);
+  border-radius: 100px;
+}
+
+.overflow-y-medium::-webkit-scrollbar-thumb {
+  background-color: rgb(78, 84, 84);
+  border-radius: 100px;
+}
+
+.overflow-x-medium::-webkit-scrollbar {
+  width: 10px;
+}
+
+.overflow-x-medium::-webkit-scrollbar-track {
+  background-color: rgb(190, 204, 204);
+  border-radius: 100px;
+}
+
+.overflow-x-medium::-webkit-scrollbar-thumb {
+  background-color: rgb(78, 84, 84);
+  border-radius: 100px;
+}
+
 .overflow-x-min::-webkit-scrollbar {
   height: 3px;
 }

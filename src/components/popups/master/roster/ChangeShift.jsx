@@ -165,7 +165,7 @@ console.log(datas);
                     <div className="flex flex-col gap-4">
                       <div className="flex justify-between text-sm font-semibold">
                         <p
-                          className={`${isDeleted ? "text-gray-400 line-through" : ""}`}
+                          className={`${isDeleted ? "text-red-500 line-through" : ""}`}
                         >
                           {datas?.shift_name}
                         </p>

@@ -590,8 +590,8 @@ const RosterCalendar = () => {
             </div>
           </div>
 
-          <div className="overflow-x-min mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
-            <div className="overflow-x-min overflow-y-min mt-4 h-screen w-full overflow-x-auto overflow-y-auto bg-white shadow-md">
+          <div className="overflow-x-medium mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
+            <div className="overflow-x-medium overflow-y-medium mt-4 h-screen w-full overflow-x-auto overflow-y-auto bg-white shadow-md">
               {isLoading ? (
                 <div className="flex min-h-96 w-full items-center justify-center bg-white">
                   <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
