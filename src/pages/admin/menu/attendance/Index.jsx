@@ -462,92 +462,98 @@ export default function Attendance() {
 
                         return (
                           <td className="border-r-[3px] border-[#d1d5db]">
-                            {attendanceEntry?.shifts?.length > 0 ? (
-                              attendanceEntry?.shifts?.map((shift, index) => (
-                                <div
-                                  key={`${day.fullDate}-${index}`}
-                                  onClick={() => {
-                                    eventClick(
-                                      employee?.employee_id,
-                                      employee?.employee_name,
-                                      day.fullDate,
-                                      day.fullDay,
-                                      shift,
-                                    );
-                                  }}
-                                  className={`flex justify-center text-center text-[0.8rem] font-semibold cursor-pointer`}
-                                >
+                            {attendanceEntry?.shifts?.length > 0
+                              ? attendanceEntry?.shifts?.map((shift, index) => (
                                   <div
-                                    className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
-                                      shift?.status === "Present"
-                                        ? "bg-[#00b448] text-black"
-                                        : shift?.status === "Holiday"
-                                          ? "bg-[#e68ecf] text-black"
-                                          : shift?.status === "Company Leave"
-                                            ? "bg-[#FDE3AA] text-black"
-                                            : shift?.status === "Annual Leave"
-                                              ? "bg-[#AEB6E7] text-black"
-                                              : shift?.status === "Absent"
-                                                ? "bg-[#e64444] text-black"
-                                                : shift?.status === "Day Off"
-                                                  ? "bg-[#c5c5cb] text-black"
-                                                  : ""
-                                    }`}
-                                    onMouseEnter={() => {
-                                      {
-                                        setHoveredShift({
-                                              id: employee?.employee_id,
-                                              date: day.fullDate,
-                                              shiftName: shift?.shift_name,
-                                              status: shift?.status,
-                                            })
-                                      }
+                                    key={`${day.fullDate}-${index}`}
+                                    onClick={() => {
+                                      eventClick(
+                                        employee?.employee_id,
+                                        employee?.employee_name,
+                                        day.fullDate,
+                                        day.fullDay,
+                                        shift,
+                                      );
                                     }}
-                                    onMouseLeave={() => {
-                                      setHoveredShift({
-                                        id: "",
-                                        date: "",
-                                        shiftName: "",
-                                      });
-                                    }}
+                                    className={`flex cursor-pointer justify-center text-center text-[0.8rem] font-semibold`}
                                   >
-                                    <span>
-                                      {shift?.status === "Present"
-                                        ? "P"
-                                        : shift?.status === "Holiday"
-                                          ? "H"
-                                          : shift?.status === "Company Leave"
-                                            ? "CL"
-                                            : shift?.status === "Annual Leave"
-                                              ? "AL"
-                                              : shift?.status === "Absent"
-                                                ? "A"
-                                                : shift?.status === "Day Off"
-                                                  ? "DO"
-                                                  : ""}
-                                    </span>
-                                    {shift?.delay_status && (
-                                      <img
-                                        className="ml-2 w-5 object-contain"
-                                        src="/assets/icons/tort.svg"
-                                        alt="late"
-                                      />
-                                    )}
-                                  </div>
-                                  <div className="relative">
-                                    {hoveredShift?.id ===
-                                      employee?.employee_id &&
-                                      hoveredShift?.date === day.fullDate &&
-                                      hoveredShift?.shiftName ===
-                                        shift?.shift_name && (
-                                        <span className="absolute right-9 top-14 h-9 w-[7rem] whitespace-nowrap rounded-md bg-gray-800 px-2 py-2 text-sm text-white shadow-md">
-                                          {hoveredShift?.shiftName}
-                                        </span>
+                                    <div
+                                      className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
+                                        shift?.status === "Present"
+                                          ? "bg-[#00b448] text-black"
+                                          : shift?.status === "Holiday"
+                                            ? "bg-[#e68ecf] text-black"
+                                            : shift?.status === "Company Leave"
+                                              ? "bg-[#FDE3AA] text-black"
+                                              : shift?.status === "Annual Leave"
+                                                ? "bg-[#AEB6E7] text-black"
+                                                : shift?.status === "Absent"
+                                                  ? "bg-[#e64444] text-black"
+                                                  : shift?.status === "Day Off"
+                                                    ? "bg-[#c5c5cb] text-black"
+                                                    : ""
+                                      }`}
+                                      onMouseEnter={() => {
+                                        {
+                                          setHoveredShift({
+                                            id: employee?.employee_id,
+                                            date: day.fullDate,
+                                            shiftName: shift?.shift_name,
+                                            status: shift?.status,
+                                          });
+                                        }
+                                      }}
+                                      onMouseLeave={() => {
+                                        setHoveredShift({
+                                          id: "",
+                                          date: "",
+                                          shiftName: "",
+                                        });
+                                      }}
+                                    >
+                                      <span>
+                                        {shift?.status === "Present"
+                                          ? "P"
+                                          : shift?.status === "Holiday"
+                                            ? "H"
+                                            : shift?.status === "Company Leave"
+                                              ? "CL"
+                                              : shift?.status === "Annual Leave"
+                                                ? "AL"
+                                                : shift?.status === "Absent"
+                                                  ? "A"
+                                                  : shift?.status === "Day Off"
+                                                    ? "DO"
+                                                    : ""}
+                                      </span>
+                                      {shift?.delay_status && (
+                                        <img
+                                          className="ml-2 w-5 object-contain"
+                                          src="/assets/icons/tort.svg"
+                                          alt="late"
+                                        />
                                       )}
+                                    </div>
+                                    <div className="relative">
+                                      {hoveredShift?.id ===
+                                        employee?.employee_id &&
+                                        hoveredShift?.date === day.fullDate &&
+                                        hoveredShift?.shiftName ===
+                                          shift?.shift_name && (
+                                          <span className="absolute right-9 top-14 h-9 w-[7rem] whitespace-nowrap rounded-md bg-gray-800 px-2 py-2 text-sm text-white shadow-md">
+                                            {hoveredShift?.shiftName?.length >
+                                            13
+                                              ? hoveredShift.shiftName.slice(
+                                                  0,
+                                                  10,
+                                                ) + "..."
+                                              : hoveredShift?.shiftName}
+                                          </span>
+                                        )}
+                                    </div>
                                   </div>
-                                </div>
-                              ))
-                            ): null}
+                                ))
+                              : null}
                           </td>
                         );
                       })}

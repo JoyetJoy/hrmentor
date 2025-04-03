@@ -41,7 +41,7 @@ export const AdminDashboard = () => {
           dates: `${dayjs(shift?.start_date).format("DD/MM/YY")} - ${dayjs(shift?.end_date).format("DD/MM/YY")}`,
           path: shift?.shift?.isHoliday
             ? ``
-            : `/admin/shift/calendarview?id=${shift?.shift?.id}&date=${selectdate}`,
+            : `/admin/shift/calendarview?id=${shift?.id}&date=${selectdate}`,
         };
       }),
       path: "/admin/shift", // Default path for the card
