@@ -62,8 +62,17 @@ export default function Notification({
     channel.bind("App\\Events\\NotificationSent", (data) => {
       console.log("Received a new notification:", data);
   
+      const message = {
+        "id": data?.latest_unread_notification?.id,
+        "user_id": data?.latest_unread_notification?.user_id,
+        "type": data?.latest_unread_notification?.type,
+        "title": "Title Available",
+        "data": data?.latest_unread_notification?.data?.message,
+        "read_at": true,
+        "created_at": data?.latest_unread_notification?.created_at
+    }
       setNotification((prevNotifications) => [
-        data.latest_unread_notification,
+        message,
         ...prevNotifications,
       ]);
     });
