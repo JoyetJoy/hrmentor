@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 import { LogIn, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import echo from "@/utils/reverb";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import Pusher from "pusher-js";
 
@@ -24,19 +23,6 @@ export default function Notification({
       user: state.user,
     }));
 
-    
-
-  
-  // useEffect(() => {
-  //   if (window.Echo) {
-  //     window.Echo.private(`notification-${user_id}`).notification(
-  //       (notification) => {
-  //         console.log("New Notification:", notification);
-         
-  //       },
-  //     );
-  //   }
-  // }, []);
   useEffect(() => {
     if (!user?.id) return; // Prevent subscription if user ID is missing
   
@@ -73,7 +59,7 @@ export default function Notification({
     });
 
     
-    channel.bind("NotificationSent", (data) => {
+    channel.bind("App\\Events\\NotificationSent", (data) => {
       console.log("Received a new notification:", data);
   
       setNotification((prevNotifications) => [
