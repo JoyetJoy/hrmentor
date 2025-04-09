@@ -103,12 +103,8 @@ console.log(selectedShiftId);
   }, [employeeError]);
 
   const onSubmit = async (data) => {
-    if (employeesdetails.length === 0) {
-      setEmployeeError("Employee is required");
-    } else {
-      await handleRoster(data);
-      close();
-    }
+    await handleRoster(data);
+    close();
   };
 
   const handleRoster = async (data) => {

@@ -800,10 +800,10 @@ const RosterCalendar = () => {
                                   {holidayEvents?.map((shift, index) => (
                                     <div
                                       key={index}
-                                      className="z-10 -mt-24 h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#c5c5cb] py-3 text-black"
+                                      className="z-10 -mt-24 h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
                                     >
                                       <p className="text-center text-xs font-semibold">
-                                        Day Off
+                                        Holiday
                                       </p>
                                     </div>
                                   ))}
