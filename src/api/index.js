@@ -190,3 +190,6 @@ export const TASK_LIST = "task";
 
 // ALL STATUS LIST
 export const ALL_STATUS_LIST = "get-all-status";
+
+//All Chat list
+export const ALL_CHAT_LIST = "user-chats"

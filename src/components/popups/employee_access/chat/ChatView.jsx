@@ -2,10 +2,10 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Send, X } from "lucide-react";
 import React, { useState } from "react";
 
-export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
+export default function ChatView({ chatPopupOpen, setChatPopupOpen, selectedUser }) {
   function close() {
     setChatPopupOpen(false);
-    reset();
+    // reset();
   }
 
   const [replay, setReplay] = useState(false);
@@ -23,13 +23,13 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen }) {
             <DialogPanel className="w-full max-w-md rounded bg-white px-7 pb-3 pt-6 ml-64">
               <div className="mb-3 flex justify-between">
                 <div className="flex items-center gap-1">
-                  <div className="h-9 w-10 rounded-full">
+                  <div className="h-9 w-10 rounded-full overflow-hidden">
                     <img
-                      src="/assets/images/employee_access/profile.png"
+                      src={selectedUser?.profile_image}
                       alt="profile-image"
                     />
                   </div>
-                  <h3 className="text-sm font-medium">KP</h3>
+                  <h3 className="text-sm font-medium">{selectedUser?.name}</h3>
                 </div>
                 <button onClick={close}>
                   <X  className="text-black/50"/>

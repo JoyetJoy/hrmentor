@@ -1,22 +1,38 @@
 import { Dialog, DialogPanel, RadioGroup } from '@headlessui/react'
-import { Filter, Search, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { Search, X } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import ChatView from './ChatView';
+import { formatLastMessageTime } from '@/utils/helpers';
 
-export default function ChatBoxList({ popupOpen, setPopupOpen }) {
+export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [chatPopupOpen,setChatPopupOpen] =useState(false); 
+    const [keyword, setKeyword] = useState('');
+    const [chats, setChats] = useState([]);
 
     function close() {
         setPopupOpen(false);
-        reset();
       }
       const handleClick = () =>{
         setChatPopupOpen(true)
       }
+
+      useEffect(() => {
+        if (keyword) {
+          const filteredUsers = data.filter((user) =>
+            user.name.toLowerCase().includes(keyword.toLowerCase())
+          );
+      
+          setChats(filteredUsers);
+        } else {
+          setChats(data); // show all if no keyword
+        }
+      }, [keyword, data]);
+      console.log(selectedUser);
+      
   return (
     <>
-    <ChatView chatPopupOpen={chatPopupOpen} setChatPopupOpen={setChatPopupOpen}/> 
+    <ChatView chatPopupOpen={chatPopupOpen} setChatPopupOpen={setChatPopupOpen} selectedUser={selectedUser}/> 
     <Dialog
       open={popupOpen}
       as="div"
@@ -39,16 +55,21 @@ export default function ChatBoxList({ popupOpen, setPopupOpen }) {
               <input
                 type="text"
                 onChange={(e) => setKeyword(e.target.value)}
+                value={keyword}
                 className="placeholder:text-dark h-full w-full placeholder:text-sm"
                 placeholder="Search"
               />
+              {keyword?.length>0 &&
+              <X  className='text-black/50' onClick={()=> setKeyword('')}/>
+              }
+              
             </div>
-            <div className="h-10 min-h-10 rounded-md border border-gray-platinum bg-white p-3">
+            {/* <div className="h-10 min-h-10 rounded-md border border-gray-platinum bg-white p-3">
               <Filter className="size-4" />
-            </div>{" "}
+            </div>{" "} */}
           </div>
           <RadioGroup value={selectedUser} onChange={setSelectedUser} className="flex flex-col gap-3">
-            {["Robert Fox", "Philip", "Randall", "Cody"].map((user, idx) => (
+            {chats?.map((user, idx) => (
               <RadioGroup.Option
                 key={idx}
                 value={user}
@@ -65,18 +86,23 @@ export default function ChatBoxList({ popupOpen, setPopupOpen }) {
                         : "bg-gray-lightcool border-gray-lightcool"
                     }`}
                   >
-                    <div className="h-9 w-10 rounded-full bg-gray-lightcool">
+                    <div className="h-9 w-10 rounded-full bg-gray-lightcool overflow-hidden">
                       <img
-                        src="/assets/images/employee_access/profile.png"
+                        src={user?.profile_image}
                         alt="profile-image"
                       />
                     </div>
                     <div className="flex w-full items-center justify-between">
                       <div>
-                        <h3 className="text-sm font-medium">{user}</h3>
-                        <p className="text-xs text-gray-500">UI/UX Design Intern</p>
+                        <h3 className="text-sm font-medium">{user?.name}</h3>
+                        <p className="text-xs text-gray-500">{user?.designation}</p>
                       </div>
-                      <span className="text-xs text-gray-400">03:22</span>
+                      <div className='flex flex-col items-center'>
+                      <span className={`text-xs ${user?.unread_count>0 ? 'text-green-600 font-semibold':'text-gray-500'}`}>{formatLastMessageTime(user?.last_message_time)}</span>
+                      {user?.unread_count>0 && (
+                        <span className='w-4 h-4 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-semibold'>{user?.unread_count}</span>
+                      )}
+                      </div>
                     </div>
                   </div>
                 )}

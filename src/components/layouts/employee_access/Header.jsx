@@ -11,7 +11,7 @@ import { Menu } from "@headlessui/react";
 import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
 import { NOTIFICATIONS } from "@/api/hiring";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest } from "@/api";
+import { ALL_CHAT_LIST, newRequest } from "@/api";
 import Notification from "@/components/popups/notification";
 
 export default function EmployeeAccessHeader() {
@@ -24,6 +24,15 @@ export default function EmployeeAccessHeader() {
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { data: userchatlist } = useQuery({
+        queryKey: ["userchatlist"],
+        queryFn: () =>
+          newRequest.get(ALL_CHAT_LIST).then((res) => {
+            // setNotifications(res.data)
+            return res.data;
+          }),
+      });
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notification"],
@@ -62,7 +71,7 @@ export default function EmployeeAccessHeader() {
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
       />
-      <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} data={userchatlist}/>
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link
           to="/employee-access/dashboard"

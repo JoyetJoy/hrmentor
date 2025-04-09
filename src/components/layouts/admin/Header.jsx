@@ -21,17 +21,20 @@ export const AdminHeader = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [popupOpen, setPopupOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
 
-  const { data: notifications, isLoading } = useQuery({
+  const { data: notification, isLoading } = useQuery({
     queryKey: ["notification"],
     queryFn: () =>
       newRequest.get(NOTIFICATIONS).then((res) => {
+        setNotifications(res.data)
         return res.data;
       }),
     // refetchInterval: 5000,
     // staleTime: 60000,
   });
+console.log(notifications);
 
   const handleClick = () => {
     setPopupOpen(true);
@@ -56,6 +59,7 @@ console.log(user);
       <Notification
         userId={user?.id}
         notifications={notifications}
+        setN
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
       />
@@ -104,9 +108,9 @@ console.log(user);
             className="flex h-10 relative w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <Bell className="size-5 text-hrmblue" />
-            {notifications?.unread_count > 0 && (
+            {notification?.unread_count > 0 && (
               <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
-                {notifications?.unread_count}
+                {notification?.unread_count}
               </div>
             )}
           </div>
