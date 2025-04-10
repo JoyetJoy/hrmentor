@@ -15,9 +15,11 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
     const {user } = useUserStore((state) => ({
           user: state.user,
         }));
+console.log(user?.user?.id);
 
     useEffect(() => {
-        if (!user?.id) return; // Prevent subscription if user ID is missing
+        if (!user?.user?.id) return; // Prevent subscription if user ID is missing
+      console.log('getin');
       
         const token =
           localStorage.getItem("super_token") ||
@@ -81,7 +83,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
           channel.unsubscribe();
           pusher.disconnect();
         };
-      }, [user?.id]);
+      }, [user?.user?.id]);
       
 
     function close() {
