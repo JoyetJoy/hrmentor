@@ -24,7 +24,7 @@ export default function Notification({
     }));
 
   useEffect(() => {
-    if (!user?.user?.id && notificationPopupOpen) return; // Prevent subscription if user ID is missing
+    if (!user?.user?.id ) return; // Prevent subscription if user ID is missing
   
     const token =
       localStorage.getItem("super_token") ||

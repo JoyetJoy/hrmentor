@@ -18,7 +18,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
 console.log(user?.user?.id);
 
     useEffect(() => {
-        if (!user?.user?.id && popupOpen) return; // Prevent subscription if user ID is missing
+        if (!user?.user?.id ) return; // Prevent subscription if user ID is missing
       console.log('getin');
       
         const token =
