@@ -3,12 +3,86 @@ import { Search, X } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import ChatView from './ChatView';
 import { formatLastMessageTime } from '@/utils/helpers';
+import Pusher from 'pusher-js';
+import { useUserStore } from '@/lib/slices/auth.slice';
 
 export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [chatPopupOpen,setChatPopupOpen] =useState(false); 
     const [keyword, setKeyword] = useState('');
     const [chats, setChats] = useState([]);
+
+    const {user } = useUserStore((state) => ({
+          user: state.user,
+        }));
+
+    useEffect(() => {
+        if (!user?.id) return; // Prevent subscription if user ID is missing
+      
+        const token =
+          localStorage.getItem("super_token") ||
+          localStorage.getItem("hr_token") ||
+          localStorage.getItem("manager_token") ||
+          localStorage.getItem("employee_token");
+      
+        const pusher = new Pusher("469a7dd00053f2be95f4", {
+          cluster: "ap2",
+          forceTLS: true,
+          encrypted: true,
+          enabledTransports: ["ws", "wss"],
+          authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
+          auth: {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          },
+        });
+      
+        console.log("Subscribing to:", `private-notification.${user?.id}`);
+      
+        // Subscribe to the private channel
+        const channel = pusher.subscribe(`private-notification.${user?.id}`);
+      
+        pusher.connection.bind("state_change", function (states) {
+          console.log("Pusher State Changed:", states);
+        });
+        
+        pusher.connection.bind("error", function (err) {
+          console.error("Pusher Error:", err);
+        });
+    
+        
+        channel.bind("App\\Events\\NewChatMessage", (data) => {
+          console.log("Received a new notification:", data);
+      
+          const message = {
+            "id": data?.latest_unread_notification?.id,
+            "user_id": data?.latest_unread_notification?.user_id,
+            "type": data?.latest_unread_notification?.type,
+            "title": "Title Available",
+            "data": data?.latest_unread_notification?.data?.message,
+            "read_at": true,
+            "created_at": data?.latest_unread_notification?.created_at
+        }
+          setNotification((prevNotifications) => [
+            message,
+            ...prevNotifications,
+          ]);
+        });
+      
+        pusher.connection.bind("error", (err) => {
+          console.error("Pusher Error:", err);
+        });
+      
+        // Cleanup
+        return () => {
+          console.log("Unsubscribing from:", `private-notification.${user?.id}`);
+          channel.unbind_all();
+          channel.unsubscribe();
+          pusher.disconnect();
+        };
+      }, [user?.id]);
+      
 
     function close() {
         setPopupOpen(false);
