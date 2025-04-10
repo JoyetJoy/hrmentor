@@ -24,7 +24,7 @@ export default function Notification({
     }));
 
   useEffect(() => {
-    if (!user?.id) return; // Prevent subscription if user ID is missing
+    if (!user?.user?.id && notificationPopupOpen) return; // Prevent subscription if user ID is missing
   
     const token =
       localStorage.getItem("super_token") ||
@@ -45,10 +45,10 @@ export default function Notification({
       },
     });
   
-    console.log("Subscribing to:", `private-notification.${user?.id}`);
+    console.log("Subscribing to:", `private-notification.${user?.user?.id}`);
   
     // Subscribe to the private channel
-    const channel = pusher.subscribe(`private-notification.${user?.id}`);
+    const channel = pusher.subscribe(`private-notification.${user?.user?.id}`);
   
     pusher.connection.bind("state_change", function (states) {
       console.log("Pusher State Changed:", states);
@@ -83,12 +83,12 @@ export default function Notification({
   
     // Cleanup
     return () => {
-      console.log("Unsubscribing from:", `private-notification.${user?.id}`);
+      console.log("Unsubscribing from:", `private-notification.${user?.user?.id}`);
       channel.unbind_all();
       channel.unsubscribe();
       pusher.disconnect();
     };
-  }, [user?.id]);
+  }, [user?.user?.id]);
   
 const handleClick = async (notificationId) => {
   if (!notificationId) return;

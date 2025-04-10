@@ -18,7 +18,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
 console.log(user?.user?.id);
 
     useEffect(() => {
-        if (!user?.user?.id) return; // Prevent subscription if user ID is missing
+        if (!user?.user?.id && popupOpen) return; // Prevent subscription if user ID is missing
       console.log('getin');
       
         const token =
@@ -54,35 +54,35 @@ console.log(user?.user?.id);
         });
     
         
-        channel.bind("App\\Events\\NewChatMessage", (data) => {
-          console.log("Received a new notification:", data);
+        // channel.bind("App\\Events\\NewChatMessage", (data) => {
+        //   console.log("Received a new notification:", data);
       
-          const message = {
-            "id": data?.latest_unread_notification?.id,
-            "user_id": data?.latest_unread_notification?.user_id,
-            "type": data?.latest_unread_notification?.type,
-            "title": "Title Available",
-            "data": data?.latest_unread_notification?.data?.message,
-            "read_at": true,
-            "created_at": data?.latest_unread_notification?.created_at
-        }
-          setNotification((prevNotifications) => [
-            message,
-            ...prevNotifications,
-          ]);
-        });
+        //   const message = {
+        //     "id": data?.latest_unread_notification?.id,
+        //     "user_id": data?.latest_unread_notification?.user_id,
+        //     "type": data?.latest_unread_notification?.type,
+        //     "title": "Title Available",
+        //     "data": data?.latest_unread_notification?.data?.message,
+        //     "read_at": true,
+        //     "created_at": data?.latest_unread_notification?.created_at
+        // }
+        //   setNotification((prevNotifications) => [
+        //     message,
+        //     ...prevNotifications,
+        //   ]);
+        // });
       
-        pusher.connection.bind("error", (err) => {
-          console.error("Pusher Error:", err);
-        });
+        // pusher.connection.bind("error", (err) => {
+        //   console.error("Pusher Error:", err);
+        // });
       
         // Cleanup
-        return () => {
-          console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
-          channel.unbind_all();
-          channel.unsubscribe();
-          pusher.disconnect();
-        };
+        // return () => {
+        //   console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
+        //   channel.unbind_all();
+        //   channel.unsubscribe();
+        //   pusher.disconnect();
+        // };
       }, [user?.user?.id]);
       
 
