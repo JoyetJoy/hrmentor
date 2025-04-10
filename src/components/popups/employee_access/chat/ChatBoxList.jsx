@@ -40,10 +40,10 @@ console.log(user?.user?.id);
           },
         });
       
-        console.log("Subscribing to:", `chat.${user?.id}`);
+        console.log("Subscribing to:", `private-chat.${user?.id}`);
       
         // Subscribe to the private channel
-        const channel = pusher.subscribe(`chat.${user?.user?.id}`);
+        const channel = pusher.subscribe(`private-chat.${user?.user?.id}`);
       
         pusher.connection.bind("state_change", function (states) {
           console.log("Pusher State Changed:", states);
@@ -78,7 +78,7 @@ console.log(user?.user?.id);
       
         // Cleanup
         return () => {
-          console.log("Unsubscribing from:", `chat.${user?.user?.id}`);
+          console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
           channel.unbind_all();
           channel.unsubscribe();
           pusher.disconnect();
