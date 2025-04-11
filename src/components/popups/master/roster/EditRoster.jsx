@@ -120,13 +120,7 @@ const handleAddEmployee = () => {
   console.log(selectedEmployees);
 
   const onSubmit = async (data) => {
-    console.log(employeesdetails);
-
-    if (selectedEmployees.length === 0) {
-      setEmployeeError("Employee is required");
-    } else {
-      await handleRoster(data);
-    }
+    await handleRoster(data);
   };
 
   const handleRoster = async (data) => {

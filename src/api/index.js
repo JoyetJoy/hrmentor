@@ -192,4 +192,7 @@ export const TASK_LIST = "task";
 export const ALL_STATUS_LIST = "get-all-status";
 
 //All Chat list
-export const ALL_CHAT_LIST = "user-chats"
+export const ALL_CHAT_LIST = "user-chats";
+
+//chats
+export const CHAT_WITH_USER = "chat-with-user";

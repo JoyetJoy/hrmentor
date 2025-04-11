@@ -1,8 +1,100 @@
+import { CHAT_WITH_USER, newRequest } from "@/api";
+import { useUserStore } from "@/lib/slices/auth.slice";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import { useQuery } from "@tanstack/react-query";
 import { Send, X } from "lucide-react";
-import React, { useState } from "react";
+import Pusher from "pusher-js";
+import React, { useEffect, useState } from "react";
 
-export default function ChatView({ chatPopupOpen, setChatPopupOpen, selectedUser }) {
+export default function ChatView({
+  chatPopupOpen,
+  setChatPopupOpen,
+  selectedUser,
+}) {
+  const [messages, setMessages] = useState([]);
+
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  const { data: chatlist } = useQuery({
+    queryKey: ["chatlist", selectedUser?.user_id], // helps caching per user
+    queryFn: async () => {
+      const res = await newRequest.get(
+        `${CHAT_WITH_USER}/${selectedUser.user_id}`,
+      );
+      return res.data;
+    },
+    enabled: !!selectedUser?.user_id,
+  });
+
+  useEffect(() => {
+    if (!selectedUser?.user_id) return; // Prevent subscription if user ID is missing
+    console.log("getin");
+
+    const token =
+      localStorage.getItem("super_token") ||
+      localStorage.getItem("hr_token") ||
+      localStorage.getItem("manager_token") ||
+      localStorage.getItem("employee_token");
+
+    const pusher = new Pusher("469a7dd00053f2be95f4", {
+      cluster: "ap2",
+      forceTLS: true,
+      encrypted: true,
+      enabledTransports: ["ws", "wss"],
+      authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
+      auth: {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      },
+    });
+
+    console.log("Subscribing to:", `private-chat.${selectedUser?.user_id}`);
+
+    // Subscribe to the private channel
+    const channel = pusher.subscribe(`private-chat.${selectedUser?.user_id}`);
+
+    pusher.connection.bind("state_change", function (states) {
+      console.log("Pusher State Changed:", states);
+    });
+
+    pusher.connection.bind("error", function (err) {
+      console.error("Pusher Error:", err);
+    });
+
+    // channel.bind("App\\Events\\NewChatMessage", (data) => {
+    //   console.log("Received a new notification:", data);
+
+    //   const message = {
+    //     "id": data?.latest_unread_notification?.id,
+    //     "user_id": data?.latest_unread_notification?.user_id,
+    //     "type": data?.latest_unread_notification?.type,
+    //     "title": "Title Available",
+    //     "data": data?.latest_unread_notification?.data?.message,
+    //     "read_at": true,
+    //     "created_at": data?.latest_unread_notification?.created_at
+    // }
+    //   setNotification((prevNotifications) => [
+    //     message,
+    //     ...prevNotifications,
+    //   ]);
+    // });
+
+    // pusher.connection.bind("error", (err) => {
+    //   console.error("Pusher Error:", err);
+    // });
+
+    // Cleanup
+    // return () => {
+    //   console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
+    //   channel.unbind_all();
+    //   channel.unsubscribe();
+    //   pusher.disconnect();
+    // };
+  }, [selectedUser?.user_id]);
+
+  console.log(chatlist);
   function close() {
     setChatPopupOpen(false);
     // reset();
@@ -15,15 +107,15 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen, selectedUser
       <Dialog
         open={chatPopupOpen}
         as="div"
-        className="relative z-50 "
+        className="relative z-50"
         onClose={close}
       >
         <div className="fixed inset-0 z-50 h-screen w-screen overflow-y-auto">
           <div className="flex min-h-full items-end justify-center">
-            <DialogPanel className="w-full max-w-md rounded bg-white px-7 pb-3 pt-6 ml-64">
+            <DialogPanel className="ml-64 w-full max-w-md rounded bg-white px-7 pb-3 pt-6">
               <div className="mb-3 flex justify-between">
                 <div className="flex items-center gap-1">
-                  <div className="h-9 w-10 rounded-full overflow-hidden">
+                  <div className="h-10 w-10 overflow-hidden rounded-full">
                     <img
                       src={selectedUser?.profile_image}
                       alt="profile-image"
@@ -32,40 +124,144 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen, selectedUser
                   <h3 className="text-sm font-medium">{selectedUser?.name}</h3>
                 </div>
                 <button onClick={close}>
-                  <X  className="text-black/50"/>
+                  <X className="text-black/50" />
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
-                <div className="flex-1 overflow-y-auto rounded-md border p-4">
-                  <div className="flex flex-col space-y-4">
-                    <div className="flex items-center justify-start gap-3 w-full">
-                      <p className="max-w-xs rounded-lg bg-bluesoft p-3 text-sm shadow-sm">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        <span className="mt-1 block text-end text-xs text-gray-500">
-                          Today | 03:22
-                        </span>
-                      </p>
-                      {/* Replay button */}
-                      <div
-                        onClick={() => setReplay(true)}
-                        className="cursor-pointer rounded-full bg-bluesoft p-2"
-                      >
-                        <img
-                          src="/assets/icons/employee_access/header/share.svg"
-                          className="h-4 w-4"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-end">
-                      <p className="max-w-xs rounded-lg bg-gray-200 p-3 text-sm shadow-sm">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        <span className="mt-1 block text-end text-xs text-gray-500">
-                          Today | 03:22
-                        </span>
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex-1 overflow-y-auto min-h-[15rem] rounded-md border p-4">
+                  {chatlist && (
+                    <>
+                      {chatlist.data?.map((msg, outerIndex) => (
+                        <div
+                          className="flex flex-col space-y-4"
+                          key={outerIndex}
+                        >
+                          <p className="flex justify-center py-2 text-[12px] text-slate-400">
+                            {msg?.date}
+                          </p>
+
+                          {msg?.messages?.map((message, innerIndex) => {
+                            const isSentByCurrentUser =
+                              message.senderId !== selectedUser?.user_id; // Check if the message was sent by the user
+                            console.log(message);
+
+                            return (
+                              <div key={innerIndex}>
+                                <div
+                                  className={`flex ${
+                                    isSentByCurrentUser
+                                      ? "justify-end"
+                                      : "justify-start"
+                                  } mb-[0.15rem]`}
+                                >
+                                  <div className="flex justify-end">
+                                    <p
+                                      className={`max-w-xs rounded-lg p-3 text-sm text-black shadow-sm ${
+                                        isSentByCurrentUser
+                                          ? "bg-[#e5e7eb]"
+                                          : "bg-[#f0f8ff]"
+                                      }`}
+                                    >
+                                      {message.content}
+                                      <span
+                                        className={`mt-1 block text-end text-xs text-[#707171]`}
+                                      >
+                                        {message.time}
+                                      </span>
+                                    </p>
+                                  </div>
+                                  {/* <div
+                                    className={`flex max-w-[70%] gap-1 rounded-[15px] px-2 text-sm ${
+                                      isSentByCurrentUser
+                                        ? "bg-[#007BFF] text-white"
+                                        : "bg-[#E5E5EA] text-black"
+                                    }`}
+                                  >
+                                    <p className="flex-1 break-all py-2">
+                                      {message.content}
+                                    </p>{" "} */}
+                                  {/* Allows long words to break */}
+                                  {/* <p
+                                      className={`mt-[2px] flex items-end pr-2 pt-4 text-[8px] ${
+                                        isSentByCurrentUser
+                                          ? "text-[#c6e4de]"
+                                          : "text-[#707171]"
+                                      }`}
+                                    >
+                                      {message.time}
+                                    </p>
+                                  </div> */}
+                                </div>
+                              </div>
+                            );
+                          })}
+                          {/* <div className="flex w-full items-center justify-start gap-3">
+                            <p className="max-w-xs rounded-lg bg-bluesoft p-3 text-sm shadow-sm">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and
+                              <span className="mt-1 block text-end text-xs text-gray-500">
+                                Today | 03:22
+                              </span>
+                            </p> */}
+                          {/* Replay button */}
+                          {/* <div
+                              onClick={() => setReplay(true)}
+                              className="cursor-pointer rounded-full bg-bluesoft p-2"
+                            >
+                              <img
+                                src="/assets/icons/employee_access/header/share.svg"
+                                className="h-4 w-4"
+                                alt=""
+                              />
+                            </div>
+                          </div> */}
+                          {messages.length > 0 &&
+                            history.data?.every(
+                              (msg) => msg.date !== "Today",
+                            ) && (
+                              <p className="flex justify-center py-2 text-[12px] text-slate-400">
+                                Today
+                              </p>
+                            )}
+                        </div>
+                      ))}
+                      {/* Handle messages from current session */}
+                      {messages.map((msg, index) => {
+                        const isSentByCurrentUser = msg.senderId !== selectedUser?.user_id;
+                        return (
+                        <div key={index}>
+                          <div
+                            className={`flex ${
+                              isSentByCurrentUser
+                                ? "justify-end"
+                                : "justify-start"
+                            } mb-[0.15rem]`}
+                          >
+                            <div className="flex justify-end">
+                              <p
+                                className={`max-w-xs rounded-lg p-3 text-sm text-black shadow-sm ${
+                                  isSentByCurrentUser
+                                    ? "bg-[#e5e7eb]"
+                                    : "bg-[#f0f8ff]"
+                                }`}
+                              >
+                                {msg.content}
+                                <span
+                                  className={`mt-1 block text-end text-xs text-[#707171]`}
+                                >
+                                  {msg.time}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        );
+                      })}
+                      {chatlist?.data.length==0 &&messages.length==0 &&(
+                        <p className="flex justify-center items-center py-2 text-[12px] text-slate-400">No Messages</p>
+                      )}
+                    </>
+                  )}
                 </div>
                 {replay && (
                   <div className="flex flex-col items-start justify-start gap-3 rounded-lg bg-bluesoft p-3">
@@ -80,7 +276,7 @@ export default function ChatView({ chatPopupOpen, setChatPopupOpen, selectedUser
                       </div>
                       <X
                         className="size-5 cursor-pointer text-black/50"
-                        onClick={() => setReplay(false)} 
+                        onClick={() => setReplay(false)}
                       />
                     </div>
                     <p className="max-w-xs text-sm">
