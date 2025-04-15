@@ -1,4 +1,4 @@
-import { CHAT_WITH_USER, newRequest } from "@/api";
+import { CHAT, CHAT_WITH_USER, newRequest } from "@/api";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,10 +12,14 @@ export default function ChatView({
   selectedUser,
 }) {
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
 
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+  console.log(user);
+  console.log(selectedUser);
+
   const { data: chatlist } = useQuery({
     queryKey: ["chatlist", selectedUser?.user_id], // helps caching per user
     queryFn: async () => {
@@ -100,7 +104,43 @@ export default function ChatView({
     // reset();
   }
 
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const data = {
+      sender_user_id: user?.employee_data?.user_id,
+      sender_employee_id: user?.employee_data?.id,
+      reciever_user_id: selectedUser?.user_id,
+      reciever_employee_id: selectedUser?.employee_id,
+      message: newMessage,
+    };
+    const now = new Date();
+    const formattedTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+    const message = {
+      content: newMessage,
+      senderId: user?.employee_data?.user_id,
+      receiverId: selectedUser?.user_id,
+      time: formattedTime, // e.g., "14:30"
+    };
+
+    console.log(data);
+
+    try {
+      const response = await newRequest.post(CHAT, data);
+      setNewMessage('');
+       // Avoid duplicate messages by checking IDs
+       setMessages((prevMessages) => {
+        
+          return [...prevMessages, message];
+        
+      });
+
+    } catch (error) {}
+    // console.log(newMessage);
+  };
+
   const [replay, setReplay] = useState(false);
+console.log(messages);
 
   return (
     <>
@@ -128,7 +168,7 @@ export default function ChatView({
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
-                <div className="flex-1 overflow-y-auto min-h-[15rem] rounded-md border p-4">
+                <div className="min-h-[15rem] flex-1 overflow-y-auto rounded-md border p-4">
                   {chatlist && (
                     <>
                       {chatlist.data?.map((msg, outerIndex) => (
@@ -227,38 +267,41 @@ export default function ChatView({
                       ))}
                       {/* Handle messages from current session */}
                       {messages.map((msg, index) => {
-                        const isSentByCurrentUser = msg.senderId !== selectedUser?.user_id;
+                        const isSentByCurrentUser =
+                          msg.senderId !== selectedUser?.user_id;
                         return (
-                        <div key={index}>
-                          <div
-                            className={`flex ${
-                              isSentByCurrentUser
-                                ? "justify-end"
-                                : "justify-start"
-                            } mb-[0.15rem]`}
-                          >
-                            <div className="flex justify-end">
-                              <p
-                                className={`max-w-xs rounded-lg p-3 text-sm text-black shadow-sm ${
-                                  isSentByCurrentUser
-                                    ? "bg-[#e5e7eb]"
-                                    : "bg-[#f0f8ff]"
-                                }`}
-                              >
-                                {msg.content}
-                                <span
-                                  className={`mt-1 block text-end text-xs text-[#707171]`}
+                          <div key={index}>
+                            <div
+                              className={`flex ${
+                                isSentByCurrentUser
+                                  ? "justify-end"
+                                  : "justify-start"
+                              } mb-[0.15rem] mt-3`}
+                            >
+                              <div className="flex justify-end">
+                                <p
+                                  className={`max-w-xs rounded-lg p-3 text-sm text-black shadow-sm ${
+                                    isSentByCurrentUser
+                                      ? "bg-[#e5e7eb]"
+                                      : "bg-[#f0f8ff]"
+                                  }`}
                                 >
-                                  {msg.time}
-                                </span>
-                              </p>
+                                  {msg.content}
+                                  <span
+                                    className={`mt-1 block text-end text-xs text-[#707171]`}
+                                  >
+                                    {msg.time}
+                                  </span>
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
                         );
                       })}
-                      {chatlist?.data.length==0 &&messages.length==0 &&(
-                        <p className="flex justify-center items-center py-2 text-[12px] text-slate-400">No Messages</p>
+                      {chatlist?.data.length == 0 && messages.length == 0 && (
+                        <p className="flex items-center justify-center py-2 text-[12px] text-slate-400">
+                          No Messages
+                        </p>
                       )}
                     </>
                   )}
@@ -285,17 +328,25 @@ export default function ChatView({
                   </div>
                 )}
 
-                <div className="flex items-center gap-4 bg-white py-4">
+                <form
+                  onSubmit={handleSend}
+                  className="flex items-center gap-4 bg-white py-4"
+                >
                   <input
                     type="text"
                     placeholder="Type a message"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
                     className="outline-noneplaceholder:text-sm flex-1 rounded-lg bg-gray-darklight p-3 shadow-sm placeholder:text-sm"
                   />
-                  <button className="bg-orange-400 hover:bg-orange-500 flex items-center gap-2 rounded-lg bg-hrmprimaryorange px-4 py-3 text-white shadow-md">
+                  <button
+                    type="submit"
+                    className="bg-orange-400 hover:bg-orange-500 flex items-center gap-2 rounded-lg bg-hrmprimaryorange px-4 py-3 text-white shadow-md"
+                  >
                     <Send size={16} />
                     Send
                   </button>
-                </div>
+                </form>
               </div>
             </DialogPanel>
           </div>

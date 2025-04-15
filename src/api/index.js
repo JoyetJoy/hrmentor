@@ -196,3 +196,6 @@ export const ALL_CHAT_LIST = "user-chats";
 
 //chats
 export const CHAT_WITH_USER = "chat-with-user";
+
+//chat
+export const CHAT = "chat";
