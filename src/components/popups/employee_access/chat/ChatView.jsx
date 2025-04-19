@@ -32,7 +32,7 @@ export default function ChatView({
   });
 
   useEffect(() => {
-    if (!selectedUser?.user_id) return; // Prevent subscription if user ID is missing
+    if (!user?.user?.id) return; // Prevent subscription if user ID is missing
     console.log("getin");
 
     const token =
@@ -54,10 +54,10 @@ export default function ChatView({
       },
     });
 
-    console.log("Subscribing to:", `private-chat.${selectedUser?.user_id}`);
+    console.log("Subscribing to:", `private-chat.${user?.user?.id}`);
 
     // Subscribe to the private channel
-    const channel = pusher.subscribe(`private-chat.${selectedUser?.user_id}`);
+    const channel = pusher.subscribe(`private-chat.${user?.user?.id}`);
 
     pusher.connection.bind("state_change", function (states) {
       console.log("Pusher State Changed:", states);
@@ -96,12 +96,13 @@ export default function ChatView({
     //   channel.unsubscribe();
     //   pusher.disconnect();
     // };
-  }, [selectedUser?.user_id]);
+  }, [user?.user?.id]);
 
   console.log(chatlist);
   function close() {
+    setMessages([]);
     setChatPopupOpen(false);
-    // reset();
+    reset();
   }
 
   const handleSend = async (e) => {
@@ -151,8 +152,8 @@ console.log(messages);
         onClose={close}
       >
         <div className="fixed inset-0 z-50 h-screen w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center">
-            <DialogPanel className="ml-64 w-full max-w-md rounded bg-white px-7 pb-3 pt-6">
+          <div className="flex min-h-full items-center justify-center ">
+            <DialogPanel className="w-full max-w-md max-h-[45rem] rounded bg-white px-7 pb-3 pt-6">
               <div className="mb-3 flex justify-between">
                 <div className="flex items-center gap-1">
                   <div className="h-10 w-10 overflow-hidden rounded-full">
@@ -168,7 +169,7 @@ console.log(messages);
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
-                <div className="min-h-[15rem] flex-1 overflow-y-auto rounded-md border p-4">
+                <div className="max-h-[30rem] flex-1 overflow-y-auto rounded-md border p-4">
                   {chatlist && (
                     <>
                       {chatlist.data?.map((msg, outerIndex) => (
@@ -210,54 +211,13 @@ console.log(messages);
                                       </span>
                                     </p>
                                   </div>
-                                  {/* <div
-                                    className={`flex max-w-[70%] gap-1 rounded-[15px] px-2 text-sm ${
-                                      isSentByCurrentUser
-                                        ? "bg-[#007BFF] text-white"
-                                        : "bg-[#E5E5EA] text-black"
-                                    }`}
-                                  >
-                                    <p className="flex-1 break-all py-2">
-                                      {message.content}
-                                    </p>{" "} */}
-                                  {/* Allows long words to break */}
-                                  {/* <p
-                                      className={`mt-[2px] flex items-end pr-2 pt-4 text-[8px] ${
-                                        isSentByCurrentUser
-                                          ? "text-[#c6e4de]"
-                                          : "text-[#707171]"
-                                      }`}
-                                    >
-                                      {message.time}
-                                    </p>
-                                  </div> */}
                                 </div>
                               </div>
                             );
                           })}
-                          {/* <div className="flex w-full items-center justify-start gap-3">
-                            <p className="max-w-xs rounded-lg bg-bluesoft p-3 text-sm shadow-sm">
-                              Lorem Ipsum is simply dummy text of the printing
-                              and
-                              <span className="mt-1 block text-end text-xs text-gray-500">
-                                Today | 03:22
-                              </span>
-                            </p> */}
-                          {/* Replay button */}
-                          {/* <div
-                              onClick={() => setReplay(true)}
-                              className="cursor-pointer rounded-full bg-bluesoft p-2"
-                            >
-                              <img
-                                src="/assets/icons/employee_access/header/share.svg"
-                                className="h-4 w-4"
-                                alt=""
-                              />
-                            </div>
-                          </div> */}
                           {messages.length > 0 &&
-                            history.data?.every(
-                              (msg) => msg.date !== "Today",
+                            chatlist?.data?.every(
+                              (msg) => msg?.date !== "Today",
                             ) && (
                               <p className="flex justify-center py-2 text-[12px] text-slate-400">
                                 Today
