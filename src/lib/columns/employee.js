@@ -27,7 +27,7 @@ export const employeeColumnKeysForWorkLocation = {
 
 // work location
 export const employeeColumnKeysForWorkArea = {
-  field1: { key: "work_area_name", label: "Work Area Name" },
+  field1: { key: "name", label: "Work Area Name" },
   field2: { key: "status", label: "Status" },
 };
 
