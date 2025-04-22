@@ -2,7 +2,7 @@ import * as Yup from "yup";
 export const RosterSchema = Yup.object().shape({
   shift: Yup
     .object()
-    .required("Shift is required")
+    // .required("Shift is required")
     .nullable(), // because `Select` returns `null` initially
 
   start_date: Yup
@@ -18,4 +18,11 @@ export const RosterSchema = Yup.object().shape({
       Yup.ref("start_date"),
       "End date cannot be before start date"
     ),
+});
+
+export const RosterEditSchema = Yup.object().shape({
+  shift: Yup
+    .object()
+    // .required("Shift is required")
+    .nullable(), // because `Select` returns `null` initially
 });

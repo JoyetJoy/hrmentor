@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Trash2, X } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
+import { RosterEditSchema, RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 import {
   ADD_ROSTER,
@@ -37,7 +37,7 @@ export default function ChangeShift({
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(RosterSchema),
+    resolver: yupResolver(RosterEditSchema),
   });
 console.log(datas);
 
