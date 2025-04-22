@@ -9,7 +9,7 @@ import { newFormRequest, newRequest, XFormRequest } from "@/api";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import MenuHeader from "@/components/common/MenuHeader";
-import { ChevronRight, Palette } from "lucide-react";
+import { ChevronRight, LogIn, Palette } from "lucide-react";
 import { customSelectStyles } from "@/utils/customStyles";
 import WeeklyRecurrence from "@/components/popups/master/shift/RecurrencePattern";
 import GradientColorPicker from "react-best-gradient-color-picker";
@@ -282,10 +282,12 @@ console.log(startTime,endTime);
   );
   useEffect(() => {
     if (workAreaList) {
-      const formattedWorkArea = workAreaList?.data?.original?.data?.map(
+      console.log(workAreaList);
+      
+      const formattedWorkArea = workAreaList.listing.map(
         (item) => ({
-          label: item.name,
-          value: item.name,
+          label: item.work_area_name,
+          value: item.work_area_name,
           id: item.id,
         }),
       );
