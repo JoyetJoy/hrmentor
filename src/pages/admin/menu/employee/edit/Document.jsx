@@ -57,8 +57,8 @@ export const EmployeeDocuments = () => {
           <>
             <div className="flex items-center gap-7">
               <h5 className="text-lg font-bold">Documents</h5>
-              <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
-                <Search className="size-4 text-gray-dark " />
+              <div className="input flex h-10 min-h-10 w-80 items-center gap-2 border border-gray-platinum text-sm outline-none placeholder:text-black hover:border-gray-platinum">
+                <Search className="size-4 text-gray-dark" />
                 <input
                   type="text"
                   onChange={(e) => setKeyword(e.target.value)}
@@ -73,26 +73,31 @@ export const EmployeeDocuments = () => {
               </div>
             ) : (
               <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white pb-7">
-                {employeeDocumentsCategory?.listing?.map((item) => (
-                  <Disclosure
-                    key={item?.id}
-                    as="div"
-                    className="p-5"
-                    defaultOpen={false}
-                  >
-                    <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
-                      <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
-                        <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                      </div>
-                      <p className="text-sm">{item?.document_category_name}</p>
-                    </DisclosureButton>
-                    <UnderListing
-                      cid={item?.id}
-                      uid={uid}
-                      documentName={item?.document_category_name}
-                    />
-                  </Disclosure>
-                ))}
+                {employeeDocumentsCategory?.listing
+                  ?.filter((item) => item?.document_category_status !== 0)
+                  ?.map((item) => (
+                    <Disclosure
+                      key={item?.id}
+                      as="div"
+                      className="p-5"
+                      defaultOpen={false}
+                    >
+                      <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
+                          <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                        </div>
+                        <p className="text-sm">
+                          {item?.document_category_name}
+                        </p>
+                      </DisclosureButton>
+                      <UnderListing
+                        cid={item?.id}
+                        uid={uid}
+                        documentName={item?.document_category_name}
+                      />
+                    </Disclosure>
+                  ))}
+
                 <Pagination
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
