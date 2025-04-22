@@ -56,7 +56,7 @@ export default function Documents() {
         subMenu={"ProfileManagement"}
         icon={<ChevronRight className="size-3" />}
       />
-      <div className="flex gap-x-3 ">
+      <div className="flex gap-x-3">
         <ProfileSidebar />
         <div className="mt-2 w-full">
           <>
@@ -78,26 +78,30 @@ export default function Documents() {
               </div>
             ) : (
               <div className="overflow-y-min mt-5 w-full overflow-y-auto rounded-md bg-white pb-7">
-                {employeeDocumentsCategory?.listing?.map((item) => (
-                  <Disclosure
-                    key={item?.id}
-                    as="div"
-                    className="p-5"
-                    defaultOpen={false}
-                  >
-                    <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
-                      <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
-                        <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
-                      </div>
-                      <p className="text-sm">{item?.document_category_name}</p>
-                    </DisclosureButton>
-                    <UnderDocumentListing
-                      cid={item?.id}
-                      uid={u_id}
-                      documentName={item?.document_category_name}
-                    />
-                  </Disclosure>
-                ))}
+                {employeeDocumentsCategory?.listing
+                  ?.filter((item) => item?.document_category_status !== 0)
+                  ?.map((item) => (
+                    <Disclosure
+                      key={item?.id}
+                      as="div"
+                      className="p-5"
+                      defaultOpen={false}
+                    >
+                      <DisclosureButton className="group flex w-full items-center gap-x-2 font-bold">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-gray-darklight">
+                          <ChevronRight className="size-4 group-data-[open]:rotate-90 group-data-[hover]:text-black/50" />
+                        </div>
+                        <p className="text-sm">
+                          {item?.document_category_name}
+                        </p>
+                      </DisclosureButton>
+                      <UnderDocumentListing
+                        cid={item?.id}
+                        uid={u_id}
+                        documentName={item?.document_category_name}
+                      />
+                    </Disclosure>
+                  ))}
                 <Pagination
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
