@@ -9,13 +9,13 @@ export const PAYROLL_MONTHLY_TWISE = "pay-roll-settings-monthly-twise";
 //PAYROLL PAYPERIOD GET
 export const PAYROLL_PAYPERIOD_GET = "pay-period";
 //PAYROLL VIEW
-export const PAYROLL_GET_VIEW = "payrun/department";
+export const PAYROLL_GET_VIEW = "pay-off-employee";
 // PAYROLL APPROVE
 export const PAYROLL_APPROVE = "payrun/department/approve";
 // APPROVE PAYROLL EMPLOYEE
 export const APPROVE_PAYROLL_EMPLOYEE = "payrun/employees";
 // EMPLOYEE PAYROLL DETAILS
-export const EMPLOYEE_PAYROLL_DETAILS = "payrun/employees/details";
+export const EMPLOYEE_PAYROLL_DETAILS = "pay-lists-employee-detail";
 
 //PAYROLL LIST GET
 export const PAYROLL_LIST_GET = "payrun/departmentlist";

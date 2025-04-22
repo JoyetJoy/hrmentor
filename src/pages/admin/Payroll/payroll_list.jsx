@@ -14,6 +14,7 @@ import Loader from "@/components/ui/Loader";
 import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
 import { formatDateRange } from "@/utils/helpers";
 import dayjs from "dayjs";
+import { formatDate } from "@/utils/date";
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -221,7 +222,7 @@ export default function PayrollList() {
               onClick={() => {
                 navigate(
                   `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}/${monthValue}` +
-                    `?start_date=${startDate}&end_date=${endDate}&department=${row.original.department_name}`,
+                    `?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&department=${row.original.department_name}`,
                 );
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"

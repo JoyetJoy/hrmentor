@@ -64,10 +64,8 @@ export default function PayrollListEdit() {
     queryKey: ["employeepayrolldetails", empId, id, startDate, endDate],
     queryFn: () =>
       newRequest
-        .get(EMPLOYEE_PAYROLL_DETAILS, {
+        .get(`${EMPLOYEE_PAYROLL_DETAILS}/${empId}`, {
           params: {
-            payrun_id: id,
-            emp_id: empId,
             start_date: startDate,
             end_date: endDate,
           },

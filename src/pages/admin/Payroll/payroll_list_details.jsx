@@ -30,10 +30,9 @@ export default function PayListDetails() {
     queryKey: ["payrolldetails", id, start, end],
     queryFn: () =>
       newRequest
-        .get(PAYROLL_GET_VIEW, {
+        .get(`${PAYROLL_GET_VIEW}/${id}`, {
           params: {
-            schedule: monthid,
-            department_id: id,
+            pay_schedule: monthid,
             start_date: start,
             end_date: end,
           },
@@ -145,7 +144,7 @@ export default function PayListDetails() {
             <button
               type="button"
               onClick={() => {
-                navigate(`/admin/payroll/paylistedit/${row.original.payrun_id}`+`?start_date=${start}&end_date=${end}&empid=${row.original.employee_id}`);
+                navigate(`/admin/payroll/paylistedit/${row.original.employee_id}`+`?start_date=${start}&end_date=${end}&empid=${row.original.employee_id}`);
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
