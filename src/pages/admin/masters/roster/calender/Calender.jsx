@@ -708,7 +708,7 @@ const RosterCalendar = () => {
                                       )}
                                     </div>
                                   ))}
-                                  {day.fullDate >= today && (
+                                  
                                     <p className="relative flex w-full items-center justify-center">
                                       <button
                                         onClick={() =>
@@ -751,7 +751,7 @@ const RosterCalendar = () => {
                                           </span>
                                         )}
                                     </p>
-                                  )}
+                                  
 
                                   {openPopup?.row === rowIndex &&
                                     openPopup?.col === colIndex && (
