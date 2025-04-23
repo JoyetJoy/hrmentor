@@ -4,10 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Share2 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MonthlyCalendarPicker from "@/components/common/MonthPicker";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import dayjs from "dayjs";
 import Reschedule from "@/components/popups/employees/view/Reschedule";
 import Share from "@/components/popups/employees/view/Share";
+import AnnualLeave from "@/components/employee/AnnualLeave";
 
 export default function EmployeeDetails() {
   const [type, setType] = useState("");
@@ -216,12 +217,15 @@ export default function EmployeeDetails() {
               <div
                 className={`flex flex-col gap-2 px-3 ${employeeViewDetails?.basic_details?.status === active ? "flex" : "hidden"} `}
               >
-                <div className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
+                <div className="flex flex-col gap-2">
+                <p className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
                   Clock In - 05:10 am
-                </div>
-                <div className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
+                </p>
+                <p className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
                   Clock Out - 06:00 pm
+                </p>
                 </div>
+                <AnnualLeave />
               </div>
             </div>
           </div>
