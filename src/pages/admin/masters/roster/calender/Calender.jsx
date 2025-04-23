@@ -808,7 +808,6 @@ const RosterCalendar = () => {
                                     </div>
                                   ))}
 
-                                  {day.fullDate >= today && (
                                     <div className="min-w-[11.4rem]">
                                       <button
                                         className="text-2xl font-bold text-blue-500"
@@ -896,7 +895,6 @@ const RosterCalendar = () => {
                                           </div>
                                         )}
                                     </div>
-                                  )}
                                 </>
                               )}
                             </td>
