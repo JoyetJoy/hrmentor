@@ -156,7 +156,7 @@ export default function PayrollListEdit() {
   return (
     <>
       <PayrollHeader page={2} />
-      <Paynow popupOpen={payPopup} setPopupOpen={setPayPopup} />
+      <Paynow popupOpen={payPopup} setPopupOpen={setPayPopup} id={id}/>
 
       <div className="mb-4 flex items-center justify-between">
         {/* Left Section */}
