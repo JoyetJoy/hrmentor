@@ -57,7 +57,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       console.error("Error fetching employee list:", error?.message || error);
     },
   });
-console.log(selectedShiftId);
+  console.log(selectedShiftId);
 
   const selectedShift = shiftList?.data?.original?.data.find(
     (item) => item.id === selectedShiftId,
@@ -75,7 +75,7 @@ console.log(selectedShiftId);
     toast.success("Employee deleted successfully");
   };
   console.log(selectedEmployee);
-  
+
   const handleAddEmployee = () => {
     if (selectedEmployee) {
       setSelectedEmployees((prev) => [
@@ -108,11 +108,17 @@ console.log(selectedShiftId);
   };
 
   const handleRoster = async (data) => {
+    const startDate = new Date(data.start_date);
+    startDate.setDate(startDate.getDate() + 1);
+
+    const endDate = new Date(data.end_date);
+    endDate.setDate(endDate.getDate() + 1);
+
     const formData = {
       shift_id: selectedShiftId,
-      start_date: data.start_date,
-      end_date: data.end_date,
-      rosterDetails: employeesdetails,
+      start_date: startDate,
+      end_date: endDate,
+      rosterDetails: selectedEmployees,
     };
 
     console.log(formData);
