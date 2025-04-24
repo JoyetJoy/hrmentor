@@ -147,7 +147,7 @@ export default function EmployeeRightToWorkEditForm({
               >
                 {" "}
                 <label className="col-span-2 flex items-center justify-end gap-1 text-xs font-medium text-[#3A3A3A]">
-                  Indefinite leave to remain (ILR){" "}
+                  Indefinite leave to remain (ILR)/ British Citizen{" "}
                   <input
                     type="checkbox"
                     onChange={handleCheckboxChange}
