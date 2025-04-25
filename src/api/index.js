@@ -70,7 +70,7 @@ export const EMPLOYEE_STATUS = "employee-status-update";
 // EMPLOYEE DETAILS
 export const EMPLOYEE_DETAILS = "view-employee-page";
 // ANNUAL LEAVE
-export const ANNUAL_LEAVE = "annual-leave";
+export const ANNUAL_LEAVE = "annual-leave-employee";
 // ACTIVE EMPLOYEE
 export const ACTIVE_EMPLOYEE = "active-employees";
 // UPDATE EMPLOYEE

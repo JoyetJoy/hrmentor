@@ -4,25 +4,23 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { ANNUAL_LEAVE, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
+// Register core chart elements
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function AnnualLeave() {
-  const {data: annualLeave, isLoading, refetch,} = useQuery({
-    queryKey: ["annualLeave"],
+export default function AnnualLeave({ id }) {
+  const { data: annualLeave } = useQuery({
+    queryKey: ["annualLeave", id],
     queryFn: () =>
-      newRequest.get(ANNUAL_LEAVE).then((res) => {
-        return res.data;
-      }),
+      newRequest.get(`${ANNUAL_LEAVE}?emp_id=${id}`).then((res) => res.data),
   });
-  console.log(annualLeave);
-  
+
   const data = {
     labels: ["Consumed", "Remaining"],
     datasets: [
       {
-        data: [annualLeave?.consumed, annualLeave?.remaining],
-        backgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-        hoverBackgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
+        data: [annualLeave?.consumed || 0, annualLeave?.remaining || 0],
+        backgroundColor: ["#456EF2", "#FFA38F"],
+        hoverBackgroundColor: ["#456EF2", "#FFA38F"],
       },
     ],
   };
@@ -48,10 +46,38 @@ export default function AnnualLeave() {
     },
   };
 
+  const centerTextPlugin = {
+    id: "centerText",
+    beforeDraw: (chart) => {
+      const { width, height, ctx } = chart;
+      const total =
+      annualLeave?.total
+  
+      ctx.restore();
+      ctx.save();
+  
+      const centerX = width / 2 - 50; // move 10px to the left
+      const centerY = height / 2;
+  
+      ctx.font = "12px sans-serif";
+      ctx.fillStyle = "#999";
+      ctx.textAlign = "center";
+      ctx.fillText("Total", centerX, centerY - 10);
+  
+      ctx.font = "bold 16px sans-serif";
+      ctx.fillStyle = "#000";
+      ctx.fillText(`${total} Hrs`, centerX, centerY + 10);
+      ctx.restore();
+    },
+  };
+
   return (
-    <div className="w-full rounded-md bg-white px-5 py-3 shadow-sm">
+    <div className="w-full rounded-md bg-white px-5 py-3 shadow-sm mt-5">
       <div className="w-[80%]">
-        <Doughnut data={data} options={options} />
+        <p className="font-semibold">Annual Leave</p>
+        {annualLeave && (
+          <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
+        )}
       </div>
     </div>
   );

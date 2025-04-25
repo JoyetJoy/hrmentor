@@ -225,7 +225,9 @@ export default function EmployeeDetails() {
                   Clock Out - 06:00 pm
                 </p>
                 </div>
-                <AnnualLeave />
+                <AnnualLeave 
+                 id={employeeViewDetails?.basic_details?.employee_id}
+                 />
               </div>
             </div>
           </div>
