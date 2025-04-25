@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import EmployeeDocumentEditForm from "@/components/popups/employees/edit/DocumentsEdit";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 
-export default function UnderListing({ cid, uid, documentName }) {
+export default function UnderListing({ cid, uid, expiry, documentName }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [popupOpen, setPopupOpen] = useState(false);
@@ -149,6 +149,7 @@ export default function UnderListing({ cid, uid, documentName }) {
         uid={uid}
         documentName={documentName}
         cid={cid}
+        expiry={expiry}
       />
       <DisclosurePanel className="my-4 ml-10 text-sm/5 text-black/50">
         <div>

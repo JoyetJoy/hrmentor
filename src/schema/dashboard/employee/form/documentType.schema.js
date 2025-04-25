@@ -22,7 +22,7 @@ export const empDocumentTypeSchema = Yup.object({
   issued_date: Yup.string().required("Issued date is required"),
   expiry_date: Yup.string()
     .nullable()
-    .required("Expiry Date is required")
+    // .required("Expiry Date is required")
     .test(
       "expiry-after-issued",
       "Expiry date should be after issued date",

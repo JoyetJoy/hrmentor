@@ -52,6 +52,8 @@ export default function SaveEmployeeMasterForm({
       setValue("status", employeeMastersDetailByid?.[colKeys.field2.key]);
       type === "Work Location" &&
         setValue("address", employeeMastersDetailByid?.[colKeys.field3.key]);
+      const expiryValue = employeeMastersDetailByid?.expiry_status === 1;
+      setValue("expiry_status", expiryValue);
     }
   }, [employeeMastersDetailByid, type, setValue]);
 
@@ -74,12 +76,15 @@ export default function SaveEmployeeMasterForm({
     setLoader(true);
     try {
       const formData = new URLSearchParams();
+      formData.append("expiry_status", data?.expiry_status ? 1 : 0);
       formData.append(colKeys.field1.key, data?.name);
       formData.append(colKeys.field2.key, data?.status?.value);
       type === "Work Location" &&
         formData.append("work_location_address", data?.address);
 
       let res;
+      console.log(data);
+
       if (selectedField !== 0) {
         res = await XFormRequest.patch(`${api}/${selectedField}`, formData);
       } else {
@@ -180,6 +185,19 @@ export default function SaveEmployeeMasterForm({
                       />
                     )}
                   />
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    {...register("expiry_status")}
+                    className="mr-2"
+                  />
+                  <label className="label-text">is expiry needed</label>
                   {errors.status && (
                     <span className="text-xs font-medium text-red-500">
                       {errors.status?.message}

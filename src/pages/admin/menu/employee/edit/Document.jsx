@@ -93,6 +93,7 @@ export const EmployeeDocuments = () => {
                       <UnderListing
                         cid={item?.id}
                         uid={uid}
+                        expiry={item?.expiry_status}
                         documentName={item?.document_category_name}
                       />
                     </Disclosure>

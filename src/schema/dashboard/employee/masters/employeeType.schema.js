@@ -9,4 +9,5 @@ export const EmployeeMasterCommanFormSchema = Yup.object({
   }).test("both-required", "Status is required", function (value) {
     return value?.value && value?.label;
   }),
+  expiry_status: Yup.boolean()
 });

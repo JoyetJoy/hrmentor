@@ -24,6 +24,7 @@ export default function EmployeeDocumentEditForm({
   uid,
   documentName,
   cid,
+  expiry
 }) {
   const {
     register,
@@ -58,7 +59,11 @@ export default function EmployeeDocumentEditForm({
 
   useEffect(() => {
     if (employeeDocumentDetailByid) {
-      setValue("status", employeeDocumentDetailByid?.data?.status);
+      const status = {
+        value: employeeDocumentDetailByid.data.status.id,
+        label: employeeDocumentDetailByid.data.status.label,
+      }
+      setValue("status", status);      
       setValue(
         "document_name",
         employeeDocumentDetailByid?.data?.document_name,
@@ -92,7 +97,9 @@ export default function EmployeeDocumentEditForm({
       formData.append("document_type_id", data.document_type_id?.id);
       formData.append("status", data.status.value);
       formData.append("issued_date", data.issued_date);
-      formData.append("expiry_date", data.expiry_date);
+      if(expiry===1){
+        formData.append("expiry_date", data.expiry_date);
+      }
       formData.append("issued_authority", data.issued_authority);
       imageFile && formData.append("document", imageFile);
 
@@ -108,6 +115,8 @@ export default function EmployeeDocumentEditForm({
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
+        reset();
+        clearImage();
         close();
       }
     } catch (error) {
@@ -226,7 +235,8 @@ export default function EmployeeDocumentEditForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex flex-col space-y-1">
+                {expiry === 1 && (
+                  <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Expiry date
                   </label>
@@ -241,6 +251,7 @@ export default function EmployeeDocumentEditForm({
                     </span>
                   )}
                 </div>
+                )}
                 <div className="group flex flex-col space-y-1">
                   <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Status
