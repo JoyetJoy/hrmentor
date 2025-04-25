@@ -77,9 +77,9 @@ function MenuHeader(props) {
           <span className="text-sm text-hrmprimaryorange">{currentpath}</span>
         </div>
         <h1 className="flex cursor-pointer items-center justify-between gap-1 text-[0.8rem] font-medium text-black">
-          {centertextmain}
+          {/* {centertextmain} */}
           <span className="font-bold text-hrmprimaryorange underline underline-offset-4">
-            {centertext}
+            {/* {centertext} */}
           </span>
         </h1>
         <div className={`flex items-center gap-5 text-sm`}>
