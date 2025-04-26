@@ -214,7 +214,7 @@ export default function LeaveDiagram() {
       <div className=" h-[17rem] w-full bg-white flex rounded-md px-5 pt-3 shadow-sm">
         <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
       </div>
-      <div className=" h-[17rem] w-full bg-white flex rounded-md px-5 pt-3 shadow-sm">
+      {/* <div className=" h-[17rem] w-full bg-white flex rounded-md px-5 pt-3 shadow-sm">
         <Doughnut data={data1} options={options} plugins={[centerTextPlugin1]} />
       </div>
       <div className=" h-[17rem] w-full bg-white flex rounded-md px-5 pt-3 shadow-sm">
@@ -222,7 +222,7 @@ export default function LeaveDiagram() {
       </div>
       <div className=" h-[17rem] w-full bg-white flex rounded-md px-5 pt-3 shadow-sm">
         <Doughnut data={data3} options={options} plugins={[centerTextPlugin3]} />
-      </div>
+      </div> */}
     </div>
   );
 }
