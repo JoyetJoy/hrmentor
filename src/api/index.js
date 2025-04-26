@@ -153,6 +153,8 @@ export const COMPANY_CALENDER = "company-calender-settings";
 export const DASHBOARD = "employee-access/dashboard";
 //CLOCKIN
 export const CLOCKIN = "employee-current-running-shift";
+//ANNUALLEAVE
+export const EMPLOYEE_ANNUAL_LEAVE = "annual-leave";
 //BREAKLIST
 export const BREAKLIST = "employee-shift-break-times";
 //RUNNINGBREAK
