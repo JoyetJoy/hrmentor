@@ -58,7 +58,7 @@ export default function Leave() {
         header: "Leave type",
         accessorKey: "type",
         cell: ({ row }) => (
-          <p className="">{row?.original?.leave_type?.leave_name || "NA"}</p>
+          <p className="">{row?.original?.leave_type|| "NA"}</p>
         ),
       },
       {

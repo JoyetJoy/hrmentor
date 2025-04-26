@@ -66,7 +66,7 @@ export default function ViewLeave({
               <div className="group flex w-full flex-col gap-1">
                 <label className="label-text">Leave Type</label>
                 <p className="text-sm font-semibold">
-                  {employeeLeaveRequestDetails?.leave_type?.leave_name}
+                  {employeeLeaveRequestDetails?.leave_type}
                 </p>
               </div>
               <div className="group flex flex-col space-y-1">
