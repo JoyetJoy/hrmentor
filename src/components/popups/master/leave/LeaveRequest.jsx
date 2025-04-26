@@ -121,7 +121,7 @@ export default function LeaveRequest({
                   {leaveDetails?.employee?.middle_name}
                 </p>
                 <p>#{leaveDetails?.employee_id}</p>
-                <p>Department</p>
+                <p className="mt-5">Department</p>
               </div>
               <div className="group mt-5 flex justify-between text-[0.85rem] font-medium">
                 <div className="flex flex-col">
@@ -180,9 +180,9 @@ export default function LeaveRequest({
                 </div>
               </div>
               <div className="group mt-5 flex flex-col justify-between space-y-1 text-[0.85rem] font-medium">
-                <p>Description</p>
+                <p>Reason</p>
                 <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  {leaveDetails?.descriptions}
+                  {leaveDetails?.reason}
                 </p>
               </div>
               <div
