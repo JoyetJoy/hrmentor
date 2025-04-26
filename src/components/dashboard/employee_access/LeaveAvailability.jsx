@@ -85,7 +85,7 @@ console.log(annualLabels);
         <div className="bg-hrmprimaryorange flex h-8 w-fit cursor-pointer  whitespace-nowrap items-center justify-center rounded px-2 text-white">
           Annual Leave
         </div>
-        <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border  whitespace-nowrap  border-black/15 bg-black/5 px-2 text-black/80">
+        {/* <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border  whitespace-nowrap  border-black/15 bg-black/5 px-2 text-black/80">
           Sick leave
         </div>
         <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border  whitespace-nowrap border-black/15 bg-black/5 px-2 text-black/80">
@@ -93,7 +93,7 @@ console.log(annualLabels);
         </div>
         <div className="flex h-8 w-fit cursor-pointer items-center justify-center rounded border  whitespace-nowrap border-black/15 bg-black/5 px-2 text-black/80">
           Loss of pay
-        </div>
+        </div> */}
       </div>
 
       <div className="w-full">
