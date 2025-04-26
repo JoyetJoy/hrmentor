@@ -96,7 +96,7 @@ console.log(annualLabels);
         </div>
       </div>
 
-      <div className="w-[80%]">
+      <div className="w-full">
         <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
       </div>
     </div>

@@ -12,6 +12,7 @@ import ViewLeave from "@/components/popups/employee_access/leave/ViewLeave";
 import { useQuery } from "@tanstack/react-query";
 import { newRequest } from "@/api";
 import { EMPLOYEE_LEAVE_REQUEST_LIST } from "@/api/master";
+import LeaveDiagram from "@/components/employee_access/leave/leave";
 
 export default function Leave() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -182,9 +183,12 @@ export default function Leave() {
       </div>
       <div className="flex gap-3 w-full">
         <LeaveSideBar />
-        <div className="flex flex-col gap-3 min-w-[80%]">
-          <img src="/assets/images/employee_access/leave.png" alt="" />
-          <div className=" mb-10 rounded-md bg-white p-5">
+        <div className="flex flex-col gap-10 w-full">
+          <div className="h-[16rem]">
+          <LeaveDiagram/>
+          </div>
+          {/* <img src="/assets/images/employee_access/leave.png" alt="" /> */}
+          <div className=" mb-10 rounded-md bg-white p-5"> 
             <div className="mb-2 flex  items-center justify-between py-2">
               <div className="flex items-center gap-3">
                 <Select
