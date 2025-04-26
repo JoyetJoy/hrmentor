@@ -31,47 +31,35 @@ export default function AdminPayOff() {
           },
         },
         {
-          header: "Month",
+          header: "Period",
           accessorKey: "month",
         },
         {
-          header: "Total Worked hrs",
+          header: "Transaction Id",
           accessorKey: "totalworked hrs",
-        },
-        {
-          header: " Worked hours pay",
-          accessorKey: "worked hours pay",
-        },
-        {
-          header: "OT Hours",
-          accessorKey: "ot hours",
-        },
-        {
-          header: "OT Pay",
-          accessorKey: "pay",
-        },
-        {
-          header: "Net Pay",
-          accessorKey: "pay",
         },
         {
           header: "Payment date",
           accessorKey: "pay",
         },
         {
-          header: "Status",
-          accessorKey: "status",
-          cell: ({ row }) => (
-            <div
-              // style={{
-              //   backgroundColor:
-              //     row?.original?.employee?.employment_status?.background_color,
-              //   color: row?.original?.employee?.employment_status?.text_color,
-              // }}
-              className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
-            ></div>
-          ),
+          header: "Amount",
+          accessorKey: "amount",
         },
+        // {
+        //   header: "Status",
+        //   accessorKey: "status",
+        //   cell: ({ row }) => (
+        //     <div
+        //       style={{
+        //         backgroundColor:
+        //           row?.original?.employee?.employment_status?.background_color,
+        //         color: row?.original?.employee?.employment_status?.text_color,
+        //       }}
+        //       className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
+        //     ></div>
+        //   ),
+        // },
         {
           header: "Action",
           accessorKey: "action",
