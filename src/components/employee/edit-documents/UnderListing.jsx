@@ -135,7 +135,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeDocumentsListing"}
         api={EMPLOYEE_DOCUMENTS}
       />

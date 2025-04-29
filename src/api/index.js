@@ -111,6 +111,10 @@ export const EMPLOYEE_DOCUMENTS = "employee-documents";
 export const UPDATE_EMPLOYEE_DOCUMENTS = "update-employee-document";
 // EMPLOYEE SALARY DETAILS
 export const EMPLOYEE_SALARY_DETAILS = "employee-salary-details";
+//PAYSLIP
+export const EMPLOYEE_PAYSLIP = "user-payroll";
+//DOWNLOAD PAYSLIP
+export const DOWNLOAD_PAYSLIP = "download-payslip"
 
 // PROFILE MANAGEMENT
 export const PROFILE_MANAGEMENT = "profile";
@@ -175,7 +179,9 @@ export const NEWS_LISt = "news";
 export const ALL_NEWS ="news-list"
 
 // EVENT ALL VIEW
-export const ALL_EVENT ="event-list"
+export const ALL_EVENT ="event-list";
+// SUBSCRIPTION
+export const SUBSCRIPTION = "subscriptions";
 
 // ROSTER CLAIM DETAILS
 export const ROSTER_CLAIM = "get-and-show-roster-count-details";
@@ -200,6 +206,9 @@ export const ALL_CHAT_LIST = "user-chats";
 
 //chats
 export const CHAT_WITH_USER = "chat-with-user";
+
+//READ CHAT 
+export const READ_CHAT = 'read-chat';
 
 //chat
 export const CHAT = "chat";

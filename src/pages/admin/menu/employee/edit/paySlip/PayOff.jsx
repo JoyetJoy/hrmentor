@@ -1,16 +1,41 @@
+import { EMPLOYEE_PAYSLIP, newRequest } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
 import QueryTable from "@/components/table/QueryTable";
 import { customSelectStyles } from "@/utils/customStyles";
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { ArrowDownToLine, ChevronRight, Eye, Search } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 
 export default function AdminPayOff() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
+
+  // Fetch List
+    const { data, isLoading } = useQuery({
+      queryKey: ['employeePayslip', currentPage, keyword],
+      queryFn: () =>
+        newRequest
+          .get(EMPLOYEE_PAYSLIP, {
+            params: {
+              search: keyword,
+              page: currentPage,
+              per_limit: pageLimit,
+            },
+          })
+          .then((res) => {
+            return res.data;
+          }),
+    });
+console.log(data);
+
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
     setDate(updatedDate);
@@ -27,7 +52,11 @@ export default function AdminPayOff() {
           header: "Sl No",
           accessorKey: "sno",
           cell: ({ row }) => {
-            return <div className="flex px-2"></div>;
+            return (
+              <div className="flex px-2">
+                {row.index + 1 + (currentPage - 1) * pageLimit}
+              </div>
+            );
           },
         },
         {

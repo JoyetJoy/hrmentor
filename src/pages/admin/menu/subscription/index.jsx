@@ -4,9 +4,20 @@ import { availablePlanData } from "../../../../constants/dummyData";
 import PurchasePlan from "../../../../components/popups/subscription/PurchasePlan";
 import AvailablePlans from "../../../../components/subscription/AvailablePlans";
 import MenuHeader from "@/components/common/MenuHeader";
+import { useQuery } from "@tanstack/react-query";
+import { newRequest, SUBSCRIPTION } from "@/api";
 
 export const MenuSubscription = () => {
   const [count, setCount] = useState(0);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["subsciption"],
+    queryFn: () =>
+      newRequest.get(SUBSCRIPTION).then((res) => {
+        return res.data;
+      }),
+  });
+
   const increment = () => {
     setCount(count + 1);
   };
@@ -49,19 +60,19 @@ export const MenuSubscription = () => {
                   Current Plan Details
                 </h1>
               </div>
-              <h3 className="text-lg font-semibold text-white">Basic Plan</h3>
+              <h3 className="text-lg font-semibold text-white">{data?.purchased_package?.package_name}</h3>
               <h1 className="my-1 text-4xl font-semibold text-white">
-                $10
+                £{data?.purchased_package?.purchased_amount}
                 <span className="text-xl font-normal tracking-wider">
-                  /User/Month/Build annually
+                  /Month
                 </span>
               </h1>
               <hr className="my-3 text-white opacity-35" />
               <div className="mt-6 flex flex-row items-center justify-between">
                 <h1 className="flex flex-col text-[18px] font-thin text-white">
-                  Number Of License:10
+                  Number Of License:{data?.purchased_package?.licence_count}
                   <span className="font-semibold text-hrmprimaryorange">
-                    Valid till 22th July 2024
+                    Valid till {data?.purchased_package?.expiry_date}
                   </span>
                 </h1>
                 <button className="btn min-h-14 rounded-md bg-white px-12 text-lg font-bold text-hrmblue hover:bg-white">
@@ -76,7 +87,7 @@ export const MenuSubscription = () => {
             Available Plans
           </h1>
           <div className="mb-12 grid grid-cols-3">
-            {availablePlanData.map((plan, planIndex) => (
+            {data?.available_plans?.map((plan, planIndex) => (
               <AvailablePlans data={plan} key={planIndex} />
             ))}
           </div>

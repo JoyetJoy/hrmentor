@@ -18,10 +18,14 @@ export default function Notification({
   function close() {
     setNotificationPopupOpen(false);
   }
-  const [notification,setNotification] = useState('');
+  const [notification,setNotification] = useState();
   const {user } = useUserStore((state) => ({
       user: state.user,
     }));
+
+    useEffect(()=>{
+      setNotification(notifications)
+    },[notifications])
 
   useEffect(() => {
     if (!user?.user?.id ) return; // Prevent subscription if user ID is missing
@@ -128,7 +132,7 @@ console.log(notification);
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <div className="overflow-y-min mx-auto max-h-[35rem] w-full overflow-y-auto">
-                  {notifications?.data?.map((notification) => (
+                  {notification?.data?.map((notification) => (
                     <Link
                       to={'/admin/leave/request/awaitingapproval'}
                       onClick={()=>handleClick(notification?.id)}
@@ -153,10 +157,10 @@ console.log(notification);
                       </div>
                     </Link>
                   ))}
-                  {notifications?.data?.length > 0 ? (
+                  {notification?.data?.length > 0 ? (
                     <div className="mt-4 text-right">
                       <Link
-                        to="/admin/notification"
+                        to="/employee-access/notifications"
                         onClick={close}
                         className="text-sm font-semibold text-hrmprimaryorange"
                       >

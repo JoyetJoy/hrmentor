@@ -1,24 +1,35 @@
-import { CHAT, CHAT_WITH_USER, newRequest } from "@/api";
+import { CHAT, CHAT_WITH_USER, newRequest, READ_CHAT } from "@/api";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Send, X } from "lucide-react";
 import Pusher from "pusher-js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function ChatView({
+  refetch,
   chatPopupOpen,
   setChatPopupOpen,
   selectedUser,
 }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-
+  const [replay, setReplay] = useState(false);
+  const messagesEndRef = useRef(null);
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
-  console.log(user);
-  console.log(selectedUser);
+
+  const { data: readchat } = useQuery({
+    queryKey: ["readchat", selectedUser?.last_message?.id], // helps caching per user
+    queryFn: async () => {
+      const res = await newRequest.post(READ_CHAT,{chat_id:selectedUser.last_message?.id}
+      );
+      refetch();
+      return res.data;
+    },
+    enabled: !!selectedUser?.last_message?.id,
+  });
 
   const { data: chatlist } = useQuery({
     queryKey: ["chatlist", selectedUser?.user_id], // helps caching per user
@@ -32,8 +43,13 @@ export default function ChatView({
   });
 
   useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, chatlist]);
+
+  useEffect(() => {
     if (!user?.user?.id) return; // Prevent subscription if user ID is missing
-    console.log("getin");
 
     const token =
       localStorage.getItem("super_token") ||
@@ -67,42 +83,43 @@ export default function ChatView({
       console.error("Pusher Error:", err);
     });
 
-    // channel.bind("App\\Events\\NewChatMessage", (data) => {
-    //   console.log("Received a new notification:", data);
+    channel.bind("App\\Events\\NewChatMessage", (data) => {
+      const now = data?.data?.created_at;
 
-    //   const message = {
-    //     "id": data?.latest_unread_notification?.id,
-    //     "user_id": data?.latest_unread_notification?.user_id,
-    //     "type": data?.latest_unread_notification?.type,
-    //     "title": "Title Available",
-    //     "data": data?.latest_unread_notification?.data?.message,
-    //     "read_at": true,
-    //     "created_at": data?.latest_unread_notification?.created_at
-    // }
-    //   setNotification((prevNotifications) => [
-    //     message,
-    //     ...prevNotifications,
-    //   ]);
-    // });
+      // Convert now (string) into a Date object
+      const dateObj = new Date(now);
 
-    // pusher.connection.bind("error", (err) => {
-    //   console.error("Pusher Error:", err);
-    // });
+      // Then you can safely use getHours() and getMinutes()
+      const formattedTime = `${String(dateObj.getHours()).padStart(2, "0")}:${String(dateObj.getMinutes()).padStart(2, "0")}`;
 
-    // Cleanup
-    // return () => {
-    //   console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
-    //   channel.unbind_all();
-    //   channel.unsubscribe();
-    //   pusher.disconnect();
-    // };
+      const message = {
+        content: data?.data?.message,
+        senderId: data?.data?.sender_user_id,
+        receiverId: data?.data?.reciever_user_id,
+        time: formattedTime, // e.g., "14:30"
+      };
+
+      setMessages((prevMessages) => {
+        return [...prevMessages, message];
+      });
+    });
+
+    pusher.connection.bind("error", (err) => {
+      console.error("Pusher Error:", err);
+    });
+
+    // Cleanup()
+    return () => {
+      console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
   }, [user?.user?.id]);
 
-  console.log(chatlist);
   function close() {
     setMessages([]);
     setChatPopupOpen(false);
-    reset();
   }
 
   const handleSend = async (e) => {
@@ -124,25 +141,22 @@ export default function ChatView({
       time: formattedTime, // e.g., "14:30"
     };
 
-    console.log(data);
-
     try {
       const response = await newRequest.post(CHAT, data);
-      setNewMessage('');
-       // Avoid duplicate messages by checking IDs
-       setMessages((prevMessages) => {
-        
-          return [...prevMessages, message];
-        
+      setNewMessage("");
+      // Avoid duplicate messages by checking IDs
+      setMessages((prevMessages) => {
+        return [...prevMessages, message];
       });
 
-    } catch (error) {}
-    // console.log(newMessage);
+      // Scroll to bottom for new messages
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  const [replay, setReplay] = useState(false);
-console.log(messages);
-
   return (
     <>
       <Dialog
@@ -152,8 +166,8 @@ console.log(messages);
         onClose={close}
       >
         <div className="fixed inset-0 z-50 h-screen w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center ">
-            <DialogPanel className="w-full max-w-md max-h-[45rem] rounded bg-white px-7 pb-3 pt-6">
+          <div className="flex min-h-full items-center justify-center">
+            <DialogPanel className="max-h-[45rem] w-full max-w-md rounded bg-white px-7 pb-3 pt-6">
               <div className="mb-3 flex justify-between">
                 <div className="flex items-center gap-1">
                   <div className="h-10 w-10 overflow-hidden rounded-full">
@@ -169,7 +183,7 @@ console.log(messages);
                 </button>
               </div>
               <div className="flex flex-1 flex-col gap-3">
-                <div className="max-h-[30rem] flex-1 overflow-y-auto rounded-md border p-4">
+                <div className="max-h-[30rem] flex-1 overflow-y-auto rounded-md border p-4" >
                   {chatlist && (
                     <>
                       {chatlist.data?.map((msg, outerIndex) => (
@@ -184,7 +198,6 @@ console.log(messages);
                           {msg?.messages?.map((message, innerIndex) => {
                             const isSentByCurrentUser =
                               message.senderId !== selectedUser?.user_id; // Check if the message was sent by the user
-                            console.log(message);
 
                             return (
                               <div key={innerIndex}>
@@ -258,6 +271,8 @@ console.log(messages);
                           </div>
                         );
                       })}
+                      {/* SCROLL TARGET */}
+                      <div ref={messagesEndRef}></div>
                       {chatlist?.data.length == 0 && messages.length == 0 && (
                         <p className="flex items-center justify-center py-2 text-[12px] text-slate-400">
                           No Messages

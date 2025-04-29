@@ -25,14 +25,13 @@ export const AdminHeader = () => {
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
 
   const { data: notification, isLoading } = useQuery({
-    queryKey: ["notification"],
+    queryKey: ["notification",user?.id],
     queryFn: () =>
       newRequest.get(NOTIFICATIONS).then((res) => {
         setNotifications(res.data)
         return res.data;
       }),
-    // refetchInterval: 5000,
-    // staleTime: 60000,
+    enabled:!!user?.id
   });
 console.log(notifications);
 

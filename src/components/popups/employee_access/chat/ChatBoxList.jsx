@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import ChatView from './ChatView';
 import { formatLastMessageTime } from '@/utils/helpers';
 
-export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
+export default function ChatBoxList({ data, popupOpen, setPopupOpen, refetch }) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [chatPopupOpen,setChatPopupOpen] =useState(false); 
     const [keyword, setKeyword] = useState('');
@@ -31,7 +31,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
       
   return (
     <>
-    <ChatView chatPopupOpen={chatPopupOpen} setChatPopupOpen={setChatPopupOpen} selectedUser={selectedUser}/> 
+    <ChatView chatPopupOpen={chatPopupOpen} setChatPopupOpen={setChatPopupOpen} selectedUser={selectedUser} refetch={refetch}/> 
     <Dialog
       open={popupOpen}
       as="div"
@@ -99,7 +99,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen }) {
                       <div className='flex flex-col items-center'>
                       <span className={`text-xs ${user?.unread_count>0 ? 'text-green-600 font-semibold':'text-gray-500'}`}>{formatLastMessageTime(user?.last_message_time)}</span>
                       {user?.unread_count>0 && (
-                        <span className='w-4 h-4 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-semibold'>{user?.unread_count}</span>
+                        <span className='w-5 h-5 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-semibold'>{user?.unread_count}</span>
                       )}
                       </div>
                     </div>

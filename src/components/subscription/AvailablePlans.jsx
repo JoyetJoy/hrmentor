@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import PurchasePlan from "../popups/subscription/PurchasePlan";
+import tickgreen from "/assets/icons/admin/tick-green.svg";
 
 export default function AvailablePlans({ data }) {
-  const { name, price, list } = data;
+  const { package_name, price_per_month_per_user, package_modules } = data;
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -13,42 +14,44 @@ export default function AvailablePlans({ data }) {
       <div className="flex flex-col shadow-lg rounded-2xl pt-16 pb-6 w-11/12">
         <div className="flex flex-col items-center text-center mb-6">
           <h1 className="text-black text-[38px] font-semibold">
-            {price}
+          £{price_per_month_per_user}
             <span className="text-xl font-semibold">/Month</span>
           </h1>
-          <h3 className="text-lg text-[#101828] font-semibold">{name}</h3>
+          <h3 className="text-lg text-[#101828] font-semibold">{package_name}</h3>
         </div>
-        {list.map((section, sectionIndex) => (
+        <div className="min-h-[20rem]">
+        {package_modules.map((section, sectionIndex) => (
           <div
             key={sectionIndex}
             className="flex flex-col gap-1 items-baseline px-6 my-1 "
           >
             <h1
               className="text-base font-semibold my-1"
-              style={{ color: section.textColor }}
+              style={{ color: "#667085" }}
             >
-              {section.title}
+              {section.module_name?.module_name}
             </h1>
-            {section.value.map((item, itemIndex) => (
+            {section.module_feature?.map((item, itemIndex) => (
               <p
                 key={itemIndex}
                 className="flex gap-3 items-center text-sm tracking-wide text-gray-bright py-1"
               >
                 <div
-                  style={{ backgroundColor: section.bgColor }}
+                  style={{ backgroundColor: "#F1F1F1" }}
                   className="rounded-full p-1 flex items-center  size-5 justify-center"
                 >
                   <img
-                    src={section.imgSrc}
+                    src={tickgreen}
                     alt="tick"
                     className=" w-full object-contain"
                   />
                 </div>
-                {item}
+                {item?.feature_name}
               </p>
             ))}
           </div>
         ))}
+        </div>
         <div className="border-b-2 border-gray-300 mx-6 mt-4"></div>
         <div className="flex flex-col items-center justify-between  text-center  ">
           <span className="my-5 flex flex-col gap-1">

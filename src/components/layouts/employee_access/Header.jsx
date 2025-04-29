@@ -25,14 +25,15 @@ export default function EmployeeAccessHeader() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { data: userchatlist } = useQuery({
-        queryKey: ["userchatlist"],
-        queryFn: () =>
-          newRequest.get(ALL_CHAT_LIST).then((res) => {
-            // setNotifications(res.data)
-            return res.data;
-          }),
-      });
+  const { data: userchatlist, refetch } = useQuery({
+    queryKey: ["userchatlist",user?.user?.id],
+    queryFn: () =>
+      newRequest.get(ALL_CHAT_LIST).then((res) => {
+        // setNotifications(res.data)
+        return res.data;
+      }),
+    enabled: !!user?.user?.id,
+  });
 
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notification"],
@@ -40,8 +41,6 @@ export default function EmployeeAccessHeader() {
       newRequest.get(NOTIFICATIONS).then((res) => {
         return res.data;
       }),
-    // refetchInterval: 5000,
-    // staleTime: 60000,
   });
 
   const handleNotificationClick = () => {
@@ -71,7 +70,12 @@ export default function EmployeeAccessHeader() {
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
       />
-      <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} data={userchatlist}/>
+      <ChatBoxList
+        refetch={refetch}
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        data={userchatlist}
+      />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link
           to="/employee-access/dashboard"
@@ -132,7 +136,7 @@ export default function EmployeeAccessHeader() {
             <MessageSquareText className="size-5 text-hrmblue" />
           </div>
           <Menu as="div" className="relative inline-block text-left">
-            <Menu.Button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100 ">
+            <Menu.Button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100">
               <LayoutGrid className="size-5 text-hrmblue" />
             </Menu.Button>
             <Menu.Items className="absolute top-12 z-20 w-36 rounded-lg bg-white p-4 shadow-lg">

@@ -5,7 +5,6 @@ import { X, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { ADMIN_EMPLOYEE_LEAVE_UPDATE, LEAVE_REQUEST_LIST } from "@/api/master";
@@ -141,7 +140,7 @@ export default function LeaveRequest({
                 <div>
                   <p>Leave Type</p>
                   <p className="text-[0.95rem] font-extrabold text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    {leaveDetails?.leave_type?.leave_name}
+                    {leaveDetails?.leave_type}
                   </p>
                 </div>
                 <div className="w-[25%]">
@@ -227,6 +226,7 @@ export default function LeaveRequest({
                   <input
                     type="radio"
                     name="leaveStatus"
+                    disabled={ViewEdit === 'view'}
                     value="pending"
                     onClick={() => {
                       setRejected(false);
@@ -241,6 +241,7 @@ export default function LeaveRequest({
                   <input
                     type="radio"
                     name="leaveStatus"
+                    disabled={ViewEdit === 'view'}
                     value="approved"
                     onClick={() => {
                       setRejected(false);
@@ -255,6 +256,7 @@ export default function LeaveRequest({
                   <input
                     type="radio"
                     name="leaveStatus"
+                    disabled={ViewEdit === 'view'}
                     value="rejected"
                     onClick={() => {
                       setRejected(true);

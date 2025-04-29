@@ -78,6 +78,10 @@ export default function EmployeeDocumentEditForm({
         "issued_authority",
         employeeDocumentDetailByid?.data?.issued_authority,
       );
+      if (employeeDocumentDetailByid?.data?.upload_documents) {
+        setImage(employeeDocumentDetailByid?.data?.upload_documents);
+        setValue("document_image", employeeDocumentDetailByid?.data?.upload_documents);
+      }
     }
   }, [employeeDocumentDetailByid]);
 
@@ -101,7 +105,10 @@ export default function EmployeeDocumentEditForm({
         formData.append("expiry_date", data.expiry_date);
       }
       formData.append("issued_authority", data.issued_authority);
-      imageFile && formData.append("document", imageFile);
+      if (imageFile instanceof File) {
+        // It's already uploaded, just send the URL
+        formData.append("document", imageFile);
+      }
 
       let res;
       if (selectedField !== 0) {

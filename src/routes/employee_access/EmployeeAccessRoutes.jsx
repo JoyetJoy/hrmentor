@@ -8,6 +8,7 @@ import { LeaveRoute } from "./children/LeaveRoute";
 import { ProfileRoutes } from "./children/ProfileRoutes";
 import { PayrollRoute } from "./children/PayrollRoute";
 import { NewsEventsRoutes } from "./children/NewsEventsRoutes";
+import EmployeeNotification from "@/pages/employee_access/notification";
 
 
 
@@ -43,6 +44,10 @@ export const EmployeeAccessRoutes = [
   {
     path: "payroll",
     children: PayrollRoute,
+  },
+  {
+    path: "notifications",
+    element: <EmployeeNotification />,
   },
   {
     path: "*",

@@ -4,10 +4,10 @@ export const employeePaysilpMenu = [
     name: "PaySlip",
     link: "/employee-access/profile/payslip",
   },
-  {
-    id: 1,
-    name: "PayOff",
-    link: "/employee-access/profile/payslip/payoff",
-  },
+  // {
+  //   id: 1,
+  //   name: "PayOff",
+  //   link: "/employee-access/profile/payslip/payoff",
+  // },
   
 ];

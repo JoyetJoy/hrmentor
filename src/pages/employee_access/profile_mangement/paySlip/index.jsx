@@ -1,7 +1,10 @@
+import { DOWNLOAD_PAYSLIP, EMPLOYEE_PAYSLIP, newRequest } from "@/api";
 import MenuHeaderEmployeeAccess from "@/components/employee_access/MenuHeader";
 import ProfileSidebar from "@/components/sidebars/employee_access/profile_management/ProfileSideBar";
+import Pagination from "@/components/table/Pagination";
 import QueryTable from "@/components/table/QueryTable";
 import { customSelectStyles } from "@/utils/customStyles";
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { ArrowDownToLine, ChevronRight, Eye, Search } from "lucide-react";
 import React, { useState } from "react";
@@ -9,49 +12,109 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 
 export default function PaySlip() {
-  const [date, setDate] = useState(new Date());
   const [keyword, setKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const pageLimit = 10;
 
-  const handleYearChange = (selectedOption) => {
-    const updatedDate = dayjs(date).year(selectedOption.value).toDate();
-    setDate(updatedDate);
+  // Fetch List
+  const { data: payslipListing, isLoading } = useQuery({
+    queryKey: ["payslipListing", currentPage, keyword],
+    queryFn: () =>
+      newRequest
+        .get(EMPLOYEE_PAYSLIP, {
+          params: {
+            search: keyword,
+            page: currentPage,
+            per_limit: pageLimit,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
+  });
+  console.log(payslipListing);
+
+  const handleDownload = async (id) => {
+    try {
+  
+      const response = await newRequest.get(`${DOWNLOAD_PAYSLIP}/${id}`, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `payslip${id}.pdf`); // Download filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Failed to download the PDF:", error);
+    }
   };
-
-  // Generate a list of years dynamically
-  const years = Array.from({ length: 11 }, (_, i) => ({
-    value: 2020 + i,
-    label: (2020 + i).toString(),
-  }));
-
+  
+  const viewPayslip = (fileUrl) => {
+    if (fileUrl) {
+      window.open(fileUrl, "_blank");
+    }
+  };
+  
+  
   // Define table columns
   const columns = React.useMemo(
     () => [
       {
         header: "Sl No",
         accessorKey: "sno",
-        cell: ({ row }) => <div className="flex px-2 text-end">{row.index + 1}</div>,
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
       },
       {
-        header: "Month",
-        accessorKey: "month",
+        header: "Pay Period",
+        accessorKey: "period",
       },
       {
-        header: "Action",
+        header: "Transaction Id",
+        accessorKey: "transaction_id",
+      },
+      {
+        header: "Transaction Date",
+        accessorKey: "transaction_date",
+      },
+      {
+        header: "Pay Amount",
+        accessorKey: "net_pay",
+        cell: ({ row }) => {
+          return (
+            <div className="flex px-2">
+              £{row.original.net_pay}
+            </div>
+          );
+        },
+      },
+      {
+        header: "Payslip",
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-end gap-2 text-xs">
-            <Link
-              to="/employee-access/profile/payslip/payslip-view"
+            <button
+              onClick={()=> viewPayslip(row.original.payslip_path)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
-            </Link>
-            <Link
-              to="/employee-access/profile/payslip/payslip-view"
+            </button>
+            <button
+              onClick={() => handleDownload(row?.original?.id)} 
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <ArrowDownToLine className="size-3" />
-            </Link>
+            </button>
           </div>
         ),
       },
@@ -84,22 +147,19 @@ export default function PaySlip() {
                   placeholder="Search"
                 />
               </div>
-
-              {/* Year Select */}
-              <Select
-                options={years}
-                isSearchable
-                onChange={handleYearChange}
-                styles={customSelectStyles}
-                placeholder={dayjs(date).format("YYYY")}
-                className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-              />
             </div>
           </div>
 
           {/* Table */}
           <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white p-7">
-            <QueryTable columns={columns} list={"NA"} />
+            <QueryTable columns={columns} list={payslipListing?.data} />
+            {totalPages && (
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
           </div>
         </div>
       </div>
