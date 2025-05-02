@@ -35,17 +35,22 @@ export default function ChatView({
     enabled: !!selectedUser?.last_message?.id,
   });
 console.log(user);
+console.log(selectedUser);
 
-  const { data: chatlist } = useQuery({
-    queryKey: ["chatlist", selectedUser?.user_id], // helps caching per user
-    queryFn: async () => {
-      const res = await newRequest.get(
-        `${CHAT_WITH_USER}/${selectedUser.user_id}`,
-      );
-      return res.data;
-    },
-    enabled: !!selectedUser?.user_id,
-  });
+const { data: chatlist, refetch:chatrefetch } = useQuery({
+  queryKey: ["chatlist", selectedUser?.user_id, chatPopupOpen],
+  queryFn: async () => {
+    const res = await newRequest.get(`${CHAT_WITH_USER}/${selectedUser.user_id}`);
+    return res.data;
+  },
+  enabled: !!selectedUser?.user_id && chatPopupOpen,
+});
+
+useEffect(() => {
+  if (chatPopupOpen && selectedUser?.user_id) {
+    chatrefetch(); // manually refetch when popup opens
+  }
+}, [chatPopupOpen, selectedUser?.user_id]);
 
   useEffect(() => {
     console.log('dee');
@@ -171,6 +176,8 @@ console.log(user);
       console.log(error);
     }
   };
+  console.log(messages);
+  
   return (
     <>
       <Dialog

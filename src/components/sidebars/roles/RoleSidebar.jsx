@@ -74,6 +74,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
                     {role.name}[{role.permissions_count}]
                   </span>
                   <div className="flex gap-3">
+                  {role.id === 1 ? null : (
                     <div
                       onClick={() => setSelectedRole(role.id)}
                       className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-soft p-2"
@@ -84,6 +85,7 @@ export const RoleSidebar = ({ selectedRole, setSelectedRole }) => {
                         className="object-contain"
                       />
                     </div>
+                  )}
                     {role.id === 1 ? null : (
                       <div
                         onClick={() => {

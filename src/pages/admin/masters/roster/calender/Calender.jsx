@@ -24,7 +24,7 @@ import {
 import { formatDate } from "@/utils/date";
 import ChangeShift from "@/components/popups/master/roster/ChangeShift";
 import { isBeforeToday } from "@/utils/date";
-import { usePermissionStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useRoleStore, useUserStore } from "@/lib/slices/auth.slice";
 
 const RosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -59,6 +59,24 @@ const RosterCalendar = () => {
   const { permissions } = usePermissionStore((state) => ({
     permissions: state.permissions,
   }));
+
+  const { role } = useRoleStore((state) => ({
+    role: state.role,
+  }));
+
+  const { user } = useUserStore((state) => ({
+      user: state.user,
+    }));
+  console.log(user);
+
+  useEffect(()=>{
+    if(!role.includes(1)){
+      const department_id=[user?.department_id];
+      const worklocation_id=[user?.worklocation_id];
+      setActiveDepartment(department_id);
+      setActiveLocation(worklocation_id)
+    }
+  },[role,user])
   
   const useFetchData = (key, url) => {
     return useQuery({
@@ -557,7 +575,8 @@ const RosterCalendar = () => {
               </div>
             </div>
           </div>
-          <div className="flex w-full items-center justify-between py-2">
+          {role.includes(1) && (
+            <div className="flex w-full items-center justify-between py-2">
             <div className="flex items-center gap-4">
               <Select
                 options={departmentOptions}
@@ -595,6 +614,7 @@ const RosterCalendar = () => {
               />
             </div>
           </div>
+          )}
 
           <div className="overflow-x-medium mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
             <div className="overflow-x-medium overflow-y-medium mt-4 h-screen w-full overflow-x-auto overflow-y-auto bg-white shadow-md">

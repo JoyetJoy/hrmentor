@@ -37,7 +37,9 @@ export const AdminLayout = () => {
     if (profile) {
       const userdata = {
         ...profile?.data?.user, // spread the user object safely
-        designation_name: profile?.data?.employee_data?.designation?.designation_name
+        designation_name: profile?.data?.employee_data?.designation?.designation_name,
+        department_id: profile?.data?.employee_data?.department_id,
+        worklocation_id: profile?.data?.employee_data?.worklocation_id,
       };
       
       setUser(userdata);      

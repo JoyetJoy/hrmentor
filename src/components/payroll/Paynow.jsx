@@ -13,6 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import * as Yup from "yup";
+import { formatDate } from "@/utils/date";
 
 const schema = Yup.object({
   id: Yup.string().required("Transaction Id is required"),
@@ -52,17 +53,19 @@ export default function Paynow({ id, popupOpen, setPopupOpen }) {
 
   const onSubmit = async (data) => {
     setLoader(true);
+    const date = formatDate(data?.date)
     try {
       const formData = new FormData();
       formData.append("payrun_id", id);
       formData.append("transaction_id", data?.id);
-      formData.append("transaction_date", data?.date);
+      formData.append("transaction_date", date);
       formData.append("transaction_amount", Number(data?.amount));
       formData.append("payslip", imageFile);
-      console.log(formData);
-      
+    
       const response = await newFormRequest.post(PAY_NOW, formData);
-      console.log(response);
+      toast.success(response.data.message);
+      setPopupOpen(false);
+
     } catch (error) {
       console.log(error);
       toast.error(
