@@ -16,8 +16,8 @@ function CreateJobSideBar({ stepCounter }) {
     { label: "Application", step: 2 },
     { label: "Team", step: 3 },
     { label: "Interview Guides", step: 4 },
-    { label: "Refer", step: 5 },
-    { label: "Promote", step: 6 },
+    // { label: "Refer", step: 5 },
+    // { label: "Promote", step: 6 },
   ];
 
   // Sub-steps under Post
@@ -108,7 +108,7 @@ function CreateJobSideBar({ stepCounter }) {
           ))}
         </div>
       </div>
-      {stepCounter === 6 && (
+      {stepCounter === 4 && (
         <button
           onClick={handlePublishJob}
           className="flex h-11 items-center justify-center rounded bg-black/80 text-[0.9rem] font-medium text-white"

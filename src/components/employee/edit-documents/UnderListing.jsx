@@ -6,6 +6,7 @@ import { EMPLOYEE_DOCUMENTS, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import EmployeeDocumentEditForm from "@/components/popups/employees/edit/DocumentsEdit";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function UnderListing({ cid, uid, expiry, documentName }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +17,10 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   // Fetch List
   const { data: employeeDocumentsListing, isLoading } = useQuery({
@@ -100,6 +105,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
+            {permissions.includes("employee-documents-edit") &&(
             <button
               type="button"
               onClick={() => {
@@ -113,6 +119,8 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
                 className="w-full object-contain"
               />
             </button>
+            )}
+            {permissions.includes("employee-documents-delete") &&(
             <button
               type="button"
               onClick={() => {
@@ -123,6 +131,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
             >
               <Trash2 className="size-3" />
             </button>
+            )}
           </div>
         ),
       },
@@ -163,6 +172,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
                 placeholder="Search"
               />
             </div>
+            {permissions.includes("employee-documents-create") &&(
             <button
               onClick={() => {
                 setPopupOpen(true);
@@ -172,6 +182,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
               <Plus className="size-4" />
               Add Documents
             </button>
+            )}
           </div>
 
           <div className="py-2">

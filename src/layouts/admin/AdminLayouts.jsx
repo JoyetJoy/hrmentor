@@ -5,13 +5,23 @@ import { useQuery } from "@tanstack/react-query";
 import { GET_USER } from "@/api/auth";
 import { newRequest } from "@/api";
 import ScrollBack from "@/components/common/ScrollBack";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useRoleStore, useUserStore } from "@/lib/slices/auth.slice";
 
 export const AdminLayout = () => {
-  const token = localStorage.getItem("super_token");
+  const token = localStorage.getItem("token");
   const { setUser } = useUserStore((state) => ({
     setUser: state.setUser,
   }));
+  const { setPermissions } = usePermissionStore((state) => ({
+    setPermissions: state.setPermissions,
+  }));
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+  const { setRole } = useRoleStore((state) => ({
+      setRole: state.setRole,
+    }));
+  
   const location = useLocation(); 
 
   const { data: profile, isLoading } = useQuery({
@@ -25,9 +35,17 @@ export const AdminLayout = () => {
 
   useEffect(() => {
     if (profile) {
-      setUser(profile?.data?.user);
+      const userdata = {
+        ...profile?.data?.user, // spread the user object safely
+        designation_name: profile?.data?.employee_data?.designation?.designation_name
+      };
+      
+      setUser(userdata);      
+      setRole(profile?.data?.roles);
+      setPermissions(profile?.data?.permission);
     }
   }, [profile]);
+console.log(permissions);
 
   if (isLoading) {
     return (
@@ -46,7 +64,7 @@ export const AdminLayout = () => {
     <>
       <ScrollBack />
       <div className="w-full h-full bg-gray-100 px-12 py-4">
-        <AdminHeader />
+        <AdminHeader permissions={permissions}/>
         <Outlet />
       </div>
     </>

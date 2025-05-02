@@ -9,7 +9,7 @@ import { ProfileRoutes } from "./children/ProfileRoutes";
 import { PayrollRoute } from "./children/PayrollRoute";
 import { NewsEventsRoutes } from "./children/NewsEventsRoutes";
 import EmployeeNotification from "@/pages/employee_access/notification";
-
+import { ProjectRoutes } from "./children/ProjectRoute";
 
 
 export const EmployeeAccessRoutes = [
@@ -40,6 +40,10 @@ export const EmployeeAccessRoutes = [
   {
     path: "news-events",
     children: NewsEventsRoutes,
+  },
+  {
+    path: "project",
+    children: ProjectRoutes,
   },
   {
     path: "payroll",

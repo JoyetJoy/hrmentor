@@ -8,7 +8,7 @@ import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ProjectHeader from "@/components/common/ProjectHeader";
 import QueryTable from "@/components/table/QueryTable";
 import useImageUpload from "@/hooks/useImageUpload";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useUserStore } from "@/lib/slices/auth.slice";
 import { projectSchema } from "@/schema/dashboard/employee/masters/project_and_tasks.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import {projectMenu } from "@/constants/menus/project";
 
 const Priority = [
   { value: 1, label: "Low" },
@@ -50,6 +51,10 @@ export default function ProjectManagement() {
   const [memberList, setMemberList] = useState([]);
   const [status, setStatus] = useState([]);
   const navigate = useNavigate();
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   const [content, setContent] = useState("");
   const { image, imageFile, handleImageChange, clearImage, setImage } =
@@ -285,6 +290,7 @@ export default function ProjectManagement() {
             >
               <Eye className="size-3" />
             </Link>
+            {permissions.includes("project-edit") && (
             <Link
               onClick={() => {
                 setPopupOpen(true);
@@ -297,6 +303,8 @@ export default function ProjectManagement() {
                 className="w-full object-contain"
               />
             </Link>
+            )}
+            {permissions.includes("project-delete") && (
             <Link
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
               onClick={() => {
@@ -306,6 +314,7 @@ export default function ProjectManagement() {
             >
               <Trash2 className="size-3" />
             </Link>
+            )}
           </div>
         ),
       },
@@ -389,6 +398,7 @@ export default function ProjectManagement() {
       <ProjectHeader
         menu="Menu"
         currentpath="Project Management"
+        projectMenu={projectMenu}
         page={1}
         currentPage={"Project Management"}
       />
@@ -426,6 +436,7 @@ export default function ProjectManagement() {
           </div>
 
           {/* Add Project button */}
+          {permissions.includes("project-create") && (
           <Link
             onClick={() => {
               setPopupOpen(true);
@@ -435,6 +446,7 @@ export default function ProjectManagement() {
             <Plus className="size-4" />
             Add Project
           </Link>
+          )}
         </div>
       </div>
 

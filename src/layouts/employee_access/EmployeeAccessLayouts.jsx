@@ -2,15 +2,18 @@ import ScrollBack from "@/components/common/ScrollBack";
 import EmployeeAccessHeader from "@/components/layouts/employee_access/Header";
 import React, { useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useUserStore } from "@/lib/slices/auth.slice";
 import { GET_USER } from "@/api/auth";
 import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
 export default function EmployeeAccessLayouts() {
-  const token = localStorage.getItem("employee_token");
+  const token = localStorage.getItem("token");
   const { setUser } = useUserStore((state) => ({
     setUser: state.setUser,
+  }));
+  const { setPermissions } = usePermissionStore((state) => ({
+    setPermissions: state.setPermissions,
   }));
   const location = useLocation();
 
@@ -26,6 +29,7 @@ export default function EmployeeAccessLayouts() {
   useEffect(() => {
     if (profile) {
       setUser(profile?.data);
+      setPermissions(profile?.data?.permission);
     }
   }, [profile]);
 console.log(location);

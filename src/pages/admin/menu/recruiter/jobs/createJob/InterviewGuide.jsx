@@ -156,14 +156,14 @@ function RecJobInterviewGuide() {
                 Interview Guides
               </span>
             </h1>
-            <button
+            {/* <button
               onClick={() => {
                 navigate(`/admin/recruiter/jobs/create-refferal?jid=${jid}`);
               }}
               className="btn flex h-10 min-h-10 min-w-24 items-center rounded bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
             >
               Next
-            </button>
+            </button> */}
           </div>
           <div className="w-full rounded-md bg-white px-7 py-4">
             <div className="mb-7 flex flex-col gap-1">

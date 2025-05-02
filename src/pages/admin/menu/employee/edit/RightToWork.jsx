@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EmployeeRightToWorkEditForm from "@/components/popups/employees/edit/RightToWork";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeRightToWorkEdit() {
   const location = useLocation();
@@ -22,6 +23,9 @@ export default function EmployeeRightToWorkEdit() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -115,6 +119,7 @@ export default function EmployeeRightToWorkEdit() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              {permissions.includes("employee-right-to-work-edit") &&(
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -125,6 +130,8 @@ export default function EmployeeRightToWorkEdit() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-right-to-work-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -135,6 +142,7 @@ export default function EmployeeRightToWorkEdit() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -184,6 +192,7 @@ export default function EmployeeRightToWorkEdit() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-right-to-work-create") &&(
                 <button
                   onClick={() => {
                     setPopupOpen(true);
@@ -193,6 +202,7 @@ export default function EmployeeRightToWorkEdit() {
                   <Plus className="size-4" />
                   Add Right to work
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

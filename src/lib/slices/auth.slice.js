@@ -8,3 +8,13 @@ export const useUserStore = create((set, get) => ({
     }));
   },
 }));
+
+export const usePermissionStore = create((set) => ({
+  permissions: [],
+  setPermissions: (permissions) => set({ permissions }),
+}));
+
+export const useRoleStore = create((set) => ({
+  role: [],
+  setRole: (role) => set({ role }),
+}));

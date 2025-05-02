@@ -14,6 +14,7 @@ import {
 } from "@/api/payroll";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function PayrollSettings() {
   const queryClient = useQueryClient();
@@ -24,6 +25,10 @@ export default function PayrollSettings() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [payrollSettings, setPayrollSettings] = useState({});
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   // Create month-year combinations
   const startYear = 2024; // Set your start year (can be current year or any year)
@@ -175,6 +180,7 @@ export default function PayrollSettings() {
           {/* Header */}
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-sm font-bold">Pay schedule</h2>
+            {permissions.includes("payroll-settings-edit") && (
             <button
               className="rounded-md px-4 py-2 text-white"
               style={{ backgroundColor: "#e95d39" }}
@@ -182,6 +188,7 @@ export default function PayrollSettings() {
             >
               {payrollSettings ? "Edit" : "Save"}
             </button>
+            )}
           </div>
 
           {/* Form Section */}

@@ -27,7 +27,7 @@ const areAllSubcategoryItemsChecked = (subcategoryItems, formData) => {
   );
 };
 
-export const MenuRoles = () => {
+export const  MenuRoles = () => {
   const [loader, setLoader] = useState(false);
   const [collapseState, setCollapseState] = useState({});
   const [selectedRole, setSelectedRole] = useState(0);
@@ -219,7 +219,7 @@ export const MenuRoles = () => {
                 />
               ) : null}
             </div>
-            <div className="my-2 flex h-28 w-full items-start gap-20 bg-gray-softlight">
+            {/* <div className="my-2 flex h-28 w-full items-start gap-20 bg-gray-softlight">
               <div className="flex flex-col gap-0.5 px-4 py-3">
                 <h5 className="font-semibold">Role Menu Managment</h5>
                 <p className="text-[0.8rem]">
@@ -236,7 +236,7 @@ export const MenuRoles = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-3">
               {permissionList?.map((parentCategory) => (
                 <div key={parentCategory.parentCategory} className="mb-3">

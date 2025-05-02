@@ -4,11 +4,7 @@ import Pusher from "pusher-js";
 window.Pusher = Pusher;
 
 const getToken = () => {
-  return localStorage.getItem("super_token") ||
-    localStorage.getItem("hr_token") ||
-    localStorage.getItem("team_token") ||
-    localStorage.getItem("manager_token") ||
-    localStorage.getItem("employee_token");
+  return localStorage.getItem("token");
 };
 
 const echo = new Echo({

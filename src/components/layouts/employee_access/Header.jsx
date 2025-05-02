@@ -19,7 +19,6 @@ export default function EmployeeAccessHeader() {
     setUser: state.setUser,
     user: state.user,
   }));
-  console.log(user);
 
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
   const location = useLocation();

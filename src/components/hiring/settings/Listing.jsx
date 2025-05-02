@@ -10,6 +10,7 @@ import SaveHiringMasterForm from "@/components/popups/hiring/settings/common/Sav
 import MenuHeaderHiring from "../MenuHeader";
 import { hiringSetting } from "@/constants/sidebars/hiring";
 import Loader from "@/components/ui/Loader";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +22,9 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -130,7 +134,8 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
-              <button
+              {permissions.includes("Hiring-settings-edit") && (
+                <button
                 type="button"
                 onClick={() => setSelectedField(row?.original?.id)}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -140,7 +145,9 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
                   className="w-full object-contain"
                 />
               </button>
-              <button
+              )}
+              {permissions.includes("Hiring-settings-delete") && (
+                <button
                 type="button"
                 onClick={() => {
                   setDeletePopup(true);
@@ -150,11 +157,12 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
       ].filter(Boolean),
-    [(data, type, api, qrkey, colKeys)],
+    [(data, type, api, qrkey, colKeys, permissions)],
   );
 
   return (
@@ -191,7 +199,8 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
                   placeholder="Search"
                 />
               </div>
-              <Button
+              {permissions.includes("Hiring-settings-create") && (
+                <Button
                 onClick={() => {
                   setPopupOpen(true);
                 }}
@@ -200,6 +209,7 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
                 <Plus className="size-4" />
                 Add
               </Button>
+              )}
             </div>
             <div>
               {isLoading ? (

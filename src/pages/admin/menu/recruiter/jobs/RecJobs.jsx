@@ -8,6 +8,7 @@ import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "@/components/ui/Loader";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 function RecruiterJobs() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +20,11 @@ function RecruiterJobs() {
   const pageLimit = 10;
   const location = useLocation();
   const draft = location.state?.type || "";
+  
+  const { permissions } = usePermissionStore((state) => ({
+      permissions: state.permissions,
+    }));
+
   useEffect(() => {
     if (draft) {
       setByStatus(draft);
@@ -126,7 +132,8 @@ function RecruiterJobs() {
             >
               <Eye className="size-3" />
             </Link>
-            <Link
+            {permissions.includes("job-edit") && (
+              <Link
               to={`/admin/recruiter/jobs/post?jid=${row.original.id}&type=1`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
@@ -135,20 +142,23 @@ function RecruiterJobs() {
                 className="w-full object-contain"
               />
             </Link>
-            <button
-                onClick={() => {
-                  setDeletePopup(true);
-                  setSelectedField(row?.original?.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
-              >
-                <Trash2 className="size-3" />
-              </button>
+            )}
+            {permissions.includes("job-delete" && (
+              <button
+              onClick={() => {
+                setDeletePopup(true);
+                setSelectedField(row?.original?.id);
+              }}
+              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2"
+            >
+              <Trash2 className="size-3" />
+            </button>
+            ))}
           </div>
         ),
       },
     ],
-    [jobListing, byStatus],
+    [jobListing, byStatus,permissions],
   );
   return (
     <>
@@ -167,13 +177,15 @@ function RecruiterJobs() {
       />
       <div className="items-centerm flex justify-between pb-3 pt-2">
         <div className="flex items-center gap-2 text-white">
-          <Link
+          {permissions.includes("job-create") && (
+            <Link
             to="/admin/recruiter/jobs/post"
             className="btn flex h-10 min-h-10 items-center rounded bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-5" strokeWidth={2} />
             Create Job
           </Link>
+          )}
           <Link
             target="_blank"
             to="/careers"

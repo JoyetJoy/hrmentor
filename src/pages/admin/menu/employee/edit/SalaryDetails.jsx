@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { EMPLOYEE_SALARY_DETAILS, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EmployeeSalaryDetailsEditForm from "@/components/popups/employees/edit/SalaryDetails";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeSalaryEdit() {
   const location = useLocation();
@@ -21,6 +22,10 @@ export default function EmployeeSalaryEdit() {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   useEffect(() => {
     if (selectedField) {
@@ -89,6 +94,7 @@ export default function EmployeeSalaryEdit() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              {permissions.includes("employee-salary-details-edit") &&(
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -99,6 +105,8 @@ export default function EmployeeSalaryEdit() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-salary-details-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -109,6 +117,7 @@ export default function EmployeeSalaryEdit() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -161,6 +170,7 @@ export default function EmployeeSalaryEdit() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-salary-details-create") &&(
                 <button
                   onClick={() => {
                     setPopupOpen(true);
@@ -170,6 +180,7 @@ export default function EmployeeSalaryEdit() {
                   <Plus className="size-4" />
                   Add Salary Details
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

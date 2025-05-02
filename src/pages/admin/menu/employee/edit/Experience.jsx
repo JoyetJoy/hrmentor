@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_EXPERIENCE, newRequest } from "@/api";
 import EmployeeExperienceEditForm from "@/components/popups/employees/edit/ExperienceEditForm";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeExperienceEdit() {
   const location = useLocation();
@@ -22,6 +23,9 @@ export default function EmployeeExperienceEdit() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -114,6 +118,7 @@ export default function EmployeeExperienceEdit() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              {permissions.includes("employee-experience-edit") &&(
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -124,6 +129,8 @@ export default function EmployeeExperienceEdit() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-experience-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -134,6 +141,7 @@ export default function EmployeeExperienceEdit() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -183,15 +191,17 @@ export default function EmployeeExperienceEdit() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-experience-create") &&(
                 <button
-                  onClick={() => {
-                    setPopupOpen(true);
-                  }}
-                  className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
-                >
-                  <Plus className="size-4" />
-                  Add Experience
-                </button>
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
+                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+              >
+                <Plus className="size-4" />
+                Add Experience
+              </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

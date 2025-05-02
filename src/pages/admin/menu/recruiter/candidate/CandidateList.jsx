@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  Filter,
-  Plus,
-  Search,
-  Eye
-} from "lucide-react";
+import { ArrowLeft, Filter, Plus, Search, Eye } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import FilterCandidate from "@/components/popups/recruiter/FilterCandidate";
@@ -15,6 +9,7 @@ import { newRequest } from "@/api";
 import { GET_CANDIDATES } from "@/api/recruiter";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import Loader from "@/components/ui/Loader";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 function CandidatesList() {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -24,6 +19,10 @@ function CandidatesList() {
   const [selectedField, setSelectedField] = useState(0);
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   // Fetch List
   const { data: candidateListing, isLoading } = useQuery({
@@ -116,8 +115,9 @@ function CandidatesList() {
             >
               <Eye className="h-3 w-3" />
             </Link>
-            <Link
-               to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}&types=2`}
+            {permissions.includes("candidate-edit") && (
+              <Link
+              to={`/admin/recruiter/candidate/profile?cid=${row?.original?.id}&types=2`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <img
@@ -125,11 +125,12 @@ function CandidatesList() {
                 className="w-full object-contain"
               />
             </Link>
+            )}
           </div>
         ),
       },
     ],
-    [candidateListing, currentPage],
+    [candidateListing, currentPage,permissions],
   );
 
   return (
@@ -148,7 +149,7 @@ function CandidatesList() {
         currentpath={"Recruiter"}
         activeMenu={"Candidates"}
       />
-      <div className="ml-3 mb-2 flex items-center justify-between">
+      <div className="mb-2 ml-3 flex items-center justify-between">
         <div className="flex items-center gap-2 font-semibold text-white">
           <div className="text flex items-center justify-between gap-1 pr-2 text-sm font-semibold text-black">
             {/* <ArrowLeft className="size-4" /> */}
@@ -177,9 +178,9 @@ function CandidatesList() {
               setPopupOpen={setPopupOpen}
             />
           </div>
-         
         </div>
-        <div className="flex items-center gap-7">
+        {permissions.includes("candidate-create") && (
+          <div className="flex items-center gap-7">
           <Link
             to={"/admin/recruiter/candidate/save?types=2"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue"
@@ -188,6 +189,7 @@ function CandidatesList() {
             Add Candidate
           </Link>
         </div>
+        )}
       </div>
       {isLoading ? (
         <Loader />

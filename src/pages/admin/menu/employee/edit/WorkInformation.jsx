@@ -30,6 +30,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { WorkInfoEmployeeSchema } from "@/schema/dashboard/employee/form/workinfo.schema";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export const WorkInformation = ({ formtype }) => {
   const [reportNotRequired, setReportNotRequired] = useState(false);
@@ -50,17 +51,20 @@ export const WorkInformation = ({ formtype }) => {
 
   console.log(errors, "errorserrors");
 
+  const [active, setActive] = useState("view");
   const queryClient = useQueryClient();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
   const [localState, setLocalState] = useState(null);
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   const { data: employeeMasters } = useEmployeeMaster(
     SALARY_DEFAULT_MASTERS,
     "employeeMasters",
   );
-
 
   const {
     data: empWorkInfoDetail,
@@ -212,19 +216,32 @@ export const WorkInformation = ({ formtype }) => {
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div className="my-1 flex w-full flex-row items-center justify-between">
               <h1 className="text-lg font-bold">Work Information</h1>
-              <button
-                type="submit"
-                className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
-              >
-                {loader ? (
-                  <div className="flex items-center gap-3">
-                    <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                    Saving
-                  </div>
-                ) : (
-                  <span>Update</span>
-                )}
-              </button>
+              {permissions.includes("employee-work-information-edit") &&(
+                <>
+                {active === "edit" ? (
+                <div
+                  className="btn flex h-10 min-h-10 min-w-24 items-center justify-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+                >
+                  {loader ? (
+                    <div className="flex items-center gap-3">
+                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                      Saving
+                    </div>
+                  ) : (
+                    <span>Update</span>
+                  )}
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setActive("edit")}
+                  className="btn flex h-10 min-h-10 min-w-24 items-center justify-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+                >
+                  Edit
+                </button>
+              )}
+                </>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-x-3 pt-2">
               <div className="flex h-screen flex-col items-baseline rounded-md border border-gray-300 bg-white px-3 py-4">
@@ -237,6 +254,7 @@ export const WorkInformation = ({ formtype }) => {
                         setReportNotRequired(e.target.checked);
                       }}
                       type="checkbox"
+                      disabled={active === "view"}
                       className="size-4"
                     />
                     <p className="text-lightMedium mt-[1px] whitespace-nowrap text-[13px] font-normal">
@@ -256,6 +274,7 @@ export const WorkInformation = ({ formtype }) => {
                           <Select
                             {...field}
                             isSearchable={true}
+                            isDisabled={active === "view"}
                             styles={customSelectStyles}
                             options={activeEmployeeList}
                             placeholder="Select"
@@ -279,6 +298,7 @@ export const WorkInformation = ({ formtype }) => {
                           <Select
                             {...field}
                             isSearchable={true}
+                            isDisabled={active === "view"}
                             styles={customSelectStyles}
                             options={activeEmployeeList}
                             placeholder="Select"
@@ -296,7 +316,9 @@ export const WorkInformation = ({ formtype }) => {
                 ) : null}
               </div>
               <div className="flex flex-col rounded-md border border-gray-soft bg-white px-5 py-4">
-                <h1 className="#2C2C2C px-3 text-lg font-bold">Equal Employment Opportunity Details</h1>
+                <h1 className="#2C2C2C px-3 text-lg font-bold">
+                  Equal Employment Opportunity Details
+                </h1>
                 <div className="mt-4 grid w-full grid-cols-2 gap-x-2">
                   {/* <div className="group flex flex-col gap-1.5 px-3 py-2">
                     <label className="label-text">Age</label>
@@ -340,6 +362,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={eeoJobCategoryList}
                           placeholder="Select"
@@ -364,6 +387,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={ethinicityList}
                           placeholder="Select"
@@ -387,6 +411,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={religiousSexualList?.religious}
                           placeholder="Select"
@@ -410,6 +435,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={employeeMasters?.genders}
                           placeholder="Select"
@@ -433,6 +459,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={religiousSexualList?.sexualOrientations}
                           placeholder="Select"
@@ -457,6 +484,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={maritalStatuses}
                           placeholder="Select"
@@ -480,6 +508,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={pregnancyStatus}
                           // value={successStatus.find(
@@ -511,6 +540,7 @@ export const WorkInformation = ({ formtype }) => {
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={active === "view"}
                           styles={customSelectStyles}
                           options={disabilityStatus}
                           placeholder="Select"

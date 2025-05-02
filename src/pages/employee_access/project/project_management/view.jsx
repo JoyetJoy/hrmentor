@@ -17,6 +17,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import Select from "react-select";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
+import { employeeprojectMenu } from "@/constants/menus/project";
 const Priority = [
   { value: 1, label: "Low" },
   { value: 2, label: "Medium" },
@@ -192,6 +193,7 @@ export default function ProjectManagementView() {
       <ProjectHeader
         menu="Menu"
         currentpath="Project Management"
+        projectMenu={employeeprojectMenu}
         page={1}
         currentPage={"Project Management"}
       />

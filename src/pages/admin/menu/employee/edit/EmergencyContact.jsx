@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { EMPLOYEE_EMERGENCY_CONTACTS, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EmployeeEmergencyContactEditForm from "@/components/popups/employees/edit/EmergencyContact";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeEmergencyContact() {
   const location = useLocation();
@@ -22,6 +23,9 @@ export default function EmployeeEmergencyContact() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -86,6 +90,7 @@ export default function EmployeeEmergencyContact() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              {permissions.includes("employee-emergency-contacts-edit") &&(
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -96,6 +101,8 @@ export default function EmployeeEmergencyContact() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-emergency-contacts-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -106,6 +113,7 @@ export default function EmployeeEmergencyContact() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -155,6 +163,7 @@ export default function EmployeeEmergencyContact() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-emergency-contacts-create") &&(
                 <button
                   onClick={() => {
                     setPopupOpen(true);
@@ -164,6 +173,7 @@ export default function EmployeeEmergencyContact() {
                   <Plus className="size-4" />
                   Add Emergency Contact
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

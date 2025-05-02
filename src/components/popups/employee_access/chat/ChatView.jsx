@@ -1,5 +1,5 @@
 import { CHAT, CHAT_WITH_USER, newRequest, READ_CHAT } from "@/api";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { useRoleStore, useUserStore } from "@/lib/slices/auth.slice";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Send, X } from "lucide-react";
@@ -20,6 +20,10 @@ export default function ChatView({
     user: state.user,
   }));
 
+  const { role } = useRoleStore((state) => ({
+    role: state.role,
+  }));
+
   const { data: readchat } = useQuery({
     queryKey: ["readchat", selectedUser?.last_message?.id], // helps caching per user
     queryFn: async () => {
@@ -30,6 +34,7 @@ export default function ChatView({
     },
     enabled: !!selectedUser?.last_message?.id,
   });
+console.log(user);
 
   const { data: chatlist } = useQuery({
     queryKey: ["chatlist", selectedUser?.user_id], // helps caching per user
@@ -43,19 +48,27 @@ export default function ChatView({
   });
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    console.log('dee');
+    
+    if (chatPopupOpen && (chatlist?.data?.length > 0 ||messages)) {
+      console.log('jii');
+      
+      const timeout = setTimeout(() => {
+        if (messagesEndRef.current) {
+          messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100); // slight delay to ensure DOM render
+  
+      return () => clearTimeout(timeout);
     }
-  }, [messages, chatlist]);
+  }, [chatPopupOpen, chatlist?.data, messages]);
+  
 
   useEffect(() => {
     if (!user?.user?.id) return; // Prevent subscription if user ID is missing
 
     const token =
-      localStorage.getItem("super_token") ||
-      localStorage.getItem("hr_token") ||
-      localStorage.getItem("manager_token") ||
-      localStorage.getItem("employee_token");
+      localStorage.getItem("token");
 
     const pusher = new Pusher("469a7dd00053f2be95f4", {
       cluster: "ap2",
@@ -124,8 +137,9 @@ export default function ChatView({
 
   const handleSend = async (e) => {
     e.preventDefault();
+    const id= role.includes(1)? user?.id : user?.employee_data?.user_id
     const data = {
-      sender_user_id: user?.employee_data?.user_id,
+      sender_user_id: id,
       sender_employee_id: user?.employee_data?.id,
       reciever_user_id: selectedUser?.user_id,
       reciever_employee_id: selectedUser?.employee_id,
@@ -272,7 +286,7 @@ export default function ChatView({
                         );
                       })}
                       {/* SCROLL TARGET */}
-                      <div ref={messagesEndRef}></div>
+                      <div ref={messagesEndRef} />
                       {chatlist?.data.length == 0 && messages.length == 0 && (
                         <p className="flex items-center justify-center py-2 text-[12px] text-slate-400">
                           No Messages

@@ -1,34 +1,50 @@
-export const recruiterMenu = [
+export const getrecruiterMenu = (permissions = []) => [
   {
     id: 1,
     name: "Dashboard",
     link: "/admin/recruiter",
   },
-  {
-    id: 2,
-    name: "Jobs",
-    link: "/admin/recruiter/jobs",
-  },
-  {
-    id: 3,
-    name: "Candidates",
-    link: "/admin/recruiter/candidate",
-  },
-  {
-    id: 5,
-    name: "Reports",
-    link: "/admin/recruiter/reports/job-reports",
-  },
+  ...(
+    permissions.includes("job-list")
+      ? [{
+        id: 2,
+        name: "Jobs",
+        link: "/admin/recruiter/jobs",
+      }]
+      : []
+  ),
+  ...(
+    permissions.includes("candidate-list")
+      ? [{
+        id: 3,
+        name: "Candidates",
+        link: "/admin/recruiter/candidate",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("report-list")
+      ? [{
+        id: 5,
+        name: "Reports",
+        link: "/admin/recruiter/reports/job-reports",
+      },]
+      : []
+  ),
   {
     id: 6,
     name: "Interviews",
     link: "/admin/recruiter/interviews",
   },
-  {
-    id: 7,
-    name: "Settings",
-    link: "/admin/recruiter/settings/job-description",
-  },
+  ...(
+    permissions.includes("settings-list")
+      ? [{
+        id: 7,
+        name: "Settings",
+        link: "/admin/recruiter/settings/job-description",
+      },]
+      : []
+  ),
 ];
 
 export const recCandidateMenus = [
@@ -62,9 +78,9 @@ export const recCandidateMenus = [
     name: "Documents",
     link: "/admin/recruiter/candidate/documents",
   },
-  {
-    id: 7,
-    name: "Candidate History",
-    link: "/admin/recruiter/candidate/history",
-  },
+  // {
+  //   id: 7,
+  //   name: "Candidate History",
+  //   link: "/admin/recruiter/candidate/history",
+  // },
 ];

@@ -1,10 +1,15 @@
-import { rosterHeaderList } from '@/constants/dummyData';
+import { getrosterHeaderList } from '@/constants/dummyData';
+import { usePermissionStore } from '@/lib/slices/auth.slice';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import React from 'react'
 import { Link } from 'react-router-dom';
 
 export default function RosterHeader({page}) {
-  console.log(page);
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+
+  const rosterHeaderList = getrosterHeaderList(permissions)
   
   return (
     <>

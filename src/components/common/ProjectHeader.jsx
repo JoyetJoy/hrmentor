@@ -1,9 +1,9 @@
-import { projectMenu } from "@/constants/menus/project";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ProjectHeader({ page, currentPage }) {
+export default function ProjectHeader({ page, currentPage, projectMenu }) {
+  
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
@@ -25,7 +25,7 @@ export default function ProjectHeader({ page, currentPage }) {
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">
-          {projectMenu.map((item) => (
+          {projectMenu?.map((item) => (
             <Link
               key={item?.id}
               to={item?.link}

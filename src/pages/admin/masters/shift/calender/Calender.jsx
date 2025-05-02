@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { EMPLOYEE_DEPARTMENT_LIST, EMPLOYEE_WORK_AREA, EMPLOYEE_WORK_LOCATION_LIST, newRequest, ROASTER_LIST_GET } from "@/api/master";
+import { ALL_WORK_AREA, EMPLOYEE_DEPARTMENT_LIST, EMPLOYEE_WORK_AREA, EMPLOYEE_WORK_LOCATION_LIST, newRequest, ROASTER_LIST_GET } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -112,7 +112,7 @@ const ShiftCalendar = () => {
       "department",
       EMPLOYEE_DEPARTMENT_LIST,
     );
-    const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
+    const { data: work_area } = useFetchData("work_area", ALL_WORK_AREA);
     const { data: location } = useFetchData(
       "location",
       EMPLOYEE_WORK_LOCATION_LIST,
@@ -131,9 +131,9 @@ const ShiftCalendar = () => {
       ? location.map((loc) => ({ value: loc.id, label: loc.value }))
       : [];
     const workAreaOptions = work_area
-      ? work_area?.data?.original?.data?.map((area) => ({
+      ? work_area?.listing?.map((area) => ({
           value: area.id,
-          label: area.name,
+          label: area.work_area_name,
         }))
       : [];
 

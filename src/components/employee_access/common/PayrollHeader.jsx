@@ -1,10 +1,10 @@
-import { rosterHeaderList } from '@/constants/dummyData';
 import { payrollHeaderList } from '@/constants/payrollHeader';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import React from 'react'
 import { Link } from 'react-router-dom';
 
 export default function PayrollHeader({page}) {
+  
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">

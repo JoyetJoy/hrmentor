@@ -1,27 +1,36 @@
-export const employeeMenu = [
+export const getEmployeeMenu = (permissions = []) => [
   {
     id: 1,
     name: "Employee",
     link: "/admin/employee",
   },
-  {
-    id: 2,
-    name: "Settings",
-    link: "/admin/employee/settings/employment-type",
-  },
+  ...(
+    permissions.includes("employee-create")
+      ? [{
+          id: 2,
+          name: "Settings",
+          link: "/admin/employee/settings/employment-type",
+        }]
+      : []
+  ),
 ];
 
-export const AccountManngerMenu = [
+
+export const getAccountManngerMenu = (permissions = []) => [
   {
     id: 1,
     name: "Role",
     link: "/admin/role",
   },
-  {
-    id: 1,
-    name: "Subscription",
-    link: "/admin/subscription",
-  },
+  ...(
+    permissions.includes("subscription-list")
+      ? [{
+        id: 1,
+        name: "Subscription",
+        link: "/admin/subscription",
+      },]
+      : []
+  ),
 ];
 export const PaysilpMenu = [
   {

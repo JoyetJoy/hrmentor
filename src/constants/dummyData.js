@@ -194,7 +194,7 @@ export const subcriptionModalData = [
   },
 ];
 // header list
-export const menuitems = [
+export const getmenuitems = (permissions = []) => [
   {
     id: 1,
     iconType: "image",
@@ -204,42 +204,63 @@ export const menuitems = [
     path: "/admin/dashboard",
     active: "dashboard",
   },
-  {
-    id: 2,
-    iconType: "image",
-    iconSrcBlack: "/assets/icons/admin/recruiter-black.svg",
-    iconSrcActive: "/assets/icons/admin/recruterColor.svg",
-    name: "Recruiter",
-    path: "/admin/recruiter",
-    active: "recruiter",
-  },
-  {
-    id: 3,
-    iconType: "image",
-    iconSrcBlack: "/assets/icons/admin/hiring-black.svg",
-    iconSrcActive: "/assets/icons/admin/hiringColor.svg",
-    name: "Hiring",
-    path: "/admin/hiring",
-    active: "hiring",
-  },
-  {
-    id: 4,
-    iconType: "image",
-    iconSrcBlack: "/assets/icons/admin/employee-black.svg",
-    iconSrcActive: "/assets/icons/admin/employeeColor.svg",
-    name: "Employee",
-    path: "/admin/employee",
-    active: "employee",
-  },
-  {
-    id: 5,
-    iconType: "image",
-    iconSrcBlack: "/assets/icons/admin/roster.svg",
-    iconSrcActive: "/assets/icons/admin/rosterfill.svg",
-    name: "Roster",
-    path: "/admin/roster",
-    active: "roster",
-  },
+  ...(
+    [
+      "job-list",
+      "candidate-list",
+      "report-list",
+      "settings-list"
+    ].some(permission => permissions.includes(permission))
+      ? [{
+        id: 2,
+        iconType: "image",
+        iconSrcBlack: "/assets/icons/admin/recruiter-black.svg",
+        iconSrcActive: "/assets/icons/admin/recruterColor.svg",
+        name: "Recruiter",
+        path: "/admin/recruiter",
+        active: "recruiter",
+      }]
+      : []
+  ),
+  ...(
+    permissions.includes("Hiring-dashboard")
+      ? [{
+        id: 3,
+        iconType: "image",
+        iconSrcBlack: "/assets/icons/admin/hiring-black.svg",
+        iconSrcActive: "/assets/icons/admin/hiringColor.svg",
+        name: "Hiring",
+        path: "/admin/hiring",
+        active: "hiring",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("employee-list")
+      ? [{
+        id: 4,
+        iconType: "image",
+        iconSrcBlack: "/assets/icons/admin/employee-black.svg",
+        iconSrcActive: "/assets/icons/admin/employeeColor.svg",
+        name: "Employee",
+        path: "/admin/employee",
+        active: "employee",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("roster-list")
+      ? [{
+        id: 5,
+        iconType: "image",
+        iconSrcBlack: "/assets/icons/admin/roster.svg",
+        iconSrcActive: "/assets/icons/admin/rosterfill.svg",
+        name: "Roster",
+        path: "/admin/roster",
+        active: "roster",
+      },]
+      : []
+  ),
   {
     id: 6,
     iconType: "image",
@@ -249,34 +270,59 @@ export const menuitems = [
     path: "/admin/attendance",
     active: "attendance",
   },
-  {
-    id: 7,
-    iconType: "image",
-    iconSrcBlack: "/assets/icons/admin/leaveday.svg",
-    iconSrcActive: "/assets/icons/admin/leave.svg",
-    name: "Leave",
-    path: "/admin/leave/request",
-    active: "leave",
-  },
+  ...(
+    permissions.includes("leave-request-list")
+      ? [{
+        id: 7,
+        iconType: "image",
+        iconSrcBlack: "/assets/icons/admin/leaveday.svg",
+        iconSrcActive: "/assets/icons/admin/leave.svg",
+        name: "Leave",
+        path: "/admin/leave/request",
+        active: "leave",
+      },]
+      : []
+  ),
 ];
 
-export const adminItems = [
-  {
-    icon: "/assets/icons/admin/profilemang.svg",
-    label: "Profile Management",
-    path: "/admin/profile-management",
-    active: "profile-management",
-  },
-  {
-    icon: "/assets/icons/admin/company.svg",
-    label: "Company Settings",
-    path: "/admin/company/general",
-  },
-  {
-    icon: "/assets/icons/admin/ac.svg",
-    label: "Account Management",
-    path: "/admin/role",
-  },
+export const getadminItems = (permissions = [], role = []) => [
+  ...(
+    role.includes(1)
+      ? [{
+        icon: "/assets/icons/admin/profilemang.svg",
+        label: "Profile Management",
+        path: "/admin/profile-management",
+        active: "profile-management",
+      },]
+      : []
+  ),
+  ...(
+    role.includes(1)
+      ? [{
+        icon: "/assets/icons/admin/company.svg",
+        label: "Company Settings",
+        path: "/admin/company/general",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("role-list")
+      ? [{
+        icon: "/assets/icons/admin/ac.svg",
+        label: "Account Management",
+        path: "/admin/role",
+      },]
+      : []
+  ),
+  ...(
+    !role.includes(1)
+      ? [{
+          icon: "/assets/icons/employee_access/header/switch.svg",
+          label: `Switch to Employee`,
+          path: "/employee-access/dashboard",
+        }]
+      : []
+  ),
   { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
 ];
 
@@ -311,50 +357,76 @@ export const rosterItems = [
     active: "WorkArea",
   },
 ];
-export const rosterHeaderList = [
+export const getrosterHeaderList = (permissions = []) => [
   { id: 1, name: "Roster Calendar", link: "/admin/roster" },
-  {
-    id: 2,
-    name: "Roster List",
-    link: "/admin/roster/list",
-  },
+  ...(
+    permissions.includes("roster-list")
+      ? [{
+        id: 2,
+        name: "Roster List",
+        link: "/admin/roster/list",
+      },]
+      : []
+  ),
 ];
-export const shiftHeaderList = [
+export const getshiftHeaderList = (permissions = []) => [
   { id: 1, name: "Shift Calendar", link: "/admin/shift" },
-
-  {
-    id: 2,
-    name: "Shift List",
-    link: "/admin/shift/list",
-  },
+  ...(
+    permissions.includes("shift-list")
+      ? [{
+        id: 2,
+        name: "Shift List",
+        link: "/admin/shift/list",
+      },]
+      : []
+  ),
 ];
-export const activityItems = [
-  {
-    icon: "/assets/icons/admin/projectTask.svg",
-    label: "Project & Task",
-    path: "/admin/project/projectManagement",
-  },
-  {
-    icon: "/assets/icons/admin/newsEvent.svg",
-    label: "News & Events ",
-    path: "admin/news-event/news",
-  },
-
-  {
-    icon: "/assets/icons/admin/payroll.svg",
-    label: "Payroll",
-    path: "/admin/payroll",
-  },
-  {
-    icon: "/assets/icons/admin/shift.svg",
-    label: "Shift",
-    path: "/admin/shift",
-  },
-  {
-    icon: "/assets/icons/admin/setup.svg",
-    label: "Setup",
-    path: "/admin/setup/email",
-  },
+export const getactivityItems = (permissions = []) => [
+  ...(
+    permissions.includes("project-list")
+      ? [{
+        icon: "/assets/icons/admin/projectTask.svg",
+        label: "Project & Task",
+        path: "/admin/project/projectManagement",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("news-list")
+      ? [{
+        icon: "/assets/icons/admin/newsEvent.svg",
+        label: "News & Events ",
+        path: "admin/news-event/news",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("paylist-view")
+      ? [{
+        icon: "/assets/icons/admin/payroll.svg",
+        label: "Payroll",
+        path: "/admin/payroll",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("shift-list")
+      ? [{
+        icon: "/assets/icons/admin/shift.svg",
+        label: "Shift",
+        path: "/admin/shift",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("Hiring-dashboard")
+      ? [{
+        icon: "/assets/icons/admin/setup.svg",
+        label: "Setup",
+        path: "/admin/setup/email",
+      },]
+      : []
+  ),
 ];
 export const EmailData = [
   {
@@ -536,7 +608,7 @@ export const employeeAccessActivityList = [
   {
     icon: "/assets/icons/admin/projectTask.svg",
     label: "Project & Task",
-    path: "/employee-access/projectManagement",
+    path: "/employee-access/project/projectManagement",
   },
   {
     icon: "/assets/icons/admin/newsEvent.svg",
@@ -585,19 +657,37 @@ export const employeeAccessActivityList = [
   //   // path: "/admin/employee",
   // },
 ];
-export const employeeaccessItems = [
+export const getemployeeaccessItems = (permissions = []) => [
   {
     icon: "/assets/icons/employee_access/header/profilemang.svg",
     label: "Profile Management",
     path: "/employee-access/profile/primary",
     active: "profile-management",
   },
-  { icon: "/assets/icons/admin/logout.svg", label: "Log Out", path: "/login" },
+  ...(
+    ["role-list", "subscription-list","employee-list", "job-list","candidate-list","report-list","settings-list","Hiring-dashboard","shift-list","project-list","task-list","news-list","events-list","holiday-type-list","bank-holiday-list","leave-request-list","roster-list","roster-calendar-list",].some(permission => permissions.includes(permission))
+      ? [{
+          icon: "/assets/icons/employee_access/header/switch.svg",
+          label: `Switch to Admin`,
+          path: "/admin/dashboard",
+        }]
+      : []
+  ),
+  {
+    icon: "/assets/icons/admin/logout.svg",
+    label: "Log Out",
+    path: "/login",
+  },
 ];
 
+
 //ADMIN NEWS & EVENT HEADER
-export const newsEventHeaderList = [
+export const getnewsEventHeaderList = (permissions = []) => [
   { id: 1, name: "News", link: "/admin/news-event/news" },
-  { id: 2, name: "Events", link: "/admin/news-event/event" },
+  ...(
+    permissions.includes("events-list")
+      ? [{ id: 2, name: "Events", link: "/admin/news-event/event" },]
+      : []
+  ),
   { id: 3, name: "News & Events", link: "/admin/news-event/view" },
 ];

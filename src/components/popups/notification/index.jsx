@@ -31,10 +31,7 @@ export default function Notification({
     if (!user?.user?.id ) return; // Prevent subscription if user ID is missing
   
     const token =
-      localStorage.getItem("super_token") ||
-      localStorage.getItem("hr_token") ||
-      localStorage.getItem("manager_token") ||
-      localStorage.getItem("employee_token");
+      localStorage.getItem("token");
   
     const pusher = new Pusher("469a7dd00053f2be95f4", {
       cluster: "ap2",

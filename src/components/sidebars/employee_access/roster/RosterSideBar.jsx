@@ -6,7 +6,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { newRequest, EMPLOYEE_DEPARTMENT_LIST, EMPLOYEE_WORK_AREA, EMPLOYEE_WORK_LOCATION_LIST } from "@/api/master";
+import { newRequest, EMPLOYEE_DEPARTMENT_LIST, EMPLOYEE_WORK_AREA, EMPLOYEE_WORK_LOCATION_LIST, ALL_WORK_AREA } from "@/api/master";
 
 const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,setActiveLocation,activeWorkArea,setActiveWorkArea}) => {
 
@@ -18,8 +18,9 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
   };
   
   const { data: department } = useFetchData("department", EMPLOYEE_DEPARTMENT_LIST);
-  const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
+  const { data: work_area } = useFetchData("work_area", ALL_WORK_AREA);
   const { data: location } = useFetchData("location", EMPLOYEE_WORK_LOCATION_LIST);  
+console.log(work_area);
 
   const handleClick = (setter, item_id, currentActive) => {
     setter(currentActive === item_id ? null : item_id);
@@ -80,7 +81,7 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
             <ChevronRight className="size-4 group-data-[open]:rotate-90" />
           </DisclosureButton>
           <DisclosurePanel className="my-4 mr-4 flex flex-col text-sm/5 text-black/50">
-            {work_area?.data?.original?.data?.map((item) => (
+            {work_area?.listing?.map((item) => (
               <p
                 key={item.id}
                 onClick={() => handleClick(setActiveWorkArea, item.id, activeWorkArea)}
@@ -88,7 +89,7 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
                   item.id === activeWorkArea ? "text-hrmprimaryorange" : "text-gray-dark"
                 }`}
               >
-                {item.name}
+                {item.work_area_name}
               </p>
             ))}
           </DisclosurePanel>

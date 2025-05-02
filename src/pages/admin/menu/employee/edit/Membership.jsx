@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { EMPLOYEE_MEMBERSHIP, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EmployeeMembershipEditForm from "@/components/popups/employees/edit/MembershipEditForm";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeMembershipEdit() {
   const location = useLocation();
@@ -22,6 +23,9 @@ export default function EmployeeMembershipEdit() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -93,6 +97,7 @@ export default function EmployeeMembershipEdit() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              {permissions.includes("employee-registration-training-edit") &&(
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -103,6 +108,8 @@ export default function EmployeeMembershipEdit() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-registration-training-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -113,6 +120,7 @@ export default function EmployeeMembershipEdit() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -163,6 +171,7 @@ export default function EmployeeMembershipEdit() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-registration-training-create") &&(
                 <button
                   onClick={() => {
                     setPopupOpen(true);
@@ -172,6 +181,7 @@ export default function EmployeeMembershipEdit() {
                   <Plus className="size-4" />
                   Add Registration/Training
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

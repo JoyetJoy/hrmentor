@@ -1,9 +1,14 @@
-import { hiringMenu } from "@/constants/menus/hiring";
+import { gethiringMenu } from "@/constants/menus/hiring";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
 function MenuHeaderHiring({ page }) {
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+  const hiringMenu = gethiringMenu(permissions)
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">

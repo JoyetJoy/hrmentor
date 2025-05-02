@@ -2,6 +2,7 @@ import { newRequest, NEWS_LISt } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -23,6 +24,10 @@ export default function News() {
   const handleClick = () => {
     setPopupOpen(true);
   };
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   const handleClickView = () => {
     setDeletePopup(true);
@@ -133,6 +138,7 @@ export default function News() {
             >
               <Eye className="size-3" />
             </span>
+            {permissions.includes("news-edit") && (
             <Link
               onClick={() => {
                 const id = row.original.id;
@@ -145,6 +151,8 @@ export default function News() {
                 className="w-full object-contain"
               />
             </Link>
+            )}
+            {permissions.includes("news-delete") && (
             <Link
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
               onClick={() => {
@@ -154,6 +162,7 @@ export default function News() {
             >
               <Trash2 className="size-3" />
             </Link>
+            )}
           </div>
         ),
       },
@@ -188,6 +197,7 @@ export default function News() {
           <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
             <Filter className="size-4" />
           </div>
+          {permissions.includes("news-create") && (
           <Link
             to={"/admin/news-event/create-news"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
@@ -195,6 +205,7 @@ export default function News() {
             <Plus className="size-4" />
             Add News{" "}
           </Link>
+          )}
         </div>
       </div>
       {isLoading ? (

@@ -73,6 +73,13 @@ input::-webkit-calendar-picker-indicator {
   border-radius: 100px;
 }
 
+.btn-price {
+  @apply z-30 w-full rounded-lg bg-black py-3 font-semibold text-white transition-all duration-200 ease-in-out hover:bg-gray-700;
+}
+.btn-price:active {
+  transform: scale(0.95); /* Button will shrink slightly when clicked */
+}
+
 .overflow-y-medium::-webkit-scrollbar {
   width: 10px;
 }

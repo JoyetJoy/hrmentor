@@ -8,6 +8,7 @@ import { LOGIN } from "@/api/auth";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { Eye } from "lucide-react";
+import { useRoleStore } from "@/lib/slices/auth.slice";
 
 function Login() {
   const [loader, setLoader] = useState(false);
@@ -19,6 +20,10 @@ function Login() {
   } = useForm({
     resolver: yupResolver(LoginSchema),
   });
+
+  const { setRole } = useRoleStore((state) => ({
+    setRole: state.setRole,
+  }));
 
   const navigate = useNavigate();
   const onSubmit = (data) => {
@@ -36,18 +41,14 @@ function Login() {
         toast.success("Login successful");
         if(res?.data?.data?.roles?.length===1){
           if(res?.data?.data?.roles?.includes(1)){
-            localStorage.removeItem('employee_token')
-            localStorage.setItem("super_token", res?.data?.data?.token);
+            localStorage.removeItem('token')
+            localStorage.setItem("token", res?.data?.data?.token);
+            setRole(res?.data?.data?.roles);
             navigate("/admin/dashboard");
-          }else if(res?.data?.data?.roles?.includes(2)){
-            localStorage.setItem("hr_token", res?.data?.data?.token);
-          }else if(res?.data?.data?.roles?.includes(3)){
-            localStorage.setItem("team_token", res?.data?.data?.token)
-          }else if(res?.data?.data?.roles?.includes(5)){
-            localStorage.setItem("manager_token", res?.data?.data?.token)
           }else{
-            localStorage.removeItem('super_token')
-            localStorage.setItem("employee_token", res?.data?.data?.token);
+            localStorage.removeItem('token')
+            localStorage.setItem("token", res?.data?.data?.token);
+            setRole(res?.data?.data?.roles)
             navigate("/employee-access/dashboard");
           }
         }else{

@@ -18,6 +18,7 @@ import moment from "moment";
 import RosterHeader from "@/components/common/RosterHeader";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EditRoster from "@/components/popups/master/roster/EditRoster";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function RosterList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,6 +32,10 @@ export default function RosterList() {
   const [selectedRoster, setSelectedRoster] = useState(null);
   const [copy, setCopy] = useState(false);
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   const { data: rosterDetailss } = useQuery({
     queryKey: ["rosterDetailss", currentPage, keyword],
@@ -210,6 +215,7 @@ export default function RosterList() {
             <Calendar className="size-4 text-black" />
             <span>Calendar View</span>
           </Link> */}
+          {permissions.includes("roster-create") &&(
           <button
             type="button"
             onClick={() => handleCreate()}
@@ -218,6 +224,7 @@ export default function RosterList() {
             <Plus strokeWidth={2} className="size-4" />
             <span>Create Roster</span>
           </button>
+          )}
         </div>
       </div>
       <div className="flex gap-2">
@@ -250,6 +257,7 @@ export default function RosterList() {
                   </p>
                 </div>
               </div>
+              {permissions.includes("roster-edit") &&(
               <div
                 className="cursor-pointer rounded-full bg-gray-darklight p-2"
                 onClick={() => {
@@ -262,6 +270,7 @@ export default function RosterList() {
                   className="h-5 w-5"
                 />
               </div>
+              )}
             </div>
             <div className="border-b border-gray-dark"></div>
             <div className="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">

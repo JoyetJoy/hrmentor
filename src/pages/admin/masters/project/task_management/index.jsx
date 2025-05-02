@@ -9,7 +9,7 @@ import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ProjectHeader from "@/components/common/ProjectHeader";
 import QueryTable from "@/components/table/QueryTable";
 import useImageUpload from "@/hooks/useImageUpload";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useUserStore } from "@/lib/slices/auth.slice";
 import { taskSchema } from "@/schema/dashboard/employee/masters/project_and_tasks.schema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
@@ -29,6 +29,7 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import {projectMenu } from "@/constants/menus/project";
 
 const Priority = [
   { value: 1, label: "Low" },
@@ -51,6 +52,10 @@ export default function TaskManagement() {
   const [memberList, setMemberList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [status, setStatus] = useState([]);
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
@@ -313,6 +318,7 @@ console.log(taskList);
             >
               <Eye className="size-3" />
             </Link>
+            {permissions.includes("task-edit") && (
             <Link
               onClick={() => {
                 setPopupOpen(true);
@@ -325,6 +331,8 @@ console.log(taskList);
                 className="w-full object-contain"
               />
             </Link>
+            )}
+            {permissions.includes("task-delete") && (
             <Link
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
               onClick={() => {
@@ -334,6 +342,7 @@ console.log(taskList);
             >
               <Trash2 className="size-3" />
             </Link>
+            )}
           </div>
         ),
       },
@@ -414,6 +423,7 @@ console.log(taskList);
       <ProjectHeader
         menu="Menu"
         currentpath="Task Management"
+        projectMenu={projectMenu}
         page={2}
         currentPage={"Task Management"}
       />
@@ -448,6 +458,7 @@ console.log(taskList);
           </div>
 
           {/* Add Project button */}
+          {permissions.includes("task-create") && (
           <Link
             onClick={() => {
               setPopupOpen(true);
@@ -457,6 +468,7 @@ console.log(taskList);
             <Plus className="size-4" />
             Add Task
           </Link>
+          )}
         </div>
       </div>
       <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">

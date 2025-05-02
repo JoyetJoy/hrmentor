@@ -7,12 +7,18 @@ import MenuHeader from "@/components/common/MenuHeader";
 import { getRandomPastelColor } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { EMPLOYEE, newRequest } from "@/api";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeLists() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+console.log(permissions);
 
   const { data: employeeListing, isLoading } = useQuery({
     queryKey: ["employeeListing", currentPage, keyword],
@@ -183,13 +189,15 @@ export default function EmployeeLists() {
             <ArrowUpFromLine className="size-4" />
             <h1 className="text-xs font-semibold">Export</h1>
           </div>
-          <Link
+          {permissions.includes("employee-create") &&(
+            <Link
             to={"/admin/employee/create"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-hrmblue"
           >
             <Plus className="size-4" />
             Add Employee{" "}
           </Link>
+          )}
         </div>
       </div>
       {isLoading ? (

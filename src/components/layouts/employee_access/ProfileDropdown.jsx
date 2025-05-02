@@ -1,8 +1,16 @@
-import { employeeaccessItems } from "@/constants/dummyData";
+import { getemployeeaccessItems } from "@/constants/dummyData";
 import { Menu } from "@headlessui/react";
 import { ProfileImage } from "@/utils";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function ProfileDropdown({ handleNavigation, user }) {
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+    }));
+    console.log(permissions);
+    
+
+    const employeeaccessItems = getemployeeaccessItems(permissions);
   return (
     <div className="relative flex flex-col items-center gap-3">
       <Menu>

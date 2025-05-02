@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import Select from "react-select";
 import { Link } from 'react-router-dom';
 
-function LeaveSettingsHeader() {
+function LeaveSettingsHeader({permissions}) {
     const [date, setDate] = useState(new Date());
     const [keyword, setKeyword]= useState('')
 
@@ -70,6 +70,7 @@ function LeaveSettingsHeader() {
               strokeWidth={2}
             />
           </div>
+          {permissions.includes("holiday-type-create") && (
           <Link
             to={'/admin/leave/settings/basesettings'}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-5 text-xs font-semibold text-white hover:bg-hrmblue rounded-md"
@@ -77,6 +78,7 @@ function LeaveSettingsHeader() {
             <Plus className="size-5" strokeWidth={2} />
             Add Holiday
           </Link>
+          )}
         </div>
       </div>
   )

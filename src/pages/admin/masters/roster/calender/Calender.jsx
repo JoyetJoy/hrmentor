@@ -11,7 +11,7 @@ import RosterHeader from "@/components/common/RosterHeader";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest, ROASTER_LIST_GET, ROASTER_LISTING } from "@/api/master";
+import { ALL_WORK_AREA, newRequest, ROASTER_LIST_GET, ROASTER_LISTING } from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import { dividerClasses } from "@mui/material";
 import DatePicker from "react-datepicker";
@@ -24,6 +24,7 @@ import {
 import { formatDate } from "@/utils/date";
 import ChangeShift from "@/components/popups/master/roster/ChangeShift";
 import { isBeforeToday } from "@/utils/date";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 const RosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -55,6 +56,10 @@ const RosterCalendar = () => {
   const getCurrentDate = () => new Date().toISOString().split("T")[0];
   const today = getCurrentDate();
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+  
   const useFetchData = (key, url) => {
     return useQuery({
       queryKey: [key],
@@ -185,7 +190,7 @@ const RosterCalendar = () => {
     "department",
     EMPLOYEE_DEPARTMENT_LIST,
   );
-  const { data: work_area } = useFetchData("work_area", EMPLOYEE_WORK_AREA);
+  const { data: work_area } = useFetchData("work_area", ALL_WORK_AREA);
   const { data: location } = useFetchData(
     "location",
     EMPLOYEE_WORK_LOCATION_LIST,
@@ -204,10 +209,11 @@ const RosterCalendar = () => {
   const locationOptions = Array.isArray(location)
     ? location.map((loc) => ({ value: loc.id, label: loc.value }))
     : [];
+ 
   const workAreaOptions = work_area
-    ? work_area?.data?.original?.data?.map((area) => ({
+    ? work_area?.listing?.map((area) => ({
         value: area.id,
-        label: area.name,
+        label: area.work_area_name,
       }))
     : [];
 
@@ -666,7 +672,8 @@ const RosterCalendar = () => {
                                     >
                                       <p className="relative text-xs font-semibold">
                                         {shift.shift_name}
-                                        <span
+                                        {permissions.includes("roster-edit") && (
+                                          <span
                                           className="absolute -top-2 right-1"
                                           onMouseEnter={() =>
                                             setHoveredShift({
@@ -699,6 +706,7 @@ const RosterCalendar = () => {
                                               </span>
                                             )}
                                         </span>
+                                        )}
                                       </p>
                                       {shift?.shift?.start_time && (
                                         <p className="text-sm">
@@ -710,7 +718,8 @@ const RosterCalendar = () => {
                                   ))}
 
                                   <p className="relative flex w-full items-center justify-center">
-                                    <button
+                                    {permissions.includes("roster-create") && (
+                                      <button
                                       onClick={() =>
                                         addShift(
                                           emp?.employee?.id,
@@ -742,6 +751,7 @@ const RosterCalendar = () => {
                                     >
                                       +
                                     </button>
+                                    )}
 
                                     {hoveredShift?.id === emp?.employee?.id &&
                                       hoveredShift?.date === day.fullDate &&
@@ -808,7 +818,8 @@ const RosterCalendar = () => {
                                   ))}
 
                                   <div className="min-w-[11.4rem]">
-                                    <button
+                                    {permissions.includes("roster-create") && (
+                                      <button
                                       className="text-2xl font-bold text-blue-500"
                                       onMouseEnter={() =>
                                         setHoveredShift({
@@ -839,6 +850,7 @@ const RosterCalendar = () => {
                                     >
                                       +
                                     </button>
+                                    )}
 
                                     {/* Tooltip */}
                                     {hoveredShift?.id === emp?.employee?.id &&

@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 import Loader from "@/components/ui/Loader";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import AddBankHoliday from "@/components/popups/master/leave/Addbankholiday";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useUserStore } from "@/lib/slices/auth.slice";
 
 function BankHolidays() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,6 +24,10 @@ function BankHolidays() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [type, setType] = useState("");
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
@@ -157,6 +161,7 @@ function BankHolidays() {
                 <circle cx="12" cy="12" r="3" />
               </svg>
             </Link>
+            {permissions.includes("bank-holiday-edit") && (
             <Link
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               onClick={() => {
@@ -170,7 +175,8 @@ function BankHolidays() {
                 className="w-full object-contain"
               />
             </Link>
-
+            )}
+          {permissions.includes("bank-holiday-delete") && (
             <button
               onClick={() => {
                 setDeletePopup(true);
@@ -180,6 +186,7 @@ function BankHolidays() {
             >
               <Trash2 className="size-3" />
             </button>
+          )}
           </div>
         ),
       },
@@ -245,6 +252,7 @@ function BankHolidays() {
               strokeWidth={2}
             />
           </div>
+          {permissions.includes("bank-holiday-create") && (
           <button
             onClick={() => {
               setPopupOpen(true);
@@ -255,6 +263,7 @@ function BankHolidays() {
             <Plus className="size-5" strokeWidth={2} />
             Add Bank Holiday
           </button>
+          )}
         </div>
       </div>
       {isLoading ? (

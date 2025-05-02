@@ -15,6 +15,7 @@ import WeeklyRecurrence from "@/components/popups/master/shift/RecurrencePattern
 import GradientColorPicker from "react-best-gradient-color-picker";
 
 import {
+  ALL_WORK_AREA,
   EMPLOYEE_DEPARTMENT_LIST,
   EMPLOYEE_WORK_AREA,
   EMPLOYEE_WORK_LOCATION_LIST,
@@ -277,7 +278,7 @@ console.log(startTime,endTime);
     "worklocationList",
   );
   const { data: workAreaList } = useEmployeeMaster(
-    EMPLOYEE_WORK_AREA,
+    ALL_WORK_AREA,
     "workAreaList",
   );
   useEffect(() => {

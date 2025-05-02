@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { EMPLOYEE_BANK_DETAILS, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import EmployeeBankDetailsEditForm from "@/components/popups/employees/edit/BankDetails";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeBankDetails() {
   const location = useLocation();
@@ -21,6 +22,10 @@ export default function EmployeeBankDetails() {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   useEffect(() => {
     if (selectedField) {
@@ -109,6 +114,7 @@ export default function EmployeeBankDetails() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
+              {permissions.includes("employee-bank-details-edit") &&(
               <button
                 type="button"
                 onClick={() =>
@@ -121,6 +127,8 @@ export default function EmployeeBankDetails() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-bank-details-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -131,6 +139,7 @@ export default function EmployeeBankDetails() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -180,6 +189,7 @@ export default function EmployeeBankDetails() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-bank-details-create") &&(
                 <button
                   onClick={() => {
                     setPopupOpen(true);
@@ -189,6 +199,7 @@ export default function EmployeeBankDetails() {
                   <Plus className="size-4" />
                   Add Bank Details
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

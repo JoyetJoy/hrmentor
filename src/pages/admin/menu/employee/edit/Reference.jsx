@@ -11,6 +11,7 @@ import ReferenceForm from "@/components/popups/employees/edit/ReferenceForm";
 import ReferenceSendEmail from "@/components/popups/employees/edit/ReferenceSendEmail";
 import ReferenceAdd from "@/components/popups/employees/edit/ReferenceAdd";
 import StatusEdit from "@/components/popups/employees/edit/StatusEdit";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeReferenceEdit() {
   const location = useLocation();
@@ -27,7 +28,9 @@ export default function EmployeeReferenceEdit() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
-  
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   // useEffect(() => {
   //   if (selectedField) {
   //     setPopupOpen(true);
@@ -140,6 +143,17 @@ export default function EmployeeReferenceEdit() {
               <button
                 type="button"
                 onClick={() => {
+                  setPopupOpen(true);
+                  setSelectedField(row.original.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+              >
+                <Eye className="size-3" />
+              </button>
+              {permissions.includes("employee-reference-edit") &&(
+              <button
+                type="button"
+                onClick={() => {
                   setPopupAddOpen(true);
                   setSelectedField(row.original.id);
                 }}
@@ -151,16 +165,7 @@ export default function EmployeeReferenceEdit() {
                   className="w-full object-contain"
                 />
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setPopupOpen(true);
-                  setSelectedField(row.original.id);
-                }}
-                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
-              >
-                <Eye className="size-3" />
-              </button>
+              )}
               
               {/* <button
                 type="button"
@@ -248,6 +253,7 @@ export default function EmployeeReferenceEdit() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-reference-create") &&(
                 <button
                   onClick={() => {
                     setPopupAddOpen(true);
@@ -257,6 +263,7 @@ export default function EmployeeReferenceEdit() {
                   <Plus className="size-4" />
                   Add Reference
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

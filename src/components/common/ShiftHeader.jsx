@@ -1,11 +1,16 @@
-import {  shiftHeaderList } from '@/constants/dummyData';
+import {  getshiftHeaderList } from '@/constants/dummyData';
+import { usePermissionStore } from '@/lib/slices/auth.slice';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import React from 'react'
 import { Link } from 'react-router-dom';
 
 export default function ShiftHeader({page}) {
-  console.log(page);
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   
+  const shiftHeaderList = getshiftHeaderList(permissions);
+
   return (
     <>
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">

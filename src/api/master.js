@@ -18,10 +18,7 @@ export const newFormRequest = axios.create({
 const addAuthorizationInterceptor = (request) => {
   request.interceptors.request.use((config) => {
     const token =
-      localStorage.getItem("super_token") ||
-      localStorage.getItem("hr_token") ||
-      localStorage.getItem("manager_token") ||
-      localStorage.getItem("employee_token");
+      localStorage.getItem("token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -68,6 +65,8 @@ export const EMPLOYEE_WORK_LOCATION = "worklocations";
 export const EMPLOYEE_WORK_LOCATION_LIST = "active-worklocations";
 //work area
 export const EMPLOYEE_WORK_AREA = "employee-work-area";
+//all work area
+export const ALL_WORK_AREA = "all-work-area";
 //change shift employee list
 export const EMPLOYEE_LIST_SHIFT = "get-employees"
 //swap shift

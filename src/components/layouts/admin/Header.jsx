@@ -2,38 +2,55 @@ import React, { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { menuitems, activityItems } from "@/constants/dummyData";
+import { getmenuitems, getactivityItems } from "@/constants/dummyData";
 import { LayoutGrid, MessageSquareText, Bell } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { useRoleStore, useUserStore } from "@/lib/slices/auth.slice";
 import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
 import Notification from "@/components/popups/notification";
 import { NOTIFICATIONS } from "@/api/hiring";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest } from "@/api";
+import { ALL_CHAT_LIST, newRequest } from "@/api";
 
-export const AdminHeader = () => {
+export const AdminHeader = ({ permissions }) => {
   const { setUser, user } = useUserStore((state) => ({
     setUser: state.setUser,
     user: state.user,
   }));
 
+  const { role } = useRoleStore((state) => ({
+    role: state.role,
+  }));
+
+  const menuitems = getmenuitems(permissions);
+  const activityItems = getactivityItems(permissions);
   const location = useLocation();
   const navigate = useNavigate();
   const [popupOpen, setPopupOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
 
-  const { data: notification, isLoading } = useQuery({
-    queryKey: ["notification",user?.id],
+  const { data: adminchatlist, refetch } = useQuery({
+    queryKey: ["adminchatlist", user?.id],
     queryFn: () =>
-      newRequest.get(NOTIFICATIONS).then((res) => {
-        setNotifications(res.data)
+      newRequest.get(ALL_CHAT_LIST).then((res) => {
+        // setNotifications(res.data)
         return res.data;
       }),
-    enabled:!!user?.id
+    enabled: !!user?.id,
   });
-console.log(notifications);
+  console.log(adminchatlist);
+
+  const { data: notification, isLoading } = useQuery({
+    queryKey: ["notification", user?.id],
+    queryFn: () =>
+      newRequest.get(NOTIFICATIONS).then((res) => {
+        setNotifications(res.data);
+        return res.data;
+      }),
+    enabled: !!user?.id,
+  });
+  console.log(notifications);
 
   const handleClick = () => {
     setPopupOpen(true);
@@ -50,11 +67,16 @@ console.log(notifications);
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
-console.log(user);
+  console.log(user);
 
   return (
     <>
-      <ChatBoxList popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <ChatBoxList
+        refetch={refetch}
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        data={adminchatlist}
+      />
       <Notification
         userId={user?.id}
         notifications={notifications}
@@ -102,23 +124,27 @@ console.log(user);
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
-          <div
-            onClick={handleNotificationClick}
-            className="flex h-10 relative w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
-          >
-            <Bell className="size-5 text-hrmblue" />
-            {notification?.unread_count > 0 && (
-              <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
-                {notification?.unread_count}
+          {role.includes(1) && (
+            <>
+              <div
+                onClick={handleNotificationClick}
+                className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+              >
+                <Bell className="size-5 text-hrmblue" />
+                {notification?.unread_count > 0 && (
+                  <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                    {notification?.unread_count}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div
-            onClick={handleClick}
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
-          >
-            <MessageSquareText className="size-5 text-hrmblue" />
-          </div>
+              <div
+                onClick={handleClick}
+                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+              >
+                <MessageSquareText className="size-5 text-hrmblue" />
+              </div>
+            </>
+          )}
           <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100">
               <LayoutGrid className="size-5 text-hrmblue" />
@@ -150,7 +176,11 @@ console.log(user);
               </ul>
             </Menu.Items>
           </Menu>
-          <ProfileDropdown handleNavigation={handleNavigation} user={user} />
+          <ProfileDropdown
+            handleNavigation={handleNavigation}
+            user={user}
+            permissions={permissions}
+          />
         </div>
       </div>
     </>

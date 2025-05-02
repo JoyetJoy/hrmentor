@@ -15,6 +15,7 @@ import { PAYROLL_LIST_GET, PAYROLL_PAYPERIOD_GET } from "@/api/payroll";
 import { formatDateRange } from "@/utils/helpers";
 import dayjs from "dayjs";
 import { formatDate } from "@/utils/date";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -47,6 +48,10 @@ export default function PayrollList() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
 
   const { data, isLoading } = useQuery({
     queryKey: ["payperiod", monthValue],
@@ -217,6 +222,7 @@ export default function PayrollList() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
+            {permissions.includes("paylist-view") && (
             <button
               type="button"
               onClick={() => {
@@ -229,6 +235,7 @@ export default function PayrollList() {
             >
               <Eye className="size-3" />
             </button>
+            )}
           </div>
         ),
       },

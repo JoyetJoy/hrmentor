@@ -10,6 +10,7 @@ import SaveRecruiterMasterForm from "./Save";
 import { recruiterSetting } from "@/constants/sidebars/recruiter";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import Loader from "@/components/ui/Loader";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +22,9 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -113,7 +117,8 @@ console.log(type,"typetype")
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
-              <button
+              {permissions.includes("settings-edit") && (
+                <button
                 type="button"
                 onClick={() => setSelectedField(row?.original?.id)}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
@@ -123,7 +128,9 @@ console.log(type,"typetype")
                   className="w-full object-contain"
                 />
               </button>
-              <button
+              )}
+              {permissions.includes("settings-delete") && (
+                <button
                 type="button"
                 onClick={() => {
                   setDeletePopup(true);
@@ -133,11 +140,12 @@ console.log(type,"typetype")
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
       ].filter(Boolean),
-    [(data, type, api, qrkey, colKeys)],
+    [(data, type, api, qrkey, colKeys,permissions)],
   );
   return (
     <>
@@ -177,7 +185,8 @@ console.log(type,"typetype")
                   placeholder="Search"
                 />
               </div>
-              <Button
+              {permissions.includes("settings-create") && (
+                <Button
                 onClick={() => {
                   setPopupOpen(true);
                 }}
@@ -186,6 +195,7 @@ console.log(type,"typetype")
                 <Plus className="size-4" />
                 Add
               </Button>
+              )}
             </div>
             <div>
               {isLoading ? (

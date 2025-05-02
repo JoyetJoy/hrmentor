@@ -17,7 +17,7 @@ function RecruiterReports() {
         <h1 className="text-base font-bold leading-7 text-neutral-700">
           Highlight Report
         </h1>
-        <div className="mt-4 grid  grid-cols-4 gap-5">
+        {/* <div className="mt-4 grid  grid-cols-4 gap-5">
           <div className="flex h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded bg-pinkishred/5 p-3 text-sm font-medium">
             <img
               className="h-8 object-contain"
@@ -56,7 +56,7 @@ function RecruiterReports() {
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
           scrambled it to make a type specimen book.
-        </p>
+        </p> */}
         <div className="w-full h-full mt-16 flex flex-col lg:flex-row">
           <div className="w-full lg:w-7/12">
             <CustomBarChart/>

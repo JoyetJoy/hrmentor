@@ -29,6 +29,7 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { employeeprojectMenu } from "@/constants/menus/project";
 
 const Priority = [
   { value: 1, label: "Low" },
@@ -413,6 +414,7 @@ export default function TaskManagement() {
       <ProjectHeader
         menu="Menu"
         currentpath="Task Management"
+        projectMenu={employeeprojectMenu}
         page={2}
         currentPage={"Task Management"}
       />

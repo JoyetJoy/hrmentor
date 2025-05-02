@@ -2,6 +2,7 @@ import { EVENT_LIST, newRequest, WORK_LOCATIONS } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import NewsEventHeader from "@/components/common/NewsEventHeader";
 import QueryTable from "@/components/table/QueryTable";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, Filter, Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -16,6 +17,9 @@ export default function Event() {
   const [selectedId, setSelectedId] = useState(null);
   const navigate = useNavigate();
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   const pageLimit = 10;
   const { data: eventList, isLoading } = useQuery({
     queryKey: ["eventList", currentPage, keyword],
@@ -153,6 +157,7 @@ export default function Event() {
             >
               <Eye className="size-3" />
             </Link>
+            {permissions.includes("events-edit") && (
             <Link
               onClick={() => {
                 const id = row.original.id;
@@ -165,6 +170,8 @@ export default function Event() {
                 className="w-full object-contain"
               />
             </Link>
+            )}
+            {permissions.includes("events-delete") && (
             <Link
               className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
               onClick={() => {
@@ -174,6 +181,7 @@ export default function Event() {
             >
               <Trash2 className="size-3" />
             </Link>
+            )}
           </div>
         ),
       },
@@ -208,6 +216,7 @@ export default function Event() {
           <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
             <Filter className="size-4" />
           </div>
+          {permissions.includes("events-create") && (
           <Link
             to={"/admin/news-event/create-event"}
             className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-6 text-xs font-semibold text-white hover:bg-hrmblue"
@@ -215,6 +224,7 @@ export default function Event() {
             <Plus className="size-4" />
             Add Events{" "}
           </Link>
+          )}
         </div>
       </div>
       {loading ? (

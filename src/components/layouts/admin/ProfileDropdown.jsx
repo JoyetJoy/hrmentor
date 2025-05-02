@@ -1,9 +1,15 @@
-import { adminItems } from "@/constants/dummyData";
+import { getadminItems } from "@/constants/dummyData";
 import { Menu } from "@headlessui/react";
 import { ProfileImage } from "@/utils";
+import { useRoleStore } from "@/lib/slices/auth.slice";
 
-export default function ProfileDropdown({ handleNavigation, user }) {
+export default function ProfileDropdown({ handleNavigation, user, permissions }) {
+  const { role } = useRoleStore((state) => ({
+      role: state.role,
+      }));
+console.log(role);
 
+  const adminItems=getadminItems(permissions,role)
   return (
     <div className="relative flex flex-col items-center gap-3">
       <Menu>
@@ -14,7 +20,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
           <h1 className="text-textcolor-100 flex flex-col text-start text-sm font-semibold text-hrmdarkblue">
             {user?.first_name} {user?.sur_name}
             <span className="text-xs font-medium text-gray-lightDim">
-              Administrator
+            {user?.designation_name}
             </span>
           </h1>
         </Menu.Button>

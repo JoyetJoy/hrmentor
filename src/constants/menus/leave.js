@@ -49,18 +49,26 @@ export const LeaveList = [
   },
 ];
 
-export const LeaveHeaderList = [
+export const getLeaveHeaderList = (permissions = []) => [
   { id: 1, name: "Leave request", link: "/admin/leave/request" },
-  {
-    id: 2,
-    name: "Bank Holidays",
-    link: "/admin/leave/bankholidays",
-  },
-  {
-    id: 3,
-    name: "Settings",
-    link: "/admin/leave/settings",
-  },
+  ...(
+    permissions.includes("bank-holiday-list")
+      ? [{
+        id: 2,
+        name: "Bank Holidays",
+        link: "/admin/leave/bankholidays",
+      },]
+      : []
+  ),
+  ...(
+    permissions.includes("holiday-type-list")
+      ? [{
+        id: 3,
+        name: "Settings",
+        link: "/admin/leave/settings",
+      },]
+      : []
+  ),
 ];
 
 export const SettingsList = [

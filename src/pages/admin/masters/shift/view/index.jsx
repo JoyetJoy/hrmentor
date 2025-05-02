@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
 import ShiftHeader from "@/components/common/ShiftHeader";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 function ShiftList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +18,11 @@ function ShiftList() {
   const [selectedField, setSelectedField] = useState('');
   const [deletePopup, setDeletePopup] = useState(false);
   const pageLimit = 10;
+
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+
   const { data: shiftDetails = { data: [], last_page: 1 }, isLoading } =
     useQuery({
       queryKey: ["shiftDetails", currentPage, keyword],
@@ -95,6 +101,7 @@ function ShiftList() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
+            {permissions.includes("shift-edit") && (
             <Link
               to={`/admin/shift/save-shift?id=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -105,6 +112,7 @@ function ShiftList() {
                 alt="Edit"
               />
             </Link>
+            )}
             {/* <button
               type="button"
               onClick={() => {
@@ -148,6 +156,7 @@ function ShiftList() {
               placeholder="Search"
             />
           </label>
+          {permissions.includes("shift-create") && (
           <Link
             to="/admin/shift/save-shift"
             className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70"
@@ -155,6 +164,7 @@ function ShiftList() {
             <Plus className="size-4" />
             Add Shift
           </Link>
+          )}
         </div>
         <div className="flex w-full flex-col gap-3">
           <div className="flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">

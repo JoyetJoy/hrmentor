@@ -75,9 +75,9 @@ export const MenuSubscription = () => {
                     Valid till {data?.purchased_package?.expiry_date}
                   </span>
                 </h1>
-                <button className="btn min-h-14 rounded-md bg-white px-12 text-lg font-bold text-hrmblue hover:bg-white">
+                {/* <button className="btn min-h-14 rounded-md bg-white px-12 text-lg font-bold text-hrmblue hover:bg-white">
                   Add More License
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -86,10 +86,8 @@ export const MenuSubscription = () => {
           <h1 className="text-textcolor-blue my-7 text-xl font-bold">
             Available Plans
           </h1>
-          <div className="mb-12 grid grid-cols-3">
-            {data?.available_plans?.map((plan, planIndex) => (
-              <AvailablePlans data={plan} key={planIndex} />
-            ))}
+          <div className="mb-12">
+              <AvailablePlans/>
           </div>
         </div>
       </div>

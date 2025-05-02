@@ -4,15 +4,15 @@ import TaskManagement from "@/pages/employee_access/project/task_management";
 
 export const ProjectRoutes = [
   {
-    path: "/employee-access/projectManagement",
+    path: "projectManagement",
     element: <ProjectManagement />,
   },
   {
-    path: "/employee-access/taskManagement",
+    path: "taskManagement",
     element: <TaskManagement />,
   },
   {
-    path: "/employee-access/projectManagementView",
+    path: "projectManagementView",
     element: <ProjectManagementView />,
   },
 ];

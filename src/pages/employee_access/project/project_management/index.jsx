@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { employeeprojectMenu } from "@/constants/menus/project";
 
 const Priority = [
   { value: 1, label: "Low" },
@@ -278,7 +279,7 @@ export default function ProjectManagement() {
             <Link
               onClick={() => {
                 navigate(
-                  `/admin/project/projectManagementView?id=${row.original.id}`,
+                  `/employee-access/project/projectManagementView?id=${row.original.id}`,
                 );
               }}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -389,6 +390,7 @@ export default function ProjectManagement() {
       <ProjectHeader
         menu="Menu"
         currentpath="Project Management"
+        projectMenu={employeeprojectMenu}
         page={1}
         currentPage={"Project Management"}
       />

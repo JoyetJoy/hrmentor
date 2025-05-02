@@ -1,15 +1,23 @@
-import { recruiterMenu } from "@/constants/menus/recruiter";
+import { getrecruiterMenu } from "@/constants/menus/recruiter";
 import { leaveMenu } from "@/constants/menus/leave";
-import { employeeMenu } from "@/constants/menus/employee";
-import { AccountManngerMenu } from "@/constants/menus/employee";
+import { getEmployeeMenu } from "@/constants/menus/employee";
+import { getAccountManngerMenu } from "@/constants/menus/employee";
 import { PaysilpMenu } from "@/constants/menus/employee";
-
 import { ArrowLeft, ChevronRight, User } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 function MenuHeader(props) {
   const location = useLocation();
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+
+  const employeeMenu = getEmployeeMenu(permissions);
+  const recruiterMenu = getrecruiterMenu(permissions);
+  const AccountManngerMenu = getAccountManngerMenu(permissions);
+  
   const isActive = (paths) => paths.includes(location.pathname);
   const {
     menu,

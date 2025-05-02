@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_SKILLS, newRequest } from "@/api";
 import SkillEditForm from "@/components/popups/employees/edit/SkillEditForm";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function SkillsQualifications() {
   const location = useLocation();
@@ -22,6 +23,9 @@ export default function SkillsQualifications() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -127,7 +131,8 @@ export default function SkillsQualifications() {
           accessorKey: "action",
           cell: ({ row }) => (
             <div className="flex items-center gap-2 text-xs">
-              <button
+              {permissions.includes("employee-skill-qualification-edit") &&(
+                <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -136,8 +141,9 @@ export default function SkillsQualifications() {
                   src="/assets/icons/admin/marker.svg"
                   className="w-full object-contain"
                 />
-              </button>
-              <button
+              </button>)}
+              {permissions.includes("employee-skill-qualification-delete") &&(
+                <button
                 type="button"
                 onClick={() => {
                   setDeletePopup(true);
@@ -147,6 +153,7 @@ export default function SkillsQualifications() {
               >
                 <Trash2 className="size-3" />
               </button>
+            )}
             </div>
           ),
         },
@@ -200,7 +207,8 @@ export default function SkillsQualifications() {
                     />
                   </div>
                 </div>
-                <button
+                {permissions.includes("employee-skill-qualification-create") &&(
+                  <button
                   onClick={() => {
                     setPopupOpen(true);
                   }}
@@ -209,6 +217,7 @@ export default function SkillsQualifications() {
                   <Plus className="size-4" />
                   Add Skills/Qualifications
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

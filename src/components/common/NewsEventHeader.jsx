@@ -1,9 +1,14 @@
-import { newsEventHeaderList } from "@/constants/dummyData";
+import { getnewsEventHeaderList } from "@/constants/dummyData";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 export default function NewsEventHeader({ page }) {
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
+  const newsEventHeaderList= getnewsEventHeaderList(permissions)
   const location = useLocation();
   const shouldRenderList =
     location.pathname !== "/admin/news-event/view" &&

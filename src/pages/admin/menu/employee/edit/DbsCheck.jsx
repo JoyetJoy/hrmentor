@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_DBS_CHECK, newRequest } from "@/api";
 import DbsEditForm from "@/components/popups/employees/edit/DbsEditForm";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeDbsCheckEdit() {
   const location = useLocation();
@@ -22,6 +23,9 @@ export default function EmployeeDbsCheckEdit() {
   const [selectedField, setSelectedField] = useState(0);
   const pageLimit = 10;
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   useEffect(() => {
     if (selectedField) {
       setPopupOpen(true);
@@ -112,6 +116,7 @@ export default function EmployeeDbsCheckEdit() {
               >
                 <Eye className="size-3" />
               </button>
+              {permissions.includes("employee-dbs-check-edit") &&(
               <button
                 type="button"
                 onClick={() => setSelectedField(row.original.id)}
@@ -122,6 +127,8 @@ export default function EmployeeDbsCheckEdit() {
                   className="w-full object-contain"
                 />
               </button>
+              )}
+              {permissions.includes("employee-dbs-check-delete") &&(
               <button
                 type="button"
                 onClick={() => {
@@ -132,6 +139,7 @@ export default function EmployeeDbsCheckEdit() {
               >
                 <Trash2 className="size-3" />
               </button>
+              )}
             </div>
           ),
         },
@@ -181,6 +189,7 @@ export default function EmployeeDbsCheckEdit() {
                     />
                   </div>
                 </div>
+                {permissions.includes("employee-dbs-check-create") &&(
                 <button
                   onClick={() => {
                     setPopupOpen(true);
@@ -190,6 +199,7 @@ export default function EmployeeDbsCheckEdit() {
                   <Plus className="size-4" />
                   Add DBS Check
                 </button>
+                )}
               </div>
               <div>
                 {isLoading ? (

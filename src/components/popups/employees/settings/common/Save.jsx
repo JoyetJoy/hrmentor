@@ -76,7 +76,9 @@ export default function SaveEmployeeMasterForm({
     setLoader(true);
     try {
       const formData = new URLSearchParams();
-      formData.append("expiry_status", data?.expiry_status ? 1 : 0);
+      if(type === "Document Category"){
+        formData.append("expiry_status", data?.expiry_status ? 1 : 0);
+      }
       formData.append(colKeys.field1.key, data?.name);
       formData.append(colKeys.field2.key, data?.status?.value);
       type === "Work Location" &&
@@ -191,7 +193,8 @@ export default function SaveEmployeeMasterForm({
                     </span>
                   )}
                 </div>
-                <div className="flex items-center">
+                {type === "Document Category" && (
+                  <div className="flex items-center">
                   <input
                     type="checkbox"
                     {...register("expiry_status")}
@@ -204,6 +207,7 @@ export default function SaveEmployeeMasterForm({
                     </span>
                   )}
                 </div>
+                )}
 
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">
                   <button

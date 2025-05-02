@@ -10,7 +10,7 @@ import { SettingsList } from "@/constants/menus/leave";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import Loader from "@/components/ui/Loader";
 import LeaveSettingsHeader from "@/components/common/LeaveSettingsHeader";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { usePermissionStore, useUserStore } from "@/lib/slices/auth.slice";
 import BasicSettings from "./settings/BasicSettings";
 import { useNavigate } from "react-router-dom";
 
@@ -27,6 +27,9 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
     user: state.user,
   }));
 
+  const { permissions } = usePermissionStore((state) => ({
+    permissions: state.permissions,
+  }));
   const navigate = useNavigate();
 
   const handleNavigation = (id) => {
@@ -119,6 +122,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
+            {permissions.includes("holiday-type-edit") && (row.original?.leave_name !== "Annual Leave") && (
             <button
               onClick={() => handleNavigation(row.original?.id)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -128,6 +132,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
                 className="w-full object-contain"
               />
             </button>
+            )}
             {/* <button
               onClick={() => {
                 setDeletePopup(true);
@@ -158,7 +163,7 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
       <div className="flex flex-col">
         <LeaveHeader page={3} currentPage={"Settings"} />
         <>
-          <LeaveSettingsHeader />
+          <LeaveSettingsHeader permissions={permissions}/>
           <div className="flex gap-x-3">
             <SettingsSidebar sidebarList={SettingsList} active={type} />
             <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
