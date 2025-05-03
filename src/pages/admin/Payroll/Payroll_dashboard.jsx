@@ -12,10 +12,12 @@ import SemiDonutChart from "@/components/payroll/DonutChart";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
 
+const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 11 }, (_, i) => ({
-  value: 2020 + i,
-  label: (2020 + i).toString(),
+  value: currentYear - i,
+  label: (currentYear - i).toString(),
 }));
+
 
 export default function Payroll() {
   const [currentPage, setCurrentPage] = useState(1);
