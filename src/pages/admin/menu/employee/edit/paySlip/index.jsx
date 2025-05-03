@@ -1,20 +1,68 @@
+import { DOWNLOAD_PAYSLIP, EMPLOYEE_PAYSLIPS, newRequest } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { customSelectStyles } from "@/utils/customStyles";
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { ArrowDownToLine, ChevronRight, Eye, Search } from "lucide-react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Select from "react-select";
 
 export default function AdminPaySlip() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [date, setDate] = useState(new Date());
   const [keyword, setKeyword] = useState("");
+  const pageLimit = 10;
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const uid = searchParams.get("uid");
+  const { data, isLoading } = useQuery({
+    queryKey: ["employeePayslips", currentPage, keyword],
+    queryFn: () =>
+      newRequest.get(EMPLOYEE_PAYSLIPS, {
+        params: {
+          user_id: uid,
+          search: keyword,
+          page: currentPage,
+          per_limit: pageLimit,
+        },
+      }).then((res) => res.data),
+  });
+  console.log(data);
+  
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
     setDate(updatedDate);
+  };
+
+  const viewPayslip = (fileUrl) => {
+    if (fileUrl) {
+      window.open(fileUrl, "_blank");
+    }
+  };
+
+  const PrintDiv = async (id) => {
+    // setLoading(true);
+    try {
+      const response = await newRequest.get(`${DOWNLOAD_PAYSLIP}/${id}`, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `invoice_${id}.pdf`); // Download filename
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Failed to download the PDF:", error);
+    // } finally {
+    //   setLoading(false);
+    }
   };
 
   // Generate a list of years dynamically
@@ -33,37 +81,37 @@ export default function AdminPaySlip() {
       },
       {
         header: "Period",
-        accessorKey: "month",
+        accessorKey: "period",
       },
       {
         header: "Transaction Id",
-        accessorKey: "totalworked hrs",
+        accessorKey: "transaction_id",
       },
       {
         header: "Payment date",
-        accessorKey: "pay",
+        accessorKey: "transaction_date",
       },
       {
         header: "Amount",
-        accessorKey: "amount",
+        accessorKey: "net_pay",
       },
       {
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            <Link
-              to="/admin/employee/payslip/payslip-view"
+            <button
+              onClick={()=> viewPayslip(row.original.payslip_path)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
-            </Link>
-            <Link
-              t0="/admin/employee/payslip/payslip-view"
+            </button>
+            <button
+              onClick={()=>PrintDiv(row.original.id)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <ArrowDownToLine className="size-3" />
-            </Link>
+            </button>
           </div>
         ),
       },
@@ -100,20 +148,20 @@ export default function AdminPaySlip() {
               </div>
 
               {/* Year Select */}
-              <Select
+              {/* <Select
                 options={years}
                 isSearchable
                 onChange={handleYearChange}
                 styles={customSelectStyles}
                 placeholder={dayjs(date).format("YYYY")}
                 className="input-box h-10 w-52 rounded-md border-gray-muted focus:border-gray-muted"
-              />
+              /> */}
             </div>
           </div>
 
           {/* Table */}
           <div className="overflow-y-min mt-5 h-screen w-full overflow-y-auto rounded-md bg-white p-7">
-            <QueryTable columns={columns} list={"NA"} />
+            <QueryTable columns={columns} list={data?.data} />
           </div>
         </div>
       </div>

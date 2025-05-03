@@ -110,6 +110,8 @@ export const UPDATE_EMPLOYEE_DOCUMENTS = "update-employee-document";
 export const EMPLOYEE_SALARY_DETAILS = "employee-salary-details";
 //PAYSLIP
 export const EMPLOYEE_PAYSLIP = "user-payroll";
+//PAYSLIPS
+export const EMPLOYEE_PAYSLIPS = "user-payroll/id";
 //DOWNLOAD PAYSLIP
 export const DOWNLOAD_PAYSLIP = "download-payslip"
 

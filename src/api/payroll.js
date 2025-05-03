@@ -18,6 +18,8 @@ export const PAYROLL_APPROVE = "payrun/department/approve";
 export const APPROVE_PAYROLL_EMPLOYEE = "payrun/employees";
 // EMPLOYEE PAYROLL DETAILS
 export const EMPLOYEE_PAYROLL_DETAILS = "pay-lists-employee-detail";
+// EMPLOYEE PAYRUN
+export const EMPLOYEE_PAYRUN = "payrun/employees/details";
 // EMPLOYEE PAY NOW
 export const PAY_NOW = "payroll-transcation";
 

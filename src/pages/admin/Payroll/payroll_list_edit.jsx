@@ -6,6 +6,7 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import {
   APPROVE_PAYROLL_EMPLOYEE,
   EMPLOYEE_PAYROLL_DETAILS,
+  EMPLOYEE_PAYRUN,
 } from "@/api/payroll";
 import { useLocation, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -64,11 +65,12 @@ export default function PayrollListEdit() {
     queryKey: ["employeepayrolldetails", empId, id, startDate, endDate],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_PAYROLL_DETAILS}/${id}`, {
+        .get(`${EMPLOYEE_PAYRUN}`, {
           params: {
+            payrun_id:id,
             start_date: startDate,
             end_date: endDate,
-            empid:empId
+            emp_id:empId
           },
         })
         .then((res) => res.data),
@@ -108,23 +110,23 @@ export default function PayrollListEdit() {
       },
       {
         header: "Clocked In",
-        accessorFn: row => row.clocked_in?.split(" ")[1], // returns "10:00:00"
+        accessorKey: "clock_in",
       },      
       {
         header: "Clocked Out",
-        accessorFn: row => row.clocked_out?.split(" ")[1], 
+        accessorKey: "clock_out",
       },
       {
         header: "Total BT",
-        accessorKey: "total_bt",
+        accessorKey: "total_break_time",
       },
       {
         header: "OT Hours",
-        accessorKey: "ot_hours",
+        accessorKey: "total_overtime",
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "total_worked_hrs",
+        accessorKey: "total_break_time",
       },
       // {
       //   header: "Disputes",
@@ -293,7 +295,7 @@ export default function PayrollListEdit() {
         {/* Overview Section - col-span-8 */}
         <div className="col-span-9">
           <h2 className="mb-4 text-lg font-bold">Overview</h2>
-          <QueryTable columns={columns} list={data&&data[0]?.result} />
+          <QueryTable columns={columns} list={data&&data[0]?.attendance_records} />
         </div>
       </div>
       <Dialog
