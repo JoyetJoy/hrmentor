@@ -197,7 +197,7 @@ export default function Payroll() {
     <>
       <PayrollHeader page={1} />
       <div className="flex gap-4">
-      <div className="flex flex-col  gap-8 w-3/4">
+      <div className="flex flex-col h-screen  gap-8 w-3/4">
         {/* Left Section */}
         <div className="col-span-7 h-[28rem] w-full gap-4 rounded-md bg-white px-10 py-10">
           <div className="flex justify-between">
@@ -253,9 +253,9 @@ export default function Payroll() {
         </div> */}
         
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full">
         {/* Right Section */}
-        <div className="col-span-3 h-[6rem] w-full bg-white p-6">
+        <div className="col-span-3 h-[6rem] w-full bg-white p-6 rounded-lg">
           <div className="mb-6">
             {/* Header */}
             <div className="mb-4 flex items-center justify-between">
@@ -294,7 +294,7 @@ export default function Payroll() {
           </div>
         </div>
         {/* Right Section */}
-        <div className="col-span-3 w-full bg-white p-10">
+        {/* <div className="col-span-3 w-full bg-white p-10">
           <div>
             <h1 className="text-md font-semibold">Payroll Summary</h1>
             <div className="flex justify-between">
@@ -326,7 +326,7 @@ export default function Payroll() {
             </div>
           </div>
           <SemiDonutChart />
-        </div>
+        </div> */}
       </div>
       </div>
     </>
