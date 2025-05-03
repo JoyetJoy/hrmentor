@@ -156,12 +156,12 @@ export default function EmployeeDetails() {
                 "Active" ? (
                   <>
                     {" "}
-                    <Link
+                    {/* <Link
                       to={`/admin/employee/activitylog/?uid=${uid}`}
                       className="bg-pale flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 rounded-md bg-[#e0e2f3] px-6 text-xs font-bold text-textcolor-darkCharcoal shadow-none transition-all duration-500 hover:scale-[1.01]"
                     >
                       Activity Log
-                    </Link>
+                    </Link> */}
                     <Link className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
                       Exit Process
                     </Link>

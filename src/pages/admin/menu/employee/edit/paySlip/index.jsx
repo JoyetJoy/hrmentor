@@ -100,7 +100,10 @@ export default function AdminPaySlip() {
       {
         header: "Amount",
         accessorKey: "transaction_amount",
-      },
+        cell: ({ row }) => (
+          <div>£{row.original.transaction_amount}</div>
+        )
+      },      
       {
         header: "Action",
         accessorKey: "action",

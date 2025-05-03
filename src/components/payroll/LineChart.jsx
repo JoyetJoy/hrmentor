@@ -11,16 +11,17 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title);
 
-const Expense = () => {
+const Expense = ({datas}) => {
+  console.log(datas);
+  const months = datas?.graph.map(item => item.month);
+  const values = datas?.graph.map(item => item.value);
+  
   const data = {
-    labels: [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-      "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
-    ],
+    labels:months,
     datasets: [
       {
-        label: "Additional Payout",
-        data: [100, 300, 240, 260, 280, 300, 340, 320, 310, 190, 180, 150],
+        label: "Payout",
+        data: values,
         borderColor: "rgb(233,93,57)",
         backgroundColor: "rgb(233,93,57)",
         tension: 0.4,
@@ -28,7 +29,20 @@ const Expense = () => {
     ],
   };
 
-  const options = { 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false, // This hides the "Payout" label on top
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return `£${context.parsed.y}`;
+          },
+        },
+      },
+    },
     scales: {
       y: {
         beginAtZero: true,
@@ -38,7 +52,7 @@ const Expense = () => {
   };
 
   return (
-    <div className="w-full min-h-[20rem]">
+    <div className="w-full min-h-[20rem] mt-5">
       <Line data={data} options={options} style={{ height: "300px" }} />
     </div>
   );

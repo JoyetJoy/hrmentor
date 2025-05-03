@@ -67,10 +67,10 @@ export default function PayrollListEdit() {
       newRequest
         .get(`${EMPLOYEE_PAYRUN}`, {
           params: {
-            payrun_id:id,
+            payrun_id: id,
             start_date: startDate,
             end_date: endDate,
-            emp_id:empId
+            emp_id: empId,
           },
         })
         .then((res) => res.data),
@@ -111,7 +111,7 @@ export default function PayrollListEdit() {
       {
         header: "Clocked In",
         accessorKey: "clock_in",
-      },      
+      },
       {
         header: "Clocked Out",
         accessorKey: "clock_out",
@@ -154,7 +154,7 @@ export default function PayrollListEdit() {
   return (
     <>
       <PayrollHeader page={2} />
-      <Paynow popupOpen={payPopup} setPopupOpen={setPayPopup} id={id}/>
+      <Paynow popupOpen={payPopup} setPopupOpen={setPayPopup} id={id} />
 
       <div className="mb-4 flex items-center justify-between">
         {/* Left Section */}
@@ -187,20 +187,26 @@ export default function PayrollListEdit() {
               fill="#2C2C2C"
             />
           </svg>
-          <h4 className="pl-4 text-lg font-bold">{data&&data[0]?.employee_name}</h4>
+          <h4 className="pl-4 text-lg font-bold">
+            {data && data[0]?.employee_name}
+          </h4>
         </div>
 
         {/* Right Section */}
         <div className="flex gap-3">
-          <div
-            className="flex items-center gap-4"
-            onClick={() => setPayPopup(true)}
-          >
-            <button className="pay-now">Pay Now</button>
-          </div>
-          <div className="flex items-center gap-4" onClick={() => Approve()}>
-            <button className="pay-now">Approve</button>
-          </div>
+          {data && data[0]?.transaction_status === "approved" && (
+            <div
+              className="flex items-center gap-4"
+              onClick={() => setPayPopup(true)}
+            >
+              <button className="pay-now">Pay Now</button>
+            </div>
+          )}
+          {data && data[0]?.transaction_status === "not_approved" && (
+            <div className="flex items-center gap-4" onClick={() => Approve()}>
+              <button className="pay-now">Approve</button>
+            </div>
+          )}
         </div>
       </div>
       <div className="grid w-full grid-cols-12 gap-4 rounded-md bg-white px-6 py-4">
@@ -216,76 +222,62 @@ export default function PayrollListEdit() {
               </h4>
             </div>
             <div className="summary-body rounded-md p-4 shadow">
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Total Working hours</span>
                 <span className="value text-md font-semibold text-gray-900">
-                {data &&data[0]?.total_working_hours}
+                  {data && data[0]?.total_working_hours}
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Overtime</span>
                 <span className="value text-md font-semibold text-gray-900">
-                {data&&data[0]?.total_overtime}
+                  {data && data[0]?.total_overtime}
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Overtime per week</span>
                 <span className="value text-md font-semibold text-gray-900">
                   0
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Paid Holidays</span>
                 <span className="value text-md font-semibold text-gray-900">
                   0
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Paid holiday credit</span>
                 <span className="value text-md font-semibold text-gray-900">
                   0
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Unpaid Holiday</span>
                 <span className="value text-md font-semibold text-gray-900">
                   0
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
-                <span className="label text-gray-700">Unpaid Leave deduction</span>
+              <div className="summary-row flex items-center justify-between border-b py-2">
+                <span className="label text-gray-700">
+                  Unpaid Leave deduction
+                </span>
                 <span className="value text-md font-semibold text-gray-900">
                   0
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Salary</span>
                 <span className="value text-md font-semibold text-gray-900">
-                {data&&data[0]?.net_pay}
+                  {data && data[0]?.net_pay}
                 </span>
               </div>
-              <div
-                className="summary-row flex items-center justify-between border-b py-2"
-              >
+              <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Payment status</span>
                 <span className="value text-md font-semibold text-gray-900">
-                  Not Paid
+                  {data && data[0]?.paid_status === "paid"
+                    ? "Paid"
+                    : "Not Paid"}
                 </span>
               </div>
             </div>
@@ -295,7 +287,10 @@ export default function PayrollListEdit() {
         {/* Overview Section - col-span-8 */}
         <div className="col-span-9">
           <h2 className="mb-4 text-lg font-bold">Overview</h2>
-          <QueryTable columns={columns} list={data&&data[0]?.attendance_records} />
+          <QueryTable
+            columns={columns}
+            list={data && data[0]?.attendance_records}
+          />
         </div>
       </div>
       <Dialog

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Reassign from "../popups/master/roster/Calendar/Reassign";
 import dayjs from "dayjs";
 
-function Rosteroveview({ rosterCalim }) {
+function Rosteroveview({ rosterCalim, date }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -73,9 +73,7 @@ function Rosteroveview({ rosterCalim }) {
         <div className="flex w-1/2 items-center justify-between">
           <p className="text-sm font-semibold text-[#2c2c2c]">
             Shift Date -{" "}
-            {dayjs(rosterCalim?.roster_details?.roster_start_date).format(
-              "DD-MM-YYYY",
-            )}
+            {date}
           </p>
           <p className="text-sm font-semibold text-[#2c2c2c]">
             Shift Time - (

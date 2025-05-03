@@ -1,5 +1,5 @@
 import { newRequest } from "@/api";
-import { CREATE_PAYRUN, ROSTER_LIST } from "@/api/setup";
+import { CREATE_PAYRUN, PAYROLL_DASHBOARD, ROSTER_LIST } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
@@ -34,21 +34,21 @@ export default function Payroll() {
   const [endDate2, setEndDate2] = useState("");
   const [loader, setLoader] = useState(false);
 
-  const { data: rosterDetailss } = useQuery({
-    queryKey: ["rosterDetailss", currentPage, keyword],
+  const { data } = useQuery({
+    queryKey: ["payroll_dashboard",date],
     queryFn: () =>
       newRequest
-        .get(ROSTER_LIST, {
+        .get(PAYROLL_DASHBOARD, {
           params: {
-            search: keyword,
-            page: currentPage,
-            per_limit: pageLimit,
+            year:year
           },
         })
         .then((res) => {
-          return res?.data || { data: [], last_page: 1 };
+          return res?.data 
         }),
   });
+
+  const total = data?.graph.reduce((sum, item) => sum + item.value, 0);
 
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
@@ -121,7 +121,7 @@ export default function Payroll() {
               />
             </p>
           </div>
-          <Expense />
+          <Expense datas={data}/>
         </div>
 
         {/* Left Section */}
@@ -194,6 +194,11 @@ export default function Payroll() {
               </div>
             </div> */}
           </div>
+        </div>
+
+        <div className="h-[21rem] w-full bg-[#e95d39] text-white text-xl rounded-lg flex flex-col font-semibold  items-center justify-center">
+          <p>£{total}</p>
+          <p>Yearly Cost to the Company</p>
         </div>
         {/* Right Section */}
         {/* <div className="col-span-3 w-full bg-white p-10">

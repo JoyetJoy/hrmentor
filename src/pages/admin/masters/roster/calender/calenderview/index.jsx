@@ -153,7 +153,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
         <Loader />
       ) : (
         <div className="flex h-screen flex-col gap-2 pt-2">
-          <Rosteroveview rosterCalim={rosterCalim} />
+          <Rosteroveview rosterCalim={rosterCalim} date={date} />
           <div className="grid grid-cols-2 gap-2">
             <div className="flex  flex-col gap-y-3 rounded-md">
               <CalanderShift

@@ -190,11 +190,8 @@ const ShiftCalendar = () => {
     }
   };
 
-  function convertTo12HourFormat(time) {
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
+  function extractHourMinute(time) {
+    return time.split(":").slice(0, 2).join(":");
   }
   const handleRangeChange = (option) => {
     setSelectedOption(option);
@@ -625,10 +622,10 @@ const ShiftCalendar = () => {
                                 {event.shift_name}
                               </span>
                               <span className="float-start flex text-[12px]">
-                                {convertTo12HourFormat(
+                                {extractHourMinute(
                                   event?.shift?.start_time,
                                 )}
-                                -{convertTo12HourFormat(event?.shift?.end_time)}
+                                -{extractHourMinute(event?.shift?.end_time)}
                               </span>
                               <div className="flex w-full items-center justify-between pr-2">
                                 <span className="float-start flex text-[12.2px] font-semibold">
