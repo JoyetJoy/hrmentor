@@ -35,32 +35,39 @@ export default function PaySlip() {
   });
   console.log(payslipListing);
 
-  const handleDownload = async (id) => {
+  const PrintDiv = async (id) => {
     try {
-  
       const response = await newRequest.get(`${DOWNLOAD_PAYSLIP}/${id}`, {
         responseType: "blob",
       });
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      // Detect file type from the blob
+      const contentType = response.data.type; // e.g., "application/pdf" or "image/png"
+      let extension = "pdf"; // default
+      if (contentType.includes("image/png")) extension = "png";
+      else if (contentType.includes("image/jpeg")) extension = "jpg";
+      else if (contentType.includes("image/webp")) extension = "webp";
+      else if (contentType.includes("application/pdf")) extension = "pdf";
+
+      const blobUrl = window.URL.createObjectURL(response.data);
       const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `payslip${id}.pdf`); // Download filename
+      link.href = blobUrl;
+      link.setAttribute("download", `invoice_${id}.${extension}`); // Dynamic filename
       document.body.appendChild(link);
       link.click();
-      link.remove();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl); // Clean up
     } catch (error) {
-      console.error("Failed to download the PDF:", error);
+      console.error("Failed to download the file:", error);
     }
   };
-  
+
   const viewPayslip = (fileUrl) => {
     if (fileUrl) {
       window.open(fileUrl, "_blank");
     }
   };
-  
-  
+
   // Define table columns
   const columns = React.useMemo(
     () => [
@@ -91,11 +98,7 @@ export default function PaySlip() {
         header: "Pay Amount",
         accessorKey: "net_pay",
         cell: ({ row }) => {
-          return (
-            <div className="flex px-2">
-              £{row.original.net_pay}
-            </div>
-          );
+          return <div className="flex px-2">£{row.original.net_pay}</div>;
         },
       },
       {
@@ -104,13 +107,13 @@ export default function PaySlip() {
         cell: ({ row }) => (
           <div className="flex items-end gap-2 text-xs">
             <button
-              onClick={()=> viewPayslip(row.original.payslip_path)}
+              onClick={() => viewPayslip(row.original.payslip_path)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
             </button>
             <button
-              onClick={() => handleDownload(row?.original?.id)} 
+              onClick={() => PrintDiv(row.original.id)}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <ArrowDownToLine className="size-3" />

@@ -45,26 +45,32 @@ export default function AdminPaySlip() {
   };
 
   const PrintDiv = async (id) => {
-    // setLoading(true);
     try {
       const response = await newRequest.get(`${DOWNLOAD_PAYSLIP}/${id}`, {
         responseType: "blob",
       });
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+  
+      // Detect file type from the blob
+      const contentType = response.data.type; // e.g., "application/pdf" or "image/png"
+      let extension = "pdf"; // default
+      if (contentType.includes("image/png")) extension = "png";
+      else if (contentType.includes("image/jpeg")) extension = "jpg";
+      else if (contentType.includes("image/webp")) extension = "webp";
+      else if (contentType.includes("application/pdf")) extension = "pdf";
+  
+      const blobUrl = window.URL.createObjectURL(response.data);
       const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `invoice_${id}.pdf`); // Download filename
+      link.href = blobUrl;
+      link.setAttribute("download", `invoice_${id}.${extension}`); // Dynamic filename
       document.body.appendChild(link);
       link.click();
-      link.remove();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl); // Clean up
     } catch (error) {
-      console.error("Failed to download the PDF:", error);
-    // } finally {
-    //   setLoading(false);
+      console.error("Failed to download the file:", error);
     }
   };
-
+  
   // Generate a list of years dynamically
   const years = Array.from({ length: 11 }, (_, i) => ({
     value: 2020 + i,
