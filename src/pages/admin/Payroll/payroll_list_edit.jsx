@@ -100,11 +100,6 @@ export default function PayrollListEdit() {
       {
         header: "Date",
         accessorKey: "date",
-        cell: ({ row }) => (
-          <div className="flex px-2">
-            {dayjs(row.original.date).format('MM/DD/YYYY')}
-          </div>
-        ),
       },
       {
         header: "Shift",
@@ -112,23 +107,23 @@ export default function PayrollListEdit() {
       },
       {
         header: "Clocked In",
-        accessorKey: "clock_in",
+        accessorKey: "clocked_in",
       },
       {
         header: "Clocked Out",
-        accessorKey: "clock_out",
+        accessorKey: "clocked_out",
       },
       {
         header: "Total BT",
-        accessorKey: "total_break_time",
+        accessorKey: "total_bt",
       },
       {
         header: "OT Hours",
-        accessorKey: "total_overtime",
+        accessorKey: "ot_hours",
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "total_working_hour",
+        accessorKey: "total_worked_hrs",
       },
       {
         header: "Disputes",
@@ -297,7 +292,7 @@ export default function PayrollListEdit() {
         {/* Overview Section - col-span-8 */}
         <div className="col-span-9">
           <h2 className="mb-4 text-lg font-bold">Overview</h2>
-          <QueryTable columns={columns} list={data&&data[0]?.attendance_records} />
+          <QueryTable columns={columns} list={data&&data[0]?.result} />
         </div>
       </div>
       <Dialog

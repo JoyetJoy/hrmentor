@@ -51,7 +51,7 @@ console.log(work_area);
           </DisclosurePanel>
         </Disclosure>
 
-        {/* <Disclosure as="div" className="py-1" defaultOpen={false}>
+        <Disclosure as="div" className="py-1" defaultOpen={false}>
           <DisclosureButton className="group flex w-full items-center justify-between">
             <p className="flex flex-row whitespace-nowrap text-sm font-bold text-black">
               Location
@@ -71,7 +71,7 @@ console.log(work_area);
               </p>
             ))}
           </DisclosurePanel>
-        </Disclosure> */}
+        </Disclosure>
 
         <Disclosure as="div" className="py-1" defaultOpen={false}>
           <DisclosureButton className="group flex w-full items-center justify-between">

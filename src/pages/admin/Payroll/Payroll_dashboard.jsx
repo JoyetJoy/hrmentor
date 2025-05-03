@@ -223,8 +223,8 @@ export default function Payroll() {
         </div>
 
         {/* Left Section */}
-        <div className="col-span-7 w-full rounded-md bg-white px-6 py-4">
-          {/* Header */}
+        {/* <div className="col-span-7 w-full rounded-md bg-white px-6 py-4">
+        
           <div className="mb-1 flex items-center justify-between">
             <h3 className="text-lg font-semibold">Transaction History</h3>
 
@@ -240,7 +240,7 @@ export default function Payroll() {
             Monday, 11 Nov 2024 to Saturday, 16 Nov 2024
           </span>
           &gt;
-          {/* Table */}
+        
           <div className="mt-2">
             <QueryTable
               columns={columns}
@@ -250,7 +250,7 @@ export default function Payroll() {
               totalPages={totalPages}
             />
           </div>
-        </div>
+        </div> */}
         
       </div>
       <div className="flex flex-col gap-4">
