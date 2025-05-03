@@ -48,111 +48,11 @@ export default function Payroll() {
         }),
   });
 
-  useEffect(() => {
-    if (rosterDetailss) {
-      setTotalPages(rosterDetailss?.last_page);
-      if (!selectedRoster && rosterDetailss.listing?.length > 0) {
-        setSelectedRoster(rosterDetailss.listing[0]?.roster_details);
-      }
-    }
-  }, [rosterDetailss, selectedRoster]);
-
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();
     setDate(updatedDate);
   };
 
-  // useEffect(() => {
-  //     if (monthValue === "1" && data) {
-  //       const { star_day, end_day } = data;
-
-  //       const startDate = getWeekDayDate(star_day);
-  //       const endDate = getWeekDayDate(
-  //         end_day,
-  //         new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000),
-  //       ); // Add 7 days for the next week
-
-  //       setStartDate(formatDateRange(startDate));
-  //       setEndDate(formatDateRange(endDate));
-  //     } else if (monthValue === "2" && data) {
-  //       setStartDate(formatDateRange(data?.start_date));
-  //       setEndDate(formatDateRange(data?.end_date));
-  //     } else if (monthValue === "3" && data) {
-  //       setStartDate(formatDateRange(data?.first_pay_term?.start_date));
-  //       setEndDate(formatDateRange(data?.first_pay_term?.end_date));
-  //       setStartDate2(formatDateRange(data?.second_pay_term?.start_date));
-  //       setEndDate2(formatDateRange(data?.second_pay_term?.end_date));
-  //     }
-  //   }, [monthValue, data]);
-
-  const handlePreviousPeriod = () => {
-    const newEndDate = new Date(
-      new Date(startDate).getTime() - 24 * 60 * 60 * 1000,
-    ); // Decrement startDate by 1 day
-
-    if (monthValue === "1") {
-      const newStartDate = new Date(
-        newEndDate.getTime() - 6 * 24 * 60 * 60 * 1000,
-      ); // Weekly: Subtract 6 days
-      setStartDate(formatDateRange(newStartDate));
-      setEndDate(formatDateRange(newEndDate));
-    } else if (monthValue === "2") {
-      const prevMonth = new Date(newEndDate);
-      prevMonth.setMonth(prevMonth.getMonth() - 1, 1); // Monthly: Start of the previous month
-      setStartDate(formatDateRange(prevMonth));
-      setEndDate(formatDateRange(newEndDate));
-    } else if (monthValue === "3") {
-      const endOfPreviousMonth = new Date(newEndDate);
-      endOfPreviousMonth.setMonth(endOfPreviousMonth.getMonth(), 0); // End of previous month
-      const midMonth = new Date(endOfPreviousMonth);
-      midMonth.setDate(15); // Set to the 15th of the month
-      setStartDate(formatDateRange(midMonth));
-      setEndDate(formatDateRange(endOfPreviousMonth));
-      setStartDate2(formatDateRange(prevMonth));
-      setEndDate2(formatDateRange(midMonth));
-    }
-  };
-
-  const handleNextPeriod = () => {
-    const newStartDate = new Date(
-      new Date(endDate).getTime() + 24 * 60 * 60 * 1000,
-    ); // Increment endDate by 1 day
-
-    if (monthValue === "1") {
-      const newEndDate = new Date(
-        newStartDate.getTime() + 6 * 24 * 60 * 60 * 1000,
-      ); // Weekly: Add 6 days
-      setStartDate(formatDateRange(newStartDate));
-      setEndDate(formatDateRange(newEndDate));
-    } else if (monthValue === "2") {
-      const endDate = new Date(newStartDate);
-      endDate.setDate(endDate.getDate() + 30); // Add 30 days to newStartDate
-
-      setStartDate(formatDateRange(newStartDate));
-      setEndDate(formatDateRange(endDate));
-    } else if (monthValue === "3") {
-      // Set startDate to newStartDate + 1 day
-      const start_Date = new Date(endDate2);
-      start_Date.setDate(start_Date.getDate() + 1);
-
-      // Set endDate to startDate + 15 days
-      const end_Date = new Date(start_Date);
-      end_Date.setDate(end_Date.getDate() + 15);
-
-      // Set startDate2 to endDate + 1 day
-      const start_Date2 = new Date(end_Date);
-      start_Date2.setDate(start_Date2.getDate() + 1);
-
-      // Set endDate2 to startDate2 + 15 days
-      const end_Date2 = new Date(start_Date2);
-      end_Date2.setDate(end_Date2.getDate() + 15);
-
-      setStartDate(formatDateRange(start_Date));
-      setEndDate(formatDateRange(end_Date));
-      setStartDate2(formatDateRange(start_Date2));
-      setEndDate2(formatDateRange(end_Date2));
-    }
-  };
 
   const CreatePayrun = async () => {
     try {
@@ -253,7 +153,7 @@ export default function Payroll() {
         </div> */}
         
       </div>
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4 w-1/3">
         {/* Right Section */}
         <div className="col-span-3 h-[6rem] w-full bg-white p-6 rounded-lg">
           <div className="mb-6">
