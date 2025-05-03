@@ -99,7 +99,7 @@ export default function AdminPaySlip() {
       },
       {
         header: "Amount",
-        accessorKey: "net_pay",
+        accessorKey: "transaction_amount",
       },
       {
         header: "Action",
