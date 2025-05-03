@@ -8,8 +8,10 @@ export const PAYROLL_MONTHLY = "pay-roll-settings-monthly";
 export const PAYROLL_MONTHLY_TWISE = "pay-roll-settings-monthly-twise";
 //PAYROLL PAYPERIOD GET
 export const PAYROLL_PAYPERIOD_GET = "pay-period";
-//PAYROLL VIEW
+//PAYOFF VIEW
 export const PAYROLL_GET_VIEW = "pay-off-employee";
+//PAYROLL VIEW
+export const PAYROLL_VIEW = "payrun/department";
 // PAYROLL APPROVE
 export const PAYROLL_APPROVE = "payrun/department/approve";
 // APPROVE PAYROLL EMPLOYEE

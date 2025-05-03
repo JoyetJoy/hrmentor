@@ -91,27 +91,26 @@ export default function PayrollList() {
 
   useEffect(() => {
     if (monthValue === "1" && data) {
-      // Get start and end dates within the same week
       const { star_day, end_day } = data;
       console.log("Weekday inputs:", star_day, end_day); // Expected: "Tue Mon"
-      // Get current date
+    
       let today = new Date();
-
-      // Find the most recent Tuesday
+    
+      // Get the most recent Tuesday (this week's Tuesday)
       let startDate = new Date(today);
-      startDate.setDate(today.getDate() - ((today.getDay() + 5) % 7) - 7); // Previous Tuesday
-
-      console.log("Previous Tuesday Start Date:", startDate);
-
-      // Get end date by adding 6 days to the start date
+      startDate.setDate(today.getDate() - ((today.getDay() + 5) % 7)); // No -7 here
+    
+      console.log("This Week's Tuesday Start Date:", startDate);
+    
+      // Get end date (6 days later, which will be Monday)
       const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6); // Ensures Mon comes after Tue in the same week
-
-      console.log("End Date:", endDate);
-
+      endDate.setDate(startDate.getDate() + 6);
+    
+      console.log("End Date (Monday):", endDate);
+    
       setStartDate(formatDateRange(startDate));
       setEndDate(formatDateRange(endDate));
-    } else if (
+    }else if (
       (monthValue === "2" || monthValue === "3" || monthValue === "4") &&
       data
     ) {
@@ -251,13 +250,11 @@ export default function PayrollList() {
         {/* Header Navigation */}
         <div className="mb-4 flex items-center justify-between">
           {/* Left Section */}
-          <div>
+          <div className="lg:min-w-[20rem] min-w-max">
             <h4 className="text-lg font-bold">Pay List</h4>
           </div>
-
-          {/* Right Section */}
           <div className="flex items-center gap-4">
-            <button
+           <button
               onClick={() => setMonthValue("1")}
               className={`rounded-md border px-4 py-2 text-sm ${
                 monthValue === "1"
@@ -298,8 +295,12 @@ export default function PayrollList() {
             >
               4-weekly
             </button>
+           </div>
 
-            <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
+          {/* Right Section */}
+          <div className="flex items-center gap-4">
+
+            <label className="input flex h-10 min-h-10 max-w-[20rem] items-center gap-2 rounded-md border-none pr-28 outline-none">
               <Search className="size-4 object-contain text-gray-dark" />
               <input
                 type="text"
@@ -307,7 +308,7 @@ export default function PayrollList() {
                 placeholder="Search"
               />
             </label>
-            <Controller
+            {/* <Controller
               name="department_id"
               className=" "
               control={control}
@@ -322,7 +323,7 @@ export default function PayrollList() {
                   className="input-box min-w-[13rem] bg-white"
                 />
               )}
-            />
+            /> */}
           </div>
         </div>
 

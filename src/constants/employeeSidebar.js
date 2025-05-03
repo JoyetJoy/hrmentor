@@ -107,7 +107,7 @@ export const getemployeeSidebarList = (permissions = []) => [
     permissions.includes("employee-pay-slip-list")
       ? [{
         id: 13,
-        link: "/admin/employee/payslip/payoff",
+        link: "/admin/employee/payslip",
         name: "Payslip",
       },]
       : []

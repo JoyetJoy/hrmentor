@@ -32,8 +32,20 @@ export default function AdminPaySlip() {
         cell: ({ row }) => <div className="flex px-2">{row.index + 1}</div>,
       },
       {
-        header: "Month",
+        header: "Period",
         accessorKey: "month",
+      },
+      {
+        header: "Transaction Id",
+        accessorKey: "totalworked hrs",
+      },
+      {
+        header: "Payment date",
+        accessorKey: "pay",
+      },
+      {
+        header: "Amount",
+        accessorKey: "amount",
       },
       {
         header: "Action",

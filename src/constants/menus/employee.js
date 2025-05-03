@@ -34,13 +34,13 @@ export const getAccountManngerMenu = (permissions = []) => [
 ];
 export const PaysilpMenu = [
   {
-    id: 1,
-    name: "PayOff",
-    link: "/admin/employee/payslip/payoff",
-  },
-  {
     id: 2,
     name: "PaySlip",
     link: "/admin/employee/payslip",
   },
+  // {
+  //   id: 1,
+  //   name: "PayOff",
+  //   link: "/admin/employee/payslip/payoff",
+  // },
 ];

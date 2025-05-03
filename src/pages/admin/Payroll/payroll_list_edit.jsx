@@ -64,10 +64,11 @@ export default function PayrollListEdit() {
     queryKey: ["employeepayrolldetails", empId, id, startDate, endDate],
     queryFn: () =>
       newRequest
-        .get(`${EMPLOYEE_PAYROLL_DETAILS}/${empId}`, {
+        .get(`${EMPLOYEE_PAYROLL_DETAILS}/${id}`, {
           params: {
             start_date: startDate,
             end_date: endDate,
+            empid:empId
           },
         })
         .then((res) => res.data),
@@ -107,11 +108,11 @@ export default function PayrollListEdit() {
       },
       {
         header: "Clocked In",
-        accessorKey: "clocked_in",
-      },
+        accessorFn: row => row.clocked_in?.split(" ")[1], // returns "10:00:00"
+      },      
       {
         header: "Clocked Out",
-        accessorKey: "clocked_out",
+        accessorFn: row => row.clocked_out?.split(" ")[1], 
       },
       {
         header: "Total BT",
@@ -125,26 +126,26 @@ export default function PayrollListEdit() {
         header: "Total Worked hrs",
         accessorKey: "total_worked_hrs",
       },
-      {
-        header: "Disputes",
-        accessorKey: "totalWorked",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2 text-xs">
-            <button
-              type="button"
-              className="flex size-7 cursor-pointer items-center"
-            >
-              <img
-                src="/assets/icons/user_image.jpg"
-                className="w-full object-contain"
-                onClick={() => {
-                  setPopupOpen(true);
-                }}
-              />
-            </button>
-          </div>
-        ),
-      },
+      // {
+      //   header: "Disputes",
+      //   accessorKey: "totalWorked",
+      //   cell: ({ row }) => (
+      //     <div className="flex items-center gap-2 text-xs">
+      //       <button
+      //         type="button"
+      //         className="flex size-7 cursor-pointer items-center"
+      //       >
+      //         <img
+      //           src="/assets/icons/user_image.jpg"
+      //           className="w-full object-contain"
+      //           onClick={() => {
+      //             setPopupOpen(true);
+      //           }}
+      //         />
+      //       </button>
+      //     </div>
+      //   ),
+      // },
     ],
     [],
   );
