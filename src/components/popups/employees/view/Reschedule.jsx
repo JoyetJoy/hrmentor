@@ -41,6 +41,10 @@ console.log(joinDate);
 
   const handleSave = async () => {
     try {
+      if(type==='status' && !data?.work_email){
+        toast.error("Work email is missing. Please add it to proceed.");
+        return;
+      }
       let onboarding;
       if(type==="reschedule"){
         onboarding = {
