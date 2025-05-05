@@ -39,27 +39,27 @@ function Login() {
       const res = await basicXFormRequest.post(LOGIN, formData);
       if (res?.data?.success === true) {
         toast.success("Login successful");
-        if(res?.data?.data?.roles?.length===1){
-          if(res?.data?.data?.roles?.includes(1)){
-            localStorage.removeItem('token')
+        if (res?.data?.data?.roles?.length === 1) {
+          if (res?.data?.data?.roles?.includes(1)) {
+            localStorage.removeItem("token");
             localStorage.setItem("token", res?.data?.data?.token);
             setRole(res?.data?.data?.roles);
             navigate("/admin/dashboard");
-          }else{
-            localStorage.removeItem('token')
+          } else {
+            localStorage.removeItem("token");
             localStorage.setItem("token", res?.data?.data?.token);
-            setRole(res?.data?.data?.roles)
+            setRole(res?.data?.data?.roles);
             navigate("/employee-access/dashboard");
           }
-        }else{
-          if(res?.data?.data?.roles?.includes(1)){
+        } else {
+          if (res?.data?.data?.roles?.includes(1)) {
             localStorage.setItem("super_token", res?.data?.data?.token);
             navigate("/admin/dashboard");
-          }else if(res?.data?.data?.roles?.includes(2,3||2,4)){
+          } else if (res?.data?.data?.roles?.includes(2, 3 || 2, 4)) {
             localStorage.setItem("hr_token", res?.data?.data?.token);
-          }else if(res?.data?.data?.roles?.includes(3,4)){
-            localStorage.setItem("team_token", res?.data?.data?.token)
-          }else{
+          } else if (res?.data?.data?.roles?.includes(3, 4)) {
+            localStorage.setItem("team_token", res?.data?.data?.token);
+          } else {
             localStorage.setItem("employee_token", res?.data?.data?.token);
             navigate("/employee-access/dashboard");
           }
@@ -68,17 +68,17 @@ function Login() {
       }
     } catch (error) {
       setLoader(false);
-      toast.error(error?.response?.data?.message||"Failed to login");
+      toast.error(error?.response?.data?.message || "Failed to login");
     }
   };
 
   return (
     <div className="mx-auto grid h-screen w-full items-center px-5 2xl:container lg:grid-cols-7 lg:px-12">
-      <div className="hidden h-full w-full lg:col-span-3 lg:flex">
+      <div className="hidden h-screen w-full lg:col-span-3 lg:flex">
         <img
           src={"/assets/images/auth/banner.svg"}
           alt="auth banner"
-          className="h-full w-full"
+          className="h-full w-full rounded-br-3xl"
         />
       </div>
       <div className="col-span-4 -mb-10 flex flex-col lg:px-14">
@@ -104,7 +104,7 @@ function Login() {
             <input
               type="email"
               placeholder="Enter email id"
-              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark  ${
+              className={`h-11 min-h-11 w-full rounded-md border px-4 py-2 font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark ${
                 errors.email ? "border-red-500" : "border-tdarkblue"
               }`}
               {...register("email")}
@@ -123,26 +123,28 @@ function Login() {
               className={``}
               {...register("password")}
             /> */}
-            <div className={`relative h-11 min-h-11 w-full rounded-md border overflow-hidden font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark ${
+            <div
+              className={`relative h-11 min-h-11 w-full overflow-hidden rounded-md border font-medium outline-none placeholder:text-[0.94rem] placeholder:text-gray-dark ${
                 errors.password ? "border-red-500" : "border-tdarkblue"
-              }`}>
-            <input
-              type={passwordVisible ? "text" : "password"}
-              {...register("password", { required: true })}
-              autoComplete="off"
-              spellCheck="false"
-              placeholder="*****************"
-              className=" placeholder:text-[#8b8b8b] bg-transparent px-4 py-2 flex-grow h-11 w-full"
-            />
-            <div className="absolute top-3 right-3">
-              <Eye
-                onClick={() => ispasswordVisible(!passwordVisible)}
-                className={`h-4 cursor-pointer ${
-                  passwordVisible ? "text-black" : "text-[#7e7e7e]"
-                }`}
+              }`}
+            >
+              <input
+                type={passwordVisible ? "text" : "password"}
+                {...register("password", { required: true })}
+                autoComplete="off"
+                spellCheck="false"
+                placeholder="*****************"
+                className="h-11 w-full flex-grow bg-transparent px-4 py-2 placeholder:text-[#8b8b8b]"
               />
+              <div className="absolute right-3 top-3">
+                <Eye
+                  onClick={() => ispasswordVisible(!passwordVisible)}
+                  className={`h-4 cursor-pointer ${
+                    passwordVisible ? "text-black" : "text-[#7e7e7e]"
+                  }`}
+                />
+              </div>
             </div>
-          </div>
             {errors.password && (
               <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
@@ -152,7 +154,7 @@ function Login() {
             className="h-12 w-full rounded-md bg-neutralmedium text-center text-base font-medium text-white hover:bg-neutralmedium"
           >
             {loader ? (
-              <div className="w-full h-full flex justify-center items-center gap-3">
+              <div className="flex h-full w-full items-center justify-center gap-3">
                 <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
                 Signing you in
               </div>
@@ -176,6 +178,7 @@ function Login() {
           </div>
         </form>
       </div>
+      <div className="col-span-7 text-sm flex justify-end w-full text-[#b0a9ad]">Version 0.0.1</div>
     </div>
   );
 }
