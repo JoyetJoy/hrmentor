@@ -77,7 +77,7 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Shift Claim</p>
                   <p className="text-lg font-semibold">
-                    {rosterCalim?.roster_details?.shift_details?.shift_claim}
+                    {rosterCalim?.roster_details?.shift_claimed_employees_count}
                   </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Requests</p>
                 </div>

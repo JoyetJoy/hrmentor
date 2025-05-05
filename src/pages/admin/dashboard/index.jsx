@@ -8,7 +8,12 @@ import { Link } from "react-router-dom";
 import { ADMIN_DASHBOARD, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { usePermissionStore } from "@/lib/slices/auth.slice";
 export const AdminDashboard = () => {
+
+  const { permissions } = usePermissionStore((state) => ({
+      permissions: state.permissions,
+    }));
   // Fetch dashboard data
 
   const { data: admindashboard } = useQuery({
@@ -102,7 +107,9 @@ export const AdminDashboard = () => {
             </label>
           </div>
         </div>
-        <StatsCard data={admindashboard} />
+        {permissions.includes("employee-list"&&"job-list"&&"candidate-list") &&(
+          <StatsCard data={admindashboard} />
+        )}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {cardsData.map((card, index) => (
             <div

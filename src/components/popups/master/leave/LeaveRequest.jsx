@@ -184,7 +184,7 @@ export default function LeaveRequest({
                   {leaveDetails?.reason}
                 </p>
               </div>
-              <div
+              {/* <div
                 className="group mt-5 flex cursor-pointer items-center space-y-1 text-[0.85rem] font-medium text-[#030e5c]"
                 onClick={() => setShowLeaveList((prev) => !prev)}
               >
@@ -192,7 +192,7 @@ export default function LeaveRequest({
                 <span>
                   <ChevronDown size={24} color="#1f008f" strokeWidth={0.75} />
                 </span>
-              </div>
+              </div> */}
               {showLeaveList && (
                 <div className="group mt-5 grid w-full grid-cols-3 justify-between gap-3 space-y-1 rounded-md border border-[#cecdcd] p-3 text-[0.85rem] font-medium">
                   <div className="pt-1">

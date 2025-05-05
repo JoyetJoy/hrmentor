@@ -88,8 +88,8 @@ export default function EmployeeAccessHeader() {
             />
           </div>
           <span className="font-monorope text-base font-normal">
-            Welcome,
-            <h1 className="-mt-0.5 text-base font-semibold">{user?.name}</h1>
+            Welcome to,
+            <h1 className="-mt-0.5 text-base font-semibold">Employee Side</h1>
           </span>
         </Link>
         <div className="items flex gap-x-3">
