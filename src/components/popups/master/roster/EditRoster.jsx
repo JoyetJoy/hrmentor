@@ -13,6 +13,7 @@ import { Controller, useForm } from "react-hook-form";
 import { RosterSchema } from "@/schema/dashboard/masters/roster.schema";
 import toast from "react-hot-toast";
 import moment from "moment";
+import { formatDate } from "@/utils/date";
 
 const EditRoster = React.memo(
   ({ editpopupOpen, setEditPopupOpen, selectedRoster, copy, setCopy }) => {
@@ -171,15 +172,11 @@ const EditRoster = React.memo(
         setValue("shift", shift);
         setValue(
           "start_date",
-          moment
-            .utc(rosterDetail?.roster_details?.start_date)
-            .format("YYYY-MM-DD"),
+          formatDate(rosterDetail?.roster_details?.start_date)
         );
         setValue(
           "end_date",
-          moment
-            .utc(rosterDetail?.roster_details?.end_date)
-            .format("YYYY-MM-DD"),
+          formatDate(rosterDetail?.roster_details?.end_date)
         );
       }
     }, [selectedRoster, setValue, editpopupOpen]);
