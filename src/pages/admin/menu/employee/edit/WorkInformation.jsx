@@ -219,7 +219,8 @@ export const WorkInformation = ({ formtype }) => {
               {permissions.includes("employee-work-information-edit") &&(
                 <>
                 {active === "edit" ? (
-                <div
+                <button
+                  type="submit"
                   className="btn flex h-10 min-h-10 min-w-24 items-center justify-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
                 >
                   {loader ? (
@@ -230,15 +231,15 @@ export const WorkInformation = ({ formtype }) => {
                   ) : (
                     <span>Update</span>
                   )}
-                </div>
+                </button>
               ) : (
-                <button
+                <div
                   type="button"
                   onClick={() => setActive("edit")}
                   className="btn flex h-10 min-h-10 min-w-24 items-center justify-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
                 >
                   Edit
-                </button>
+                </div>
               )}
                 </>
               )}

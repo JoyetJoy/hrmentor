@@ -284,23 +284,39 @@ const RosterCalendar = () => {
 
     const formattedDate = date;
     const holidayEvents = data?.filter((event) =>
-      event?.holidays?.includes(formattedDate),
+      Array.isArray(event?.holidays) && event.holidays.includes(formattedDate)
     );
+    
     const swapedEvents = data?.filter((event) =>
-      event?.date_swaps?.includes(formattedDate)
-    )
-    const deletedEvents = data?.filter((event) =>
-      event?.date_deletions?.includes(formattedDate)
-    )
-    const shiftEvents = data?.filter((event) =>
-      event?.date_range?.includes(formattedDate),
+      Array.isArray(event?.date_swaps) && event.date_swaps.includes(formattedDate)
     );
-
-    const dayOff = [
+    
+    const deletedEvents = data?.filter((event) =>
+      Array.isArray(event?.date_deletions) && event.date_deletions.includes(formattedDate)
+    );
+    
+    const shiftEvents = data?.filter((event) =>
+      Array.isArray(event?.date_range) && event.date_range.includes(formattedDate)
+    );
+    
+    // Create a set of shift event IDs for exclusion
+    const shiftEventIds = new Set(shiftEvents.map(event => event._id));
+    
+    // Combine dayOff candidates and filter out duplicates and shiftEvents
+    const combinedDayOff = [
       ...swapedEvents,
       ...deletedEvents,
       ...holidayEvents
-    ];    
+    ];
+    
+    // Use Map to remove duplicate events based on _id
+    const dayOff = Array.from(
+      new Map(
+        combinedDayOff
+          .filter(event => !shiftEventIds.has(event._id)) // remove if also in shiftEvents
+          .map(event => [event._id, event]) // use _id as unique key
+      ).values()
+    );    
 
     const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
 

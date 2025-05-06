@@ -321,6 +321,8 @@ export default function SaveEmployeeForm({ formtype }) {
 
   const handleEmployee = async (data) => {
     setLoader(true);
+    console.log(data);
+    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);
@@ -329,7 +331,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("post_code", data.post_code);
     formData.append("dob", data.dob);
     formData.append("blood_group", data.blood_group?.value || "");
-    formData.append("marital_status", data.marital_status?.value);
+    formData.append("marital_status", data.marital_status?.label);
     formData.append("nationality_id", data.nationality_id?.id);
     formData.append("unique_id", uniqueId?.unique_id);
     formData.append("mobile_number", data.mobile_number);
@@ -380,8 +382,11 @@ export default function SaveEmployeeForm({ formtype }) {
       }
     } catch (error) {
       console.log(error);
+      const message = error?.response?.data?.message;
       toast.error(
-        error?.response?.data?.message[0] || "Failed to save employee.",
+        Array.isArray(message)
+          ? message[0]
+          : message || "Failed to save employee.",
       );
       setLoader(false);
     }
@@ -440,20 +445,36 @@ export default function SaveEmployeeForm({ formtype }) {
                   Onboarding Form
                 </button>
               )}
-              {permissions.includes("employee-primary-information-edit") &&(
+              {permissions.includes("employee-primary-information-edit") && (
                 <>
-                {active === "edit" ? (
-                <button
-                  type="submit"
-                  className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
-                >
-                  {loader ? (
-                    <div className="flex items-center gap-3">
-                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      {formtype === "update" ? "Updating" : "Saving"}
-                    </div>
+                  {active === "edit" ? (
+                    <button
+                      type="submit"
+                      className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+                    >
+                      {loader ? (
+                        <div className="flex items-center gap-3">
+                          <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                          {formtype === "update" ? "Updating" : "Saving"}
+                        </div>
+                      ) : (
+                        <>
+                          <div className="w-3.5">
+                            <img
+                              src={"/assets/icons/employees/save.svg"}
+                              alt="save icon"
+                              className="w-full object-contain"
+                            />
+                          </div>
+                          {formtype === "update" ? "Update" : "Save"}
+                        </>
+                      )}
+                    </button>
                   ) : (
-                    <>
+                    <div
+                      onClick={() => setActive("edit")}
+                      className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
+                    >
                       <div className="w-3.5">
                         <img
                           src={"/assets/icons/employees/save.svg"}
@@ -461,25 +482,9 @@ export default function SaveEmployeeForm({ formtype }) {
                           className="w-full object-contain"
                         />
                       </div>
-                      {formtype === "update" ? "Update" : "Save"}
-                    </>
+                      Edit
+                    </div>
                   )}
-                </button>
-              ) : (
-                <div
-                  onClick={()=>setActive("edit")}
-                  className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
-                >
-                  <div className="w-3.5">
-                    <img
-                      src={"/assets/icons/employees/save.svg"}
-                      alt="save icon"
-                      className="w-full object-contain"
-                    />
-                  </div>
-                  Edit
-                </div>
-              )}
                 </>
               )}
             </div>
@@ -641,7 +646,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={employeeMasters?.genders}
                         placeholder="Select Gender"
@@ -665,7 +670,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={nationalityList}
                         placeholder="Select Nationality"
@@ -691,7 +696,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={countryList}
                         placeholder="Select Country"
@@ -726,7 +731,7 @@ export default function SaveEmployeeForm({ formtype }) {
                             ? "No cities found"
                             : "Select a country first"
                         }
-                        isDisabled={!country_id||active ==="view"} // Disable if no country is selected
+                        isDisabled={!country_id || active === "view"} // Disable if no country is selected
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption); // Update form state
                           handleCitySelect(selectedOption);
@@ -792,7 +797,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={bloodGroups}
                         placeholder="Select Blood Group"
@@ -875,7 +880,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     </div>
                   </label>
                   <textarea
-                    disabled={sameAsHome||active ==="view"}
+                    disabled={sameAsHome || active === "view"}
                     autoComplete="off"
                     {...register("communication_address", { required: true })}
                     className="input-box min-h-28 p-2"
@@ -900,11 +905,12 @@ export default function SaveEmployeeForm({ formtype }) {
                         alt="Uploaded"
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                       />
-                      {active !=="view" &&
-                      <X
-                      onClick={clearImage}
-                      className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                    />}
+                      {active !== "view" && (
+                        <X
+                          onClick={clearImage}
+                          className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                        />
+                      )}
                     </div>
                   ) : (
                     <label
@@ -972,7 +978,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={departmentListing}
                         placeholder="Select Department"
@@ -996,7 +1002,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     render={({ field }) => (
                       <Select
                         {...field}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         isSearchable={true}
                         styles={customSelectStyles}
                         options={rolesList}
@@ -1032,7 +1038,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={designationListing}
                         placeholder="Select Designation"
@@ -1082,7 +1088,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={workLocationListing}
                         placeholder="Select Work location"
@@ -1116,7 +1122,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={employeeTypeList}
                         placeholder="Select Employement Type"
@@ -1165,7 +1171,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={maritalStatuses}
                         placeholder="Select Marital status"
@@ -1225,7 +1231,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"} 
+                        isDisabled={active === "view"}
                         styles={customSelectStyles}
                         options={pentionStatuses}
                         placeholder="Select status"
