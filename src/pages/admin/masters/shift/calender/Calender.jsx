@@ -616,7 +616,7 @@ const ShiftCalendar = () => {
                                 backgroundColor: event?.shift?.shift_color,
                                 borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
                               }}
-                              className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm border-l-4 border-blue-400 bg-blue-200 py-3 pl-2 pr-3 text-gray-800 hover:opacity-65 lg:w-36 xl:w-44`}
+                              className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm border-l-4 border-blue-400 bg-blue-200 py-3 pl-2 pr-3 text-gray-800 hover:opacity-65 `}
                             >
                               <span className="float-start flex text-[0.8rem] font-semibold">
                                 {event.shift_name}
