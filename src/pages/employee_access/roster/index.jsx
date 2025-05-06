@@ -221,37 +221,10 @@ const EmployeeAccessRosterCalendar = () => {
                 requestedSlots,
               } = findEvents(date);
               return (
-                <div className="flex h-full w-full flex-col overflow-visible">
+                <div className="relative flex h-full w-full flex-col overflow-visible">
                   <>
-                    {shiftEvents?.length > 0
-                      ? shiftEvents?.slice(0, 2)?.map((event, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              backgroundColor: event?.shift?.shift_color,
-                              borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
-                            }}
-                            className={`relative mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 px-3 py-2 text-gray-800`}
-                          >
-                            <span onClick={() => handleClick(event)} className="float-start flex text-[0.8rem] font-semibold">
-                              {event.shift_name}
-                            </span>
-                            <span onClick={() => handleClick(event)} className="float-start flex text-[12px]">
-                              {event?.shift?.start_time} -{" "}
-                              {event?.shift?.end_time}
-                            </span>
-                            <div className="absolute -top-1 right-0 flex flex-col items-end">
-                      {/* <img
-                          key={`available-slot-`}
-                          onClick={() => {
-                            setClaimPopup(true);
-                            setSelectedField(slot);
-                          }}
-                          className="h-5 w-5"
-                          src="/assets/icons/employee_access/header/availableshift.svg"
-                          alt=""
-                        /> */}
-                      {/* {availableSlots?.map((slot, index) => (
+                    <div className="absolute -top-6 right-0 flex flex-col items-end">
+                      {availableSlots?.map((slot, index) => (
                         <img
                           key={`available-slot-${index}`}
                           onClick={() => {
@@ -268,8 +241,26 @@ const EmployeeAccessRosterCalendar = () => {
                           src="/assets/icons/employee_access/header/requested_slot.svg"
                           alt=""
                         />
-                      ))} */}
+                      ))}
                     </div>
+                    {shiftEvents?.length > 0
+                      ? shiftEvents?.slice(0, 2)?.map((event, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleClick(event)}
+                            style={{
+                              backgroundColor: event?.shift?.shift_color,
+                              borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
+                            }}
+                            className={`mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 px-3 py-2 text-gray-800`}
+                          >
+                            <span className="float-start flex text-[0.8rem] font-semibold">
+                              {event.shift_name}
+                            </span>
+                            <span className="float-start flex text-[12px]">
+                              {event?.shift?.start_time} -{" "}
+                              {event?.shift?.end_time}
+                            </span>
                           </div>
                         ))
                       : holidayEvents?.map((event, index) => (

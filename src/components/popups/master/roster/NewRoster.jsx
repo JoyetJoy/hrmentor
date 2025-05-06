@@ -81,7 +81,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       setSelectedEmployees((prev) => [
         ...prev,
         {
-          unique_id: selectedEmployee.value,
+          employee_id: selectedEmployee.value,
           first_name: selectedEmployee.label,
         },
       ]);
@@ -150,7 +150,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       {
         header: "Emp:ID",
         accessorKey: "unique_id",
-        cell: ({ row }) => row?.original?.unique_id || "NA",
+        cell: ({ row }) => row?.original?.employee_id || "NA",
       },
       {
         header: "Emp:Name",

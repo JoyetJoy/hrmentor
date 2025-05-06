@@ -11,7 +11,12 @@ import RosterHeader from "@/components/common/RosterHeader";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { ALL_WORK_AREA, newRequest, ROASTER_LIST_GET, ROASTER_LISTING } from "@/api/master";
+import {
+  ALL_WORK_AREA,
+  newRequest,
+  ROASTER_LIST_GET,
+  ROASTER_LISTING,
+} from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import { dividerClasses } from "@mui/material";
 import DatePicker from "react-datepicker";
@@ -24,7 +29,11 @@ import {
 import { formatDate } from "@/utils/date";
 import ChangeShift from "@/components/popups/master/roster/ChangeShift";
 import { isBeforeToday } from "@/utils/date";
-import { usePermissionStore, useRoleStore, useUserStore } from "@/lib/slices/auth.slice";
+import {
+  usePermissionStore,
+  useRoleStore,
+  useUserStore,
+} from "@/lib/slices/auth.slice";
 
 const RosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -65,19 +74,19 @@ const RosterCalendar = () => {
   }));
 
   const { user } = useUserStore((state) => ({
-      user: state.user,
-    }));
+    user: state.user,
+  }));
   console.log(user);
 
-  useEffect(()=>{
-    if(!role.includes(1)){
-      const department_id=[user?.department_id];
-      const worklocation_id=[user?.worklocation_id];
+  useEffect(() => {
+    if (!role.includes(1)) {
+      const department_id = [user?.department_id];
+      const worklocation_id = [user?.worklocation_id];
       setActiveDepartment(department_id);
-      setActiveLocation(worklocation_id)
+      setActiveLocation(worklocation_id);
     }
-  },[role,user])
-  
+  }, [role, user]);
+
   const useFetchData = (key, url) => {
     return useQuery({
       queryKey: [key],
@@ -227,7 +236,7 @@ const RosterCalendar = () => {
   const locationOptions = Array.isArray(location)
     ? location.map((loc) => ({ value: loc.id, label: loc.value }))
     : [];
- 
+
   const workAreaOptions = work_area
     ? work_area?.listing?.map((area) => ({
         value: area.id,
@@ -277,9 +286,21 @@ const RosterCalendar = () => {
     const holidayEvents = data?.filter((event) =>
       event?.holidays?.includes(formattedDate),
     );
+    const swapedEvents = data?.filter((event) =>
+      event?.date_swaps?.includes(formattedDate)
+    )
+    const deletedEvents = data?.filter((event) =>
+      event?.date_deletions?.includes(formattedDate)
+    )
     const shiftEvents = data?.filter((event) =>
       event?.date_range?.includes(formattedDate),
     );
+
+    const dayOff = [
+      ...swapedEvents,
+      ...deletedEvents,
+      ...holidayEvents
+    ];    
 
     const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
 
@@ -289,7 +310,7 @@ const RosterCalendar = () => {
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
 
-    return { holidayEvents, shiftEvents, isDayOff, requestedSlots };
+    return { holidayEvents, shiftEvents, isDayOff, requestedSlots, swapedEvents, deletedEvents,dayOff };
   };
 
   useEffect(() => {
@@ -577,43 +598,43 @@ const RosterCalendar = () => {
           </div>
           {role.includes(1) && (
             <div className="flex w-full items-center justify-between py-2">
-            <div className="flex items-center gap-4">
-              <Select
-                options={departmentOptions}
-                isSearchable={true}
-                styles={customSelectStyles}
-                onChange={(selectedOption) =>
-                  setActiveDepartment([selectedOption.value])
-                }
-                placeholder="Select Department"
-                className="input-box z-30 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-              />
+              <div className="flex items-center gap-4">
+                <Select
+                  options={departmentOptions}
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  onChange={(selectedOption) =>
+                    setActiveDepartment([selectedOption.value])
+                  }
+                  placeholder="Select Department"
+                  className="input-box z-30 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                />
 
-              <Select
-                options={locationOptions}
-                isSearchable={true}
-                styles={customSelectStyles}
-                onChange={(selectedOption) =>
-                  setActiveLocation([selectedOption.value])
-                }
-                placeholder="Select Location"
-                className="input-box z-20 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-              />
-            </div>
+                <Select
+                  options={locationOptions}
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  onChange={(selectedOption) =>
+                    setActiveLocation([selectedOption.value])
+                  }
+                  placeholder="Select Location"
+                  className="input-box z-20 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                />
+              </div>
 
-            <div className="flex items-center gap-4">
-              <Select
-                options={workAreaOptions}
-                isSearchable={true}
-                styles={customSelectStyles}
-                onChange={(selectedOption) =>
-                  setActiveWorkArea([selectedOption.value])
-                }
-                placeholder="Select Work Area"
-                className="input-box z-20 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
-              />
+              <div className="flex items-center gap-4">
+                <Select
+                  options={workAreaOptions}
+                  isSearchable={true}
+                  styles={customSelectStyles}
+                  onChange={(selectedOption) =>
+                    setActiveWorkArea([selectedOption.value])
+                  }
+                  placeholder="Select Work Area"
+                  className="input-box z-20 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+                />
+              </div>
             </div>
-          </div>
           )}
 
           <div className="overflow-x-medium mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
@@ -658,7 +679,11 @@ const RosterCalendar = () => {
                             shiftEvents,
                             isDayOff,
                             requestedSlots,
+                            swapedEvents,
+                            deletedEvents,
+                            dayOff
                           } = findEvents(day.fullDate, emp?.rosters, day.day);
+                          console.log(dayOff);
 
                           return (
                             <td
@@ -692,40 +717,42 @@ const RosterCalendar = () => {
                                     >
                                       <p className="relative text-xs font-semibold">
                                         {shift.shift_name}
-                                        {permissions.includes("roster-edit") && (
+                                        {permissions.includes(
+                                          "roster-edit",
+                                        ) && (
                                           <span
-                                          className="absolute -top-2 right-1"
-                                          onMouseEnter={() =>
-                                            setHoveredShift({
-                                              id: shift.shift_id,
-                                              date: day.fullDate,
-                                              type: "change",
-                                              empid: emp?.employee?.id,
-                                            })
-                                          }
-                                          onMouseLeave={() =>
-                                            setHoveredShift({
-                                              id: "",
-                                              date: "",
-                                              type: "",
-                                              empid: "",
-                                            })
-                                          }
-                                        >
-                                          <ChevronDown size={20} />
-                                          {/* Tooltip */}
-                                          {hoveredShift?.id ===
-                                            shift.shift_id &&
-                                            hoveredShift?.date ===
-                                              day.fullDate &&
-                                            hoveredShift?.type === "change" &&
-                                            hoveredShift?.empid ===
-                                              emp?.employee?.id && (
-                                              <span className="absolute right-0 top-6 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
-                                                Edit
-                                              </span>
-                                            )}
-                                        </span>
+                                            className="absolute -top-2 right-1"
+                                            onMouseEnter={() =>
+                                              setHoveredShift({
+                                                id: shift.shift_id,
+                                                date: day.fullDate,
+                                                type: "change",
+                                                empid: emp?.employee?.id,
+                                              })
+                                            }
+                                            onMouseLeave={() =>
+                                              setHoveredShift({
+                                                id: "",
+                                                date: "",
+                                                type: "",
+                                                empid: "",
+                                              })
+                                            }
+                                          >
+                                            <ChevronDown size={20} />
+                                            {/* Tooltip */}
+                                            {hoveredShift?.id ===
+                                              shift.shift_id &&
+                                              hoveredShift?.date ===
+                                                day.fullDate &&
+                                              hoveredShift?.type === "change" &&
+                                              hoveredShift?.empid ===
+                                                emp?.employee?.id && (
+                                                <span className="absolute right-0 top-6 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
+                                                  Edit
+                                                </span>
+                                              )}
+                                          </span>
                                         )}
                                       </p>
                                       {shift?.shift?.start_time && (
@@ -736,41 +763,51 @@ const RosterCalendar = () => {
                                       )}
                                     </div>
                                   ))}
+                                  {dayOff?.map((shift, index) => (
+                                    <div
+                                      key={index}
+                                      className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
+                                    >
+                                      <p className="text-center text-xs font-semibold">
+                                        Day Off
+                                      </p>
+                                    </div>
+                                  ))}
 
                                   <p className="relative flex w-full items-center justify-center">
                                     {permissions.includes("roster-create") && (
                                       <button
-                                      onClick={() =>
-                                        addShift(
-                                          emp?.employee?.id,
-                                          "",
-                                          day.fullDate,
-                                          "addshift",
-                                          emp?.employee?.department_id,
-                                          "",
-                                          shiftEvents,
-                                        )
-                                      }
-                                      onMouseEnter={() =>
-                                        setHoveredShift({
-                                          id: emp?.employee?.id,
-                                          date: day.fullDate,
-                                          type: "add",
-                                          empid: "",
-                                        })
-                                      }
-                                      onMouseLeave={() =>
-                                        setHoveredShift({
-                                          id: "",
-                                          date: "",
-                                          type: "",
-                                          empid: "",
-                                        })
-                                      }
-                                      className="h-10 w-10 cursor-pointer text-2xl font-bold text-blue-500"
-                                    >
-                                      +
-                                    </button>
+                                        onClick={() =>
+                                          addShift(
+                                            emp?.employee?.id,
+                                            "",
+                                            day.fullDate,
+                                            "addshift",
+                                            emp?.employee?.department_id,
+                                            "",
+                                            shiftEvents,
+                                          )
+                                        }
+                                        onMouseEnter={() =>
+                                          setHoveredShift({
+                                            id: emp?.employee?.id,
+                                            date: day.fullDate,
+                                            type: "add",
+                                            empid: "",
+                                          })
+                                        }
+                                        onMouseLeave={() =>
+                                          setHoveredShift({
+                                            id: "",
+                                            date: "",
+                                            type: "",
+                                            empid: "",
+                                          })
+                                        }
+                                        className="h-10 w-10 cursor-pointer text-2xl font-bold text-blue-500"
+                                      >
+                                        +
+                                      </button>
                                     )}
 
                                     {hoveredShift?.id === emp?.employee?.id &&
@@ -824,52 +861,53 @@ const RosterCalendar = () => {
                                       </div>
                                     )}
                                 </div>
-                              ) : (
-                                <>
-                                  {holidayEvents?.map((shift, index) => (
-                                    <div
-                                      key={index}
-                                      className="z-10 -mt-24 h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
-                                    >
-                                      <p className="text-center text-xs font-semibold">
-                                        Day Off
-                                      </p>
-                                    </div>
-                                  ))}
-
-                                  <div className="min-w-[11.4rem]">
+                              ) : dayOff?.length > 0 ? (
+                                <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
+                                  {dayOff.length > 0 && (
+                                    <>
+                                      {dayOff?.map((shift, index) => (
+                                        <div
+                                          key={index}
+                                          className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
+                                        >
+                                          <p className="text-center text-xs font-semibold">
+                                            Day Off
+                                          </p>
+                                        </div>
+                                      ))}
+                                      <div className="min-w-[11.4rem]">
                                     {permissions.includes("roster-create") && (
                                       <button
-                                      className="text-2xl font-bold text-blue-500"
-                                      onMouseEnter={() =>
-                                        setHoveredShift({
-                                          id: emp?.employee?.id,
-                                          date: day.fullDate,
-                                          type: "add",
-                                          empid: "",
-                                        })
-                                      }
-                                      onMouseLeave={() =>
-                                        setHoveredShift({
-                                          id: emp?.employee?.id,
-                                          date: day.fullDate,
-                                          type: "",
-                                          empid: "",
-                                        })
-                                      }
-                                      onClick={() =>
-                                        changeShift(
-                                          emp?.employee?.id,
-                                          "",
-                                          day.fullDate,
-                                          "add",
-                                          emp?.employee?.department_id,
-                                          "",
-                                        )
-                                      }
-                                    >
-                                      +
-                                    </button>
+                                        className="text-2xl font-bold text-blue-500"
+                                        onMouseEnter={() =>
+                                          setHoveredShift({
+                                            id: emp?.employee?.id,
+                                            date: day.fullDate,
+                                            type: "add",
+                                            empid: "",
+                                          })
+                                        }
+                                        onMouseLeave={() =>
+                                          setHoveredShift({
+                                            id: emp?.employee?.id,
+                                            date: day.fullDate,
+                                            type: "",
+                                            empid: "",
+                                          })
+                                        }
+                                        onClick={() =>
+                                          changeShift(
+                                            emp?.employee?.id,
+                                            "",
+                                            day.fullDate,
+                                            "add",
+                                            emp?.employee?.department_id,
+                                            "",
+                                          )
+                                        }
+                                      >
+                                        +
+                                      </button>
                                     )}
 
                                     {/* Tooltip */}
@@ -924,7 +962,97 @@ const RosterCalendar = () => {
                                         </div>
                                       )}
                                   </div>
-                                </>
+                                    </>
+                                  )}
+                                </div>
+                              ):(
+                                <div className="min-w-[11.4rem]">
+                                    {permissions.includes("roster-create") && (
+                                      <button
+                                        className="text-2xl font-bold text-blue-500"
+                                        onMouseEnter={() =>
+                                          setHoveredShift({
+                                            id: emp?.employee?.id,
+                                            date: day.fullDate,
+                                            type: "add",
+                                            empid: "",
+                                          })
+                                        }
+                                        onMouseLeave={() =>
+                                          setHoveredShift({
+                                            id: emp?.employee?.id,
+                                            date: day.fullDate,
+                                            type: "",
+                                            empid: "",
+                                          })
+                                        }
+                                        onClick={() =>
+                                          changeShift(
+                                            emp?.employee?.id,
+                                            "",
+                                            day.fullDate,
+                                            "add",
+                                            emp?.employee?.department_id,
+                                            "",
+                                          )
+                                        }
+                                      >
+                                        +
+                                      </button>
+                                    )}
+
+                                    {/* Tooltip */}
+                                    {hoveredShift?.id === emp?.employee?.id &&
+                                      hoveredShift?.date === day.fullDate &&
+                                      hoveredShift?.type === "add" && (
+                                        <span className="absolute bottom-10 right-10 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
+                                          Add Shift
+                                        </span>
+                                      )}
+
+                                    {/* Popup Box (only opens for clicked cell) */}
+                                    {openPopup?.row === rowIndex &&
+                                      openPopup?.col === colIndex && (
+                                        <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
+                                          {/* Close Button */}
+                                          <div className="flex items-center justify-between border-b pb-2">
+                                            <span className="text-sm font-semibold">
+                                              Select Shift
+                                            </span>
+                                            <button
+                                              className="text-lg font-bold text-gray-500 hover:text-gray-700"
+                                              onClick={() => setOpenPopup(null)} // Close popup when clicked
+                                            >
+                                              &times;
+                                            </button>
+                                          </div>
+
+                                          {/* Search Input */}
+                                          <input
+                                            type="text"
+                                            placeholder="Search shift name"
+                                            className="mt-2 w-full rounded-md border p-2 outline-none"
+                                          />
+
+                                          {/* Shift List */}
+                                          <div className="mt-2">
+                                            {filteredShifts.map(
+                                              (shift, index) => (
+                                                <div
+                                                  key={index}
+                                                  className="flex justify-between border-b p-2 text-sm last:border-none"
+                                                >
+                                                  <span>{shift.name}</span>
+                                                  <span className="text-gray-500">
+                                                    {shift.time}
+                                                  </span>
+                                                </div>
+                                              ),
+                                            )}
+                                          </div>
+                                        </div>
+                                      )}
+                                  </div>
                               )}
                             </td>
                           );

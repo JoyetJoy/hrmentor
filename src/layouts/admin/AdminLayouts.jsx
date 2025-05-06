@@ -4,6 +4,7 @@ import { AdminHeader } from "../../components/layouts/admin/Header";
 import { useQuery } from "@tanstack/react-query";
 import { GET_USER } from "@/api/auth";
 import { newRequest } from "@/api";
+import convertToNumbersArray from 'array-to-numbers';
 import ScrollBack from "@/components/common/ScrollBack";
 import { usePermissionStore, useRoleStore, useUserStore } from "@/lib/slices/auth.slice";
 
@@ -42,8 +43,9 @@ export const AdminLayout = () => {
         worklocation_id: profile?.data?.employee_data?.worklocation_id,
       };
       
-      setUser(userdata);      
-      setRole(profile?.data?.roles);
+      setUser(userdata);  
+      const result = convertToNumbersArray(profile?.data?.roles);    
+      setRole(result);
       setPermissions(profile?.data?.permission);
     }
   }, [profile]);

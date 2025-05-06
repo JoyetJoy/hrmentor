@@ -308,11 +308,7 @@ const EditRoster = React.memo(
                           <input
                             type="date"
                             defaultValue={
-                              rosterDetail?.roster_details?.start_date
-                                ? moment
-                                    .utc(rosterDetail.roster_details.start_date)
-                                    .format("YYYY-MM-DD")
-                                : ""
+                              rosterDetail?.roster_details?.start_date 
                             }
                             {...register("start_date", { required: true })}
                             className="input-box w-full"
@@ -330,9 +326,7 @@ const EditRoster = React.memo(
                           <input
                             type="date"
                             defaultValue={
-                              moment(
-                                rosterDetail?.roster_details?.end_date,
-                              ).format("YYYY-MM-DD") || ""
+                              rosterDetail?.roster_details?.end_date
                             }
                             {...register("end_date", { required: true })}
                             className="input-box w-full"
