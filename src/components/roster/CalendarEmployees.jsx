@@ -10,7 +10,7 @@ import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
 import DeleteConfirmation from "../common/DeleteConfirmation";
 
-function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelectedEmployee,handleReassign, setSwapEmployee, setPopupOpen, popupOpen, handleDelete,deletePopup, setDeletePopup }) {
+function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelectedEmployee,selectedEmployee, handleReassign, setSwapEmployee, setPopupOpen, popupOpen, handleDelete,deletePopup, setDeletePopup }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [selectedId, setSelectedId] = useState({
@@ -20,7 +20,7 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
   const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("");
   const pageLimit = 10;
-  const { control } = useForm();
+  const { control ,reset  } = useForm();
 
   useEffect(() => {
     if (rosterCalim) {
@@ -134,6 +134,7 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
                   styles={customSelectStyles}
                   placeholder="Select Employee"
                   className="input-box w-full"
+                  value={field.value} 
                   options={rosterEmpList?.employees?.map((item) => ({
                     label: item.first_name,
                     value: item?.id,
@@ -149,6 +150,7 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
           <div
           onClick={()=>{
             handleSubmit();
+            reset({ employees: null });
           }}
             // to="/admin/recruiter/jobs/post"
             className="flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded bg-hrmprimaryorange text-xs font-semibold text-white hover:bg-hrmblue"

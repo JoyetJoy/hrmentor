@@ -10,10 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { usePermissionStore } from "@/lib/slices/auth.slice";
 export const AdminDashboard = () => {
-
   const { permissions } = usePermissionStore((state) => ({
-      permissions: state.permissions,
-    }));
+    permissions: state.permissions,
+  }));
   // Fetch dashboard data
 
   const { data: admindashboard } = useQuery({
@@ -65,6 +64,7 @@ export const AdminDashboard = () => {
       title: "Upcoming Holidays",
       details: admindashboard?.upcoming_holidays?.map((holiday) => ({
         type: holiday.holiday_name,
+        count:holiday.employee_id,
         date: holiday.date,
         time: dayjs(holiday.created_at).format("HH:MM"),
       })),
@@ -80,6 +80,8 @@ export const AdminDashboard = () => {
         ]
           .filter(Boolean)
           .join(" "),
+          
+        count:leave?.employee_id
         // date: [leave?.date],
       })),
       path: "/admin/leave/people-on-leave",
@@ -107,9 +109,9 @@ export const AdminDashboard = () => {
             </label>
           </div>
         </div>
-        {permissions.includes("employee-list"&&"job-list"&&"candidate-list") &&(
-          <StatsCard data={admindashboard} />
-        )}
+        {permissions.includes(
+          "employee-list" && "job-list" && "candidate-list",
+        ) && <StatsCard data={admindashboard} />}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {cardsData.map((card, index) => (
             <div
@@ -128,7 +130,7 @@ export const AdminDashboard = () => {
                     >
                       <div className="flex items-center gap-2">
                         <div
-                          className={`flex h-11 w-11 items-center justify-center rounded-full border  ${card.title === "People on Leave" ? "bg-gray-100" : "bg-hrmprimaryorange p-1"}`}
+                          className={`flex h-11 w-11 items-center justify-center rounded-full border ${card.title === "People on Leave" ? "bg-gray-100" : "bg-hrmprimaryorange p-1"}`}
                         >
                           {card.title === "People on Leave" ? (
                             <img
@@ -151,17 +153,20 @@ export const AdminDashboard = () => {
                           <h1>{item?.dates || item?.date}</h1>
                           {/* <h1>{item?.date || ""}</h1> */}
                           <h1>{item?.time || `Employee: ${item?.count}`}</h1>
+                          
                         </label>
                       </div>
-                      <Link
-                        to={item?.path}
-                        className="rounded-full border bg-gray-soft p-2"
-                      >
-                        <MoveDiagonal
-                          className="size-3 text-black"
-                          strokeWidth={1.7}
-                        />
-                      </Link>
+                      {card.title !== "Upcoming Holidays" && (
+                        <Link
+                          to={item?.path}
+                          className="rounded-full border bg-gray-soft p-2"
+                        >
+                          <MoveDiagonal
+                            className="size-3 text-black"
+                            strokeWidth={1.7}
+                          />
+                        </Link>
+                      )}
                     </div>
                   ))
                 ) : (
@@ -174,7 +179,6 @@ export const AdminDashboard = () => {
       </div>
       <div className="flex w-[27%] flex-col">
         <ProfileCompletionCount value={admindashboard} />
-        <LeaveAvailability />
         <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
           <h1 className="mb-4 flex items-center justify-between text-lg font-semibold text-black">
             News & Events
@@ -185,7 +189,7 @@ export const AdminDashboard = () => {
               View <Eye className="size-4 text-black/70" />
             </Link>
           </h1>
-          <div className="overflow-y-min flex max-h-[14.3rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+          <div className="overflow-y-min flex max-h-[31rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
             {admindashboard?.newsandevents?.events.map((event, index) => (
               <div
                 key={index}

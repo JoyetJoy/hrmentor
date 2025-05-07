@@ -59,14 +59,14 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Available</p>
                   <p className="text-lg font-semibold">
-                    {rosterCalim?.roster_details?.shift_claimed_employees_count}
+                    {rosterCalim?.roster_details?.available_employees_count}
                   </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Employees</p>
                 </div>
                 <div className="rounded-md border border-[#eceef6] bg-white px-3 py-1">
                   <p className="text-sm font-semibold">Shift Claim</p>
                   <p className="text-lg font-semibold">
-                    {rosterCalim?.roster_details?.shift_claimed_employees_count}
+                    {rosterCalim?.roster_details?.shift_claim_requests?.length}
                   </p>
                   <p className="text-[0.7rem] text-[#a5a5a6]">Requests</p>
                 </div>

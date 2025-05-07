@@ -51,6 +51,8 @@ export const SWAP_SHIFT = "/swap-shift-roster-employee";
 export const UPDATE_ROSTER_LIST = "employee-roster-list ";
 //swap employee roster
 export const SWAP_EMPLOYEE_ROSTER = "swap-shift-roster-employee";
+//shift claim open and close
+export const SHIFT_CLAIM_ON_OFF = "shift-claim-on-off";
 //add employee roster
 export const ADD_EMPLOYEE_ROSTER = "employee-add-roster-by-day";
 //delete employee roster

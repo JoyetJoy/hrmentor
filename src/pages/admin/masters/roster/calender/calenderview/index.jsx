@@ -51,16 +51,16 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
   });
 
   const { data: rosterEmpList } = useQuery({
-    queryKey: ["rosterEmpList", id],
+    queryKey: ["rosterEmpList", id, rosterCalim],
     queryFn: () => {
       console.log(`Fetching employee list for shift ID: ${id}`);
       return newRequest
-        .get(`${ROSTER_EMPLIST}/${id}/${date}`)
+        .get(`${ROSTER_EMPLIST}/${rosterCalim?.roster_details?.shift_details?.shift_id}/${id}/${date}`)
         .then((res) => {
           return res.data;
         });
     },
-    enabled: !!id,
+    enabled: !!rosterCalim,
   });
   
   const handleSubmit = async (data) => {
@@ -75,6 +75,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
   
         if (response.status === 200) {
           toast.success(response.data?.message || "Candidate saved successfully!");
+          setSelectedEmployee();
           refetch();
         } else {
           toast.error(response.data?.message || "Failed to save candidate.");
@@ -153,7 +154,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
         <Loader />
       ) : (
         <div className="flex h-screen flex-col gap-2 pt-2">
-          <Rosteroveview rosterCalim={rosterCalim} date={date} />
+          <Rosteroveview rosterCalim={rosterCalim} date={date} id={id} refetch={refetch}/>
           <div className="grid grid-cols-2 gap-2">
             <div className="flex  flex-col gap-y-3 rounded-md">
               <CalanderShift
@@ -167,6 +168,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
                 isLoading={isLoading}
                 rosterEmpList={rosterEmpList}
                 setSelectedEmployee={setSelectedEmployee}
+                selectedEmployee={selectedEmployee}
                 handleSubmit={handleSubmit}
                 handleReassign={handleReassign}
                 setSwapEmployee={setSwapEmployee}

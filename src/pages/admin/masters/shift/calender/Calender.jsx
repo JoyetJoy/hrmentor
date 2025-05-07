@@ -184,7 +184,7 @@ const ShiftCalendar = () => {
       const selectdate = dayjs(date).format("YYYY-MM-DD");
       if (date) {
         navigate(
-          `/admin/shift/calendarview?id=${event?.shift_id}&date=${selectdate}`,
+          `/admin/shift/calendarview?id=${event?.id}&date=${selectdate}`,
         );
       }
     }
