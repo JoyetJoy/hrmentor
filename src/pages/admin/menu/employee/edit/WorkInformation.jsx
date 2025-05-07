@@ -139,7 +139,7 @@ export const WorkInformation = ({ formtype }) => {
       data.pregnancy_and_maternity?.id,
     );
     formData.append("gender", data.gender?.id);
-    formData.append("marital_status", data.marital_status?.value);
+    formData.append("marital_status", data?.marital_status?.value);
     formData.append("disability", data.disability?.id);
     // formData.append("age", data.age);
     formData.append("dosent_reporting", reportNotRequired ? 1 : 0);

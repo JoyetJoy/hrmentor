@@ -55,7 +55,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
     queryFn: () => {
       console.log(`Fetching employee list for shift ID: ${id}`);
       return newRequest
-        .get(`${ROSTER_EMPLIST}/${id}`)
+        .get(`${ROSTER_EMPLIST}/${id}/${date}`)
         .then((res) => {
           return res.data;
         });

@@ -331,7 +331,7 @@ export default function SaveEmployeeForm({ formtype }) {
     formData.append("post_code", data.post_code);
     formData.append("dob", data.dob);
     formData.append("blood_group", data.blood_group?.value || "");
-    formData.append("marital_status", data.marital_status?.label);
+    formData.append("marital_status", data.marital_status?.value);
     formData.append("nationality_id", data.nationality_id?.id);
     formData.append("unique_id", uniqueId?.unique_id);
     formData.append("mobile_number", data.mobile_number);

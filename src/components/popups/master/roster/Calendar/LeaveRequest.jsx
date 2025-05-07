@@ -13,7 +13,8 @@ function LeaveRequest({
   handleSave,
   data,
   api,
-  selectedId
+  selectedId,
+  selectedData
 }) {
   const [note, setNote] = useState("");
 console.log(data);
@@ -76,8 +77,6 @@ console.log(data);
       toast.error("Something went wrong. Please try again.");
     }
   };
-  
-console.log(data?.request_details?.employee?.first_name[0]);
 
   return (
     <Dialog open={popupOpen} as="div" className="relative z-10" onClose={onClose}>

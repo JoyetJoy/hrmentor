@@ -1,24 +1,18 @@
-import { newRequest, ROSTER_CLAIM } from "@/api";
-import { DASHBOARD_CANDIDATES_LIST } from "@/api/recruiter";
+import { newRequest } from "@/api";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { Maximize2, ChevronRight, ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { ChevronRight, ChevronDown } from "lucide-react";
+import { useState } from "react";
 import LeaveRequest from "../popups/master/roster/Calendar/LeaveRequest";
-import { ROSTER_CLAIMED_EMPLOYEE_DETAILS, ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST, ROSTER_EMPLIST } from "@/api/setup";
+import { ROSTER_CLAIMED_EMPLOYEE_DETAILS, ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST } from "@/api/setup";
 
 export default function CalanderShift({rosterCalim, isLoading}) {
   const [leaveOpen, setLeaveOpen] = useState(false);
   const [claimOpen, setClaimOpen] = useState(false);
   const [leavepopup, setLeavepopup] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
-  const [keyword, setKeyword] = useState("");
   const [type, setType] = useState("");
   const [selectedId, setSelectedId] = useState('');
-  const pageLimit = 10;   
-
+  const [selectedData, setSelectedData] = useState();
 
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedId],
@@ -32,12 +26,6 @@ export default function CalanderShift({rosterCalim, isLoading}) {
     },
     enabled: !!selectedId,
   });
-
-  useEffect(() => {
-    if (rosterCalim) {
-      setTotalPages(rosterCalim?.last_page);
-    }
-  }, [rosterCalim]);
   
   return (
     <>
@@ -53,6 +41,7 @@ export default function CalanderShift({rosterCalim, isLoading}) {
             data={rosterEmpList}
             api={ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST}
             selectedId={selectedId}
+            selectedData={selectedData}
           />
           {rosterCalim ? (
             <>
@@ -157,6 +146,7 @@ export default function CalanderShift({rosterCalim, isLoading}) {
                     onClick={() => {
                       setSelectedId(claimedEmployee?.id)
                       setLeavepopup(true);
+                      setSelectedData(claimedEmployee);
                       setType("claimed");
                     }}
                     className="flex h-16 w-[90%] items-center justify-between rounded-full bg-white py-2 pl-2 pr-5"
