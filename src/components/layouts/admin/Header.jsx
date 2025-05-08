@@ -39,7 +39,6 @@ export const AdminHeader = ({ permissions }) => {
       }),
     enabled: !!user?.id,
   });
-  console.log(adminchatlist);
 
   const { data: notification, isLoading } = useQuery({
     queryKey: ["notification", user?.id],
@@ -50,7 +49,6 @@ export const AdminHeader = ({ permissions }) => {
       }),
     enabled: !!user?.id,
   });
-  console.log(notifications);
 
   const handleClick = () => {
     setPopupOpen(true);
@@ -67,7 +65,6 @@ export const AdminHeader = ({ permissions }) => {
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);
-  console.log(user);
 
   return (
     <>

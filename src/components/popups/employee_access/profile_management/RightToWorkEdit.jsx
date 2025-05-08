@@ -106,7 +106,7 @@ export default function RightToWorkEdit({
       setLoader(false);
     }
   };
-  console.log(errors, "errorserrorserrors");
+  
   return (
     <Dialog
       open={popupOpen}

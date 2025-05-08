@@ -33,8 +33,6 @@ export default function LeaveRequest({
     resolver: yupResolver(LeaveRequestSchema),
   });
 
-  console.log(errors, "errorserrors");
-
   const { data: leaveDetails } = useQuery({
     queryKey: ["leaveDetails", user?.id, id],
     queryFn: () =>

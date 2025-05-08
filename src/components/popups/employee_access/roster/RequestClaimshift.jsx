@@ -10,6 +10,7 @@ import { customSelectStyles } from "@/utils/customStyles";
 export default function RequestClaimshift({
   popupOpen,
   refetch,
+  type,
   setPopupOpen,
   selectedField,
 }) {
@@ -24,7 +25,7 @@ export default function RequestClaimshift({
     reset();
     setPopupOpen(false);
   }
-  console.log(selectedField);
+  
   const options = [
     {
       id: 1,
@@ -84,7 +85,7 @@ export default function RequestClaimshift({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-md font-bold leading-7 text-textcolor-darkCharcoal">
-                Request for Claim shift
+                {type === 'claim' ? 'Request for Claim shift' : 'Requested shift details'}
               </h1>
               <button
                 onClick={close}
@@ -138,7 +139,8 @@ export default function RequestClaimshift({
                 {error?.note && <div className="text-sm text-red-500">{error.note}</div>}
               </div>
 
-              <div className="mt-2 flex w-full items-center justify-between gap-3">
+              {type === 'claim' && (
+                <div className="mt-2 flex w-full items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={close}
@@ -154,6 +156,7 @@ export default function RequestClaimshift({
                   Send Request
                 </button>
               </div>
+              )}
             </div>
           </DialogPanel>
         </div>

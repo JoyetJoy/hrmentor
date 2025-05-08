@@ -53,7 +53,6 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
   const [loader, setLoader] = useState(false);
   const [description, setDescription] = useState("");
   const [emailDescription, setEmailDescription] = useState("");
-  console.log(candidate);
   const {
     register,
     handleSubmit,
@@ -189,7 +188,7 @@ export const UnConditionalOfferLetter = ({ candidate }) => {
       setLoader(false);
     }
   };
-  console.log(candidate);
+ 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex w-full items-center justify-between text-sm font-semibold">

@@ -1,9 +1,4 @@
 import { newRequest, ROSTER_CLAIM } from "@/api";
-import MonthlyCalendarPicker from "@/components/common/MonthPicker";
-import NewJoiners from "@/components/hiring/dashboard/NewJoiner";
-import MenuHeaderHiring from "@/components/hiring/MenuHeader";
-import { OverviewCards } from "@/components/hiring/overview/OverviewCard";
-import NewComers from "@/components/popups/hiring/dashboard/NewComers";
 import Loader from "@/components/ui/Loader";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -11,9 +6,8 @@ import { useEffect, useState } from "react";
 import Rosteroveview from "@/components/roster/Rosteroveview";
 import CalanderShift from "@/components/roster/CalendarShift";
 import CalendarEmployees from "@/components/roster/CalendarEmployees";
-import CalendarShiftHistory from "@/components/roster/CalendarShiftHistory";
 import { useLocation } from "react-router-dom";
-import { ADD_EMPLOYEE_ROSTER, DELETE_EMPLOYEE_ROSTER, ROSTER_EMPLIST, SWAP_EMPLOYEE_ROSTER } from "@/api/setup";
+import { ADD_EMPLOYEE_ROSTER, DELETE_EMPLOYEE_ROSTER, EMPLOYEE_LIST_ADMIN, SWAP_EMPLOYEE_ROSTER } from "@/api/setup";
 import toast from "react-hot-toast";
 import ShiftHeader from "@/components/common/ShiftHeader";
 
@@ -53,9 +47,8 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", id, rosterCalim],
     queryFn: () => {
-      console.log(`Fetching employee list for shift ID: ${id}`);
       return newRequest
-        .get(`${ROSTER_EMPLIST}/${rosterCalim?.roster_details?.shift_details?.shift_id}/${id}/${date}`)
+        .get(`${EMPLOYEE_LIST_ADMIN}/${rosterCalim?.roster_details?.shift_details?.shift_id}/${id}/${date}`)
         .then((res) => {
           return res.data;
         });

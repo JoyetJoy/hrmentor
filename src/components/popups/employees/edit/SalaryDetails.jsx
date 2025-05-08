@@ -53,7 +53,6 @@ export default function EmployeeSalaryDetailsEditForm({
       newRequest.get(`${api}/${selectedField}/edit`).then((res) => res.data),
     enabled: !!selectedField != 0,
   });
-  console.log(employeeSalaryDetailByid);
 
   useEffect(() => {
     if (employeeSalaryDetailByid) {
@@ -118,7 +117,6 @@ export default function EmployeeSalaryDetailsEditForm({
       return;
     }
     try {
-      console.log(data);
       setLoader(true);
       const formData = new FormData();
       formData.append("user_id", uid);
@@ -141,8 +139,6 @@ export default function EmployeeSalaryDetailsEditForm({
       if (selectedField !== 0) {
         res = await newRequest.patch(`${api}/${selectedField}`, formData);
       } else {
-        console.log(formData);
-
         res = await newRequest.post(api, formData);
       }
       if (res.data?.status === 201) {
@@ -157,8 +153,7 @@ export default function EmployeeSalaryDetailsEditForm({
       setLoader(false);
     }
   };
-  console.log(empSalaryMasterList);
-
+  
   return (
     <Dialog
       open={popupOpen}

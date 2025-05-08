@@ -115,7 +115,7 @@ export default function DocumentEdit({
       setLoader(false);
     }
   };
-console.log(uid,"uiduid")
+
   return (
     <Dialog
       open={popupOpen}

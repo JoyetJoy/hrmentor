@@ -11,8 +11,6 @@ export default function Share({ sharePopupOpen, setSharePopupOpen, uid }) {
       setIsLoader(true);
       const response = await newFormRequest.post(`${SEND_ONBORDING}/${uid}`);
 
-      console.log(response, "responseresponse");
-
       if (response?.data?.original?.message) {
         toast.error(response?.data?.original?.message);
       } else {

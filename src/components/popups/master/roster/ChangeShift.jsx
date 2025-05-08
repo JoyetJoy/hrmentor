@@ -39,7 +39,6 @@ export default function ChangeShift({
     mode: "onSubmit",
     resolver: yupResolver(RosterEditSchema),
   });
-console.log(datas);
 
   function close() {
     setIsDeleted(false);

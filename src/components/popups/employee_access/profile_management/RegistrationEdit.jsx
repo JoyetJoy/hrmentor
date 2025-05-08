@@ -39,8 +39,6 @@ export default function RegistrationEdit({
     enabled: !!selectedField != 0,
   });
 
-  console.log(employeeExperienceDetailByid);
-
   useEffect(() => {
     if (employeeExperienceDetailByid) {
       setValue("reg_memb_body", employeeExperienceDetailByid.reg_memb_body);

@@ -31,8 +31,6 @@ export default function EditQuestionnaireForm({
     enabled: !!selectedField != 0,
   });
 
-  console.log(questionnaireDetailByid?.candidateScreeningQuestionOptions);
-
   const {
     register,
     handleSubmit,

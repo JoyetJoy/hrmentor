@@ -102,8 +102,6 @@ export default function ProfileManagmentForm({ formtype }) {
   }));
   
   const u_id = user?.employee_data?.user_id;
-  console.log(errors);
-  
 
   // MASTERS LISTING
   const { data: employeeMasters } = useEmployeeMaster(
@@ -322,8 +320,6 @@ export default function ProfileManagmentForm({ formtype }) {
   };
 
   const handleEmployee = async (data) => {
-    console.log(data);
-    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data?.middle_name||'');

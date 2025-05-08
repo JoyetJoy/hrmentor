@@ -22,8 +22,6 @@ export default function NewComers() {
         }),
   });
 
-  console.log(newComers);
-
   return (
     <>
       <>

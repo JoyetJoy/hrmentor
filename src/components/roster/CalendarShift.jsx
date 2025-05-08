@@ -17,7 +17,6 @@ export default function CalanderShift({rosterCalim, isLoading, refetch}) {
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedId],
     queryFn: () => {
-      console.log(`Fetching employee list for shift ID: ${selectedId}`);
       return newRequest
         .get(`${ROSTER_CLAIMED_EMPLOYEE_DETAILS}/${selectedId}`)
         .then((res) => {

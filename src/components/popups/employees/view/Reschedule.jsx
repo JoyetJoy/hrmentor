@@ -16,7 +16,6 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate
     // setSelectedEmployee("");
     setPopupOpen(false);
   };
-console.log(joinDate);
 
   const options = [
     { label: "On Leave", value: "On Leave", id: 3 },
@@ -28,7 +27,6 @@ console.log(joinDate);
   ];
 
   const [status, setStatus] = useState(null);
-  console.log(date);
 
   useEffect(() => {
     if (data?.employmentStatus) {

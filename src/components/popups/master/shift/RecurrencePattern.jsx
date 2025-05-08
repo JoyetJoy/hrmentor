@@ -5,11 +5,7 @@ export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,sel
     const toggleDaySelection = (day,index) => {
       const value = 0;
     const newRequireDays = [...requireDays];
-    
-    
-    
     newRequireDays[index] = value;
-    console.log(newRequireDays);
     setRequireDays(newRequireDays);
       
         setSelectedDays((prev) =>

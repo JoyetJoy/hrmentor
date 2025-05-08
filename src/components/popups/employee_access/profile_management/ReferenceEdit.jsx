@@ -132,7 +132,6 @@ export default function ReferenceEdit({
     }
   };
 
-  console.log(errors, "errordddd");
   return (
     <Dialog
       open={popupAddOpen}

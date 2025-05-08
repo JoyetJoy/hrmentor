@@ -71,7 +71,6 @@ export default function Event() {
         accessorKey: "sno",
         cell: ({ row }) => (
           <>
-            {console.log(currentPage, "currentPagecurrentPage")}
             <div>{row.index + 1 + (currentPage - 1) * pageLimit}</div>
           </>
         ),

@@ -43,7 +43,6 @@ export const ConditionalOfferLetter = ({ candidate }) => {
   const [loader, setLoader] = useState(false);
   const [description, setDescription] = useState("");
   const [emailDescription, setEmailDescription] = useState("");
-  console.log(candidate);
   const {
     register,
     handleSubmit,
@@ -70,7 +69,6 @@ export const ConditionalOfferLetter = ({ candidate }) => {
     DEFAULT_EMAIL_TEMPLATE,
     "olEmailDefaultTemplate",
   );
-  console.log(olEmailDefaultTemplate);
 
   // SET DEFAULT VALUES
   useEffect(() => {

@@ -24,7 +24,7 @@ export default function RecDashboardInterviews({ selectedDate }) {
           return res.data;
         }),
   });
-  console.log(recDashboardInterviews);
+  
   return (
     <>
       {isLoading ? (

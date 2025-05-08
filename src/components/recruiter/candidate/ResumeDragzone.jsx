@@ -29,7 +29,6 @@ export default function ResumeDragzone({
       setFilePreview(null); // Clear preview if file is not supported
     }
   };
-console.log(types);
 
   return (
     <>

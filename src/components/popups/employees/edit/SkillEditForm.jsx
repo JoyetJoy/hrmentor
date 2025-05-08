@@ -44,7 +44,6 @@ export default function SkillEditForm({
     SKILL_FIELD_TYPE,
     "skillTypeList",
   );
-console.log(skillTypeList);
 
   // Get selected data
   const { data: employeeSkillDetailByid, isLoading } = useQuery({

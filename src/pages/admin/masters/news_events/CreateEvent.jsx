@@ -103,7 +103,6 @@ export default function CreateEvent() {
       formData.append("active_status", status);
 
       let res;
-      console.log(status, "statust");
 
       if (
         !data?.event_title ||

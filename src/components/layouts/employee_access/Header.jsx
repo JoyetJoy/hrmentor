@@ -52,8 +52,6 @@ export default function EmployeeAccessHeader() {
       localStorage.removeItem("employee_token");
       navigate("/login");
     }
-    console.log(path, "pathpath");
-
     navigate(path);
   };
   const isActiveLink = (path) => location.pathname.includes(path);

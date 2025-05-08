@@ -63,7 +63,6 @@ export default function RecSaveFormCandidate({ type }) {
       }),
     enabled: type == "update",
   });
-  console.log(candidateDetails?.data);
 
   useEffect(() => {
     if (candidateDetails) {
@@ -117,8 +116,6 @@ export default function RecSaveFormCandidate({ type }) {
 
   useEffect(() => {
     if (candidateDetails?.data) {
-      console.log(candidateDetails?.data);
-
       setValue("employee_id", candidateDetails?.data?.employee_id);
       setValue("first_name", candidateDetails?.data?.first_name);
       setValue("middle_name", candidateDetails?.data?.middle_name || "");
@@ -190,8 +187,6 @@ export default function RecSaveFormCandidate({ type }) {
       return;
     }
     const formData = new FormData();
-    console.log(data.state_or_province);
-
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name ?? "");
     formData.append("sur_name", data.sur_name);

@@ -25,8 +25,6 @@ export default function SaveRecruiterMasterForm({
   api,
 })
  {
-  console.log(qrKey, type, colKeys, api);
-  
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
@@ -40,7 +38,6 @@ export default function SaveRecruiterMasterForm({
       newRequest.get(`${api}/${selectedField}`).then((res) => res.data),
     enabled: enableKey,
   });
-console.log(type);
 
   const {
     register,

@@ -118,11 +118,6 @@ const ShiftCalendar = () => {
       EMPLOYEE_WORK_LOCATION_LIST,
     );
   
-    // Debugging
-    console.log("work_area data:", work_area);
-    console.log("department data:", department);
-    console.log("location data:", location);
-  
     // Ensure the data is an array
     const departmentOptions = Array.isArray(department)
       ? department.map((dep) => ({ value: dep.id, label: dep.value }))
@@ -583,7 +578,6 @@ const ShiftCalendar = () => {
                       availableSlots,
                       requestedSlots,
                     } = findEvents(date);
-                    console.log(shiftEvents);
 
                     return (
                       <div className="overflow-y-min relative flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">

@@ -17,7 +17,7 @@ const handleEmailShare = () => {
   const body = encodeURIComponent(jobContent);
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
 };
-console.log(text,"")
+
   // Function to handle sharing via WhatsApp
   const handleWhatsappShare = () => {
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(

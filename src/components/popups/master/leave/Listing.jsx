@@ -202,7 +202,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [currentPage, pageLimit, colKeys],
   );
-console.log(selectedId,"selectedIdselectedIdselectedId")
+  
   return (
     <>
       <DeleteConfirmation

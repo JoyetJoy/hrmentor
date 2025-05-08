@@ -30,7 +30,7 @@ export default function SaveHiringMasterForm({
     HIRING_DOCUMENT_TYPE,
     "documentTypesHiring",
   );
- console.log(documentTypesHiring,"documentTypesHiring")
+ 
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");

@@ -76,7 +76,6 @@ const RosterCalendar = () => {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
-  console.log(user);
 
   useEffect(() => {
     if (!role.includes(1)) {
@@ -93,9 +92,6 @@ const RosterCalendar = () => {
       queryFn: () => newRequest.get(url).then((res) => res.data),
     });
   };
-
-  // console.log(activeDepartment);
-  // console.log(endDate);
 
   const { data, refetch, isLoading } = useQuery({
     queryKey: [
@@ -222,12 +218,6 @@ const RosterCalendar = () => {
     "location",
     EMPLOYEE_WORK_LOCATION_LIST,
   );
-
-  // Debugging
-
-  // console.log("work_area data:", work_area);
-  // console.log("department data:", department);
-  // console.log("location data:", location);
 
   // Ensure the data is an array
   const departmentOptions = Array.isArray(department)
@@ -436,22 +426,10 @@ const RosterCalendar = () => {
     is_swapped,
     date_swaps,
   ) => {
-    console.log(date_swaps, type);
     let dateSwap;
     if (type === "change" && date_swaps) {
       dateSwap = date_swaps?.find((swap) => swap?.date === date);
     }
-
-    // if (type === "addshift") {
-    //   console.log('yes');
-
-    //   setShiftIds((prev) => {
-    //     const newSet = new Set([...prev, ...shifts.map((shift) => shift?.shift_id)]);
-    //     return Array.from(newSet);
-    //   });
-
-    // }
-    console.log(date_swaps);
 
     if (type === "addshift" && shiftIds.length > 0) {
       setShiftDetails({
@@ -478,7 +456,6 @@ const RosterCalendar = () => {
       setShiftPopup(true);
     }
   };
-  console.log(shiftIds, "shiftDetails");
 
   return (
     <>
@@ -699,7 +676,6 @@ const RosterCalendar = () => {
                             deletedEvents,
                             dayOff
                           } = findEvents(day.fullDate, emp?.rosters, day.day);
-                          console.log(dayOff);
 
                           return (
                             <td

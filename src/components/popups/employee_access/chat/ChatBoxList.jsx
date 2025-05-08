@@ -27,7 +27,6 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen, refetch }) 
           setChats(data); // show all if no keyword
         }
       }, [keyword, data]);
-      // console.log(selectedUser);
       
   return (
     <>

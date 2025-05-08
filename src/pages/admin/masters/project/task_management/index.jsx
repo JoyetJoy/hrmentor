@@ -145,7 +145,6 @@ export default function TaskManagement() {
         })
         .then((res) => res.data),
   });
-console.log(taskList);
 
   const { data: taskListDetails } = useQuery({
     queryKey: ["taskListDetails", selectedId],

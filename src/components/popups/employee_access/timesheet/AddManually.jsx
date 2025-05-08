@@ -41,8 +41,6 @@ export default function AddManually({ popupOpen, setPopupOpen }) {
     reset();
   }
 
-  console.log(errors, "cdcdc");
-
   const onSubmit = async (data) => {
     setLoader(true);
 

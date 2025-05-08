@@ -10,8 +10,6 @@ import Select from "react-select";
 
 function RecruiterSideBar({ jid, jobDetailView }) {
   const queryClient = useQueryClient();
-  console.log(jobDetailView);
-
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {

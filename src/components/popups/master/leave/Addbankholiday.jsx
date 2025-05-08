@@ -205,11 +205,6 @@ export default function AddBankHoliday({
                         options={locationList}
                         placeholder="Select Location"
                         onChange={(selectedOption) => {
-                          console.log(
-                            selectedOption,
-                            "selectedOptionselectedOption",
-                          );
-
                           field.onChange(selectedOption);
                           setSelectedlocationId(selectedOption.id);
                         }}

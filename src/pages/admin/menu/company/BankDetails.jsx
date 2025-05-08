@@ -175,7 +175,6 @@ export default function CompanyBankDetails() {
           },
         },
       );
-      console.log(res);
 
       if (res) {
         toast.success(res?.data?.message);

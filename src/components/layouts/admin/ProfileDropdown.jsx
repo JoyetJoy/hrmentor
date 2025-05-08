@@ -7,7 +7,6 @@ export default function ProfileDropdown({ handleNavigation, user, permissions })
   const { role } = useRoleStore((state) => ({
       role: state.role,
       }));
-console.log(role);
 
   const adminItems=getadminItems(permissions,role)
   return (

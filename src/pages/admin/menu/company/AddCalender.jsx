@@ -251,8 +251,6 @@ export default function CompanyAddCalender() {
     }
   }, [selectIds, companyCalenderDetails]);
 
-  console.log(companyCalenderDetails, popupOpen, "popupOpenpopupOpenpopupOpen");
-
   return (
     <>
       {popupOpen && (

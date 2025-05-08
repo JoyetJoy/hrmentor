@@ -16,8 +16,6 @@ export default function ChangeStatus({
 
   const handleSubmit = () => {
     if (status) {
-        console.log(status);
-        
       handleCandidateStatus(status);
       setOpen(false); // Close the modal after submitting
     } else {

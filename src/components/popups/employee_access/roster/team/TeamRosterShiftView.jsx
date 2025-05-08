@@ -11,7 +11,6 @@ export default function TeamRosterShiftView({
   date,
   convertTo12HourFormat,
 }) {
-  console.log(selectedField);
 
   // const [loader, setLoader] = useState(false);
   const { data, refetch } = useQuery({
@@ -30,7 +29,6 @@ export default function TeamRosterShiftView({
         .then((res) => res.data),
     enabled: !!data?.shift_id, // Run only if data and shift_id exist
   });
-  console.log(data);
 
   function close() {
     setPopupOpen(false);

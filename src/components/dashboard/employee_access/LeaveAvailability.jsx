@@ -24,8 +24,6 @@ export default function LeaveAvailability() {
   
 const annual= [leave?.consumed || 0, leave?.remaining || 0]
 const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total') : [];
-console.log(annualLabels);
-
 
   const data = {
     labels: annualLabels,
@@ -62,7 +60,6 @@ console.log(annualLabels);
   
       ctx.restore();
       ctx.save();
-  console.log(leave);
   
       const centerX = width / 2 - 50; // move 10px to the left
       const centerY = height / 2;

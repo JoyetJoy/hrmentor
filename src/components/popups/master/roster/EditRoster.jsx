@@ -59,13 +59,10 @@ const EditRoster = React.memo(
           .then((res) => res.data),
       enabled: !!selectedRoster?.roster_id,
     });
-    console.log(rosterDetail);
 
     const handleShiftChange = (selectedOption) => {
-      console.log("Selected shift:", selectedOption);
       setSelectedShiftId(selectedOption.value);
     };
-    console.log(selectedEmployees);
 
     const handleDeleteEmployee = (employeeId) => {
       setSelectedEmployees((prevEmployees) =>
@@ -73,7 +70,6 @@ const EditRoster = React.memo(
       );
       toast.success("Employee deleted successfully");
     };
-    console.log(selectedEmployee);
 
     const handleAddEmployee = () => {
       if (selectedEmployee) {
@@ -99,7 +95,6 @@ const EditRoster = React.memo(
     const { data: rosterEmpList } = useQuery({
       queryKey: ["rosterEmpList", selectedShiftId],
       queryFn: () => {
-        console.log(`Fetching employee list for shift ID: ${selectedShiftId}`);
         return newRequest
           .get(`${ROSTER_EMPLIST}/${selectedShiftId}`)
           .then((res) => {
@@ -107,14 +102,10 @@ const EditRoster = React.memo(
           });
       },
       enabled: !!selectedShiftId,
-      onSuccess: (data) => {
-        console.log("Fetched employee list:", data);
-      },
       onError: (error) => {
         console.error("Error fetching employee list:", error?.message || error);
       },
     });
-    console.log(selectedEmployees);
 
     const onSubmit = async (data) => {
       await handleRoster(data);
@@ -133,15 +124,12 @@ const EditRoster = React.memo(
         end_date: endDate,
         rosterDetails: selectedEmployees,
       };
-
-      console.log(formData);
       try {
         let res;
         res = await newRequest.post(
           `${ROSTER_LIST}/${selectedRoster?.roster_id}`,
           formData,
         );
-        console.log(res);
         if (res?.status === 200) {
           setCopy("");
           toast.success("Update roster details successfully");
@@ -149,8 +137,6 @@ const EditRoster = React.memo(
           reset();
           setEditPopupOpen(false);
         } else {
-          console.log(res);
-
           toast.error("Failed to update roster.");
         }
       } catch (error) {
@@ -160,15 +146,7 @@ const EditRoster = React.memo(
     };
 
     useEffect(() => {
-      if (selectedShiftId) {
-        console.log(`Shift selected: ${selectedShiftId}`);
-      }
-    }, [selectedShiftId]);
-
-    useEffect(() => {
       if (selectedRoster) {
-        console.log("hjshdf", rosterDetail);
-
         setValue("shift", shift);
         setValue(
           "start_date",
@@ -225,7 +203,7 @@ const EditRoster = React.memo(
       ],
       [],
     );
-    console.log(selectedRoster);
+   
     useEffect(() => {
       if (selectedRoster?.employees) {
         setSelectedEmployees(

@@ -12,7 +12,6 @@ import {
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title);
 
 const Expense = ({datas}) => {
-  console.log(datas);
   const months = datas?.graph.map(item => item.month);
   const values = datas?.graph.map(item => item.value);
   

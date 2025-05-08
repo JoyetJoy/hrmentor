@@ -79,8 +79,6 @@ export default function ReferenceAdd({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      console.log(data?.type, "data?.typedata?.type");
-
       const formData = new FormData();
       formData.append("type", data?.type?.value);
       formData.append("employee_id", employeeDetails?.employee_id);
@@ -126,7 +124,6 @@ export default function ReferenceAdd({
     }
   };
 
-  console.log(uid, "designationdesignationdesignation");
   return (
     <Dialog
       open={popupAddOpen}

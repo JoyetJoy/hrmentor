@@ -32,7 +32,7 @@ const Index = ({ attendance, setAttendance, empId, refetch }) => {
     remarks: "",
     status: "",
   });
-  console.log(empId);
+
 const id = empId?.attendance?.attendance_id;
   const { data, isLoading,refetch:refetchData } = useQuery({
     queryKey: ["attendanceData", id],
@@ -42,7 +42,7 @@ const id = empId?.attendance?.attendance_id;
         .then((res) => res.data),
     enabled: !!id,
   });
-  console.log(id);
+ 
   useEffect(() => {
     if (!empId?.attendance?.attendance_id) {
       setLeave(empId?.attendance?.status);
@@ -101,8 +101,6 @@ const id = empId?.attendance?.attendance_id;
         remarks: fullData?.remarks,
       };
 
-      console.log(data);
-
       const response = await newRequest.post(CHANGE_ATTENDANCE, data);
       if (response.status === 200) {
         refetch();
@@ -114,9 +112,6 @@ const id = empId?.attendance?.attendance_id;
     } catch (error) {
       toast.error("Something went wrong , Try after sometimes");
     }
-    console.log(fullData);
-
-    // setAttendance(false);
   };
 
   const onclose = () => {

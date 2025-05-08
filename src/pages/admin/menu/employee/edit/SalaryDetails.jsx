@@ -124,7 +124,6 @@ export default function EmployeeSalaryEdit() {
       ].filter(Boolean),
     [employeeSalaryDetails],
   );
-  console.log(selectedId);
   
   return (
     <>

@@ -23,7 +23,6 @@ function Rosteroveview({ rosterCalim, date, id, refetch }) {
       }
       const response = await newRequest.post(SHIFT_CLAIM_ON_OFF,data);
       refetch();
-      console.log(response);
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while updating the claim.");

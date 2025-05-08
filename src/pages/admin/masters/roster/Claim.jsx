@@ -22,7 +22,7 @@ export default function Claim() {
     queryKey: ["rosterdetails", currentPage, rid,date, keyword],
     queryFn: () =>
       newRequest
-        .get(, {
+        .get(ROSTER_CLAIM, {
           params: {
             search: keyword,
             page: currentPage,

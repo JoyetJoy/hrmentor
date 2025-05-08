@@ -63,7 +63,6 @@ export default function SaveMasterShift({ formtype, sid }) {
     mode: "onChange",
     resolver: yupResolver(ShiftSchema),
   });
-  console.log(selectedDays);
 
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
@@ -76,16 +75,8 @@ export default function SaveMasterShift({ formtype, sid }) {
     enabled: !!id,
   });
 
-  // Log the shift details
-  useEffect(() => {
-    if (shiftDetails) {
-      console.log(shiftDetails);
-    }
-  }, [shiftDetails]);
-
   const startTime = watch("start_time");
   const endTime = watch("end_time");
-console.log(startTime,endTime);
 
   useEffect(() => {
     if (startTime && endTime) {
@@ -148,8 +139,6 @@ console.log(startTime,endTime);
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     if (recurrencePattern === "weekly") {
       if (validateInputs()) {
         if (calculationType === "perhour") {
@@ -180,7 +169,6 @@ console.log(startTime,endTime);
 
     // Start loader
     setLoader(true);
-    console.log(data.department_id);
 
     // Common shift data for both weekly and non-weekly recurrence
     formdata = {
@@ -217,7 +205,6 @@ console.log(startTime,endTime);
         shift_id: id,
       };
     }
-    console.log(formdata);
 
     try {
       const api = id ? `${SHIFT_LIST}/${id}` : SHIFT_LIST;
@@ -283,8 +270,6 @@ console.log(startTime,endTime);
   );
   useEffect(() => {
     if (workAreaList) {
-      console.log(workAreaList);
-      
       const formattedWorkArea = workAreaList.listing.map(
         (item) => ({
           label: item.work_area_name,

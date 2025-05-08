@@ -42,7 +42,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedShiftId],
     queryFn: () => {
-      console.log(`Fetching employee list for shift ID: ${selectedShiftId}`);
       return newRequest
         .get(`${ROSTER_EMPLIST}/${selectedShiftId}`)
         .then((res) => {
@@ -50,21 +49,16 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
         });
     },
     enabled: !!selectedShiftId,
-    onSuccess: (data) => {
-      console.log("Fetched employee list:", data);
-    },
     onError: (error) => {
       console.error("Error fetching employee list:", error?.message || error);
     },
   });
-  console.log(selectedShiftId);
 
   const selectedShift = shiftList?.data?.original?.data.find(
     (item) => item.id === selectedShiftId,
   );
 
   const handleShiftChange = (selectedOption) => {
-    console.log("Selected shift:", selectedOption);
     setSelectedShiftId(selectedOption.value);
   };
 
@@ -74,7 +68,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     );
     toast.success("Employee deleted successfully");
   };
-  console.log(selectedEmployee);
 
   const handleAddEmployee = () => {
     if (selectedEmployee) {
@@ -91,9 +84,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
           employee_id: Number(selectedEmployee.value),
         },
       ]);
-    } else {
-      console.log("No employee selected to add.");
-    }
+    } 
   };
 
   useEffect(() => {
@@ -120,12 +111,9 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       end_date: endDate,
       rosterDetails: selectedEmployees,
     };
-
-    console.log(formData);
     try {
       let res;
       res = await newRequest.post(ROSTER_LIST, formData);
-      console.log(res);
       if (res?.status === 200) {
         toast.success("Saved roster details successfully");
         queryClient.invalidateQueries([""]);
@@ -139,11 +127,6 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
       toast.error(error.response.data.error || "Failed roster.");
     }
   };
-  useEffect(() => {
-    if (selectedShiftId) {
-      console.log(`Shift selected: ${selectedShiftId}`);
-    }
-  }, [selectedShiftId]);
 
   const columns = React.useMemo(
     () => [

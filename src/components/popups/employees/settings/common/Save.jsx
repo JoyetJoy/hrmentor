@@ -85,7 +85,6 @@ export default function SaveEmployeeMasterForm({
         formData.append("work_location_address", data?.address);
 
       let res;
-      console.log(data);
 
       if (selectedField !== 0) {
         res = await XFormRequest.patch(`${api}/${selectedField}`, formData);

@@ -75,7 +75,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     enabled: !!user?.id && !!id,
   });
 
-  console.log(user?.id, "user_id");
   useEffect(() => {
     if (AdvanceholidayDetails) {
       reset({
@@ -155,8 +154,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
     } catch (error) {
       console.error("Error Details:", error);
       console.error("Error Response Data:", error?.response?.data);
-      console.log(error, "error");
-
       const errorMessage =
         error?.response?.data?.error || "An unexpected error occurred";
       toast.error(errorMessage);
@@ -484,7 +481,6 @@ const AdvancedSettings = ({ formtype = "save" }) => {
               <button
                 type="button"
                 className="btn flex h-10 min-h-10 min-w-[10rem] items-center border border-gray-400 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100"
-                onClick={() => console.log("Cancel clicked")}
               >
                 Cancel
               </button>

@@ -11,7 +11,7 @@ export default function QuestionnaireListing({ jobProfileQuestionnaire, jid }) {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
-  console.log(jobProfileQuestionnaire[0]?.id,"jobProfileQuestionnaire")
+  
   return (
     <>
       <DeleteConfirmation

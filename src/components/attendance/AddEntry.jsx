@@ -44,7 +44,6 @@ const AddEntryModal = ({
   } = useForm({
     resolver: yupResolver( schema),
   });
-console.log(entry);
 
   const { data } = useQuery({
     queryKey: ["leavetype"],
@@ -55,18 +54,12 @@ console.log(entry);
         )
         .then((res) => res.data),
   });
-  console.log(data);
 
   useEffect(() => {
-    console.log('hiiii');
-    
     if (type === "Edit") {
-     console.log('type');
-     
         setValue("checkIn", entry?.clockIn);
         setValue("checkOut", entry?.clockOut);
         setValue("remarks", entry?.remarks || " ");
-      
     }
   }, [addEntry,type]);
 
@@ -77,14 +70,11 @@ console.log(entry);
         clockOut: data?.checkOut,
         remarks: data?.remarks || "",
       })
-    console.log("Form Data:", entry);
     reset();
     close();
   };
 
   const formatTime = (input) => {
-    console.log(input);
-
     let value = input.replace(/[^0-9]/g, ""); // Remove non-numeric characters
 
     // Format input as HH:MM
@@ -94,7 +84,6 @@ console.log(entry);
 
     return value;
   };
-  console.log(type);
 
   return (
     <Dialog open={addEntry} as="div" className="relative z-30" onClose={close}>

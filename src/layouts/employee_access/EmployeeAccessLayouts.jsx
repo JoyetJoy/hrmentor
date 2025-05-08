@@ -32,7 +32,7 @@ export default function EmployeeAccessLayouts() {
       setPermissions(profile?.data?.permission);
     }
   }, [profile]);
-console.log(location);
+(location);
 
   if (location.pathname === "/employee-access") {
     return <Navigate to="/employee-access/dashboard" replace />;

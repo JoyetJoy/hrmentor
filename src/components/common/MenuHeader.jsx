@@ -41,11 +41,9 @@ function MenuHeader(props) {
             )
           ? AccountManngerMenu
           : [];
-  console.log(currentMenu);
 
   const menuItem = currentMenu.find((item) => item.name === activeSubMenu);
   const defaultActiveMenu = activeSubMenu;
-  console.log(menuItem);
 
   const isSpecialPath = [
     "Employee",

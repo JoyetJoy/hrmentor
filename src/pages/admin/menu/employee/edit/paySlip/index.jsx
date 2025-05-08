@@ -31,7 +31,6 @@ export default function AdminPaySlip() {
         },
       }).then((res) => res.data),
   });
-  console.log(data);
   
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();

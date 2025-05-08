@@ -88,7 +88,6 @@ const BasicSettings = ({ formtype = "save" }) => {
   const [encashmentsPay, setEncashmentsPay] = useState("");
   const { user } = useUserStore((state) => ({ user: state.user }));
   const selectedMonthValue = watch("accural_monthly")?.value;
-  console.log(selectedMonthValue);
   const [dayOptions, setDayOptions] = useState([]);
 
   const daysInMonth = selectedMonthValue
@@ -155,7 +154,6 @@ const BasicSettings = ({ formtype = "save" }) => {
         .then((res) => res.data),
     enabled: !!id,
   });
-  console.log(accrualType, applicable);
 
   useEffect(() => {
     if (basicholidayDetails) {
@@ -236,8 +234,6 @@ const BasicSettings = ({ formtype = "save" }) => {
   const handledSubmit = async (data) => {
     try {
       setLoader(true);
-      console.log(data);
-
       const formData = {
         leave_name: data.leave_name,
         display_name: data.display_name,
@@ -300,8 +296,6 @@ const BasicSettings = ({ formtype = "save" }) => {
   };
 
   const getOrdinalSuffix = (num) => {
-    console.log(num);
-
     if (num >= 11 && num <= 13) return num + "th";
     const lastDigit = num % 10;
     switch (lastDigit) {
@@ -315,11 +309,8 @@ const BasicSettings = ({ formtype = "save" }) => {
         return num + "th";
     }
   };
-  console.log(daysInMonth);
 
   useEffect(() => {
-    console.log("Days in selected month:", daysInMonth);
-
     const newDayOptions = [
       ...Array.from({ length: daysInMonth }, (_, i) => {
         const day = i + 1;
@@ -330,8 +321,6 @@ const BasicSettings = ({ formtype = "save" }) => {
       }),
       { value: "lastDay", label: "Last day" },
     ];
-
-    console.log("Updated Day Options:", newDayOptions);
     setDayOptions(newDayOptions);
   }, [selectedMonthValue]);
 

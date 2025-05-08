@@ -7,8 +7,6 @@ export default function ProfileDropdown({ handleNavigation, user }) {
   const { permissions } = usePermissionStore((state) => ({
     permissions: state.permissions,
     }));
-    console.log(permissions);
-    
 
     const employeeaccessItems = getemployeeaccessItems(permissions);
   return (

@@ -79,8 +79,6 @@ export default function ReferenceSendEmail({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      console.log(data?.type, "data?.typedata?.type");
-
       const formData = new FormData();
       formData.append("type", data?.type?.value);
       formData.append("id", selectedField);
@@ -111,11 +109,7 @@ export default function ReferenceSendEmail({
       setLoader(false);
     }
   };
-  // const selectedTemplateValue = watch("template_heading");
-
-  // Find the corresponding description based on the selected value
- 
-  console.log(uid, "sendsecxcxvcnd");
+  
   return (
     <Dialog
       open={popupOpen}

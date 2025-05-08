@@ -87,8 +87,6 @@ export default function EmployeeBankDetailsEditForm({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      console.log(data);
-      
       const formData = new FormData();
       formData.append("user_id", uid);
       formData.append("account_type", data.account_type?.id);

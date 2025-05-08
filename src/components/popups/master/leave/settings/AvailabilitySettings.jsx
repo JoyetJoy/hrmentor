@@ -77,7 +77,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     role_availability: [],
     role_except: [],
   });
-  console.log(user?.id);
 
   const { isLoading: isLocation, data: location } = useQuery({
     queryKey: ["location", user?.id],
@@ -298,7 +297,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
               <button
                 type="button"
                 className="btn flex h-10 min-h-10 min-w-[10rem] items-center border border-gray-400 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100"
-                onClick={() => console.log("Cancel clicked")}
               >
                 Cancel
               </button>

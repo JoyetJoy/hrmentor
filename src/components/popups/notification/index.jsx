@@ -46,14 +46,8 @@ export default function Notification({
       },
     });
   
-    console.log("Subscribing to:", `private-notification.${user?.user?.id}`);
-  
     // Subscribe to the private channel
     const channel = pusher.subscribe(`private-notification.${user?.user?.id}`);
-  
-    pusher.connection.bind("state_change", function (states) {
-      console.log("Pusher State Changed:", states);
-    });
     
     pusher.connection.bind("error", function (err) {
       console.error("Pusher Error:", err);
@@ -61,8 +55,6 @@ export default function Notification({
 
     
     channel.bind("App\\Events\\NotificationSent", (data) => {
-      console.log("Received a new notification:", data);
-  
       const message = {
         "id": data?.latest_unread_notification?.id,
         "user_id": data?.latest_unread_notification?.user_id,
@@ -84,7 +76,6 @@ export default function Notification({
   
     // Cleanup
     return () => {
-      console.log("Unsubscribing from:", `private-notification.${user?.user?.id}`);
       channel.unbind_all();
       channel.unsubscribe();
       pusher.disconnect();
@@ -100,15 +91,12 @@ const handleClick = async (notificationId) => {
     const response = await newRequest.post(READ_NOTIFICATION,data);
     
     if (response.status === 200) {
-      console.log("Notification marked as read", response.data);
       close();
     }
   } catch (error) {
     console.error("Error marking notification as read:", error);
   }
 };
-
-console.log(notification);
 
   return (
     <>

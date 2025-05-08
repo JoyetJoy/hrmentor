@@ -38,7 +38,6 @@ export default function EmailSetup() {
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
-  console.log(user);
   
   const { data: emailFolderList = [],refetch } = useQuery({
     queryKey: ["emailFolderList", user?.id],

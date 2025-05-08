@@ -87,8 +87,7 @@ export const AdminDashboard = () => {
       path: "/admin/leave/people-on-leave",
     },
   ];
-
-  console.log(admindashboard?.available_slots, "available_slots");
+  
   return (
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
       <div className="flex min-w-[73%] flex-col gap-3">

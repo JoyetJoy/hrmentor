@@ -70,23 +70,17 @@ export default function RosterList() {
     setPopupOpen(true);
   };
 
-  console.log(selectedRoster);
-
   const handleView = (roster) => {
     setSelectedRoster(roster);
   };
 
   const handleEdit = (roster) => {
-    console.log("Selected roster for editing:", roster);
     setEditPopupOpen(true);
   };
   const handleCopy = (roster) => {
-    console.log("Selected roster for editing:", roster);
     setCopy(true);
     setEditPopupOpen(true);
   };
-
-  console.log(rosterDetailss?.listing);
 
   const columns = React.useMemo(
     () => [
@@ -173,7 +167,7 @@ export default function RosterList() {
     ],
     [],
   );
-  console.log(selectedRoster);
+  
   return (
     <>
       <DeleteConfirmation

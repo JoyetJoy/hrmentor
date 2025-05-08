@@ -194,14 +194,9 @@ export default function Attendance() {
       const selectedMonth = dayjs().month(); // Get the current month dynamically
       dateRange = getCurrentMonth(selectedYear, selectedMonth);
     }
-
     setStartDate(dateRange.start);
     setEndDate(dateRange.end);
-
-    console.log("Start Date:", dateRange.start);
-    console.log("End Date:", dateRange.end);
   };
-  console.log();
 
   const eventClick = (id, empname, date, day, attendance) => {
     setEmpId({
@@ -213,7 +208,7 @@ export default function Attendance() {
     });
     setAttendance(true);
   };
-  console.log(days, "daysdays");
+  
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -454,10 +449,6 @@ export default function Attendance() {
                         // Find attendance status for the given date
                         const attendanceEntry = employee.attendances.find(
                           (att) => att.attendance_date === day.fullDate,
-                        );
-                        console.log(
-                          attendanceEntry,
-                          "attendanceEntryattendanceEntry",
                         );
 
                         return (

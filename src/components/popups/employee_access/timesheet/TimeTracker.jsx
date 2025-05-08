@@ -24,7 +24,7 @@ export default function TimeTracker({
     const [hours, minutes] = time.split(":");
     return `${hours} hr ${minutes} min`;
   };
-  console.log(weekDays, "weekDaysweekDays");
+ 
   return (
     <Dialog
       open={timeTrackerPopupOpen}

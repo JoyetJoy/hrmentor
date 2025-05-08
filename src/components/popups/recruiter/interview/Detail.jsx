@@ -19,8 +19,6 @@ export default function RecInterviewDetailView({
     enabled: enableKey,
   });
 
-  console.log(recInterviewDetail);
-
   function close() {
     setPopupOpen(false);
     setSelectedField(0);

@@ -47,7 +47,7 @@ export const RecruiterMasters = ({ api, qrkey, colKeys, type }) => {
           return res.data;
         }),
   });
-console.log(type,"typetype")
+  
   useEffect(() => {
     if (data) {
       setTotalPages(data?.last_page);

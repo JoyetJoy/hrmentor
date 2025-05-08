@@ -23,7 +23,7 @@ export default function LeaveDiagram() {
       
     const annual= [leave?.consumed || 0, leave?.remaining || 0]
     const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total') : [];
-    console.log(annualLabels);
+  
   const data = {
     labels: annualLabels,
     datasets: [
@@ -126,7 +126,6 @@ export default function LeaveDiagram() {
   
       ctx.restore();
       ctx.save();
-//   console.log(leave);
   
       const centerX = width / 2 - 70; // move 10px to the left
       const centerY = height / 2 - 120;
@@ -151,7 +150,6 @@ export default function LeaveDiagram() {
   
       ctx.restore();
       ctx.save();
-//   console.log(leave);
   
       const centerX = width / 2 - 70; // move 10px to the left
       const centerY = height / 2 - 120;
@@ -176,7 +174,6 @@ export default function LeaveDiagram() {
   
       ctx.restore();
       ctx.save();
-//   console.log(leave);
   
       const centerX = width / 2 - 70; // move 10px to the left
       const centerY = height / 2 - 120;

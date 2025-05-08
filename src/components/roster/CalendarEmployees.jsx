@@ -45,13 +45,11 @@ function CalendarEmployees({ rosterCalim ,rosterEmpList,handleSubmit, setSelecte
             const finded = rosterCalim.roster_details.swaped_employees.find(
               (employee) => employee?.swaping_from_employee_id === row.original?.id
             );
-            console.log(finded);
+            
             if (finded) {
               name = finded.employee_to?.first_name;
             }
           }
-      
-          console.log(name); // Log the computed name for debugging
       
           return (
             <p className={`whitespace-nowrap flex items-center`}>

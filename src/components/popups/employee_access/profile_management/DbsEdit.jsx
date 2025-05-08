@@ -74,8 +74,6 @@ export default function DbsEdit({
     enabled: !!uid,
   });
 
-  console.log(employeeDetails, "employeeDetailsemployeeDetails");
-
   useEffect(() => {
     if (employeeDbsCheckDetailByid) {
       setValue("dbs_type", employeeDbsCheckDetailByid.dbs_type);

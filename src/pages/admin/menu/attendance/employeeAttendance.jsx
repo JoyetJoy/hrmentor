@@ -108,7 +108,6 @@ const EmployeeAttendanceCalendar = () => {
     const shiftEvents = events?.filter((event) =>
       event?.attendance_date?.includes(formattedDate),
     );
-    // console.log(shiftEvents);
 
     const availableSlots = events?.available_slots_filtered?.filter((slot) =>
       dayjs(slot.date).isSame(dayjs(date), "day"),
@@ -125,7 +124,6 @@ const EmployeeAttendanceCalendar = () => {
     setSelected(event);
     setPopupOpen(true);
   };
-  console.log(selected);
   
   return (
     <div className="flex flex-col">

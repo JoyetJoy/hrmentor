@@ -8,9 +8,7 @@ import { useParams } from "react-router-dom";
 export default function NewsAndEventDetails() {
 
   const { id } = useParams();
-  console.log("id", id); 
-  console.log("Is id truthy?", !!id);
-  console.log(`${NEWS_LISt}/${id}`);
+  
   const { data: newsDetail, isLoading, error } = useQuery({
     queryKey: ["newsDetail", id],
     queryFn: async () => {
@@ -20,7 +18,6 @@ export default function NewsAndEventDetails() {
     enabled: !!id,
   });
 
-  console.log(newsDetail,"newsDetail newsDetail")
   return (
     <div className="h-full">
       <h1 className="my-4 flex items-center text-sm font-bold text-black">

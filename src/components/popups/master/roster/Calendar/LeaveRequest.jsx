@@ -19,7 +19,6 @@ function LeaveRequest({
   selectedData
 }) {
   const [note, setNote] = useState("");
-console.log(data);
 
   const onClose = () => {
     setPopupOpen(false);

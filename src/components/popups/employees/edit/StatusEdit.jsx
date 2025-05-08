@@ -42,8 +42,6 @@ export default function StatusEdit({
     resolver: yupResolver(referenceSchema),
   });
 
-  console.log(errors, "errorserrors");
-
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const { data: statusList } = useEmployeeMaster(STATUS_UPDATELIST, "statusList");
@@ -66,8 +64,6 @@ export default function StatusEdit({
       setValue("status", referenceStatus.status);
     }
   }, [referenceStatus]);
-
-  console.log(referenceStatus, "statusListstatusList");
 
   function close() {
     setPopupStatusOpen(false);

@@ -48,8 +48,6 @@ export const HiringMasters = ({ api, qrkey, colKeys, type }) => {
         }),
   });
 
-  console.log(data);
-
   useEffect(() => {
     if (data) {
       setTotalPages(data?.last_page);

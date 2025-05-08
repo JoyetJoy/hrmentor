@@ -20,7 +20,6 @@ const RosterItemList = ({activeDepartment,setActiveDepartment,activeLocation,set
   const { data: department } = useFetchData("department", EMPLOYEE_DEPARTMENT_LIST);
   const { data: work_area } = useFetchData("work_area", ALL_WORK_AREA);
   const { data: location } = useFetchData("location", EMPLOYEE_WORK_LOCATION_LIST);  
-console.log(work_area);
 
   const handleClick = (setter, item_id, currentActive) => {
     setter(currentActive === item_id ? null : item_id);

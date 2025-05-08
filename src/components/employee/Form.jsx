@@ -321,8 +321,6 @@ export default function SaveEmployeeForm({ formtype }) {
 
   const handleEmployee = async (data) => {
     setLoader(true);
-    console.log(data);
-    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
     formData.append("middle_name", data.middle_name);

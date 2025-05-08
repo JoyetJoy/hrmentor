@@ -18,7 +18,6 @@ export default function EmployeeLists() {
   const { permissions } = usePermissionStore((state) => ({
     permissions: state.permissions,
   }));
-console.log(permissions);
 
   const { data: employeeListing, isLoading } = useQuery({
     queryKey: ["employeeListing", currentPage, keyword],

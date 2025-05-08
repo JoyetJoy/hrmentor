@@ -23,8 +23,7 @@ export default function OpenJobs() {
           return res.data;
         }),
   });
-
-  console.log(openJobs);
+  
   const columns = useMemo(
     () => [
       {

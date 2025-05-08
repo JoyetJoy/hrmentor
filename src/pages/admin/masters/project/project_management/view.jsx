@@ -36,9 +36,6 @@ export default function ProjectManagementView() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
-
-  console.log(id, "idid");
-
   const [content, setContent] = useState("");
   const { image, imageFile, handleImageChange, clearImage, setImage } =
     useImageUpload();
@@ -187,7 +184,7 @@ export default function ProjectManagementView() {
       },
     ],
   };
- console.log(projectListDetails,"projectListDetailsprojectListDetails")
+  
   return (
     <>
       <ProjectHeader

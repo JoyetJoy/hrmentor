@@ -94,9 +94,6 @@ export default function ReferenceForm({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-
-      console.log(data?.type,"data?.typedata?.type");
-      
       const formData = new FormData();
       formData.append("type", data?.type?.value);
       formData.append("employee_id", employeeDetails?.employee_id);
@@ -129,9 +126,7 @@ export default function ReferenceForm({
       setLoader(false);
     }
   };
-  console.log(selectedType, "selectedTypeselectedType")
-
-  console.log(errors, "designationdesignationdesignation");
+ 
   return (
     <Dialog
       open={popupOpen}

@@ -147,6 +147,7 @@ const EmployeeAccessRosterCalendar = () => {
       <RequestClaimshift
         popupOpen={claimPopup}
         refetch={refetch}
+        type={'claim'}
         setPopupOpen={setClaimPopup}
         selectedField={selectedField}
       />

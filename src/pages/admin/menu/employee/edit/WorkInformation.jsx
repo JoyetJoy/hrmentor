@@ -49,8 +49,6 @@ export const WorkInformation = ({ formtype }) => {
     resolver: yupResolver(WorkInfoEmployeeSchema),
   });
 
-  console.log(errors, "errorserrors");
-
   const [active, setActive] = useState("view");
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -81,8 +79,6 @@ export const WorkInformation = ({ formtype }) => {
   });
   useEffect(() => {
     if (empWorkInfoDetail) {
-      console.log(empWorkInfoDetail);
-
       setValue("hiring_manager_id", empWorkInfoDetail?.hiringManager);
       setValue("reporting_manager_id", empWorkInfoDetail?.reportingManager);
       setValue("ethinicity_id", empWorkInfoDetail?.ethnicity);
@@ -106,7 +102,6 @@ export const WorkInformation = ({ formtype }) => {
   useEffect(() => {
     if (uid) {
       refetch().then((response) => {
-        console.log("Data refetched", response);
         setLocalState(response?.data);
       });
     }
@@ -127,9 +122,7 @@ export const WorkInformation = ({ formtype }) => {
 
   const handleSave = async (data) => {
     const formData = new FormData();
-    console.log(data, "343434");
     formData.append("user_id", uid);
-
     formData.append("ethinicity_id", data.ethinicity_id?.id);
     formData.append("eeo_job_category_id", data.eeo_job_category_id?.id);
     formData.append("relegion_belief_id", data.relegion_belief_id?.id);

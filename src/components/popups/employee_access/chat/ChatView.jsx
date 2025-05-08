@@ -34,8 +34,6 @@ export default function ChatView({
     },
     enabled: !!selectedUser?.last_message?.id,
   });
-console.log(user);
-console.log(selectedUser);
 
 const { data: chatlist, refetch:chatrefetch } = useQuery({
   queryKey: ["chatlist", selectedUser?.user_id, chatPopupOpen],
@@ -53,11 +51,7 @@ useEffect(() => {
 }, [chatPopupOpen, selectedUser?.user_id]);
 
   useEffect(() => {
-    console.log('dee');
-    
     if (chatPopupOpen && (chatlist?.data?.length > 0 ||messages)) {
-      console.log('jii');
-      
       const timeout = setTimeout(() => {
         if (messagesEndRef.current) {
           messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -88,14 +82,8 @@ useEffect(() => {
       },
     });
 
-    console.log("Subscribing to:", `private-chat.${user?.user?.id}`);
-
     // Subscribe to the private channel
     const channel = pusher.subscribe(`private-chat.${user?.user?.id}`);
-
-    pusher.connection.bind("state_change", function (states) {
-      console.log("Pusher State Changed:", states);
-    });
 
     pusher.connection.bind("error", function (err) {
       console.error("Pusher Error:", err);
@@ -128,7 +116,6 @@ useEffect(() => {
 
     // Cleanup()
     return () => {
-      console.log("Unsubscribing from:", `private-chat.${user?.user?.id}`);
       channel.unbind_all();
       channel.unsubscribe();
       pusher.disconnect();
@@ -176,7 +163,6 @@ useEffect(() => {
       console.log(error);
     }
   };
-  console.log(messages);
   
   return (
     <>

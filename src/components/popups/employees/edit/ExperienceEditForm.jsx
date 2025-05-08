@@ -91,10 +91,6 @@ export default function EmployeeExperienceEditForm({
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
-      }else if(res.data?.status ===422 ){
-        console.log(res);
-        
-        
       }
     } catch (error) {
       console.log(error);

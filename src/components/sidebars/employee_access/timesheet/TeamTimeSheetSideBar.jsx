@@ -23,7 +23,6 @@ export default function TeamTimeSheetSideBar({
   setSelectedShift,
   setActiveEmployee
 }) {
-  console.log(rosterEmpList, type);
   const { control } = useForm();
 
   return (

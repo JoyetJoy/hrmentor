@@ -49,7 +49,7 @@ export const AdminLayout = () => {
       setPermissions(profile?.data?.permission);
     }
   }, [profile]);
-console.log(permissions);
+(permissions);
 
   if (isLoading) {
     return (
