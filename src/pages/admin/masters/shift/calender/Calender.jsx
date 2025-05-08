@@ -236,7 +236,7 @@ const ShiftCalendar = () => {
     setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
   const adjustLightness = (hex, percent) => {
-    hex = hex.replace("#", "");
+    hex = hex?.replace("#", "");
 
     let r = parseInt(hex.substring(0, 2), 16);
     let g = parseInt(hex.substring(2, 4), 16);

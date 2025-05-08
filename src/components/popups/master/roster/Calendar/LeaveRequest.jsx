@@ -11,9 +11,11 @@ function LeaveRequest({
   setType,
   requestData,
   handleSave,
+  refetch,
   data,
   api,
   selectedId,
+  rosterCalim,
   selectedData
 }) {
   const [note, setNote] = useState("");
@@ -52,13 +54,15 @@ console.log(data);
   
       if (type === "claimed") {
         const response = await newRequest.post(`${api}/${selectedId}`, {
+          roster_id:rosterCalim?.roster_details?.roster_id,
+          available_count:rosterCalim?.roster_details?.available_employees_count,
           status_id: statusId,
           accepted_note: note,
         });
   
         if (response.status === 200) {
           toast.success(response.data?.message || "Claim request processed successfully!");
-  
+          refetch();
           // Close the popup
           setPopupOpen(false);
           setType("");

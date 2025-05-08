@@ -6,7 +6,7 @@ import { useState } from "react";
 import LeaveRequest from "../popups/master/roster/Calendar/LeaveRequest";
 import { ROSTER_CLAIMED_EMPLOYEE_DETAILS, ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST } from "@/api/setup";
 
-export default function CalanderShift({rosterCalim, isLoading}) {
+export default function CalanderShift({rosterCalim, isLoading, refetch}) {
   const [leaveOpen, setLeaveOpen] = useState(false);
   const [claimOpen, setClaimOpen] = useState(false);
   const [leavepopup, setLeavepopup] = useState(false);
@@ -36,12 +36,14 @@ export default function CalanderShift({rosterCalim, isLoading}) {
           <LeaveRequest
             popupOpen={leavepopup}
             setPopupOpen={setLeavepopup}
+            refetch={refetch}
             type={type}
             setType={setType}
             data={rosterEmpList}
             api={ROSTER_CLAIMED_EMPLOYEE_DETAILS_POST}
             selectedId={selectedId}
             selectedData={selectedData}
+            rosterCalim={rosterCalim}
           />
           {rosterCalim ? (
             <>

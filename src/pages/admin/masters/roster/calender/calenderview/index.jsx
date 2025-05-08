@@ -160,6 +160,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
               <CalanderShift
                 rosterCalim={rosterCalim}
                 isLoading={isLoading}
+                refetch={refetch}
               />
             </div>
             <div className=" rounded-md bg-white pb-7">
