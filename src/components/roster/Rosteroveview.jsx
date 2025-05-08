@@ -15,7 +15,13 @@ function Rosteroveview({ rosterCalim, date, id, refetch }) {
 
   const handleClaim = async () => {
     try {
-      const response = await newRequest.post(SHIFT_CLAIM_ON_OFF,{roster_id :id});
+      const data={
+        roster_id :id,
+        date,
+        department_id:rosterCalim?.roster_details?.shift_details?.department_id,
+        shift_claim:isChecked?0:1
+      }
+      const response = await newRequest.post(SHIFT_CLAIM_ON_OFF,data);
       refetch();
       console.log(response);
     } catch (error) {

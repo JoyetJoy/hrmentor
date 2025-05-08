@@ -322,9 +322,11 @@ export default function ProfileManagmentForm({ formtype }) {
   };
 
   const handleEmployee = async (data) => {
+    console.log(data);
+    
     const formData = new FormData();
     formData.append("first_name", data.first_name);
-    formData.append("middle_name", data.middle_name);
+    formData.append("middle_name", data?.middle_name||'');
     formData.append("sur_name", data.sur_name);
     formData.append("gender", data.gender?.id);
     formData.append("post_code", data.post_code);

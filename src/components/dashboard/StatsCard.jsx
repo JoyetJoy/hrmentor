@@ -71,11 +71,11 @@ export default function StatsCard({data}) {
           </h1>
           <p className="mt-1 text-xs text-gray-cool">{stat.description}</p>
             </div>
-            {stat.description!== "Employees" &&(
+            {stat.title!== "Employees on Holiday" &&(
               <Link 
               to={stat.path}
               className="h-5 w-5 flex cursor-pointer items-center justify-center rounded-full bg-gray-soft">
-                {/* <Eye className="size-3" /> */}
+                <Eye className="size-3" />
               </Link>
             )}
           </div>

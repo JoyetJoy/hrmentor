@@ -2,47 +2,71 @@ import { newRequest, AVAILABLE_SLOT } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
 
 export default function RequestClaimshift({
   popupOpen,
   refetch,
   setPopupOpen,
-  selectedField
+  selectedField,
 }) {
-  const [note, setNote] = useState('');
-  const [error, setError] = useState(null);
+  const [note, setNote] = useState("");
+  const [error, setError] = useState({ shift: '', note: '' });
+  const [selectedShift, setSelectedShift] = useState('');
+
+  const { control, reset } = useForm();
   function close() {
-    setError(null)
-    setNote('')
+    setError({shift:'Select a shift', note:'Note is required'})
+    setNote("");
+    reset();
     setPopupOpen(false);
   }
-console.log(selectedField);
+  console.log(selectedField);
+  const options = [
+    {
+      id: 1,
+      label: "Morning",
+      value: 1,
+    },
+    {
+      id: 2,
+      label: "Morning",
+      value: 2,
+    },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (note==='') {
-      setError("Note is required.");
+    if (note === "" && selectedShift==='') {
+      setError({shift:'Select a shift', note:'Note is required'})
       return;
+    }else if(note === ""){
+      setError(prev => ({ ...prev, note: "Note is required." }));
+    }else if (shift === ''){
+      setError(prev => ({ ...prev, note: "Select a shift" }));
     }
     const payload = {
       shift_id: selectedField?.slot?.shift_id,
       roster_id: selectedField?.slot?.id,
-      note:note,
+      note: note,
       shift_date: selectedField?.date,
     };
 
     const response = await newRequest.post(AVAILABLE_SLOT, payload);
     if (response.status === 200) {
       refetch();
+      reset();
       setPopupOpen(false);
       toast.success("Requested successfully");
     } else {
       setPopupOpen(false);
       toast.error("Failed to request slot, Try again.");
     }
-    setError(null)
-    setNote('')
+    setError(null);
+    setNote("");
   };
 
   return (
@@ -69,42 +93,51 @@ console.log(selectedField);
                 <X />
               </button>
             </div>
-            <div className="grid grid-cols-2 justify-between gap-3 gap-y-7">
+            <div className="flex flex-col justify-between gap-3 gap-y-7">
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Requesting Shift
+                  Select Shift
                 </label>
-                <p className="text-sm font-semibold">
-                  {selectedField?.slot?.shift?.name}
-                </p>
+                <Controller
+                  name="employees"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      isSearchable={true}
+                      styles={customSelectStyles}
+                      placeholder="Select Shift"
+                      className="input-box w-full"
+                      value={field.value}
+                      options={options}
+                      onChange={(selectedOption) => {
+                        field.onChange(selectedOption);
+                        setSelectedShift(selectedOption.value);
+                      }}
+                    />
+                  )}
+                />
+                {error?.shift && <div className="text-sm text-red-500">{error.shift}</div>}
               </div>
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Shift Time
                 </label>
                 <p className="text-sm font-semibold">
-                  {
-                    selectedField?.slot?.shift?.start_time || ""
-                  }
-                  -
-                  {
-                    selectedField?.slot?.shift?.end_time || ""
-                  }
+                  {selectedField?.slot?.shift?.start_time || ""}-
+                  {selectedField?.slot?.shift?.end_time || ""}
                 </p>
               </div>
               <div className="group col-span-2 flex w-full flex-col gap-1">
                 <label className="label-text">Note</label>
                 <textarea
-                onChange={((e)=>setNote(e.target.value))}
+                  onChange={(e) => setNote(e.target.value)}
                   className="h-20 w-full rounded-md border border-gray-muted p-2 text-sm"
                   rows="4"
                 />
-                {error&&(
-                <div className="text-red-500 text-sm">{error}</div>
-              )
-              }
+                {error?.note && <div className="text-sm text-red-500">{error.note}</div>}
               </div>
-              
+
               <div className="mt-2 flex w-full items-center justify-between gap-3">
                 <button
                   type="button"

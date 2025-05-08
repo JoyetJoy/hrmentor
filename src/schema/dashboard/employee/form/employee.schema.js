@@ -4,7 +4,7 @@ import * as Yup from "yup";
 export const EmployeeSchema = Yup.object({
   unique_id: Yup.string().required("Employee unique ID is required"),
   first_name: Yup.string().required("First name is required"),
-  middle_name: Yup.string(),
+  middle_name: Yup.string().nullable(),
   sur_name: Yup.string().required("Surname is required"),
 
   blood_group: Yup.object({
