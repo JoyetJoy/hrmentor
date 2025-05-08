@@ -268,7 +268,7 @@ const EmployeeAccessTeamRoster = () => {
           tileContent={({ date, view }) => {
             if (view === "month") {
               const { holidayEvents, shiftEvents } = findEvents(date);
-              console.log(shiftEvents);
+              
               return (
                 <div className={`relative flex h-full w-full flex-col overflow-visible ${shiftEvents?.length >= 3 ? 'pt-[0.6rem]' : ''}`}>
                   {shiftEvents?.length >= 3 && (

@@ -52,7 +52,7 @@ export default function JobAreaListing() {
       setTotalPages(careersListing?.last_page);
     }
   }, [careersListing]);
- console.log(careersListing?.listing,"career?.job_titlecareer?.job_title")
+  
   return (
     <>
       <ShareJob

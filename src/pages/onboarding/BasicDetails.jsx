@@ -86,12 +86,9 @@ export default function BasicDetails({ formtype }) {
       }),
     enabled: formtype == "update",
   });
-
-  console.log(employeeDetails, "employeeDetailsemployeeDetails");
+  
   useEffect(() => {
     if (employeeDetails) {
-      console.log(employeeDetails);
-
       setValue("employee_id", employeeDetails.employee_id);
       setValue("first_name", employeeDetails.first_name);
       setValue("middle_name", employeeDetails.middle_name || "");
@@ -118,10 +115,6 @@ export default function BasicDetails({ formtype }) {
     }
   }, [employeeDetails, setValue]);
 
-  console.log(
-    employeeDetails?.gender?.value,
-    " employeeDetails.employment_type",
-  );
   useEffect(() => {
     if (employeeDetails) {
       setImage(employeeDetails?.profile_image);

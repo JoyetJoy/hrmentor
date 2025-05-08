@@ -33,7 +33,6 @@ export default function PaySlip() {
           return res.data;
         }),
   });
-  console.log(payslipListing);
 
   const PrintDiv = async (id) => {
     try {

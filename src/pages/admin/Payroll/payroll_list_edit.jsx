@@ -55,11 +55,9 @@ export default function PayrollListEdit() {
   const { id } = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-
   const startDate = searchParams.get("start_date");
   const endDate = searchParams.get("end_date");
   const empId = searchParams.get("empid");
-  console.log(startDate, endDate);
 
   const { data, isLoading } = useQuery({
     queryKey: ["employeepayrolldetails", empId, id, startDate, endDate],
@@ -77,8 +75,6 @@ export default function PayrollListEdit() {
     enabled: !!empId,
   });
 
-  console.log(data);
-
   function close() {
     setPopupOpen(false);
     reset();
@@ -91,7 +87,6 @@ export default function PayrollListEdit() {
 
     try {
       const response = await newRequest.post(APPROVE_PAYROLL_EMPLOYEE, body);
-      console.log("Approval successful:", response);
       toast.success(response.data.original.message);
     } catch (error) {
       console.error("Error approving payroll:", error);

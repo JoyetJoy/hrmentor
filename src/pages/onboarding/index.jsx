@@ -25,20 +25,7 @@ export default function OnboardingForm() {
   const uid = searchParams.get("uid");
   const employee_id = searchParams.get("employee_id");
   const statusId = 9;
-  const [id, setId] = useState("");
   const navigate = useNavigate();
-
-  // const { data: employeeDetails} = useQuery({
-  //   queryKey: ["employeeDetails", uid],
-  //   queryFn: () =>
-  //     newRequest.get(`${EMPLOYEE}/${uid}`).then((res) => {
-  //       return res.data;
-  //     }),
-  //   enabled: formtype == "update",
-  // });
-
-
-  console.log(employee_id,"employee_idemployee_id");
   
   const handleShare = async () => {
     try {

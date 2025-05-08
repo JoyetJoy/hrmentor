@@ -38,8 +38,6 @@ export default function Document() {
     }
   }, [employeeDocumentsCategory]);
 
-
- console.log(employeeDocumentsCategory?.listing,"employeeDocumentsCategoryemployeeDocumentsCategory")
   return (
     <Disclosure as="div" className="px-5 py-2" defaultOpen={false}>
       <DisclosureButton className="group flex w-full items-center gap-x-2">

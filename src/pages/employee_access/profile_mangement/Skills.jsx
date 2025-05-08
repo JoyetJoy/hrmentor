@@ -33,7 +33,7 @@ export default function Skills() {
       user: state.user,
      }));
      const u_id = user?.user?.id ;
- console.log(user?.user?.id,"useruser")
+     
   // Fetch List
   const { data: employeeSkills, isLoading } = useQuery({
     queryKey: ["employeeSkills", currentPage, u_id, keyword],

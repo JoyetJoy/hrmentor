@@ -108,7 +108,7 @@ function CandidateDocuments() {
     ],
     [],
   );
-console.log(selectedField,"selectedId")
+  
   return (
     <>
       <SaveCandidateDocument

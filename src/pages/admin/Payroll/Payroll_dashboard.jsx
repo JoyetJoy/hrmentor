@@ -60,7 +60,6 @@ export default function Payroll() {
     try {
       setLoader(true);
       const response = await newRequest.post(CREATE_PAYRUN);
-      console.log(response);
       setLoader(false);
       toast.success(response.data.original.message);
     } catch (error) {

@@ -43,7 +43,6 @@ export default function WorkInfo({ formtype }) {
     resolver: yupResolver(EmployeeSchema),
   });
 
-  console.log(errors, "errorserrors");
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const uid = searchParams.get("uid");
@@ -85,8 +84,6 @@ export default function WorkInfo({ formtype }) {
   });
   useEffect(() => {
     if (employeeDetails) {
-      console.log(employeeDetails);
-
       setValue("department_id", employeeDetails.department_id);
       setValue("role_id", employeeDetails.role_id);
       setValue("designation_id", employeeDetails.designation_id);

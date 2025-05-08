@@ -19,30 +19,6 @@ export default function CareerDetail() {
         return res.data;
       }),
   });
- 
-  console.log(careerDetails);
-
-  // const handleShare = () => {
-  //   setPopupOpen(true); // ✅ Open popup before sharing
-
-  //   setTimeout(() => {
-  //     const currentUrl = window.location.href; 
-
-  //     if (navigator.share) {
-  //       navigator
-  //         .share({
-  //           title: "Check this out!",
-  //           text: "Here's a job you might be interested in.",
-  //           url: currentUrl,
-  //         })
-  //         .then(() => setPopupOpen(true)) // ✅ Close popup after sharing
-  //         .catch((error) => console.log("Sharing failed", error));
-  //     } else {
-  //       navigator.clipboard.writeText(currentUrl);
-  //       alert("Link copied to clipboard!");
-  //     }
-  //   }, 500); // ✅ Small delay for popup to open first
-  // };
 
   return (
     <>

@@ -118,10 +118,9 @@ export default function TimeSheet() {
       fullDate: startOfWeek.format("YYYY-MM-DD"),
     };
   });
-  
 
   const { start,end } = getStartAndEndOfWeek();
-  console.log(start,end);
+  
   // Fetch the data for the selected week
   const { data: events, refetch } = useQuery({
     queryKey: ["events", selectedWeek, date], // Unique query key
@@ -140,7 +139,7 @@ export default function TimeSheet() {
     const [hours, minutes] = time.split(":");
     return `${hours} hr ${minutes} min`;
   };
-console.log(selectedWeek,"selectedWeek...")
+  
   return (
     <>
     <TimeTracker timeTrackerPopupOpen={timeTrackerPopupOpen} setTimeTrackerPopupOpen={setTimeTrackerPopupOpen} selectedId={end} weekDays={weekDays} />
@@ -234,7 +233,6 @@ console.log(selectedWeek,"selectedWeek...")
                     const formattedWeekDate = dayjs(dayObj.fullDate).format(
                       "YYYY-MM-DD",
                     );
-                    console.log(formattedWeekDate);
 
                     // Find matching data from events.days_hours
                     const dayData = events?.days_hours?.find(

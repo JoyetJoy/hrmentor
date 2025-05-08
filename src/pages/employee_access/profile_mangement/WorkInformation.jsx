@@ -71,11 +71,9 @@ export default function WorkInformation({ formtype }) {
 
     enabled: !!u_id,
   });
-  console.log(empWorkInfoDetail, "empWorkInfoDetail");
+  
   useEffect(() => {
     if (empWorkInfoDetail) {
-      console.log(empWorkInfoDetail);
-
       setValue("hiring_manager_id", empWorkInfoDetail?.hiringManager);
       setValue("reporting_manager_id", empWorkInfoDetail?.reportingManager);
       setValue("ethinicity_id", empWorkInfoDetail?.ethnicity);
@@ -99,7 +97,6 @@ export default function WorkInformation({ formtype }) {
   useEffect(() => {
     if (uid) {
       refetch().then((response) => {
-        console.log("Data refetched", response);
         setLocalState(response?.data);
       });
     }
@@ -188,7 +185,7 @@ export default function WorkInformation({ formtype }) {
     EMPLOYEE_RELIGIOUS_AND_SEXUAL,
     "religiousSexualList",
   );
-  console.log(errors, "error");
+  
   return (
     <div className="flex flex-col">
       <MenuHeaderEmployeeAccess

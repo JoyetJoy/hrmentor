@@ -43,7 +43,6 @@ export const RecRequestRefferal = () => {
           return res.data;
         }),
   });
-  console.log(recJobRefferals);
 
   useEffect(() => {
     if (recJobRefferals) {

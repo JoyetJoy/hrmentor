@@ -48,7 +48,7 @@ export default function DBScheck() {
       setTotalPages(employeeDbCheck?.last_page);
     }
   }, [employeeDbCheck]);
-  console.log(employeeDbCheck);
+  
   const columns = React.useMemo(
     () =>
       [

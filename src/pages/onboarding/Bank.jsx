@@ -51,8 +51,6 @@ export default function Bank() {
     }
   }, [employeeBankDetails]);
 
-  console.log(employeeBankDetails?.data?.listing);
-
   const columns = React.useMemo(
     () =>
       [

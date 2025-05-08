@@ -34,7 +34,6 @@ const TeamAttendanceCalendar = () => {
   const month = dayjs(date).month() + 1;
 
   const { data: shiftList } = useEmployeeMaster(SHIFT_LIST, "shiftList");
-  console.log(selectedShift);
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
@@ -44,7 +43,6 @@ const TeamAttendanceCalendar = () => {
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedShift],
     queryFn: () => {
-      console.log(`Fetching employee list for shift ID: ${selectedShift}`);
       return newRequest
         .get(`${ROSTER_EMPLIST}/${selectedShift}`)
         .then((res) => {
@@ -52,9 +50,6 @@ const TeamAttendanceCalendar = () => {
         });
     },
     enabled: !!selectedShift,
-    onSuccess: (data) => {
-      console.log("Fetched employee list:", data);
-    },
     onError: (error) => {
       console.error("Error fetching employee list:", error?.message || error);
     },
@@ -87,13 +82,11 @@ const TeamAttendanceCalendar = () => {
     setPopupOpen(true);
   };
   useEffect(() => {
-    console.log("Initial fetch for:", { month, year });
     refetch(); // Initial fetch when the component mounts
   }, []);
 
   useEffect(() => {
     if (month && year) {
-      console.log("Refetching events for:", { month, year });
       refetch();
     }
   }, [date, month, year, refetch]);
@@ -157,7 +150,6 @@ const TeamAttendanceCalendar = () => {
     const formattedHours = hours % 12 || 12;
     return `${formattedHours}:${minutes} ${period}`;
   }
-  console.log(date);
 
   return (
     <div className="flex flex-col">
@@ -253,7 +245,6 @@ const TeamAttendanceCalendar = () => {
                 availableSlots,
                 requestedSlots,
               } = findEvents(date);
-              console.log(shiftEvents);
 
               return events ? (
                 <div className="flex h-full w-full flex-col gap-2">

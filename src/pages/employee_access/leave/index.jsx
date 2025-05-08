@@ -162,8 +162,6 @@ export default function Leave() {
       newRequest
         .get(`/${EMPLOYEE_LEAVE_REQUEST_LIST}/${selectedId}`)
         .then((res) => {
-          console.log(res);
-
           setLeaveDetails(res.data);
         });
     }

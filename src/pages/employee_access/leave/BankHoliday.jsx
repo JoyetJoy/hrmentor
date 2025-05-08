@@ -31,7 +31,7 @@ function BankHoliday() {
       setTotalPages(employeeBankHolidays?.last_page);
     }
   }, [employeeBankHolidays]);
- console.log(employeeBankHolidays,"employeeBankHolidaysemployeeBankHolidays")
+  
   const columns = React.useMemo(
     () => [
       {

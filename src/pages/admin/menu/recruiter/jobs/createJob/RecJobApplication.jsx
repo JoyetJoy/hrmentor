@@ -244,7 +244,6 @@ function JobApplicationQuestion() {
                   <div className="flex flex-col gap-2 px-4 pb-16 pt-4">
                     {jobProfileQuestions?.default_profile_questions?.map(
                       (i) => {
-                        console.log(i);
                         return (
                           <div className="label cursor-pointer justify-between rounded-sm bg-gray-lightcool px-4 py-3 text-xs font-medium text-textcolor-darkCharcoal">
                             <div className="flex flex-row items-center gap-2">
@@ -289,7 +288,6 @@ function JobApplicationQuestion() {
                                 if (e.target.checked) {
                                   profileQuestions.push(i?.id);
                                   setProfileQuestions([...profileQuestions]);
-                                  console.log(profileQuestions);
                                 } else {
                                   let id = i?.id;
                                   setProfileQuestions(() => {

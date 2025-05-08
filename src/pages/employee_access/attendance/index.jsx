@@ -39,14 +39,11 @@ const EmployeeAccessAttendanceCalendar = () => {
     staleTime: 0,
   });
 
-  console.log(events, "attendance");
-
   const handleClick = (event) => {
     setSelected(event);
     setPopupOpen(true);
   };
   useEffect(() => {
-    console.log("Initial fetch for:", { month, year });
     refetch();
   }, []);
   useEffect(() => {
@@ -56,7 +53,6 @@ const EmployeeAccessAttendanceCalendar = () => {
   }, [startTime, endTime, refetch]);
   useEffect(() => {
     if (month && year) {
-      console.log("Refetching events for:", { month, year });
       refetch();
     }
   }, [date, month, year, refetch]);
@@ -76,8 +72,6 @@ const EmployeeAccessAttendanceCalendar = () => {
         ),
       )
       .toDate();
-    console.log(updatedDate);
-
     setDate(updatedDate); // Synchronize date state
   };
 
@@ -114,7 +108,6 @@ const EmployeeAccessAttendanceCalendar = () => {
       : [];
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
-  console.log(date);
 
   return (
     <div className="flex flex-col">
@@ -196,7 +189,6 @@ const EmployeeAccessAttendanceCalendar = () => {
                 availableSlots,
                 requestedSlots,
               } = findEvents(date);
-              console.log(shiftEvents);
 
               return events ? (
                 <div className="flex h-full w-full flex-col gap-2">

@@ -34,7 +34,6 @@ export default function AdminPayOff() {
             return res.data;
           }),
     });
-console.log(data);
 
   const handleYearChange = (selectedOption) => {
     const updatedDate = dayjs(date).year(selectedOption.value).toDate();

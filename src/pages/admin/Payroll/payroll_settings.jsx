@@ -109,8 +109,6 @@ export default function PayrollSettings() {
     }
   }, [payrollSettings]);
 
-  console.log(payrollSettings, "payrollSettings");
-
   const handleSave = async () => {
     const payload = {
       pay_duration: payDuriation,

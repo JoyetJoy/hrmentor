@@ -33,8 +33,6 @@ export const HiredCandidates = () => {
         }),
   });
 
-  console.log(hiredCandidates);
-
   useEffect(() => {
     if (hiredCandidates) {
       setTotalPages(hiredCandidates?.last_page);

@@ -84,8 +84,6 @@ export const SettingsLeaveSchema = Yup.object().shape({
       "Accrual period is required",
       function (value) {
         const { accrualType } = this.parent;
-        console.log(accrualType, value);
-
         if (
           (accrualType === "bycycle" || accrualType === "byworking") &&
           !value?.value // Checking value inside the object
@@ -95,32 +93,12 @@ export const SettingsLeaveSchema = Yup.object().shape({
         return true;
       },
     ),
-  // accural_day: Yup.object()
-  // .shape({
-  //   value: Yup.string().required("Accrual day is required"),
-  //   label: Yup.string().required(),
-  // })
-  // .test(
-  //   "accrual-day-test",
-  //   "Accrual day is required",
-  //   function (value) {
-  //     const { accrualType } = this.parent;
-  //     console.log("Accrual Type:", accrualType, "Selected Day:", value);
-
-  //     if (accrualType === "bycycle" && !value?.value) {
-  //       return false;
-  //     }
-  //     return true;
-  //   }
-  // ),
 
   accural_day: Yup.object().test(
     "accrual-day-test",
     "Accrual day is required",
     function (value) {
       const { accrualType } = this.parent;
-      console.log("Accrual Type:", accrualType, "Selected Day:", value);
-
       if (accrualType === "bycycle" && !value?.value) {
         return false;
       }
@@ -132,8 +110,6 @@ export const SettingsLeaveSchema = Yup.object().shape({
     "Accrual monthly is required",
     function (value) {
       const { accrualType } = this.parent;
-      console.log("Accrual Type:", accrualType, "Selected Month:", value);
-
       if (accrualType === "bycycle" && !value?.value) {
         return false;
       }
@@ -151,25 +127,6 @@ export const SettingsLeaveSchema = Yup.object().shape({
       return true;
     },
   ),
-
-  // accural_monthly: Yup.object()
-  //   .shape({
-  //     value: Yup.string().required("Accrual monthly is required"),
-  //     label: Yup.string().required(),
-  //   })
-  //   .test(
-  //     "accrual-monthly-test",
-  //     "Accrual monthly is required",
-  //     function (value) {
-  //       const { accrualType } = this.parent;
-  //       console.log("Accrual Type:", accrualType, "Selected Month:", value);
-
-  //       if (accrualType === "bycycle" && !value?.value) {
-  //         return false;
-  //       }
-  //       return true;
-  //     }
-  //   ),
   accural_monthly: Yup.object().test(
     "accrual-monthly-test",
     "Accrual monthly is required",

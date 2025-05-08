@@ -217,7 +217,6 @@ export default function HiringCandidateDetails() {
       setLoader(false);
     }
   };
-  console.log(candidateDetails);
 
   return (
     <>

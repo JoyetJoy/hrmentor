@@ -104,7 +104,6 @@ function CandidateDiscussion() {
         `${CANDIDATE_DISCUSSTIONS}/${cid}`,
         formData,
       );
-      console.log(res);
       if (res?.data?.status === 201) {
         toast.success(res?.data?.message);
         setMessage("");

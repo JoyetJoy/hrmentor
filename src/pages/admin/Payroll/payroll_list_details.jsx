@@ -22,8 +22,6 @@ export default function PayListDetails() {
   const department = searchParams.get("department");
   const start = getCurrentDateISO(startDate);
   const end = getCurrentDateISO(endDate);
-  console.log(id, monthid);
-  console.log(start, end);
   const pageLimit = 10;
 
   const { data, isLoading } = useQuery({
@@ -52,7 +50,6 @@ export default function PayListDetails() {
   
     try {
       const response = await newRequest.post(PAYROLL_APPROVE, body);
-      console.log("Approval successful:", response);
       toast.success(response.data.original.message)
     } catch (error) {
       console.error("Error approving payroll:", error);

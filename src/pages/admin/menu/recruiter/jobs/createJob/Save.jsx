@@ -154,8 +154,6 @@ function RecruiterJobPost() {
 
   useEffect(() => {
     if (jobDetails) {
-      console.log(jobDetails);
-
       setValue("job_title", jobDetails.job_title);
       setValue("employment_type", jobDetails?.employment_type);
       setValue("min_exp_id", jobDetails.min_exp_id);
@@ -459,7 +457,6 @@ function RecruiterJobPost() {
       });
     }
   };
-console.log(type);
 
   return (
     <>

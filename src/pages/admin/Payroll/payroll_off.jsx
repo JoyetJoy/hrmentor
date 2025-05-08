@@ -60,7 +60,6 @@ export default function PayrollOff() {
         .then((res) => res.data),
     enabled: !!startDate,
   });
-  console.log(payrollList);
 
   const { data: departmentListing } = useEmployeeMaster(
     EMPLOYEE_DEPARTMENT_LIST,

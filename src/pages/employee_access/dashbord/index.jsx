@@ -67,7 +67,6 @@ export const EmployeeDashboard = () => {
     enabled: true,
     staleTime: 0,
   });
-  console.log(dashboard);
 
   // Fetch clock-in data
   const { data: clockin, refetch } = useQuery({

@@ -29,8 +29,6 @@ export const OfferTable = ({ api, keyword, setKeyword }) => {
         }),
   });
 
-  console.log(offerToBeFinalized);
-
   useEffect(() => {
     if (offerToBeFinalized) {
       setTotalPages(offerToBeFinalized?.last_page);

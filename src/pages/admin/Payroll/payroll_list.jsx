@@ -82,8 +82,6 @@ export default function PayrollList() {
     enabled: !!start,
   });
 
-  console.log(payrollList);
-
   const { data: departmentListing } = useEmployeeMaster(
     EMPLOYEE_DEPARTMENT_LIST,
     "employeeDepartmentList",
@@ -92,7 +90,6 @@ export default function PayrollList() {
   useEffect(() => {
     if (monthValue === "1" && data) {
       const { star_day, end_day } = data;
-      console.log("Weekday inputs:", star_day, end_day); // Expected: "Tue Mon"
     
       let today = new Date();
     
@@ -100,13 +97,9 @@ export default function PayrollList() {
       let startDate = new Date(today);
       startDate.setDate(today.getDate() - ((today.getDay() + 5) % 7)); // No -7 here
     
-      console.log("This Week's Tuesday Start Date:", startDate);
-    
       // Get end date (6 days later, which will be Monday)
       const endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + 6);
-    
-      console.log("End Date (Monday):", endDate);
     
       setStartDate(formatDateRange(startDate));
       setEndDate(formatDateRange(endDate));
@@ -241,7 +234,6 @@ export default function PayrollList() {
     ],
     [startDate, endDate],
   );
-  console.log(startDate);
 
   return (
     <>

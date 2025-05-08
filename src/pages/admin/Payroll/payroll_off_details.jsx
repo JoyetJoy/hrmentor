@@ -50,11 +50,8 @@ export default function PayrollOffDetails() {
   const { id } = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-
   const startDate = searchParams.get("start_date");
   const endDate = searchParams.get("end_date");
-  console.log(id);
-  console.log(startDate, endDate);
 
   const { data, isLoading } = useQuery({
     queryKey: ["payoffdetails", id, startDate, endDate],
@@ -69,8 +66,6 @@ export default function PayrollOffDetails() {
         .then((res) => res.data),
     enabled: !!id,
   });
-
-  console.log(data);
 
   const columns = React.useMemo(
     () => [
