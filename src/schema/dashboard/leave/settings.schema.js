@@ -149,17 +149,6 @@ export const SettingsLeaveSchema = Yup.object().shape({
       return true;
     },
   ),
-  // accural_at: Yup.string().test(
-  //   "accrual-at-test",
-  //   "Accrual at is required",
-  //   function (value) {
-  //     const { accrualType } = this.parent;
-  //     if (accrualType === "byworking" && !value) {
-  //       return false;
-  //     }
-  //     return true;
-  //   },
-  // ),
   accural_at: Yup.mixed().test(
     "accrual-at-test",
     "Accrual at is required",

@@ -437,9 +437,9 @@ export default function Attendance() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((employee, empIndex) => (
+                  {data?.map((employee) => (
                     <tr
-                      key={empIndex}
+                      key={employee?.employee_id}
                       className="border-b-[3px] border-[#d1d5db] text-left"
                     >
                       <td className="sticky left-0 border-r-2 border-b-slate-500 bg-[#ffffff] text-sm font-bold capitalize text-slate-800">

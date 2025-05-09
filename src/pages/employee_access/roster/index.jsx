@@ -26,6 +26,7 @@ const EmployeeAccessRosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
+  const [type, setType] = useState('');
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
 
@@ -147,7 +148,7 @@ const EmployeeAccessRosterCalendar = () => {
       <RequestClaimshift
         popupOpen={claimPopup}
         refetch={refetch}
-        type={'claim'}
+        type={type}
         setPopupOpen={setClaimPopup}
         selectedField={selectedField}
       />
@@ -224,28 +225,33 @@ const EmployeeAccessRosterCalendar = () => {
               return (
                 <div className="relative flex h-full w-full flex-col overflow-visible">
                   <>
-                  <div className="absolute -top-6 left-0 flex flex-col items-end">
-                  <img
-                          
-                          src="/assets/icons/employee_access/header/requested_slot.svg"
-                          alt=""
-                        />
-                  </div>
+                    <div className="absolute -top-6 left-0 flex flex-col items-end">
+                      <img
+                        onClick={() => {
+                          setClaimPopup(true);
+                          setSelectedField(slot);
+                          setType('request');
+                        }}
+                        src="/assets/icons/employee_access/header/requested_slot.svg"
+                        alt=""
+                      />
+                    </div>
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
-                    <img
-                          key={`available-slot-$`}
-                          onClick={() => {
-                            setClaimPopup(true);
-                            setSelectedField(slot);
-                          }}
-                          src="/assets/icons/employee_access/header/availableshift.svg"
-                          alt=""
-                        />
+                      <img
+                        key={`available-slot-$`}
+                        onClick={() => {
+                          setClaimPopup(true);
+                          setSelectedField(slot);
+                        }}
+                        src="/assets/icons/employee_access/header/availableshift.svg"
+                        alt=""
+                      />
                       {availableSlots?.map((slot, index) => (
                         <img
                           key={`available-slot-${index}`}
                           onClick={() => {
                             setClaimPopup(true);
+                            setType('claim');
                             setSelectedField(slot);
                           }}
                           src="/assets/icons/employee_access/header/availableshift.svg"
@@ -283,7 +289,7 @@ const EmployeeAccessRosterCalendar = () => {
                       : holidayEvents?.map((event, index) => (
                           <div
                             key={index}
-                            className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#75757e] bg-[#d5d5dc] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8] "
+                            className="mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 border-[#75757e] bg-[#d5d5dc] px-3 text-[12px] text-gray-800 hover:bg-[#e9c5d8]"
                           >
                             <span className="float-start flex w-full font-semibold">
                               Day Off
@@ -291,7 +297,7 @@ const EmployeeAccessRosterCalendar = () => {
                           </div>
                         ))}
                   </>
- 
+
                   {/* "Count More" Button */}
                   {/* {shiftEvents?.length > 2 && (
                     <button
