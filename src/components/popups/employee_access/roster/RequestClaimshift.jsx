@@ -1,11 +1,12 @@
 import { newRequest, AVAILABLE_SLOT } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import Select from "react-select";
 import { customSelectStyles } from "@/utils/customStyles";
+import { useUserStore } from "@/lib/slices/auth.slice";
 
 export default function RequestClaimshift({
   popupOpen,
@@ -15,43 +16,51 @@ export default function RequestClaimshift({
   selectedField,
 }) {
   const [note, setNote] = useState("");
-  const [error, setError] = useState({ shift: '', note: '' });
-  const [selectedShift, setSelectedShift] = useState('');
+  const [error, setError] = useState({ shift: "", note: "" });
+  const [selectedShift, setSelectedShift] = useState();
+  const [shiftdata, setShiftdata] = useState();
+
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
+  console.log(user);
 
   const { control, reset } = useForm();
   function close() {
-    setError({shift:'Select a shift', note:'Note is required'})
+    setError({ shift: "Select a shift", note: "Note is required" });
     setNote("");
     reset();
     setPopupOpen(false);
   }
-  
-  const options = [
-    {
-      id: 1,
-      label: "Morning",
-      value: 1,
-    },
-    {
-      id: 2,
-      label: "Morning",
-      value: 2,
-    },
-  ];
+
+  const options = selectedField?.slots?.map((shift) => ({
+    id: shift.shift_id,
+    value: shift.roster_id,
+    label: shift.shift_name,
+  }));
+
+  useEffect(() => {
+    const shift = selectedField?.slots?.find(
+      (slot) => slot.roster_id === selectedShift,
+    );
+    setShiftdata(shift);
+  }, [selectedShift]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (note === "" && selectedShift==='') {
-      setError({shift:'Select a shift', note:'Note is required'})
+    if (note === "" && selectedShift === "") {
+      setError({ shift: "Select a shift", note: "Note is required" });
       return;
-    }else if(note === ""){
-      setError(prev => ({ ...prev, note: "Note is required." }));
-    }else if (shift === ''){
-      setError(prev => ({ ...prev, note: "Select a shift" }));
+    } else if (note === "") {
+      setError((prev) => ({ ...prev, note: "Note is required." }));
+    } else if (selectedShift === "") {
+      setError((prev) => ({ ...prev, note: "Select a shift" }));
     }
     const payload = {
-      shift_id: selectedField?.slot?.shift_id,
-      roster_id: selectedField?.slot?.id,
+      employee_id: user?.user?.id,
+      roster_claim_id:shiftdata?.roster_claim_id,
+      shift_id: shiftdata?.shift_id,
+      roster_id: shiftdata?.roster_id,
       note: note,
       shift_date: selectedField?.date,
     };
@@ -85,7 +94,9 @@ export default function RequestClaimshift({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-md font-bold leading-7 text-textcolor-darkCharcoal">
-                {type === 'claim' ? 'Request for Claim shift' : 'Requested shift details'}
+                {type === "claim"
+                  ? "Request for Claim shift"
+                  : "Requested shift details"}
               </h1>
               <button
                 onClick={close}
@@ -94,7 +105,7 @@ export default function RequestClaimshift({
                 <X />
               </button>
             </div>
-            <div className="flex flex-col justify-between gap-3 gap-y-7">
+            <div className="flex flex-col justify-between gap-3 gap-y-5">
               <div className="group flex flex-col space-y-1">
                 <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                   Select Shift
@@ -118,17 +129,20 @@ export default function RequestClaimshift({
                     />
                   )}
                 />
-                {error?.shift && <div className="text-sm text-red-500">{error.shift}</div>}
+                {error?.shift && (
+                  <div className="text-sm text-red-500">{error.shift}</div>
+                )}
               </div>
-              <div className="group flex flex-col space-y-1">
-                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Shift Time
-                </label>
-                <p className="text-sm font-semibold">
-                  {selectedField?.slot?.shift?.start_time || ""}-
-                  {selectedField?.slot?.shift?.end_time || ""}
-                </p>
-              </div>
+              {selectedShift && (
+                <div className="group flex flex-col space-y-1">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                    Shift Time
+                  </label>
+                  <p className="text-sm font-semibold">
+                    {shiftdata?.start_time || ""}-{shiftdata?.end_time || ""}
+                  </p>
+                </div>
+              )}
               <div className="group col-span-2 flex w-full flex-col gap-1">
                 <label className="label-text">Note</label>
                 <textarea
@@ -136,26 +150,28 @@ export default function RequestClaimshift({
                   className="h-20 w-full rounded-md border border-gray-muted p-2 text-sm"
                   rows="4"
                 />
-                {error?.note && <div className="text-sm text-red-500">{error.note}</div>}
+                {error?.note && (
+                  <div className="text-sm text-red-500">{error.note}</div>
+                )}
               </div>
 
-              {type === 'claim' && (
+              {type === "claim" && (
                 <div className="mt-2 flex w-full items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={close}
-                  className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black bg-black text-sm font-semibold text-white focus:outline-none"
-                >
-                  Send Request
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black bg-black text-sm font-semibold text-white focus:outline-none"
+                  >
+                    Send Request
+                  </button>
+                </div>
               )}
             </div>
           </DialogPanel>

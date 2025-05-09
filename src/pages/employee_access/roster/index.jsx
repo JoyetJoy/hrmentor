@@ -237,15 +237,6 @@ const EmployeeAccessRosterCalendar = () => {
                       />
                     </div> */}
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
-                      {/* <img
-                        key={`available-slot-$`}
-                        onClick={() => {
-                          setClaimPopup(true);
-                          setSelectedField(slot);
-                        }}
-                        src="/assets/icons/employee_access/header/availableshift.svg"
-                        alt=""
-                      /> */}
                       {availableSlots?.map((slot, index) => (
                         <img
                           key={`available-slot-${index}`}
