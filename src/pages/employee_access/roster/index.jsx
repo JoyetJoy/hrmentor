@@ -225,7 +225,7 @@ const EmployeeAccessRosterCalendar = () => {
               return (
                 <div className="relative flex h-full w-full flex-col overflow-visible">
                   <>
-                    <div className="absolute -top-6 left-0 flex flex-col items-end">
+                    {/* <div className="absolute -top-6 left-0 flex flex-col items-end">
                       <img
                         onClick={() => {
                           setClaimPopup(true);
@@ -235,9 +235,9 @@ const EmployeeAccessRosterCalendar = () => {
                         src="/assets/icons/employee_access/header/requested_slot.svg"
                         alt=""
                       />
-                    </div>
+                    </div> */}
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
-                      <img
+                      {/* <img
                         key={`available-slot-$`}
                         onClick={() => {
                           setClaimPopup(true);
@@ -245,7 +245,7 @@ const EmployeeAccessRosterCalendar = () => {
                         }}
                         src="/assets/icons/employee_access/header/availableshift.svg"
                         alt=""
-                      />
+                      /> */}
                       {availableSlots?.map((slot, index) => (
                         <img
                           key={`available-slot-${index}`}

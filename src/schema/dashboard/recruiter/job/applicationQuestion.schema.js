@@ -62,9 +62,7 @@ export const interviewGuidelineSchema = Yup.object().shape({
     id: Yup.string(),
     value: Yup.string(),
     label: Yup.string(),
-  }).test("both-required", "Interviewer is required", function (value) {
-    return value?.value && value?.label;
-  }),
+  })
 });
 
 export const recJobReferSchema = Yup.object().shape({
