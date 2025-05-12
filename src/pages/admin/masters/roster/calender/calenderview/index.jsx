@@ -154,6 +154,7 @@ export const ShiftCalendarView = ({ api, selectedId, selecteDate }) => {
                 rosterCalim={rosterCalim}
                 isLoading={isLoading}
                 refetch={refetch}
+                date={date}
               />
             </div>
             <div className=" rounded-md bg-white pb-7">

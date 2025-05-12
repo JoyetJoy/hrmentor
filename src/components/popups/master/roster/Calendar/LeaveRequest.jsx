@@ -13,6 +13,7 @@ function LeaveRequest({
   handleSave,
   refetch,
   data,
+  date,
   api,
   selectedId,
   rosterCalim,
@@ -24,6 +25,7 @@ function LeaveRequest({
     setPopupOpen(false);
     setType("");
   };
+console.log(data);
 
   // const saveRequest = async(id) => {
   //   if (type === "claimed") {
@@ -54,6 +56,9 @@ function LeaveRequest({
       if (type === "claimed") {
         const response = await newRequest.post(`${api}/${selectedId}`, {
           roster_id:rosterCalim?.roster_details?.roster_id,
+          shift_id:rosterCalim?.roster_details?.shift_details?.shift_id,
+          roster_date:date,
+          employee_id:data?.request_details?.employee_id,
           available_count:rosterCalim?.roster_details?.available_employees_count,
           status_id: statusId,
           accepted_note: note,
