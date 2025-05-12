@@ -26,7 +26,7 @@ const EmployeeAccessRosterCalendar = () => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("");
   const [claimPopup, setClaimPopup] = useState(false);
-  const [type, setType] = useState('');
+  const [type, setType] = useState("");
   const year = dayjs(date).year();
   const month = dayjs(date).month() + 1;
 
@@ -119,13 +119,22 @@ const EmployeeAccessRosterCalendar = () => {
       event?.date_range?.includes(formattedDate),
     );
 
-    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
 
-    const requestedSlots = events?.requested_details?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
+// Step 1: Filter by selected date
+const filteredByDate = events?.available_slots_filtered?.filter((slotGroup) =>
+  dayjs(slotGroup.date).isSame(dayjs(date), "day")
+);
+
+// Step 2: Separate into requested and available groups (by date)
+const requestedSlots = filteredByDate?.map(({ date, slots }) => {
+  const requested = slots.filter((slot) => slot.status === 'requested');
+  return requested.length ? { date, slots: requested } : null;
+}).filter(Boolean); // Remove null entries
+
+const availableSlots = filteredByDate?.map(({ date, slots }) => {
+  const available = slots.filter((slot) => slot.status !== 'requested');
+  return available.length ? { date, slots: available } : null;
+}).filter(Boolean); // Remove null entries
 
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
@@ -222,37 +231,35 @@ const EmployeeAccessRosterCalendar = () => {
                 availableSlots,
                 requestedSlots,
               } = findEvents(date);
+              console.log(availableSlots);
+              
               return (
                 <div className="relative flex h-full w-full flex-col overflow-visible">
                   <>
-                    {/* <div className="absolute -top-6 left-0 flex flex-col items-end">
-                      <img
-                        onClick={() => {
-                          setClaimPopup(true);
-                          setSelectedField(slot);
-                          setType('request');
-                        }}
-                        src="/assets/icons/employee_access/header/requested_slot.svg"
-                        alt=""
-                      />
-                    </div> */}
+                    <div className="absolute -top-6 left-0 flex flex-col items-end">
+                      {requestedSlots?.map((slot, index) => (
+                        <img
+                          key={`requested-slot-${index}`}
+                          onClick={() => {
+                            setClaimPopup(true);
+                            setSelectedField(slot);
+                            setType("request");
+                          }}
+                          src="/assets/icons/employee_access/header/requested_slot.svg"
+                          alt=""
+                        />
+                      ))}
+                    </div>
                     <div className="absolute -top-6 right-0 flex flex-col items-end">
                       {availableSlots?.map((slot, index) => (
                         <img
                           key={`available-slot-${index}`}
                           onClick={() => {
                             setClaimPopup(true);
-                            setType('claim');
+                            setType("claim");
                             setSelectedField(slot);
                           }}
                           src="/assets/icons/employee_access/header/availableshift.svg"
-                          alt=""
-                        />
-                      ))}
-                      {requestedSlots?.map((slot, index) => (
-                        <img
-                          key={index}
-                          src="/assets/icons/employee_access/header/requested_slot.svg"
                           alt=""
                         />
                       ))}

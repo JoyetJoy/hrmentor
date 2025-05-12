@@ -1,10 +1,12 @@
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ROASTER_GET, newRequest } from "@/api/master";
 import { useQuery } from "@tanstack/react-query";
 
 export default function ShiftDetailsView({ popupOpen, setPopupOpen, selectedField }) {
+  console.log(selectedField);
+  
 
   const { data, refetch } = useQuery({
     queryKey: ['shiftDetails', selectedField?.id], // Array of query keys

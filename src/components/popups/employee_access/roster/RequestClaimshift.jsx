@@ -19,6 +19,7 @@ export default function RequestClaimshift({
   const [error, setError] = useState({ shift: "", note: "" });
   const [selectedShift, setSelectedShift] = useState();
   const [shiftdata, setShiftdata] = useState();
+console.log(selectedField);
 
   const { user } = useUserStore((state) => ({
     user: state.user,
