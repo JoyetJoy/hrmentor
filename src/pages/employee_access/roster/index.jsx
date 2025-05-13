@@ -122,9 +122,11 @@ const EmployeeAccessRosterCalendar = () => {
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
 
-    const requestedSlots = events?.requested_details?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
+    const requestedSlots = events?.requested_details?.filter(
+      (slot) =>
+        dayjs(slot.date).isSame(dayjs(date), "day") &&
+        slot.status !== "approved"
+    );    
 
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
