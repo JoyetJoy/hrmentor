@@ -118,23 +118,13 @@ const EmployeeAccessRosterCalendar = () => {
     const shiftEvents = events?.result?.filter((event) =>
       event?.date_range?.includes(formattedDate),
     );
+    const availableSlots = events?.available_slots_filtered?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
 
-
-// Step 1: Filter by selected date
-const filteredByDate = events?.available_slots_filtered?.filter((slotGroup) =>
-  dayjs(slotGroup.date).isSame(dayjs(date), "day")
-);
-
-// Step 2: Separate into requested and available groups (by date)
-const requestedSlots = filteredByDate?.map(({ date, slots }) => {
-  const requested = slots.filter((slot) => slot.status === 'requested');
-  return requested.length ? { date, slots: requested } : null;
-}).filter(Boolean); // Remove null entries
-
-const availableSlots = filteredByDate?.map(({ date, slots }) => {
-  const available = slots.filter((slot) => slot.status !== 'requested');
-  return available.length ? { date, slots: available } : null;
-}).filter(Boolean); // Remove null entries
+    const requestedSlots = events?.requested_details?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
 
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
@@ -145,6 +135,7 @@ const availableSlots = filteredByDate?.map(({ date, slots }) => {
       setPopupOpen(true);
     }
   };
+console.log(selectedField);
 
   return (
     <div className="flex flex-col">
@@ -232,7 +223,7 @@ const availableSlots = filteredByDate?.map(({ date, slots }) => {
                 requestedSlots,
               } = findEvents(date);
               console.log(availableSlots);
-              
+
               return (
                 <div className="relative flex h-full w-full flex-col overflow-visible">
                   <>

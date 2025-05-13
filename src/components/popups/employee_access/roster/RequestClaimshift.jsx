@@ -19,7 +19,7 @@ export default function RequestClaimshift({
   const [error, setError] = useState({ shift: "", note: "" });
   const [selectedShift, setSelectedShift] = useState();
   const [shiftdata, setShiftdata] = useState();
-console.log(selectedField);
+  console.log(selectedField);
 
   const { user } = useUserStore((state) => ({
     user: state.user,
@@ -59,7 +59,7 @@ console.log(selectedField);
     }
     const payload = {
       employee_id: user?.user?.id,
-      roster_claim_id:shiftdata?.roster_claim_id,
+      roster_claim_id: shiftdata?.roster_claim_id,
       shift_id: shiftdata?.shift_id,
       roster_id: shiftdata?.roster_id,
       note: note,
@@ -107,54 +107,79 @@ console.log(selectedField);
               </button>
             </div>
             <div className="flex flex-col justify-between gap-3 gap-y-5">
-              <div className="group flex flex-col space-y-1">
-                <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                  Select Shift
-                </label>
-                <Controller
-                  name="employees"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      isSearchable={true}
-                      styles={customSelectStyles}
-                      placeholder="Select Shift"
-                      className="input-box w-full"
-                      value={field.value}
-                      options={options}
-                      onChange={(selectedOption) => {
-                        field.onChange(selectedOption);
-                        setSelectedShift(selectedOption.value);
-                      }}
+              {type === "claim" && (
+                <>
+                  <div className="group flex flex-col space-y-1">
+                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Select Shift
+                    </label>
+                    <Controller
+                      name="employees"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          isSearchable={true}
+                          styles={customSelectStyles}
+                          placeholder="Select Shift"
+                          className="input-box w-full"
+                          value={field.value}
+                          options={options}
+                          onChange={(selectedOption) => {
+                            field.onChange(selectedOption);
+                            setSelectedShift(selectedOption.value);
+                          }}
+                        />
+                      )}
                     />
+                    {error?.shift && (
+                      <div className="text-sm text-red-500">{error.shift}</div>
+                    )}
+                  </div>
+                  {selectedShift && (
+                    <div className="group flex flex-col space-y-1">
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Shift Time
+                      </label>
+                      <p className="text-sm font-semibold">
+                        {shiftdata?.start_time || ""}-
+                        {shiftdata?.end_time || ""}
+                      </p>
+                    </div>
                   )}
-                />
-                {error?.shift && (
-                  <div className="text-sm text-red-500">{error.shift}</div>
-                )}
-              </div>
-              {selectedShift && (
-                <div className="group flex flex-col space-y-1">
-                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                    Shift Time
-                  </label>
-                  <p className="text-sm font-semibold">
-                    {shiftdata?.start_time || ""}-{shiftdata?.end_time || ""}
-                  </p>
+                  <div className="group col-span-2 flex w-full flex-col gap-1">
+                    <label className="label-text">Note</label>
+                    <textarea
+                      onChange={(e) => setNote(e.target.value)}
+                      className="h-20 w-full rounded-md border border-gray-muted p-2 text-sm"
+                      rows="4"
+                    />
+                    {error?.note && (
+                      <div className="text-sm text-red-500">{error.note}</div>
+                    )}
+                  </div>
+                </>
+              )}
+              {type === "request" && (
+                <div className="flex flex-col justify-between gap-3 gap-y-5">
+                  <div className="group flex flex-col space-y-1">
+                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Select Shifte
+                    </label>
+                    <input type="text" className="input-box w-full" />
+                  </div>
+                  <div className="group flex flex-col space-y-1">
+                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                      Note
+                    </label>
+                    <textarea
+                      onChange={(e) => setNote(e.target.value)}
+                      className="h-20 w-full rounded-md border border-gray-muted p-2 text-sm"
+                      rows="4"
+                    />
+                  </div>
                 </div>
               )}
-              <div className="group col-span-2 flex w-full flex-col gap-1">
-                <label className="label-text">Note</label>
-                <textarea
-                  onChange={(e) => setNote(e.target.value)}
-                  className="h-20 w-full rounded-md border border-gray-muted p-2 text-sm"
-                  rows="4"
-                />
-                {error?.note && (
-                  <div className="text-sm text-red-500">{error.note}</div>
-                )}
-              </div>
 
               {type === "claim" && (
                 <div className="mt-2 flex w-full items-center justify-between gap-3">

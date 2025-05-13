@@ -61,7 +61,7 @@ console.log(data);
           employee_id:data?.request_details?.employee_id,
           available_count:rosterCalim?.roster_details?.available_employees_count,
           status_id: statusId,
-          roster_claim_id:2,
+          roster_claim_id:selectedData?.roster_claim_id,
           accepted_note: note,
         });
   
