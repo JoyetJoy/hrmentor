@@ -161,24 +161,37 @@ export default function RequestClaimshift({
                 </>
               )}
               {type === "request" && (
-                <div className="flex flex-col justify-between gap-3 gap-y-5">
+                <>
+                {selectedField?.requests.map((slot)=>(
+                  <div className="flex flex-col justify-between gap-3 gap-y-5">
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Select Shifte
+                      Select Shift
                     </label>
-                    <input type="text" className="input-box w-full" />
+                    <input type="text" className="input-box w-full" value={slot?.shift_name}/>
                   </div>
+                  <div className="group flex flex-col space-y-1">
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Shift Time
+                      </label>
+                      <p className="text-sm font-semibold">
+                        {slot?.start_time || ""}-
+                        {slot?.end_time || ""}
+                      </p>
+                    </div>
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                       Note
                     </label>
                     <textarea
-                      onChange={(e) => setNote(e.target.value)}
+                      value={slot?.note}
                       className="h-20 w-full rounded-md border border-gray-muted p-2 text-sm"
                       rows="4"
                     />
                   </div>
                 </div>
+                ))}
+                </>
               )}
 
               {type === "claim" && (
