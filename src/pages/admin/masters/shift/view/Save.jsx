@@ -63,6 +63,7 @@ export default function SaveMasterShift({ formtype, sid }) {
     mode: "onChange",
     resolver: yupResolver(ShiftSchema),
   });
+console.log(errors);
 
   const calculationType = watch("calculation_type", "perday");
   const recurrencePattern = watch("recur_pattern", "daily");
