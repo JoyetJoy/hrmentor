@@ -231,17 +231,32 @@ const ShiftCalendar = () => {
     setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
   const adjustLightness = (hex, percent) => {
-    hex = hex?.replace("#", "");
-
+    if (typeof hex !== "string") {
+      console.warn("Invalid hex color (not a string):", hex);
+      return "hsl(0, 0%, 80%)";
+    }
+  
+    hex = hex.replace("#", "");
+  
+    if (hex.length === 3) {
+      hex = hex.split("").map((c) => c + c).join("");
+    }
+  
+    if (hex.length !== 6) {
+      console.warn("Invalid hex color length:", hex);
+      return "hsl(0, 0%, 80%)";
+    }
+  
     let r = parseInt(hex.substring(0, 2), 16);
     let g = parseInt(hex.substring(2, 4), 16);
     let b = parseInt(hex.substring(4, 6), 16);
-
-    // Convert to HSL
+  
     let hsl = rgbToHsl(r, g, b);
-    hsl[2] = Math.min(100, Math.max(0, hsl[2] + percent)); // Adjust Lightness
+    hsl[2] = Math.min(100, Math.max(0, hsl[2] + percent));
+  
     return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
   };
+  
 
   const getMonthDays = () => {
     const startOfMonth = dayjs(startDate).startOf("month");

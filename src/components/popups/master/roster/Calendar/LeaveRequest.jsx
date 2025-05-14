@@ -21,6 +21,7 @@ function LeaveRequest({
 }) {
   const [note, setNote] = useState("");
   const [loader, setLoader] = useState(false);
+  const [rejectloader, setRejectloader] = useState(false);
 
   const onClose = () => {
     setPopupOpen(false);
@@ -55,7 +56,12 @@ function LeaveRequest({
       }
 
       if (type === "claimed") {
-        setLoader(true);
+        if(statusId===2 ){
+          setLoader(true);
+        }else if(statusId === 3){
+          setRejectloader(true);
+        }
+        
         const response = await newRequest.post(`${api}/${selectedId}`, {
           roster_id: rosterCalim?.roster_details?.roster_id,
           shift_id: rosterCalim?.roster_details?.shift_details?.shift_id,
@@ -91,6 +97,7 @@ function LeaveRequest({
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoader(false);
+      setRejectloader(false);
     }
   };
 
@@ -163,6 +170,12 @@ function LeaveRequest({
                   />
                 </div>
                 <div className="mt-4 flex gap-3">
+                {rejectloader ? (
+                    <div className="flex w-full items-center gap-2 rounded border border-black px-4 py-3">
+                      <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-black"></div>
+                      Rejecting
+                    </div>
+                  ) : (
                   <button
                     type="button"
                     onClick={() => {
@@ -172,10 +185,11 @@ function LeaveRequest({
                   >
                     Reject Request
                   </button>
+                  )}
                   {loader ? (
-                    <div className="flex items-center gap-2 rounded bg-black px-4 py-3 text-white">
+                    <div className="flex w-full items-center gap-2 rounded bg-black px-4 py-3 text-white">
                       <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      Accept Request
+                      Accepting
                     </div>
                   ) : (
                     <button
