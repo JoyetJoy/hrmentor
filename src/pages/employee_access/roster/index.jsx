@@ -122,11 +122,11 @@ const EmployeeAccessRosterCalendar = () => {
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
 
-    const requestedSlots = events?.requested_details?.filter(
-      (slot) =>
-        dayjs(slot.date).isSame(dayjs(date), "day") &&
-        slot.status !== "approved"
-    );    
+    const requestedSlots = events?.requested_details
+      ?.filter((slot) => dayjs(slot.date).isSame(dayjs(date), "day"))
+      ?.flatMap((slot) =>
+        slot.requests.filter((req) => req.status !== "approved"),
+      );
 
     return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
   };
@@ -137,7 +137,7 @@ const EmployeeAccessRosterCalendar = () => {
       setPopupOpen(true);
     }
   };
-console.log(selectedField);
+  console.log(selectedField);
 
   return (
     <div className="flex flex-col">
