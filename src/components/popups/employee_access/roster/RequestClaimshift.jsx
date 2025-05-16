@@ -162,11 +162,11 @@ export default function RequestClaimshift({
               )}
               {type === "request" && (
                 <>
-                {selectedField?.requests.map((slot)=>(
+                {selectedField?.requests?.map((slot)=>(
                   <div className="flex flex-col justify-between gap-3 gap-y-5">
                   <div className="group flex flex-col space-y-1">
                     <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Select Shift
+                      Shift
                     </label>
                     <input type="text" className="input-box w-full" value={slot?.shift_name}/>
                   </div>
