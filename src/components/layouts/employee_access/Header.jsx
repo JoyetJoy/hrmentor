@@ -12,7 +12,7 @@ import ChatBoxList from "@/components/popups/employee_access/chat/ChatBoxList";
 import { NOTIFICATIONS } from "@/api/hiring";
 import { useQuery } from "@tanstack/react-query";
 import { ALL_CHAT_LIST, newRequest } from "@/api";
-import Notification from "@/components/popups/notification";
+import EmployeeNotification from "@/components/popups/notification/Employeenotification";
 
 export default function EmployeeAccessHeader() {
   const { setUser, user } = useUserStore((state) => ({
@@ -62,7 +62,7 @@ export default function EmployeeAccessHeader() {
 
   return (
     <>
-      <Notification
+      <EmployeeNotification
         notifications={notifications}
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
