@@ -14,10 +14,15 @@ export default function QueryTable({
   setCurrentPage,
 }) {
   // Table instance
+  const pageLimit = 10; 
   const tableInstance = useReactTable({
     columns,
     data: list,
     getCoreRowModel: getCoreRowModel(),
+    meta: {
+      currentPage,
+      pageLimit,
+    },
    
   });
 
