@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { customSelectStyles } from "@/utils/customStyles";
 import Select from "react-select";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
+import { RecruiterSettingJobDescription } from "@/pages/admin/menu/recruiter/settings/Index";
 
 export default function ReferenceAdd({
   popupAddOpen,
@@ -114,6 +115,7 @@ export default function ReferenceAdd({
       if (res.data?.status === 201) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
+        reset();
         close();
       }
     } catch (error) {

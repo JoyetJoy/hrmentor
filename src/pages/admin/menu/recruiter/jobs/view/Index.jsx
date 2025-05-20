@@ -148,7 +148,7 @@ function RecViewJobDetail() {
           >
             Candidates
           </Link>
-          <Link
+          {/* <Link
             to={`/admin/recruiter/jobs/promote?jid=${jid}`}
             className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
@@ -159,7 +159,7 @@ function RecViewJobDetail() {
             className="flex gap-5 text-sm font-medium text-gray-neutral"
           >
             Refer
-          </Link>
+          </Link> */}
         </div>
       </div>
       <div className="my-3 flex flex-row gap-2">
@@ -183,12 +183,12 @@ function RecViewJobDetail() {
                   placeholder="Search"
                 />
               </label>
-              <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
+              {/* <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
                 <Filter
                   className="stroke size-4 font-medium text-black"
                   strokeWidth={2}
                 />
-              </div>
+              </div> */}
               <Link
                to={'/admin/employee/create'}
                className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmdarkblue">

@@ -3,7 +3,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_REFERENCE, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
@@ -129,9 +129,10 @@ export default function EmployeeReferenceEdit() {
               setPopupStatusOpen(true);
               setSelectedField(row.original.id);
             }}
-            className={`flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md  px-3 font-semibold ${row?.original?.status?.status_name==='Verified' ? 'bg-green-500 text-white' :'bg-red-300 text-red-700' }`}
+            className={`flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md  pl-3 pr-1 font-semibold ${row?.original?.status?.status_name==='Verified' ? 'bg-green-500 text-white' :'bg-red-300 text-red-700' }`}
           >
             {row?.original?.status?.status_name}
+            <ChevronDown className="ml-2" size={20} />
           </div>
           ),
         },
