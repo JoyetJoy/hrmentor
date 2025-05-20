@@ -9,6 +9,11 @@ const data = [
   { name: 'May', Apppliedcandidates: 1890, Selectedcandidates: 4800, Rejectedcandidates: 500 },
   { name: 'June', Apppliedcandidates: 2390, Selectedcandidates: 3800, Rejectedcandidates: 700 },
   { name: 'July', Apppliedcandidates: 3490, Selectedcandidates: 4300, Rejectedcandidates: 400 },
+  { name: 'August', Apppliedcandidates: 2780, Selectedcandidates: 3908, Rejectedcandidates: 900 },
+  { name: 'September', Apppliedcandidates: 1890, Selectedcandidates: 4800, Rejectedcandidates: 500 },
+  { name: 'October', Apppliedcandidates: 2390, Selectedcandidates: 3800, Rejectedcandidates: 700 },
+  { name: 'November', Apppliedcandidates: 3490, Selectedcandidates: 4300, Rejectedcandidates: 400 },
+  { name: 'December', Apppliedcandidates: 3490, Selectedcandidates: 4300, Rejectedcandidates: 400 },
 ];
 
 export default function CustomBarChart() {

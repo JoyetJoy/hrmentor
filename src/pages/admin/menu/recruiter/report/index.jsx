@@ -58,13 +58,13 @@ function RecruiterReports() {
           scrambled it to make a type specimen book.
         </p> */}
         <div className="w-full h-full mt-16 flex flex-col lg:flex-row">
-          <div className="w-full lg:w-7/12">
+          <div className="w-full lg:w-8/12">
             <CustomBarChart/>
 
           </div>
-          <div className="w-full lg:w-6/12">
+          {/* <div className="w-full lg:w-6/12">
             <SingleLineChart/>
-          </div>
+          </div> */}
         </div>
 
       </div>
