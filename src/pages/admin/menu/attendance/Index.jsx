@@ -363,14 +363,14 @@ export default function Attendance() {
               </p>
               <p className="text-sm">Present</p>
             </div>
-            <div className="flex gap-2 text-sm">
+            {/* <div className="flex gap-2 text-sm">
               <img
                 className="h-5 object-contain"
                 src="/assets/icons/tort.svg"
                 alt="late"
               />
               <p className="text-sm">Late</p>
-            </div>
+            </div> */}
             <div className="flex items-center gap-2">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e64444] pt-[0.02rem] text-xs font-extrabold text-black">
                 A
