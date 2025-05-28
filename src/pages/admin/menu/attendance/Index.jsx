@@ -379,17 +379,10 @@ export default function Attendance() {
             </div>
             <div className="flex items-center gap-2">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#AEB6E7] pt-[0.02rem] text-xs font-extrabold text-black">
-                AL
+                L
               </p>
-              <p className="text-sm">Annual Leave</p>
+              <p className="text-sm">Leave</p>
             </div>
-            <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FDE3AA] pt-[0.02rem] text-xs font-extrabold text-black">
-                CL
-              </p>
-              <p className="text-sm">Casual Leave</p>
-            </div>
-
             <div className="flex items-center gap-2">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e68ecf] pt-[0.02rem] text-xs font-extrabold text-black">
                 H
@@ -474,9 +467,7 @@ export default function Attendance() {
                                           ? "bg-[#00b448] text-black"
                                           : shift?.status === "Holiday"
                                             ? "bg-[#e68ecf] text-black"
-                                            : shift?.status === "Company Leave"
-                                              ? "bg-[#FDE3AA] text-black"
-                                              : shift?.status === "Annual Leave"
+                                              : shift?.status === "Leave"
                                                 ? "bg-[#AEB6E7] text-black"
                                                 : shift?.status === "Absent"
                                                   ? "bg-[#e64444] text-black"
@@ -507,10 +498,8 @@ export default function Attendance() {
                                           ? "P"
                                           : shift?.status === "Holiday"
                                             ? "H"
-                                            : shift?.status === "Company Leave"
-                                              ? "CL"
-                                              : shift?.status === "Annual Leave"
-                                                ? "AL"
+                                              : shift?.status === "Leave"
+                                                ? "L"
                                                 : shift?.status === "Absent"
                                                   ? "A"
                                                   : shift?.status === "Day Off"
