@@ -55,6 +55,7 @@ export default function EmployeeDetails() {
       <Share
         sharePopupOpen={sharePopupOpen}
         setSharePopupOpen={setSharePopupOpen}
+        uid={uid}
       />
       {isLoading ? (
         <div className="flex min-h-96 w-full items-center justify-center bg-white">
