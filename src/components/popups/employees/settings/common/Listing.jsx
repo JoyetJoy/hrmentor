@@ -55,11 +55,14 @@ export const EmployeeMasters = ({ api, qrkey, colKeys, type }) => {
       [
         {
           header: "Sl No",
-          accessorKey: "sno",
-          cell: ({ row }) => {
+          accessorKey: "sno", 
+          cell: ({ row, table }) => {
+            const currentPage = table.options.meta?.currentPage || 1;
+            const pageLimit = table.options.meta?.pageLimit || 10;
+        
             return (
               <div className="flex px-2">
-                {row.index + 1 + (currentPage - 1) * pageLimit}
+                {(row.index + 1) + (currentPage - 1) * pageLimit}
               </div>
             );
           },
