@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 const MonthlyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
-  const daysInWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const daysInWeek = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const startOfMonth = dayjs(selectedDate).startOf("month");
   const endOfMonth = dayjs(selectedDate).endOf("month");
