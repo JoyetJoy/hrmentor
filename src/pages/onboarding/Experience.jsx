@@ -100,15 +100,15 @@ export default function Experience() {
           header: "Document",
           accessorKey: "document",
           cell: ({ row }) => (
-            <div className="flex">
-              <Link
-                // href={row.original?.document}
+            <div className="flex cursor-pointer">
+              <a
+              href={row.original?.certificate}
                 target="_blank"
                 className="text-[#1A75FF] underline underline-offset-2"
                 rel="noopener noreferrer"
               >
                 document
-              </Link>
+              </a>
             </div>
           ),
         },

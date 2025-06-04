@@ -66,6 +66,8 @@ export const EMPLOYEE_RESCHEDULE = "employee-reschedule";
 export const EMPLOYEE_STATUS = "employee-status-update";
 // EMPLOYEE DETAILS
 export const EMPLOYEE_DETAILS = "view-employee-page";
+// EMPLOYEE ACTIVITY LOGS
+export const EMPLOYEE_ACTIVITYLOG = "employee-activity-logs";
 // ANNUAL LEAVE
 export const ANNUAL_LEAVE = "annual-leave-employee";
 // ACTIVE EMPLOYEE

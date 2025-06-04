@@ -68,11 +68,11 @@ export default function OnboardingForm() {
                 className="h-full w-full object-contain"
               />
             </div>
-            <span className="font-monorope text-sm font-normal text-white">
-              Welcome,
-              <h1 className="-mt-0.5 text-sm font-semibold">
+            <span className="font-monorope text-sm font-normal mt-3 text-white">
+              Welcome
+              {/* <h1 className="-mt-0.5 text-sm font-semibold">
                 Tech Butomy pvt Ltd
-              </h1>
+              </h1> */}
             </span>
           </div>
           <h1 className="text-lg font-semibold text-white">

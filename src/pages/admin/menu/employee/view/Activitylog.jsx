@@ -31,7 +31,7 @@ export default function EmployeeActivitylogDetails() {
   } = useQuery({
     queryKey: ["employeeViewDetails", uid],
     queryFn: () =>
-      newRequest.get(`${EMPLOYEE_DETAILS}/${uid}`).then((res) => {
+      newRequest.get(`${EMPLOYEE_ACTIVITYLOG}/${uid}`).then((res) => {
         return res.data;
       }),
   });
