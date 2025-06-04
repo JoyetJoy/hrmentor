@@ -218,14 +218,14 @@ export default function EmployeeDetails() {
               <div
                 className={`flex flex-col gap-2 px-3 ${employeeViewDetails?.basic_details?.status === active ? "flex" : "hidden"} `}
               >
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                 <p className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
                   Clock In - 05:10 am
                 </p>
                 <p className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">
                   Clock Out - 06:00 pm
                 </p>
-                </div>
+                </div> */}
                 <AnnualLeave 
                  id={employeeViewDetails?.basic_details?.employee_id}
                  />
