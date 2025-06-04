@@ -115,14 +115,14 @@ export default function Skills() {
           accessorKey: "document",
           cell: ({ row }) => (
             <div className="flex">
-              <Link
+              <a
                 href={row.original?.document}
                 target="_blank"
                 className="text-[#1A75FF] underline underline-offset-2"
                 rel="noopener noreferrer"
               >
                 document
-              </Link>
+              </a>
             </div>
           ),
         },
