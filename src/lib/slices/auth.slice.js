@@ -18,3 +18,8 @@ export const useRoleStore = create((set) => ({
   role: [],
   setRole: (role) => set({ role }),
 }));
+
+export const useCurrentPage = create((set) => ({
+  page: null,
+  setPage: (page) => set({ page }),
+}));

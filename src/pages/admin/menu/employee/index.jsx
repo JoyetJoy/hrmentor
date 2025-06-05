@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Search, Filter, ArrowUpFromLine, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
 import QueryTable from "@/components/table/QueryTable";
 import MenuHeader from "@/components/common/MenuHeader";
 import { getRandomPastelColor } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { EMPLOYEE, newRequest } from "@/api";
-import { usePermissionStore } from "@/lib/slices/auth.slice";
+import { useCurrentPage, usePermissionStore, useUserStore } from "@/lib/slices/auth.slice";
 
 export default function EmployeeLists() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [keyword, setKeyword] = useState("");
   const pageLimit = 10;
+  const navigate = useNavigate();
 
   const { permissions } = usePermissionStore((state) => ({
     permissions: state.permissions,
   }));
 
-  const { data: employeeListing, isLoading } = useQuery({
+  const { page } = useCurrentPage((state) => ({
+    page: state.page,
+  }));
+
+  const { setPage } = useCurrentPage((state) => ({
+    setPage: state.setPage,
+  }));
+
+  const { data: employeeListing, isLoading, refetch } = useQuery({
     queryKey: ["employeeListing", currentPage, keyword],
     queryFn: () =>
       newRequest
@@ -35,25 +44,37 @@ export default function EmployeeLists() {
         }),
   });
 
+  useEffect(()=>{
+    if(page){
+      setCurrentPage(page);
+      refetch();
+    }
+  },[page])
+
   useEffect(() => {
     if (employeeListing) {
       setTotalPages(employeeListing?.last_page);
     }
   }, [employeeListing]);
 
+  const handleNav = (url,page) =>{
+    setPage(page);
+    navigate(url);
+  }
+
   // employee;
   const columns = React.useMemo(
     () => [
       {
         header: "Sl No",
-        accessorKey: "sno", 
+        accessorKey: "sno",
         cell: ({ row, table }) => {
           const currentPage = table.options.meta?.currentPage || 1;
           const pageLimit = table.options.meta?.pageLimit || 10;
-      
+
           return (
             <div className="flex px-2">
-              {(row.index + 1) + (currentPage - 1) * pageLimit}
+              {row.index + 1 + (currentPage - 1) * pageLimit}
             </div>
           );
         },
@@ -129,7 +150,7 @@ export default function EmployeeLists() {
                 row?.original?.employee?.employment_status?.background_color,
               color: row?.original?.employee?.employment_status?.text_color,
             }}
-            className="flex h-8 w-fit items-center justify-center rounded-md px-3 font-semibold whitespace-nowrap"
+            className="flex h-8 w-fit items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold"
           >
             {row?.original?.employee?.employment_status?.status_name}
           </div>
@@ -140,12 +161,13 @@ export default function EmployeeLists() {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center justify-start gap-3 text-xs">
-            <Link
-              to={`/admin/employee/details/?uid=${row.original.id}`}
+            <div
+              // to={`/admin/employee/details/?uid=${row.original.id}`}
+              onClick={() => handleNav(`/admin/employee/details/?uid=${row.original.id}`,employeeListing?.current_page)}
               className="flex cursor-pointer items-center rounded-full bg-gray-soft p-2"
             >
               <Eye className="size-3" />
-            </Link>
+            </div>
             <Link
               to={`/admin/employee/primary/?uid=${row.original.id}`}
               className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -159,7 +181,7 @@ export default function EmployeeLists() {
         ),
       },
     ],
-    [],
+    [employeeListing],
   );
 
   return (
@@ -191,19 +213,19 @@ export default function EmployeeLists() {
             <ArrowUpFromLine className="size-4" />
             <h1 className="text-xs font-semibold">Export</h1>
           </div>
-          {permissions.includes("employee-create") &&(
+          {permissions.includes("employee-create") && (
             <Link
-            to={"/admin/employee/create"}
-            className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-hrmblue"
-          >
-            <Plus className="size-4" />
-            Add Employee{" "}
-          </Link>
+              to={"/admin/employee/create"}
+              className="btn flex h-10 min-h-10 items-center bg-hrmprimaryorange px-3 text-xs font-semibold text-white hover:bg-hrmblue"
+            >
+              <Plus className="size-4" />
+              Add Employee{" "}
+            </Link>
           )}
         </div>
       </div>
       {isLoading ? (
-        <div className="flex min-h-96 w-full  items-center justify-center bg-white">
+        <div className="flex min-h-96 w-full items-center justify-center bg-white">
           <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
         </div>
       ) : (
