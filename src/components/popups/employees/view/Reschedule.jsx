@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { EMPLOYEE_RESCHEDULE, EMPLOYEE_STATUS, newRequest } from "@/api";
 import toast from "react-hot-toast";
 
-const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate }) => {
+const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate,RightToWork, dbs }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const [date, setDate] = useState(joinDate);
@@ -41,6 +41,14 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate
     try {
       if(type==='status' && !data?.work_email){
         toast.error("Work email is missing. Please add it to proceed.");
+        return;
+      }
+      if(type==='status' && dbs?.listing.length==0){
+        toast.error("DBS is missing. Please add it to proceed.");
+        return;
+      }
+      if(type==='status' && RightToWork?.listing.length==0){
+        toast.error("Right to work is missing. Please add it to proceed.");
         return;
       }
       let onboarding;
