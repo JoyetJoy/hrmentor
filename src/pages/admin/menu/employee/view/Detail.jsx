@@ -1,10 +1,17 @@
-import { EMPLOYEE_DBS_CHECK, EMPLOYEE_DETAILS, EMPLOYEE_DOCUMENTS, EMPLOYEE_REFERENCE, EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
+import {
+  EMPLOYEE_DBS_CHECK,
+  EMPLOYEE_DETAILS,
+  EMPLOYEE_DOCUMENTS,
+  EMPLOYEE_REFERENCE,
+  EMPLOYEE_RIGHT_TO_WORK,
+  newRequest,
+} from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Share2 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MonthlyCalendarPicker from "@/components/common/MonthPicker";
-import {useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import Reschedule from "@/components/popups/employees/view/Reschedule";
 import Share from "@/components/popups/employees/view/Share";
@@ -61,13 +68,15 @@ export default function EmployeeDetails() {
   const { data: Documents } = useQuery({
     queryKey: ["Documents", uid],
     queryFn: () =>
-      newRequest.get(`${EMPLOYEE_DOCUMENTS}/${uid}`, {
-        params: {
-          document_category_id: uid,
-        },
-      }).then((res) => {
-        return res.data;
-      }),
+      newRequest
+        .get(`${EMPLOYEE_DOCUMENTS}/${uid}`, {
+          params: {
+            document_category_id: 19,
+          },
+        })
+        .then((res) => {
+          return res.data;
+        }),
   });
 
   return (
@@ -106,7 +115,8 @@ export default function EmployeeDetails() {
           <div className="flex items-center justify-between gap-7">
             <h5 className="text-lg font-bold">Employee Details </h5>
             <div className="flex items-center gap-2">
-              {employeeViewDetails?.basic_details?.employmentStatus?.id !==9 && (
+              {employeeViewDetails?.basic_details?.employmentStatus?.id !==
+                9 && (
                 <button
                   type="button"
                   className="hover:bg-bgColor-300 btn flex h-10 min-h-10 min-w-40 items-center justify-center gap-1 bg-paleblue px-6 text-xs font-bold text-[#2C2C2C] shadow-none"
@@ -147,7 +157,10 @@ export default function EmployeeDetails() {
                   <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-hrmprimaryorange">
                     <img
                       className="h-full w-full object-cover"
-                      src={employeeViewDetails?.basic_details?.profile_image || '/assets/icons/user_image.jpg'}
+                      src={
+                        employeeViewDetails?.basic_details?.profile_image ||
+                        "/assets/icons/user_image.jpg"
+                      }
                       alt={employeeViewDetails?.basic_details?.first_name}
                     />
                   </div>
@@ -266,9 +279,9 @@ export default function EmployeeDetails() {
                   Clock Out - 06:00 pm
                 </p>
                 </div> */}
-                <AnnualLeave 
-                 id={employeeViewDetails?.basic_details?.employee_id}
-                 />
+                <AnnualLeave
+                  id={employeeViewDetails?.basic_details?.employee_id}
+                />
               </div>
             </div>
           </div>
