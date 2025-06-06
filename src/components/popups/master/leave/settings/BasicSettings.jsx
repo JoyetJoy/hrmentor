@@ -71,6 +71,7 @@ const BasicSettings = ({ formtype = "save" }) => {
     CarryForwardExpire_isOn,
     Encashments_isOn,
   } = watch();
+  console.log(errors);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -819,9 +820,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                           // }
                           className="input-box h-10 rounded-md border"
                         />
-                        {errors?.experience?.year && (
+                        {errors?.experience?.[index]?.year && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors?.experience?.year.message}
+                            {errors.experience[index].year.message}
                           </span>
                         )}
                       </div>
@@ -839,9 +840,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                           {...register(`experience.${index}.month`)}
                           className="input-box h-10 rounded-md border"
                         />
-                        {errors?.experience?.month && (
+                        {errors?.experience?.[index]?.month && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors?.experience?.month.message}
+                            {errors.experience[index].month.message}
                           </span>
                         )}
                       </div>
@@ -864,9 +865,9 @@ const BasicSettings = ({ formtype = "save" }) => {
                           min={0}
                           className="input-box h-10 rounded-md border"
                         />
-                        {errors?.experience?.daysLeave && (
+                        {errors?.experience?.[index]?.daysLeave && (
                           <span className="text-xs font-medium text-red-500">
-                            {errors?.experience?.daysLeave.message}
+                            {errors.experience[index].daysLeave.message}
                           </span>
                         )}
                       </div>
@@ -896,11 +897,6 @@ const BasicSettings = ({ formtype = "save" }) => {
                       Two or more service period should not be same years and
                       month
                     </p>
-                  )}
-                  {errors.experience && (
-                    <span className="text-xs text-red-500">
-                      {errors?.experience?.root?.message}
-                    </span>
                   )}
                 </div>
               </div>

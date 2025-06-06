@@ -209,7 +209,7 @@ export const SettingsLeaveSchema = Yup.object().shape({
           .transform((value) => (value === "" ? NaN : Number(value)))
           .required("Days are required")
           .min(0, "Days cannot be negative")
-          .max(31, "Days should be between 0-31")
+          .max(365, "Days should be between 0-365")
           .when(["year", "month"], {
             is: (year, month) => year === 0 && month === 0,
             then: (schema) =>
