@@ -20,12 +20,9 @@ export default function EmployeeLists() {
     permissions: state.permissions,
   }));
 
-  const { page } = useCurrentPage((state) => ({
-    page: state.page,
-  }));
-
-  const { setPage } = useCurrentPage((state) => ({
+  const { setPage,page } = useCurrentPage((state) => ({
     setPage: state.setPage,
+    page: state.page,
   }));
 
   const { data: employeeListing, isLoading, refetch } = useQuery({
@@ -235,6 +232,7 @@ export default function EmployeeLists() {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={totalPages}
+          setPage={setPage}
         />
       )}
     </div>

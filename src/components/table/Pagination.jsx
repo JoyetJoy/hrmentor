@@ -1,3 +1,5 @@
+import { useCurrentPage } from "@/lib/slices/auth.slice";
+
 export default function Pagination({
   currentPage,
   setCurrentPage,
@@ -16,13 +18,19 @@ export default function Pagination({
   };
   const pageNumbers = generatePageNumbers();
 
+  const { setPage } = useCurrentPage((state) => ({
+    setPage: state.setPage,
+  }));
+
   const goToPreviousPage = () => {
     if (currentPage > 1) {
+      setPage(null);
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
   const goToNextPage = () => {
     if (currentPage < totalPages) {
+      setPage(null);
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
@@ -47,7 +55,10 @@ export default function Pagination({
             }}
             className="left text-#2E2E2E flex h-7 w-7 items-center justify-center rounded-full text-sm"
             key={page}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => {
+              setPage(null);
+              setCurrentPage(page);
+            }}
             disabled={currentPage === page}
           >
             {page}

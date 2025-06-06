@@ -8,6 +8,7 @@ import Pagination from "./Pagination";
 
 export default function QueryTable({
   list,
+  setPage,
   columns,
   totalPages,
   currentPage,
@@ -78,6 +79,7 @@ export default function QueryTable({
           </div>
           {totalPages && (
             <Pagination
+              setPage={setPage}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               totalPages={totalPages}
