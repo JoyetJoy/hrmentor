@@ -39,15 +39,15 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate
 
   const handleSave = async () => {
     try {
-      if(type==='status' && !data?.work_email){
+      if(type==='status' && !data?.work_email && status==="Active"){
         toast.error("Work email is missing. Please add it to proceed.");
         return;
       }
-      if(type==='status' && dbs?.listing.length==0){
+      if(type==='status' && dbs?.listing.length==0 && status==="Active"){
         toast.error("DBS is missing. Please add it to proceed.");
         return;
       }
-      if(type==='status' && RightToWork?.listing.length==0){
+      if(type==='status' && RightToWork?.listing.length==0 && status==="Active"){
         toast.error("Right to work is missing. Please add it to proceed.");
         return;
       }
