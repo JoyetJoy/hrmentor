@@ -1,4 +1,4 @@
-import { EMPLOYEE_DBS_CHECK, EMPLOYEE_DETAILS, EMPLOYEE_REFERENCE, EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
+import { EMPLOYEE_DBS_CHECK, EMPLOYEE_DETAILS, EMPLOYEE_DOCUMENTS, EMPLOYEE_REFERENCE, EMPLOYEE_RIGHT_TO_WORK, newRequest } from "@/api";
 import MenuHeader from "@/components/common/MenuHeader";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, Eye, Share2 } from "lucide-react";
@@ -58,6 +58,18 @@ export default function EmployeeDetails() {
       }),
   });
 
+  const { data: Documents } = useQuery({
+    queryKey: ["Documents", uid],
+    queryFn: () =>
+      newRequest.get(`${EMPLOYEE_DOCUMENTS}/${uid}`, {
+        params: {
+          document_category_id: uid,
+        },
+      }).then((res) => {
+        return res.data;
+      }),
+  });
+
   return (
     <>
       <MenuHeader
@@ -70,6 +82,7 @@ export default function EmployeeDetails() {
       <Reschedule
         data={employeeViewDetails?.basic_details}
         Reference={Reference}
+        Documents={Documents}
         dbs={dbs}
         RightToWork={RightToWork}
         popupOpen={popupOpen}

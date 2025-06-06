@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { EMPLOYEE_RESCHEDULE, EMPLOYEE_STATUS, newRequest } from "@/api";
 import toast from "react-hot-toast";
 
-const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate,RightToWork, dbs, Reference }) => {
+const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate,RightToWork, dbs, Reference, Documents }) => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const [date, setDate] = useState(joinDate);
@@ -53,6 +53,10 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate
       }
       else if(type==='status' && Reference?.listing.length==0 && status==="Active"){
         toast.error("Reference is missing. Please add it to proceed.");
+        return;
+      }
+      else if(type==='status' && Documents?.listing.length==0 && status==="Active"){
+        toast.error("E Visa/ Identity is missing. Please add it to proceed.");
         return;
       }
 
