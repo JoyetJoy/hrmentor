@@ -39,27 +39,28 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate
 
   const handleSave = async () => {
     try {
-      if(type==='status' && !data?.work_email && status==="Active"){
+      console.log(type,status);
+      
+      if(type==='status' && !data?.work_email && status===4){
         toast.error("Work email is missing. Please add it to proceed.");
         return;
       }
-      else if(type==='status' && dbs?.listing.length==0 && status==="Active"){
+      else if(type==='status' && dbs?.listing.length==0 && status===4){
         toast.error("DBS is missing. Please add it to proceed.");
         return;
       }
-      else if(type==='status' && RightToWork?.listing.length==0 && status==="Active"){
+      else if(type==='status' && RightToWork?.listing.length==0 && status===4){
         toast.error("Right to work is missing. Please add it to proceed.");
         return;
       }
-      else if(type==='status' && Reference?.listing.length==0 && status==="Active"){
+      else if(type==='status' && Reference?.listing.length==0 && status===4){
         toast.error("Reference is missing. Please add it to proceed.");
         return;
       }
-      else if(type==='status' && Documents?.listing.length==0 && status==="Active"){
+      else if(type==='status' && Documents?.listing.length==0 && status===4){
         toast.error("E Visa/ Identity is missing. Please add it to proceed.");
         return;
       }
-
       let onboarding;
       if(type==="reschedule"){
         onboarding = {
