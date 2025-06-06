@@ -29,13 +29,13 @@ export default function EmployeeLists() {
   }));
 
   const { data: employeeListing, isLoading, refetch } = useQuery({
-    queryKey: ["employeeListing", currentPage, keyword],
+    queryKey: ["employeeListing", currentPage, keyword,page],
     queryFn: () =>
       newRequest
         .get(EMPLOYEE, {
           params: {
             search: keyword,
-            page: currentPage,
+            page: page?page : currentPage,
             per_limit: pageLimit,
           },
         })
