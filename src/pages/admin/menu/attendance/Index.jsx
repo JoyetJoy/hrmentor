@@ -61,11 +61,11 @@ export default function Attendance() {
     let newEndDate;
 
     if (selectedOption === "daily") {
-      newStartDate = dayjs(startDate).add(1, "day").toDate();
+      newStartDate = dayjs(startDate).add(2, "day").toDate();
     } else if (selectedOption === "weekly") {
       newStartDate = dayjs(startDate).add(2, "week").toDate();
     } else {
-      newStartDate = dayjs(startDate).add(1, "month").toDate();
+      newStartDate = dayjs(startDate).add(2, "month").toDate();
     }
     const start = formatDate(newStartDate);
     setStartDate(start);
