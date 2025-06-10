@@ -99,7 +99,6 @@ export default function Apply() {
   };
 
   const handleSave = async (data) => {
-    
     const formData = {
       first_name: data.first_name,
       middle_name: data.middle_name,
@@ -234,17 +233,18 @@ export default function Apply() {
             className="relative flex h-72 flex-col items-center gap-5 rounded-md bg-cover py-12"
           >
             <Link to="/careers" className="absolute left-7 top-4">
-              <img
-                className="h-12"
-                src="/assets/icons/career-logo.svg"
-                alt=""
-              />
+              <div className="mr-2 h-9">
+                <img
+                  src={"/logo.svg"}
+                  alt="hr mentor"
+                  className="h-full w-full object-contain"
+                />
+              </div>
             </Link>
             <div className="text-2xl text-white">Apply with us now</div>
             <div className="max-w-2/4 min-w-2/4 text-softcool w-2/4 text-center text-[0.8rem]">
-              Build up your career with us form by either selecting from one of
-              our application form. Using the Neodesk form builder to format and
-              customize the application form template to match your needs.
+              Please complete all sections of this application form
+              accurately and honestly
             </div>
           </div>
           <form
@@ -345,7 +345,9 @@ export default function Apply() {
                 )}
               </div>
               <div className="group flex flex-col gap-1.5">
-                <label className="required label-text">Country of residence</label>
+                <label className="required label-text">
+                  Country of residence
+                </label>
                 <Controller
                   name="country_id"
                   control={control}
@@ -370,33 +372,33 @@ export default function Apply() {
               <div className="group flex flex-col gap-1.5">
                 <label className="required label-text">City</label>
                 <Controller
-                name="city_id"
-                control={control}
-                rules={{
-                  required: country_id
-                    ? "City is required"
-                    : "Please select a country first",
-                }}
-                render={({ field }) => (
-                  <AsyncSelect
-                    {...field}
-                    placeholder="Search ..."
-                    loadOptions={country_id ? loadCitiesOptions : () => []}
-                    isSearchable={true}
-                    noOptionsMessage={() =>
-                      country_id
-                        ? "No cities found"
-                        : "Select a country first"
-                    }
-                    isDisabled={!country_id}
-                    onChange={(selectedOption) => {
-                      field.onChange(selectedOption); // Update form state
-                      handleCitySelect(selectedOption);
-                    }}
-                    className="input-box"
-                  />
-                )}
-              />
+                  name="city_id"
+                  control={control}
+                  rules={{
+                    required: country_id
+                      ? "City is required"
+                      : "Please select a country first",
+                  }}
+                  render={({ field }) => (
+                    <AsyncSelect
+                      {...field}
+                      placeholder="Search ..."
+                      loadOptions={country_id ? loadCitiesOptions : () => []}
+                      isSearchable={true}
+                      noOptionsMessage={() =>
+                        country_id
+                          ? "No cities found"
+                          : "Select a country first"
+                      }
+                      isDisabled={!country_id}
+                      onChange={(selectedOption) => {
+                        field.onChange(selectedOption); // Update form state
+                        handleCitySelect(selectedOption);
+                      }}
+                      className="input-box"
+                    />
+                  )}
+                />
                 {errors.city_id && (
                   <span className="text-xs font-medium text-red-500">
                     {errors.city_id?.message}

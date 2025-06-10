@@ -208,7 +208,7 @@ export default function Attendance() {
     });
     setAttendance(true);
   };
-  
+
   return (
     <>
       <div className="flex h-screen flex-col">
@@ -447,7 +447,14 @@ export default function Attendance() {
                         return (
                           <td className="border-r-[3px] border-[#d1d5db]">
                             {attendanceEntry?.shifts?.length > 0
-                              ? attendanceEntry?.shifts?.map((shift, index) => (
+                              ? Array.from(
+                                  new Map(
+                                    attendanceEntry.shifts.map((shift) => [
+                                      shift.id,
+                                      shift,
+                                    ]),
+                                  ).values(),
+                                ).map((shift, index) => (
                                   <div
                                     key={`${day.fullDate}-${index}`}
                                     onClick={() => {
@@ -467,13 +474,13 @@ export default function Attendance() {
                                           ? "bg-[#00b448] text-black"
                                           : shift?.status === "Holiday"
                                             ? "bg-[#e68ecf] text-black"
-                                              : shift?.status === "Leave"
-                                                ? "bg-[#AEB6E7] text-black"
-                                                : shift?.status === "Absent"
-                                                  ? "bg-[#e64444] text-black"
-                                                  : shift?.status === "Day Off"
-                                                    ? "bg-[#c5c5cb] text-black"
-                                                    : ""
+                                            : shift?.status === "Leave"
+                                              ? "bg-[#AEB6E7] text-black"
+                                              : shift?.status === "Absent"
+                                                ? "bg-[#e64444] text-black"
+                                                : shift?.status === "Day Off"
+                                                  ? "bg-[#c5c5cb] text-black"
+                                                  : ""
                                       }`}
                                       onMouseEnter={() => {
                                         {
@@ -498,13 +505,13 @@ export default function Attendance() {
                                           ? "P"
                                           : shift?.status === "Holiday"
                                             ? "H"
-                                              : shift?.status === "Leave"
-                                                ? "L"
-                                                : shift?.status === "Absent"
-                                                  ? "A"
-                                                  : shift?.status === "Day Off"
-                                                    ? "DO"
-                                                    : ""}
+                                            : shift?.status === "Leave"
+                                              ? "L"
+                                              : shift?.status === "Absent"
+                                                ? "A"
+                                                : shift?.status === "Day Off"
+                                                  ? "DO"
+                                                  : ""}
                                       </span>
                                       {shift?.delay_status && (
                                         <img

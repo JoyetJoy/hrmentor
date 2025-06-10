@@ -27,6 +27,7 @@ import AdminPayOff from "@/pages/admin/menu/employee/edit/paySlip/PayOff";
 import AdminPayOffView from "@/pages/admin/menu/employee/edit/paySlip/PayOffView";
 import AdminPaySlipView from "@/pages/admin/menu/employee/edit/paySlip/PaySlipView";
 import { EmployeeWorkArea } from "@/pages/admin/menu/employee/settings/WorkArea";
+import ExitProcess from "@/pages/admin/menu/employee/view/Exitprocess";
 
 export const EmployeeRoutes = [
   {
@@ -40,6 +41,10 @@ export const EmployeeRoutes = [
   {
     path: "activitylog",
     element: <EmployeeActivitylogDetails />,
+  },
+  {
+    path: "exitprocess",
+    element: <ExitProcess />,
   },
   {
     path: "create",
