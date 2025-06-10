@@ -63,7 +63,7 @@ export default function Attendance() {
     if (selectedOption === "daily") {
       newStartDate = dayjs(startDate).add(1, "day").toDate();
     } else if (selectedOption === "weekly") {
-      newStartDate = dayjs(startDate).add(1, "week").toDate();
+      newStartDate = dayjs(startDate).add(2, "week").toDate();
     } else {
       newStartDate = dayjs(startDate).add(1, "month").toDate();
     }
