@@ -306,7 +306,7 @@ export default function DbsEditForm({
                                 : "View Certificate"}
                             </span>
                           </>
-                        ) : (
+                        ) : type!=='View' ? (
                           <>
                             <ArrowUpFromLine className="size-4" />
                             <label
@@ -315,6 +315,14 @@ export default function DbsEditForm({
                               className="cursor-pointer text-xs font-semibold text-black/50"
                             >
                               Upload Document
+                            </label>
+                          </>
+                        ) : (
+                          <>
+                            <label
+                              className="cursor-pointer text-xs font-semibold text-black/50"
+                            >
+                             No Document
                             </label>
                           </>
                         )}
