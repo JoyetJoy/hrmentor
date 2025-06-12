@@ -21,6 +21,7 @@ export default function EmployeeDbsCheckEdit() {
   const [selectedId, setSelectedId] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
+  const [type, setType] = useState("");
   const pageLimit = 10;
 
   const { permissions } = usePermissionStore((state) => ({
@@ -112,6 +113,10 @@ export default function EmployeeDbsCheckEdit() {
             <div className="flex items-center gap-2 text-xs">
               <button
                 type="button"
+                onClick={() => {
+                  setType('view');
+                  setSelectedId(row.original.id);
+                }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
                 <Eye className="size-3" />
@@ -156,6 +161,7 @@ export default function EmployeeDbsCheckEdit() {
         api={EMPLOYEE_DBS_CHECK}
       />
       <DbsEditForm
+        type={type}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}

@@ -17,6 +17,7 @@ import {
 } from "@/constants/data";
 
 export default function DbsEditForm({
+  type,
   popupOpen,
   setPopupOpen,
   selectedField,
@@ -78,13 +79,15 @@ export default function DbsEditForm({
     if (employeeDbsCheckDetailByid) {
       setValue("dbs_type", employeeDbsCheckDetailByid.dbs_type);
       setValue("subscription", employeeDbsCheckDetailByid.subscription);
-      setValue("renewal_date", employeeDbsCheckDetailByid.renewal_date);
       setValue("dbs_number", employeeDbsCheckDetailByid.dbs_number);
       setValue("issue_date", employeeDbsCheckDetailByid.issue_date);
       setValue("document", employeeDbsCheckDetailByid.document);
       setValue("note", employeeDbsCheckDetailByid.note);
       setValue("declaration", employeeDbsCheckDetailByid.declaration);
       setValue("status", employeeDbsCheckDetailByid.status);
+      if (employeeDbsCheckDetailByid?.renewal_date) {
+        setValue("renewal_date", employeeDbsCheckDetailByid?.renewal_date);
+      }
     }
   }, [employeeDbsCheckDetailByid]);
 
@@ -175,6 +178,7 @@ export default function DbsEditForm({
                       <Select
                         {...field}
                         isSearchable={false}
+                        isDisabled={type === "view"}
                         styles={customSelectStyles}
                         options={dbsCheckType}
                         placeholder="Select Type"
@@ -201,6 +205,7 @@ export default function DbsEditForm({
                       <Select
                         {...field}
                         isSearchable={false}
+                        isDisabled={type === "view"}
                         options={successStatus}
                         styles={customSelectStyles}
                         placeholder="Select Type"
@@ -220,6 +225,7 @@ export default function DbsEditForm({
                   </label>
                   <input
                     {...register("renewal_date", { required: true })}
+                    disabled={type === "view"}
                     type="date"
                     className="input-box h-10 w-full pr-2"
                   />
@@ -236,6 +242,7 @@ export default function DbsEditForm({
                   <input
                     {...register("dbs_number", { required: true })}
                     type="text"
+                    disabled={type === "view"}
                     placeholder="Enter reference"
                     className="input-box h-10 w-full"
                   />
@@ -252,6 +259,7 @@ export default function DbsEditForm({
                   <input
                     {...register("issue_date", { required: true })}
                     type="date"
+                    disabled={type === "view"}
                     className="input-box h-10 w-full pr-2"
                   />
                   {errors.issue_date && (
@@ -284,7 +292,9 @@ export default function DbsEditForm({
                               className="cursor-pointer text-xs font-semibold text-black/50"
                               onClick={toggleImageVisibility}
                             >
-                              {isImageVisible ? "Hide Certificate" : "View Certificate"}
+                              {isImageVisible
+                                ? "Hide Certificate"
+                                : "View Certificate"}
                             </span>
                           </>
                         ) : (
@@ -321,10 +331,12 @@ export default function DbsEditForm({
                         alt="Uploaded"
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                       />
-                      <X
-                        onClick={clearImage}
-                        className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
-                      />
+                      {type !== "view" && (
+                        <X
+                          onClick={clearImage}
+                          className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
+                        />
+                      )}
                     </div>
                   )}
                 </div>
@@ -338,6 +350,7 @@ export default function DbsEditForm({
                       <Select
                         {...field}
                         isSearchable={false}
+                        isDisabled={type === "view"}
                         options={employeeMasterOptions}
                         styles={customSelectStyles}
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
@@ -356,6 +369,7 @@ export default function DbsEditForm({
                   </label>
                   <textarea
                     {...register("note", { required: true })}
+                    disabled={type === "view"}
                     className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
                   {errors.note && (
@@ -370,6 +384,7 @@ export default function DbsEditForm({
                   </label>
                   <textarea
                     {...register("declaration", { required: true })}
+                    disabled={type === "view"}
                     className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
                   {errors.declaration && (
@@ -378,29 +393,31 @@ export default function DbsEditForm({
                     </span>
                   )}
                 </div>
-                <div className="mt-2 flex flex-row items-center justify-center gap-3">
-                  <button
-                    type="submit"
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange text-sm font-normal text-white focus:outline-none"
-                    // disabled={loader}
-                  >
-                    {loader ? (
-                      <div className="flex items-center gap-3">
-                        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                        {selectedField ? "Updating" : "Saving"}
-                      </div>
-                    ) : (
-                      <span>{selectedField ? "Add" : "Save"}</span>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={close}
-                    className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                  >
-                    Cancel
-                  </button>
-                </div>
+                {type !== "view" && (
+                  <div className="mt-2 flex flex-row items-center justify-center gap-3">
+                    <button
+                      type="submit"
+                      className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmprimaryorange text-sm font-normal text-white focus:outline-none"
+                      // disabled={loader}
+                    >
+                      {loader ? (
+                        <div className="flex items-center gap-3">
+                          <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                          {selectedField ? "Updating" : "Saving"}
+                        </div>
+                      ) : (
+                        <span>{selectedField ? "Add" : "Save"}</span>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={close}
+                      className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
               </form>
             )}
           </DialogPanel>
