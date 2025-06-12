@@ -18,10 +18,12 @@ import {
 
 export default function DbsEditForm({
   type,
+  setType,
   popupOpen,
   setPopupOpen,
   selectedField,
   setSelectedField,
+  data,
   qrKey,
   api,
   uid,
@@ -81,20 +83,27 @@ export default function DbsEditForm({
       setValue("subscription", employeeDbsCheckDetailByid.subscription);
       setValue("dbs_number", employeeDbsCheckDetailByid.dbs_number);
       setValue("issue_date", employeeDbsCheckDetailByid.issue_date);
-      setValue("document", employeeDbsCheckDetailByid.document);
+      // setValue("document", employeeDbsCheckDetailByid.document);
+      if(employeeDbsCheckDetailByid.document){
+        setImage(employeeDbsCheckDetailByid.document)
+      }
       setValue("note", employeeDbsCheckDetailByid.note);
       setValue("declaration", employeeDbsCheckDetailByid.declaration);
       setValue("status", employeeDbsCheckDetailByid.status);
-      if (employeeDbsCheckDetailByid?.renewal_date) {
-        setValue("renewal_date", employeeDbsCheckDetailByid?.renewal_date);
+      if (data?.renewal_date) {
+        console.log(employeeDbsCheckDetailByid?.renewal_date);
+        
+        setValue("renewal_date", data?.renewal_date);
       }
     }
   }, [employeeDbsCheckDetailByid]);
 
   function close() {
+    setType('');
+    setImage('')
+    reset();
     setPopupOpen(false);
     setSelectedField(0);
-    reset();
   }
   const onSubmit = async (data) => {
     setLoader(true);
@@ -149,7 +158,7 @@ export default function DbsEditForm({
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-                {selectedField ? "Update" : "Add"} DBS Check
+                {type? type :selectedField ? "Update" : "Add"} DBS Check
               </h1>
               <button
                 type="button"
@@ -178,7 +187,7 @@ export default function DbsEditForm({
                       <Select
                         {...field}
                         isSearchable={false}
-                        isDisabled={type === "view"}
+                        isDisabled={type === "View"}
                         styles={customSelectStyles}
                         options={dbsCheckType}
                         placeholder="Select Type"
@@ -205,7 +214,7 @@ export default function DbsEditForm({
                       <Select
                         {...field}
                         isSearchable={false}
-                        isDisabled={type === "view"}
+                        isDisabled={type === "View"}
                         options={successStatus}
                         styles={customSelectStyles}
                         placeholder="Select Type"
@@ -225,7 +234,7 @@ export default function DbsEditForm({
                   </label>
                   <input
                     {...register("renewal_date", { required: true })}
-                    disabled={type === "view"}
+                    disabled={type === "View"}
                     type="date"
                     className="input-box h-10 w-full pr-2"
                   />
@@ -242,7 +251,7 @@ export default function DbsEditForm({
                   <input
                     {...register("dbs_number", { required: true })}
                     type="text"
-                    disabled={type === "view"}
+                    disabled={type === "View"}
                     placeholder="Enter reference"
                     className="input-box h-10 w-full"
                   />
@@ -259,7 +268,7 @@ export default function DbsEditForm({
                   <input
                     {...register("issue_date", { required: true })}
                     type="date"
-                    disabled={type === "view"}
+                    disabled={type === "View"}
                     className="input-box h-10 w-full pr-2"
                   />
                   {errors.issue_date && (
@@ -302,6 +311,7 @@ export default function DbsEditForm({
                             <ArrowUpFromLine className="size-4" />
                             <label
                               htmlFor="document"
+                              disabled={type==="View"}
                               className="cursor-pointer text-xs font-semibold text-black/50"
                             >
                               Upload Document
@@ -331,7 +341,7 @@ export default function DbsEditForm({
                         alt="Uploaded"
                         className="max-h-24 w-full rounded-md border border-black/20 object-contain"
                       />
-                      {type !== "view" && (
+                      {type !== "View" && (
                         <X
                           onClick={clearImage}
                           className="absolute -right-2 -top-2 h-5 w-5 cursor-pointer rounded-full bg-hrmdarkblue p-1 text-white"
@@ -350,7 +360,7 @@ export default function DbsEditForm({
                       <Select
                         {...field}
                         isSearchable={false}
-                        isDisabled={type === "view"}
+                        isDisabled={type === "View"}
                         options={employeeMasterOptions}
                         styles={customSelectStyles}
                         className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
@@ -369,7 +379,7 @@ export default function DbsEditForm({
                   </label>
                   <textarea
                     {...register("note", { required: true })}
-                    disabled={type === "view"}
+                    disabled={type === "View"}
                     className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
                   {errors.note && (
@@ -384,7 +394,7 @@ export default function DbsEditForm({
                   </label>
                   <textarea
                     {...register("declaration", { required: true })}
-                    disabled={type === "view"}
+                    disabled={type === "View"}
                     className="input-box h-24 w-full pt-1 placeholder:text-[0.8rem]"
                   />
                   {errors.declaration && (
@@ -393,7 +403,7 @@ export default function DbsEditForm({
                     </span>
                   )}
                 </div>
-                {type !== "view" && (
+                {type !== "View" && (
                   <div className="mt-2 flex flex-row items-center justify-center gap-3">
                     <button
                       type="submit"

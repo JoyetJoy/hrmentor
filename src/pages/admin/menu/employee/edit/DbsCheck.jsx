@@ -22,6 +22,7 @@ export default function EmployeeDbsCheckEdit() {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const [type, setType] = useState("");
+  const [data, setData] = useState('');
   const pageLimit = 10;
 
   const { permissions } = usePermissionStore((state) => ({
@@ -114,8 +115,9 @@ export default function EmployeeDbsCheckEdit() {
               <button
                 type="button"
                 onClick={() => {
-                  setType('view');
-                  setSelectedId(row.original.id);
+                  setType('View');
+                  setData(row.original);
+                  setSelectedField(row.original.id);
                 }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
@@ -124,7 +126,10 @@ export default function EmployeeDbsCheckEdit() {
               {permissions.includes("employee-dbs-check-edit") &&(
               <button
                 type="button"
-                onClick={() => setSelectedField(row.original.id)}
+                onClick={() => {
+                  setData(row.original);
+                  setSelectedField(row.original.id);
+                }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
               >
                 <img
@@ -162,6 +167,8 @@ export default function EmployeeDbsCheckEdit() {
       />
       <DbsEditForm
         type={type}
+        data={data}
+        setType={setType}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         selectedField={selectedField}

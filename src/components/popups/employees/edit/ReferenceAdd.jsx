@@ -38,7 +38,7 @@ export default function ReferenceAdd({
   const [selectedType, setSelectedType] = useState("");
 
   const handleTypeChange = (selectedOption) => {
-    setSelectedType(selectedOption);
+    setSelectedType(selectedOption.value);
   };
 
   // Get selected data
@@ -61,7 +61,7 @@ export default function ReferenceAdd({
   useEffect(() => {
     if (employeeReferenceid) {
       setValue("type", employeeReferenceid.type);
-      handleTypeChange(employeeReferenceid.type)
+      handleTypeChange(employeeReferenceid.type);
       setValue("reference_name", employeeReferenceid.reference_name);
       setValue("personal_email", employeeReferenceid.personal_email);
       setValue("company_email", employeeReferenceid.company_email);
@@ -180,7 +180,7 @@ export default function ReferenceAdd({
                           ]}
                           onChange={(e) => {
                             field.onChange(e);
-                            handleTypeChange(e.value);
+                            handleTypeChange(e);
                           }}
                           placeholder="Select Type"
                           className="input-box h-10 w-full rounded-md border-[#C2C1C1] focus:border-[#C2C1C1]"
