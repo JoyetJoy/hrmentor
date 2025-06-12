@@ -21,7 +21,7 @@ export const dbsSchema = Yup.object({
   renewal_date: Yup.string(),
   dbs_number: Yup.string().required("DBS Number is required"),
   issue_date: Yup.string().required("DBS Issue date required"),
-  document: Yup.string(),
+  // document: Yup.string(),
   status: Yup.object({
     value: Yup.string(),
     label: Yup.string(),

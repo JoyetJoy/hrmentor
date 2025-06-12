@@ -61,6 +61,7 @@ export default function ReferenceAdd({
   useEffect(() => {
     if (employeeReferenceid) {
       setValue("type", employeeReferenceid.type);
+      handleTypeChange(employeeReferenceid.type);
       setValue("reference_name", employeeReferenceid.reference_name);
       setValue("personal_email", employeeReferenceid.personal_email);
       setValue("company_email", employeeReferenceid.company_email);
