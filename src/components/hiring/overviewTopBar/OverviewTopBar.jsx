@@ -35,7 +35,7 @@ export const OverviewTopBar = ({
                   placeholder="Search"
                 />
               </label>
-              <button onClick={toggleModal}>
+              {/* <button onClick={toggleModal}>
                 <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ export const OverviewTopBar = ({
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
                   </svg>
                 </div>
-              </button>
+              </button> */}
             </>
           )}
           {overviewButton && (

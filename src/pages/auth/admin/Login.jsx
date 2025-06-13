@@ -9,9 +9,11 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { useRoleStore } from "@/lib/slices/auth.slice";
+import ForgotPassword from "@/components/popups/ForgotPass";
 
 function Login() {
   const [loader, setLoader] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [passwordVisible, ispasswordVisible] = useState(false);
   const {
     register,
@@ -74,6 +76,10 @@ function Login() {
 
   return (
     <div className="mx-auto grid h-screen w-full items-center px-5 2xl:container lg:grid-cols-7 lg:px-12">
+      <ForgotPassword
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        />
       <div className="hidden h-screen w-full lg:col-span-3 lg:flex">
         <img
           src={"/assets/images/auth/banner.svg"}
@@ -162,12 +168,12 @@ function Login() {
               "Login"
             )}
           </button>
-          <Link
-            to="/forgot-password"
-            className="mt-2.5 text-center text-base font-semibold text-hrmprimaryorange"
+          <div
+            onClick={()=> setPopupOpen(true)}
+            className="mt-2.5 text-center text-base font-semibold text-hrmprimaryorange cursor-pointer"
           >
             Forgot password?
-          </Link>
+          </div>
           <div className="mt-5 flex flex-col items-center justify-center">
             <p className="text-center text-[0.94rem] font-medium text-softslate">
               Powered By

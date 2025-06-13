@@ -18,7 +18,7 @@ export default function EmployeeNotification({
   function close() {
     setNotificationPopupOpen(false);
   }
-  const [notification,setNotification] = useState();
+  const [notification,setNotification] = useState([]);
   const {user } = useUserStore((state) => ({
       user: state.user,
     }));
