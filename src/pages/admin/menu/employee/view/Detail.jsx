@@ -216,11 +216,11 @@ export default function EmployeeDetails() {
                     >
                       Activity Log
                     </Link> */}
-                    <Link 
+                    {/* <Link 
                       to={`/admin/employee/exitprocess?uid=${uid}`}
                       className="btn flex h-10 min-h-10 min-w-36 items-center justify-center gap-1 bg-hrmprimaryorange px-6 text-xs font-bold text-white shadow-none transition-all duration-500 hover:scale-[1.01]">
                       Exit Process
-                    </Link>
+                    </Link> */}
                   </>
                 ) : (
                   <>
