@@ -64,12 +64,12 @@ function LeaveSettingsHeader({permissions}) {
               placeholder="Search"
             />
           </label>
-          <div className="h-10 min-h-10 rounded-md border border-gray-platinum bg-white p-3">
+          {/* <div className="h-10 min-h-10 rounded-md border border-gray-platinum bg-white p-3">
             <Filter
               className="stroke size-4 font-medium text-black"
               strokeWidth={2}
             />
-          </div>
+          </div> */}
           {permissions.includes("holiday-type-create") && (
           <Link
             to={'/admin/leave/settings/basesettings'}

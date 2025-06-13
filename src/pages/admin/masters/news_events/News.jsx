@@ -194,9 +194,9 @@ export default function News() {
               placeholder="Search"
             />
           </label>
-          <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
+          {/* <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
             <Filter className="size-4" />
-          </div>
+          </div> */}
           {permissions.includes("news-create") && (
           <Link
             to={"/admin/news-event/create-news"}

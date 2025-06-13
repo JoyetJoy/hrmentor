@@ -166,7 +166,7 @@ function CandidatesList() {
               placeholder="Search"
             />
           </label>
-          <div className="relative">
+          {/* <div className="relative">
             <div className="h-9 min-h-9 rounded-md border border-gray-400 bg-white p-[0.58rem]">
               <Filter
                 className="stroke size-4 font-medium text-black"
@@ -177,7 +177,7 @@ function CandidatesList() {
               popupOpen={popupOpen}
               setPopupOpen={setPopupOpen}
             />
-          </div>
+          </div> */}
         </div>
         {permissions.includes("candidate-create") && (
           <div className="flex items-center gap-7">
