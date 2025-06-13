@@ -118,7 +118,7 @@ export default function ExitProcess() {
                 </span>
               )} */}
             </div>
-            <div className="group flex flex-col gap-1.5 px-3 py-2">
+            {/* <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Last Working Date</label>
               <input
                 {...register("last_working_date", { required: true })}
@@ -126,13 +126,13 @@ export default function ExitProcess() {
                 type="date"
                 max={new Date().toISOString().split("T")[0]}
                 className="input-box pr-2"
-              />
+              /> */}
               {/* {errors.dob && (
                 <span className="text-xs font-medium text-red-500">
                   {errors.dob?.message}
                 </span>
               )} */}
-            </div>
+            {/* </div> */}
             <div className="group flex flex-col gap-1.5 px-3 py-2">
               <label className="required label-text">Reason For Exit</label>
               <input
