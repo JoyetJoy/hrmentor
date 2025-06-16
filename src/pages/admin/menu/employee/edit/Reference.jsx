@@ -169,7 +169,7 @@ export default function EmployeeReferenceEdit() {
                 />
               </button>
               )}
-              <button
+              {/* <button
                 type="button"
                 onClick={() => {
                   setPopupOpen(true);
@@ -178,7 +178,7 @@ export default function EmployeeReferenceEdit() {
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
               >
                 <ArrowRight className="size-3"/>
-              </button>
+              </button> */}
               
               {/* <button
                 type="button"
