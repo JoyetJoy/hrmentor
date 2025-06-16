@@ -203,9 +203,9 @@ export default function EmployeeLists() {
           />
         </label>
         <div className="flex items-center gap-2">
-          <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
+          {/* <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
             <Filter className="size-4" />
-          </div>
+          </div> */}
           <div className="flex h-10 min-h-10 flex-row items-center justify-center gap-1 rounded-md border border-gray-400 bg-white px-4 py-1">
             <ArrowUpFromLine className="size-4" />
             <h1 className="text-xs font-semibold">Export</h1>

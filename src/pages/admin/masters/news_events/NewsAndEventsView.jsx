@@ -45,9 +45,9 @@ export default function NewsAndEventsView() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="mb-4 text-xl font-semibold">Latest News</h2>
-                <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
+                {/* <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
                   <Filter className="size-4" />
-                </div>
+                </div> */}
               </div>
               {newsItems.length > 0 && (
                 <div className="flex items-start gap-2 py-4">
@@ -130,9 +130,9 @@ export default function NewsAndEventsView() {
           <div className="w-1/3 bg-white p-6">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="mb-4 text-xl font-semibold">Events</h2>
-              <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
+              {/* <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
                 <Filter className="size-4" />
-              </div>
+              </div> */}
             </div>
             <div className="space-y-6">
               {employeeAllEvent.map((event, index) => (

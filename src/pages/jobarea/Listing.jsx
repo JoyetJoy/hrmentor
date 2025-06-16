@@ -92,12 +92,12 @@ export default function JobAreaListing() {
                   placeholder="Search"
                 />
               </label>
-              <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
+              {/* <div className="h-10 min-h-10 rounded-md border border-gray-400 bg-white p-3">
                 <Filter
                   className="stroke size-4 font-medium text-black"
                   strokeWidth={2}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           {isLoading ? (

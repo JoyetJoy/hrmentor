@@ -66,7 +66,7 @@ export default function ReferenceEdit({
       setValue("designation", employeeReferenceid.designation);
       setValue("contact_number", employeeReferenceid.contact_number);
     }
-  }, [employeeReferenceid]);
+  }, []);
 
   function close() {
     setPopupAddOpen(false);

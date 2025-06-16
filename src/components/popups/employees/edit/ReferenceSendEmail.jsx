@@ -70,10 +70,10 @@ export default function ReferenceSendEmail({
   }, [employeeReferenceid]);
 
   function close() {
+    reset();
     setPopupOpen(false);
     setSelectedField(0);
     setSelectedType(null);
-    reset();
   }
 
   const onSubmit = async (data) => {

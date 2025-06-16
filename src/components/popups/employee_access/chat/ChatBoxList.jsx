@@ -37,7 +37,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen, refetch }) 
       className="relative z-40"
       onClose={close}
     >
-      <div className="fixed inset-0 z-40 h-screen w-screen overflow-y-auto bg-black/10">
+      <div className="fixed inset-0 z-40 h-screen w-screen bg-black/10">
         <div className="flex min-h-full items-left justify-end">
           <DialogPanel className="w-full max-w-sm rounded bg-white px-10 py-10">
             <div className="mb-5 flex justify-between">
@@ -66,7 +66,7 @@ export default function ChatBoxList({ data, popupOpen, setPopupOpen, refetch }) 
               <Filter className="size-4" />
             </div>{" "} */}
           </div>
-          <RadioGroup value={selectedUser} onChange={setSelectedUser} className="flex flex-col gap-3">
+          <RadioGroup value={selectedUser} onChange={setSelectedUser} className="flex flex-col gap-3 h-screen overflow-auto overflow-y-min">
             {chats?.map((user, idx) => (
               <RadioGroup.Option
                 key={idx}

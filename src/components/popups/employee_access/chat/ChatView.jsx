@@ -173,8 +173,8 @@ useEffect(() => {
         onClose={close}
       >
         <div className="fixed inset-0 z-50 h-screen w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center">
-            <DialogPanel className="max-h-[45rem] w-full max-w-md rounded bg-white px-7 pb-3 pt-6">
+          <div className="relative min-h-full">
+            <DialogPanel className="absolute max-h-[45rem] bottom-2 right-[24.5rem] w-full max-w-md rounded bg-white px-7 pb-3 pt-6">
               <div className="mb-3 flex justify-between">
                 <div className="flex items-center gap-1">
                   <div className="h-10 w-10 overflow-hidden rounded-full">

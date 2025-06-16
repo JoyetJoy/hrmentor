@@ -40,36 +40,38 @@ export default function ReferenceAdd({
   const handleTypeChange = (selectedOption) => {
     setSelectedType(selectedOption.value);
   };
+console.log(popupAddOpen);
 
   // Get selected data
-  const { data: employeeReferenceid, isLoading } = useQuery({
-    queryKey: ["employeeReferenceid", api, selectedField],
+  const { data: employeeReferenceAdd, isLoading } = useQuery({
+    queryKey: ["employeeReferenceAdd", api, selectedField],
     queryFn: () =>
       newRequest
         .get(`${"employee-references"}/${selectedField}/edit`)
         .then((res) => res.data),
-    enabled: !!selectedField != 0,
+        enabled: !!selectedField && popupAddOpen
   });
+console.log(employeeReferenceAdd);
 
   const { data: employeeDetails } = useQuery({
     queryKey: ["employeeDetails", api, selectedField],
     queryFn: () =>
       newRequest.get(`${"employee"}/${uid}`).then((res) => res.data),
-    enabled: !!uid,
+    enabled: !!uid && popupAddOpen
   });
 
   useEffect(() => {
-    if (employeeReferenceid) {
-      setValue("type", employeeReferenceid.type);
-      handleTypeChange(employeeReferenceid.type);
-      setValue("reference_name", employeeReferenceid.reference_name);
-      setValue("personal_email", employeeReferenceid.personal_email);
-      setValue("company_email", employeeReferenceid.company_email);
-      setValue("company_name", employeeReferenceid.company_name);
-      setValue("designation", employeeReferenceid.designation);
-      setValue("contact_number", employeeReferenceid.contact_number);
+    if (employeeReferenceAdd) {
+      setValue("type", employeeReferenceAdd.type);
+      handleTypeChange(employeeReferenceAdd.type);
+      setValue("reference_name", employeeReferenceAdd.reference_name);
+      setValue("personal_email", employeeReferenceAdd.personal_email);
+      setValue("company_email", employeeReferenceAdd.company_email);
+      setValue("company_name", employeeReferenceAdd.company_name);
+      setValue("designation", employeeReferenceAdd.designation);
+      setValue("contact_number", employeeReferenceAdd.contact_number);
     }
-  }, [employeeReferenceid]);
+  }, [employeeReferenceAdd]);
 
   function close() {
     setPopupAddOpen(false);

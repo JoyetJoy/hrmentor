@@ -384,10 +384,6 @@ select:focus {
   cursor: pointer;
 }
 
-.day-box:hover {
-  background: #ffffff;
-}
-
 .selected {
   background-color: #e95d39;
   color: white;

@@ -444,9 +444,9 @@ export default function TaskManagement() {
           </label>
 
           {/* Filter button */}
-          <div className="flex h-10 min-h-10 items-center justify-center rounded-md border border-gray-400 bg-white p-3">
+          {/* <div className="flex h-10 min-h-10 items-center justify-center rounded-md border border-gray-400 bg-white p-3">
             <Filter className="size-4" />
-          </div>
+          </div> */}
 
           {/* Add Project button */}
           <Link
