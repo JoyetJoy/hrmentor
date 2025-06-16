@@ -20,6 +20,8 @@ export default function ReferenceAdd({
   qrKey,
   api,
   uid,
+  type,
+  setType
 }) {
   const {
     register,
@@ -86,6 +88,7 @@ export default function ReferenceAdd({
   }, [employeeReferenceAdd]);
 
   function close() {
+    setType();
     setPopupAddOpen(false);
     setSelectedField(0);
     setSelectedType(null);
@@ -93,13 +96,16 @@ export default function ReferenceAdd({
   }
 
   const onSubmit = async (data) => {
-    if (data?.type?.value==='work' && !emailRegex.test(data.company_email)) {
+    if (data?.type?.value === "work" && !emailRegex.test(data.company_email)) {
       setError("company_email", {
         type: "manual",
         message: "Please enter a valid email address",
       });
       return;
-    }else if (data?.type?.value==='personal' && !emailRegex.test(data.personal_email)) {
+    } else if (
+      data?.type?.value === "personal" &&
+      !emailRegex.test(data.personal_email)
+    ) {
       setError("personal_email", {
         type: "manual",
         message: "Please enter a valid email address",
@@ -116,11 +122,17 @@ export default function ReferenceAdd({
       formData.append("reference_name", data.reference_name);
       {
         selectedType === "work"
-          ? (formData.append("company_email", data?.company_email ?? data?.personal_email),
+          ? (formData.append(
+              "company_email",
+              data?.company_email ?? data?.personal_email,
+            ),
             formData.append("company_name", data.company_name),
             formData.append("reference_name", data.reference_name))
           : (formData.append("reference_name", data.reference_name),
-            formData.append("personal_email", data?.personal_email ?? data?.company_email));
+            formData.append(
+              "personal_email",
+              data?.personal_email ?? data?.company_email,
+            ));
       }
 
       formData.append("contact_number", data.contact_number);
@@ -151,6 +163,7 @@ export default function ReferenceAdd({
       console.log(error);
       toast.error(error?.response?.data?.error);
     } finally {
+      setType();
       setLoader(false);
     }
   };
@@ -166,7 +179,7 @@ export default function ReferenceAdd({
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             transition
-            className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-7 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
+            className="data-[closed]:transform-[scale(95%)] w-full max-w-sm rounded bg-white/90 p-7 pb-10 backdrop-blur-2xl duration-300 ease-out data-[closed]:opacity-0"
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
@@ -200,6 +213,7 @@ export default function ReferenceAdd({
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={type==='view'}
                           styles={customSelectStyles}
                           options={[
                             { label: "Personal", value: "personal" },
@@ -227,6 +241,7 @@ export default function ReferenceAdd({
                     </label>
                     <input
                       {...register("reference_name", { required: true })}
+                      disabled={type==='view'}
                       className="input-box h-10 w-full"
                     />
                     {errors.reference_name && (
@@ -242,6 +257,7 @@ export default function ReferenceAdd({
                       </label>
                       <input
                         {...register("personal_email", { required: true })}
+                        disabled={type==='view'}
                         className="input-box h-10 w-full"
                       />
                       {errors.personal_email && (
@@ -259,6 +275,7 @@ export default function ReferenceAdd({
                         </label>
                         <input
                           {...register("company_name", { required: true })}
+                          disabled={type==='view'}
                           className="input-box h-10 w-full"
                         />
                         {errors.company_name && (
@@ -273,6 +290,7 @@ export default function ReferenceAdd({
                         </label>
                         <input
                           {...register("designation", { required: true })}
+                          disabled={type==='view'}
                           className="input-box h-10 w-full"
                         />
                         {errors.designation && (
@@ -287,6 +305,7 @@ export default function ReferenceAdd({
                         </label>
                         <input
                           {...register("company_email", { required: true })}
+                          disabled={type==='view'}
                           className="input-box h-10 w-full"
                         />
                         {errors.company_email && (
@@ -303,6 +322,7 @@ export default function ReferenceAdd({
                     </label>
                     <input
                       {...register("contact_number", { required: true })}
+                      disabled={type==='view'}
                       className="input-box h-10 w-full"
                     />
                     {errors.contact_number && (
@@ -312,31 +332,33 @@ export default function ReferenceAdd({
                     )}
                   </div>
                 </div>
-                <div className="grid grid-cols-1">
-                  <div className="mt-7 flex flex-row items-center justify-center gap-3">
-                    <button
-                      type="submit"
-                      className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
-                      disabled={loader}
-                    >
-                      {loader ? (
-                        <div className="flex items-center gap-3">
-                          <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
-                          {selectedField ? "Updating" : "Saving"}
-                        </div>
-                      ) : (
-                        <span>{selectedField ? "Update" : "Save"}</span>
-                      )}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={close}
-                      className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
-                    >
-                      Cancel
-                    </button>
+                {type !== "view" && (
+                  <div className="grid grid-cols-1">
+                    <div className="mt-7 flex flex-row items-center justify-center gap-3">
+                      <button
+                        type="submit"
+                        className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-hrmblack text-sm font-normal text-white focus:outline-none"
+                        disabled={loader}
+                      >
+                        {loader ? (
+                          <div className="flex items-center gap-3">
+                            <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+                            {selectedField ? "Updating" : "Saving"}
+                          </div>
+                        ) : (
+                          <span>{selectedField ? "Update" : "Save"}</span>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={close}
+                        className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </form>
             )}
           </DialogPanel>
