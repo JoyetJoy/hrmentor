@@ -3,7 +3,7 @@ import MenuHeader from "@/components/common/MenuHeader";
 import EmployeesSidebar from "@/components/sidebars/employee/EmployeesSidebar";
 import QueryTable from "@/components/table/QueryTable";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronDown, ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
+import { ArrowRight, ChevronDown, ChevronRight, Eye, Plus, Search, Trash2 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { EMPLOYEE_REFERENCE, newRequest } from "@/api";
 import DeleteConfirmation from "@/components/common/DeleteConfirmation";
@@ -26,6 +26,7 @@ export default function EmployeeReferenceEdit() {
   const [popupAddOpen, setPopupAddOpen] = useState(false);
   const [popupStatusOpen, setPopupStatusOpen] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
+  const [type, setType] = useState('');
   const pageLimit = 10;
 
   const { permissions } = usePermissionStore((state) => ({
@@ -144,7 +145,8 @@ export default function EmployeeReferenceEdit() {
               <button
                 type="button"
                 onClick={() => {
-                  setPopupOpen(true);
+                  setType('view');
+                  setPopupAddOpen(true);
                   setSelectedField(row.original.id);
                 }}
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
@@ -167,6 +169,16 @@ export default function EmployeeReferenceEdit() {
                 />
               </button>
               )}
+              {/* <button
+                type="button"
+                onClick={() => {
+                  setPopupOpen(true);
+                  setSelectedField(row.original.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-darkCharcoal"
+              >
+                <ArrowRight className="size-3"/>
+              </button> */}
               
               {/* <button
                 type="button"
@@ -209,6 +221,8 @@ export default function EmployeeReferenceEdit() {
         setSelectedField={setSelectedField}
         qrKey={"employeeReference"}
         api={EMPLOYEE_REFERENCE}
+        type={type}
+        setType={setType}
         uid={uid}
       />
        <ReferenceSendEmail
