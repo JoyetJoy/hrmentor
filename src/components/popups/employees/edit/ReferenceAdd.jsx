@@ -51,7 +51,7 @@ console.log(popupAddOpen);
         .then((res) => res.data),
         enabled: !!selectedField && popupAddOpen
   });
-console.log(employeeReferenceAdd);
+console.log(errors);
 
   const { data: employeeDetails } = useQuery({
     queryKey: ["employeeDetails", api, selectedField],
