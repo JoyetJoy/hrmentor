@@ -27,6 +27,7 @@ export default function ReferenceAdd({
     control,
     reset,
     setValue,
+    setError,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
@@ -36,11 +37,12 @@ export default function ReferenceAdd({
   const queryClient = useQueryClient();
   const [loader, setLoader] = useState(false);
   const [selectedType, setSelectedType] = useState("");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleTypeChange = (selectedOption) => {
     setSelectedType(selectedOption.value);
   };
-console.log(popupAddOpen);
+  console.log(popupAddOpen);
 
   // Get selected data
   const { data: employeeReferenceAdd, isLoading } = useQuery({
@@ -49,15 +51,15 @@ console.log(popupAddOpen);
       newRequest
         .get(`${"employee-references"}/${selectedField}/edit`)
         .then((res) => res.data),
-        enabled: !!selectedField && popupAddOpen
+    enabled: !!selectedField && popupAddOpen,
   });
-console.log(employeeReferenceAdd);
+  console.log(errors);
 
   const { data: employeeDetails } = useQuery({
     queryKey: ["employeeDetails", api, selectedField],
     queryFn: () =>
       newRequest.get(`${"employee"}/${uid}`).then((res) => res.data),
-    enabled: !!uid && popupAddOpen
+    enabled: !!uid && popupAddOpen,
   });
 
   useEffect(() => {
@@ -65,8 +67,18 @@ console.log(employeeReferenceAdd);
       setValue("type", employeeReferenceAdd.type);
       handleTypeChange(employeeReferenceAdd.type);
       setValue("reference_name", employeeReferenceAdd.reference_name);
-      setValue("personal_email", employeeReferenceAdd.personal_email);
-      setValue("company_email", employeeReferenceAdd.company_email);
+      setValue(
+        "personal_email",
+        employeeReferenceAdd.personal_email ??
+          employeeReferenceAdd.company_email ??
+          "",
+      );
+      setValue(
+        "company_email",
+        employeeReferenceAdd.company_email ??
+          employeeReferenceAdd.personal_email ??
+          "",
+      );
       setValue("company_name", employeeReferenceAdd.company_name);
       setValue("designation", employeeReferenceAdd.designation);
       setValue("contact_number", employeeReferenceAdd.contact_number);
@@ -81,6 +93,20 @@ console.log(employeeReferenceAdd);
   }
 
   const onSubmit = async (data) => {
+    if (data?.type?.value==='work' && !emailRegex.test(data.company_email)) {
+      setError("company_email", {
+        type: "manual",
+        message: "Please enter a valid email address",
+      });
+      return;
+    }else if (data?.type?.value==='personal' && !emailRegex.test(data.personal_email)) {
+      setError("personal_email", {
+        type: "manual",
+        message: "Please enter a valid email address",
+      });
+      return;
+    }
+
     setLoader(true);
     try {
       const formData = new FormData();
@@ -90,22 +116,22 @@ console.log(employeeReferenceAdd);
       formData.append("reference_name", data.reference_name);
       {
         selectedType === "work"
-          ? (formData.append("company_email", data.company_email),
+          ? (formData.append("company_email", data?.company_email ?? data?.personal_email),
             formData.append("company_name", data.company_name),
             formData.append("reference_name", data.reference_name))
           : (formData.append("reference_name", data.reference_name),
-            formData.append("personal_email", data.personal_email));
+            formData.append("personal_email", data?.personal_email ?? data?.company_email));
       }
 
       formData.append("contact_number", data.contact_number);
       formData.append("designation", data.designation);
-      
+
       if (selectedType === "work") {
         if (!data?.company_name || !data?.company_email || !data?.designation) {
           return toast.error("Filed Missing");
         }
       }
-      
+
       let res;
       if (selectedField !== 0) {
         res = await newFormRequest.post(
@@ -144,7 +170,7 @@ console.log(employeeReferenceAdd);
           >
             <div className="mb-7 flex items-center justify-between">
               <h1 className="text-[0.94rem] font-bold leading-7 text-neutral-700">
-              {selectedField ? "Update" : "Add"} Reference
+                {selectedField ? "Update" : "Add"} Reference
               </h1>
               <button
                 type="button"
@@ -211,19 +237,19 @@ console.log(employeeReferenceAdd);
                   </div>
                   {selectedType === "personal" && (
                     <div className="group flex flex-col space-y-1">
-                    <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
-                      Email Address
-                    </label>
-                    <input
-                      {...register("personal_email", { required: true })}
-                      className="input-box h-10 w-full"
-                    />
-                    {errors.personal_email && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.personal_email?.message}
-                      </span>
-                    )}
-                  </div>
+                      <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                        Email Address
+                      </label>
+                      <input
+                        {...register("personal_email", { required: true })}
+                        className="input-box h-10 w-full"
+                      />
+                      {errors.personal_email && (
+                        <span className="text-xs font-medium text-red-500">
+                          {errors.personal_email?.message}
+                        </span>
+                      )}
+                    </div>
                   )}
                   {selectedType === "work" && (
                     <>
