@@ -10,10 +10,13 @@ export const referenceSchema = Yup.object({
       return value?.value && value?.label;
     })
     .required("Type is required"),
-    reference_name: Yup.string(),
-    personal_email: Yup.string(),
-    contact_number: Yup.string(),
-    // company_name: Yup.string(),
-    // designation: Yup.string(),
-    // company_email: Yup.string()
+  reference_name: Yup.string(),
+  personal_email: Yup.string()
+    .nullable()
+    .notRequired()
+    .email("Invalid email address"),
+  contact_number: Yup.string(),
+  // company_name: Yup.string(),
+  // designation: Yup.string(),
+  // company_email: Yup.string()
 });
