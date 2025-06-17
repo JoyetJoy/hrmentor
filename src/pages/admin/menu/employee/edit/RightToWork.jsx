@@ -154,7 +154,7 @@ export default function EmployeeRightToWorkEdit() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeRightToWorks"}
         api={EMPLOYEE_RIGHT_TO_WORK}
       />
