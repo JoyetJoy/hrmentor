@@ -115,14 +115,13 @@ const EmployeeAccessRosterCalendar = () => {
     const holidayEvents = events?.result?.filter((event) =>
       event?.holidays?.includes(formattedDate),
     );
-    
     let shiftEventsRaw = events?.result?.filter((event) =>
       Array.isArray(event?.date_range) && event.date_range.includes(formattedDate)
     );
     
     // Step 2: Deduplicate by (shift_id + date) combination
     const shiftEventMap = new Map();
-    shiftEventsRaw.forEach(event => {
+    shiftEventsRaw?.forEach(event => {
       const key = `${event.shift_id}_${formattedDate}`;
       if (!shiftEventMap.has(key)) {
         shiftEventMap.set(key, event);
