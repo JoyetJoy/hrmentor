@@ -274,11 +274,21 @@ useEffect(() => {
       Array.isArray(event?.date_deletions) && event.date_deletions.includes(formattedDate)
     );
     
-    const shiftEvents = data?.filter((event) =>
+    let shiftEventsRaw = data?.filter((event) =>
       Array.isArray(event?.date_range) && event.date_range.includes(formattedDate)
     );
     
-    // Create a set of shift event IDs for exclusion
+    // Step 2: Deduplicate by (shift_id + date) combination
+    const shiftEventMap = new Map();
+    shiftEventsRaw.forEach(event => {
+      const key = `${event.shift_id}_${formattedDate}`;
+      if (!shiftEventMap.has(key)) {
+        shiftEventMap.set(key, event);
+      }
+    });
+    const shiftEvents = Array.from(shiftEventMap.values());
+    
+    // Step 3: Create a set of shift event IDs for exclusion
     const shiftEventIds = new Set(shiftEvents.map(event => event._id));
     
     // Combine dayOff candidates and filter out duplicates and shiftEvents
