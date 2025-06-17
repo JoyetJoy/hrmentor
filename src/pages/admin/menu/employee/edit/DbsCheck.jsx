@@ -99,10 +99,17 @@ export default function EmployeeDbsCheckEdit() {
           },
         },
         {
+          header: "Renewal Date",
+          accessorKey: "renewal_date",
+          Cell: ({ row }) => {
+            return <div className="flex px-2">{row?.original?.renewal_date}</div>;
+          },
+        },
+        {
           header: "Status",
           accessorKey: "status", 
           cell: ({ row }) => (
-            <div className="flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-red-300 px-3 font-semibold text-red-700">
+            <div className={`flex h-8 w-fit cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 font-semibold ${row.original?.status === 1 ?'bg-green-500 text-white' :'bg-red-300 text-red-700'}`}>
               {row.original?.status === 1 ? "Active" : "Inactive"}
             </div>
           ),
