@@ -98,7 +98,7 @@ export default function EmployeeReferenceEdit() {
           },
         },
         {
-          header: "Personal Email",
+          header: "Email",
           accessorKey: "personal-email",
           cell: ({ row }) => (
             <div className="flex">{row.original?.type==='work'? row.original?.company_email : row.original?.personal_email}</div>

@@ -74,7 +74,7 @@ export default function EmployeeEmergencyContact() {
           accessorKey: "name",
         },
         {
-          header: "Next of Kin",
+          header: "Relationship",
           accessorKey: "relationship",
         },
         {
@@ -125,7 +125,7 @@ export default function EmployeeEmergencyContact() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedId}
+        id={selectedId}
         qrKey={"employeeEmergencyContacts"}
         api={EMPLOYEE_EMERGENCY_CONTACTS}
       />

@@ -370,10 +370,8 @@ export default function SaveEmployeeForm({ formtype }) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries(["employeeDetails"]);
         queryClient.invalidateQueries(["employeeListing"]);
-        clearImage();
-        reset();
         setLoader(false);
-        navigate("/admin/employee");
+        setActive('view');
       } else {
         toast.error("Failed to save employee.");
         setLoader(false);
@@ -445,7 +443,7 @@ export default function SaveEmployeeForm({ formtype }) {
               )}
               {permissions.includes("employee-primary-information-edit") && (
                 <>
-                  {active === "edit" ? (
+                  {active === "edit" || (active ==='view'&& formtype==='save') ? (
                     <button
                       type="submit"
                       className="btn flex h-10 min-h-10 min-w-24 items-center bg-hrmprimaryorange text-sm font-medium text-white transition-all duration-500 hover:bg-hrmblue/70"
@@ -535,7 +533,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   <input
                     autoComplete="off"
                     type="text"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     placeholder="Enter First Name"
                     {...register("first_name", {
                       required: "First Name is required",
@@ -571,7 +569,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       },
                     })}
                     autoComplete="off"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     placeholder="Enter Middle Name"
                     type="text"
                     className="input-box"
@@ -600,7 +598,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       },
                     })}
                     autoComplete="off"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     placeholder="Enter Surname"
                     type="text"
                     className="input-box"
@@ -623,7 +621,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("dob", { required: true })}
                     autoComplete="off"
                     type="date"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     max={new Date().toISOString().split("T")[0]}
                     className="input-box pr-2"
                   />
@@ -644,7 +642,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={employeeMasters?.genders}
                         placeholder="Select Gender"
@@ -668,7 +666,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={nationalityList}
                         placeholder="Select Nationality"
@@ -694,7 +692,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={countryList}
                         placeholder="Select Country"
@@ -729,7 +727,7 @@ export default function SaveEmployeeForm({ formtype }) {
                             ? "No cities found"
                             : "Select a country first"
                         }
-                        isDisabled={!country_id || active === "view"} // Disable if no country is selected
+                        isDisabled={!country_id || (active === "view"&&formtype==='update')} // Disable if no country is selected
                         onChange={(selectedOption) => {
                           field.onChange(selectedOption); // Update form state
                           handleCitySelect(selectedOption);
@@ -765,7 +763,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       required: true,
                     })}
                     autoComplete="off"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     type="text"
                     placeholder="Enter Post Code"
                     onKeyPress={(event) => {
@@ -795,7 +793,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={bloodGroups}
                         placeholder="Select Blood Group"
@@ -824,7 +822,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     })}
                     autoComplete="off"
                     type="text"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     maxLength={9}
                     placeholder="Enter National Insurance Number"
                     className="input-box"
@@ -844,7 +842,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   <textarea
                     autoComplete="off"
                     type="text"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     {...register("home_address", { required: true })}
                     className="input-box min-h-28 py-2 text-start"
                     onInput={(e) => {
@@ -866,7 +864,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     <div className="flex gap-1.5">
                       <input
                         type="checkbox"
-                        disabled={active === "view"}
+                        disabled={active === "view"&&formtype==='update'}
                         checked={sameAsHome}
                         onChange={() => {
                           setSameAsHome(!sameAsHome);
@@ -878,7 +876,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     </div>
                   </label>
                   <textarea
-                    disabled={sameAsHome || active === "view"}
+                    disabled={sameAsHome || (active === "view"&&formtype==='update')}
                     autoComplete="off"
                     {...register("communication_address", { required: true })}
                     className="input-box min-h-28 p-2"
@@ -976,7 +974,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={departmentListing}
                         placeholder="Select Department"
@@ -1000,7 +998,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     render={({ field }) => (
                       <Select
                         {...field}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         isSearchable={true}
                         styles={customSelectStyles}
                         options={rolesList}
@@ -1036,7 +1034,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={designationListing}
                         placeholder="Select Designation"
@@ -1056,7 +1054,7 @@ export default function SaveEmployeeForm({ formtype }) {
                   <input
                     {...register("date_of_joining", { required: true })}
                     autoComplete="off"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     type="date"
                     className="input-box pr-2"
                   />
@@ -1086,7 +1084,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={workLocationListing}
                         placeholder="Select Work location"
@@ -1120,7 +1118,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={employeeTypeList}
                         placeholder="Select Employement Type"
@@ -1140,7 +1138,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("mobile_number", { required: true })}
                     autoComplete="off"
                     type="text"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     placeholder="Enter Moblie Number"
                     onKeyPress={(event) => {
                       // Allow only digits (0-9) and prevent input if length is already 11
@@ -1169,7 +1167,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={maritalStatuses}
                         placeholder="Select Marital status"
@@ -1191,7 +1189,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("personal_email", { required: true })}
                     autoComplete="off"
                     type="text"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     placeholder="Enter Personal Email Address  "
                     className="input-box"
                   />
@@ -1207,7 +1205,7 @@ export default function SaveEmployeeForm({ formtype }) {
                     {...register("work_email", { required: true })}
                     autoComplete="off"
                     type="text"
-                    disabled={active === "view"}
+                    disabled={active === "view"&&formtype==='update'}
                     placeholder="Enter Work Email Address"
                     className="input-box"
                   />
@@ -1229,7 +1227,7 @@ export default function SaveEmployeeForm({ formtype }) {
                       <Select
                         {...field}
                         isSearchable={true}
-                        isDisabled={active === "view"}
+                        isDisabled={active === "view"&&formtype==='update'}
                         styles={customSelectStyles}
                         options={pentionStatuses}
                         placeholder="Select status"

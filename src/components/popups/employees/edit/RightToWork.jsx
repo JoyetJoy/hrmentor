@@ -58,18 +58,15 @@ export default function EmployeeRightToWorkEditForm({
       } else {
         setIndefinite(false);
       }
+      setImage(employeeRightToWorkDetailByid?.document);
     }
   }, [employeeRightToWorkDetailByid]);
 
-  useEffect(() => {
-    if (employeeRightToWorkDetailByid) {
-      setImage(employeeRightToWorkDetailByid?.document);
-    }
-  }, [employeeRightToWorkDetailByid, setImage]);
-
   function close() {
+    setIndefinite(false);
     setPopupOpen(false);
     setSelectedField(0);
+    clearImage();
     reset();
   }
   const handleCheckboxChange = (e) => {
@@ -78,7 +75,7 @@ export default function EmployeeRightToWorkEditForm({
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      if (!imageFile) {
+      if (!imageFile&&!image) {
         toast.error("Document is required");
         return;
       }
@@ -86,7 +83,7 @@ export default function EmployeeRightToWorkEditForm({
       formData.append("reference_no", data?.reference_no);
       formData.append("user_id", uid);
       formData.append("condtion", data.condtion);
-      formData.append("expiry_date", data.expiry_date);
+      data.expiry_date&&formData.append("expiry_date", data.expiry_date);
       formData.append("reviewedBy", data.reviewedBy);
       imageFile && formData.append("document", imageFile);
       let res;
@@ -105,8 +102,11 @@ export default function EmployeeRightToWorkEditForm({
       }
     } catch (error) {
       console.log(error);
+      close();
       toast.error(error?.response?.data?.error);
     } finally {
+      setIndefinite(false);
+      close();
       setLoader(false);
     }
   };

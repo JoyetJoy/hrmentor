@@ -238,15 +238,19 @@ export const getmenuitems = (permissions = []) => [
       },]
       : []
   ),
-  {
-    id: 6,
-    iconType: "image",
-    iconSrcBlack: "/assets/icons/admin/attendance-black.svg",
-    iconSrcActive: "/assets/icons/admin/attendance-color.svg",
-    name: "Attendance",
-    path: "/admin/attendance",
-    active: "attendance",
-  },
+  ...(
+    permissions.includes("roster-list")
+      ? [{
+        id: 6,
+        iconType: "image",
+        iconSrcBlack: "/assets/icons/admin/attendance-black.svg",
+        iconSrcActive: "/assets/icons/admin/attendance-color.svg",
+        name: "Attendance",
+        path: "/admin/attendance",
+        active: "attendance",
+      },]
+      : []
+  ),
   ...(
     permissions.includes("leave-request-list")
       ? [{

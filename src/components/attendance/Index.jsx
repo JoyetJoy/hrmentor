@@ -13,13 +13,7 @@ const Options = [{
 },{
   Title:'Absent',
   value:'Absent'
-},{
-  Title:'Leave',
-  value:'Leave'
-},{
-  Title:'Day Off',
-  value:'Day-Off'
-}]
+},]
 const Index = ({ attendance, setAttendance, empId, refetch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);

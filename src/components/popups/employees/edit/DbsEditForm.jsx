@@ -424,7 +424,7 @@ export default function DbsEditForm({
                           {selectedField ? "Updating" : "Saving"}
                         </div>
                       ) : (
-                        <span>{selectedField ? "Add" : "Save"}</span>
+                        <span>{type? type :selectedField ? "Update" : "Save"}</span>
                       )}
                     </button>
                     <button
