@@ -54,15 +54,15 @@ function Login() {
             navigate("/employee-access/dashboard");
           }
         } else {
-          if (res?.data?.data?.roles?.includes(1)) {
-            localStorage.setItem("super_token", res?.data?.data?.token);
+          if (res?.data?.data?.roles[0]===1) {
+            localStorage.removeItem("token");
+            localStorage.setItem("token", res?.data?.data?.token);
+            setRole(res?.data?.data?.roles[0]);
             navigate("/admin/dashboard");
-          } else if (res?.data?.data?.roles?.includes(2, 3 || 2, 4)) {
-            localStorage.setItem("hr_token", res?.data?.data?.token);
-          } else if (res?.data?.data?.roles?.includes(3, 4)) {
-            localStorage.setItem("team_token", res?.data?.data?.token);
           } else {
-            localStorage.setItem("employee_token", res?.data?.data?.token);
+            localStorage.removeItem("token");
+            localStorage.setItem("token", res?.data?.data?.token);
+            setRole(res?.data?.data?.roles[0]);
             navigate("/employee-access/dashboard");
           }
         }
