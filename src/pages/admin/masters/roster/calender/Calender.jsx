@@ -588,7 +588,6 @@ useEffect(() => {
               </div>
             </div>
           </div>
-          {role.includes(1) && (
             <div className="flex w-full items-center justify-between py-2">
               <div className="flex items-center gap-4">
                 <Select
@@ -627,7 +626,6 @@ useEffect(() => {
                 />
               </div>
             </div>
-          )}
 
           <div className="overflow-x-medium mt-4 min-h-screen w-full overflow-x-auto bg-gray-100">
             <div className="overflow-x-medium overflow-y-medium mt-4 h-screen w-full overflow-x-auto overflow-y-auto bg-white shadow-md">
