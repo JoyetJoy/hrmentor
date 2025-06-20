@@ -77,14 +77,14 @@ const RosterCalendar = () => {
     user: state.user,
   }));
 
-  useEffect(() => {
-    if (!role.includes(1)) {
-      const department_id = [user?.department_id];
-      const worklocation_id = [user?.worklocation_id];
-      setActiveDepartment(department_id);
-      setActiveLocation(worklocation_id);
-    }
-  }, [role, user]);
+  // useEffect(() => {
+  //   if (!role.includes(1)) {
+  //     const department_id = [user?.department_id];
+  //     const worklocation_id = [user?.worklocation_id];
+  //     setActiveDepartment(department_id);
+  //     setActiveLocation(worklocation_id);
+  //   }
+  // }, [role, user]);
 
   const useFetchData = (key, url) => {
     return useQuery({
