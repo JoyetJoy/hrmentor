@@ -1,4 +1,4 @@
-import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST } from "@/api/setup";
+import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST, SHIFT_LISTS } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -37,28 +37,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     reset();
   }
 
-  const { data: shiftList = { data: [], last_page: 1 }, isLoading } = useQuery({
-    queryKey: ["shiftList"],
-    queryFn: async () => {
-      const [page1, page2] = await Promise.all([
-        newRequest.get(SHIFT_LIST, {
-          params: { page: 1, },
-        }),
-        newRequest.get(SHIFT_LIST, {
-          params: { page: 2,},
-        }),
-      ]);
-  
-      const data1 = page1?.data?.data?.original?.data || [];
-      const data2 = page2?.data?.data?.original?.data || [];
-      const last_page = Math.max(page1?.data?.last_page || 1, page2?.data?.last_page || 1);
-  
-      return {
-        data: [...data1, ...data2],
-        last_page,
-      };
-    },
-  });  
+  const { data: shiftList } = useEmployeeMaster(SHIFT_LISTS, "shiftList");
 
   const { data: rosterEmpList } = useQuery({
     queryKey: ["rosterEmpList", selectedShiftId],
@@ -75,7 +54,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
     },
   });
 
-  const selectedShift = shiftList?.data.find(
+  const selectedShift = shiftList?.data?.original?.data.find(
     (item) => item.id === selectedShiftId,
   );
 
@@ -212,7 +191,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                               {...field}
                               isSearchable={true}
                               styles={customSelectStyles}
-                              options={shiftList?.data.map(
+                              options={shiftList?.data?.original?.data.map(
                                 (item) => ({
                                   label: item.name,
                                   value: item.id,
