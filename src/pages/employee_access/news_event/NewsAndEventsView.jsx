@@ -1,28 +1,38 @@
+import { ALL_EVENT, ALL_NEWS, newRequest } from "@/api";
+import NewsEventHeader from "@/components/common/NewsEventHeader";
+import Pagination from "@/components/table/Pagination";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { ArrowLeft, ChevronRight, Filter } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function NewsAndEventsView() {
-  
-  const newsItems = [
-    {
-      title:
-        "Our Company Launches Innovative HRMS Platform to Revolutionize Employee Management and Enhance Organizational Efficiency",
-      description:
-        "We are thrilled to introduce our groundbreaking HRMS platform, designed to transform employee management and drive organizational efficiency.",
-      date: "November 23, 2023",
-      image: "path_to_image1.jpg",
-    },
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [keyword, setKeyword] = useState("");
+  const [selectedId, setSelectedId] = useState("null");
 
-  const events = [
-    {
-      title: "Our Company Unveils Next-Generation HRMS Solution Event",
-      date: "November 25, 2023",
-      time: "02:00 AM",
-      image: "path_to_event_image1.jpg",
+  const { data: employeeAllNews = [], isLoading } = useQuery({
+    queryKey: ["employeeAllNews", currentPage, keyword],
+    queryFn: async () => {
+      const response = await newRequest.get(ALL_NEWS, {
+        params: { page: currentPage },
+      });
+      return response.data || [];
     },
-  ];
+  });
+
+  const { data: employeeAllEvent = [], isLoadingg } = useQuery({
+    queryKey: ["employeeAllEvent", currentPage, keyword],
+    queryFn: async () => {
+      const response = await newRequest.get(ALL_EVENT, {
+        params: { page: currentPage },
+      });
+      return response.data || []; // Ensure it always returns an array
+    },
+  });
+  const newsItems = employeeAllNews;
   return (
     <div className="h-full">
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-2">
@@ -55,61 +65,63 @@ export default function NewsAndEventsView() {
                   <Filter className="size-4" />
                 </div> */}
               </div>
-              {newsItems.map((item, index) => (
-                <div key={index} className="flex items-start gap-2 py-4">
-                  <div className="w-full">
+              {newsItems.length > 0 && (
+                <div className="flex items-start gap-2 py-4">
+                  <div className="w-96 overflow-hidden rounded-md">
                     <img
-                      src="/assets/images/employee_access/news.png"
-                      alt={item.title}
-                      className="object-containe w-full"
+                      src={newsItems[0].featured_image}
+                      alt={newsItems[0].news_title}
+                      className="h-full w-full object-contain"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <Link
-                      to="/employee-access/news-events/detail"
+                      to={`/admin/news-event/detail/${newsItems[0].id}`}
                       className="text-xl font-semibold hover:text-blue-600 hover:underline"
                     >
-                      {item.title}
+                      {newsItems[0].news_title}
                     </Link>
-                    <p className="Italic text-sm text-gray-500">
-                      {item.description}
+                    <p className="text-sm italic text-gray-500">
+                      {newsItems[0].short_summary}
                     </p>
                     <div className="mt-3 flex items-center gap-2 font-medium text-black">
                       <div className="w-6 overflow-hidden">
                         <img
                           src="/assets/images/employee_access/pro.png"
                           alt=""
-                          className="w-full object-contain"
+                          className="block"
                         />
                       </div>
                       <p className="text-xs">Jerome Bell</p>
                       <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
-                      <p className="text-xs">{item.date}</p>
+                      <p className="text-xs">
+                        {dayjs(newsItems[0]?.created_at).format("DD MMM YYYY")}
+                      </p>
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
             <div className="space-y-6">
               <h2 className="mb-4 text-xl font-semibold">News</h2>
               {newsItems.map((item, index) => (
-                <div key={index} className="flex items-start gap-2 py-4">
-                  <div className="w-full">
+                <div key={index} className="flex items-start gap-2">
+                  <div className="w-96 overflow-hidden rounded-md">
                     <img
-                      src="/assets/images/employee_access/news.png"
-                      alt={item.title}
-                      className="object-containe w-full"
+                      src={item.featured_image}
+                      alt={item.news_title}
+                      className="h-full w-full object-contain"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <Link
-                      to="/employee-access/news-events/detail"
+                      to={`/admin/news-event/detail/${item.id}`}
                       className="text-xl font-semibold hover:text-blue-600 hover:underline"
                     >
-                      {item.title}
-                    </Link>{" "}
+                      {item.news_title}
+                    </Link>
                     <p className="text-sm italic text-gray-500">
-                      {item.description}
+                      {item.short_summary}
                     </p>
                     <div className="mt-3 flex items-center gap-2 font-medium text-black">
                       <div className="w-6 overflow-hidden">
@@ -121,7 +133,9 @@ export default function NewsAndEventsView() {
                       </div>
                       <p className="text-xs">Jerome Bell</p>
                       <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
-                      <p className="text-xs">{item.date}</p>
+                      <p className="text-xs">
+                        {dayjs(item[0]?.created_at).format("DD MMM YYYY")}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -129,7 +143,7 @@ export default function NewsAndEventsView() {
             </div>
             {/* <Pagination/> */}
           </div>
-          <div className="w-1/2 bg-white p-6">
+          <div className="w-1/3 bg-white p-6">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="mb-4 text-xl font-semibold">Events</h2>
               {/* <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
@@ -137,22 +151,28 @@ export default function NewsAndEventsView() {
               </div> */}
             </div>
             <div className="space-y-6">
-              {events.map((event, index) => (
+              {employeeAllEvent.map((event, index) => (
                 <div key={index} className="items-star flex flex-col gap-3">
-                  <div>
+                  <div className="overflow-hidden rounded-md">
                     <img
-                      src="/assets/images/employee_access/event.png"
+                      src={event.featured_image}
                       alt={event.title}
                       className="w-full object-cover"
                     />
                   </div>
-
                   <div>
-                    <h3 className="text-sm font-semibold">{event.title}</h3>
+                    <h3 className="text-sm font-semibold">
+                      {event.event_title}
+                    </h3>
                     <div className="mt-3 flex items-center gap-2 font-medium text-black">
-                      <p className="text-xs">{event.time}</p>
+                      <p className="text-xs">
+                        {dayjs(event.end_time).format("hh:mm")}
+                      </p>
                       <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
-                      <p className="text-xs">{event.date}</p>
+                      <p className="text-xs">
+                        {" "}
+                        {dayjs(event.created_at).format("DD MMM YYYY")}
+                      </p>
                     </div>
                   </div>
                 </div>
