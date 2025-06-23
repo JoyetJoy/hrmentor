@@ -1,4 +1,9 @@
-import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST, SHIFT_LISTS } from "@/api/setup";
+import {
+  ROSTER_EMPLIST,
+  ROSTER_LIST,
+  SHIFT_LIST,
+  SHIFT_LISTS,
+} from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -71,20 +76,22 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
 
   const handleAddEmployee = () => {
     if (selectedEmployee) {
+      const include = selectedEmployees.find(
+        (employee) => employee.employee_id === selectedEmployee.value,
+      );
+      if (include) {
+        toast.error("Employee already added");
+        return;
+      }
       setSelectedEmployees((prev) => [
         ...prev,
         {
           employee_id: selectedEmployee.value,
           first_name: selectedEmployee.label,
+          unique_id: selectedEmployee.unique_id,
         },
       ]);
-      setEmployeesdetails((prev) => [
-        ...prev,
-        {
-          employee_id: Number(selectedEmployee.value),
-        },
-      ]);
-    } 
+    }
   };
 
   useEffect(() => {

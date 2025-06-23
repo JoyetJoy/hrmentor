@@ -101,6 +101,9 @@ export const EmployeeDashboard = () => {
     if (dashboard?.rosterOrShift) {
       setClockInPopupOpen(true);
     } else {
+      if(!dashboard?.shiftTime?.id){
+        toast.error('You do not have a shift at this time')
+      }
       try {
         const formData = { company_setting_id: dashboard?.shiftTime?.id };
         const res = await newRequest.post(CLOCK_IN, formData);
