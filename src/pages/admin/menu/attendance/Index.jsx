@@ -412,7 +412,7 @@ export default function Attendance() {
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-hrmprimaryorange"></div>
               </div>
             ) : (
-              <table style={{ borderSpacing: "0", width: "100%" }}>
+              <table style={{ borderSpacing: "0", width: "100%" }} className="mb-8">
                 <thead className="bg-gray-soft">
                   <tr>
                     <th className="sticky left-0 top-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
@@ -527,7 +527,7 @@ export default function Attendance() {
                                         hoveredShift?.date === day.fullDate &&
                                         hoveredShift?.shiftName ===
                                           shift?.shift_name && (
-                                          <span className="absolute right-9 top-14 h-9 w-[7rem] whitespace-nowrap rounded-md bg-gray-800 px-2 py-2 text-sm text-white shadow-md">
+                                          <span className="absolute right-1 top-14 h-9 w-[7rem] whitespace-nowrap rounded-md bg-gray-800 px-2 py-2 text-sm text-white shadow-md">
                                             {hoveredShift?.shiftName?.length >
                                             13
                                               ? hoveredShift.shiftName.slice(
