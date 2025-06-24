@@ -7,7 +7,7 @@ export const NewsEventsRoutes = [
         element:<NewsAndEventsView/>
     },
     {
-        path:"detail",
+        path:"detail/:id",
         element:<NewsAndEventDetails/>
     },
 ]

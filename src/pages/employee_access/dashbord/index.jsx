@@ -7,7 +7,7 @@ import StopBreak from "@/components/popups/employee_access/dashboard/StopBreak";
 import ClockIn from "@/components/popups/employee_access/dashboard/ClockIn";
 import { newRequest, CLOCK_IN } from "@/api/master";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DASHBOARD, CLOCKIN, RUNNINGBREAK } from "@/api";
+import { DASHBOARD, CLOCKIN, RUNNINGBREAK, ALL_NEWS, ALL_EVENT } from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
 import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
 import { toast } from "react-hot-toast";
@@ -59,6 +59,22 @@ export const EmployeeDashboard = () => {
     staleTime: 0,
   });
 
+  const { data: employeeAllNews = [], isLoading } = useQuery({
+    queryKey: ["employeeAllNews"],
+    queryFn: async () => {
+      const response = await newRequest.get(ALL_NEWS);
+      return response.data || [];
+    },
+  });
+
+  const { data: employeeAllEvent = [], isLoadingg } = useQuery({
+    queryKey: ["employeeAllEvent"],
+    queryFn: async () => {
+      const response = await newRequest.get(ALL_EVENT);
+      return response.data || []; // Ensure it always returns an array
+    },
+  });
+
   // Update logged time dynamically
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
@@ -85,6 +101,9 @@ export const EmployeeDashboard = () => {
     if (dashboard?.rosterOrShift) {
       setClockInPopupOpen(true);
     } else {
+      if(!dashboard?.shiftTime?.id){
+        toast.error('You do not have a shift at this time')
+      }
       try {
         const formData = { company_setting_id: dashboard?.shiftTime?.id };
         const res = await newRequest.post(CLOCK_IN, formData);
@@ -287,26 +306,61 @@ export const EmployeeDashboard = () => {
                 View <Eye className="size-4 text-black/70" />
               </span>
             </Link>
-            <div className="overflow-y-min flex max-h-[15.3rem] min-h-[6rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
-              {meetings.length > 0 ? (
+            <div className="overflow-y-min flex max-h-[25rem] min-h-[6rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
+              {employeeAllNews.length > 0 && employeeAllEvent.length > 0 ? (
                 <>
-                  {meetings.map((meeting, index) => (
-                    <div
-                      key={index}
-                      className="mr-5 flex flex-row rounded-md border border-gray-300"
-                    >
-                      <h1 className="flex w-16 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
-                        {meeting.date} <br />
-                        <span>{meeting.month}</span>
-                      </h1>
-                      <h2 className="p-4 text-sm font-semibold text-black">
-                        {meeting.title} <br />
-                        <span className="text-xs font-normal text-gray-dark">
-                          {meeting.details}
-                        </span>
-                      </h2>
-                    </div>
-                  ))}
+                  <>
+                    {employeeAllNews.slice(0, 3).map((news, index) => (
+                      <div
+                        key={index}
+                        className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
+                      >
+                        <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
+                          {dayjs(news.start_date).format("D")} <br />
+                          <span>{dayjs(news.start_date).format(" MMM")}</span>
+                        </h1>
+                        <h2 className="p-4 text-sm font-semibold text-black">
+                          {news.news_title.length > 12
+                            ? news.news_title.substring(0, 25) + "..."
+                            : news.news_title}
+                          <br />
+                          <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
+                            {news.short_summary.length > 25
+                              ? news.short_summary.substring(0, 40) + "..."
+                              : news.short_summary}
+                            {/* <div className="h-3 border border-gray-dark"></div>You and
+                                        13+ more */}
+                          </span>
+                        </h2>
+                      </div>
+                    ))}
+                  </>
+                  <>
+                    {employeeAllEvent.slice(0, 3).map((events, index) => (
+                      <div
+                        key={index}
+                        className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
+                      >
+                        <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
+                          {dayjs(events.start_date).format("D")} <br />
+                          <span>{dayjs(events.start_date).format(" MMM")}</span>
+                        </h1>
+                        <h2 className="p-4 text-sm font-semibold text-black">
+                          {events.event_title.length > 12
+                            ? events.event_title.substring(0, 25) + "..."
+                            : events.event_title}
+                          <br />
+                          <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
+                            {events.short_summary.length > 25
+                              ? events.short_summary.substring(0, 40) + "..."
+                              : events.short_summary}
+                            {/* <div className="h-3 border border-gray-dark"></div>You and
+                                        13+ more */}
+                          </span>
+                        </h2>
+                      </div>
+                    ))}
+                  </>
                 </>
               ) : (
                 <p className="text-sm text-gray-dark">Data not available</p>

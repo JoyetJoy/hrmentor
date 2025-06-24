@@ -1,5 +1,7 @@
 //SHIFT LIST
 export const SHIFT_LIST = "employee-shift-area";
+//ALL SHIFT LIST
+export const SHIFT_LISTS = "employee-shift-area-wpage";
 //UPDATE SHIFT
 export const UPDATE_SHIFT_ = "employee-shift-area";
 //BREAK TIME

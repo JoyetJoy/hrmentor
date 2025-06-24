@@ -1,4 +1,4 @@
-import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST } from "@/api/setup";
+import { ROSTER_EMPLIST, ROSTER_LIST, SHIFT_LIST, SHIFT_LISTS } from "@/api/setup";
 import QueryTable from "@/components/table/QueryTable";
 import useEmployeeMaster from "@/hooks/useEmployeeMasters";
 import { customSelectStyles } from "@/utils/customStyles";
@@ -166,28 +166,7 @@ const EditRoster = React.memo(
         value: selectedRoster?.shift_details?.shift_id,
       };
     }
-    const { data: shiftList = { data: [], last_page: 1 } } = useQuery({
-      queryKey: ["shiftList"],
-      queryFn: async () => {
-        const [page1, page2] = await Promise.all([
-          newRequest.get(SHIFT_LIST, {
-            params: { page: 1, },
-          }),
-          newRequest.get(SHIFT_LIST, {
-            params: { page: 2,},
-          }),
-        ]);
-    
-        const data1 = page1?.data?.data?.original?.data || [];
-        const data2 = page2?.data?.data?.original?.data || [];
-        const last_page = Math.max(page1?.data?.last_page || 1, page2?.data?.last_page || 1);
-    
-        return {
-          data: [...data1, ...data2],
-          last_page,
-        };
-      },
-    });  
+    const { data: shiftList } = useEmployeeMaster(SHIFT_LISTS, "shiftList");
 
     const columns = React.useMemo(
       () => [
@@ -276,7 +255,7 @@ const EditRoster = React.memo(
                                 isSearchable={true}
                                 isDisabled={copy}
                                 styles={customSelectStyles}
-                                options={shiftList?.data.map(
+                                options={shiftList?.data?.original?.data.map(
                                   (item) => ({
                                     label: item?.name,
                                     value: item?.id,
