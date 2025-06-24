@@ -7,6 +7,10 @@ export const RosterRoutes = [
     element: <RosterDepartment />,
   },
   {
+    path: "rosterpdf",
+    element: <Rosterpdf />,
+  },
+  {
     path: "List",
     element: <RosterLists />,
   },
