@@ -103,6 +103,7 @@ export const EmployeeDashboard = () => {
     } else {
       if(!dashboard?.shiftTime?.id){
         toast.error('You do not have a shift at this time')
+        return;
       }
       try {
         const formData = { company_setting_id: dashboard?.shiftTime?.id };
