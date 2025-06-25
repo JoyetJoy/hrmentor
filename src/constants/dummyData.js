@@ -349,6 +349,7 @@ export const getrosterHeaderList = (permissions = []) => [
       },]
       : []
   ),
+  { id: 3, name: "Roster Download", link: "/admin/roster/rosterpdf" },
 ];
 export const getshiftHeaderList = (permissions = []) => [
   { id: 1, name: "Shift Calendar", link: "/admin/shift" },
