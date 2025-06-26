@@ -41,14 +41,14 @@ console.log(newsDetail);
                       {newsDetail?.original?.short_summary}
                     </p>
                     <div className="mt-3 flex items-center gap-2 font-medium text-black">
-                      <div className="">
+                      {/* <div className="">
                         <img
                           src="/assets/images/employee_access/pro.png"
                           alt=""
                           className=""
                         />
-                      </div>
-                      <p className="text-xs">Jerome Bell</p>
+                      </div> */}
+                      <p className="text-xs">{newsDetail?.original?.created_by}</p>
                       <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
                       <p className="text-xs">{dayjs(newsDetail?.original?.created_at).format("DD MMM YYYY")}</p>
                     </div>
