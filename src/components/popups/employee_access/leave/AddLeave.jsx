@@ -97,10 +97,10 @@ export default function AddLeave({
     queryFn: () =>
       newRequest
         .get(EMPLOYEE_LEAVE_SHIFTS, {
-          params: { from_date: fromDate, to_date: toDate },
+          params: { from_date: fromDate, to_date: toDate, employee_id: employeeId },
         })
         .then((res) => res.data),
-    enabled: !!fromDate && !!toDate,
+    enabled: !!fromDate && !!toDate && !!employeeId,
   });
 
   useEffect(() => {

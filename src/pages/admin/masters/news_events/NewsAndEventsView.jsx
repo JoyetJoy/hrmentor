@@ -43,50 +43,6 @@ export default function NewsAndEventsView() {
         <div className="mt-6 flex gap-3">
           <div className="flex flex-col bg-white p-6">
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="mb-4 text-xl font-semibold">Latest News</h2>
-                {/* <div className="h-10 min-h-10 rounded-md border border-gray-soft bg-white p-3">
-                  <Filter className="size-4" />
-                </div> */}
-              </div>
-              {newsItems.length > 0 && (
-                <div className="flex items-start gap-2 py-4">
-                  <div className="w-96 overflow-hidden rounded-md">
-                    <img
-                      src={newsItems[0].featured_image}
-                      alt={newsItems[0].news_title}
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Link
-                      to={`/admin/news-event/detail/${newsItems[0].id}`}
-                      className="text-xl font-semibold hover:text-blue-600 hover:underline"
-                    >
-                      {newsItems[0].news_title}
-                    </Link>
-                    <p className="text-sm italic text-gray-500">
-                      {newsItems[0].short_summary}
-                    </p>
-                    <div className="mt-3 flex items-center gap-2 font-medium text-black">
-                      <div className="w-6 overflow-hidden">
-                        <img
-                          src="/assets/images/employee_access/pro.png"
-                          alt=""
-                          className="block"
-                        />
-                      </div>
-                      <p className="text-xs">Jerome Bell</p>
-                      <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
-                      <p className="text-xs">
-                        {dayjs(newsItems[0]?.created_at).format("DD MMM YYYY")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="space-y-6">
               <h2 className="mb-4 text-xl font-semibold">News</h2>
               {newsItems.map((item, index) => (
                 <div key={index} className="flex items-start gap-2">
@@ -118,7 +74,7 @@ export default function NewsAndEventsView() {
                       <p className="text-xs">Jerome Bell</p>
                       <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
                       <p className="text-xs">
-                        {dayjs(item[0]?.created_at).format("DD MMM YYYY")}
+                        {dayjs(item?.created_at).format("DD MMM YYYY")}
                       </p>
                     </div>
                   </div>

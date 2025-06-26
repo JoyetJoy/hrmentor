@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
-import { newRequest, ROASTER_LISTING } from "@/api/master";
+import { EMPLOYEE_DEPARTMENT_LIST, newRequest, ROASTER_LISTING } from "@/api/master";
 import { formatDate } from "@/utils/date";
 import RosterHeader from "@/components/common/RosterHeader";
 import html2pdf from "html2pdf.js";
+import Select from "react-select";
+import { customSelectStyles } from "@/utils/customStyles";
 
 export default function Rosterpdf() {
   const [startDate, setStartDate] = useState();
@@ -12,9 +14,22 @@ export default function Rosterpdf() {
   const [days, setDays] = useState([]);
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedOption, setSelectedOption] = useState("weekly");
+  const [activeDepartment, setActiveDepartment] = useState([]);
+
+  const useFetchData = (key, url) => {
+      return useQuery({
+        queryKey: [key],
+        queryFn: () => newRequest.get(url).then((res) => res.data),
+      });
+    };
+
+   const { data: department } = useFetchData(
+      "department",
+      EMPLOYEE_DEPARTMENT_LIST,
+    );
 
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["event", startDate, endDate],
+    queryKey: ["event", startDate, endDate,activeDepartment],
     queryFn: () =>
       newRequest
         .get(ROASTER_LISTING, {
@@ -22,7 +37,7 @@ export default function Rosterpdf() {
             start_date: startDate,
             end_date: endDate,
             role: "hrmanager",
-            department_id: "",
+            department_id: activeDepartment,
             location_id: "",
             work_area_id: "",
           },
@@ -32,10 +47,10 @@ export default function Rosterpdf() {
   });
 
   useEffect(() => {
-    if (startDate && endDate) {
+    if (startDate && endDate && activeDepartment) {
       refetch();
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate,activeDepartment]);
 
   const handleDownloadPDF = () => {
     const element = document.getElementById("attendance-table");
@@ -163,7 +178,7 @@ export default function Rosterpdf() {
   const monthDays = getMonthDays();
   const weekDays = getWeekDays();
   const customDays = getCustomDays();
-  
+
   useEffect(() => {
     if (selectedOption === "weekly") {
       setDays(weekDays);
@@ -272,14 +287,28 @@ export default function Rosterpdf() {
     setEndDate(dateRange.end);
   };
 
+  const departmentOptions = Array.isArray(department)
+    ? department.map((dep) => ({ value: dep.id, label: dep.value }))
+    : [];
+
   return (
     <>
       <div className="flex h-screen flex-col">
         <RosterHeader page={3} />
         {/* Filters */}
-        <div className="relative flex w-full flex-col items-center justify-between gap-4 px-4 py-2">
+        <div className="relative flex w-full items-center justify-between gap-4 px-4 py-2">
+        <Select
+            options={departmentOptions}
+            isSearchable={true}
+            styles={customSelectStyles}
+            onChange={(selectedOption) =>
+              setActiveDepartment([selectedOption.value])
+            }
+            placeholder="Select Department"
+            className="input-box  h-10 w-52 z-30 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+          />
           <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
+            <div className="flex items-center space-x-2 rounded-md bg-white mb-2 p-2 shadow-md">
               {/* Daily, Weekly, Monthly Buttons */}
               {["weekly"].map((option) => (
                 <button
@@ -363,7 +392,7 @@ export default function Rosterpdf() {
           </div>
           <button
             onClick={handleDownloadPDF}
-            className="absolute right-1 mb-4 rounded-md bg-hrmprimaryorange px-4 py-2 text-white"
+            className=" mb-4 rounded-md bg-hrmprimaryorange px-4 py-2 text-white"
           >
             Download PDF
           </button>
@@ -390,7 +419,7 @@ export default function Rosterpdf() {
                       {days.map((dayObj, index) => (
                         <th
                           key={index}
-                          className="sticky top-0 z-0 border border-gray-300 pb-3 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
+                          className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] pb-3 text-sm font-bold capitalize text-gray-darkpale"
                         >
                           {dayObj.day}
                           <p className="font-medium">{dayObj.date}</p>
@@ -404,7 +433,7 @@ export default function Rosterpdf() {
                         key={rowIndex}
                         className="border-b-[3px] border-[#d1d5db] text-left"
                       >
-                        <td className="sticky left-0 min-h-32 border-r-[3px] border-l-[3px] border-b-[3px] px-5 pb-2 border-[#d1d5db] bg-[#ffffff] text-sm font-bold capitalize text-slate-800">
+                        <td className="sticky left-0 min-h-32 border-b-[3px] border-l-[3px] border-r-[3px] border-[#d1d5db] bg-[#ffffff] px-5 pb-2 text-sm font-bold capitalize text-slate-800">
                           {employee?.employee?.name}
                         </td>
                         {days.map((day, index) => {
@@ -420,40 +449,36 @@ export default function Rosterpdf() {
                               key={index}
                               className="border-r-[3px] border-[#d1d5db]"
                             >
-                              {shiftEvents?.length > 0
-                                ? shiftEvents?.map((shift, index) => (
+                              {shiftEvents?.length > 0 ? (
+                                shiftEvents?.map((shift, index) => (
+                                  <div
+                                    key={index}
+                                    style={{
+                                      background:
+                                        shift?.shift_color || "#bfdbfe",
+                                    }}
+                                    className={`mx-2 my-2 flex min-h-12 min-w-36 cursor-pointer items-center justify-center rounded-md text-center text-xs font-semibold`}
+                                  >
                                     <div
-                                      key={index}
-                                      style={{
-                                        background:
-                                          shift?.shift_color || "#bfdbfe",
-                                      }}
-                                      className={`flex min-h-12 mx-2 my-2 min-w-36 cursor-pointer justify-center items-center rounded-md text-center text-xs font-semibold`}
+                                      className={`my-1 flex h-10 w-full flex-col items-center justify-center rounded-md text-center text-xs font-semibold`}
                                     >
-                                      <div
-                                        className={`my-1 flex h-10 w-full flex-col items-center justify-center rounded-md text-center text-xs font-semibold`}
-                                      >
-                                        <span>{shift.shift_name}</span>
-                                        {shift?.shift?.start_time && (
-                                          <p className="text-center text-xs">
-                                            {shift?.shift?.start_time} -{" "}
-                                            {shift?.shift?.end_time}
-                                          </p>
-                                        )}
-                                      </div>
+                                      <span>{shift.shift_name}</span>
+                                      {shift?.shift?.start_time && (
+                                        <p className="text-center text-xs">
+                                          {shift?.shift?.start_time} -{" "}
+                                          {shift?.shift?.end_time}
+                                        </p>
+                                      )}
                                     </div>
-                                  ))
-                                : 
-                                <div
-                                  className="flex h-2 min-w-36  mx-2 my-2 "
-                                >
-                                  
-                                </div>
-                                }
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="mx-2 my-2 flex h-2 min-w-36"></div>
+                              )}
                               {dayOff?.map((shift, index) => (
                                 <div
                                   key={index}
-                                  className="flex h-12 min-w-36  mx-2 my-2 cursor-pointer items-center justify-center rounded-md bg-[#ba1a1a] text-black"
+                                  className="mx-2 my-2 flex h-12 min-w-36 cursor-pointer items-center justify-center rounded-md bg-[#ba1a1a] text-black"
                                 >
                                   <p className="text-center text-xs font-semibold">
                                     Day Off
