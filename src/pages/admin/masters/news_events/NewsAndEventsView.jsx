@@ -64,7 +64,7 @@ export default function NewsAndEventsView() {
                       {item.short_summary}
                     </p>
                     <div className="mt-3 flex items-center gap-2 font-medium text-black">
-                      <div className="w-6 overflow-hidden">
+                      {/* <div className="w-6 overflow-hidden">
                         <img
                           src="/assets/images/employee_access/pro.png"
                           alt=""
@@ -72,7 +72,7 @@ export default function NewsAndEventsView() {
                         />
                       </div>
                       <p className="text-xs">Jerome Bell</p>
-                      <div className="h-4 w-[1.2] border border-l border-gray-dark"></div>
+                      <div className="h-4 w-[1.2] border border-l border-gray-dark"></div> */}
                       <p className="text-xs">
                         {dayjs(item?.created_at).format("DD MMM YYYY")}
                       </p>
