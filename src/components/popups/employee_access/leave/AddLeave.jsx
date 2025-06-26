@@ -533,7 +533,7 @@ export default function AddLeave({
                   </>
                 )}
                 <div className="flex w-1/2 flex-col gap-2">
-                  <label className="text-sm font-medium">
+                  <label className="required text-sm font-medium">
                     Reason for Leave
                   </label>
                   <textarea
