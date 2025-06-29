@@ -51,6 +51,7 @@ export default function AddLeave({
     mode: "onSubmit",
     resolver: yupResolver(LeaveSchema),
   });
+console.log(user);
 
   function close() {
     setPopupOpen(false);
@@ -97,11 +98,12 @@ export default function AddLeave({
     queryFn: () =>
       newRequest
         .get(EMPLOYEE_LEAVE_SHIFTS, {
-          params: { from_date: fromDate, to_date: toDate },
+          params: { from_date: fromDate, to_date: toDate, employee_id:user?.employee_data?.id },
         })
         .then((res) => res.data),
     enabled: !!fromDate && !!toDate,
   });
+console.log(fromDate,toDate);
 
   useEffect(() => {
     if (employeeLeaveShift?.length) {

@@ -163,12 +163,12 @@ const EmployeeAccessAttendanceCalendar = () => {
               <p>Absent</p>
             </div>
           </div>
-          <Link
+          {/* <Link
             to="/employee-access/attendance/team-attendance"
             className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmdarkblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
           >
             Team Attendance
-          </Link>
+          </Link> */}
         </div>
       </div>
 

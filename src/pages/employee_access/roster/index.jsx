@@ -207,12 +207,12 @@ const EmployeeAccessRosterCalendar = () => {
               <p>Requested slot</p>
             </div>
           </div>
-          <Link
+          {/* <Link
             to="/employee-access/roster/teamroster"
             className="flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white"
           >
             Team Roster
-          </Link>
+          </Link> */}
         </div>
       </div>
 
