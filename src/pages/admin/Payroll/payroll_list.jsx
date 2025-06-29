@@ -267,7 +267,7 @@ export default function PayrollList() {
             >
               Monthly
             </button>
-            <button
+            {/* <button
               onClick={() => setMonthValue("3")}
               className={`whitespace-nowrap rounded-md border px-4 py-2 text-sm ${
                 monthValue === "3"
@@ -286,7 +286,7 @@ export default function PayrollList() {
               }`}
             >
               4-weekly
-            </button>
+            </button> */}
            </div>
 
           {/* Right Section */}

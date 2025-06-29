@@ -101,7 +101,7 @@ console.log(user);
           params: { from_date: fromDate, to_date: toDate, employee_id:user?.employee_data?.id },
         })
         .then((res) => res.data),
-    enabled: !!fromDate && !!toDate,
+    enabled: !!fromDate && !!toDate && !!employeeId,
   });
 console.log(fromDate,toDate);
 
@@ -535,7 +535,7 @@ console.log(fromDate,toDate);
                   </>
                 )}
                 <div className="flex w-1/2 flex-col gap-2">
-                  <label className="text-sm font-medium">
+                  <label className="required text-sm font-medium">
                     Reason for Leave
                   </label>
                   <textarea
