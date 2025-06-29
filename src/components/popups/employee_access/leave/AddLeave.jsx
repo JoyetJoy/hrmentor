@@ -94,14 +94,14 @@ console.log(user);
   }, [employeeTeamList]);
 
   const { data: employeeLeaveShift = [] } = useQuery({
-    queryKey: ["employeeLeaveShift", fromDate, toDate],
+    queryKey: ["employeeLeaveShift", fromDate, toDate, user?.employee_data, selectedLeaveType],
     queryFn: () =>
       newRequest
         .get(EMPLOYEE_LEAVE_SHIFTS, {
           params: { from_date: fromDate, to_date: toDate, employee_id:user?.employee_data?.id },
         })
         .then((res) => res.data),
-    enabled: !!fromDate && !!toDate && !!employeeId,
+    enabled: !!fromDate && !!toDate && !!user?.employee_data && !! selectedLeaveType,
   });
 console.log(fromDate,toDate);
 
