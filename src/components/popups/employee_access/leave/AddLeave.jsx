@@ -98,7 +98,7 @@ console.log(user);
     queryFn: () =>
       newRequest
         .get(EMPLOYEE_LEAVE_SHIFTS, {
-          params: { from_date: fromDate, to_date: toDate, employee_id:user?.employee_data?.id },
+          params: { from_date: fromDate, to_date: toDate, employee_id: employeeTeamHoliday? employeeId :user?.employee_data?.id },
         })
         .then((res) => res.data),
     enabled: !!fromDate && !!toDate && !!user?.employee_data && !! selectedLeaveType,

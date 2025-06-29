@@ -293,13 +293,21 @@ const RosterCalendar = () => {
         event.date_deletions.includes(formattedDate),
     );
 
-    const leaveEvents = data?.filter(
+    const leaveEventsRaw = data?.filter(
       (event) =>
         Array.isArray(event?.date_leaves) &&
         event.date_leaves.some((leave) =>
           dayjs(leave.date).isSame(formattedDate, "day"),
         ),
+    ) || [];
+    
+    // Deduplicate leaveEvents by user (or by _id if user isn't available)
+    const leaveEvents = Array.from(
+      new Map(
+        leaveEventsRaw.map((event) => [event._id, event]) // replace `_id` with `event.user_id` if applicable
+      ).values()
     );
+    
     // console.log(leaveEvents);
 
     let shiftEventsRaw = data?.filter(
