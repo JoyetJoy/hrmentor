@@ -64,7 +64,7 @@ export default function Payroll() {
       toast.success(response.data.original.message);
     } catch (error) {
       console.log(error);
-      toast.error('Something went wrong. Try after somtimes')
+      // toast.error('Something went wrong. Try after somtimes')
       setLoader(false);
     }
   };
