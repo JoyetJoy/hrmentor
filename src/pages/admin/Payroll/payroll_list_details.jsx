@@ -189,9 +189,9 @@ export default function PayListDetails() {
           <QueryTable
             columns={columns}
             list={data}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
+            // currentPage={currentPage}
+            // setCurrentPage={setCurrentPage}
+            // totalPages={totalPages}
           />
         </div>
       </div>
