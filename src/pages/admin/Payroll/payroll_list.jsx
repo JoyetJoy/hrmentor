@@ -90,20 +90,28 @@ export default function PayrollList() {
   useEffect(() => {
     if (monthValue === "1" && data) {
       const { star_day, end_day } = data;
-    
-      let today = new Date();
-    
-      // Get the most recent Tuesday (this week's Tuesday)
-      let startDate = new Date(today);
-      startDate.setDate(today.getDate() - ((today.getDay() + 5) % 7)); // No -7 here
-    
-      // Get end date (6 days later, which will be Monday)
+  
+      const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  
+      // Get today's date
+      const today = new Date();
+  
+      // Get index of today and start_day
+      const todayIndex = today.getDay(); // 0 (Sun) - 6 (Sat)
+      const startIndex = weekdays.indexOf(star_day?.toUpperCase());
+      const endIndex = weekdays.indexOf(end_day?.toUpperCase());
+  
+      // Calculate this week's start date for the given star_day
+      const startDate = new Date(today);
+      startDate.setDate(today.getDate() - ((todayIndex - startIndex + 7) % 7));
+  
+      // Calculate end date based on end_day
       const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6);
-    
+      endDate.setDate(startDate.getDate() + ((endIndex - startIndex + 7) % 7));
+  
       setStartDate(formatDateRange(startDate));
       setEndDate(formatDateRange(endDate));
-    }else if (
+    } else if (
       (monthValue === "2" || monthValue === "3" || monthValue === "4") &&
       data
     ) {
@@ -111,7 +119,7 @@ export default function PayrollList() {
       setEndDate(formatDateRange(data?.end_date));
     }
   }, [monthValue, data]);
-
+  
   const handlePreviousPeriod = () => {
     const newEndDate = new Date(
       new Date(startDate).getTime() - 24 * 60 * 60 * 1000,
