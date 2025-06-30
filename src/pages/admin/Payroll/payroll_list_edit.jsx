@@ -121,7 +121,7 @@ export default function PayrollListEdit() {
       },
       {
         header: "Total Worked hrs",
-        accessorKey: "total_break_time",
+        accessorKey: "total_working_hour",
       },
       // {
       //   header: "Disputes",
