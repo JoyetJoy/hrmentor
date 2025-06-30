@@ -447,16 +447,28 @@ export default function Attendance() {
                           (att) => att.attendance_date === day.fullDate,
                         );
 
-                        const uniqueShiftIds = new Set();
-                        const uniqueShifts = attendanceEntry?.shifts?.filter(
-                          (shift) => {
-                            if (!uniqueShiftIds.has(shift.shift_id)) {
-                              uniqueShiftIds.add(shift.shift_id);
-                              return true;
+                        let uniqueShifts = [];
+                        if (attendanceEntry?.shifts?.length) {
+                          const tempSet = new Set();
+                          for (let shift of attendanceEntry.shifts) {
+                            if (!tempSet.has(shift.shift_id)) {
+                              tempSet.add(shift.shift_id);
+                              uniqueShifts.push(shift);
                             }
-                            return false;
-                          },
-                        );
+                          }
+
+                          // If there are multiple "Leave" entries, keep only one
+                          const leaveShifts = uniqueShifts.filter(
+                            (s) => s.status === "Leave",
+                          );
+                          if (leaveShifts.length > 1) {
+                            // Keep only the first Leave, remove others
+                            const firstLeave = leaveShifts[0];
+                            uniqueShifts = uniqueShifts.filter(
+                              (s) => s.status !== "Leave" || s === firstLeave,
+                            );
+                          }
+                        }
 
                         return (
                           <td className="border-r-[3px] border-[#d1d5db]">
