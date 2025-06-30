@@ -201,7 +201,11 @@ export default function PayrollList() {
       {
         header: "Net Pay",
         accessorKey: "net_pay",
-      },
+        cell: ({ getValue }) => {
+          const value = parseFloat(getValue());
+          return isNaN(value) ? "-" : value.toFixed(2);
+        },
+      },      
       {
         header: "Status",
         accessorKey: "status",
