@@ -75,24 +75,47 @@ export const EmployeeDashboard = () => {
     },
   });
 
-  // Update logged time dynamically
+  const calculateLoggedTime = () => {
+    const [datePart, timePart] = clockin.clock_in_time.split(" ");
+    const [year, month, day] = datePart.split("-");
+    const [hour, minute, second] = timePart.split(":");
+  
+    const clockInDate = new Date(
+      Number(year),
+      Number(month) - 1,
+      Number(day),
+      Number(hour),
+      Number(minute),
+      Number(second)
+    );
+  
+    // Get real BST time from Europe/London timezone
+    const bstString = new Date().toLocaleString('en-US', { timeZone: 'Europe/London' });
+    const nowBST = new Date(bstString);
+  
+    console.log("Clock-in:", clockInDate.toString());
+    console.log("Now (BST):", nowBST.toString());
+  
+    const elapsedTime = nowBST.getTime() - clockInDate.getTime();
+  
+    if (elapsedTime < 0) return "00:00:00";
+  
+    const totalHours = Math.floor(elapsedTime / (1000 * 60 * 60));
+    const minutes = String(Math.floor((elapsedTime / (1000 * 60)) % 60)).padStart(2, '0');
+    const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(2, '0');
+  
+    return `${String(totalHours).padStart(2, '0')}:${minutes}:${seconds}`;
+  };  
+
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
-
-    const calculateLoggedTime = () => {
-      const clockInDateUTC = new Date(
-        `${clockin?.clock_in_time.replace(" ", "T")}Z`,
-      ).getTime();
-      const elapsedTime = Date.now() - clockInDateUTC;
-      return new Date(elapsedTime).toISOString().substr(11, 8);
-    };
-
-    const interval = setInterval(
-      () => setLoggedTime(calculateLoggedTime()),
-      1000,
-    );
+  
+    const interval = setInterval(() => {
+      setLoggedTime(calculateLoggedTime());
+    }, 1000);
+  
     return () => clearInterval(interval);
-  }, [clockin?.clock_in_time]);
+  }, [clockin?.clock_in_time]);  
 
   const handleClockIn = async (toOpen) => {
     if (!dashboard) {
