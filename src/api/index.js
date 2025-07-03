@@ -179,8 +179,23 @@ export const NEWS_LISt = "news";
 //NEWS ALL VIEW
 export const ALL_NEWS ="news-list"
 
+export const NEWS = "event-news";
+
 // EVENT ALL VIEW
 export const ALL_EVENT ="event-list";
+
+//BIRTHDAY
+export const ALL_BIRTHDAY = "upcoming-birthdays"
+
+//EXPIRY DOC
+export const EXPIRY_DOC = "expiry-documents"
+
+//NEW JOINERS
+export const NEW_JOINERS = "new-joiners"
+
+//BANK HOLIDAY
+export const BANK_HOLIDAY = "upcoming-bank-holidays"
+
 // SUBSCRIPTION
 export const SUBSCRIPTION = "subscriptions";
 

@@ -7,7 +7,7 @@ import StopBreak from "@/components/popups/employee_access/dashboard/StopBreak";
 import ClockIn from "@/components/popups/employee_access/dashboard/ClockIn";
 import { newRequest, CLOCK_IN } from "@/api/master";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DASHBOARD, CLOCKIN, RUNNINGBREAK, ALL_NEWS, ALL_EVENT } from "@/api";
+import { DASHBOARD, CLOCKIN, RUNNINGBREAK, ALL_NEWS, ALL_EVENT, NEWS, EXPIRY_DOC, NEW_JOINERS, BANK_HOLIDAY, ALL_BIRTHDAY } from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
 import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
 import { toast } from "react-hot-toast";
@@ -15,25 +15,6 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
 export const EmployeeDashboard = () => {
-  const cardsData = [
-    {
-      title: "Documents Expiry",
-      details: [],
-    },
-    {
-      title: "New Joiners",
-      details: [],
-    },
-    {
-      title: "Bank Holidays",
-      details: [],
-    },
-    {
-      title: "Birthday in next 30 days",
-      details: [],
-    },
-  ];
-
   const queryClient = useQueryClient();
   const [breakpopupOpen, setBreakPopupOpen] = useState(false);
   const [clockInpopupOpen, setClockInPopupOpen] = useState(false);
@@ -62,15 +43,39 @@ export const EmployeeDashboard = () => {
   const { data: employeeAllNews = [], isLoading } = useQuery({
     queryKey: ["employeeAllNews"],
     queryFn: async () => {
-      const response = await newRequest.get(ALL_NEWS);
+      const response = await newRequest.get(NEWS);
       return response.data || [];
     },
   });
 
-  const { data: employeeAllEvent = [], isLoadingg } = useQuery({
-    queryKey: ["employeeAllEvent"],
+  const { data: expiryDoc = [], isLoadingg } = useQuery({
+    queryKey: ["expiryDoc"],
     queryFn: async () => {
-      const response = await newRequest.get(ALL_EVENT);
+      const response = await newRequest.get(EXPIRY_DOC);
+      return response.data || []; // Ensure it always returns an array
+    },
+  });
+
+  const { data: newJoiners = [] } = useQuery({
+    queryKey: ["newJoiners"],
+    queryFn: async () => {
+      const response = await newRequest.get(NEW_JOINERS);
+      return response.data || []; // Ensure it always returns an array
+    },
+  });
+
+  const { data: bankHoliday = [] } = useQuery({
+    queryKey: ["bankHoliday"],
+    queryFn: async () => {
+      const response = await newRequest.get(BANK_HOLIDAY);
+      return response.data || []; // Ensure it always returns an array
+    },
+  });
+
+  const { data: birthday = [] } = useQuery({
+    queryKey: ["birthday"],
+    queryFn: async () => {
+      const response = await newRequest.get(ALL_BIRTHDAY);
       return response.data || []; // Ensure it always returns an array
     },
   });
@@ -163,6 +168,25 @@ export const EmployeeDashboard = () => {
       console.error("Failed to fetch running break:", error);
     }
   };
+
+  const cardsData = [
+    {
+      title: "Documents Expiry",
+      details: expiryDoc||[],
+    },
+    {
+      title: "New Joiners",
+      details: newJoiners||[],
+    },
+    {
+      title: "Bank Holidays",
+      details: bankHoliday||[],
+    },
+    {
+      title: "Birthday in next 30 days",
+      details: birthday||[],
+    },
+  ];
 
   return (
     <>
@@ -331,10 +355,9 @@ export const EmployeeDashboard = () => {
               </span>
             </Link>
             <div className="overflow-y-min flex max-h-[25rem] min-h-[6rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
-              {employeeAllNews.length > 0 && employeeAllEvent.length > 0 ? (
+              {employeeAllNews.length > 0 ? (
                 <>
-                  <>
-                    {employeeAllNews.slice(0, 3).map((news, index) => (
+                {employeeAllNews.map((news, index) => (
                       <div
                         key={index}
                         className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
@@ -358,34 +381,8 @@ export const EmployeeDashboard = () => {
                         </h2>
                       </div>
                     ))}
-                  </>
-                  <>
-                    {employeeAllEvent.slice(0, 3).map((events, index) => (
-                      <div
-                        key={index}
-                        className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
-                      >
-                        <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
-                          {dayjs(events.start_date).format("D")} <br />
-                          <span>{dayjs(events.start_date).format(" MMM")}</span>
-                        </h1>
-                        <h2 className="p-4 text-sm font-semibold text-black">
-                          {events.event_title.length > 12
-                            ? events.event_title.substring(0, 25) + "..."
-                            : events.event_title}
-                          <br />
-                          <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
-                            {events.short_summary.length > 25
-                              ? events.short_summary.substring(0, 40) + "..."
-                              : events.short_summary}
-                            {/* <div className="h-3 border border-gray-dark"></div>You and
-                                        13+ more */}
-                          </span>
-                        </h2>
-                      </div>
-                    ))}
-                  </>
                 </>
+                
               ) : (
                 <p className="text-sm text-gray-dark">Data not available</p>
               )}
