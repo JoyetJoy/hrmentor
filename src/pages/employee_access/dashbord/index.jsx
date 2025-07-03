@@ -7,7 +7,18 @@ import StopBreak from "@/components/popups/employee_access/dashboard/StopBreak";
 import ClockIn from "@/components/popups/employee_access/dashboard/ClockIn";
 import { newRequest, CLOCK_IN } from "@/api/master";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DASHBOARD, CLOCKIN, RUNNINGBREAK, ALL_NEWS, ALL_EVENT, NEWS, EXPIRY_DOC, NEW_JOINERS, BANK_HOLIDAY, ALL_BIRTHDAY } from "@/api";
+import {
+  DASHBOARD,
+  CLOCKIN,
+  RUNNINGBREAK,
+  ALL_NEWS,
+  ALL_EVENT,
+  NEWS,
+  EXPIRY_DOC,
+  NEW_JOINERS,
+  BANK_HOLIDAY,
+  ALL_BIRTHDAY,
+} from "@/api";
 import StartBreak from "@/components/popups/employee_access/dashboard/StartBreak";
 import ClockOut from "@/components/popups/employee_access/dashboard/ClockOut";
 import { toast } from "react-hot-toast";
@@ -84,43 +95,50 @@ export const EmployeeDashboard = () => {
     const [datePart, timePart] = clockin.clock_in_time.split(" ");
     const [year, month, day] = datePart.split("-");
     const [hour, minute, second] = timePart.split(":");
-  
+
     const clockInDate = new Date(
       Number(year),
       Number(month) - 1,
       Number(day),
       Number(hour),
       Number(minute),
-      Number(second)
+      Number(second),
     );
-  
+
     // Get real BST time from Europe/London timezone
-    const bstString = new Date().toLocaleString('en-US', { timeZone: 'Europe/London' });
+    const bstString = new Date().toLocaleString("en-US", {
+      timeZone: "Europe/London",
+    });
     const nowBST = new Date(bstString);
-  
+
     console.log("Clock-in:", clockInDate.toString());
     console.log("Now (BST):", nowBST.toString());
-  
+
     const elapsedTime = nowBST.getTime() - clockInDate.getTime();
-  
+
     if (elapsedTime < 0) return "00:00:00";
-  
+
     const totalHours = Math.floor(elapsedTime / (1000 * 60 * 60));
-    const minutes = String(Math.floor((elapsedTime / (1000 * 60)) % 60)).padStart(2, '0');
-    const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(2, '0');
-  
-    return `${String(totalHours).padStart(2, '0')}:${minutes}:${seconds}`;
-  };  
+    const minutes = String(
+      Math.floor((elapsedTime / (1000 * 60)) % 60),
+    ).padStart(2, "0");
+    const seconds = String(Math.floor((elapsedTime / 1000) % 60)).padStart(
+      2,
+      "0",
+    );
+
+    return `${String(totalHours).padStart(2, "0")}:${minutes}:${seconds}`;
+  };
 
   useEffect(() => {
     if (!clockin?.clock_in_time) return;
-  
+
     const interval = setInterval(() => {
       setLoggedTime(calculateLoggedTime());
     }, 1000);
-  
+
     return () => clearInterval(interval);
-  }, [clockin?.clock_in_time]);  
+  }, [clockin?.clock_in_time]);
 
   const handleClockIn = async (toOpen) => {
     if (!dashboard) {
@@ -129,8 +147,8 @@ export const EmployeeDashboard = () => {
     if (dashboard?.rosterOrShift) {
       setClockInPopupOpen(true);
     } else {
-      if(!dashboard?.shiftTime?.id){
-        toast.error('You do not have a shift at this time')
+      if (!dashboard?.shiftTime?.id) {
+        toast.error("You do not have a shift at this time");
         return;
       }
       try {
@@ -172,19 +190,19 @@ export const EmployeeDashboard = () => {
   const cardsData = [
     {
       title: "Documents Expiry",
-      details: expiryDoc||[],
+      details: expiryDoc || [],
     },
     {
       title: "New Joiners",
-      details: newJoiners||[],
+      details: newJoiners || [],
     },
     {
       title: "Bank Holidays",
-      details: bankHoliday||[],
+      details: bankHoliday || [],
     },
     {
       title: "Birthday in next 30 days",
-      details: birthday||[],
+      details: birthday || [],
     },
   ];
 
@@ -316,10 +334,12 @@ export const EmployeeDashboard = () => {
                             </div>
                             {/* Text Details */}
                             <div className="text-xs text-black">
-                              <h1>{item.type}</h1>
+                              <h1>
+                                {item.first_name} {item?.middle_name}
+                              </h1>
                               <h1>
                                 {item.count ??
-                                  dayjs(item.date).format("DD-MM-YYYY")}
+                                  `${dayjs(item.dob).format("MM-DD")}-${dayjs().format("YYYY")}`}
                               </h1>
                             </div>
                           </div>
@@ -357,32 +377,31 @@ export const EmployeeDashboard = () => {
             <div className="overflow-y-min flex max-h-[25rem] min-h-[6rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
               {employeeAllNews.length > 0 ? (
                 <>
-                {employeeAllNews.map((news, index) => (
-                      <div
-                        key={index}
-                        className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
-                      >
-                        <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
-                          {dayjs(news.start_date).format("D")} <br />
-                          <span>{dayjs(news.start_date).format(" MMM")}</span>
-                        </h1>
-                        <h2 className="p-4 text-sm font-semibold text-black">
-                          {news.news_title.length > 12
-                            ? news.news_title.substring(0, 25) + "..."
-                            : news.news_title}
-                          <br />
-                          <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
-                            {news.short_summary.length > 25
-                              ? news.short_summary.substring(0, 40) + "..."
-                              : news.short_summary}
-                            {/* <div className="h-3 border border-gray-dark"></div>You and
+                  {employeeAllNews.map((news, index) => (
+                    <div
+                      key={index}
+                      className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
+                    >
+                      <h1 className="flex min-w-14 flex-col items-center justify-center bg-gray-300 text-center text-sm font-bold text-black/80">
+                        {dayjs(news.start_date).format("D")} <br />
+                        <span>{dayjs(news.start_date).format(" MMM")}</span>
+                      </h1>
+                      <h2 className="p-4 text-sm font-semibold text-black">
+                        {news.news_title.length > 12
+                          ? news.news_title.substring(0, 25) + "..."
+                          : news.news_title}
+                        <br />
+                        <span className="flex items-center gap-1 text-xs font-normal text-gray-dark">
+                          {news.short_summary.length > 25
+                            ? news.short_summary.substring(0, 40) + "..."
+                            : news.short_summary}
+                          {/* <div className="h-3 border border-gray-dark"></div>You and
                                         13+ more */}
-                          </span>
-                        </h2>
-                      </div>
-                    ))}
+                        </span>
+                      </h2>
+                    </div>
+                  ))}
                 </>
-                
               ) : (
                 <p className="text-sm text-gray-dark">Data not available</p>
               )}
