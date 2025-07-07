@@ -293,21 +293,22 @@ const RosterCalendar = () => {
         event.date_deletions.includes(formattedDate),
     );
 
-    const leaveEventsRaw = data?.filter(
-      (event) =>
-        Array.isArray(event?.date_leaves) &&
-        event.date_leaves.some((leave) =>
-          dayjs(leave.date).isSame(formattedDate, "day"),
-        ),
-    ) || [];
-    
+    const leaveEventsRaw =
+      data?.filter(
+        (event) =>
+          Array.isArray(event?.date_leaves) &&
+          event.date_leaves.some((leave) =>
+            dayjs(leave.date).isSame(formattedDate, "day"),
+          ),
+      ) || [];
+
     // Deduplicate leaveEvents by user (or by _id if user isn't available)
     const leaveEvents = Array.from(
       new Map(
-        leaveEventsRaw.map((event) => [event._id, event]) // replace `_id` with `event.user_id` if applicable
-      ).values()
+        leaveEventsRaw.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
+      ).values(),
     );
-    
+
     // console.log(leaveEvents);
 
     let shiftEventsRaw = data?.filter(
@@ -919,9 +920,9 @@ const RosterCalendar = () => {
                                       </div>
                                     )}
                                 </div>
-                              ) :leaveEvents?.length > 0 ?  (
+                              ) : leaveEvents?.length > 0 ? (
                                 <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
-                                {leaveEvents?.map((event, index) =>
+                                  {leaveEvents?.map((event, index) =>
                                     event?.date_leaves
                                       ?.filter((leave) =>
                                         dayjs(leave.date).isSame(
@@ -934,22 +935,21 @@ const RosterCalendar = () => {
                                           key={`${index}-${i}`}
                                           className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#815fb3] py-3 text-black"
                                         >
-                                          <p className="flex h-[3.5rem] w-full text-center justify-center text-xs font-semibold">
+                                          <p className="flex h-[3.5rem] w-full justify-center text-center text-xs font-semibold">
                                             {leave.leave_name || "Leave"}
                                           </p>
                                         </div>
                                       )),
                                   )}
                                 </div>
-                              ):
-                               dayOff?.length > 0 ? (
+                              ) : dayOff?.length > 0 ? (
                                 <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
                                   {dayOff.length > 0 && (
                                     <>
                                       {dayOff?.map((shift, index) => (
                                         <div
                                           key={index}
-                                          className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
+                                          className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#c5c5cb] py-3 text-black"
                                         >
                                           <p className="text-center text-xs font-semibold">
                                             Day Off
@@ -1054,13 +1054,13 @@ const RosterCalendar = () => {
                               ) : (
                                 <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
                                   <div
-                                          key={index}
-                                          className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
-                                        >
-                                          <p className="text-center text-xs font-semibold">
-                                            Day Off
-                                          </p>
-                                        </div>
+                                    key={index}
+                                    className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#c5c5cb] py-3 text-black"
+                                  >
+                                    <p className="text-center text-xs font-semibold">
+                                      Day Off
+                                    </p>
+                                  </div>
                                   {permissions.includes("roster-create") && (
                                     <button
                                       className="text-2xl font-bold text-blue-500"
