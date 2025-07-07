@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Send, X } from "lucide-react";
 import Pusher from "pusher-js";
 import React, { useEffect, useRef, useState } from "react";
+const url = import.meta.env.VITE_CHAT_URL;
 
 export default function ChatView({
   refetch,
@@ -74,7 +75,7 @@ useEffect(() => {
       forceTLS: true,
       encrypted: true,
       enabledTransports: ["ws", "wss"],
-      authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
+      authEndpoint: `${url}/broadcasting/auth`,
       auth: {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",

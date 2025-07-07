@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import Pusher from "pusher-js";
+const url = import.meta.env.VITE_CHAT_URL;
 
 export default function Notification({
   notifications,
@@ -38,7 +39,7 @@ export default function Notification({
       forceTLS: true,
       encrypted: true,
       enabledTransports: ["ws", "wss"],
-      authEndpoint: "https://hr-mentor.techbutomy.com/broadcasting/auth",
+      authEndpoint: `${url}/broadcasting/auth`,
       auth: {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",

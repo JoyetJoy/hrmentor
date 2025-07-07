@@ -543,6 +543,7 @@ export default function Attendance() {
                                   <div className="relative">
                                     {hoveredShift?.id ===
                                       employee?.employee_id &&
+                                      shift?.status !== "Holiday" &&
                                       hoveredShift?.date === day.fullDate &&
                                       hoveredShift?.shiftName ===
                                         shift?.shift_name && (
