@@ -1052,7 +1052,15 @@ const RosterCalendar = () => {
                                   )}
                                 </div>
                               ) : (
-                                <div className="min-w-[11.4rem]">
+                                <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
+                                  <div
+                                          key={index}
+                                          className="h-[3.5rem] min-w-44 cursor-pointer rounded-md bg-[#ba1a1a] py-3 text-black"
+                                        >
+                                          <p className="text-center text-xs font-semibold">
+                                            Day Off
+                                          </p>
+                                        </div>
                                   {permissions.includes("roster-create") && (
                                     <button
                                       className="text-2xl font-bold text-blue-500"
