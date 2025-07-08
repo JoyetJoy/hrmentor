@@ -4,7 +4,12 @@ import React, { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PayrollHeader from "@/components/employee_access/common/PayrollHeader";
 import { useQuery } from "@tanstack/react-query";
-import { PAYROLL_APPROVE, PAYROLL_GET_VIEW, PAYROLL_VIEW } from "@/api/payroll";
+import {
+  DOWNLOAD_EXCEL,
+  PAYROLL_APPROVE,
+  PAYROLL_GET_VIEW,
+  PAYROLL_VIEW,
+} from "@/api/payroll";
 import { newRequest } from "@/api";
 import { getCurrentDateISO } from "@/utils/helpers";
 import toast from "react-hot-toast";
@@ -31,7 +36,7 @@ export default function PayListDetails() {
         .get(`${PAYROLL_VIEW}`, {
           params: {
             schedule: monthid,
-            department_id:id,
+            department_id: id,
             start_date: start,
             end_date: end,
           },
@@ -39,7 +44,7 @@ export default function PayListDetails() {
         .then((res) => res.data),
     enabled: !!id,
   });
-  
+
   const Approve = async () => {
     const body = {
       department_id: id,
@@ -47,16 +52,40 @@ export default function PayListDetails() {
       start_date: start,
       end_date: end,
     };
-  
+
     try {
       const response = await newRequest.post(PAYROLL_APPROVE, body);
-      toast.success(response.data.original.message)
+      toast.success(response.data.original.message);
     } catch (error) {
       console.error("Error approving payroll:", error);
-      toast.error('Failed to approve payroll. Please try again.')
+      toast.error("Failed to approve payroll. Please try again.");
     }
   };
-  
+
+  const download = async () => {
+    const body = {
+      department_id: id,
+      schedule: monthid,
+      start_date: start,
+      end_date: end,
+    };
+    try {
+      const response = await newRequest.post(DOWNLOAD_EXCEL, body, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `payroll_${start}-${end}.xlsx`); // Correct file extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Failed to download the Excel file:", error);
+    }
+  };
+
   const columns = React.useMemo(
     () => [
       {
@@ -142,7 +171,10 @@ export default function PayListDetails() {
             <button
               type="button"
               onClick={() => {
-                navigate(`/admin/payroll/paylistedit/${row.original.payrun_id}`+`?start_date=${start}&end_date=${end}&empid=${row.original.employee_id}`);
+                navigate(
+                  `/admin/payroll/paylistedit/${row.original.payrun_id}` +
+                    `?start_date=${start}&end_date=${end}&empid=${row.original.employee_id}`,
+                );
               }}
               className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
             >
@@ -182,6 +214,15 @@ export default function PayListDetails() {
             >
               Approve
             </button>
+            {data?.length > 0 && (
+              <button
+                className="bg-orange-500 rounded-md px-4 py-2 text-sm text-white"
+                onClick={() => download()}
+                style={{ backgroundColor: "#e95d39" }}
+              >
+                Download Excel
+              </button>
+            )}
           </div>
         </div>
         {/* Table Section */}

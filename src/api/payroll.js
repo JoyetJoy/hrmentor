@@ -14,6 +14,8 @@ export const PAYROLL_GET_VIEW = "pay-off-employee";
 export const PAYROLL_VIEW = "payrun/department";
 // PAYROLL APPROVE
 export const PAYROLL_APPROVE = "payrun/department/approve";
+// DOWNLOAD EXCEL
+export const DOWNLOAD_EXCEL = "payrun/export-excel";
 // APPROVE PAYROLL EMPLOYEE
 export const APPROVE_PAYROLL_EMPLOYEE = "payrun/employees";
 // EMPLOYEE PAYROLL DETAILS
