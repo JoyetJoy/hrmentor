@@ -19,6 +19,7 @@ export default function CareerDetail() {
         return res.data;
       }),
   });
+console.log(careerDetails);
 
   return (
     <>

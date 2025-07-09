@@ -8,15 +8,30 @@ import {
 } from "react-share";
 
 export default function ShareJob({ popupOpen, setPopupOpen, text }) {
-const emailSubject = `Job title - ${text?.job_title}`;
-const emailBody = `${text?.job_description}`;
-const jobUrl = `${window.location.origin}/career/${text?.id}`;  // Proper HTML link
-const jobContent = `${emailBody} \n\nApply here: ${jobUrl}`;
-const handleEmailShare = () => {
-  const subject = encodeURIComponent(emailSubject);
-  const body = encodeURIComponent(jobContent);
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
-};
+
+  const stripHtmlTags = (htmlString) => {
+    const doc = new DOMParser().parseFromString(htmlString || "", "text/html");
+    return doc.body.textContent || "";
+  };
+
+  // Clean all fields
+  const cleanedText = Object.fromEntries(
+    Object.entries(text || {}).map(([key, value]) => [
+      key,
+      stripHtmlTags(value),
+    ])
+  );
+
+  const emailSubject = `Job title - ${cleanedText.job_title}`;
+  const emailBody = cleanedText.job_description;
+  const jobUrl = `${window.location.origin}/career/${cleanedText.id}`;
+  const jobContent = `${emailBody}\n\nApply here: ${jobUrl}`;
+
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent(emailSubject);
+    const body = encodeURIComponent(jobContent);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
 
   // Function to handle sharing via WhatsApp
   const handleWhatsappShare = () => {
