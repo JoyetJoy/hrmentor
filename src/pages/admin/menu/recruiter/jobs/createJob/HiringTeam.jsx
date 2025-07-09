@@ -71,7 +71,7 @@ function RecJobHiringTeam() {
         accessorKey: "recruiting_role",
         cell: ({ row }) => (
           <>
-            {row.original?.employee?.recruiting_role == 1
+            {row.original?.recruiting_role == 1
               ? "Hiring Manager"
               : "Interview Analyst"}
           </>
