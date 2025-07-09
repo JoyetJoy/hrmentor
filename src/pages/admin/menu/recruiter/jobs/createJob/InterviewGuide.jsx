@@ -122,7 +122,7 @@ function RecJobInterviewGuide() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"recInterviewGuidelinesbyId"}
         api={INTERVIEW_GUIDELINE}
       />

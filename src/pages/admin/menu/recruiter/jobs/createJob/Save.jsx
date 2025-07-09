@@ -334,7 +334,7 @@ function RecruiterJobPost() {
   };
 
   // GET CITY BY STATE ID AND SEARCH KEY
-  const loadCitiesOptions = async (inputValue) => {
+  const  loadCitiesOptions = async (inputValue) => {
     if (inputValue?.length < 3) {
       return [];
     }

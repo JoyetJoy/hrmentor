@@ -162,6 +162,8 @@ function JobApplicationQuestion() {
       setLoader(false);
     }
   };
+  console.log(selectedField);
+  
   return (
     <>
       <MenuHeader
@@ -175,7 +177,7 @@ function JobApplicationQuestion() {
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"jobProfileQuestions"}
         api={DELETE_PROFILE_QUESTION}
       />

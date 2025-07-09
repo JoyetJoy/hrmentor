@@ -116,13 +116,14 @@ function RecJobHiringTeam() {
     ],
     [],
   );
+console.log(selectedField);
 
   return (
     <>
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}
-        selectedId={selectedField}
+        id={selectedField}
         qrkey={"hiringTeamsByid"}
         api={REC_HIRING_TEAM}
       />

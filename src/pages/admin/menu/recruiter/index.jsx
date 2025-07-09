@@ -145,7 +145,7 @@ export default function RecruiterDashbaord() {
           </div>
         </div>
         <div
-          onClick={()=>handleClick('/admin/recruiter/jobs')}
+          onClick={()=>handleClick('/admin/recruiter/candidate')}
           className="flex items-center gap-2 rounded-md bg-white p-4 cursor-pointer">
           <div
             className="size-12 rounded-full p-3"
