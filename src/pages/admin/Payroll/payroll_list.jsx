@@ -177,7 +177,7 @@ export default function PayrollList() {
   const CreatePayrun = async () => {
     const body= {
       pay_schedule: monthValue,
-      state_date: start,
+      start_date: start,
       end_date: end,
     }
       try {
