@@ -18,6 +18,7 @@ import { formatDate } from "@/utils/date";
 import { usePermissionStore } from "@/lib/slices/auth.slice";
 import { CREATE_PAYRUN } from "@/api/setup";
 import toast from "react-hot-toast";
+import PayrunConfirmation from "@/components/common/PayrunConfirmation";
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -50,6 +51,7 @@ export default function PayrollList() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loader, setLoader] = useState(false);
+  const [payrunPopup, setPayrunPopup] = useState(false);
   const pageLimit = 10;
 
   const { permissions } = usePermissionStore((state) => ({
@@ -88,26 +90,28 @@ export default function PayrollList() {
   useEffect(() => {
     if (monthValue === "1" && data) {
       const { star_day, end_day } = data;
-  
+
       const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  
+
       // Use date 7 days ago as reference
-    const referenceDate = new Date();
-    referenceDate.setDate(referenceDate.getDate() - 7);
-  
+      const referenceDate = new Date();
+      referenceDate.setDate(referenceDate.getDate() - 7);
+
       // Get index of today and start_day
       const todayIndex = referenceDate.getDay(); // 0 (Sun) - 6 (Sat)
       const startIndex = weekdays.indexOf(star_day?.toUpperCase());
       const endIndex = weekdays.indexOf(end_day?.toUpperCase());
-  
+
       // Calculate this week's start date for the given star_day
       const startDate = new Date(referenceDate);
-      startDate.setDate(referenceDate.getDate() - ((todayIndex - startIndex + 7) % 7));
-  
+      startDate.setDate(
+        referenceDate.getDate() - ((todayIndex - startIndex + 7) % 7),
+      );
+
       // Calculate end date based on end_day
       const endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + ((endIndex - startIndex + 7) % 7));
-  
+
       setStartDate(formatDateRange(startDate));
       setEndDate(formatDateRange(endDate));
     } else if (
@@ -118,7 +122,7 @@ export default function PayrollList() {
       setEndDate(formatDateRange(data?.end_date));
     }
   }, [monthValue, data]);
-  
+
   const handlePreviousPeriod = () => {
     const newEndDate = new Date(
       new Date(startDate).getTime() - 24 * 60 * 60 * 1000,
@@ -174,24 +178,6 @@ export default function PayrollList() {
     }
   };
 
-  const CreatePayrun = async () => {
-    const body= {
-      pay_schedule: monthValue,
-      start_date: start,
-      end_date: end,
-    }
-      try {
-        setLoader(true);
-        const response = await newRequest.post(CREATE_PAYRUN,body);
-        setLoader(false);
-        toast.success(response.data.original.message);
-      } catch (error) {
-        console.log(error);
-        toast.error('Something went wrong. Try after somtimes')
-        setLoader(false);
-      }
-    };
-
   const columns = React.useMemo(
     () => [
       {
@@ -222,7 +208,7 @@ export default function PayrollList() {
           const value = parseFloat(getValue());
           return isNaN(value) ? "-" : value.toFixed(2);
         },
-      },      
+      },
       {
         header: "Status",
         accessorKey: "status",
@@ -244,18 +230,18 @@ export default function PayrollList() {
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
             {permissions.includes("paylist-view") && (
-            <button
-              type="button"
-              onClick={() => {
-                navigate(
-                  `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}/${monthValue}` +
-                    `?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&department=${row.original.department_name}`,
-                );
-              }}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-            >
-              <Eye className="size-3" />
-            </button>
+              <button
+                type="button"
+                onClick={() => {
+                  navigate(
+                    `/admin/payroll/paylistdetail/${row.original?.department_id || "default"}/${monthValue}` +
+                      `?start_date=${formatDate(startDate)}&end_date=${formatDate(endDate)}&department=${row.original.department_name}`,
+                  );
+                }}
+                className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              >
+                <Eye className="size-3" />
+              </button>
             )}
           </div>
         ),
@@ -266,16 +252,25 @@ export default function PayrollList() {
 
   return (
     <>
+      <PayrunConfirmation
+        popupOpen={payrunPopup}
+        setPopupOpen={setPayrunPopup}
+        monthValue={monthValue}
+        startDate={startDate}
+        endDate={endDate}
+        start={start}
+        end={end}
+      />
       <PayrollHeader page={2} />
       <div className="min-h-screen bg-gray-100">
         {/* Header Navigation */}
         <div className="mb-4 flex items-center justify-between">
           {/* Left Section */}
-          <div className="lg:min-w-[20rem] min-w-max">
+          <div className="min-w-max lg:min-w-[20rem]">
             <h4 className="text-lg font-bold">Pay List</h4>
           </div>
           <div className="flex items-center gap-4">
-           <button
+            <button
               onClick={() => setMonthValue("1")}
               className={`rounded-md border px-4 py-2 text-sm ${
                 monthValue === "1"
@@ -316,11 +311,10 @@ export default function PayrollList() {
             >
               4-weekly
             </button> */}
-           </div>
+          </div>
 
           {/* Right Section */}
           <div className="flex items-center gap-4">
-
             <label className="input flex h-10 min-h-10 max-w-[20rem] items-center gap-2 rounded-md border-none pr-28 outline-none">
               <Search className="size-4 object-contain text-gray-dark" />
               <input
@@ -353,34 +347,41 @@ export default function PayrollList() {
           {startDate && endDate ? (
             <>
               <div className="flex justify-between">
-              <div className="flex items-center gap-2 pb-3 text-xs font-semibold">
-                <button className="p-2" onClick={() => handlePreviousPeriod()}>
-                  <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
-                </button>
+                <div className="flex items-center gap-2 pb-3 text-xs font-semibold">
+                  <button
+                    className="p-2"
+                    onClick={() => handlePreviousPeriod()}
+                  >
+                    <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
+                  </button>
 
-                <p>
-                  {startDate} to {endDate}
-                </p>
-                <button className="p-2" onClick={() => handleNextPeriod()}>
-                  <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
-                </button>
-              </div>
-              <div className="mb-4 flex items-center justify-between">
-              <button
-                className="rounded-md px-4 py-2 text-white"
-                onClick={() => CreatePayrun()}
-                style={{ backgroundColor: "#e95d39" }}
-              >
-                {loader ? (
-                  <div className="flex items-center gap-3">
-                    <p className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></p>
-                    Creating
-                  </div>
-                ) : (
-                  <>Create Payrun</>
-                )}
-              </button>
-            </div>
+                  <p>
+                    {startDate} to {endDate}
+                  </p>
+                  <button className="p-2" onClick={() => handleNextPeriod()}>
+                    <ChevronRight
+                      size={20}
+                      color="#171717"
+                      strokeWidth={1.75}
+                    />
+                  </button>
+                </div>
+                <div className="mb-4 flex items-center justify-between">
+                  <button
+                    className="rounded-md px-4 py-2 text-white"
+                    onClick={() => setPayrunPopup(true)}
+                    style={{ backgroundColor: "#e95d39" }}
+                  >
+                    {loader ? (
+                      <div className="flex items-center gap-3">
+                        <p className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></p>
+                        Creating
+                      </div>
+                    ) : (
+                      <>Create Payrun</>
+                    )}
+                  </button>
+                </div>
               </div>
               {payrollList ? (
                 <QueryTable
