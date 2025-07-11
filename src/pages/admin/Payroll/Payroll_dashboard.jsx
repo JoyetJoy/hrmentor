@@ -55,20 +55,6 @@ export default function Payroll() {
     setDate(updatedDate);
   };
 
-
-  const CreatePayrun = async () => {
-    try {
-      setLoader(true);
-      const response = await newRequest.post(CREATE_PAYRUN);
-      setLoader(false);
-      toast.success(response.data.original.message);
-    } catch (error) {
-      console.log(error);
-      // toast.error('Something went wrong. Try after somtimes')
-      setLoader(false);
-    }
-  };
-
   const columns = React.useMemo(
     () => [
       {
@@ -156,26 +142,9 @@ export default function Payroll() {
       </div>
       <div className="flex flex-col gap-4 w-1/3">
         {/* Right Section */}
-        <div className="col-span-3 h-[6rem] w-full bg-white p-6 rounded-lg">
-          <div className="mb-6">
+        {/* <div className="col-span-3 h-[6rem] w-full bg-white p-6 rounded-lg">
+          <div className="mb-6"> */}
             {/* Header */}
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Process pay run</h3>
-              <button
-                className="rounded-md px-4 py-2 text-white"
-                onClick={() => CreatePayrun()}
-                style={{ backgroundColor: "#e95d39" }}
-              >
-                {loader ? (
-                  <div className="flex items-center gap-3">
-                    <p className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></p>
-                    Creating
-                  </div>
-                ) : (
-                  <>Create pay run</>
-                )}
-              </button>
-            </div>
 
             {/* Content */}
             {/* <div className="text-sm">
@@ -192,8 +161,8 @@ export default function Payroll() {
                 <span>This payment is overdue by 174 day(s)</span>
               </div>
             </div> */}
-          </div>
-        </div>
+          {/* </div>
+        </div> */}
 
         <div className="h-[21rem] w-full bg-[#e95d39] text-white text-xl rounded-lg flex flex-col font-semibold  items-center justify-center">
           <p>£{total}</p>

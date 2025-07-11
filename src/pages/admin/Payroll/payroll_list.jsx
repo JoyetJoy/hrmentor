@@ -16,6 +16,8 @@ import { formatDateRange } from "@/utils/helpers";
 import dayjs from "dayjs";
 import { formatDate } from "@/utils/date";
 import { usePermissionStore } from "@/lib/slices/auth.slice";
+import { CREATE_PAYRUN } from "@/api/setup";
+import toast from "react-hot-toast";
 
 const getWeekDayDate = (targetDay, referenceDate = new Date()) => {
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -47,6 +49,7 @@ export default function PayrollList() {
   const [monthValue, setMonthValue] = useState("1");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [loader, setLoader] = useState(false);
   const pageLimit = 10;
 
   const { permissions } = usePermissionStore((state) => ({
@@ -82,28 +85,24 @@ export default function PayrollList() {
     enabled: !!start,
   });
 
-  const { data: departmentListing } = useEmployeeMaster(
-    EMPLOYEE_DEPARTMENT_LIST,
-    "employeeDepartmentList",
-  );
-
   useEffect(() => {
     if (monthValue === "1" && data) {
       const { star_day, end_day } = data;
   
       const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   
-      // Get today's date
-      const today = new Date();
+      // Use date 7 days ago as reference
+    const referenceDate = new Date();
+    referenceDate.setDate(referenceDate.getDate() - 7);
   
       // Get index of today and start_day
-      const todayIndex = today.getDay(); // 0 (Sun) - 6 (Sat)
+      const todayIndex = referenceDate.getDay(); // 0 (Sun) - 6 (Sat)
       const startIndex = weekdays.indexOf(star_day?.toUpperCase());
       const endIndex = weekdays.indexOf(end_day?.toUpperCase());
   
       // Calculate this week's start date for the given star_day
-      const startDate = new Date(today);
-      startDate.setDate(today.getDate() - ((todayIndex - startIndex + 7) % 7));
+      const startDate = new Date(referenceDate);
+      startDate.setDate(referenceDate.getDate() - ((todayIndex - startIndex + 7) % 7));
   
       // Calculate end date based on end_day
       const endDate = new Date(startDate);
@@ -174,6 +173,24 @@ export default function PayrollList() {
       setEndDate(formatDateRange(newEndDate));
     }
   };
+
+  const CreatePayrun = async () => {
+    const body= {
+      pay_schedule: monthValue,
+      state_date: start,
+      end_date: end,
+    }
+      try {
+        setLoader(true);
+        const response = await newRequest.post(CREATE_PAYRUN,body);
+        setLoader(false);
+        toast.success(response.data.original.message);
+      } catch (error) {
+        console.log(error);
+        toast.error('Something went wrong. Try after somtimes')
+        setLoader(false);
+      }
+    };
 
   const columns = React.useMemo(
     () => [
@@ -335,6 +352,7 @@ export default function PayrollList() {
         <div className="mt-2 rounded-md bg-white p-4">
           {startDate && endDate ? (
             <>
+              <div className="flex justify-between">
               <div className="flex items-center gap-2 pb-3 text-xs font-semibold">
                 <button className="p-2" onClick={() => handlePreviousPeriod()}>
                   <ChevronLeft size={20} color="#0d0d0d" strokeWidth={1.75} />
@@ -346,6 +364,23 @@ export default function PayrollList() {
                 <button className="p-2" onClick={() => handleNextPeriod()}>
                   <ChevronRight size={20} color="#171717" strokeWidth={1.75} />
                 </button>
+              </div>
+              <div className="mb-4 flex items-center justify-between">
+              <button
+                className="rounded-md px-4 py-2 text-white"
+                onClick={() => CreatePayrun()}
+                style={{ backgroundColor: "#e95d39" }}
+              >
+                {loader ? (
+                  <div className="flex items-center gap-3">
+                    <p className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></p>
+                    Creating
+                  </div>
+                ) : (
+                  <>Create Payrun</>
+                )}
+              </button>
+            </div>
               </div>
               {payrollList ? (
                 <QueryTable

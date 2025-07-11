@@ -215,7 +215,7 @@ export default function PayrollSettings() {
                   />
                   Monthly
                 </label>
-                <label className="flex items-center gap-2">
+                {/* <label className="flex items-center gap-2">
                   <input
                     type="radio"
                     name="monthlytwice"
@@ -224,7 +224,7 @@ export default function PayrollSettings() {
                     checked={payDuriation == "monthlytwice"}
                   />
                   Biweekly
-                </label>
+                </label> */}
               </div>
               <p className="mt-2 rounded-md border-l-4 border-[#ffb233] bg-yellow-100 p-2 text-sm text-yellow-600">
                 Once you have processed the first pay run, you cannot update the
