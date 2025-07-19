@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
-import { EMPLOYEE_DEPARTMENT_LIST, newRequest, ROASTER_LISTING } from "@/api/master";
+import {
+  EMPLOYEE_DEPARTMENT_LIST,
+  newRequest,
+  ROASTER_LISTING,
+} from "@/api/master";
 import { formatDate } from "@/utils/date";
 import RosterHeader from "@/components/common/RosterHeader";
 import html2pdf from "html2pdf.js";
@@ -17,19 +21,19 @@ export default function Rosterpdf() {
   const [activeDepartment, setActiveDepartment] = useState([]);
 
   const useFetchData = (key, url) => {
-      return useQuery({
-        queryKey: [key],
-        queryFn: () => newRequest.get(url).then((res) => res.data),
-      });
-    };
+    return useQuery({
+      queryKey: [key],
+      queryFn: () => newRequest.get(url).then((res) => res.data),
+    });
+  };
 
-   const { data: department } = useFetchData(
-      "department",
-      EMPLOYEE_DEPARTMENT_LIST,
-    );
+  const { data: department } = useFetchData(
+    "department",
+    EMPLOYEE_DEPARTMENT_LIST,
+  );
 
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["event", startDate, endDate,activeDepartment],
+    queryKey: ["event", startDate, endDate, activeDepartment],
     queryFn: () =>
       newRequest
         .get(ROASTER_LISTING, {
@@ -50,7 +54,7 @@ export default function Rosterpdf() {
     if (startDate && endDate && activeDepartment) {
       refetch();
     }
-  }, [startDate, endDate,activeDepartment]);
+  }, [startDate, endDate, activeDepartment]);
 
   const handleDownloadPDF = () => {
     const element = document.getElementById("attendance-table");
@@ -194,6 +198,9 @@ export default function Rosterpdf() {
   }, [selectedOption, startDate, endDate]);
 
   const findEvents = (date, data, day) => {
+    const workingDays = data?.shift?.weeks || [];
+    const allDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    const selectedDay = dayjs(date).format("ddd").toUpperCase();
     const formattedDate = date;
     const holidayEvents = data?.filter(
       (event) =>
@@ -212,6 +219,24 @@ export default function Rosterpdf() {
         Array.isArray(event?.date_deletions) &&
         event.date_deletions.includes(formattedDate),
     );
+
+    const leaveEventsRaw =
+      data?.filter(
+        (event) =>
+          Array.isArray(event?.date_leaves) &&
+          event.date_leaves.some((leave) =>
+            dayjs(leave.date).isSame(formattedDate, "day"),
+          ),
+      ) || [];
+
+    // Deduplicate leaveEvents by user (or by _id if user isn't available)
+    const leaveEvents = Array.from(
+      new Map(
+        leaveEventsRaw.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
+      ).values(),
+    );
+
+    // console.log(leaveEvents);
 
     let shiftEventsRaw = data?.filter(
       (event) =>
@@ -237,6 +262,7 @@ export default function Rosterpdf() {
       ...swapedEvents,
       ...deletedEvents,
       ...holidayEvents,
+      ...leaveEvents,
     ];
 
     // Use Map to remove duplicate events based on _id
@@ -248,7 +274,24 @@ export default function Rosterpdf() {
       ).values(),
     );
 
-    return { holidayEvents, shiftEvents, swapedEvents, deletedEvents, dayOff };
+    const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
+
+    const isDayOff = weekOffDays.includes(selectedDay);
+
+    const requestedSlots = data?.requested_details?.filter((slot) =>
+      dayjs(slot.date).isSame(dayjs(date), "day"),
+    );
+
+    return {
+      holidayEvents,
+      shiftEvents,
+      isDayOff,
+      requestedSlots,
+      swapedEvents,
+      deletedEvents,
+      leaveEvents,
+      dayOff,
+    };
   };
 
   const getCurrentWeek = (year) => {
@@ -297,7 +340,7 @@ export default function Rosterpdf() {
         <RosterHeader page={3} />
         {/* Filters */}
         <div className="relative flex w-full items-center justify-between gap-4 px-4 py-2">
-        <Select
+          <Select
             options={departmentOptions}
             isSearchable={true}
             styles={customSelectStyles}
@@ -305,10 +348,10 @@ export default function Rosterpdf() {
               setActiveDepartment([selectedOption.value])
             }
             placeholder="Select Department"
-            className="input-box  h-10 w-52 z-30 rounded-md border-gray-muted bg-white focus:border-gray-muted"
+            className="input-box z-30 h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
           />
           <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-2 rounded-md bg-white mb-2 p-2 shadow-md">
+            <div className="mb-2 flex items-center space-x-2 rounded-md bg-white p-2 shadow-md">
               {/* Daily, Weekly, Monthly Buttons */}
               {["weekly"].map((option) => (
                 <button
@@ -392,7 +435,7 @@ export default function Rosterpdf() {
           </div>
           <button
             onClick={handleDownloadPDF}
-            className=" mb-4 rounded-md bg-hrmprimaryorange px-4 py-2 text-white"
+            className="mb-4 rounded-md bg-hrmprimaryorange px-4 py-2 text-white"
           >
             Download PDF
           </button>
@@ -438,11 +481,12 @@ export default function Rosterpdf() {
                         </td>
                         {days.map((day, index) => {
                           // Find attendance status for the given date
-                          const { shiftEvents, dayOff } = findEvents(
-                            day.fullDate,
-                            employee?.rosters,
-                            day.day,
-                          );
+                          const { shiftEvents, leaveEvents, dayOff } =
+                            findEvents(
+                              day.fullDate,
+                              employee?.rosters,
+                              day.day,
+                            );
 
                           return (
                             <td
@@ -450,41 +494,94 @@ export default function Rosterpdf() {
                               className="border-r-[3px] border-[#d1d5db]"
                             >
                               {shiftEvents?.length > 0 ? (
-                                shiftEvents?.map((shift, index) => (
+                                <div className="">
+                                  {shiftEvents?.map((shift, index) => (
+                                    <div
+                                      key={index}
+                                      style={{
+                                        background:
+                                          shift?.shift_color || "#bfdbfe",
+                                      }}
+                                      className={`mx-2 my-2 flex min-h-12 min-w-36 cursor-pointer items-center justify-center rounded-md text-center text-xs pb-2 font-semibold`}
+                                    >
+                                      <div
+                                        className={`flex w-full flex-col items-center justify-center rounded-md text-center text-xs font-semibold`}
+                                      >
+                                        <span>{shift.shift_name}</span>
+                                        {shift?.shift?.start_time && (
+                                          <p className="text-center text-xs">
+                                            {shift?.shift?.start_time} -{" "}
+                                            {shift?.shift?.end_time}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                  {leaveEvents?.map((event, index) =>
+                                    event?.date_leaves
+                                      ?.filter((leave) =>
+                                        dayjs(leave.date).isSame(
+                                          day.fullDate,
+                                          "day",
+                                        ),
+                                      )
+                                      .map((leave, i) => (
+                                        <div
+                                          key={`${index}-${i}`}
+                                          className="mx-2 my-2 flex items-center justify-center min-h-12 min-w-36 cursor-pointer rounded-md bg-[#815fb3] py-3 text-black"
+                                        >
+                                           <p className="flex h-[1.6rem] w-full justify-center text-center text-xs font-semibold">
+                                            {leave.leave_name || "Leave"}
+                                          </p>
+                                        </div>
+                                      )),
+                                  )}
+                                </div>
+                              ) : leaveEvents?.length > 0 ? (
+                                <div className="">
+                                  {leaveEvents?.map((event, index) =>
+                                    event?.date_leaves
+                                      ?.filter((leave) =>
+                                        dayjs(leave.date).isSame(
+                                          day.fullDate,
+                                          "day",
+                                        ),
+                                      )
+                                      .map((leave, i) => (
+                                        <div
+                                          key={`${index}-${i}`}
+                                          className="mx-2 my-2 flex min-h-5 min-w-36 items-center justify-center cursor-pointer rounded-md bg-[#815fb3] py-3 text-black"
+                                        >
+                                          <p className="flex h-[1.6rem] w-full justify-center text-center text-xs font-semibold">
+                                            {leave.leave_name || "Leave"}
+                                          </p>
+                                        </div>
+                                      )),
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="">
                                   <div
                                     key={index}
-                                    style={{
-                                      background:
-                                        shift?.shift_color || "#bfdbfe",
-                                    }}
-                                    className={`mx-2 my-2 flex min-h-12 min-w-36 cursor-pointer items-center justify-center rounded-md text-center text-xs font-semibold`}
+                                    className="mx-2 my-2 flex min-h-12 min-w-36 items-center justify-center cursor-pointer rounded-md bg-[#c5c5cb] pb-2 text-black"
                                   >
-                                    <div
-                                      className={`my-1 flex h-10 w-full flex-col items-center justify-center rounded-md text-center text-xs font-semibold`}
-                                    >
-                                      <span>{shift.shift_name}</span>
-                                      {shift?.shift?.start_time && (
-                                        <p className="text-center text-xs">
-                                          {shift?.shift?.start_time} -{" "}
-                                          {shift?.shift?.end_time}
-                                        </p>
-                                      )}
-                                    </div>
+                                    <p className="flex h-[1.2rem] w-full justify-center text-center text-xs font-semibold">
+                                      Day Off
+                                    </p>
                                   </div>
-                                ))
-                              ) : (
-                                <div className="mx-2 my-2 flex h-2 min-w-36"></div>
+                                 
+                                </div>
                               )}
-                              {dayOff?.map((shift, index) => (
+                              {/* {dayOff?.map((shift, index) => (
                                 <div
                                   key={index}
                                   className="mx-2 my-2 flex h-12 min-w-36 cursor-pointer items-center justify-center rounded-md bg-[#ba1a1a] text-black"
                                 >
                                   <p className="text-center text-xs font-semibold">
-                                    Day Off
+                                    Day Of
                                   </p>
                                 </div>
-                              ))}
+                              ))} */}
                             </td>
                           );
                         })}
