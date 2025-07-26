@@ -50,8 +50,6 @@ export default function AnnualLeave({ id }) {
     id: "centerText",
     beforeDraw: (chart) => {
       const { width, height, ctx } = chart;
-      const total =
-      annualLeave?.total
   
       ctx.restore();
       ctx.save();
@@ -62,11 +60,11 @@ export default function AnnualLeave({ id }) {
       ctx.font = "12px sans-serif";
       ctx.fillStyle = "#999";
       ctx.textAlign = "center";
-      ctx.fillText("Total", centerX, centerY - 10);
+      ctx.fillText("Remaining", centerX, centerY - 10);
   
       ctx.font = "bold 16px sans-serif";
       ctx.fillStyle = "#000";
-      ctx.fillText(`${total} Hrs`, centerX, centerY + 10);
+      ctx.fillText(`${annualLeave?.remaining} Hrs`, centerX, centerY + 10);
       ctx.restore();
     },
   };
