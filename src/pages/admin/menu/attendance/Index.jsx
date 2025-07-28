@@ -378,10 +378,22 @@ export default function Attendance() {
               <p className="text-sm">Absent</p>
             </div>
             <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#AEB6E7] pt-[0.02rem] text-xs font-extrabold text-black">
-                L
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#815fb3] pt-[0.02rem] text-xs font-extrabold text-black">
+                AL
               </p>
-              <p className="text-sm">Leave</p>
+              <p className="text-sm">Annual Leave</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#21A3B1] pt-[0.02rem] text-xs font-extrabold text-black">
+                SL
+              </p>
+              <p className="text-sm">Sick Leave</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FBE51E] pt-[0.02rem] text-xs font-extrabold text-black">
+                OL
+              </p>
+              <p className="text-sm">Other Leaves</p>
             </div>
             <div className="flex items-center gap-2">
               <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e68ecf] pt-[0.02rem] text-xs font-extrabold text-black">
