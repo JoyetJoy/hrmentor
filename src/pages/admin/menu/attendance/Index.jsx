@@ -372,19 +372,19 @@ export default function Attendance() {
               <p className="text-sm">Late</p>
             </div> */}
             <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#e64444] pt-[0.02rem] text-xs font-extrabold text-black">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#cb2020] pt-[0.02rem] text-xs font-extrabold text-black">
                 A
               </p>
               <p className="text-sm">Absent</p>
             </div>
             <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#815fb3] pt-[0.02rem] text-xs font-extrabold text-black">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#c5a2fb] pt-[0.02rem] text-xs font-extrabold text-black">
                 AL
               </p>
               <p className="text-sm">Annual Leave</p>
             </div>
             <div className="flex items-center gap-2">
-              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#21A3B1] pt-[0.02rem] text-xs font-extrabold text-black">
+              <p className="flex h-7 w-7 items-center justify-center rounded-full bg-[#fb643e] pt-[0.02rem] text-xs font-extrabold text-black">
                 SL
               </p>
               <p className="text-sm">Sick Leave</p>
@@ -501,18 +501,31 @@ export default function Attendance() {
                                     className={`flex cursor-pointer justify-center text-center text-[0.8rem] font-semibold`}
                                   >
                                     <div
-                                      className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold ${
+                                      className={`mb-2 flex h-10 w-full items-center justify-center text-sm font-extrabold text-black ${
                                         shift?.status === "Present"
-                                          ? "bg-[#00b448] text-black"
+                                          ? "bg-[#00b448]"
                                           : shift?.status === "Holiday"
-                                            ? "bg-[#e68ecf] text-black"
-                                            : shift?.status === "Leave"
-                                              ? "bg-[#AEB6E7] text-black"
-                                              : shift?.status === "Absent"
-                                                ? "bg-[#e64444] text-black"
-                                                : shift?.status === "Day Off"
-                                                  ? "bg-[#c5c5cb] text-black"
-                                                  : ""
+                                            ? "bg-[#e68ecf]"
+                                            : shift?.status === "Absent"
+                                              ? "bg-[#cb2020]"
+                                              : shift?.status === "Day Off"
+                                                ? "bg-[#c5c5cb]"
+                                                : shift?.status === "Leave" &&
+                                                    shift?.leave_type_id ===
+                                                      "AL"
+                                                  ? "bg-[#c5a2fb]"
+                                                  : shift?.status === "Leave" &&
+                                                      shift?.leave_type_id ===
+                                                        "170"
+                                                    ? "bg-[#fb643e]"
+                                                    : shift?.status ===
+                                                          "Leave" &&
+                                                        shift?.leave_type_id !==
+                                                          "AL" &&
+                                                        shift?.leave_type_id !==
+                                                          "170"
+                                                      ? "bg-[#FBE51E]"
+                                                      : ""
                                       }`}
                                       onMouseEnter={() => {
                                         {
@@ -537,13 +550,26 @@ export default function Attendance() {
                                           ? "P"
                                           : shift?.status === "Holiday"
                                             ? "H"
-                                            : shift?.status === "Leave"
-                                              ? "L"
-                                              : shift?.status === "Absent"
-                                                ? "A"
-                                                : shift?.status === "Day Off"
-                                                  ? "DO"
-                                                  : ""}
+                                            : shift?.status === "Absent"
+                                              ? "A"
+                                              : shift?.status === "Day Off"
+                                                ? "DO"
+                                                : shift?.status === "Leave" &&
+                                                    shift?.leave_type_id ===
+                                                      "AL"
+                                                  ? "AL"
+                                                  : shift?.status === "Leave" &&
+                                                      shift?.leave_type_id ===
+                                                        "170"
+                                                    ? "SL"
+                                                    : shift?.status ===
+                                                          "Leave" &&
+                                                        shift?.leave_type_id !==
+                                                          "AL" &&
+                                                        shift?.leave_type_id !==
+                                                          "170"
+                                                      ? "OL"
+                                                      : ""}
                                       </span>
                                       {shift?.delay_status && (
                                         <img

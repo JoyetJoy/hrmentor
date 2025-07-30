@@ -115,20 +115,22 @@ const EmployeeAccessRosterCalendar = () => {
     const holidayEvents = events?.result?.filter((event) =>
       event?.holidays?.includes(formattedDate),
     );
-    let shiftEventsRaw = events?.result?.filter((event) =>
-      Array.isArray(event?.date_range) && event.date_range.includes(formattedDate)
+    let shiftEventsRaw = events?.result?.filter(
+      (event) =>
+        Array.isArray(event?.date_range) &&
+        event.date_range.includes(formattedDate),
     );
-    
+
     // Step 2: Deduplicate by (shift_id + date) combination
     const shiftEventMap = new Map();
-    shiftEventsRaw?.forEach(event => {
+    shiftEventsRaw?.forEach((event) => {
       const key = `${event.shift_id}_${formattedDate}`;
       if (!shiftEventMap.has(key)) {
         shiftEventMap.set(key, event);
       }
     });
     const shiftEvents = Array.from(shiftEventMap.values());
-    
+
     const availableSlots = events?.available_slots_filtered?.filter((slot) =>
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
@@ -137,7 +139,32 @@ const EmployeeAccessRosterCalendar = () => {
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
 
-    return { holidayEvents, shiftEvents, availableSlots, requestedSlots };
+    const leaveEvents =
+      events?.result?.flatMap((event) => {
+        if (!Array.isArray(event.leave)) return [];
+
+        return event.leave
+          .filter(
+            (leaveEntry) =>
+              Array.isArray(leaveEntry.leave_dates) &&
+              leaveEntry.leave_dates.includes(formattedDate),
+          )
+          .map((leaveEntry) => ({
+            ...leaveEntry,
+            shift_id: event.shift_id,
+            shift_name: event.shift_name,
+            user_id: event.user_id,
+            event_id: event.id,
+          }));
+      }) || [];
+
+    return {
+      holidayEvents,
+      shiftEvents,
+      availableSlots,
+      requestedSlots,
+      leaveEvents,
+    };
   };
 
   const handleClick = (event) => {
@@ -232,10 +259,11 @@ const EmployeeAccessRosterCalendar = () => {
                 shiftEvents,
                 availableSlots,
                 requestedSlots,
+                leaveEvents,
               } = findEvents(date);
-              console.log(requestedSlots);
-              console.log(availableSlots);
-              
+              // console.log(shiftEvents);
+
+              console.log(leaveEvents);
 
               return (
                 <div className="relative flex h-full w-full flex-col overflow-visible">
@@ -298,6 +326,24 @@ const EmployeeAccessRosterCalendar = () => {
                             </span>
                           </div>
                         ))}
+                    {leaveEvents?.length > 0 && (
+                      <>
+                        {leaveEvents.map((leave, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleClick(leave)}
+                            style={{
+                              borderLeft: `4px solid ${adjustLightness(leave?.leave_type_id === "AL" ? '#c5a2fb' : leave?.leave_type_id === "170" ? '#fb643e' : '#FBE51E', -18)}`,
+                            }}
+                            className={`mt-2 flex h-14 w-auto flex-col justify-center rounded-sm border-l-4 px-3 py-2 text-gray-800 ${leave?.leave_type_id === "AL" ? 'bg-[#c5a2fb]' : leave?.leave_type_id === "170" ? 'bg-[#fb643e]' : 'bg-[#FBE51E]'}`}
+                          >
+                            <span className="float-start flex text-[0.8rem] font-semibold">
+                              {leave?.leave_type_id === "AL" || leave?.leave_type_id === "170" ? leave?.name : 'Other leave'}
+                            </span>
+                          </div>
+                        ))}
+                      </>
+                    )}
                   </>
 
                   {/* "Count More" Button */}

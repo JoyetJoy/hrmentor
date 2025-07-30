@@ -824,7 +824,7 @@ const RosterCalendar = () => {
                                       .map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
-                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black ${leave?.leave_type_id === "AL"? "bg-[#815fb3]" : leave?.leave_type_id === "170" ?"bg-[#21A3B1]":'bg-[#FBE51E]'}`}
+                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black ${leave?.leave_type_id === "AL"? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ?"bg-[#fb643e]":'bg-[#FBE51E]'}`}
                                         >
                                           <p className="text-center text-xs font-semibold">
                                             {leave.leave_name || "Leave"}
@@ -933,7 +933,7 @@ const RosterCalendar = () => {
                                       .map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
-                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black  ${leave?.leave_type_id === "AL"? "bg-[#815fb3]" : leave?.leave_type_id === "170" ?"bg-[#21A3B1]":'bg-[#FBE51E]'}`}
+                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black  ${leave?.leave_type_id === "AL"? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ?"bg-[#fc8d7a]":'bg-[#FBE51E]'}`}
                                         >
                                           <p className="flex h-[3.5rem] w-full justify-center text-center text-xs font-semibold">
                                             {leave.leave_name || "Leave"}
