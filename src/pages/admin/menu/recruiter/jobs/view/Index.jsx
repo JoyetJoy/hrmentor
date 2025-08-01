@@ -160,6 +160,18 @@ function RecViewJobDetail() {
           >
             Refer
           </Link> */}
+           <button
+            onClick={() => {
+              const url = `${window.location.origin}/career/${jid}`;
+              navigator.clipboard
+                .writeText(url)
+                .then(() => toast.success("Link copied to clipboard!"))
+                .catch((err) => console.error("Failed to copy: ", err));
+            }}
+            className="btn flex h-10 min-h-10 items-center justify-center rounded-md bg-hrmprimaryorange px-6 text-xs font-normal text-white hover:bg-hrmdarkblue"
+          >
+            Copy Link
+          </button>
         </div>
       </div>
       <div className="my-3 flex flex-row gap-2">
