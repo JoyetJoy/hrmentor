@@ -35,14 +35,13 @@ export const AdminDashboard = () => {
 
   const cardsData = [
     {
-      title: "Upcoming Shift",
-      details: admindashboard?.upcoming_shifts?.map((shift) => {
-        const selectdate = dayjs(shift?.shift?.date).format("YYYY-MM-DD");
+      title: "Current Shift Status",
+      details: admindashboard?.shifts?.map((shift) => {
+        const selectdate = dayjs(shift?.date).format("YYYY-MM-DD");
         return {
-          type: shift?.shift?.name,
-          count: shift?.shift?.people_required,
-          date: shift?.shift?.start_date,
-          dates: `${dayjs(shift?.start_date).format("DD/MM/YY")} - ${dayjs(shift?.end_date).format("DD/MM/YY")}`,
+          type: shift?.shift_name,
+          count: shift?.employees_clocked_in,
+          date: shift?.date,
           path: shift?.shift?.isHoliday
             ? ``
             : `/admin/shift/calendarview?id=${shift?.id}&date=${selectdate}`,
@@ -115,7 +114,7 @@ export const AdminDashboard = () => {
           {cardsData.map((card, index) => (
             <div
               key={index}
-              className="flex flex-col gap-4 rounded-md bg-white p-6 shadow-sm"
+              className="flex flex-col gap-4 rounded-md bg-white p-6 shadow-sm max-h-[20rem]"
             >
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
@@ -151,7 +150,7 @@ export const AdminDashboard = () => {
                           </h1>
                           <h1>{item?.dates || item?.date}</h1>
                           {/* <h1>{item?.date || ""}</h1> */}
-                          <h1>{item?.time || `Employee: ${item?.count}`}</h1>
+                          <h1>{item?.time || `${card.title !== "Current Shift Status" ? 'Employee' : 'Clockedin count'}: ${item?.count}`}</h1>
                           
                         </label>
                       </div>
