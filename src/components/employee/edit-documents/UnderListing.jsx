@@ -56,22 +56,25 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
       {
         header: "Document Type",
         accessorKey: "addNo",
-        cell: ({ row }) => (
-          <>{row?.original?.document_type?.employee_document_type_name}</>
-        ),
+        cell: ({ row }) => row?.original?.document_type?.employee_document_type_name || "N/A",
       },
       {
         header: "Issued Authority",
         accessorKey: "issued_authority",
+        cell: ({ row }) => row?.original?.issued_authority || "N/A",
       },
       {
         header: "Issued Date",
         accessorKey: "issued_date",
       },
-      {
-        header: "Expiry Date",
-        accessorKey: "expiry_date",
-      },
+      ...(expiry === 1
+        ? [
+            {
+              header: "Expiry Date",
+              accessorKey: "expiry_date",
+            },
+          ]
+        : []),
       {
         header: "Status",
         accessorKey: "status",
@@ -88,14 +91,13 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
         accessorKey: "document",
         cell: ({ row }) => (
           <div className="flex">
-             <a
+            <a
               href={row.original?.upload_documents}
               target="_blank"
-              className={`${row.original?.upload_documents? 'text-[#1A75FF] underline underline-offset-2':''}`}
+              className={`${row.original?.upload_documents ? "text-[#1A75FF] underline underline-offset-2" : ""}`}
               rel="noopener noreferrer"
             >
-              {row.original?.upload_documents?'document':'No document'}
-              
+              {row.original?.upload_documents ? "document" : "No document"}
             </a>
           </div>
         ),
@@ -105,32 +107,32 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
         accessorKey: "action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2 text-xs">
-            {permissions.includes("employee-documents-edit") &&(
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedField(row.original.id);
-                setPopupOpen(true);
-              }}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-            >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
-            </button>
+            {permissions.includes("employee-documents-edit") && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedField(row.original.id);
+                  setPopupOpen(true);
+                }}
+                className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              >
+                <img
+                  src="/assets/icons/admin/marker.svg"
+                  className="w-full object-contain"
+                />
+              </button>
             )}
-            {permissions.includes("employee-documents-delete") &&(
-            <button
-              type="button"
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedId(row.original.id);
-              }}
-              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-[#2C2C2C]"
-            >
-              <Trash2 className="size-3" />
-            </button>
+            {permissions.includes("employee-documents-delete") && (
+              <button
+                type="button"
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedId(row.original.id);
+                }}
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-[#2C2C2C]"
+              >
+                <Trash2 className="size-3" />
+              </button>
             )}
           </div>
         ),
@@ -163,7 +165,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
       <DisclosurePanel className="my-4 ml-10 text-sm/5 text-black/50">
         <div>
           <div className="my-4 flex items-center justify-between">
-            <div className="input flex min-h-10 h-10 w-80 items-center gap-2 placeholder:text-black border border-gray-platinum outline-none hover:border-gray-platinum text-sm">
+            <div className="input flex h-10 min-h-10 w-80 items-center gap-2 border border-gray-platinum text-sm outline-none placeholder:text-black hover:border-gray-platinum">
               <Search className="size-4 text-gray-dark" />
               <input
                 onChange={(e) => setKeyword(e.target.value)}
@@ -172,16 +174,16 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
                 placeholder="Search"
               />
             </div>
-            {permissions.includes("employee-documents-create") &&(
-            <button
-              onClick={() => {
-                setPopupOpen(true);
-              }}
-              className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
-            >
-              <Plus className="size-4" />
-              Add Documents
-            </button>
+            {permissions.includes("employee-documents-create") && (
+              <button
+                onClick={() => {
+                  setPopupOpen(true);
+                }}
+                className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white focus:outline-none data-[hover]:bg-hrmblue/70 data-[focus]:outline-1 data-[focus]:outline-white"
+              >
+                <Plus className="size-4" />
+                Add Documents
+              </button>
             )}
           </div>
 

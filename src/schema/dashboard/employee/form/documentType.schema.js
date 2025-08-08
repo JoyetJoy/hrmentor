@@ -7,10 +7,8 @@ export const empDocumentTypeSchema = Yup.object({
     value: Yup.string(),
     label: Yup.string(),
   })
-    .test("both-required", "Type is required", function (value) {
-      return value?.value && value?.label;
-    })
-    .required("Type is required"),
+    // 
+    ,
   status: Yup.object({
     value: Yup.string(),
     label: Yup.string(),
@@ -19,7 +17,9 @@ export const empDocumentTypeSchema = Yup.object({
       return value?.value && value?.label;
     })
     .required("Status is required"),
-  issued_date: Yup.string().required("Issued date is required"),
+  issued_date: Yup.string()
+  .required("Issued date is required")
+  ,
   expiry_date: Yup.string()
     .nullable()
     // .required("Expiry Date is required")
@@ -32,5 +32,6 @@ export const empDocumentTypeSchema = Yup.object({
         return new Date(expiry_date) > new Date(issued_date); // Validate only if expiry_date is provided
       },
     ),
-  issued_authority: Yup.string().required("Issued authority is required"),
+  issued_authority: Yup.string()
+  // .required("Issued authority is required"),
 });

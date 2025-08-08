@@ -98,7 +98,7 @@ export default function EmployeeDocumentEditForm({
       formData.append("document_category_id", cid);
       formData.append("user_id", uid);
       formData.append("document_name", data.document_name);
-      formData.append("document_type_id", data.document_type_id?.id);
+      formData.append("document_type_id", data.document_type_id?.id|| '');
       formData.append("status", data.status.value);
       formData.append("issued_date", data.issued_date);
       if(expiry===1){
@@ -186,13 +186,12 @@ export default function EmployeeDocumentEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Document Type
                   </label>
                   <Controller
                     name="document_type_id"
                     control={control}
-                    rules={{ required: true }}
                     render={({ field }) => (
                       <Select
                         {...field}
@@ -212,11 +211,11 @@ export default function EmployeeDocumentEditForm({
                 </div>
 
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Issued Authority
                   </label>
                   <input
-                    {...register("issued_authority", { required: true })}
+                    {...register("issued_authority")}
                     type="text"
                     placeholder="Enter issued authority"
                     className="input-box h-10 w-full placeholder:text-[0.8rem]"
@@ -232,7 +231,7 @@ export default function EmployeeDocumentEditForm({
                     Issued Date
                   </label>
                   <input
-                    {...register("issued_date", { required: true })}
+                    {...register("issued_date")}
                     type="date"
                     className="input-box h-10 w-full pr-2"
                   />
