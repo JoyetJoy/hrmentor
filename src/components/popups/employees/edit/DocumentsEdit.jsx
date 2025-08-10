@@ -97,7 +97,7 @@ export default function EmployeeDocumentEditForm({
       const formData = new FormData();
       formData.append("document_category_id", cid);
       formData.append("user_id", uid);
-      formData.append("document_name", data.document_name);
+      formData.append("document_name", data.document_name||'N/A');
       formData.append("document_type_id", data.document_type_id?.id|| '');
       formData.append("status", data.status.value);
       formData.append("issued_date", data.issued_date);
@@ -169,11 +169,11 @@ export default function EmployeeDocumentEditForm({
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="group flex flex-col space-y-1">
-                  <label className="required text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
+                  <label className="text-[0.8rem] font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                     Document Name
                   </label>
                   <input
-                    {...register("document_name", { required: true })}
+                    {...register("document_name")}
                     type="text"
                     placeholder="Enter document name"
                     className="input-box h-10 w-full placeholder:text-[0.8rem]"

@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const empDocumentTypeSchema = Yup.object({
-  document_name: Yup.string().required("Document name is required"),
+  document_name: Yup.string(),
   document_type_id: Yup.object({
     id: Yup.string(),
     value: Yup.string(),

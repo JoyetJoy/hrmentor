@@ -52,6 +52,7 @@ export default function UnderListing({ cid, uid, expiry, documentName }) {
       {
         header: "Document Name",
         accessorKey: "document_name",
+        cell: ({ row }) => row?.original?.document_name || "N/A",
       },
       {
         header: "Document Type",
