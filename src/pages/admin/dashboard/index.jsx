@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Clock4, Eye, MoveDiagonal, Search } from "lucide-react";
 // import { meetings } from "@/constants/dummyData";
 import StatsCard from "@/components/dashboard/StatsCard";
@@ -9,7 +9,11 @@ import { ADMIN_DASHBOARD, newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { usePermissionStore } from "@/lib/slices/auth.slice";
+import EmployeeList from "@/components/popups/employees/EmployeeList";
+import toast from "react-hot-toast";
 export const AdminDashboard = () => {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [employees, setEmployees] = useState('');
   const { permissions } = usePermissionStore((state) => ({
     permissions: state.permissions,
   }));
@@ -40,8 +44,9 @@ export const AdminDashboard = () => {
         const selectdate = dayjs(shift?.date).format("YYYY-MM-DD");
         return {
           type: shift?.shift_name,
-          count: shift?.employees_clocked_in,
+          count: shift?.employees_clocked_in_count,
           date: shift?.date,
+          emp:shift?.employees_clocked_in,
           path: shift?.shift?.isHoliday
             ? ``
             : `/admin/shift/calendarview?id=${shift?.roster_id}&date=${selectdate}`,
@@ -63,7 +68,7 @@ export const AdminDashboard = () => {
       title: "Upcoming Holidays",
       details: admindashboard?.upcoming_holidays?.map((holiday) => ({
         type: holiday.holiday_name,
-        count:holiday.employee_id,
+        count: holiday.employee_id,
         date: holiday.date,
         time: dayjs(holiday.created_at).format("HH:MM"),
       })),
@@ -79,16 +84,30 @@ export const AdminDashboard = () => {
         ]
           .filter(Boolean)
           .join(" "),
-          
-        count:leave?.employee_id
+
+        count: leave?.employee_id,
         // date: [leave?.date],
       })),
       path: "/admin/leave/people-on-leave",
     },
   ];
-  
+
+  const Employee = (emp,shift)=>{
+    if(emp.length<1){
+      toast('No employee found for this shift');
+      return;
+    }
+    setEmployees({emp:emp,shift:shift});
+    setPopupOpen(true)
+  }
+
   return (
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
+      <EmployeeList
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        datas={employees}
+      />
       <div className="flex min-w-[73%] flex-col gap-3">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-black">Dashboard</h1>
@@ -114,7 +133,7 @@ export const AdminDashboard = () => {
           {cardsData.map((card, index) => (
             <div
               key={index}
-              className="flex flex-col gap-4 rounded-md bg-white p-6 shadow-sm max-h-[20rem]"
+              className="flex max-h-[20rem] flex-col gap-4 rounded-md bg-white p-6 shadow-sm"
             >
               <label className="mb-4 flex items-center justify-between">
                 <h1 className="text-base font-bold text-black">{card.title}</h1>
@@ -150,20 +169,22 @@ export const AdminDashboard = () => {
                           </h1>
                           <h1>{item?.dates || item?.date}</h1>
                           {/* <h1>{item?.date || ""}</h1> */}
-                          <h1>{item?.time || `${card.title !== "Current Shift Status" ? 'Employee' : 'Clockedin count'}: ${item?.count}`}</h1>
-                          
+                          <h1>
+                            {item?.time ||
+                              `${card.title !== "Current Shift Status" ? "Employee" : "Clockedin count"}: ${item?.count}`}
+                          </h1>
                         </label>
                       </div>
-                      {card.title !== "Upcoming Holidays" && card.title !=="People on Leave" && (
-                        <Link
-                          to={item?.path}
+                      {card.title === "Current Shift Status" && (
+                        <div
+                          onClick={() => Employee(item?.emp,item?.type)}
                           className="rounded-full border bg-gray-soft p-2"
                         >
                           <MoveDiagonal
                             className="size-3 text-black"
                             strokeWidth={1.7}
                           />
-                        </Link>
+                        </div>
                       )}
                     </div>
                   ))

@@ -180,7 +180,7 @@ useEffect(() => {
                 <div className="flex items-center gap-1">
                   <div className="h-10 w-10 overflow-hidden rounded-full">
                     <img
-                      src={selectedUser?.profile_image}
+                      src={selectedUser?.profile_image || "/assets/images/profile.jpg"}
                       alt="profile-image"
                     />
                   </div>
