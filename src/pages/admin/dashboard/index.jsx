@@ -154,7 +154,7 @@ export const AdminDashboard = () => {
                           
                         </label>
                       </div>
-                      {card.title !== "Upcoming Holidays" && (
+                      {card.title !== "Upcoming Holidays" && card.title !=="People on Leave" && (
                         <Link
                           to={item?.path}
                           className="rounded-full border bg-gray-soft p-2"
