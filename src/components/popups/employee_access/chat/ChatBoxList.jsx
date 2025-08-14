@@ -5,6 +5,7 @@ import ChatView from "./ChatView";
 import { formatLastMessageTime } from "@/utils/helpers";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import Pusher from "pusher-js";
+const url = import.meta.env.VITE_CHAT_URL;
 
 export default function ChatBoxList({
   data,
