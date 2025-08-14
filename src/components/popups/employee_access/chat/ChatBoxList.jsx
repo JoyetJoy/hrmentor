@@ -65,8 +65,11 @@ export default function ChatBoxList({
 
   channel.bind("App\\Events\\NewChatCount", (data) => {
     console.log("Received data:", data);
+console.log(data.reciever_user_id,user.user.id);
 
     if (data.reciever_user_id === user.user.id) {
+      console.log('inside');
+      
      refetch();
     }
   });
