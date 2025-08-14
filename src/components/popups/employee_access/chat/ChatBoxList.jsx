@@ -3,6 +3,8 @@ import { Search, UserRound, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import ChatView from "./ChatView";
 import { formatLastMessageTime } from "@/utils/helpers";
+import { useUserStore } from "@/lib/slices/auth.slice";
+import Pusher from "pusher-js";
 
 export default function ChatBoxList({
   data,
@@ -14,6 +16,9 @@ export default function ChatBoxList({
   const [chatPopupOpen, setChatPopupOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [chats, setChats] = useState([]);
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
   function close() {
     setPopupOpen(false);
   }
@@ -32,6 +37,46 @@ export default function ChatBoxList({
       setChats(data); // show all if no keyword
     }
   }, [keyword, data]);
+
+ useEffect(() => {
+  if (!user?.user?.id) return;
+
+  const token = localStorage.getItem("token");
+
+  const pusher = new Pusher("469a7dd00053f2be95f4", {
+    cluster: "ap2",
+    forceTLS: true,
+    encrypted: true,
+    enabledTransports: ["ws", "wss"],
+    authEndpoint: `${url}/broadcasting/auth`,
+    auth: {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    },
+  });
+
+  const channel = pusher.subscribe(`private-chatCount.${user.user.id}`);
+
+  pusher.connection.bind("error", (err) => {
+    console.error("Pusher Error:", err);
+  });
+
+  channel.bind("App\\Events\\NewChatCount", (data) => {
+    console.log("Received data:", data);
+
+    if (data.receiver_id === user.user.id) {
+      // ✅ Receiver is the logged-in user, trigger API
+      // myApiCallFunction();
+    }
+  });
+
+  return () => {
+    channel.unbind_all();
+    channel.unsubscribe();
+    pusher.disconnect();
+  };
+}, [user?.user?.id]); // ✅ Only depends on logged-in user ID
 
   return (
     <>
