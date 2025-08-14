@@ -64,65 +64,7 @@ useEffect(() => {
   }, [chatPopupOpen, chatlist?.data, messages]);
   
 
-  useEffect(() => {
-    if (!user?.user?.id) return; // Prevent subscription if user ID is missing
-
-    const token =
-      localStorage.getItem("token");
-
-    const pusher = new Pusher("469a7dd00053f2be95f4", {
-      cluster: "ap2",
-      forceTLS: true,
-      encrypted: true,
-      enabledTransports: ["ws", "wss"],
-      authEndpoint: `${url}/broadcasting/auth`,
-      auth: {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-      },
-    });
-
-    // Subscribe to the private channel
-    const channel = pusher.subscribe(`private-chat.${user?.user?.id}`);
-
-    pusher.connection.bind("error", function (err) {
-      console.error("Pusher Error:", err);
-    });
-
-    channel.bind("App\\Events\\NewChatMessage", (data) => {
-      const now = data?.data?.created_at;
-
-      // Convert now (string) into a Date object
-      const dateObj = new Date(now);
-
-      // Then you can safely use getHours() and getMinutes()
-      const formattedTime = `${String(dateObj.getHours()).padStart(2, "0")}:${String(dateObj.getMinutes()).padStart(2, "0")}`;
-
-      const message = {
-        content: data?.data?.message,
-        senderId: data?.data?.sender_user_id,
-        receiverId: data?.data?.reciever_user_id,
-        time: formattedTime, // e.g., "14:30"
-      };
-
-      setMessages((prevMessages) => {
-        return [...prevMessages, message];
-      });
-    });
-
-    pusher.connection.bind("error", (err) => {
-      console.error("Pusher Error:", err);
-    });
-
-    // Cleanup()
-    return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-      pusher.disconnect();
-    };
-  }, [user?.user?.id]);
-
+  
   function close() {
     setMessages([]);
     setChatPopupOpen(false);
