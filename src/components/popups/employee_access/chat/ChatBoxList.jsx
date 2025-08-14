@@ -66,9 +66,8 @@ export default function ChatBoxList({
   channel.bind("App\\Events\\NewChatCount", (data) => {
     console.log("Received data:", data);
 
-    if (data.receiver_id === user.user.id) {
-      // ✅ Receiver is the logged-in user, trigger API
-      // myApiCallFunction();
+    if (data.reciever_user_id === user.user.id) {
+     refetch();
     }
   });
 
