@@ -19,21 +19,20 @@ export default function Notification({
   function close() {
     setNotificationPopupOpen(false);
   }
-  const [notification,setNotification] = useState();
-  const {user } = useUserStore((state) => ({
-      user: state.user,
-    }));
-
-    useEffect(()=>{
-      setNotification(notifications)
-    },[notifications])
+  const [notification, setNotification] = useState();
+  const { user } = useUserStore((state) => ({
+    user: state.user,
+  }));
 
   useEffect(() => {
-    if (!user?.user?.id ) return; // Prevent subscription if user ID is missing
-  
-    const token =
-      localStorage.getItem("token");
-  
+    setNotification(notifications);
+  }, [notifications]);
+
+  useEffect(() => {
+    if (!user?.user?.id) return; // Prevent subscription if user ID is missing
+
+    const token = localStorage.getItem("token");
+
     const pusher = new Pusher("469a7dd00053f2be95f4", {
       cluster: "ap2",
       forceTLS: true,
@@ -46,35 +45,31 @@ export default function Notification({
         },
       },
     });
-  
+
     // Subscribe to the private channel
     const channel = pusher.subscribe(`private-notification.${user?.user?.id}`);
-    
+
     pusher.connection.bind("error", function (err) {
       console.error("Pusher Error:", err);
     });
 
-    
     channel.bind("App\\Events\\NotificationSent", (data) => {
       const message = {
-        "id": data?.latest_unread_notification?.id,
-        "user_id": data?.latest_unread_notification?.user_id,
-        "type": data?.latest_unread_notification?.type,
-        "title": "Title Available",
-        "data": data?.latest_unread_notification?.data?.message,
-        "read_at": true,
-        "created_at": data?.latest_unread_notification?.created_at
-    }
-      setNotification((prevNotifications) => [
-        message,
-        ...prevNotifications,
-      ]);
+        id: data?.latest_unread_notification?.id,
+        user_id: data?.latest_unread_notification?.user_id,
+        type: data?.latest_unread_notification?.type,
+        title: "Title Available",
+        data: data?.latest_unread_notification?.data?.message,
+        read_at: true,
+        created_at: data?.latest_unread_notification?.created_at,
+      };
+      setNotification((prevNotifications) => [message, ...prevNotifications]);
     });
-  
+
     pusher.connection.bind("error", (err) => {
       console.error("Pusher Error:", err);
     });
-  
+
     // Cleanup
     return () => {
       channel.unbind_all();
@@ -82,22 +77,22 @@ export default function Notification({
       pusher.disconnect();
     };
   }, [user?.user?.id]);
-  
-const handleClick = async (notificationId) => {
-  if (!notificationId) return;
-  const data ={
-    notification_id:notificationId
-  }
-  try {
-    const response = await newRequest.post(READ_NOTIFICATION,data);
-    
-    if (response.status === 200) {
-      close();
+
+  const handleClick = async (notificationId) => {
+    if (!notificationId) return;
+    const data = {
+      notification_id: notificationId,
+    };
+    try {
+      const response = await newRequest.post(READ_NOTIFICATION, data);
+
+      if (response.status === 200) {
+        close();
+      }
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
     }
-  } catch (error) {
-    console.error("Error marking notification as read:", error);
-  }
-};
+  };
 
   return (
     <>
@@ -120,14 +115,16 @@ const handleClick = async (notificationId) => {
                 <div className="overflow-y-min mx-auto max-h-[35rem] w-full overflow-y-auto">
                   {notification?.data?.map((notification) => (
                     <Link
-                      to={'/admin/leave/request/awaitingapproval'}
-                      onClick={()=>handleClick(notification?.id)}
+                      to={"/admin/leave/request/awaitingapproval"}
+                      onClick={() => handleClick(notification?.id)}
                       key={notification?.id}
                       className="mb-4 border-b border-gray-200 pb-4"
                     >
-                      <div className="flex items-start gap-2">
-                        <div className="min-h-10 min-w-10 rounded-full text-center justify-center text-white flex items-center bg-red-500  mt-2">N</div>
-                        <div className="flex flex-col border-b border-gray-200 py-2 w-full">
+                      <div className="flex items-center gap-2">
+                        <div className="mt-2 flex min-h-10 min-w-10 items-center justify-center rounded-full bg-red-500 text-center text-white">
+                          N
+                        </div>
+                        <div className="flex w-full flex-col border-b border-gray-200 py-2">
                           <h4 className="text-sm font-semibold text-black">
                             {notification.title}
                           </h4>
@@ -139,6 +136,11 @@ const handleClick = async (notificationId) => {
                               "DD/MM/YYYY",
                             )}
                           </p>
+                        </div>
+                        <div className="flex h-full items-center justify-center">
+                          {!notification.read_at && (
+                            <div className="flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white"></div>
+                          )}
                         </div>
                       </div>
                     </Link>
