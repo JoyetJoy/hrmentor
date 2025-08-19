@@ -12,6 +12,7 @@ export default function ChatBoxList({
   popupOpen,
   setPopupOpen,
   refetch,
+  type,
 }) {
   const [selectedUser, setSelectedUser] = useState(null);
   const [chatPopupOpen, setChatPopupOpen] = useState(false);
@@ -39,47 +40,50 @@ export default function ChatBoxList({
     }
   }, [keyword, data]);
 
- useEffect(() => {
-  if (!user?.user?.id) return;
+  useEffect(() => {
+    if (!user?.user?.id && type !== "admin") return;
 
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    const id = user?.user?.id ? user.user.id : type === "admin" ? 1 : "";
+    console.log(id);
 
-  const pusher = new Pusher("469a7dd00053f2be95f4", {
-    cluster: "ap2",
-    forceTLS: true,
-    encrypted: true,
-    enabledTransports: ["ws", "wss"],
-    authEndpoint: `${url}/broadcasting/auth`,
-    auth: {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : "",
+    const pusher = new Pusher("469a7dd00053f2be95f4", {
+      cluster: "ap2",
+      forceTLS: true,
+      encrypted: true,
+      enabledTransports: ["ws", "wss"],
+      authEndpoint: `${url}/broadcasting/auth`,
+      auth: {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
       },
-    },
-  });
+    });
 
-  const channel = pusher.subscribe(`private-chatCount.${user.user.id}`);
+    const channel = pusher.subscribe(`private-chatCount.${id}`);
 
-  pusher.connection.bind("error", (err) => {
-    console.error("Pusher Error:", err);
-  });
+    pusher.connection.bind("error", (err) => {
+      console.error("Pusher Error:", err);
+    });
 
-  channel.bind("App\\Events\\NewChatCount", (data) => {
-    console.log("Received data:", data);
-console.log(data?.data?.reciever_user_id,user.user.id);
+    channel.bind("App\\Events\\NewChatCount", (data) => {
+      console.log("Received data:", type === "admin" && data?.data?.reciever_user_id === 1);
 
-    if (data?.data?.reciever_user_id === user?.user?.id) {
-      console.log('inside');
-      
-     refetch();
-    }
-  });
+      if (
+        data?.data?.reciever_user_id === user?.user?.id ||
+        (type === "admin" && data?.data?.reciever_user_id === 1)
+      ) {
+        console.log("inside");
+        refetch();
+      }
+    });
 
-  return () => {
-    channel.unbind_all();
-    channel.unsubscribe();
-    pusher.disconnect();
-  };
-}, [user?.user?.id]); // ✅ Only depends on logged-in user ID
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusher.disconnect();
+    };
+  }, [user?.user?.id, type === "admin"]); // ✅ Only depends on logged-in user ID
 
   return (
     <>
@@ -88,6 +92,7 @@ console.log(data?.data?.reciever_user_id,user.user.id);
         setChatPopupOpen={setChatPopupOpen}
         selectedUser={selectedUser}
         refetch={refetch}
+        type={type}
       />
       <Dialog
         open={popupOpen}

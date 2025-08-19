@@ -72,7 +72,8 @@ export const AdminHeader = ({ permissions }) => {
         refetch={refetch}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        data={adminchatlist}
+        data={adminchatlist?.chats}
+        type={'admin'}
       />
       <Notification
         userId={user?.id}
@@ -136,9 +137,14 @@ export const AdminHeader = ({ permissions }) => {
               </div>
               <div
                 onClick={handleClick}
-                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+                className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
               >
                 <MessageSquareText className="size-5 text-hrmblue" />
+                {adminchatlist?.employee_unread_count > 0 && (
+                  <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                    {adminchatlist.employee_unread_count}
+                  </div>
+                )}
               </div>
             </>
           )}
