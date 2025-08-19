@@ -128,7 +128,7 @@ export default function EmployeeAccessHeader() {
           </div>
           <div
             onClick={handleClick}
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+            className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <MessageSquareText className="size-5 text-hrmblue" />
             {userchatlist?.employee_unread_count > 0 && (
