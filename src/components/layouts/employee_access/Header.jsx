@@ -25,7 +25,7 @@ export default function EmployeeAccessHeader() {
   const navigate = useNavigate();
 
   const { data: userchatlist, refetch } = useQuery({
-    queryKey: ["userchatlist",user?.user?.id],
+    queryKey: ["userchatlist", user?.user?.id],
     queryFn: () =>
       newRequest.get(ALL_CHAT_LIST).then((res) => {
         // setNotifications(res.data)
@@ -71,7 +71,7 @@ export default function EmployeeAccessHeader() {
         refetch={refetch}
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
-        data={userchatlist}
+        data={userchatlist?.chats}
       />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link
@@ -131,6 +131,11 @@ export default function EmployeeAccessHeader() {
             className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <MessageSquareText className="size-5 text-hrmblue" />
+            {userchatlist?.employee_unread_count > 0 && (
+              <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                {userchatlist.employee_unread_count}
+              </div>
+            )}
           </div>
           <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100">
