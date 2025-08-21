@@ -23,10 +23,9 @@ export default function LeaveAvailability() {
   });
   
 const annual= [leave?.consumed || 0, leave?.remaining || 0]
-const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total') : [];
 
   const data = {
-    labels: annualLabels,
+    labels: ["Consumed", "Remaining"],
     datasets: [
       {
         data: annual,
@@ -46,9 +45,17 @@ const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total')
           padding: 14,
           usePointStyle: true,
         },
-      },leaveData: {
-        total: leave?.total || 0,
-      },  
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.label}: ${tooltipItem.raw} Hrs`;
+          },
+        },
+      },
+      leaveData: {
+        remaining: leave?.remaining || 0,
+      }, 
     },
   };
 
@@ -56,7 +63,7 @@ const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total')
     id: "centerText",
     beforeDraw: (chart) => {
       const { width, height, ctx } = chart;
-      const total =chart?.config?.options?.plugins?.leaveData?.total;
+      const remaining =chart?.config?.options?.plugins?.leaveData?.remaining;
   
       ctx.restore();
       ctx.save();
@@ -67,11 +74,11 @@ const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total')
       ctx.font = "12px sans-serif";
       ctx.fillStyle = "#999";
       ctx.textAlign = "center";
-      ctx.fillText("Total", centerX, centerY - 10);
+      ctx.fillText("Remaining", centerX, centerY - 10);
   
       ctx.font = "bold 16px sans-serif";
       ctx.fillStyle = "#000";
-      ctx.fillText(`${total} Hrs`, centerX, centerY + 10);
+      ctx.fillText(`${remaining} Hrs`, centerX, centerY + 10);
       ctx.restore();
     },
   };

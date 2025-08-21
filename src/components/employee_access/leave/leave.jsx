@@ -22,45 +22,12 @@ export default function LeaveDiagram() {
       });
       
     const annual= [leave?.consumed || 0, leave?.remaining || 0]
-    const annualLabels = leave ? Object.keys(leave).filter((key) => key !== 'total') : [];
   
   const data = {
-    labels: annualLabels,
+    labels: ["Consumed", "Remaining"],
     datasets: [
       {
         data: annual,
-        backgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-        hoverBackgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-      },
-    ],
-  };
-  const data1 = {
-    labels: ["Available", "Consumed", "Annual", "Accrued"],
-    datasets: [
-      {
-        data: [6, 2, 12, 8],
-        backgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-        hoverBackgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-      },
-    ],
-  };
-
-  const data2 = {
-    labels: ["Available", "Consumed", "Annual", "Accrued"],
-    datasets: [
-      {
-        data: [6, 2, 12, 8],
-        backgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-        hoverBackgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
-      },
-    ],
-  };
-
-  const data3 = {
-    labels: ["Available", "Consumed", "Annual", "Accrued"],
-    datasets: [
-      {
-        data: [6, 2, 12, 8],
         backgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
         hoverBackgroundColor: ["#456EF2", "#FFA38F", "#FFD74A", "#FFBC29"],
       },
@@ -79,8 +46,15 @@ export default function LeaveDiagram() {
           usePointStyle: true,
         },
       },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `${tooltipItem.label}: ${tooltipItem.raw} Hrs`;
+          },
+        },
+      },
       leaveData: {
-        total: leave?.total || 0,
+        remaining: leave?.remaining || 0,
       },
     },
   };
@@ -89,7 +63,7 @@ export default function LeaveDiagram() {
     id: "centerText",
     beforeDraw: (chart) => {
       const { width, height, ctx } = chart;
-      const total = chart?.config?.options?.plugins?.leaveData?.total;
+      const remaining = chart?.config?.options?.plugins?.leaveData?.remaining;
   
       ctx.save();
   
@@ -106,12 +80,12 @@ export default function LeaveDiagram() {
       ctx.textAlign = "center";
       ctx.font = "12px sans-serif";
       ctx.fillStyle = "#999";
-      ctx.fillText("Total", centerX, centerY - 10);
+      ctx.fillText("Remaining", centerX, centerY - 10);
   
       // 📍 Draw "XXX Hrs" just below "Total"
       ctx.font = "bold 16px sans-serif";
       ctx.fillStyle = "#000";
-      ctx.fillText(`${total} Hrs`, centerX, centerY + 12);
+      ctx.fillText(`${remaining} Hrs`, centerX, centerY + 12);
   
       ctx.restore();
     },
