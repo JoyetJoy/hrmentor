@@ -175,7 +175,7 @@ export default function ChatBoxList({
                               <span
                                 className={`text-xs ${user?.unread_count > 0 ? "font-semibold text-green-600" : "text-gray-500"}`}
                               >
-                                {formatLastMessageTime(user?.last_message_time)}
+                                {user?.last_message_time ?formatLastMessageTime(user?.last_message_time) :''}
                               </span>
                               {user?.unread_count > 0 && (
                                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-xs font-semibold text-white">
