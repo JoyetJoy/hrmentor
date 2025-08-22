@@ -86,11 +86,11 @@ export const LeaveSidebarList = [
     name: "Availability settings",
     link: "",
   },
-  {
-    id: 3,
-    name: "Advanced settings",
-    link: "",
-  },
+  // {
+  //   id: 3,
+  //   name: "Advanced settings",
+  //   link: "",
+  // },
 ];
 
 export const AddholidayList = [

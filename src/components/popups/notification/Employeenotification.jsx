@@ -13,6 +13,7 @@ const url = import.meta.env.VITE_CHAT_URL;
 
 export default function EmployeeNotification({
   notifications,
+  type,
   notificationPopupOpen,
   setNotificationPopupOpen,
 }) {
@@ -116,6 +117,7 @@ export default function EmployeeNotification({
                   {notification?.data?.map((notification) => (
                     <Link
                       to={
+                        type === 'employee'? "/employee-access/leave/request" :
                         notification?.type === "Shift_claim_open"
                           ? "/employee-access/roster"
                           : "/admin/leave/request/awaitingapproval"

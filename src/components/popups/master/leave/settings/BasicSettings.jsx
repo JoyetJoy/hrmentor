@@ -241,7 +241,7 @@ const BasicSettings = ({ formtype = "save" }) => {
         code: data.code,
         pay_type: data.pay_type,
         description: data.description,
-        units: units,
+        units: 'hours',
         status: data.status,
         valid_from: moment(data.valid_from).format("YYYY-MM-DD"),
         accural_type: accrualType,
@@ -419,33 +419,33 @@ const BasicSettings = ({ formtype = "save" }) => {
                   </span>
                 )}
               </div>
-              <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
-                <label className="required label-text">Units</label>
-                <div className="flex gap-3">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="units"
-                      value={"days"}
-                      onClick={() => setUnits("days")}
-                      className="radio-black"
-                      checked={units == "days"}
-                    />
-                    <label className="text-sm font-normal">Days</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="units"
-                      value="hours"
-                      onClick={() => setUnits("hours")}
-                      className="radio-black"
-                      checked={units === "hours"}
-                    />
-                    <label className="text-sm font-normal">Hours</label>
+                <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
+                  <label className="required label-text">Units</label>
+                  <div className="flex gap-3">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="units"
+                        value={"days"}
+                        onClick={() => setUnits("days")}
+                        className="radio-black"
+                        checked={units == "days"}
+                      />
+                      <label className="text-sm font-normal">Days</label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="units"
+                        value="hours"
+                        onClick={() => setUnits("hours")}
+                        className="radio-black"
+                        checked={units === "hours"}
+                      />
+                      <label className="text-sm font-normal">Hours</label>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
             {/* Description */}
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
@@ -776,7 +776,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                     autoComplete="off"
                     placeholder={`Number of ${units}`}
                     type="number"
-                    min={1}
+                    min={0}
                     defaultValue={0}
                     className="input-box"
                     name="emp_no_days"
@@ -901,7 +901,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                 </div>
               </div>
             )}
-            <div className="group col-span-2 flex flex-col gap-1.5 py-2">
+            {/* <div className="group col-span-2 flex flex-col gap-1.5 py-2">
               <div className="flex justify-between">
                 <p className="text-[0.9rem] font-bold">Carry Forward</p>
                 <div
@@ -926,8 +926,8 @@ const BasicSettings = ({ formtype = "save" }) => {
               <p className="label-text">
                 Number of unused leaves of an employee can be carry forwarded
               </p>
-            </div>
-            {CarryForward_isOn && (
+            </div> */}
+            {/* {CarryForward_isOn && (
               <>
                 <div className="group mt-2 flex flex-col gap-3 text-[0.85rem] font-medium">
                   <p className="text-[0.85rem] font-normal">
@@ -1118,7 +1118,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   )}
                 </div>
               </div>
-            )}
+            )} */}
             {/* Buttons Section */}
             <div className="mt-6 flex items-center justify-end gap-4">
               <button

@@ -11,7 +11,7 @@ import {
   SALARY_DEFAULT_MASTERS,
 } from "@/api/master";
 import { useUserStore } from "@/lib/slices/auth.slice";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { HOLIDAY_AVAILABLE_SETTING, WORK_LOCATIONS } from "@/api";
 import toast from "react-hot-toast";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
@@ -19,18 +19,13 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 // Validation Schema
 const leaveSchema = Yup.object().shape({
   user_id: Yup.string().min(1, "Select at least one department"),
-  department_except: Yup.array().min(1, "Select at least one department"),
   locations_availability: Yup.array().min(1, "Select at least one location"),
-  locations_except: Yup.array().min(1, "Select at least one location"),
   gender_availability: Yup.array().min(1, "Select at least one gender"),
-  gender_except: Yup.array().min(1, "Select at least one gender"),
   role_availability: Yup.array().min(1, "Select at least one role"),
-  role_except: Yup.array().min(1, "Select at least one role"),
 });
 
 const AvailabilitySettings = ({ formtype = "save" }) => {
   const {
-    register,
     handleSubmit,
     control,
     reset,
@@ -40,11 +35,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     resolver: yupResolver(leaveSchema),
   });
 
-  const close = () => {
-    setPopupOpen(false);
-    reset();
-  };
-
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
   const { user } = useUserStore((state) => ({ user: state.user }));
@@ -52,14 +42,13 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
 
   const getStoredData = () => {
     const storedData = localStorage.getItem("myData");
-    return storedData ? JSON.parse(storedData) : null; // Parse only if storedData exists
+    return storedData ? JSON.parse(storedData) : null;
   };
 
   const storedData = getStoredData();
-  const { id: routeId } = useParams(); // Use `routeId` to avoid naming conflicts
+  const { id: routeId } = useParams();
   const [searchParams] = useSearchParams();
 
-  // Determine `id` with priority: searchParams -> routeId -> storedData
   const id = searchParams.get("id") || routeId || storedData?.id || null;
 
   useEffect(() => {
@@ -69,13 +58,9 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
 
   const [availabilitySelection, setAvailabilitySelection] = useState({
     department_availability: [],
-    department_except: [],
     locations_availability: [],
-    locations_except: [],
     gender_availability: [],
-    gender_except: [],
     role_availability: [],
-    role_except: [],
   });
 
   const { isLoading: isLocation, data: location } = useQuery({
@@ -96,10 +81,7 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
         .get(SALARY_DEFAULT_MASTERS, {
           params: { user_id: user?.id },
         })
-        .then((res) => {
-          return res.data.genders;
-        }),
-
+        .then((res) => res.data.genders),
     enabled: !!user?.id,
   });
 
@@ -135,16 +117,50 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
         .then((res) => res.data),
     enabled: !!user?.id && !!id,
   });
+  // Auto-select all options when data loads and no saved availability exists
+useEffect(() => {
+  if (department?.length) {
+    setAvailabilitySelection((prev) => ({
+      ...prev,
+      department_availability: department.map((d) => d.id),
+    }));
+    setValue("department_availability", department.map((d) => d.id));
+  }
+
+  if (location?.length) {
+    setAvailabilitySelection((prev) => ({
+      ...prev,
+      locations_availability: location.map((l) => l.id),
+    }));
+    setValue("locations_availability", location.map((l) => l.id));
+  }
+
+  if (gender?.length) {
+    setAvailabilitySelection((prev) => ({
+      ...prev,
+      gender_availability: gender.map((g) => g.id),
+    }));
+    setValue("gender_availability", gender.map((g) => g.id));
+  }
+
+  if (role?.length) {
+    setAvailabilitySelection((prev) => ({
+      ...prev,
+      role_availability: role.map((r) => r.id),
+    }));
+    setValue("role_availability", role.map((r) => r.id));
+  }
+}, [department, location, gender, role, setValue,id]);
+
 
   useEffect(() => {
     if (availableholidayDetails) {
-      // Filter only the keys that exist in both objects
       const updatedSelection = Object.keys(availabilitySelection).reduce(
         (acc, key) => {
           acc[key] = availableholidayDetails[key] || [];
           return acc;
         },
-        {},
+        {}
       );
 
       setAvailabilitySelection(updatedSelection);
@@ -160,25 +176,26 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
       setLoader(true);
       const formData = {
         holiday_id: id,
-        ...availabilitySelection, // Use spread syntax to avoid listing each field
+        ...availabilitySelection,
       };
-      if (formData.department_availability.length == 0) {
+      if (formData.department_availability.length === 0) {
         return toast.error("Select Department Availability");
       }
-      if (formData.gender_availability.length == 0) {
+      if (formData.gender_availability.length === 0) {
         return toast.error("Select Gender Availability");
       }
-      if (formData.locations_availability.length == 0) {
+      if (formData.locations_availability.length === 0) {
         return toast.error("Select Locations Availability");
       }
-      if (formData.role_availability.length == 0) {
+      if (formData.role_availability.length === 0) {
         return toast.error("Select Role Availability");
       }
 
       const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
 
       if (res.data.success === true) {
-        navigate(`/admin/leave/settings/advancedsettings/${id}`);
+        toast.success("Leave created successfully");
+        navigate(`/admin/leave/settings`);
       }
     } catch (error) {
       const errorMessage =
@@ -189,34 +206,18 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
     }
   };
 
-  const handleSelectChange = (selectedOptions, field, oppositeField) => {
-    // Convert selected options to an array of values
+  const handleSelectChange = (selectedOptions, field) => {
     const selectedValues = selectedOptions.map((option) => option.id);
 
-    // Update the availabilitySelection state for the current field
     setAvailabilitySelection((prev) => ({ ...prev, [field]: selectedValues }));
-
-    // Update the form field value in React Hook Form's control
-    control.setValue(field, selectedValues);
-
-    // Filter out selected values from the opposite field to prevent duplication
-    const filteredOptions = availabilitySelection[oppositeField].filter(
-      (val) => !selectedValues.includes(val),
-    );
-    setAvailabilitySelection((prev) => ({
-      ...prev,
-      [oppositeField]: filteredOptions,
-    }));
-
-    // Update the opposite field value in React Hook Form's control
-    control.setValue(oppositeField, filteredOptions);
+    setValue(field, selectedValues);
   };
 
   return (
     <div className="min-h-[570px] w-full rounded-md bg-white px-5 py-4">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full p-5">
         <div className="flex w-full flex-row items-center justify-between">
-          <h1 className="text-lg font-bold">AvailabilitySettings</h1>
+          <h1 className="text-lg font-bold">Availability Settings</h1>
         </div>
 
         <div className="mt-5 grid gap-x-3 lg:grid-cols-2">
@@ -224,72 +225,55 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
             {[
               {
                 title: "Department",
-                fields: ["department_availability", "department_except"],
-                options: department || [], // Fallback to empty array
+                field: "department_availability",
+                options: department || [],
               },
               {
                 title: "Office locations",
-                fields: ["locations_availability", "locations_except"],
-                options: location || [], // Fallback to empty array
+                field: "locations_availability",
+                options: location || [],
               },
               {
                 title: "Gender",
-                fields: ["gender_availability", "gender_except"],
-                options: gender || [], // Fallback to empty array
+                field: "gender_availability",
+                options: gender || [],
               },
               {
                 title: "Roles",
-                fields: ["role_availability", "role_except"],
-                options: role || [], // Fallback to empty array
+                field: "role_availability",
+                options: role || [],
               },
-            ].map(({ title, fields, options }) => (
+            ].map(({ title, field, options }) => (
               <div key={title} className="flex flex-col gap-3">
                 <div className="text-[0.9rem] font-bold">{title}</div>
-                <div className="grid w-full grid-cols-2 gap-3">
-                  {fields.map((field, idx) => (
-                    <div className="group flex flex-col gap-1.5" key={field}>
-                      <label
-                        className={`label-text ${idx === 0 ? "required" : ""}`}
-                      >
-                        {idx === 0 ? "Available to" : "Except"}
-                      </label>
-                      <Controller
-                        name={field}
-                        control={control}
-                        render={({ field: controllerField }) => (
-                          <Select
-                            {...controllerField}
-                            isSearchable
-                            styles={customSelectStyles}
-                            options={(options || []).filter(
-                              (opt) =>
-                                !availabilitySelection[
-                                  fields[1 - idx]
-                                ].includes(opt.id),
-                            )}
-                            isMulti
-                            value={availabilitySelection[field].map((id) =>
-                              options.find((opt) => opt.id === id),
-                            )}
-                            placeholder={`Select ${title}`}
-                            className="input-box h-fit"
-                            onChange={(selectedOptions) =>
-                              handleSelectChange(
-                                selectedOptions,
-                                field,
-                                fields[1 - idx],
-                              )
-                            }
-                          />
+                <div className="group flex flex-col gap-1.5">
+                  <label className="label-text required">Available to</label>
+                  <Controller
+                    name={field}
+                    control={control}
+                    render={({ field: controllerField }) => (
+                      <Select
+                        {...controllerField}
+                        isSearchable
+                        styles={customSelectStyles}
+                        options={options || []}
+                        isMulti
+                        value={availabilitySelection[field].map((id) =>
+                          options.find((opt) => opt.id === id)
                         )}
+                        placeholder={`Select ${title}`}
+                        className="input-box h-fit"
+                        onChange={(selectedOptions) =>
+                          handleSelectChange(selectedOptions, field)
+                        }
                       />
-                      {errors[field] && (
-                        <span className="text-xs font-medium text-red-500">
-                          {errors[field].message}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                    )}
+                  />
+                  {errors[field] && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors[field].message}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}

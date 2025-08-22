@@ -66,6 +66,7 @@ export default function EmployeeAccessHeader() {
         notifications={notifications}
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
+        type={'employee'}
       />
       <ChatBoxList
         refetch={refetch}

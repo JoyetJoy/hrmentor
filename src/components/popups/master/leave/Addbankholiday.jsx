@@ -111,7 +111,7 @@ export default function AddBankHoliday({
         return toast.error("Please Select Type");
       }
 
-      if (formData.type === "paid" && !formData.percentage) {
+      if (formData.type === "paid" && formData.percentage < 0) {
         return toast.error("Percentage is manditory");
       }
       if (selectedField) {
