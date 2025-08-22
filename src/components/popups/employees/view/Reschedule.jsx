@@ -45,7 +45,7 @@ const Reschedule = ({ popupOpen, setPopupOpen, type, id, data, refetch, joinDate
         toast.error("Work email is missing. Please add it to proceed.");
         return;
       }
-      else if(type==='status' && dbs?.listing.length==0 && status===4){
+      else if(type==='status' && data?.business_type_id === 2 && dbs?.listing.length==0 && status===4){
         toast.error("DBS is missing. Please add it to proceed.");
         return;
       }
