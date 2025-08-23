@@ -29,9 +29,10 @@ export default function Notification({
   }, [notifications]);
 
   useEffect(() => {
-    if (!user?.user?.id) return; // Prevent subscription if user ID is missing
+    if (!user?.user?.id && type !== "admin") return; // Prevent subscription if user ID is missing
 
     const token = localStorage.getItem("token");
+    const id = user?.user?.id ? user.user.id : type === "admin" ? 1 : "";
 
     const pusher = new Pusher("469a7dd00053f2be95f4", {
       cluster: "ap2",
@@ -47,7 +48,7 @@ export default function Notification({
     });
 
     // Subscribe to the private channel
-    const channel = pusher.subscribe(`private-notification.${user?.user?.id}`);
+    const channel = pusher.subscribe(`private-notification.${id}`);
 
     pusher.connection.bind("error", function (err) {
       console.error("Pusher Error:", err);
@@ -76,7 +77,7 @@ export default function Notification({
       channel.unsubscribe();
       pusher.disconnect();
     };
-  }, [user?.user?.id]);
+  }, [user?.user?.id, type === "admin"]);
 
   const handleClick = async (notificationId) => {
     if (!notificationId) return;

@@ -77,8 +77,8 @@ export const AdminHeader = ({ permissions }) => {
       />
       <Notification
         userId={user?.id}
+        type={'admin'}
         notifications={notifications}
-        setN
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
       />
