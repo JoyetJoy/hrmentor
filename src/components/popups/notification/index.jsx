@@ -13,6 +13,7 @@ const url = import.meta.env.VITE_CHAT_URL;
 
 export default function Notification({
   notifications,
+  type,
   notificationPopupOpen,
   setNotificationPopupOpen,
 }) {
