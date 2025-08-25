@@ -58,10 +58,15 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
 
   const [availabilitySelection, setAvailabilitySelection] = useState({
     department_availability: [],
+    department_except: [],
     locations_availability: [],
+    locations_except: [],
     gender_availability: [],
+    gender_except: [],
     role_availability: [],
+    role_except: [],
   });
+
 
   const { isLoading: isLocation, data: location } = useQuery({
     queryKey: ["location", user?.id],
