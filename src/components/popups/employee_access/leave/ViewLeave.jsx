@@ -33,7 +33,7 @@ export default function ViewLeave({
         cell: ({ row }) => {
           return (
             <div className="">
-              {row.index + 1 + (currentPage - 1) * pageLimit}
+              {row.index + 1}
             </div>
           );
         },
@@ -42,41 +42,13 @@ export default function ViewLeave({
         header: "Date",
         accessorKey: "date",
         cell: ({ row }) => (
-          <div className="">
-            <p>{row?.original?.unique_id}||0</p>
-          </div>
+            <p>{row?.original?.date}||0000-00-00</p>
         ),
       },
       {
         header: "Shift",
-        accessorKey: "shift",
-        cell: ({ row }) => (
-          <div className="">
-            <p>{row?.original?.employee_name || "-"}</p>
-          </div>
-        ),
-      },
-      {
-        header: "Leave Type",
-        accessorKey: "leave_type",
-        cell: ({ row }) => (
-          <div className="">
-            <p>{row?.original?.from_date}||0</p>
-          </div>
-        ),
-      },
-      {
-        header: "End date",
-        accessorKey: "tue",
-        cell: ({ row }) => <p className="">{row?.original?.to_date}</p>,
-      },
-      {
-        header: "Leave type",
-        accessorKey: "type",
-        cell: ({ row }) => (
-          <p className="">{row?.original?.leave_type_name || "NA"}</p>
-        ),
-      },
+        accessorKey: "shift_name",
+      }
     ],
     [],
   );
@@ -157,7 +129,7 @@ export default function ViewLeave({
               <div className="mt-2 flex w-full items-center justify-between gap-3">
                 <QueryTable
                   columns={columns}
-                  list={[]}
+                  list={employeeLeaveRequestDetails?.leave_period}
                 />
                 {/* <button
                   type="button"
