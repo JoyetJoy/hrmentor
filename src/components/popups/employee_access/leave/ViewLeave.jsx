@@ -25,6 +25,7 @@ export default function ViewLeave({
 
   function close() {
     setViewLeavePopupOpen(false);
+    setShowLeaveDetail(false);
   }
   const columns = React.useMemo(
     () => [

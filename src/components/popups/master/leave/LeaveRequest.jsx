@@ -81,6 +81,7 @@ export default function LeaveRequest({
 
   function close() {
     setPopupOpen(false);
+    setShowLeaveDetail(false);
     reset();
   }
 
