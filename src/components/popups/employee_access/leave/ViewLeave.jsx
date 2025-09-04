@@ -126,7 +126,7 @@ export default function ViewLeave({
                   {employeeLeaveRequestDetails?.reason}
                 </p>
               </div>
-              <div className="mt-2 flex w-full items-center justify-between gap-3">
+              <div className="mt-2 col-span-2 w-full items-center justify-between gap-3">
                 <QueryTable
                   columns={columns}
                   list={employeeLeaveRequestDetails?.leave_period}
