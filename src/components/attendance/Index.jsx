@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Clock3, Trash2, X } from "lucide-react";
+import { ChevronDown, Clock3, MapPin, Trash2, X } from "lucide-react";
 import AddEntryModal from "./AddEntry";
 import toast from "react-hot-toast";
 import { newRequest } from "@/api";
@@ -7,13 +7,16 @@ import { useQuery } from "@tanstack/react-query";
 import { ATTENDANCE_GET, CHANGE_ATTENDANCE } from "@/api/master";
 import dayjs from "dayjs";
 
-const Options = [{
-  Title:'Present',
-  value:'Present'
-},{
-  Title:'Absent',
-  value:'Absent'
-},]
+const Options = [
+  {
+    Title: "Present",
+    value: "Present",
+  },
+  {
+    Title: "Absent",
+    value: "Absent",
+  },
+];
 const Index = ({ attendance, setAttendance, empId, refetch }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [addEntry, setAddEntry] = useState(false);
@@ -27,16 +30,18 @@ const Index = ({ attendance, setAttendance, empId, refetch }) => {
     status: "",
   });
 
-const id = empId?.attendance?.attendance_id;
-  const { data, isLoading,refetch:refetchData } = useQuery({
+  const id = empId?.attendance?.attendance_id;
+  const {
+    data,
+    isLoading,
+    refetch: refetchData,
+  } = useQuery({
     queryKey: ["attendanceData", id],
     queryFn: () =>
-      newRequest
-        .get(`${ATTENDANCE_GET}?id=${id}`)
-        .then((res) => res.data),
+      newRequest.get(`${ATTENDANCE_GET}?id=${id}`).then((res) => res.data),
     enabled: !!id,
   });
- 
+
   useEffect(() => {
     if (!empId?.attendance?.attendance_id) {
       setLeave(empId?.attendance?.status);
@@ -112,6 +117,16 @@ const id = empId?.attendance?.attendance_id;
     setEntry();
     setAttendance(false);
   };
+
+  const openMap = () => {
+    if (data?.latitude && data?.longitude) {
+      const url = `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+      window.open(url, "_blank"); // opens in a new tab
+    } else {
+      toast.error("Location not available");
+    }
+  };
+
   return (
     <div className="flex justify-end">
       <AddEntryModal
@@ -235,6 +250,14 @@ const id = empId?.attendance?.attendance_id;
                     className="w-full object-contain"
                   />
                 </p>
+                {data?.latitude && data?.longitude && (
+                  <p
+                    onClick={() => openMap()}
+                    className="mr-2 flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+                  >
+                    <MapPin size={20} />
+                  </p>
+                )}
                 <p
                   onClick={() => deleteEntry()}
                   className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
@@ -265,16 +288,16 @@ const id = empId?.attendance?.attendance_id;
             {isDropdownOpen && (
               <div className="absolute bottom-14 left-36 mt-2 w-32 rounded-lg bg-white text-black shadow-lg">
                 <ul className="p-2">
-                  {Options.map((option)=>(
+                  {Options.map((option) => (
                     <li
-                    onClick={() => {
-                      setLeave(option.value);
-                      setIsDropdownOpen(false);
-                    }}
-                    className="cursor-pointer p-2 hover:bg-gray-200"
-                  >
-                    {option.Title}
-                  </li>
+                      onClick={() => {
+                        setLeave(option.value);
+                        setIsDropdownOpen(false);
+                      }}
+                      className="cursor-pointer p-2 hover:bg-gray-200"
+                    >
+                      {option.Title}
+                    </li>
                   ))}
                 </ul>
               </div>

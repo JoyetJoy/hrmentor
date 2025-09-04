@@ -67,7 +67,7 @@ export const AdminLayout = () => {
   return token ? (
     <>
       <ScrollBack />
-      <div className="w-full h-full bg-gray-100 px-12 py-4">
+      <div className="w-full h-full bg-gray-100 px-12 py-4 min-h-screen">
         <AdminHeader permissions={permissions}/>
         <Outlet />
       </div>

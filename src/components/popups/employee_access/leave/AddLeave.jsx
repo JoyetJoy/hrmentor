@@ -418,9 +418,15 @@ console.log(fromDate,toDate);
                           className="mt-4 flex items-center justify-center gap-3 border-t"
                         >
                           {/* Display the date */}
-                          <h1 className="mt-4 whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
+                          <div className="flex items-center justify-center flex-col">
+                            <p>
+                              <label htmlFor="dayoff">Mark as dayoff</label>
+                              <input type="checkbox" name="dayoff" id="" />
+                            </p>
+                            <h1 className="whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
                             {date.date}
                           </h1>
+                          </div>
 
                           {/* Shift Selection */}
                           <div className="mt-4 w-full">

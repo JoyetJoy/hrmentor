@@ -14,40 +14,6 @@ import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { formatDateRange } from "@/utils/helpers";
 import Paynow from "@/components/payroll/Paynow";
-import dayjs from "dayjs";
-
-const summaryData = [
-  { label: "Total Working hours", value: "240 hr 00 min" },
-  { label: "Overtime", value: "02 hr 30 min" },
-  { label: "Overtime per week", value: "£300" },
-  { label: "Paid Holidays", value: "5" },
-  { label: "Paid holiday credit", value: "120" },
-  { label: "Unpaid Holiday", value: "5" },
-  { label: "Unpaid Leave deduction", value: "5" },
-  { label: "Salary", value: "£25250" },
-  { label: "Payment status", value: "Not paid" },
-];
-
-const tableData = [
-  {
-    date: "01/11/2023",
-    shift: "Morning Shift",
-    clockedIn: "08:00 AM",
-    clockedOut: "11:00 AM",
-    totalBT: "30 Min",
-    otHours: "02 hr 0 min",
-    totalWorked: "09 hr 0 min",
-  },
-  {
-    date: "01/11/2023",
-    shift: "Morning Shift",
-    clockedIn: "08:00 AM",
-    clockedOut: "11:00 AM",
-    totalBT: "30 Min",
-    otHours: "02 hr 0 min",
-    totalWorked: "09 hr 0 min",
-  },
-];
 
 export default function PayrollListEdit() {
   const [popupOpen, setPopupOpen] = useState(false);
@@ -115,10 +81,10 @@ export default function PayrollListEdit() {
         header: "Total BT",
         accessorKey: "total_break_time",
       },
-      {
-        header: "OT Hours",
-        accessorKey: "total_overtime",
-      },
+      // {
+      //   header: "OT Hours",
+      //   accessorKey: "total_overtime",
+      // },
       {
         header: "Total Worked hrs",
         accessorKey: "total_working_hour",
@@ -229,7 +195,7 @@ export default function PayrollListEdit() {
                   {data && data[0]?.total_overtime}
                 </span>
               </div>
-              <div className="summary-row flex items-center justify-between border-b py-2">
+              {/* <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Overtime per week</span>
                 <span className="value text-md font-semibold text-gray-900">
                   0
@@ -260,7 +226,7 @@ export default function PayrollListEdit() {
                 <span className="value text-md font-semibold text-gray-900">
                   0
                 </span>
-              </div>
+              </div> */}
               <div className="summary-row flex items-center justify-between border-b py-2">
                 <span className="label text-gray-700">Salary</span>
                 <span className="value text-md font-semibold text-gray-900">

@@ -1,4 +1,4 @@
-import Leave from "@/pages/employee_access/leave";
+import  Leave from "@/pages/employee_access/leave";
 import BankHoliday from "@/pages/employee_access/leave/BankHoliday";
 import TeamLeaveRequest from "@/pages/employee_access/leave/team";
 import TeamLeave from "@/pages/employee_access/leave/TeamLeave";
