@@ -251,7 +251,7 @@ export default function LeaveRequest({
               )}
               <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <p>View leave details</p>
-                <ChevronDown size={20} onClick={()=> setShowLeaveDetail(true)}/>
+                <ChevronDown size={20} onClick={()=> setShowLeaveDetail(!showLeaveDetail)}/>
               </div>
               {showLeaveDetail && (
                 <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
