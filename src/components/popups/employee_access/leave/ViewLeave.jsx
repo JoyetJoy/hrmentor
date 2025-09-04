@@ -32,24 +32,18 @@ export default function ViewLeave({
         header: "Sl.no",
         accessorKey: "sno",
         cell: ({ row }) => {
-          return (
-            <div className="">
-              {row.index + 1}
-            </div>
-          );
+          return <div className="">{row.index + 1}</div>;
         },
       },
       {
         header: "Date",
         accessorKey: "date",
-        cell: ({ row }) => (
-            <p>{row?.original?.date ||'0000-00-00'}</p>
-        ),
+        cell: ({ row }) => <p>{row?.original?.date || "0000-00-00"}</p>,
       },
       {
         header: "Shift",
         accessorKey: "shift_name",
-      }
+      },
     ],
     [],
   );
@@ -127,25 +121,39 @@ export default function ViewLeave({
                   {employeeLeaveRequestDetails?.reason}
                 </p>
               </div>
-              <div className="mt-2 col-span-2 w-full items-center justify-between gap-3">
-                <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
-                <p>View leave details</p>
-                <ChevronDown size={20} onClick={()=> setShowLeaveDetail(!showLeaveDetail)}/>
+              <div className="col-span-2 mt-2 w-full items-center justify-between gap-3">
+                <div className="groupmb-2 flex items-center gap-3 text-[0.85rem] font-medium">
+                  <p>View leave details</p>
+                  <ChevronDown
+                    size={20}
+                    className={`cursor-pointer transition-transform duration-300 ${
+                      showLeaveDetail ? "rotate-180" : ""
+                    }`}
+                    onClick={() => setShowLeaveDetail(!showLeaveDetail)}
+                  />
+                </div>
+
+                <div
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    showLeaveDetail
+                      ? "max-h-[500px] opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <QueryTable
+                    columns={columns}
+                    list={employeeLeaveRequestDetails?.leave_period}
+                  />
+                </div>
               </div>
-              {showLeaveDetail && (
-                <QueryTable
-                  columns={columns}
-                  list={employeeLeaveRequestDetails?.leave_period}
-                />
-              )}
-                {/* <button
+
+              {/* <button
                   type="button"
                   onClick={close}
                   className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
                 >
                   Close
                 </button> */}
-              </div>
             </div>
           </DialogPanel>
         </div>
