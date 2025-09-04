@@ -39,6 +39,7 @@ export default function AddLeave({
   const [leaveReason, setLeaveReason] = useState("");
   const [teamList, setTeamList] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
+  const [dayOffDates, setDayOffDates] = useState([]);
 
   const {
     register,
@@ -51,7 +52,7 @@ export default function AddLeave({
     mode: "onSubmit",
     resolver: yupResolver(LeaveSchema),
   });
-console.log(user);
+  console.log(user);
 
   function close() {
     setPopupOpen(false);
@@ -94,16 +95,29 @@ console.log(user);
   }, [employeeTeamList]);
 
   const { data: employeeLeaveShift = [] } = useQuery({
-    queryKey: ["employeeLeaveShift", fromDate, toDate, user?.employee_data, selectedLeaveType],
+    queryKey: [
+      "employeeLeaveShift",
+      fromDate,
+      toDate,
+      user?.employee_data,
+      selectedLeaveType,
+    ],
     queryFn: () =>
       newRequest
         .get(EMPLOYEE_LEAVE_SHIFTS, {
-          params: { from_date: fromDate, to_date: toDate, employee_id: employeeTeamHoliday? employeeId :user?.employee_data?.id },
+          params: {
+            from_date: fromDate,
+            to_date: toDate,
+            employee_id: employeeTeamHoliday
+              ? employeeId
+              : user?.employee_data?.id,
+          },
         })
         .then((res) => res.data),
-    enabled: !!fromDate && !!toDate && !!user?.employee_data && !! selectedLeaveType,
+    enabled:
+      !!fromDate && !!toDate && !!user?.employee_data && !!selectedLeaveType,
   });
-console.log(fromDate,toDate);
+  console.log(fromDate, toDate);
 
   useEffect(() => {
     if (employeeLeaveShift?.length) {
@@ -155,9 +169,7 @@ console.log(fromDate,toDate);
           if (employeeLeaveType?.length) {
             const options = employeeLeaveType
               .filter(
-                (type) =>
-                  type.already_taked_leaves <
-                  Number(type?.emp_no_days),
+                (type) => type.already_taked_leaves < Number(type?.emp_no_days),
               )
               .map((type) => ({
                 label: type.display_name,
@@ -251,7 +263,14 @@ console.log(fromDate,toDate);
     const updatedData = dateRange.filter((_, i) => i !== index); // Remove the item at the given index
     setDateRange(updatedData); // Update the state
   };
-  
+
+  const handleDayOffToggle = (date, checked) => {
+    if (checked) {
+      setDayOffDates((prev) => [...prev, date]);
+    } else {
+      setDayOffDates((prev) => prev.filter((d) => d !== date));
+    }
+  };
 
   const onSubmit = async () => {
     setLoader(true);
@@ -418,14 +437,26 @@ console.log(fromDate,toDate);
                           className="mt-4 flex items-center justify-center gap-3 border-t"
                         >
                           {/* Display the date */}
-                          <div className=" w-ful min-w-36 flex gap-2 justify-center flex-col">
-                            <p className="w-full flex gap-2">
-                              <input type="checkbox" name="dayoff" id="" />
-                              <label htmlFor="dayoff" className="text-xs">Mark as dayoff</label>
+                          <div className="w-ful mt-4 flex min-w-36 flex-col justify-center gap-2">
+                            <p className="flex w-full gap-2">
+                              <input
+                                type="checkbox"
+                                name="dayoff"
+                                checked={dayOffDates.includes(date.date)}
+                                onChange={(e) =>
+                                  handleDayOffToggle(
+                                    date.date,
+                                    e.target.checked,
+                                  )
+                                }
+                              />
+                              <label htmlFor="dayoff" className="text-xs">
+                                Mark as dayoff
+                              </label>
                             </p>
-                            <h1 className="whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
-                            {date.date}
-                          </h1>
+                            <h1 className="w-full whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
+                              {date.date}
+                            </h1>
                           </div>
 
                           {/* Shift Selection */}
@@ -447,6 +478,7 @@ console.log(fromDate,toDate);
                                   value={shiftOptions.find(
                                     (option) => option.value === field.value,
                                   )} // Set the current value
+                                  isDisabled={dayOffDates.includes(date.date)}
                                 />
                               )}
                             />
@@ -472,6 +504,7 @@ console.log(fromDate,toDate);
                                   value={leaveSchedule.find(
                                     (option) => option.value === field.value,
                                   )} // Set the current value
+                                  isDisabled={dayOffDates.includes(date.date)}
                                 />
                               )}
                             />
