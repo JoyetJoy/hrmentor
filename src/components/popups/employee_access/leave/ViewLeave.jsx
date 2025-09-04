@@ -12,6 +12,7 @@ export default function ViewLeave({
   selectedId,
 }) {
   const [loader, setLoader] = useState(false);
+  const [showLeaveDetail, setShowLeaveDetail] = useState(false);
 
   const { data: employeeLeaveRequestDetails = [] } = useQuery({
     queryKey: ["employeeLeaveRequestDetails", selectedId],
@@ -127,10 +128,16 @@ export default function ViewLeave({
                 </p>
               </div>
               <div className="mt-2 col-span-2 w-full items-center justify-between gap-3">
+                <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
+                <p>View leave details</p>
+                <ChevronDown size={20} onClick={()=> setShowLeaveDetail(!showLeaveDetail)}/>
+              </div>
+              {showLeaveDetail && (
                 <QueryTable
                   columns={columns}
                   list={employeeLeaveRequestDetails?.leave_period}
                 />
+              )}
                 {/* <button
                   type="button"
                   onClick={close}
