@@ -420,8 +420,8 @@ console.log(fromDate,toDate);
                           {/* Display the date */}
                           <div className="flex items-center justify-center flex-col">
                             <p>
-                              <label htmlFor="dayoff">Mark as dayoff</label>
                               <input type="checkbox" name="dayoff" id="" />
+                              <label htmlFor="dayoff" className="text-xs">Mark as dayoff</label>
                             </p>
                             <h1 className="whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
                             {date.date}
