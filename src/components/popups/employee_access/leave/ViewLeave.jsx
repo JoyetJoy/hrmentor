@@ -1,5 +1,6 @@
 import { newRequest } from "@/api";
 import { EMPLOYEE_LEAVE_REQUEST_DEATAILS } from "@/api/master";
+import QueryTable from "@/components/table/QueryTable";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { X } from "lucide-react";
@@ -24,6 +25,62 @@ export default function ViewLeave({
   function close() {
     setViewLeavePopupOpen(false);
   }
+  const columns = React.useMemo(
+    () => [
+      {
+        header: "Sl.no",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="">
+              {row.index + 1 + (currentPage - 1) * pageLimit}
+            </div>
+          );
+        },
+      },
+      {
+        header: "Date",
+        accessorKey: "date",
+        cell: ({ row }) => (
+          <div className="">
+            <p>{row?.original?.unique_id}||0</p>
+          </div>
+        ),
+      },
+      {
+        header: "Shift",
+        accessorKey: "shift",
+        cell: ({ row }) => (
+          <div className="">
+            <p>{row?.original?.employee_name || "-"}</p>
+          </div>
+        ),
+      },
+      {
+        header: "Leave Type",
+        accessorKey: "leave_type",
+        cell: ({ row }) => (
+          <div className="">
+            <p>{row?.original?.from_date}||0</p>
+          </div>
+        ),
+      },
+      {
+        header: "End date",
+        accessorKey: "tue",
+        cell: ({ row }) => <p className="">{row?.original?.to_date}</p>,
+      },
+      {
+        header: "Leave type",
+        accessorKey: "type",
+        cell: ({ row }) => (
+          <p className="">{row?.original?.leave_type_name || "NA"}</p>
+        ),
+      },
+    ],
+    [],
+  );
+
   return (
     <Dialog
       open={viewLeavePopupOpen}
@@ -98,13 +155,17 @@ export default function ViewLeave({
                 </p>
               </div>
               <div className="mt-2 flex w-full items-center justify-between gap-3">
-                <button
+                <QueryTable
+                  columns={columns}
+                  list={employeeLeaveRequestDetails?.data}
+                />
+                {/* <button
                   type="button"
                   onClick={close}
                   className="flex h-11 w-fit min-w-40 cursor-pointer items-center justify-center gap-2 rounded-md border border-black text-sm font-semibold text-black focus:outline-none"
                 >
                   Close
-                </button>
+                </button> */}
               </div>
             </div>
           </DialogPanel>
