@@ -285,6 +285,7 @@ console.log(dayOffDates);
         leave_start_date: fromDate,
         leave_end_date: toDate,
         leave_reason: leaveReason,
+        day_off_date: dayOffDates
       };
 
       if (
