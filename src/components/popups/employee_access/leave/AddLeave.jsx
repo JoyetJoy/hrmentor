@@ -271,6 +271,7 @@ export default function AddLeave({
       setDayOffDates((prev) => prev.filter((d) => d !== date));
     }
   };
+console.log(dayOffDates);
 
   const onSubmit = async () => {
     setLoader(true);
