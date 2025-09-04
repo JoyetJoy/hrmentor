@@ -90,24 +90,18 @@ export default function LeaveRequest({
         header: "Sl.no",
         accessorKey: "sno",
         cell: ({ row }) => {
-          return (
-            <div className="">
-              {row.index + 1}
-            </div>
-          );
+          return <div className="">{row.index + 1}</div>;
         },
       },
       {
         header: "Date",
         accessorKey: "date",
-        cell: ({ row }) => (
-            <p>{row?.original?.date ||'0000-00-00'}</p>
-        ),
+        cell: ({ row }) => <p>{row?.original?.date || "0000-00-00"}</p>,
       },
       {
         header: "Shift",
         accessorKey: "shift_name",
-      }
+      },
     ],
     [],
   );
@@ -251,22 +245,34 @@ export default function LeaveRequest({
               )}
               <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <p>View leave details</p>
-                <ChevronDown size={20} onClick={()=> setShowLeaveDetail(!showLeaveDetail)}/>
+                <ChevronDown
+                  size={20}
+                  className={`cursor-pointer transition-transform duration-300 ${
+                    showLeaveDetail ? "rotate-180" : ""
+                  }`}
+                  onClick={() => setShowLeaveDetail(!showLeaveDetail)}
+                />
               </div>
-              {showLeaveDetail && (
-                <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
+
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showLeaveDetail
+                    ? "mt-5 max-h-[500px] opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
                 <QueryTable
                   columns={columns}
                   list={leaveDetails?.leave_period}
                 />
               </div>
-              )}
+
               <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <div className="flex items-center gap-2">
                   <input
                     type="radio"
                     name="leaveStatus"
-                    disabled={ViewEdit === 'view'}
+                    disabled={ViewEdit === "view"}
                     value="pending"
                     onClick={() => {
                       setRejected(false);
@@ -281,7 +287,7 @@ export default function LeaveRequest({
                   <input
                     type="radio"
                     name="leaveStatus"
-                    disabled={ViewEdit === 'view'}
+                    disabled={ViewEdit === "view"}
                     value="approved"
                     onClick={() => {
                       setRejected(false);
@@ -296,7 +302,7 @@ export default function LeaveRequest({
                   <input
                     type="radio"
                     name="leaveStatus"
-                    disabled={ViewEdit === 'view'}
+                    disabled={ViewEdit === "view"}
                     value="rejected"
                     onClick={() => {
                       setRejected(true);

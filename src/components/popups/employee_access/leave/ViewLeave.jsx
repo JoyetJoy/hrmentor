@@ -122,7 +122,7 @@ export default function ViewLeave({
                 </p>
               </div>
               <div className="col-span-2 mt-2 w-full items-center justify-between gap-3">
-                <div className="groupmb-2 flex items-center gap-3 text-[0.85rem] font-medium">
+                <div className="group mb-2 flex items-center gap-3 text-[0.85rem] font-medium">
                   <p>View leave details</p>
                   <ChevronDown
                     size={20}
