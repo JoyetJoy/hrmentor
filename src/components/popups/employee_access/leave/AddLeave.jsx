@@ -440,6 +440,9 @@ console.log(dayOffDates);
                         >
                           {/* Display the date */}
                           <div className="w-ful mt-4 flex min-w-36 flex-col justify-center gap-2">
+                            <h1 className="w-full whitespace-nowrap text-sm font-semibold text-textcolor-darkCharcoal">
+                              {date.date}
+                            </h1>
                             <p className="flex w-full gap-2">
                               <input
                                 type="checkbox"
@@ -456,9 +459,6 @@ console.log(dayOffDates);
                                 Mark as dayoff
                               </label>
                             </p>
-                            <h1 className="w-full whitespace-nowrap text-xs font-semibold text-textcolor-darkCharcoal">
-                              {date.date}
-                            </h1>
                           </div>
 
                           {/* Shift Selection */}
