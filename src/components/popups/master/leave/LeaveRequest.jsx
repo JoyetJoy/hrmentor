@@ -18,6 +18,7 @@ export default function LeaveRequest({
   ViewEdit,
 }) {
   const [showLeaveList, setShowLeaveList] = useState(false);
+  const [showLeaveDetail, setShowLeaveDetail] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [reason, setReason] = useState(null);
   const [rejected, setRejected] = useState(false);
@@ -249,11 +250,17 @@ export default function LeaveRequest({
                 </div>
               )}
               <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
+                <p>View leave details</p>
+                <ChevronDown size={20} onClick={()=> setShowLeaveDetail(true)}/>
+              </div>
+              {showLeaveDetail && (
+                <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <QueryTable
                   columns={columns}
                   list={leaveDetails?.leave_period}
                 />
               </div>
+              )}
               <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <div className="flex items-center gap-2">
                   <input
