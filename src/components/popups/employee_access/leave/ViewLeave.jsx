@@ -3,7 +3,7 @@ import { EMPLOYEE_LEAVE_REQUEST_DEATAILS } from "@/api/master";
 import QueryTable from "@/components/table/QueryTable";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
-import { X } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import React, { useState } from "react";
 
 export default function ViewLeave({
