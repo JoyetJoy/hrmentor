@@ -418,8 +418,8 @@ console.log(fromDate,toDate);
                           className="mt-4 flex items-center justify-center gap-3 border-t"
                         >
                           {/* Display the date */}
-                          <div className="flex items-center justify-center flex-col">
-                            <p>
+                          <div className=" w-ful min-w-36 flex gap-2 justify-center flex-col">
+                            <p className="w-full flex gap-2">
                               <input type="checkbox" name="dayoff" id="" />
                               <label htmlFor="dayoff" className="text-xs">Mark as dayoff</label>
                             </p>
