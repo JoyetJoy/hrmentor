@@ -9,6 +9,7 @@ import { newRequest } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { ADMIN_EMPLOYEE_LEAVE_UPDATE, LEAVE_REQUEST_LIST } from "@/api/master";
 import { useUserStore } from "@/lib/slices/auth.slice";
+import QueryTable from "@/components/table/QueryTable";
 
 export default function LeaveRequest({
   popupOpen,
@@ -81,6 +82,34 @@ export default function LeaveRequest({
     setPopupOpen(false);
     reset();
   }
+
+  const columns = React.useMemo(
+    () => [
+      {
+        header: "Sl.no",
+        accessorKey: "sno",
+        cell: ({ row }) => {
+          return (
+            <div className="">
+              {row.index + 1}
+            </div>
+          );
+        },
+      },
+      {
+        header: "Date",
+        accessorKey: "date",
+        cell: ({ row }) => (
+            <p>{row?.original?.date ||'0000-00-00'}</p>
+        ),
+      },
+      {
+        header: "Shift",
+        accessorKey: "shift_name",
+      }
+    ],
+    [],
+  );
 
   return (
     <Dialog
@@ -219,6 +248,12 @@ export default function LeaveRequest({
                   </div>
                 </div>
               )}
+              <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
+                <QueryTable
+                  columns={columns}
+                  list={leaveDetails?.leave_period}
+                />
+              </div>
               <div className="group mt-5 flex items-center gap-3 text-[0.85rem] font-medium">
                 <div className="flex items-center gap-2">
                   <input

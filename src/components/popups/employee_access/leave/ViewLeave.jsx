@@ -42,7 +42,7 @@ export default function ViewLeave({
         header: "Date",
         accessorKey: "date",
         cell: ({ row }) => (
-            <p>{row?.original?.date}||0000-00-00</p>
+            <p>{row?.original?.date ||'0000-00-00'}</p>
         ),
       },
       {
