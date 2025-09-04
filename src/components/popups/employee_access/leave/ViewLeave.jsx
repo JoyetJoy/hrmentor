@@ -157,7 +157,7 @@ export default function ViewLeave({
               <div className="mt-2 flex w-full items-center justify-between gap-3">
                 <QueryTable
                   columns={columns}
-                  list={employeeLeaveRequestDetails?.data}
+                  list={[]}
                 />
                 {/* <button
                   type="button"
