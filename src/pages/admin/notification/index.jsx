@@ -63,7 +63,7 @@ export default function Notification() {
               </div>
               <p className="mt-1 text-sm text-gray-600">{notification.data}</p>
               <p className="mt-1 text-xs text-gray-400">
-                {dayjs(notification.time).format("DD/MM/YYYY")}
+                {dayjs(notification.created_at).format("DD/MM/YYYY")}
               </p>
             </div>
           ))}
