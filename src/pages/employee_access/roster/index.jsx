@@ -139,31 +139,38 @@ const EmployeeAccessRosterCalendar = () => {
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
 
-    const leaveEvents =
-      events?.result?.flatMap((event) => {
-        if (!Array.isArray(event.leave)) return [];
+    // ✅ Deduplicate leave events
+  const leaveEventMap = new Map();
+  events?.result?.forEach((event) => {
+    if (Array.isArray(event.leave)) {
+      event.leave.forEach((leaveEntry) => {
+        if (
+          Array.isArray(leaveEntry.leave_dates) &&
+          leaveEntry.leave_dates.includes(formattedDate)
+        ) {
+          const key = `${leaveEntry.leave_type_id}_${formattedDate}`;
+          if (!leaveEventMap.has(key)) {
+            leaveEventMap.set(key, {
+              ...leaveEntry,
+              shift_id: event.shift_id,
+              shift_name: event.shift_name,
+              user_id: event.user_id,
+              event_id: event.id,
+            });
+          }
+        }
+      });
+    }
+  });
+  const leaveEvents = Array.from(leaveEventMap.values());
 
-        return event.leave
-          .filter(
-            (leaveEntry) =>
-              Array.isArray(leaveEntry.leave_dates) &&
-              leaveEntry.leave_dates.includes(formattedDate),
-          )
-          .map((leaveEntry) => ({
-            ...leaveEntry,
-            shift_id: event.shift_id,
-            shift_name: event.shift_name,
-            user_id: event.user_id,
-            event_id: event.id,
-          }));
-      }) || [];
 
     return {
       holidayEvents,
       shiftEvents,
       availableSlots,
       requestedSlots,
-      leaveEvents,
+      leaveEvents
     };
   };
 
