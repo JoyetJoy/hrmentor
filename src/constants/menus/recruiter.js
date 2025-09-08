@@ -22,15 +22,15 @@ export const getrecruiterMenu = (permissions = []) => [
       },]
       : []
   ),
-  ...(
-    permissions.includes("report-list")
-      ? [{
-        id: 5,
-        name: "Reports",
-        link: "/admin/recruiter/reports/job-reports",
-      },]
-      : []
-  ),
+  // ...(
+  //   permissions.includes("report-list")
+  //     ? [{
+  //       id: 5,
+  //       name: "Reports",
+  //       link: "/admin/recruiter/reports/job-reports",
+  //     },]
+  //     : []
+  // ),
   {
     id: 6,
     name: "Interviews",
