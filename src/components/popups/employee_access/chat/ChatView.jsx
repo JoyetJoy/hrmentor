@@ -34,7 +34,7 @@ export default function ChatView({
       refetch();
       return res.data;
     },
-    enabled: !!selectedUser?.last_message?.id,
+    enabled: selectedUser?.unread_count !== 0,
   });
 
 const { data: chatlist, refetch:chatrefetch } = useQuery({
