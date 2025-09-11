@@ -34,7 +34,7 @@ export default function EmployeeAccessHeader() {
     enabled: !!user?.user?.id,
   });
 
-  const unreadChats = userchatlist.chats.filter(chat => chat.unread_count > 0).length;
+  const unreadChats = userchatlist?.chats.filter(chat => chat.unread_count > 0).length;
 
 
   const { data: notifications, isLoading } = useQuery({
