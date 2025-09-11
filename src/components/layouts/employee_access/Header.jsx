@@ -34,6 +34,9 @@ export default function EmployeeAccessHeader() {
     enabled: !!user?.user?.id,
   });
 
+  const unreadChats = userchatlist.chats.filter(chat => chat.unread_count > 0).length;
+
+
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notification"],
     queryFn: () =>
@@ -132,9 +135,9 @@ export default function EmployeeAccessHeader() {
             className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
           >
             <MessageSquareText className="size-5 text-hrmblue" />
-            {userchatlist?.employee_unread_count > 0 && (
+            {unreadChats > 0 && (
               <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
-                {userchatlist.employee_unread_count}
+                {unreadChats}
               </div>
             )}
           </div>
