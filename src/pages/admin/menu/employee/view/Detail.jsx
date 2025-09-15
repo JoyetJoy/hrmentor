@@ -178,13 +178,13 @@ export default function EmployeeDetails() {
                 <div
                   className="ml-5 flex h-7 cursor-pointer items-center rounded bg-[#E3FCEF] px-3 text-[0.8rem] font-bold text-[#28A745]"
                   onClick={() => {
-                    if (
-                      employeeViewDetails?.basic_details?.employmentStatus
-                        ?.label !== "Active"
-                    ) {
+                    // if (
+                    //   employeeViewDetails?.basic_details?.employmentStatus
+                    //     ?.label !== "Active"
+                    // ) {
                       setPopupOpen(true);
                       setType("status");
-                    }
+                    // }
                   }}
                 >
                   {employeeViewDetails?.basic_details?.employmentStatus?.label}
