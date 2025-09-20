@@ -184,7 +184,7 @@ export default function ClockIn({
                           {data?.error || !data ? (
                             <></>
                           ) : (
-                            data.map((times) => (
+                            data?.map((times) => (
                               <RadioGroup.Option
                                 key={times?.shift?.name}
                                 value={{

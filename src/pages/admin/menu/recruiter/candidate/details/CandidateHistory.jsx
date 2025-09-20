@@ -93,7 +93,7 @@ function CandidateHistoryTimeline() {
             </div>
           </div>
           <div className="overflow-y-min h-[500px] w-full overflow-y-scroll p-5">
-            {historyData.map((day, index) => (
+            {historyData?.map((day, index) => (
               <div
                 key={index}
                 className="relative rounded-md bg-white p-5 pt-0"
@@ -103,7 +103,7 @@ function CandidateHistoryTimeline() {
                 </p>
                 <div className="absolute bottom-20 left-10 top-16 z-0 border-l-2 border-hrmprimaryorange" />
                 <div className="flex flex-col gap-y-4">
-                  {day.entries.map((entry, idx) => (
+                  {day?.entries?.map((entry, idx) => (
                     <div
                       key={idx}
                       className="flex items-center gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]"

@@ -23,7 +23,7 @@ export default function SetUpHeader({ page,currentPage }) {
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">
-          {emailMenu.map((item) => (
+          {emailMenu?.map((item) => (
             <Link
               key={item?.id}
               to={item?.link}

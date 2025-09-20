@@ -433,7 +433,7 @@ export default function Attendance() {
                     <th className="sticky left-0 top-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
                       Employee Name
                     </th>
-                    {days.map((dayObj, index) => (
+                    {days?.map((dayObj, index) => (
                       <th
                         key={index}
                         className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
@@ -486,7 +486,7 @@ export default function Attendance() {
                           <td className="border-r-[3px] border-[#d1d5db]">
                             {uniqueShifts?.length > 0 ? (
                               <>
-                                {uniqueShifts.map((shift, index) => (
+                                {uniqueShifts?.map((shift, index) => (
                                   <div
                                     key={`${day.fullDate}-${index}`}
                                     onClick={() => {

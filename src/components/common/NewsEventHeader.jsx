@@ -32,7 +32,7 @@ export default function NewsEventHeader({ page }) {
           </Link>
         </div>
           <div className="flex items-center gap-5 text-sm font-semibold">
-            {newsEventHeaderList.map((item) => (
+            {newsEventHeaderList?.map((item) => (
               <Link
                 key={item?.id}
                 to={item?.link}

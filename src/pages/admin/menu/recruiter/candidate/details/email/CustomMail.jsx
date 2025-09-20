@@ -46,7 +46,7 @@ const CustomMail = () => {
             </div>
           </div>
           <div className='border-t border-gray-300 '>
-      {EmailData.map((item, index) => (
+      {EmailData?.map((item, index) => (
         <div key={index} className='border-b border-gray-300 flex items-center justify-between py-5'>
           <h1 className='text-sm font-semibold text-[#2C2C2C]'>{item.heading}</h1>
           <p className='text-sm font-normal text-[#7F7F7F]'>{item.content}</p>

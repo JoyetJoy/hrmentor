@@ -16,7 +16,7 @@ export default function ShareJob({ popupOpen, setPopupOpen, text }) {
 
   // Clean all fields
   const cleanedText = Object.fromEntries(
-    Object.entries(text || {}).map(([key, value]) => [
+    Object.entries(text || {})?.map(([key, value]) => [
       key,
       stripHtmlTags(value),
     ])

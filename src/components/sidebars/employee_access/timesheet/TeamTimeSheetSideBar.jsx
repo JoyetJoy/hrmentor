@@ -47,7 +47,7 @@ export default function TeamTimeSheetSideBar({
                     {...field}
                     isSearchable={true}
                     styles={customSelectStyles}
-                    options={shiftList?.data?.original?.data.map((item) => ({
+                    options={shiftList?.data?.original?.data?.map((item) => ({
                       label: item.name,
                       value: item.id,
                     }))}

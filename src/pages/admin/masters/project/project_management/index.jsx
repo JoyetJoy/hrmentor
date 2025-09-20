@@ -224,7 +224,7 @@ export default function ProjectManagement() {
         accessorKey: "members",
         cell: ({ row }) => (
           <div className="flex items-center">
-            {row.original.members.map((member, idx) => (
+            {row?.original?.members?.map((member, idx) => (
               <div
                 key={idx}
                 className="group relative"
@@ -267,7 +267,7 @@ export default function ProjectManagement() {
               handleStatusChange(row.original.id, newValue);
             }}
           >
-            {status.map((option) => (
+            {status?.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -331,7 +331,7 @@ export default function ProjectManagement() {
       if (!content) {
         return toast.error("Please Fill Description");
       }
-      const newArray = memberList.map(({ id, employee_id }) => ({
+      const newArray = memberList?.map(({ id, employee_id }) => ({
         user_id: id,
         employee_id,
       }));

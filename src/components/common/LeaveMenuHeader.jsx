@@ -34,7 +34,7 @@ export default function LeaveHeader({page, currentPage}) {
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">
-          {LeaveHeaderList.map((item) => (
+          {LeaveHeaderList?.map((item) => (
             <Link
               key={item?.id}
               to={item?.link}

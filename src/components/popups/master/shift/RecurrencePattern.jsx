@@ -31,7 +31,7 @@ export default function WeeklyRecurrence({ recurrencePattern,setSelectedDays,sel
             </h3>
         )}
         <div className="grid h-8 grid-cols-7 overflow-hidden rounded-md border">
-          {days.map((day,index) => (
+          {days?.map((day,index) => (
             <h1
               key={day}
               onClick={() => toggleDaySelection(day,index)}

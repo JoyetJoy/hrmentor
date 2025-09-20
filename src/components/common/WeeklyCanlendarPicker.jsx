@@ -37,14 +37,14 @@ const WeeklyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
       </div>
       <hr className="border-gray-light" />
       <div className="days-row px-7">
-        {daysInWeek.map((day, index) => (
+        {daysInWeek?.map((day, index) => (
           <div key={index} className="day-name">
             {day}
           </div>
         ))}
       </div>
       <div className="dates-row px-7">
-        {days.map((day, index) => (
+        {days?.map((day, index) => (
           <div
             key={index}
             className={`day-box ${

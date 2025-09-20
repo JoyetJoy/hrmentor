@@ -50,7 +50,7 @@ export default function EmployeeList({ popupOpen, setPopupOpen, datas }) {
               <hr className="mb-5 h-[0.03rem] bg-gray-500" />
               <div className="flex flex-col gap-6">
                 {datas?.emp?.length > 0 &&
-                  datas.emp.map((employee, i) => (
+                  datas?.emp?.map((employee, i) => (
                     <li key={i}>{employee.full_name}</li>
                   ))}
               </div>

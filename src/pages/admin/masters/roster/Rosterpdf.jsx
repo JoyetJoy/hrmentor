@@ -232,7 +232,7 @@ export default function Rosterpdf() {
     // Deduplicate leaveEvents by user (or by _id if user isn't available)
     const leaveEvents = Array.from(
       new Map(
-        leaveEventsRaw.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
+        leaveEventsRaw?.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
       ).values(),
     );
 
@@ -255,7 +255,7 @@ export default function Rosterpdf() {
     const shiftEvents = Array.from(shiftEventMap.values());
 
     // Step 3: Create a set of shift event IDs for exclusion
-    const shiftEventIds = new Set(shiftEvents.map((event) => event._id));
+    const shiftEventIds = new Set(shiftEvents?.map((event) => event._id));
 
     // Combine dayOff candidates and filter out duplicates and shiftEvents
     const combinedDayOff = [
@@ -270,7 +270,7 @@ export default function Rosterpdf() {
       new Map(
         combinedDayOff
           .filter((event) => !shiftEventIds.has(event._id)) // remove if also in shiftEvents
-          .map((event) => [event._id, event]), // use _id as unique key
+          ?.map((event) => [event._id, event]), // use _id as unique key
       ).values(),
     );
 
@@ -331,7 +331,7 @@ export default function Rosterpdf() {
   };
 
   const departmentOptions = Array.isArray(department)
-    ? department.map((dep) => ({ value: dep.id, label: dep.value }))
+    ? department?.map((dep) => ({ value: dep.id, label: dep.value }))
     : [];
 
   return (
@@ -459,7 +459,7 @@ export default function Rosterpdf() {
                       <th className="sticky left-0 top-0 z-10 border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale">
                         Employee Name
                       </th>
-                      {days.map((dayObj, index) => (
+                      {days?.map((dayObj, index) => (
                         <th
                           key={index}
                           className="sticky top-0 z-0 border border-gray-300 bg-[#ebebf0] pb-3 text-sm font-bold capitalize text-gray-darkpale"
@@ -479,7 +479,7 @@ export default function Rosterpdf() {
                         <td className="sticky left-0 min-h-32 border-b-[3px] border-l-[3px] border-r-[3px] border-[#d1d5db] bg-[#ffffff] px-5 pb-2 text-sm font-bold capitalize text-slate-800">
                           {employee?.employee?.name}
                         </td>
-                        {days.map((day, index) => {
+                        {days?.map((day, index) => {
                           // Find attendance status for the given date
                           const { shiftEvents, leaveEvents, dayOff } =
                             findEvents(
@@ -525,7 +525,7 @@ export default function Rosterpdf() {
                                           "day",
                                         ),
                                       )
-                                      .map((leave, i) => (
+                                      ?.map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
                                           className="mx-2 my-2 flex items-center justify-center min-h-12 min-w-36 cursor-pointer rounded-md bg-[#815fb3] py-3 text-black"
@@ -547,7 +547,7 @@ export default function Rosterpdf() {
                                           "day",
                                         ),
                                       )
-                                      .map((leave, i) => (
+                                      ?.map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
                                           className="mx-2 my-2 flex min-h-5 min-w-36 items-center justify-center cursor-pointer rounded-md bg-[#815fb3] py-3 text-black"

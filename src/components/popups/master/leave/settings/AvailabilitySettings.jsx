@@ -127,33 +127,33 @@ useEffect(() => {
   if (department?.length) {
     setAvailabilitySelection((prev) => ({
       ...prev,
-      department_availability: department.map((d) => d.id),
+      department_availability: department?.map((d) => d.id),
     }));
-    setValue("department_availability", department.map((d) => d.id));
+    setValue("department_availability", department?.map((d) => d.id));
   }
 
   if (location?.length) {
     setAvailabilitySelection((prev) => ({
       ...prev,
-      locations_availability: location.map((l) => l.id),
+      locations_availability: location?.map((l) => l.id),
     }));
-    setValue("locations_availability", location.map((l) => l.id));
+    setValue("locations_availability", location?.map((l) => l.id));
   }
 
   if (gender?.length) {
     setAvailabilitySelection((prev) => ({
       ...prev,
-      gender_availability: gender.map((g) => g.id),
+      gender_availability: gender?.map((g) => g.id),
     }));
-    setValue("gender_availability", gender.map((g) => g.id));
+    setValue("gender_availability", gender?.map((g) => g.id));
   }
 
   if (role?.length) {
     setAvailabilitySelection((prev) => ({
       ...prev,
-      role_availability: role.map((r) => r.id),
+      role_availability: role?.map((r) => r.id),
     }));
-    setValue("role_availability", role.map((r) => r.id));
+    setValue("role_availability", role?.map((r) => r.id));
   }
 }, [department, location, gender, role, setValue,id]);
 
@@ -212,7 +212,7 @@ useEffect(() => {
   };
 
   const handleSelectChange = (selectedOptions, field) => {
-    const selectedValues = selectedOptions.map((option) => option.id);
+    const selectedValues = selectedOptions?.map((option) => option.id);
 
     setAvailabilitySelection((prev) => ({ ...prev, [field]: selectedValues }));
     setValue(field, selectedValues);

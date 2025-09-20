@@ -120,10 +120,10 @@ const ShiftCalendar = () => {
   
     // Ensure the data is an array
     const departmentOptions = Array.isArray(department)
-      ? department.map((dep) => ({ value: dep.id, label: dep.value }))
+      ? department?.map((dep) => ({ value: dep.id, label: dep.value }))
       : [];
     const locationOptions = Array.isArray(location)
-      ? location.map((loc) => ({ value: loc.id, label: loc.value }))
+      ? location?.map((loc) => ({ value: loc.id, label: loc.value }))
       : [];
     const workAreaOptions = work_area
       ? work_area?.listing?.map((area) => ({
@@ -239,7 +239,7 @@ const ShiftCalendar = () => {
     hex = hex.replace("#", "");
   
     if (hex.length === 3) {
-      hex = hex.split("").map((c) => c + c).join("");
+      hex = hex.split("")?.map((c) => c + c).join("");
     }
   
     if (hex.length !== 6) {

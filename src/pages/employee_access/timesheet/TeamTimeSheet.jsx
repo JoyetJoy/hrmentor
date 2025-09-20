@@ -158,7 +158,7 @@ export default function TeamTimeSheet() {
           </div>
         ),
       },
-      ...weekDays.map((dayObj) => ({
+      ...weekDays?.map((dayObj) => ({
         header: (
           <div className="text-center">
             <span className="text-sm font-bold capitalize text-gray-darkpale">

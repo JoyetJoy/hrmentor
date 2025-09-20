@@ -150,7 +150,7 @@ export default function CompanyAddCalender() {
   const handleCheckboxChange = (day, index) => {
     setWeekendDefinition((prev) => ({
       ...prev,
-      [day]: prev[day].map((selected, i) =>
+      [day]: prev[day]?.map((selected, i) =>
         i === index ? !selected : selected,
       ),
     }));
@@ -187,7 +187,7 @@ export default function CompanyAddCalender() {
   const onSubmit = async () => {
     setLoader(true);
     try {
-      const location_id = location.map((item) => item.id);
+      const location_id = location?.map((item) => item.id);
       const formData = {
         location: location_id,
         fiscal_calendar: fiscalCalendar,
@@ -661,7 +661,7 @@ export default function CompanyAddCalender() {
 
                   <div className="grid grid-cols-8 gap-28 text-center font-semibold">
                     <div></div>
-                    {headers.map((header, index) => (
+                    {headers?.map((header, index) => (
                       <div
                         key={index}
                         className="whitespace-nowrap text-xs font-normal"
@@ -671,13 +671,13 @@ export default function CompanyAddCalender() {
                     ))}
                   </div>
 
-                  {days.map((day, dayIndex) => (
+                  {days?.map((day, dayIndex) => (
                     <div
                       key={dayIndex}
                       className="my-7 grid grid-cols-8 items-center gap-28 text-center"
                     >
                       <div className="text-left text-sm">{day}</div>
-                      {headers.map((_, colIndex) => (
+                      {headers?.map((_, colIndex) => (
                         <input
                           key={colIndex}
                           type="checkbox"
@@ -1099,7 +1099,7 @@ export default function CompanyAddCalender() {
 
                 <div className="grid grid-cols-8 gap-28 text-center font-semibold">
                   <div></div>
-                  {headers.map((header, index) => (
+                  {headers?.map((header, index) => (
                     <div
                       key={index}
                       className="whitespace-nowrap text-xs font-normal"
@@ -1109,13 +1109,13 @@ export default function CompanyAddCalender() {
                   ))}
                 </div>
 
-                {days.map((day, dayIndex) => (
+                {days?.map((day, dayIndex) => (
                   <div
                     key={dayIndex}
                     className="my-7 grid grid-cols-8 items-center gap-28 text-center"
                   >
                     <div className="text-left text-xs">{day}</div>
-                    {headers.map((_, colIndex) => (
+                    {headers?.map((_, colIndex) => (
                       <input
                         key={colIndex}
                         type="checkbox"

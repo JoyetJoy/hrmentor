@@ -26,9 +26,9 @@ function RecruiterTable({  list,
       <div className="table table-md  mx-auto  w-full">
         <table style={{ borderSpacing: "0", width: "100%" }}>
           <thead className="bg-gray-soft rounded-md overflow-hidden ">
-            {getHeaderGroups().map((headerGroup) => (
+            {getHeaderGroups()?.map((headerGroup) => (
               <tr key={headerGroup.id} className="">
-                {headerGroup.headers.map((column) => (
+                {headerGroup?.headers?.map((column) => (
                   <th
                     colSpan={headerGroup.colSpan}
                     key={column.id}
@@ -45,13 +45,13 @@ function RecruiterTable({  list,
           </thead>
           {/* -padding--- */}
           <tbody className=" ">
-            {getRowModel().rows.map((row) => {
+            {getRowModel()?.rows?.map((row) => {
               return (
                 <tr
                   key={row.id}
                   className="borde-b-2  borde-[#C0C0C0] last:border-none  "
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row?.getVisibleCells()?.map((cell) => (
                     <td
                       key={cell.id}
                       className="text-[15px] text-start   text-textcolor-darkCharcoal font-medium capitalize py-7 "

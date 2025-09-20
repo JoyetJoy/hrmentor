@@ -130,7 +130,7 @@ export const AdminDashboard = () => {
           "employee-list" && "job-list" && "candidate-list",
         ) && <StatsCard data={admindashboard} />}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {cardsData.map((card, index) => (
+          {cardsData?.map((card, index) => (
             <div
               key={index}
               className="flex max-h-[20rem] flex-col gap-4 rounded-md bg-white p-6 shadow-sm"
@@ -140,7 +140,7 @@ export const AdminDashboard = () => {
               </label>
               <div className="overflow-y-min flex min-h-[13rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
                 {card.details?.length > 0 ? (
-                  card.details.map((item, idx) => (
+                  card?.details?.map((item, idx) => (
                     <div
                       key={idx}
                       className="mr-5 flex items-center justify-between gap-4 rounded-full bg-gray-100 p-1 hover:bg-[#E95D394D]"
@@ -209,7 +209,7 @@ export const AdminDashboard = () => {
             </Link>
           </h1>
           <div className="overflow-y-min flex max-h-[31rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
-            {admindashboard?.newsandevents?.events.map((event, index) => (
+            {admindashboard?.newsandevents?.events?.map((event, index) => (
               <div
                 key={index}
                 className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"
@@ -231,7 +231,7 @@ export const AdminDashboard = () => {
                 </h2>
               </div>
             ))}
-            {admindashboard?.newsandevents?.news.map((newss, index) => (
+            {admindashboard?.newsandevents?.news?.map((newss, index) => (
               <div
                 key={index}
                 className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"

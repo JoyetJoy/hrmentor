@@ -95,7 +95,7 @@ export default function ProjectManagementView() {
       if (!content) {
         return toast.error("Please Fill Description");
       }
-      const newArray = memberList.map(({ id, employee_id }) => ({
+      const newArray = memberList?.map(({ id, employee_id }) => ({
         user_id: id,
         employee_id,
       }));
@@ -234,7 +234,7 @@ export default function ProjectManagementView() {
         <div className="flex items-center gap-8 text-xs">
           <div className="flex -space-x-3">
             <div className="flex items-center">
-              {projectListDetails?.members.map((member, idx) => (
+              {projectListDetails?.members?.map((member, idx) => (
                 <div
                   key={idx}
                   className="group relative"

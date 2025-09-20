@@ -68,9 +68,9 @@ export const  MenuRoles = () => {
   // Process the permissions data
   const permissionList =
     data?.data &&
-    Object.entries(data?.data).map(([parentCategory, subcategories]) => ({
+    Object.entries(data?.data)?.map(([parentCategory, subcategories]) => ({
       parentCategory,
-      subcategories: Object.entries(subcategories).map(
+      subcategories: Object.entries(subcategories)?.map(
         ([subcategory, items]) => ({
           subcategory,
           items,

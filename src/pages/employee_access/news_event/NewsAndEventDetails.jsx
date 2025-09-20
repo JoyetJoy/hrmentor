@@ -36,7 +36,7 @@ export default function NewsAndEventDetails() {
         <div className="flex gap-3">
           <div className="flex flex-col bg-white p-6">
             <div className="space-y-6">
-              {newsItems.map((item, index) => (
+              {newsItems?.map((item, index) => (
                 <div key={index} className="flex flex-col items-start gap-2">
                   <div className="flex flex-col gap-2">
                     <h3 className="text-xl font-semibold">{item.title}</h3>
@@ -105,7 +105,7 @@ export default function NewsAndEventDetails() {
           <div className="w-1/2 bg-white p-6">
             <h2 className="mb-4 text-sm font-semibold">Related News</h2>
             <div className="space-y-6">
-              {events.map((event, index) => (
+              {events?.map((event, index) => (
                 <div key={index} className="items-star flex flex-col gap-3">
                   <div>
                     <img

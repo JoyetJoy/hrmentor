@@ -55,7 +55,7 @@ export default function EmailTypeSave() {
           params: { user_id: user?.id },
         })
         .then((res) => {
-          const formattedTokens = res.data.map((token) => ({
+          const formattedTokens = res.data?.map((token) => ({
             id: token.id,
             label: token.token,
           }));
@@ -71,7 +71,7 @@ export default function EmailTypeSave() {
   const onSubmit = async () => {
     setLoader(true);
     try {
-      const ids = tokens.map((item) => item.id); // Extract only token IDs
+      const ids = tokens?.map((item) => item.id); // Extract only token IDs
 
       const formData = { tokens: ids };
 
@@ -150,7 +150,7 @@ export default function EmailTypeSave() {
                     value={tokens}
                     onChange={(selectedOption) => {
                       setTokens(
-                        selectedOption.map((item) => ({
+                        selectedOption?.map((item) => ({
                           id: item.id,
                           label: item.label,
                         })),

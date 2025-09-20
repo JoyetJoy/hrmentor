@@ -15,7 +15,7 @@ export default function EmployeeAttendance({ popupOpen, setPopupOpen, selected})
     let totalSeconds = 0;
   
     overtimeArray.forEach((item) => {
-      const [hours, minutes, seconds] = item.overtime_hours.split(":").map(Number);
+      const [hours, minutes, seconds] = item?.overtime_hours?.split(":").map(Number);
   
       totalHours += hours;
       totalMinutes += minutes;

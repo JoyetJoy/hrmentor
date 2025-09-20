@@ -36,9 +36,9 @@ export default function QueryTable({
           <div className="table table-md mx-auto w-full">
             <table style={{ borderSpacing: "0", width: "100%" }}>
               <thead className="overflow-hidden rounded-md bg-gray-soft">
-                {getHeaderGroups().map((headerGroup) => (
+                {getHeaderGroups()?.map((headerGroup) => (
                   <tr key={headerGroup.id} className="">
-                    {headerGroup.headers.map((column) => (
+                    {headerGroup?.headers?.map((column) => (
                       <th
                         colSpan={headerGroup.colSpan}
                         key={column.id}
@@ -54,13 +54,13 @@ export default function QueryTable({
                 ))}
               </thead>
               <tbody className="">
-                {getRowModel().rows.map((row) => {
+                {getRowModel()?.rows?.map((row) => {
                   return (
                     <tr
                       key={row.id}
                       className="borde-b-2 borde-[#C0C0C0] text-left last:border-none"
                     >
-                      {row.getVisibleCells().map((cell) => (
+                      {row.getVisibleCells()?.map((cell) => (
                         <td
                           key={cell.id}
                           className="justify-end text-[0.8rem] font-medium text-gray-darkpale"

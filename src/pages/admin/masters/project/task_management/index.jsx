@@ -245,7 +245,7 @@ export default function TaskManagement() {
                 handleStatusChange(row.original.id, newValue);
               }}
             >
-              {status.map((option) => (
+              {status?.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -266,7 +266,7 @@ export default function TaskManagement() {
         header: "Assigned To",
         cell: ({ row }) => (
           <div className="flex items-center">
-            {row.original?.assignees.map((member, idx) => (
+            {row?.original?.assignees?.map((member, idx) => (
               <div
                 key={idx}
                 className="group relative"
@@ -355,7 +355,7 @@ export default function TaskManagement() {
       if (!memberList) {
         return toast.error("Select A Assignees");
       }
-      const newArray = memberList.map(({ id, employee_id }) => ({
+      const newArray = memberList?.map(({ id, employee_id }) => ({
         user_id: id,
         employee_id,
       }));
@@ -471,7 +471,7 @@ export default function TaskManagement() {
         </div>
       </div>
       <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">
-        {statuses.map((status, index) => (
+        {statuses?.map((status, index) => (
           <React.Fragment key={status.label}>
             <div className="flex flex-col items-center px-24">
               <span className={`text-lg font-semibold ${status.color}`}>

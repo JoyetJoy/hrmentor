@@ -96,7 +96,7 @@ export default function EmailSetupSave() {
           params: { user_id: user?.id },
         })
         .then((res) => {
-          const formattedTokens = res.data.map((token) => ({
+          const formattedTokens = res?.data?.map((token) => ({
             value: token.id,
             label: token.token,
           }));

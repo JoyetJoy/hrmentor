@@ -56,13 +56,13 @@ export default function PurchasePlan({ isOpen, closeModal }) {
                         <h1 className="mb-2 text-lg font-extrabold text-[#202020]">
                           Features
                         </h1>
-                        {data.list.map((item, index) => (
+                        {data?.list?.map((item, index) => (
                           <div key={index} className="flex flex-col">
                             <h3 className="my-3 text-sm font-extrabold text-[#101828]">
                               {item.title}
                             </h3>
                             <div className="flex flex-col gap-2">
-                              {item.value.map((feature, featureIndex) => (
+                              {item?.value?.map((feature, featureIndex) => (
                                 <p
                                   key={featureIndex}
                                   className="flex items-center gap-2 py-1 text-sm font-medium tracking-wide text-[#667085]"

@@ -86,7 +86,7 @@ export default function AddLeave({
 
   useEffect(() => {
     if (employeeTeamList?.length) {
-      const options = employeeTeamList.map((team) => ({
+      const options = employeeTeamList?.map((team) => ({
         label: team?.name,
         value: team?.id,
       }));
@@ -121,7 +121,7 @@ export default function AddLeave({
 
   useEffect(() => {
     if (employeeLeaveShift?.length) {
-      const options = employeeLeaveShift.map((shift) => ({
+      const options = employeeLeaveShift?.map((shift) => ({
         label: shift?.shift.name,
         value: shift?.shift.id,
         id: shift?.id,
@@ -141,7 +141,7 @@ export default function AddLeave({
 
           if (employeeTeamLeaveType?.length) {
             const options = employeeTeamLeaveType
-              .filter(
+              ?.filter(
                 (type) =>
                   type.already_taked_leaves <=
                   Number(type.leave_types?.emp_no_days),
@@ -171,7 +171,7 @@ export default function AddLeave({
               .filter(
                 (type) => type.already_taked_leaves < Number(type?.emp_no_days),
               )
-              .map((type) => ({
+              ?.map((type) => ({
                 label: type.display_name,
                 value: type.id,
               }));
@@ -429,7 +429,7 @@ console.log(dayOffDates);
 
                 {dateRange && (
                   <>
-                    {dateRange.map((date, index) => {
+                    {dateRange?.map((date, index) => {
                       const dateCount = dateRange.filter(
                         (d) => d.date === date.date,
                       ).length; // Count occurrences of the date

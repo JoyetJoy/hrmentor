@@ -191,7 +191,7 @@ export default function PayrollOffEdit() {
               </h4>
             </div>
             <div className="summary-body">
-              {summaryData.map((item, index) => (
+              {summaryData?.map((item, index) => (
                 <div
                   key={index}
                   className="summary-row flex justify-between border-b py-2"

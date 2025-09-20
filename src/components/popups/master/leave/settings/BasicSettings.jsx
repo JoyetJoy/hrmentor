@@ -325,7 +325,7 @@ const BasicSettings = ({ formtype = "save" }) => {
     setDayOptions(newDayOptions);
   }, [selectedMonthValue]);
 
-  const monthOptions = Object.keys(monthDaysMap).map((month) => ({
+  const monthOptions = Object.keys(monthDaysMap)?.map((month) => ({
     value: month,
     label: month,
   }));
@@ -797,7 +797,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   to end
                 </p>
                 <div className="w-full">
-                  {fields.map((box, index) => (
+                  {fields?.map((box, index) => (
                     <div
                       key={box.id}
                       className={`mb-4 ${index > 0 ? "px-2 py-5" : "p-5"} flex w-full flex-row justify-around rounded-lg border border-dashed border-black`}

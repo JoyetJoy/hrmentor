@@ -151,7 +151,7 @@ export default function CompanyGeneral() {
   useEffect(() => {
     if (businessType) {
       // Transform `businessType` data into an array of { value, label } objects
-      const formattedBusinessTypes = businessType.map((type) => ({
+      const formattedBusinessTypes = businessType?.map((type) => ({
         value: type.id,
         label: type.bussiness_type_name,
       }));

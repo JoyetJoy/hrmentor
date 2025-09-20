@@ -94,7 +94,7 @@ export default function CalanderShift({rosterCalim, isLoading, refetch,date}) {
               </div>
               {!leaveOpen && (
                 <div className="flex  flex-col gap-3 w-full items-center justify-center">
-                {rosterCalim?.roster_details?.leave_employees.map((employee)=>(
+                {rosterCalim?.roster_details?.leave_employees?.map((employee)=>(
                     <div
                     key={employee?.id}
                     onClick={() => {

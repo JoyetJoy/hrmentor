@@ -33,7 +33,7 @@ export default function RosterHeader({page}) {
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">
-          {rosterHeaderList.map((item) => (
+          {rosterHeaderList?.map((item) => (
             <Link
               key={item?.id}
               to={item?.link}

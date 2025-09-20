@@ -91,8 +91,8 @@ console.log(errors);
 
         const [startHours, startMinutes] = formattedStartTime
           .split(":")
-          .map(Number);
-        const [endHours, endMinutes] = formattedEndTime.split(":").map(Number);
+          ?.map(Number);
+        const [endHours, endMinutes] = formattedEndTime.split(":")?.map(Number);
 
         let startTotalMinutes = startHours * 60 + startMinutes;
         let endTotalMinutes = endHours * 60 + endMinutes;
@@ -131,7 +131,7 @@ console.log(errors);
   };
 
   const validateInputs = () => {
-    const newErrors = selectedDays.map((day) => {
+    const newErrors = selectedDays?.map((day) => {
       const index = days.indexOf(day);
       return requireDays[index] === 0;
     });
@@ -271,7 +271,7 @@ console.log(errors);
   );
   useEffect(() => {
     if (workAreaList) {
-      const formattedWorkArea = workAreaList.listing.map(
+      const formattedWorkArea = workAreaList?.listing?.map(
         (item) => ({
           label: item.work_area_name,
           value: item.work_area_name,
@@ -794,7 +794,7 @@ console.log(errors);
                     People Required
                   </h3>
                   <div className="grid h-8 grid-cols-7 overflow-hidden rounded-md border">
-                    {days.map((day, index) => (
+                    {days?.map((day, index) => (
                       <div key={index} className="relative">
                         <input
                           className={`border-r px-2 py-2 text-start text-xs placeholder:text-zinc-700 ${

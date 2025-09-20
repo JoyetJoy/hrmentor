@@ -37,7 +37,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
         <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-hrmprimaryorange" />
         <div className="flex flex-col gap-y-4">
           {/* Render Main Steps */}
-          {mainSteps.map((mainStep, index) => (
+          {mainSteps?.map((mainStep, index) => (
             <div key={index}>
               {/* Main Step */}
               <div className="flex h-12 items-center gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]">
@@ -66,7 +66,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
                         You must complete all required field to save Company
                         profile.
                       </p>
-                  {companySubSteps.map((subStep, subIndex) => (
+                  {companySubSteps?.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
                       
                       <div
@@ -99,7 +99,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
                         You must complete all required field to save Company
                         profile.
                       </p>
-                  {bankSubSteps.map((subStep, subIndex) => (
+                  {bankSubSteps?.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
                       
                       <div
@@ -132,7 +132,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
                         You must complete all required field to save Company
                         profile.
                       </p>
-                  {signatorySubSteps.map((subStep, subIndex) => (
+                  {signatorySubSteps?.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
                       
                       <div
@@ -165,7 +165,7 @@ export default function CompanyCreateSideBar({ stepCounter }) {
                         You must complete all required field to save Company
                         profile.
                       </p>
-                  {calenderSubSteps.map((subStep, subIndex) => (
+                  {calenderSubSteps?.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
                       
                       <div

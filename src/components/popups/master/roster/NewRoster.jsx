@@ -198,7 +198,7 @@ export default function NewRoster({ popupOpen, setPopupOpen }) {
                               {...field}
                               isSearchable={true}
                               styles={customSelectStyles}
-                              options={shiftList?.data?.original?.data.map(
+                              options={shiftList?.data?.original?.data?.map(
                                 (item) => ({
                                   label: item.name,
                                   value: item.id,

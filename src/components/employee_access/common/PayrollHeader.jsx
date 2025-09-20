@@ -27,7 +27,7 @@ export default function PayrollHeader({page}) {
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">
-          {payrollHeaderList.map((item) => (
+          {payrollHeaderList?.map((item) => (
             <Link
               key={item?.id}
               to={item?.link}

@@ -94,7 +94,7 @@ function CandidateInterviews() {
       cell: ({ row }) => {
         return (
           <>
-            {row.original?.interviewers?.slice(0, 1).map((i) => (
+            {row.original?.interviewers?.slice(0, 1)?.map((i) => (
               <span key={i?.id}>
                 {i?.first_name} {i?.middle_name ?? ""} {i?.sur_name}
               </span>

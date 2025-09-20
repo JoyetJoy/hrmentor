@@ -282,7 +282,7 @@ export const EmployeeDashboard = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {cardsData.map((card, index) => (
+            {cardsData?.map((card, index) => (
               <div
                 key={index}
                 className="flex flex-col gap-4 rounded-md bg-white p-6 shadow-sm"
@@ -301,7 +301,7 @@ export const EmployeeDashboard = () => {
                 <div className="overflow-y-min flex h-[12rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
                   {card?.details.length > 0 ? (
                     <>
-                      {card.details.map((item, idx) => (
+                      {card.details?.map((item, idx) => (
                         <div
                           key={idx}
                           className="mr-5 flex items-center justify-between gap-4 rounded-full bg-gray-100 p-1"
@@ -377,7 +377,7 @@ export const EmployeeDashboard = () => {
             <div className="overflow-y-min flex max-h-[25rem] min-h-[6rem] flex-col gap-3 overflow-y-auto overflow-x-hidden">
               {employeeAllNews.length > 0 ? (
                 <>
-                  {employeeAllNews.map((news, index) => (
+                  {employeeAllNews?.map((news, index) => (
                     <div
                       key={index}
                       className="mr-5 flex min-h-20 flex-row rounded-md border border-gray-300"

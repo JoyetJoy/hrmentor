@@ -207,7 +207,7 @@ const EditRoster = React.memo(
     useEffect(() => {
       if (selectedRoster?.employees) {
         setSelectedEmployees(
-          selectedRoster.employees.map((employee) => ({
+          selectedRoster?.employees?.map((employee) => ({
             employee_id: employee.id,
             first_name: employee.first_name,
             unique_id: employee.unique_id,
@@ -255,7 +255,7 @@ const EditRoster = React.memo(
                                 isSearchable={true}
                                 isDisabled={copy}
                                 styles={customSelectStyles}
-                                options={shiftList?.data?.original?.data.map(
+                                options={shiftList?.data?.original?.data?.map(
                                   (item) => ({
                                     label: item?.name,
                                     value: item?.id,

@@ -44,7 +44,7 @@ function MenuHeaderEmployeeAccess({
         </div>
         {displayMenu && (
           <div className="flex items-center gap-5 text-sm font-semibold">
-            {employeePaysilpMenu.map((item) => (
+            {employeePaysilpMenu?.map((item) => (
               <Link
                 key={item?.id}
                 to={item?.link}

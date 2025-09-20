@@ -335,7 +335,7 @@ const EmployeeAccessRosterCalendar = () => {
                         ))}
                     {leaveEvents?.length > 0 && (
                       <>
-                        {leaveEvents.map((leave, index) => (
+                        {leaveEvents?.map((leave, index) => (
                           <div
                             key={index}
                             onClick={() => handleClick(leave)}

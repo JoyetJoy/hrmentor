@@ -208,7 +208,7 @@ export default function TimeSheet() {
                   <th className="text-sm font-bold capitalize text-gray-darkpale">
                     Total Worked hours
                   </th>
-                  {weekDays.map((dayObj, index) => (
+                  {weekDays?.map((dayObj, index) => (
                     <th
                       key={index}
                       className="text-sm font-bold capitalize text-gray-darkpale"
@@ -228,7 +228,7 @@ export default function TimeSheet() {
                       ? formatTime(events?.total_working_hours)
                       : "00Hr 00Min"}
                   </td>
-                  {weekDays.map((dayObj, index) => {
+                  {weekDays?.map((dayObj, index) => {
                     // Convert weekDays date to match the format in events.days_hours
                     const formattedWeekDate = dayjs(dayObj.fullDate).format(
                       "YYYY-MM-DD",

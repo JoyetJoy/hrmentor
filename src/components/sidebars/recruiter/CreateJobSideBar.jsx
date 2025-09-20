@@ -52,7 +52,7 @@ function CreateJobSideBar({ stepCounter }) {
         <div className="absolute bottom-10 left-10 top-10 z-0 border-l-2 border-gray-darkcool" />
         <div className="flex flex-col gap-y-4">
           {/* Render Main Steps */}
-          {mainSteps.map((mainStep, index) => (
+          {mainSteps?.map((mainStep, index) => (
             <div key={index}>
               {/* Main Step */}
               <div className="flex h-12 items-center gap-2 rounded bg-gray-lightcool px-3 text-[0.94rem]">
@@ -77,7 +77,7 @@ function CreateJobSideBar({ stepCounter }) {
               {/* Sub-steps for 'Post' */}
               {mainStep.step === 1 && stepCounter >= 1 && stepCounter == 1 && (
                 <div className="ml-5 flex flex-col gap-3 rounded px-3 text-sm">
-                  {postSubSteps.map((subStep, subIndex) => (
+                  {postSubSteps?.map((subStep, subIndex) => (
                     <div key={subIndex} className="flex items-center gap-x-2">
                       {/* <div
                         className={`flex size-1 items-center justify-center rounded-full border ${

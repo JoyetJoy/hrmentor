@@ -44,7 +44,7 @@ export default function NewsAndEventsView() {
           <div className="flex flex-col bg-white p-6">
             <div className="space-y-6">
               <h2 className="mb-4 text-xl font-semibold">News</h2>
-              {newsItems.map((item, index) => (
+              {newsItems?.map((item, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <div className="w-96 overflow-hidden rounded-md">
                     <img
@@ -91,7 +91,7 @@ export default function NewsAndEventsView() {
               </div> */}
             </div>
             <div className="space-y-6">
-              {employeeAllEvent.map((event, index) => (
+              {employeeAllEvent?.map((event, index) => (
                 <div key={index} className="items-star flex flex-col gap-3">
                   <div className="overflow-hidden rounded-md">
                     <img

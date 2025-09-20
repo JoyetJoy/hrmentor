@@ -52,14 +52,14 @@ const MonthlyCalendarPicker = ({ selectedDate, setSelectedDate }) => {
       </div>
       <hr className="border-gray-light" />
       <div className="grid grid-cols-7 px-7 pt-4 text-center font-medium">
-        {daysInWeek.map((day, index) => (
+        {daysInWeek?.map((day, index) => (
           <div key={index} className="day-name">
             {day}
           </div>
         ))}
       </div>
       <div className="grid grid-cols-7 px-7 pt-3 text-center">
-        {days.map((day, index) => (
+        {days?.map((day, index) => (
           <div
             key={index}
             className={`day-box ${

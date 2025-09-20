@@ -103,7 +103,7 @@ function RecruiterSideBar({ jid, jobDetailView }) {
       </div>
       <hr className="border-1 my-2 border-gray-soft" />
       <div className="mt-3 grid grid-cols-3 gap-3">
-        {statusData.map((item) => (
+        {statusData?.map((item) => (
           <div
             key={item.id}
             className="rounded-md"

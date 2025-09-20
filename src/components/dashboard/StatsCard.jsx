@@ -42,7 +42,7 @@ export default function StatsCard({data}) {
 
   return (
     <div className="grid w-full grid-cols-4 gap-3">
-      {employeeDetails.map((stat, index) => (
+      {employeeDetails?.map((stat, index) => (
         <div
           key={index}
           className="flex w-full flex-col items-start rounded-md border border-black/10 bg-white px-5 py-4"

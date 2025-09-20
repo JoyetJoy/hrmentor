@@ -25,7 +25,7 @@ export default function ProfileDropdown({ handleNavigation, user }) {
         </Menu.Button>
         <Menu.Items className="absolute top-12 z-20 w-48 rounded-lg bg-white p-4 shadow-lg">
           <ul className="flex flex-col gap-4">
-            {employeeaccessItems.map((item, index) => (
+            {employeeaccessItems?.map((item, index) => (
               <Menu.Item key={index}>
                 {({ active }) => (
                   <button

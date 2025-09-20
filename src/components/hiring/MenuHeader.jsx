@@ -31,7 +31,7 @@ function MenuHeaderHiring({ page }) {
           </Link>
         </div>
         <div className="flex items-center gap-5 text-sm font-semibold">
-          {hiringMenu.map((item) => (
+          {hiringMenu?.map((item) => (
             <Link
               key={item?.id}
               to={item?.link}

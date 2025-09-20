@@ -41,7 +41,7 @@ const storedData = JSON.parse(localStorage.getItem("candidateDetails") || "null"
 
       {recCandidateQAByid?.length ? (
         <>
-          {recCandidateQAByid.map((item) => (
+          {recCandidateQAByid?.map((item) => (
             <Disclosure key={item?.id} as="div" className="rounded-sm bg-gray-mutedlight">
               {({ open }) => (
                 <>

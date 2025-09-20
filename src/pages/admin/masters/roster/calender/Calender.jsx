@@ -222,10 +222,10 @@ const RosterCalendar = () => {
 
   // Ensure the data is an array
   const departmentOptions = Array.isArray(department)
-    ? department.map((dep) => ({ value: dep.id, label: dep.value }))
+    ? department?.map((dep) => ({ value: dep.id, label: dep.value }))
     : [];
   const locationOptions = Array.isArray(location)
-    ? location.map((loc) => ({ value: loc.id, label: loc.value }))
+    ? location?.map((loc) => ({ value: loc.id, label: loc.value }))
     : [];
 
   const workAreaOptions = work_area
@@ -305,7 +305,7 @@ const RosterCalendar = () => {
     // Deduplicate leaveEvents by user (or by _id if user isn't available)
     const leaveEvents = Array.from(
       new Map(
-        leaveEventsRaw.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
+        leaveEventsRaw?.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
       ).values(),
     );
 
@@ -328,7 +328,7 @@ const RosterCalendar = () => {
     const shiftEvents = Array.from(shiftEventMap.values());
 
     // Step 3: Create a set of shift event IDs for exclusion
-    const shiftEventIds = new Set(shiftEvents.map((event) => event._id));
+    const shiftEventIds = new Set(shiftEvents?.map((event) => event._id));
 
     // Combine dayOff candidates and filter out duplicates and shiftEvents
     const combinedDayOff = [
@@ -343,7 +343,7 @@ const RosterCalendar = () => {
       new Map(
         combinedDayOff
           .filter((event) => !shiftEventIds.has(event._id)) // remove if also in shiftEvents
-          .map((event) => [event._id, event]), // use _id as unique key
+          ?.map((event) => [event._id, event]), // use _id as unique key
       ).values(),
     );
 
@@ -446,7 +446,7 @@ const RosterCalendar = () => {
     setShiftIds((prev) => {
       const newSet = new Set([
         ...prev,
-        ...shifts.map((shift) => shift?.shift_id),
+        ...shifts?.map((shift) => shift?.shift_id),
       ]);
       return Array.from(newSet);
     });
@@ -689,7 +689,7 @@ const RosterCalendar = () => {
                       <th className="sticky left-0 top-0 z-20 min-w-[12rem] bg-[#ebebf0] p-5 text-left">
                         Employee Name
                       </th>
-                      {days.map((dayObj, index) => (
+                      {days?.map((dayObj, index) => (
                         <th
                           key={index}
                           className="sticky top-0 z-10 min-w-[8rem] border border-gray-300 bg-[#ebebf0] text-sm font-bold capitalize text-gray-darkpale"
@@ -711,7 +711,7 @@ const RosterCalendar = () => {
                             {emp?.employee?.name}
                           </span>
                         </td>
-                        {days.map((day, index) => {
+                        {days?.map((day, index) => {
                           // Find attendance status for the given date
                           const {
                             holidayEvents,
@@ -821,7 +821,7 @@ const RosterCalendar = () => {
                                           "day",
                                         ),
                                       )
-                                      .map((leave, i) => (
+                                      ?.map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
                                           className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black ${leave?.leave_type_id === "AL"? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ?"bg-[#fb643e]":'bg-[#FBE51E]'}`}
@@ -903,7 +903,7 @@ const RosterCalendar = () => {
 
                                         {/* Shift List */}
                                         <div className="mt-2">
-                                          {filteredShifts.map(
+                                          {filteredShifts?.map(
                                             (shift, index) => (
                                               <div
                                                 key={index}
@@ -930,7 +930,7 @@ const RosterCalendar = () => {
                                           "day",
                                         ),
                                       )
-                                      .map((leave, i) => (
+                                      ?.map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
                                           className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black  ${leave?.leave_type_id === "AL"? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ?"bg-[#fc8d7a]":'bg-[#FBE51E]'}`}
@@ -1031,7 +1031,7 @@ const RosterCalendar = () => {
 
                                               {/* Shift List */}
                                               <div className="mt-2">
-                                                {filteredShifts.map(
+                                                {filteredShifts?.map(
                                                   (shift, index) => (
                                                     <div
                                                       key={index}
@@ -1130,7 +1130,7 @@ const RosterCalendar = () => {
 
                                         {/* Shift List */}
                                         <div className="mt-2">
-                                          {filteredShifts.map(
+                                          {filteredShifts?.map(
                                             (shift, index) => (
                                               <div
                                                 key={index}

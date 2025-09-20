@@ -24,19 +24,19 @@ const CompanyWeekendCalendar = () => {
     <>
       <div className="grid grid-cols-8 gap-28 text-center font-semibold">
         <div></div>
-        {headers.map((header, index) => (
+        {headers?.map((header, index) => (
           <div key={index} className="whitespace-nowrap text-sm font-normal">
             {header}
           </div>
         ))}
       </div>
-      {days.map((day, dayIndex) => (
+      {days?.map((day, dayIndex) => (
         <div
           key={dayIndex}
           className="my-7 grid grid-cols-8 items-center gap-28 text-center"
         >
           <div className="text-left">{day}</div>
-          {headers.map((_, colIndex) => (
+          {headers?.map((_, colIndex) => (
             <input
               key={colIndex}
               type="checkbox"

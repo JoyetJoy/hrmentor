@@ -56,7 +56,7 @@ export default function EditQuestionnaireForm({
     if (questionnaireDetailByid) {
       setOptions(() => {
         const options =
-          questionnaireDetailByid?.candidateScreeningQuestionOptions.map(
+          questionnaireDetailByid?.candidateScreeningQuestionOptions?.map(
             (option) => ({ value: option.option }),
           );
         return options;
@@ -80,7 +80,7 @@ export default function EditQuestionnaireForm({
   };
 
   const handleChangeOption = (index, value) => {
-    setOptions(options.map((option, i) => (i === index ? { value } : option)));
+    setOptions(options?.map((option, i) => (i === index ? { value } : option)));
   };
 
   const onSubmit = async (data) => {
@@ -170,7 +170,7 @@ export default function EditQuestionnaireForm({
                       }
                     </b>
                   </div>
-                  {options.map((option, index) => (
+                  {options?.map((option, index) => (
                     <div key={index} className="flex flex-col gap-2">
                       <label className="text-sm font-medium text-[#3A3A3A] group-focus-within:text-[#2E2E2E]">
                         Option {index + 1}

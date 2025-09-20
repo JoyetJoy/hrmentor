@@ -28,7 +28,7 @@ function MenuHeaderCandidate({ page, candidate }) {
           )}
         </div>
         <div className="flex items-center gap-10 text-sm font-semibold">
-          {recCandidateMenus.map((item) => (
+          {recCandidateMenus?.map((item) => (
             <Link
               key={item?.id}
               to={`${item?.link}?cid=${cid}`}

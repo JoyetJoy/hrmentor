@@ -97,7 +97,7 @@ export const AdminHeader = ({ permissions }) => {
           </span>
         </Link>
         <div className="items flex gap-x-3">
-          {menuitems.map((item) => (
+          {menuitems?.map((item) => (
             <NavLink
               to={item.path}
               key={item.id}
@@ -155,7 +155,7 @@ export const AdminHeader = ({ permissions }) => {
 
             <Menu.Items className="absolute top-12 z-30 w-36 rounded-lg bg-white p-4 shadow-lg">
               <ul className="flex flex-col gap-5">
-                {activityItems.map((item, index) => (
+                {activityItems?.map((item, index) => (
                   <Menu.Item key={index}>
                     {({ active }) => (
                       <button

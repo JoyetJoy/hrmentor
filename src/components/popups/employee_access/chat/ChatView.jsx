@@ -251,7 +251,7 @@ useEffect(() => {
                         </div>
                       ))}
                       {/* Handle messages from current session */}
-                      {messages.map((msg, index) => {
+                      {messages?.map((msg, index) => {
                         const isSentByCurrentUser =
                           msg.senderId !== selectedUser?.user_id;
                         return (

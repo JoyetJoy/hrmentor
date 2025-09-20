@@ -234,7 +234,7 @@ export default function PayrollOff() {
 
               {monthValue === "5" && (
                 <ul className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
-                  {custom.map((option) => (
+                  {custom?.map((option) => (
                     <li
                       key={option.value}
                       className="cursor-pointer px-4 py-2 text-sm hover:bg-gray-200"

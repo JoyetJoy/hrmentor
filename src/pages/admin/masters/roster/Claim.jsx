@@ -120,7 +120,7 @@ export default function Claim() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
-            {calimList.map((item, index) => (
+            {calimList?.map((item, index) => (
               <div key={index} className="rounded-md bg-white px-4 py-2">
                 <h1 className="font-semibold text-black">{item.title}</h1>
                 <h2 className="text-md font-extrabold">{rosterdetails?.roster_details?.leave_requests_of_roster_employees_count}</h2>
@@ -211,7 +211,7 @@ export default function Claim() {
           <div className="h-screen rounded-md bg-white p-5 shadow-md">
             <h4 className="mb-3 font-semibold">Shift History</h4>
             <ul className="space-y-4">
-              {shiftHistoryData.map((item, index) => (
+              {shiftHistoryData?.map((item, index) => (
                 <li
                   key={index}
                   className="flex items-start gap-3 text-gray-dark"

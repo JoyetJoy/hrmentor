@@ -47,7 +47,7 @@ export default function Pagination({
         >
           Previous
         </button>
-        {pageNumbers.map((page) => (
+        {pageNumbers?.map((page) => (
           <button
             style={{
               backgroundColor: currentPage === page ? "#E95D39" : "",

@@ -40,7 +40,7 @@ export const OverviewCards = ({ data }) => {
   ];
   return (
     <div className="grid grid-cols-5 gap-3">
-      {cardData.map((card, index) => (
+      {cardData?.map((card, index) => (
         <Link key={index} to={card.path}>
           <div
             className="text-md flex items-center justify-between rounded-sm p-5 font-semibold"

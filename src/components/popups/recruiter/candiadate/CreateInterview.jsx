@@ -303,7 +303,7 @@ export default function RecCreateInterview({
                       <option value="" disabled>
                         HH
                       </option>
-                      {hours.map((hour) => (
+                      {hours?.map((hour) => (
                         <option key={hour} value={hour}>
                           {hour}
                         </option>
@@ -321,7 +321,7 @@ export default function RecCreateInterview({
                       <option value="" disabled>
                         MM
                       </option>
-                      {minutes.map((minute) => (
+                      {minutes?.map((minute) => (
                         <option key={minute} value={minute}>
                           {minute}
                         </option>
