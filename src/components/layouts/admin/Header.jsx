@@ -122,7 +122,7 @@ export const AdminHeader = ({ permissions }) => {
         </div>
 
         <div className="flex items-center gap-3 py-2.5">
-          {role.includes(1) && (
+          {/* {role.includes(1) && ( */}
             <>
               <div
                 onClick={handleNotificationClick}
@@ -147,7 +147,7 @@ export const AdminHeader = ({ permissions }) => {
                 )}
               </div>
             </>
-          )}
+          {/* )} */}
           <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100">
               <LayoutGrid className="size-5 text-hrmblue" />
