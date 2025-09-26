@@ -80,9 +80,14 @@ export default function AddBankHoliday({
       setValue("percentage", bankHolidayDetails.percentage || "");
       setValue("description", bankHolidayDetails.description || "");
       setPercentage(bankHolidayDetails.type || "");
-      setSelectedlocationId(
-        bankHolidayDetails?.work_location?.location_id || "",
-      );
+      const matchedLocation = locationList.find(
+      (loc) => loc.id === bankHolidayDetails?.work_location?.location_id
+    );
+
+    if (matchedLocation) {
+      setValue("location_id", matchedLocation); // set full object, not just id
+      setSelectedlocationId(matchedLocation.id);
+    }
     }
   }, [bankHolidayDetails, setValue]);
 
