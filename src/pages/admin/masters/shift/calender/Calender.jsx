@@ -8,7 +8,14 @@ import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import NewRoster from "@/components/popups/master/roster/NewRoster";
 import { useQuery } from "@tanstack/react-query";
-import { ALL_WORK_AREA, EMPLOYEE_DEPARTMENT_LIST, EMPLOYEE_WORK_AREA, EMPLOYEE_WORK_LOCATION_LIST, newRequest, ROASTER_LIST_GET } from "@/api/master";
+import {
+  ALL_WORK_AREA,
+  EMPLOYEE_DEPARTMENT_LIST,
+  EMPLOYEE_WORK_AREA,
+  EMPLOYEE_WORK_LOCATION_LIST,
+  newRequest,
+  ROASTER_LIST_GET,
+} from "@/api/master";
 import { ACTIVE_EMPLOYEE } from "@/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -42,13 +49,12 @@ const ShiftCalendar = () => {
     dayjs(startDate).add(6, "day").toDate(),
   );
 
-
   const useFetchData = (key, url) => {
-      return useQuery({
-        queryKey: [key],
-        queryFn: () => newRequest.get(url).then((res) => res.data),
-      });
-    };
+    return useQuery({
+      queryKey: [key],
+      queryFn: () => newRequest.get(url).then((res) => res.data),
+    });
+  };
 
   const { data: employee } = useQuery({
     queryKey: ["employee"],
@@ -101,36 +107,36 @@ const ShiftCalendar = () => {
     const newYear = dayjs(date).year();
     const newStartDate = dayjs(`${newYear}-01-01`).toDate();
     const newEndDate = dayjs(`${newYear}-12-31`).toDate();
-    setDate(newStartDate)
+    setDate(newStartDate);
     setStartDate(newStartDate);
     setEndDate(newEndDate);
     setIsOpen(false);
   };
 
-   // Fetch data from APIs
-    const { data: department } = useFetchData(
-      "department",
-      EMPLOYEE_DEPARTMENT_LIST,
-    );
-    const { data: work_area } = useFetchData("work_area", ALL_WORK_AREA);
-    const { data: location } = useFetchData(
-      "location",
-      EMPLOYEE_WORK_LOCATION_LIST,
-    );
-  
-    // Ensure the data is an array
-    const departmentOptions = Array.isArray(department)
-      ? department?.map((dep) => ({ value: dep.id, label: dep.value }))
-      : [];
-    const locationOptions = Array.isArray(location)
-      ? location?.map((loc) => ({ value: loc.id, label: loc.value }))
-      : [];
-    const workAreaOptions = work_area
-      ? work_area?.listing?.map((area) => ({
-          value: area.id,
-          label: area.work_area_name,
-        }))
-      : [];
+  // Fetch data from APIs
+  const { data: department } = useFetchData(
+    "department",
+    EMPLOYEE_DEPARTMENT_LIST,
+  );
+  const { data: work_area } = useFetchData("work_area", ALL_WORK_AREA);
+  const { data: location } = useFetchData(
+    "location",
+    EMPLOYEE_WORK_LOCATION_LIST,
+  );
+
+  // Ensure the data is an array
+  const departmentOptions = Array.isArray(department)
+    ? department?.map((dep) => ({ value: dep.id, label: dep.value }))
+    : [];
+  const locationOptions = Array.isArray(location)
+    ? location?.map((loc) => ({ value: loc.id, label: loc.value }))
+    : [];
+  const workAreaOptions = work_area
+    ? work_area?.listing?.map((area) => ({
+        value: area.id,
+        label: area.work_area_name,
+      }))
+    : [];
 
   // const handleMonthChange = (selectedOption) => {
   //   const currentDay = dayjs(date).date();
@@ -212,7 +218,7 @@ const ShiftCalendar = () => {
     } else {
       newStartDate = dayjs(startDate).subtract(1, "month").toDate();
     }
-    setDate(newStartDate)
+    setDate(newStartDate);
     setStartDate(newStartDate);
     setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
@@ -226,7 +232,7 @@ const ShiftCalendar = () => {
     } else {
       newStartDate = dayjs(startDate).add(1, "month").toDate();
     }
-    setDate(newStartDate)
+    setDate(newStartDate);
     setStartDate(newStartDate);
     setEndDate(dayjs(newStartDate).add(1, "month").subtract(1, "day").toDate());
   };
@@ -235,28 +241,30 @@ const ShiftCalendar = () => {
       console.warn("Invalid hex color (not a string):", hex);
       return "hsl(0, 0%, 80%)";
     }
-  
+
     hex = hex.replace("#", "");
-  
+
     if (hex.length === 3) {
-      hex = hex.split("")?.map((c) => c + c).join("");
+      hex = hex
+        .split("")
+        ?.map((c) => c + c)
+        .join("");
     }
-  
+
     if (hex.length !== 6) {
       console.warn("Invalid hex color length:", hex);
       return "hsl(0, 0%, 80%)";
     }
-  
+
     let r = parseInt(hex.substring(0, 2), 16);
     let g = parseInt(hex.substring(2, 4), 16);
     let b = parseInt(hex.substring(4, 6), 16);
-  
+
     let hsl = rgbToHsl(r, g, b);
     hsl[2] = Math.min(100, Math.max(0, hsl[2] + percent));
-  
+
     return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
   };
-  
 
   const getMonthDays = () => {
     const startOfMonth = dayjs(startDate).startOf("month");
@@ -437,7 +445,9 @@ const ShiftCalendar = () => {
                 <Select
                   options={departmentOptions}
                   isSearchable={true}
-                  onChange={(option) => setActiveDepartment(option?.value || "")}
+                  onChange={(option) =>
+                    setActiveDepartment(option?.value || "")
+                  }
                   styles={customSelectStyles}
                   placeholder="Select Department"
                   className="input-box h-10 w-52 rounded-md border-gray-muted bg-white focus:border-gray-muted"
@@ -617,40 +627,46 @@ const ShiftCalendar = () => {
                               />
                             ))}
                           </div>
-                          {shiftEvents?.map((event, index) => (
-                            <div
-                              key={index}
-                              onClick={() => handleClick(event, date)}
-                              style={{
-                                backgroundColor: event?.shift?.shift_color,
-                                borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
-                              }}
-                              className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm border-l-4 border-blue-400 bg-blue-200 py-3 pl-2 pr-3 text-gray-800 hover:opacity-65 `}
-                            >
-                              <span className="float-start flex text-[0.8rem] font-semibold">
-                                {event.shift_name}
-                              </span>
-                              <span className="float-start flex text-[12px]">
-                                {extractHourMinute(
-                                  event?.shift?.start_time,
-                                )}
-                                -{extractHourMinute(event?.shift?.end_time)}
-                              </span>
-                              <div className="flex w-full items-center justify-between pr-2">
-                                <span className="float-start flex text-[12.2px] font-semibold">
-                                  Employee:{" "}
-                                  {event?.assigned_total_employee_count || 0}/
-                                  {event?.people_required || 0}
+                          {shiftEvents?.map((event, index) => {
+                            const employeeCount =
+                              event?.assigned_total_employee_count_by_date?.find(
+                                (emp) =>
+                                  dayjs(emp.date).isSame(dayjs(date), "day"),
+                              )?.count || 0;
+
+                            return (
+                              <div
+                                key={index}
+                                onClick={() => handleClick(event, date)}
+                                style={{
+                                  backgroundColor: event?.shift?.shift_color,
+                                  borderLeft: `4px solid ${adjustLightness(event?.shift?.shift_color, -18)}`,
+                                }}
+                                className={`mt-2 flex h-[3.8rem] w-auto flex-col justify-center rounded-sm border-l-4 border-blue-400 bg-blue-200 py-3 pl-2 pr-3 text-gray-800 hover:opacity-65`}
+                              >
+                                <span className="float-start flex text-[0.8rem] font-semibold">
+                                  {event.shift_name}
                                 </span>
-                                <ArrowRight
-                                  onClick={() => handleClick(event)}
-                                  size={16}
-                                  color="#848484"
-                                  strokeWidth={1.5}
-                                />
+                                <span className="float-start flex text-[12px]">
+                                  {extractHourMinute(event?.shift?.start_time)}-
+                                  {extractHourMinute(event?.shift?.end_time)}
+                                </span>
+                                <div className="flex w-full items-center justify-between pr-2">
+                                  <span className="float-start flex text-[12.2px] font-semibold">
+                                    Employee:{" "}
+                                    {employeeCount || 0}/
+                                    {event?.people_required || 0}
+                                  </span>
+                                  <ArrowRight
+                                    onClick={() => handleClick(event)}
+                                    size={16}
+                                    color="#848484"
+                                    strokeWidth={1.5}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </>
                       </div>
                     );
