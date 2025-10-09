@@ -317,7 +317,7 @@ export default function TaskManagement() {
             >
               <Eye className="size-3" />
             </Link>
-            {permissions.includes("task-edit") && (
+            {/* {permissions.includes("task-edit") && (
               <Link
                 onClick={() => {
                   setPopupOpen(true);
@@ -330,7 +330,7 @@ export default function TaskManagement() {
                   className="w-full object-contain"
                 />
               </Link>
-            )}
+            )} */}
             {permissions.includes("task-delete") && (
               <Link
                 className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
@@ -818,19 +818,20 @@ export default function TaskManagement() {
               <div className="flex flex-col rounded-lg bg-white p-6 shadow-md md:flex-row">
                 {/* Left Section */}
                 <div className="w-full border-r p-4 md:w-1/2">
-                  <h2 className="mb-4 text-xl font-semibold">Salary Type</h2>
+                  <h2 className="mb-4 text-xl font-semibold">
+                    Subject : {taskListDetails?.subject}
+                  </h2>
                   <p className="mb-2 text-gray-500">
-                    <strong>Related:</strong> #1045-HRMentor
+                    <strong>Related to :</strong>{" "}
+                    {taskListDetails?.related_to?.label}
                   </p>
-                  <button className="mb-4 flex w-full items-center justify-center rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
+                  {/* <button className="mb-4 flex w-full items-center justify-center rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
                     <span className="material-icons mr-2">timer</span> Start
                     Timer
-                  </button>
+                  </button> */}
                   <h3 className="text-md mb-2 font-medium">Task Description</h3>
                   <p className="text-gray-600">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nunc vulputate libero et velit interdum, ac aliquet odio
-                    mattis.
+                    {taskListDetails?.task_description}{" "}
                   </p>
                 </div>
 
@@ -838,33 +839,38 @@ export default function TaskManagement() {
                 <div className="w-full p-4 md:w-1/2">
                   <h3 className="mb-4 text-lg font-semibold">Task Info</h3>
                   <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                    <p>
+                    {/* <p>
                       <strong>Task Created:</strong> 08-05-2025, 09:00 AM
                     </p>
-                    <p></p>
+                    <p></p> */}
                     <p>
-                      <strong>Start Date:</strong> 08-05-2025
+                      <strong>Start Date:</strong>
+                      <br /> {taskListDetails?.start_date}
                     </p>
                     <p>
-                      <strong>Due Date:</strong> 08-05-2025
+                      <strong>Due Date:</strong>
+                      <br /> {taskListDetails?.due_date}
                     </p>
-                    <p>
+                    {/* <p>
                       <strong>Logged Time:</strong> 00:00
                     </p>
                     <p>
                       <strong>Total Logged Time:</strong>{" "}
-                      <span className="text-green-500">05:56</span>
-                    </p>
+                      <span className="text-green-500">00:00</span>
+                    </p> */}
                   </div>
 
                   <h3 className="mt-6 font-medium">Priority</h3>
                   <span className="inline-block rounded-md bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600">
-                    In Progress
+                    {taskListDetails?.status?.label}
                   </span>
 
                   <h3 className="mt-6 font-medium">Assignees</h3>
                   <div className="mt-2 flex">
-                    <img
+                    {taskListDetails?.assignees?.map((employee) => (
+                      <div>{employee?.value} ,</div>
+                    ))}
+                    {/* <img
                       src="https://via.placeholder.com/40"
                       alt="Assignee 1"
                       className="-ml-2 h-10 w-10 rounded-full border-2 border-white shadow"
@@ -873,16 +879,21 @@ export default function TaskManagement() {
                       src="https://via.placeholder.com/40"
                       alt="Assignee 2"
                       className="-ml-2 h-10 w-10 rounded-full border-2 border-white shadow"
-                    />
+                    /> */}
                   </div>
+                  {taskListDetails?.file && (
+                    <>
+                      <h3 className="mt-6 font-medium">Attach Files</h3>
 
-                  <h3 className="mt-6 font-medium">Attach Files</h3>
-                  <div className="mt-2 rounded-md border-2 border-dashed border-gray-300 p-4 text-center text-gray-500">
-                    <button className="flex items-center justify-center text-blue-500">
-                      <span className="material-icons mr-2">upload</span> Attach
-                      files
-                    </button>
-                  </div>
+                      <div className="relative">
+                        <img
+                          src={taskListDetails?.file}
+                          alt="Uploaded"
+                          className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </DialogPanel>

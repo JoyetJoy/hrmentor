@@ -199,9 +199,9 @@ export default function ProjectManagementView() {
         <label style={{ fontWeight: "bold", fontSize: "17px" }}>
           HR Mentor
         </label>
-        <div className="flex items-center gap-4">
+        {/* <div className="flex items-center gap-4"> */}
           {/* Search bar */}
-          <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
+          {/* <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
             <Search
               className="size-4 object-contain text-gray-dark"
               onChange={(e) => setKeyword(e.target.value)}
@@ -211,15 +211,15 @@ export default function ProjectManagementView() {
               className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
               placeholder="Search"
             />
-          </label>
+          </label> */}
 
           {/* Filter button */}
-          <div className="flex h-10 min-h-10 items-center justify-center rounded-md border border-gray-400 bg-white p-3">
+          {/* <div className="flex h-10 min-h-10 items-center justify-center rounded-md border border-gray-400 bg-white p-3">
             <Filter className="size-4" />
-          </div>
+          </div> */}
 
           {/* Add Project button */}
-          <Link
+          {/* <Link
             onClick={() => {
               setPopupOpen(true);
             }}
@@ -227,8 +227,8 @@ export default function ProjectManagementView() {
           >
             <Plus className="size-4" />
             New Task
-          </Link>
-        </div>
+          </Link> */}
+        {/* </div> */}
       </div>
       <div className="flex w-full flex-col gap-8 rounded-md bg-white px-5 py-7">
         <div className="flex items-center gap-8 text-xs">
@@ -285,7 +285,7 @@ export default function ProjectManagementView() {
             />
             Over View
           </h1>
-          <h1
+          {/* <h1
             onClick={() => setActiveTab("task")}
             className={`items-centre flex gap-2 text-base font-semibold ${!activeTab ? "border-b-2 border-hrmprimaryorange text-hrmprimaryorange" : "text-gray-dark"}`}
           >
@@ -299,12 +299,12 @@ export default function ProjectManagementView() {
               alt=""
             />
             Task
-          </h1>{" "}
+          </h1>{" "} */}
         </div>
       </div>
       <div className="mt-5 flex w-full gap-6">
         <div className="flex w-1/2 flex-col gap-2 rounded-md bg-white p-6">
-          <div style={styles.statsCard} className="w-full">
+          {/* <div style={styles.statsCard} className="w-full">
             <h4 className="items-centre flex gap-1 text-gray-dark">
               Project Progress <span>0%</span>
             </h4>
@@ -312,7 +312,7 @@ export default function ProjectManagementView() {
               <div style={{ ...styles.progress, width: "29.41%" }}></div>
             </div>
           </div>
-          <div className="border-b-2 border-gray-soft/50"></div>
+          <div className="border-b-2 border-gray-soft/50"></div> */}
           <div className="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
             <div>
               <p className="text-gray-dark">Project#</p>
@@ -359,12 +359,12 @@ export default function ProjectManagementView() {
             <div>
               <p className="text-gray-dark">Description</p>
               <p className="text-gray-dark">
-                {projectListDetails?.description}
+                {projectListDetails?.description?.replace(/<[^>]+>/g, "")}
               </p>
             </div>
           </div>
         </div>
-        <div style={styles.container} className="w-1/2">
+        {/* <div style={styles.container} className="w-1/2">
           <div style={styles.statsContainer} className="w-full">
             <div
               style={styles.statsCard}
@@ -393,7 +393,7 @@ export default function ProjectManagementView() {
           <div style={styles.chartSection}>
             <Bar data={chartData} options={{ maintainAspectRatio: false }} />
           </div>
-        </div>
+        </div> */}
       </div>
       <Dialog
         open={popupOpen}

@@ -80,21 +80,21 @@ export default function TaskManagement() {
   });
 
   const { data: EmployeeList, error } = useQuery({
-    queryKey: ["EmployeeList", user?.id],
+    queryKey: ["EmployeeList", user?.user?.id],
     queryFn: () =>
       newRequest
         .get(ACTIVE_EMPLOYEE, {
-          params: { user_id: user?.id },
+          params: { user_id: user?.user?.id },
         })
         .then((res) => res.data),
-    enabled: !!user?.id, // Only run if user.id is defined
+    enabled: !!user?.user?.id, // Only run if user.id is defined
   });
 
   const { data: projectList } = useQuery({
-    queryKey: ["projectList", user?.id],
+    queryKey: ["projectList", user?.user?.id],
     queryFn: async () => {
       const response = await newRequest.get(PROJECT_LIST, {
-        params: { user_id: user?.id },
+        params: { user_id: user?.user?.id },
       });
 
       // Map the data into the desired format
@@ -107,7 +107,7 @@ export default function TaskManagement() {
 
       return mappedStatuses || []; // Ensure a defined return value
     },
-    enabled: !!user?.id, // Only run if user.id is defined
+    enabled: !!user?.user?.id, // Only run if user.id is defined
   });
 
   const { data: statusList } = useQuery({
@@ -139,7 +139,7 @@ export default function TaskManagement() {
             per_limit: pageLimit,
           },
         })
-        .then((res) => res.data?.original?.data),
+        .then((res) => res.data),
   });
 
   const { data: taskListDetails } = useQuery({
@@ -180,6 +180,7 @@ export default function TaskManagement() {
     { label: "Awaiting Feedback", count: 0, tasks: 1, color: "text-green-600" },
     { label: "Complete", count: 2, tasks: 2, color: "text-green-600" },
   ];
+  console.log(taskList);
 
   const handleStatusChange = async (id, newValue) => {
     const selectedOption = status.find((option) => option.value === newValue);
@@ -197,7 +198,7 @@ export default function TaskManagement() {
             "Content-Type": "multipart/form-data",
           },
           params: {
-            user_id: user?.id,
+            user_id: user?.user?.id,
           },
         },
       );
@@ -377,7 +378,7 @@ export default function TaskManagement() {
               "Content-Type": "multipart/form-data",
             },
             params: {
-              user_id: user?.id,
+              user_id: user?.user?.id,
             },
           },
         );
@@ -390,7 +391,7 @@ export default function TaskManagement() {
               "Content-Type": "multipart/form-data",
             },
             params: {
-              user_id: user?.id,
+              user_id: user?.user?.id,
             },
           },
         );
@@ -460,7 +461,7 @@ export default function TaskManagement() {
           </Link>
         </div>
       </div>
-      <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">
+      {/* <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">
         {statuses?.map((status, index) => (
           <React.Fragment key={status.label}>
             <div className="flex flex-col items-center px-24">
@@ -476,7 +477,7 @@ export default function TaskManagement() {
             )}
           </React.Fragment>
         ))}
-      </div>
+      </div> */}
       <div className="mt-3 flex gap-4">
         <div className="flex w-full flex-col">
           <div className="flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">
@@ -662,7 +663,7 @@ export default function TaskManagement() {
                           placeholder="Select Related"
                           styles={customSelectStyles}
                           className="input-box"
-                          value={projectList.find(
+                          value={projectList?.find(
                             (option) => option.value === field.value,
                           )} // Ensure the selected value matches
                           onChange={(selectedOption) =>
@@ -807,19 +808,20 @@ export default function TaskManagement() {
               <div className="flex flex-col rounded-lg bg-white p-6 shadow-md md:flex-row">
                 {/* Left Section */}
                 <div className="w-full border-r p-4 md:w-1/2">
-                  <h2 className="mb-4 text-xl font-semibold">Salary Type</h2>
+                  <h2 className="mb-4 text-xl font-semibold">
+                    Subject : {taskListDetails?.subject}
+                  </h2>
                   <p className="mb-2 text-gray-500">
-                    <strong>Related:</strong> #1045-HRMentor
+                    <strong>Related:</strong>{" "}
+                    {taskListDetails?.related_to?.label}
                   </p>
-                  <button className="mb-4 flex w-full items-center justify-center rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
+                  {/* <button className="mb-4 flex w-full items-center justify-center rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
                     <span className="material-icons mr-2">timer</span> Start
                     Timer
-                  </button>
+                  </button> */}
                   <h3 className="text-md mb-2 font-medium">Task Description</h3>
                   <p className="text-gray-600">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Nunc vulputate libero et velit interdum, ac aliquet odio
-                    mattis.
+                    {taskListDetails?.task_description}{" "}
                   </p>
                 </div>
 
@@ -827,33 +829,38 @@ export default function TaskManagement() {
                 <div className="w-full p-4 md:w-1/2">
                   <h3 className="mb-4 text-lg font-semibold">Task Info</h3>
                   <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                    <p>
+                    {/* <p>
                       <strong>Task Created:</strong> 08-05-2025, 09:00 AM
                     </p>
-                    <p></p>
+                    <p></p> */}
                     <p>
-                      <strong>Start Date:</strong> 08-05-2025
+                      <strong>Start Date:</strong> <br />{" "}
+                      {taskListDetails?.start_date}
                     </p>
                     <p>
-                      <strong>Due Date:</strong> 08-05-2025
+                      <strong>Due Date:</strong> <br />{" "}
+                      {taskListDetails?.due_date}
                     </p>
-                    <p>
+                    {/* <p>
                       <strong>Logged Time:</strong> 00:00
                     </p>
                     <p>
                       <strong>Total Logged Time:</strong>{" "}
                       <span className="text-green-500">05:56</span>
-                    </p>
+                    </p> */}
                   </div>
 
                   <h3 className="mt-6 font-medium">Priority</h3>
                   <span className="inline-block rounded-md bg-blue-100 px-3 py-1 text-sm font-medium text-blue-600">
-                    In Progress
+                     {taskListDetails?.status?.label}
                   </span>
 
                   <h3 className="mt-6 font-medium">Assignees</h3>
                   <div className="mt-2 flex">
-                    <img
+                     {taskListDetails?.assignees?.map((employee) => (
+                      <div>{employee?.value} , </div>
+                    ))}
+                    {/* <img
                       src="https://via.placeholder.com/40"
                       alt="Assignee 1"
                       className="-ml-2 h-10 w-10 rounded-full border-2 border-white shadow"
@@ -862,16 +869,29 @@ export default function TaskManagement() {
                       src="https://via.placeholder.com/40"
                       alt="Assignee 2"
                       className="-ml-2 h-10 w-10 rounded-full border-2 border-white shadow"
-                    />
+                    /> */}
                   </div>
 
-                  <h3 className="mt-6 font-medium">Attach Files</h3>
+                  {/* <h3 className="mt-6 font-medium">Attach Files</h3>
                   <div className="mt-2 rounded-md border-2 border-dashed border-gray-300 p-4 text-center text-gray-500">
                     <button className="flex items-center justify-center text-blue-500">
                       <span className="material-icons mr-2">upload</span> Attach
                       files
                     </button>
-                  </div>
+                  </div> */}
+                  {taskListDetails?.file && (
+                    <>
+                      <h3 className="mt-6 font-medium">Attach Files</h3>
+
+                      <div className="relative">
+                        <img
+                          src={taskListDetails?.file}
+                          alt="Uploaded"
+                          className="max-h-24 w-full rounded-md border border-black/20 object-contain"
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </DialogPanel>

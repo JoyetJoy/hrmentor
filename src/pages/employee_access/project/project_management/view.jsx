@@ -194,14 +194,14 @@ export default function ProjectManagementView() {
         page={1}
         currentPage={"Project Management"}
       />
-      <div className="mb-4 mt-1 flex items-center justify-between">
+      <div className="mb-4 mt-3 flex items-center justify-between">
         {/* Left-aligned label */}
         <label style={{ fontWeight: "bold", fontSize: "17px" }}>
           HR Mentor
         </label>
         <div className="flex items-center gap-4">
           {/* Search bar */}
-          <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
+          {/* <label className="input flex h-10 min-h-10 items-center gap-2 rounded-md border-none pr-28 outline-none">
             <Search
               className="size-4 object-contain text-gray-dark"
               onChange={(e) => setKeyword(e.target.value)}
@@ -211,15 +211,15 @@ export default function ProjectManagementView() {
               className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
               placeholder="Search"
             />
-          </label>
+          </label> */}
 
           {/* Filter button */}
-          <div className="flex h-10 min-h-10 items-center justify-center rounded-md border border-gray-400 bg-white p-3">
+          {/* <div className="flex h-10 min-h-10 items-center justify-center rounded-md border border-gray-400 bg-white p-3">
             <Filter className="size-4" />
-          </div>
+          </div> */}
 
           {/* Add Project button */}
-          <Link
+          {/* <Link
             onClick={() => {
               setPopupOpen(true);
             }}
@@ -227,7 +227,7 @@ export default function ProjectManagementView() {
           >
             <Plus className="size-4" />
             New Task
-          </Link>
+          </Link> */}
         </div>
       </div>
       <div className="flex w-full flex-col gap-8 rounded-md bg-white px-5 py-7">
@@ -285,7 +285,7 @@ export default function ProjectManagementView() {
             />
             Over View
           </h1>
-          <h1
+          {/* <h1
             onClick={() => setActiveTab("task")}
             className={`items-centre flex gap-2 text-base font-semibold ${!activeTab ? "border-b-2 border-hrmprimaryorange text-hrmprimaryorange" : "text-gray-dark"}`}
           >
@@ -299,20 +299,20 @@ export default function ProjectManagementView() {
               alt=""
             />
             Task
-          </h1>{" "}
+          </h1>{" "} */}
         </div>
       </div>
       <div className="mt-5 flex w-full gap-6">
         <div className="flex w-1/2 flex-col gap-2 rounded-md bg-white p-6">
-          <div style={styles.statsCard} className="w-full">
+          {/* <div style={styles.statsCard} className="w-full">
             <h4 className="items-centre flex gap-1 text-gray-dark">
               Project Progress <span>0%</span>
             </h4>
             <div style={styles.progressBar}>
               <div style={{ ...styles.progress, width: "29.41%" }}></div>
             </div>
-          </div>
-          <div className="border-b-2 border-gray-soft/50"></div>
+          </div> */}
+          {/* <div className="border-b-2 border-gray-soft/50"></div> */}
           <div className="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
             <div>
               <p className="text-gray-dark">Project#</p>
@@ -327,19 +327,14 @@ export default function ProjectManagementView() {
             <div>
               <p className="text-gray-dark">Status</p>
               <p className="font-semibold">
-                {projectListDetails?.status_details?.project_status_name}
+                {projectListDetails?.status?.label}
               </p>
             </div>
             <div>
               <p className="text-gray-dark">Date Created</p>
               <p className="font-semibold">
-                {projectListDetails?.created_at
-                  ? new Intl.DateTimeFormat("en-US", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                    }).format(new Date(projectListDetails.created_at))
-                  : "N/A"}
+                {projectListDetails?.created_date
+                  }
               </p>
             </div>
             <div>
@@ -352,7 +347,7 @@ export default function ProjectManagementView() {
             </div>
             <div>
               <p className="text-gray-dark">Total Logged Hours</p>
-              <p className="font-semibold"></p>
+              <p className="font-semibold">00:00</p>
             </div>
             <div>
               <p className="text-gray-dark">Deadline</p>
@@ -360,13 +355,13 @@ export default function ProjectManagementView() {
             </div>
             <div>
               <p className="text-gray-dark">Description</p>
-              <p className="text-gray-dark">
-                {projectListDetails?.description}
+              <p className="">
+                {projectListDetails?.description?.replace(/<[^>]+>/g, "")}
               </p>
             </div>
           </div>
         </div>
-        <div style={styles.container} className="w-1/2">
+        {/* <div style={styles.container} className="w-1/2">
           <div style={styles.statsContainer} className="w-full">
             <div
               style={styles.statsCard}
@@ -395,7 +390,7 @@ export default function ProjectManagementView() {
           <div style={styles.chartSection}>
             <Bar data={chartData} options={{ maintainAspectRatio: false }} />
           </div>
-        </div>
+        </div> */}
       </div>
       <Dialog
         open={popupOpen}
