@@ -470,7 +470,7 @@ export default function TaskManagement() {
           )}
         </div>
       </div>
-      <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">
+      {/* <div className="flex items-center rounded-lg bg-gray-50 p-5 shadow-sm">
         {statuses?.map((status, index) => (
           <React.Fragment key={status.label}>
             <div className="flex flex-col items-center px-24">
@@ -486,7 +486,7 @@ export default function TaskManagement() {
             )}
           </React.Fragment>
         ))}
-      </div>
+      </div> */}
       <div className="mt-3 flex gap-4">
         <div className="flex w-full flex-col">
           <div className="flex min-h-[570px] w-full flex-col gap-4 rounded-md bg-white px-5 py-4">

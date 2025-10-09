@@ -264,14 +264,14 @@ export default function EmployeeDetails() {
                   Work Information
                 </Link>
               </div>
-              <div className="mr-4 rounded-md border">
+              {/* <div className="mr-4 rounded-md border">
                 <MonthlyCalendarPicker
                   selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
                 />
-              </div>
+              </div> */}
               <div
-                className={`flex flex-col gap-2 px-3 ${employeeViewDetails?.basic_details?.status === active ? "flex" : "hidden"} `}
+                className={`col-span-2 border rounded-md flex flex-col gap-2 px-3 ${employeeViewDetails?.basic_details?.status === active ? "flex" : "hidden"} `}
               >
                 {/* <div className="flex flex-col gap-2">
                 <p className="rounded-md bg-[#f8f7f7] p-4 text-sm font-medium">

@@ -28,7 +28,7 @@ export const HiringDashboard = () => {
       ) : (
         <div className="flex flex-col gap-3">
           <OverviewCards data={hiringData?.countDashboard} />
-          <div className="my-3 grid grid-cols-3 gap-3">
+          <div className="my-3 grid grid-cols-2 gap-3">
             <div>
               <h1 className="text-[ #2C2C2C] mb-4 text-sm font-bold">
                 Upcoming Joiners
@@ -37,7 +37,7 @@ export const HiringDashboard = () => {
                 <NewJoiners />
               </div>
             </div>
-            <div>
+            {/* <div>
               <div className="mb-4 h-5" />
               <div className="h-fit rounded-md bg-white pb-7">
                 <MonthlyCalendarPicker
@@ -45,7 +45,7 @@ export const HiringDashboard = () => {
                   setSelectedDate={setSelectedDate}
                 />
               </div>
-            </div>
+            </div> */}
             <div>
               <h1 className="text-[ #2C2C2C] mb-4 text-sm font-bold">
                 New Joiners
