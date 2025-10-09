@@ -23,8 +23,7 @@ export default function SaveRecruiterMasterForm({
   type,
   colKeys,
   api,
-})
- {
+}) {
   let enableKey = selectedField === 0 ? false : true;
   const queryClient = useQueryClient();
   const [description, setDescription] = useState("");
@@ -75,12 +74,12 @@ export default function SaveRecruiterMasterForm({
   function close() {
     setPopupOpen(false);
     setSelectedField(0);
-    setDescription('');
+    setDescription("");
     reset();
   }
 
   const Generate_text = async () => {
-    const nameValue = getValues("name"); // Get the value of the "name" field
+    const nameValue = getValues("name"); // your input value
     if (!nameValue) {
       toast.error("Enter a Job Description");
       return;
@@ -88,25 +87,32 @@ export default function SaveRecruiterMasterForm({
 
     try {
       setGenerateLoader(true);
-      const genAI = new GoogleGenerativeAI(
-        "AIzaSyCBgwP-pT6WdPM9ksvpEbZT44BZSYML8yM",
-      );
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      const prompt = `Write a job description for ${nameValue} within 300 words`;
+      // Initialize Gemini client
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
+      // Select the model
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+      // Build the prompt
+      const prompt = `Write a job description for ${nameValue} within 300 words.`;
+
+      // Generate content
       const result = await model.generateContent(prompt);
 
-      // Extract the full content text from the response
+      // Extract text safely
       const jobDescription = result.response.text();
 
       setDescription(jobDescription);
-      setGenerateLoader(false);
     } catch (error) {
-      console.error("Error generating text:", error.message);
+      console.error("Error generating text:", error);
+      toast.error("Error generating text. Please try again.");
       setDescription("Error generating text. Please try again.");
+    } finally {
+      setGenerateLoader(false);
     }
   };
+  
   const isJobDescription = type === "Job Description";
   const onSubmit = async (data) => {
     if (isJobDescription && !description) {
@@ -239,7 +245,7 @@ export default function SaveRecruiterMasterForm({
                     </span>
                   )}
                 </div>
-                <div className="group flex w-full flex-col gap-1 z-50">
+                <div className="group z-50 flex w-full flex-col gap-1">
                   <label className="required label-text">Status</label>
                   <Controller
                     name="status"
