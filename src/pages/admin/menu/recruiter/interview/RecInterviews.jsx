@@ -159,7 +159,7 @@ function RecInterviews() {
         activeMenu={"Interviews"}
       />
       <div className="mb-4 mt-2 flex items-center justify-between">
-        <label className="input flex h-11 min-h-11 min-w-96 items-center gap-2 border border-black/10 text-white outline-none">
+        <label className="input flex h-11 min-h-11 min-w-96 items-center gap-2 border border-black/10 text-black outline-none">
           <Search className="size-4 object-contain text-gray-dark" />
           <input
             type="text"

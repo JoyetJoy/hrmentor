@@ -29,7 +29,7 @@ import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
-import {projectMenu } from "@/constants/menus/project";
+import { projectMenu } from "@/constants/menus/project";
 
 const Priority = [
   { value: 1, label: "Low" },
@@ -132,7 +132,7 @@ export default function TaskManagement() {
     }
   }, [statusList]);
 
-  const { data: taskList,refetch } = useQuery({
+  const { data: taskList, refetch } = useQuery({
     queryKey: ["taskList", currentPage, keyword],
     queryFn: () =>
       newRequest
@@ -318,29 +318,29 @@ export default function TaskManagement() {
               <Eye className="size-3" />
             </Link>
             {permissions.includes("task-edit") && (
-            <Link
-              onClick={() => {
-                setPopupOpen(true);
-                setSelectedId(row.original.id);
-              }}
-              className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
-            >
-              <img
-                src="/assets/icons/admin/marker.svg"
-                className="w-full object-contain"
-              />
-            </Link>
+              <Link
+                onClick={() => {
+                  setPopupOpen(true);
+                  setSelectedId(row.original.id);
+                }}
+                className="flex size-7 cursor-pointer items-center rounded-full bg-gray-soft p-2"
+              >
+                <img
+                  src="/assets/icons/admin/marker.svg"
+                  className="w-full object-contain"
+                />
+              </Link>
             )}
             {permissions.includes("task-delete") && (
-            <Link
-              className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
-              onClick={() => {
-                setDeletePopup(true);
-                setSelectedId(row?.original?.id);
-              }}
-            >
-              <Trash2 className="size-3" />
-            </Link>
+              <Link
+                className="flex cursor-pointer items-center justify-center rounded-full bg-gray-soft p-2 text-textcolor-red"
+                onClick={() => {
+                  setDeletePopup(true);
+                  setSelectedId(row?.original?.id);
+                }}
+              >
+                <Trash2 className="size-3" />
+              </Link>
             )}
           </div>
         ),
@@ -446,7 +446,8 @@ export default function TaskManagement() {
             <Search className="size-4 object-contain text-gray-dark" />
             <input
               type="text"
-              className="grow placeholder:text-sm placeholder:text-gray-dark focus:outline-none"
+              onChange={(e) => setKeyword(e.target.value)}
+              className="h-full w-full placeholder:text-[#7F7F7F]"
               placeholder="Search"
             />
           </label>
@@ -458,15 +459,15 @@ export default function TaskManagement() {
 
           {/* Add Project button */}
           {permissions.includes("task-create") && (
-          <Link
-            onClick={() => {
-              setPopupOpen(true);
-            }}
-            className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white hover:bg-hrmdarkblue/70 focus:outline-none"
-          >
-            <Plus className="size-4" />
-            Add Task
-          </Link>
+            <Link
+              onClick={() => {
+                setPopupOpen(true);
+              }}
+              className="flex w-fit items-center justify-center gap-2 rounded-md bg-hrmprimaryorange px-5 py-2.5 text-sm font-medium text-white hover:bg-hrmdarkblue/70 focus:outline-none"
+            >
+              <Plus className="size-4" />
+              Add Task
+            </Link>
           )}
         </div>
       </div>
