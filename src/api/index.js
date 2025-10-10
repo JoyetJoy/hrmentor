@@ -57,6 +57,7 @@ export const GET_PERMISSIONS = "permissions";
 
 // EMPLOYEE UNIQUE ID
 export const EMPLOYEE_UNIQUE_ID = "employee-unique-id";
+export const EMPLOYEE_PASSWORD = "update-password";
 
 // EMPLOYEE
 export const EMPLOYEE = "employee";

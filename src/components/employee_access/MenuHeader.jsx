@@ -18,9 +18,7 @@ function MenuHeaderEmployeeAccess({
 
   return (
     <>
-    <Password
-    popupOpen={popupOpen}
-    setPopupOpen={setPopupOpen}/>
+      <Password popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <div className="my-2 flex flex-row items-center justify-between rounded-md bg-white px-4 py-3">
         <div
           className={`flex items-center justify-between text-sm font-semibold text-hrmblue`}
@@ -64,7 +62,12 @@ function MenuHeaderEmployeeAccess({
             ))}
           </div>
         )}
-        <button className="bg-hrmprimaryorange text-white text-sm font-semibold px-3 py-2 rounded-lg" onClick={()=> setPopupOpen(true)}>Change Password</button>
+        <button
+          className="rounded-lg bg-hrmprimaryorange px-3 py-2 text-sm font-semibold text-white"
+          onClick={() => setPopupOpen(true)}
+        >
+          Change Password
+        </button>
       </div>
     </>
   );

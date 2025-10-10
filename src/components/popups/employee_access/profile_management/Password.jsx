@@ -1,4 +1,4 @@
-import { newFormRequest, newRequest } from "@/api";
+import { EMPLOYEE_PASSWORD, newFormRequest, newRequest } from "@/api";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +16,7 @@ const passwordSchema = Yup.object({
     .oneOf([Yup.ref("new_pass")], "Passwords must match"),
 });
 
-export default function Password({ popupOpen, setPopupOpen, qrKey, api }) {
+export default function Password({ popupOpen, setPopupOpen }) {
   const {
     register,
     handleSubmit,
@@ -50,16 +50,15 @@ export default function Password({ popupOpen, setPopupOpen, qrKey, api }) {
   const onSubmit = async (data) => {
     setLoader(true);
     try {
-      const formData = new FormData();
-      formData.append("current", data.current);
-      formData.append("new_pass", data.new_pass);
-      formData.append("confirm_pass", data.confirm_pass);
-
-      const res = await newFormRequest.post(api, formData);
+      const body = {
+        current_password:data?.current,
+        new_password : data?.new_pass,
+        confirm_password : data?.confirm_pass
+      }
+      const res = await newRequest.post(EMPLOYEE_PASSWORD, body);
 
       if (res.data?.status === 201) {
         toast.success(res.data.message);
-        queryClient.invalidateQueries([qrKey]);
         close();
       }
     } catch (error) {
