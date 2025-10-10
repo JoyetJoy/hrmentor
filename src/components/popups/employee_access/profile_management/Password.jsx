@@ -10,7 +10,15 @@ import * as Yup from "yup";
 
 const passwordSchema = Yup.object({
   current: Yup.string().required("Current password is required"),
-  new_pass: Yup.string().required("New password is required"),
+
+  new_pass: Yup.string()
+    .required("New password is required")
+    .min(8, "Password must be at least 8 characters long")
+    .matches(
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      "Password must include letters, numbers, and symbols"
+    ),
+
   confirm_pass: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("new_pass")], "Passwords must match"),
