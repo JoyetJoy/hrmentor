@@ -62,12 +62,14 @@ function MenuHeaderEmployeeAccess({
             ))}
           </div>
         )}
-        <button
-          className="rounded-lg bg-hrmprimaryorange px-3 py-2 text-sm font-semibold text-white"
-          onClick={() => setPopupOpen(true)}
-        >
-          Change Password
-        </button>
+        {subMenu === "ProfileManagement" && (
+          <button
+            className="rounded-lg bg-hrmprimaryorange px-3 py-2 text-sm font-semibold text-white"
+            onClick={() => setPopupOpen(true)}
+          >
+            Change Password
+          </button>
+        )}
       </div>
     </>
   );

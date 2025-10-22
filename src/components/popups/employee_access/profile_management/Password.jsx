@@ -64,14 +64,17 @@ export default function Password({ popupOpen, setPopupOpen }) {
         confirm_password : data?.confirm_pass
       }
       const res = await newRequest.post(EMPLOYEE_PASSWORD, body);
+console.log(res);
 
-      if (res.data?.status === 201) {
-        toast.success(res.data.message);
+      if (res?.status === 200) {
+        toast.success(res?.data.message);
+        console.log('dfg');
+        
         close();
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.error || "Something went wrong");
+      toast.error(error?.response?.data?.message || "Something went wrong");
     } finally {
       setLoader(false);
     }
