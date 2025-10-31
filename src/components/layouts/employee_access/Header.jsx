@@ -37,7 +37,7 @@ export default function EmployeeAccessHeader() {
   const unreadChats = userchatlist?.chats.filter(chat => chat.unread_count > 0).length;
 
 
-  const { data: notifications, isLoading } = useQuery({
+  const { data: notifications, isLoading,refetch:refetchNotification } = useQuery({
     queryKey: ["notification"],
     queryFn: () =>
       newRequest.get(NOTIFICATIONS).then((res) => {
@@ -68,6 +68,7 @@ export default function EmployeeAccessHeader() {
       <EmployeeNotification
         notifications={notifications}
         notificationPopupOpen={notificationPopupOpen}
+        refetchNotification={refetchNotification}
         setNotificationPopupOpen={setNotificationPopupOpen}
         type={'employee'}
       />
