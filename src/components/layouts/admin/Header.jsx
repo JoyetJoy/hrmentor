@@ -40,7 +40,11 @@ export const AdminHeader = ({ permissions }) => {
     enabled: !!user?.id,
   });
 
-  const { data: notification, isLoading } = useQuery({
+  const {
+    data: notification,
+    isLoading,
+    refetch: refetchNotification,
+  } = useQuery({
     queryKey: ["notification", user?.id],
     queryFn: () =>
       newRequest.get(NOTIFICATIONS).then((res) => {
@@ -73,14 +77,15 @@ export const AdminHeader = ({ permissions }) => {
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         data={adminchatlist?.chats}
-        type={'admin'}
+        type={"admin"}
       />
       <Notification
         userId={user?.id}
-        type={'admin'}
+        type={"admin"}
         notifications={notifications}
         notificationPopupOpen={notificationPopupOpen}
         setNotificationPopupOpen={setNotificationPopupOpen}
+        refetchNotification={refetchNotification}
       />
       <div className="relative flex flex-row items-center justify-between rounded-md bg-white pr-5">
         <Link to="/admin/dashboard" className="flex flex-row gap-1 pl-3">
@@ -123,30 +128,30 @@ export const AdminHeader = ({ permissions }) => {
 
         <div className="flex items-center gap-3 py-2.5">
           {/* {role.includes(1) && ( */}
-            <>
-              <div
-                onClick={handleNotificationClick}
-                className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
-              >
-                <Bell className="size-5 text-hrmblue" />
-                {notification?.unread_count > 0 && (
-                  <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
-                    {notification?.unread_count}
-                  </div>
-                )}
-              </div>
-              <div
-                onClick={handleClick}
-                className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
-              >
-                <MessageSquareText className="size-5 text-hrmblue" />
-                {adminchatlist?.employee_unread_count > 0 && (
-                  <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
-                    {adminchatlist.employee_unread_count}
-                  </div>
-                )}
-              </div>
-            </>
+          <>
+            <div
+              onClick={handleNotificationClick}
+              className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+            >
+              <Bell className="size-5 text-hrmblue" />
+              {notification?.unread_count > 0 && (
+                <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                  {notification?.unread_count}
+                </div>
+              )}
+            </div>
+            <div
+              onClick={handleClick}
+              className="relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100"
+            >
+              <MessageSquareText className="size-5 text-hrmblue" />
+              {adminchatlist?.employee_unread_count > 0 && (
+                <div className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-hrmblue text-[0.57rem] font-bold text-white">
+                  {adminchatlist.employee_unread_count}
+                </div>
+              )}
+            </div>
+          </>
           {/* )} */}
           <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-gray-100">
