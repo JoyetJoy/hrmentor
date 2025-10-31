@@ -65,10 +65,11 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
 
   useEffect(() => {
     if (data) {
-      setTotalPages(data?.original?.pagination?.total);
+      setTotalPages(data?.original?.pagination?.last_page);
       removeIdFromLocalStorage();
     }
   }, [data]);
+  console.log(currentPage,"currentPage")
   const columns = React.useMemo(
     () => [
       {
