@@ -31,13 +31,13 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
     permissions: state.permissions,
   }));
   const navigate = useNavigate();
-
+console.log(permissions,"permissions")
   const handleNavigation = (id) => {
     navigate(`/admin/leave/settings/basesettings?id=${id}`);
   };
 
   // Fetch List
-  const { data, isLoading } = useQuery({
+  const { data, isLoading ,refetch} = useQuery({
     queryKey: [qrkey, currentPage, type, qrkey, keyword, user?.id],
     queryFn: () =>
       newRequest
@@ -53,6 +53,9 @@ export const HolidayListing = ({ api, qrkey, colKeys, type }) => {
           return res.data;
         }),
   });
+useEffect(() => {
+  refetch();
+}, [currentPage, keyword]);
 
   const removeIdFromLocalStorage = () => {
     const storedData = localStorage.getItem("myData");
