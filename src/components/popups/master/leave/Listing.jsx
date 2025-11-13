@@ -9,6 +9,7 @@ import LeaveRequest from "./LeaveRequest";
 import { LeaveList } from "@/constants/menus/leave";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import Loader from "@/components/ui/Loader";
+import EditLeave from "./EditLeave";
 
 export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -212,7 +213,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         qrkey={qrkey}
         api={api}
       />
-      <LeaveRequest
+      <EditLeave
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         id={selectedId}
