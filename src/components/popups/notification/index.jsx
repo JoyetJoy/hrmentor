@@ -121,7 +121,7 @@ export default function Notification({
                 <div className="overflow-y-min mx-auto max-h-[35rem] w-full overflow-y-auto">
                   {notification?.data?.map((notification) => (
                     <Link
-                      to={notification?.type === "leave_application" ? "/admin/leave/request/awaitingapproval" :"/admin/employee"}
+                      to={"/admin/leave/request/awaitingapproval"}
                       onClick={() => handleClick(notification?.id)}
                       key={notification?.id}
                       className="mb-4 border-b border-gray-200 pb-4"
