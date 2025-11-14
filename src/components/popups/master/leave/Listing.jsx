@@ -213,7 +213,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
         qrkey={qrkey}
         api={api}
       />
-      <EditLeave
+      <LeaveRequest
         popupOpen={popupOpen}
         setPopupOpen={setPopupOpen}
         id={selectedId}
