@@ -303,8 +303,11 @@ const RosterCalendar = () => {
       ) || [];
 
     // 🔹 Deduplicate leave events by user or event ID
-    const leaveEvents = leaveEventsRaw; // keep duplicates
-
+    const leaveEvents = Array.from(
+      new Map(
+        leaveEventsRaw?.map((event) => [event.user_id || event._id, event]),
+      ).values(),
+    );
 
     // 🔹 Get shift events normally first
     let shiftEventsRaw = data?.filter(
@@ -314,12 +317,14 @@ const RosterCalendar = () => {
     );
 
     // 🚫 EXCLUDE shifts that have leave for the same date
-   shiftEventsRaw = data?.filter(
-  (event) =>
-    Array.isArray(event?.date_range) &&
-    event.date_range.includes(formattedDate),
-);
-
+    shiftEventsRaw = shiftEventsRaw.filter((event) => {
+      const hasLeave =
+        Array.isArray(event?.date_leaves) &&
+        event.date_leaves.some((leave) =>
+          dayjs(leave.date).isSame(formattedDate, "day"),
+        );
+      return !hasLeave; // remove if leave exists on same date
+    });
 
     // 🔹 Deduplicate by (shift_id + date)
     const shiftEventMap = new Map();
@@ -329,8 +334,7 @@ const RosterCalendar = () => {
         shiftEventMap.set(key, event);
       }
     });
-    const shiftEvents = shiftEventsRaw; // keep duplicates
-
+    const shiftEvents = Array.from(shiftEventMap.values());
 
     // 🔹 Remove duplicates between shiftEvents and other types
     const shiftEventIds = new Set(shiftEvents?.map((event) => event._id));
