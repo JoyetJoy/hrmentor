@@ -198,101 +198,112 @@ export default function Rosterpdf() {
   }, [selectedOption, startDate, endDate]);
 
   const findEvents = (date, data, day) => {
-    const workingDays = data?.shift?.weeks || [];
-    const allDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-    const selectedDay = dayjs(date).format("ddd").toUpperCase();
-    const formattedDate = date;
-    const holidayEvents = data?.filter(
-      (event) =>
-        Array.isArray(event?.holidays) &&
-        event.holidays.includes(formattedDate),
-    );
-
-    const swapedEvents = data?.filter(
-      (event) =>
-        Array.isArray(event?.date_swaps) &&
-        event.date_swaps.includes(formattedDate),
-    );
-
-    const deletedEvents = data?.filter(
-      (event) =>
-        Array.isArray(event?.date_deletions) &&
-        event.date_deletions.includes(formattedDate),
-    );
-
-    const leaveEventsRaw =
-      data?.filter(
+      const workingDays = data?.shift?.weeks || [];
+      const allDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+      const selectedDay = dayjs(date).format("ddd").toUpperCase();
+  
+      const formattedDate = date;
+  
+      // 🔹 Filter events by type
+      const holidayEvents = data?.filter(
         (event) =>
+          Array.isArray(event?.holidays) &&
+          event.holidays.includes(formattedDate),
+      );
+  
+      const swapedEvents = data?.filter(
+        (event) =>
+          Array.isArray(event?.date_swaps) &&
+          event.date_swaps.includes(formattedDate),
+      );
+  
+      const deletedEvents = data?.filter(
+        (event) =>
+          Array.isArray(event?.date_deletions) &&
+          event.date_deletions.includes(formattedDate),
+      );
+  
+      const leaveEventsRaw =
+        data?.filter(
+          (event) =>
+            Array.isArray(event?.date_leaves) &&
+            event.date_leaves.some((leave) =>
+              dayjs(leave.date).isSame(formattedDate, "day"),
+            ),
+        ) || [];
+  
+      // 🔹 Deduplicate leave events by user or event ID
+      const leaveEvents = Array.from(
+        new Map(
+          leaveEventsRaw?.map((event) => [event.user_id || event._id, event]),
+        ).values(),
+      );
+  
+      // 🔹 Get shift events normally first
+      let shiftEventsRaw = data?.filter(
+        (event) =>
+          Array.isArray(event?.date_range) &&
+          event.date_range.includes(formattedDate),
+      );
+  
+      // 🚫 EXCLUDE shifts that have leave for the same date
+      shiftEventsRaw = shiftEventsRaw.filter((event) => {
+        const hasLeave =
           Array.isArray(event?.date_leaves) &&
           event.date_leaves.some((leave) =>
             dayjs(leave.date).isSame(formattedDate, "day"),
-          ),
-      ) || [];
-
-    // Deduplicate leaveEvents by user (or by _id if user isn't available)
-    const leaveEvents = Array.from(
-      new Map(
-        leaveEventsRaw?.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
-      ).values(),
-    );
-
-    // console.log(leaveEvents);
-
-    let shiftEventsRaw = data?.filter(
-      (event) =>
-        Array.isArray(event?.date_range) &&
-        event.date_range.includes(formattedDate),
-    );
-
-    // Step 2: Deduplicate by (shift_id + date) combination
-    const shiftEventMap = new Map();
-    shiftEventsRaw.forEach((event) => {
-      const key = `${event.shift_id}_${formattedDate}`;
-      if (!shiftEventMap.has(key)) {
-        shiftEventMap.set(key, event);
-      }
-    });
-    const shiftEvents = Array.from(shiftEventMap.values());
-
-    // Step 3: Create a set of shift event IDs for exclusion
-    const shiftEventIds = new Set(shiftEvents?.map((event) => event._id));
-
-    // Combine dayOff candidates and filter out duplicates and shiftEvents
-    const combinedDayOff = [
-      ...swapedEvents,
-      ...deletedEvents,
-      ...holidayEvents,
-      ...leaveEvents,
-    ];
-
-    // Use Map to remove duplicate events based on _id
-    const dayOff = Array.from(
-      new Map(
-        combinedDayOff
-          .filter((event) => !shiftEventIds.has(event._id)) // remove if also in shiftEvents
-          ?.map((event) => [event._id, event]), // use _id as unique key
-      ).values(),
-    );
-
-    const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
-
-    const isDayOff = weekOffDays.includes(selectedDay);
-
-    const requestedSlots = data?.requested_details?.filter((slot) =>
-      dayjs(slot.date).isSame(dayjs(date), "day"),
-    );
-
-    return {
-      holidayEvents,
-      shiftEvents,
-      isDayOff,
-      requestedSlots,
-      swapedEvents,
-      deletedEvents,
-      leaveEvents,
-      dayOff,
+          );
+        return !hasLeave; // remove if leave exists on same date
+      });
+  
+      // 🔹 Deduplicate by (shift_id + date)
+      const shiftEventMap = new Map();
+      shiftEventsRaw.forEach((event) => {
+        const key = `${event.shift_id}_${formattedDate}`;
+        if (!shiftEventMap.has(key)) {
+          shiftEventMap.set(key, event);
+        }
+      });
+      const shiftEvents = Array.from(shiftEventMap.values());
+  
+      // 🔹 Remove duplicates between shiftEvents and other types
+      const shiftEventIds = new Set(shiftEvents?.map((event) => event._id));
+  
+      const combinedDayOff = [
+        ...swapedEvents,
+        ...deletedEvents,
+        ...holidayEvents,
+        ...leaveEvents,
+      ];
+  
+      const dayOff = Array.from(
+        new Map(
+          combinedDayOff
+            .filter((event) => !shiftEventIds.has(event._id))
+            ?.map((event) => [event._id, event]),
+        ).values(),
+      );
+  
+      // 🔹 Identify week-offs
+      const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
+      const isDayOff = weekOffDays.includes(selectedDay);
+  
+      // 🔹 Requested slots for this date
+      const requestedSlots = data?.requested_details?.filter((slot) =>
+        dayjs(slot.date).isSame(dayjs(date), "day"),
+      );
+  
+      return {
+        holidayEvents,
+        shiftEvents,
+        isDayOff,
+        requestedSlots,
+        swapedEvents,
+        deletedEvents,
+        leaveEvents,
+        dayOff,
+      };
     };
-  };
 
   const getCurrentWeek = (year) => {
     const today = dayjs().year(year).toDate();
