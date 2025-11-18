@@ -302,15 +302,22 @@ const RosterCalendar = () => {
           ),
       ) || [];
 
-    // Deduplicate by user/event + leave_type_id
-    const leaveEvents = Array.from(
-      new Map(
-        leaveEventsRaw.map((event) => {
-          const uniqueKey = `${event.user_id || event._id}_${event.leave_type_id}`;
-          return [uniqueKey, event];
-        }),
-      ).values(),
-    );
+    // 🔹 Deduplicate leave events by user or event ID
+   // Deduplicate leaves for the current date by leave_type_id
+const leaveEvents = Array.from(
+  new Map(
+    leaveEventsRaw
+      .flatMap((event) =>
+        event.date_leaves
+          ?.filter((leave) =>
+            dayjs(leave.date).isSame(formattedDate, "day")
+          )
+          .map((leave) => [leave.leave_type_id, { ...event, leave }])
+      )
+  ).values()
+);
+
+console.log(leaveEvents);
 
     // 🔹 Get shift events normally first
     let shiftEventsRaw = data?.filter(
@@ -953,92 +960,97 @@ const RosterCalendar = () => {
                                       )),
                                   )}
                                   <div className="min-w-[11.4rem]">
-                                    {permissions.includes("roster-create") && (
-                                      <button
-                                        className="text-2xl font-bold text-blue-500"
-                                        onMouseEnter={() =>
-                                          setHoveredShift({
-                                            id: emp?.employee?.id,
-                                            date: day.fullDate,
-                                            type: "add",
-                                            empid: "",
-                                          })
-                                        }
-                                        onMouseLeave={() =>
-                                          setHoveredShift({
-                                            id: emp?.employee?.id,
-                                            date: day.fullDate,
-                                            type: "",
-                                            empid: "",
-                                          })
-                                        }
-                                        onClick={() =>
-                                          changeShift(
-                                            emp?.employee?.id,
-                                            "",
-                                            day.fullDate,
-                                            "add",
-                                            emp?.employee?.department_id,
-                                            "",
-                                          )
-                                        }
-                                      >
-                                        +
-                                      </button>
-                                    )}
+                                        {permissions.includes(
+                                          "roster-create",
+                                        ) && (
+                                          <button
+                                            className="text-2xl font-bold text-blue-500"
+                                            onMouseEnter={() =>
+                                              setHoveredShift({
+                                                id: emp?.employee?.id,
+                                                date: day.fullDate,
+                                                type: "add",
+                                                empid: "",
+                                              })
+                                            }
+                                            onMouseLeave={() =>
+                                              setHoveredShift({
+                                                id: emp?.employee?.id,
+                                                date: day.fullDate,
+                                                type: "",
+                                                empid: "",
+                                              })
+                                            }
+                                            onClick={() =>
+                                              changeShift(
+                                                emp?.employee?.id,
+                                                "",
+                                                day.fullDate,
+                                                "add",
+                                                emp?.employee?.department_id,
+                                                "",
+                                              )
+                                            }
+                                          >
+                                            +
+                                          </button>
+                                        )}
 
-                                    {/* Tooltip */}
-                                    {hoveredShift?.id === emp?.employee?.id &&
-                                      hoveredShift?.date === day.fullDate &&
-                                      hoveredShift?.type === "add" && (
-                                        <span className="absolute bottom-10 right-10 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
-                                          Add Shift
-                                        </span>
-                                      )}
-
-                                    {/* Popup Box (only opens for clicked cell) */}
-                                    {openPopup?.row === rowIndex &&
-                                      openPopup?.col === colIndex && (
-                                        <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
-                                          {/* Close Button */}
-                                          <div className="flex items-center justify-between border-b pb-2">
-                                            <span className="text-sm font-semibold">
-                                              Select Shift
+                                        {/* Tooltip */}
+                                        {hoveredShift?.id ===
+                                          emp?.employee?.id &&
+                                          hoveredShift?.date === day.fullDate &&
+                                          hoveredShift?.type === "add" && (
+                                            <span className="absolute bottom-10 right-10 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
+                                              Add Shift
                                             </span>
-                                            <button
-                                              className="text-lg font-bold text-gray-500 hover:text-gray-700"
-                                              onClick={() => setOpenPopup(null)} // Close popup when clicked
-                                            >
-                                              &times;
-                                            </button>
-                                          </div>
+                                          )}
 
-                                          {/* Search Input */}
-                                          <input
-                                            type="text"
-                                            placeholder="Search shift name"
-                                            className="mt-2 w-full rounded-md border p-2 outline-none"
-                                          />
-
-                                          {/* Shift List */}
-                                          <div className="mt-2">
-                                            {filteredShifts?.map(
-                                              (shift, index) => (
-                                                <div
-                                                  key={index}
-                                                  className="flex justify-between border-b p-2 text-sm last:border-none"
+                                        {/* Popup Box (only opens for clicked cell) */}
+                                        {openPopup?.row === rowIndex &&
+                                          openPopup?.col === colIndex && (
+                                            <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
+                                              {/* Close Button */}
+                                              <div className="flex items-center justify-between border-b pb-2">
+                                                <span className="text-sm font-semibold">
+                                                  Select Shift
+                                                </span>
+                                                <button
+                                                  className="text-lg font-bold text-gray-500 hover:text-gray-700"
+                                                  onClick={() =>
+                                                    setOpenPopup(null)
+                                                  } // Close popup when clicked
                                                 >
-                                                  <span>{shift.name}</span>
-                                                  <span className="text-gray-500">
-                                                    {shift.time}
-                                                  </span>
-                                                </div>
-                                              ),
-                                            )}
-                                          </div>
-                                        </div>
-                                      )}
-                                  </div>
+                                                  &times;
+                                                </button>
+                                              </div>
+
+                                              {/* Search Input */}
+                                              <input
+                                                type="text"
+                                                placeholder="Search shift name"
+                                                className="mt-2 w-full rounded-md border p-2 outline-none"
+                                              />
+
+                                              {/* Shift List */}
+                                              <div className="mt-2">
+                                                {filteredShifts?.map(
+                                                  (shift, index) => (
+                                                    <div
+                                                      key={index}
+                                                      className="flex justify-between border-b p-2 text-sm last:border-none"
+                                                    >
+                                                      <span>{shift.name}</span>
+                                                      <span className="text-gray-500">
+                                                        {shift.time}
+                                                      </span>
+                                                    </div>
+                                                  ),
+                                                )}
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
                                 </div>
                               ) : dayOff?.length > 0 ? (
                                 <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
