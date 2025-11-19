@@ -40,6 +40,7 @@ export default function AddLeave({
   const [teamList, setTeamList] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
   const [dayOffDates, setDayOffDates] = useState([]);
+  const [droperrors, setDroperrors] = useState(null);
 
   const {
     register,
@@ -115,9 +116,11 @@ export default function AddLeave({
         })
         .then((res) => res.data),
     enabled:
-      !!fromDate && !!toDate && !!user?.employee_data && !!selectedLeaveType,
+      !!fromDate &&
+      !!toDate &&
+      (employeeTeamHoliday ? !!employeeId : !!user?.employee_data?.id) &&
+      !!selectedLeaveType,
   });
-  console.log(fromDate, toDate);
 
   useEffect(() => {
     if (employeeLeaveShift?.length) {
