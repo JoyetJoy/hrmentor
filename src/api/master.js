@@ -199,7 +199,7 @@ export const EMPLOYEE_TEAM_LEAVE_APPLICATIONS =
   "employee-team-leave-applications";
 
 // EMPLOYEE LEAVE SHIFTS
-export const EMPLOYEE_LEAVE_SHIFTS = "employee-leave-shifts";
+export const EMPLOYEE_LEAVE_SHIFTS = "employee-leave-shifts-update";
 
 // EMPLOYEE LEAVE TYPE
 export const EMPLOYEE_LEAVE_TYPE = "employee-leave-types";

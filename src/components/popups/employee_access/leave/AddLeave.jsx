@@ -121,12 +121,17 @@ export default function AddLeave({
 
   useEffect(() => {
     if (employeeLeaveShift?.length) {
-      const options = employeeLeaveShift?.map((shift) => ({
-        label: shift?.shift.name,
-        value: shift?.shift.id,
-        id: shift?.id,
-      }));
-      setShiftOptions(options);
+      const formatted = {};
+
+      employeeLeaveShift.forEach((item) => {
+        formatted[item.date] = item.data.map((d) => ({
+          label: d.name,
+          value: d.shift_id,
+          id: d.roster_id,
+        }));
+      });
+
+      setShiftOptions(formatted); // <-- store as object grouped by date
     }
   }, [employeeLeaveShift]);
 
@@ -271,7 +276,7 @@ export default function AddLeave({
       setDayOffDates((prev) => prev.filter((d) => d !== date));
     }
   };
-console.log(dayOffDates);
+  console.log(dayOffDates);
 
   const onSubmit = async () => {
     setLoader(true);
@@ -285,7 +290,7 @@ console.log(dayOffDates);
         leave_start_date: fromDate,
         leave_end_date: toDate,
         leave_reason: leaveReason,
-        day_off_date: dayOffDates
+        day_off_date: dayOffDates,
       };
 
       if (
@@ -430,9 +435,8 @@ console.log(dayOffDates);
                 {dateRange && (
                   <>
                     {dateRange?.map((date, index) => {
-                      const dateCount = dateRange.filter(
-                        (d) => d.date === date.date,
-                      ).length; // Count occurrences of the date
+                      const shiftsForThisDate = shiftOptions[date.date] || []; // <<-- Filter by date
+
                       return (
                         <div
                           key={index}
@@ -470,16 +474,16 @@ console.log(dayOffDates);
                               render={({ field }) => (
                                 <Select
                                   {...field}
-                                  isSearchable={true}
-                                  options={shiftOptions}
+                                  isSearchable
+                                  options={shiftsForThisDate} // <<-- ONLY shifts for this date
                                   placeholder="Select Shift"
                                   className="input-box w-full text-black"
                                   onChange={(selectedOption) =>
                                     handleShiftChange(selectedOption, index)
-                                  } // Call the handler with index
-                                  value={shiftOptions.find(
+                                  }
+                                  value={shiftsForThisDate.find(
                                     (option) => option.value === field.value,
-                                  )} // Set the current value
+                                  )}
                                   isDisabled={dayOffDates.includes(date.date)}
                                 />
                               )}
