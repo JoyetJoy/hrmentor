@@ -43,7 +43,7 @@ export default function LeaveRequest({
           params: { user_id: user?.id },
         })
         .then((res) => res.data),
-    enabled: !!user?.id && !!id,
+    enabled: !!user?.id && !!id &&!!popupOpen,
   });
   useEffect(() => {
     if (leaveDetails) {

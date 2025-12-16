@@ -20,6 +20,8 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const [ViewEdit, setViewEdit] = useState("");
+  const [editPopup, setEditPopup] = useState(false);
+  const [userId, setUserId] = useState('');
 
   const pageLimit = 10;
 
@@ -176,8 +178,9 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
               <button
                 type="button"
                 onClick={() => {
-                  setPopupOpen(true);
-                  setViewEdit("edit");
+                  setEditPopup(true);
+                  setUserId(row?.original?.user_id)
+                  setViewEdit("admin");
                   setSelectedId(row?.original?.id);
                 }}
                 className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
@@ -203,9 +206,16 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [currentPage, pageLimit, colKeys],
   );
-  
+
   return (
     <>
+      <EditLeave
+        popupOpen={editPopup}
+        ViewEdit={ViewEdit}
+        setPopupOpen={setEditPopup}
+        id={selectedId}
+        userId={userId}
+      />
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}

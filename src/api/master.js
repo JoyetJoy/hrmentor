@@ -181,6 +181,8 @@ export const EMPLOYEE_LIST = "/team-employees";
 //  LEAVE REQUEST LIST
 export const LEAVE_REQUEST_LIST = "admin-employee-leave-requests";
 
+export const LEAVE_REQUEST_UPDATE = "admin-employee-leave-update";
+
 export const PENDING_LEAVE_REQUEST_LIST = "admin-employee-pending-leave-request-list";
 // COMPLETED LEAVE REQUEST LIST
 export const COMPLETED_LEAVE_REQUEST_LIST = "admin-employee-completed-leave-request-list";

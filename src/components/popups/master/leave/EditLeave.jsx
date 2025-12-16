@@ -6,14 +6,16 @@ import {
   EMPLOYEE_TEAM_LEAVE_APPLY,
   EMPLOYEE_TEAM_LEAVE_TYPE,
   EMPLOYEE_TEAM_LIST,
+  LEAVE_REQUEST_LIST,
+  LEAVE_REQUEST_UPDATE,
 } from "@/api/master";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlusIcon, Trash2, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
@@ -25,8 +27,10 @@ const LeaveSchema = Yup.object({
 
 export default function EditLeave({
   popupOpen,
+  ViewEdit,
   setPopupOpen,
-  employeeTeamHoliday,
+  id,
+  userId,
 }) {
   const { user } = useUserStore((state) => ({ user: state.user }));
   const [loader, setLoader] = useState(false);
@@ -40,6 +44,8 @@ export default function EditLeave({
   const [teamList, setTeamList] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
   const [dayOffDates, setDayOffDates] = useState([]);
+  const hasPrefilledRef = useRef(false);
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -47,22 +53,29 @@ export default function EditLeave({
     control,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(LeaveSchema),
   });
   console.log(user);
+  console.log(userId, id);
+
+  const { data: leaveDetails } = useQuery({
+    queryKey: ["leaveDetails", userId, id],
+    queryFn: () =>
+      newRequest
+        .get(`${LEAVE_REQUEST_LIST}/${id}`, {
+          params: { user_id: userId },
+        })
+        .then((res) => res.data),
+    enabled: !!userId && !!id,
+  });
 
   function close() {
+    hasPrefilledRef.current = false;
     setPopupOpen(false);
-    reset();
-    setFromDate("");
-    setToDate("");
-    setDateRange([]);
-    setSelectedLeaveType("");
-    setLeaveReason("");
-    setEmployeeId("");
   }
 
   const leaveSchedule = [
@@ -74,6 +87,93 @@ export default function EditLeave({
     { label: "First Half", value: "first_half" },
     { label: "Second Half", value: "second_half" },
   ];
+
+  useEffect(() => {
+    if (!leaveDetails) return;
+
+    setFromDate(leaveDetails?.from_date);
+    setToDate(leaveDetails?.to_date);
+
+    // Prefill basic info
+    setValue("employee_name", {
+      label: leaveDetails?.employee.first_name,
+      value: leaveDetails?.employee.id,
+    });
+    setValue("leaveType", {
+      label: leaveDetails?.leave_type,
+      value: leaveDetails?.leave_type_id,
+    });
+    setLeaveReason(leaveDetails?.reason);
+    setSelectedLeaveType(leaveDetails?.leave_type_id);
+  }, [leaveDetails]);
+
+  useEffect(() => {
+    if (
+      hasPrefilledRef.current ||
+      !leaveDetails ||
+      dateRange.length === 0 ||
+      Object.keys(shiftOptions).length === 0
+    ) {
+      return;
+    }
+
+    const updatedDateRange = [...dateRange];
+    const prefilledDayOff = [];
+
+    leaveDetails.leave_period.forEach((leaveItem) => {
+      const index = updatedDateRange.findIndex(
+        (d) => d.date === leaveItem.date,
+      );
+      if (index === -1) return;
+
+      // DAY OFF
+      if (leaveItem.shift_name?.toLowerCase() === "day off") {
+        prefilledDayOff.push(leaveItem.date);
+        updatedDateRange[index] = { date: leaveItem.date };
+        return;
+      }
+
+      // SHIFT
+      const shiftsForThisDate = shiftOptions[leaveItem.date] || [];
+      const matchedShift = shiftsForThisDate.find((s) =>
+        s.label.includes(leaveItem.shift_name),
+      );
+
+      updatedDateRange[index] = {
+        ...updatedDateRange[index],
+        shift_id: matchedShift?.value,
+        roster_id: matchedShift?.id,
+        leave_schedule: leaveItem.leave_schedule,
+        leave_schedule_section: leaveItem.leave_schedule_section || null,
+      };
+
+      // RHF PREFILL (UI)
+      setValue(
+        `leave_schedule-${index}`,
+        leaveSchedule.find((o) => o.value === leaveItem.leave_schedule),
+      );
+
+      if (leaveItem.leave_schedule === "half_day") {
+        setValue(
+          `leave_schedule_section-${index}`,
+          leaveScheduleSection.find(
+            (o) => o.value === leaveItem.leave_schedule_section,
+          ),
+        );
+      }
+
+      if (matchedShift) {
+        setValue(`additionalShift-${index}`, matchedShift.value);
+      }
+    });
+
+    setDateRange(updatedDateRange);
+    setDayOffDates(prefilledDayOff);
+
+    hasPrefilledRef.current = true;
+  }, [leaveDetails, dateRange, shiftOptions]);
+
+  console.log(dateRange);
 
   const handleLeaveTypeChange = (selectedOption) => {
     setSelectedLeaveType(selectedOption.value);
@@ -108,26 +208,31 @@ export default function EditLeave({
           params: {
             from_date: fromDate,
             to_date: toDate,
-            employee_id: employeeTeamHoliday
-              ? employeeId
-              : user?.employee_data?.id,
+            employee_id: leaveDetails?.employee_id,
           },
         })
         .then((res) => res.data),
     enabled:
-      !!fromDate && !!toDate && !!user?.employee_data && !!selectedLeaveType,
+      !!fromDate &&
+      !!toDate &&
+      !!leaveDetails?.employee_id &&
+      !!selectedLeaveType,
   });
-  console.log(fromDate, toDate);
+  console.log(shiftOptions);
 
   useEffect(() => {
-    if (employeeLeaveShift?.length) {
-      const options = employeeLeaveShift?.map((shift) => ({
-        label: shift?.shift.name,
-        value: shift?.shift.id,
-        id: shift?.id,
+    if (!employeeLeaveShift?.length) return;
+    const formatted = {};
+
+    employeeLeaveShift.forEach((item) => {
+      formatted[item.date] = item.data.map((d) => ({
+        label: d.name,
+        value: d.shift_id,
+        id: d.roster_id,
       }));
-      setShiftOptions(options);
-    }
+    });
+
+    setShiftOptions(formatted);
   }, [employeeLeaveShift]);
 
   useEffect(() => {
@@ -245,7 +350,8 @@ export default function EditLeave({
     updateDateRanges("shift_id", selectedOption, index);
   };
 
-  const handleShiftSchedule = (selectedOption, index) => {
+  const handleShiftSchedule = (selectedOption, index, onChange) => {
+    onChange(selectedOption); // 🔑 MUST update RHF
     updateDateRange("leave_schedule", selectedOption, index);
   };
 
@@ -271,50 +377,59 @@ export default function EditLeave({
       setDayOffDates((prev) => prev.filter((d) => d !== date));
     }
   };
-console.log(dayOffDates);
+  console.log(dayOffDates);
 
   const onSubmit = async () => {
     setLoader(true);
 
     try {
-      // Common form data
-      const formData = {
-        leave_type_id: selectedLeaveType,
-        total_leave_days: dateRange.length,
-        leave_periods: dateRange,
-        leave_start_date: fromDate,
-        leave_end_date: toDate,
-        leave_reason: leaveReason,
-        day_off_date: dayOffDates
-      };
+      const leave_periods = dateRange.map((item) => {
+        // 🟡 DAY OFF → only date
+        if (dayOffDates.includes(item.date)) {
+          return { date: item.date };
+        }
 
-      if (
-        !formData?.leave_type_id ||
-        !formData?.total_leave_days ||
-        !formData?.leave_reason ||
-        !formData?.leave_start_date ||
-        !formData?.leave_end_date ||
-        formData?.leave_periods.length == 0
-      ) {
-        return toast.error("mandatory field missing error");
-      }
+        const payload = {
+          date: item.date,
+        };
 
-      let apiUrl = EMPLOYEE_LEAVE_REQUEST; // Default API URL
-      if (employeeId) {
-        apiUrl = EMPLOYEE_TEAM_LEAVE_APPLY;
-        formData.employee_id = employeeId; // Add employee_id if available
-      }
+        // shift
+        if (item.shift_id) payload.shift_id = item.shift_id;
+        if (item.roster_id) payload.roster_id = item.roster_id;
 
-      // Send POST request
-      const res = await newRequest.post(apiUrl, formData, {
-        params: { user_id: user?.id },
+        // leave schedule
+        if (item.leave_schedule) {
+          payload.leave_schedule = item.leave_schedule;
+
+          if (
+            item.leave_schedule === "half_day" &&
+            item.leave_schedule_section
+          ) {
+            payload.leave_schedule_section = item.leave_schedule_section;
+          }
+        }
+
+        return payload;
       });
 
-      // Success message and page reload
-      if (res) {
-        toast.success(res?.data?.message);
-        window.location.reload();
-      }
+      const formData = {
+        leave_status_id: 2,
+        descriptions: leaveReason,
+        leave_periods,
+        day_off_date: dayOffDates,
+      };
+
+      const res = await newRequest.post(
+        `${LEAVE_REQUEST_UPDATE}/${id}`,
+        formData,
+        {
+          params: { user_id: userId },
+        },
+      );
+
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries(["servicesList"]);
+      setPopupOpen(false);
     } catch (error) {
       console.error(error);
       toast.error(error?.response?.data?.error || "An error occurred.");
@@ -335,7 +450,7 @@ console.log(dayOffDates);
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel className="w-full max-w-3xl rounded bg-white px-10 py-10">
               <div className="mb-5 flex justify-between">
-                <h1 className="text-md font-bold">Add Leave</h1>
+                <h1 className="text-md font-bold">Edit Leave</h1>
                 <button onClick={close}>
                   <X />
                 </button>
@@ -345,40 +460,37 @@ console.log(dayOffDates);
                 onSubmit={handleSubmit(onSubmit)}
               >
                 <div className="flex gap-2">
-                  {employeeTeamHoliday ? (
-                    <div className="flex w-full flex-col gap-2">
-                      <label className="text-sm font-medium">Employee</label>
-                      <Controller
-                        name="employee_name"
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field }) => (
-                          <Select
-                            {...field}
-                            isSearchable={true}
-                            styles={customSelectStyles}
-                            options={teamList}
-                            placeholder="Select Leave Type"
-                            className="input-box w-full text-black caret-white"
-                            onChange={(e) => {
-                              setEmployeeId(e?.value);
-                            }}
-                          />
-                        )}
-                      />
-                    </div>
-                  ) : (
-                    <></>
-                  )}
+                  <div className="flex w-full flex-col gap-2">
+                    <label className="text-sm font-medium">Employee</label>
+                    <Controller
+                      name="employee_name"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          isSearchable={true}
+                          isDisabled={true}
+                          styles={customSelectStyles}
+                          options={teamList}
+                          placeholder="Select Leave Type"
+                          className="input-box w-full text-black caret-white"
+                          onChange={(e) => {
+                            setEmployeeId(e?.value);
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
 
                   <div className="flex w-full flex-col gap-2">
                     <label className="text-sm font-medium">
                       Leave Type
-                      {leaveType.length === 0 && (
+                      {/* {leaveType.length === 0 && (
                         <span style={{ color: "red" }}>
                           [No Leave Available For You]
                         </span>
-                      )}
+                      )} */}
                     </label>
                     <Controller
                       name="leaveType"
@@ -388,6 +500,7 @@ console.log(dayOffDates);
                         <Select
                           {...field}
                           isSearchable={true}
+                          isDisabled={true}
                           styles={customSelectStyles}
                           options={leaveType}
                           placeholder="Select Leave Type"
@@ -430,9 +543,8 @@ console.log(dayOffDates);
                 {dateRange && (
                   <>
                     {dateRange?.map((date, index) => {
-                      const dateCount = dateRange.filter(
-                        (d) => d.date === date.date,
-                      ).length; // Count occurrences of the date
+                      const shiftsForThisDate = shiftOptions[date.date] || []; // <<-- Filter by date
+
                       return (
                         <div
                           key={index}
@@ -470,16 +582,16 @@ console.log(dayOffDates);
                               render={({ field }) => (
                                 <Select
                                   {...field}
-                                  isSearchable={true}
-                                  options={shiftOptions}
+                                  isSearchable
+                                  options={shiftsForThisDate} // <<-- ONLY shifts for this date
                                   placeholder="Select Shift"
                                   className="input-box w-full text-black"
                                   onChange={(selectedOption) =>
                                     handleShiftChange(selectedOption, index)
-                                  } // Call the handler with index
-                                  value={shiftOptions.find(
+                                  }
+                                  value={shiftsForThisDate.find(
                                     (option) => option.value === field.value,
-                                  )} // Set the current value
+                                  )}
                                   isDisabled={dayOffDates.includes(date.date)}
                                 />
                               )}
@@ -495,25 +607,27 @@ console.log(dayOffDates);
                               render={({ field }) => (
                                 <Select
                                   {...field}
-                                  isSearchable={true}
+                                  isSearchable
                                   styles={customSelectStyles}
                                   options={leaveSchedule}
                                   placeholder="Select Leave Type"
                                   className="input-box w-full text-black caret-white"
-                                  onChange={(selectedOption) =>
-                                    handleShiftSchedule(selectedOption, index)
-                                  } // Call the handler with index
-                                  value={leaveSchedule.find(
-                                    (option) => option.value === field.value,
-                                  )} // Set the current value
+                                  value={field.value || null}
                                   isDisabled={dayOffDates.includes(date.date)}
+                                  onChange={(selectedOption) =>
+                                    handleShiftSchedule(
+                                      selectedOption,
+                                      index,
+                                      field.onChange,
+                                    )
+                                  }
                                 />
                               )}
                             />
                           </div>
 
-                          {/* Conditional Fields for "Half Day" */}
-                          {date?.leave_schedule === "half_day" && (
+                          {watch(`leave_schedule-${index}`)?.value ===
+                            "half_day" && (
                             <div className="mt-4 w-full">
                               <Controller
                                 name={`leave_schedule_section-${index}`}
@@ -522,20 +636,19 @@ console.log(dayOffDates);
                                 render={({ field }) => (
                                   <Select
                                     {...field}
-                                    isSearchable={true}
+                                    isSearchable
                                     styles={customSelectStyles}
                                     options={leaveScheduleSection}
                                     placeholder="Select Section"
                                     className="input-box w-full text-black caret-white"
-                                    onChange={(selectedOption) =>
+                                    value={field.value || null} // ✅ FIX
+                                    onChange={(selectedOption) => {
+                                      field.onChange(selectedOption); // 🔑 update RHF
                                       handleShiftScheduleSection(
                                         selectedOption,
                                         index,
-                                      )
-                                    } // Call the handler with index
-                                    value={leaveScheduleSection.find(
-                                      (option) => option.value === field.value,
-                                    )} // Set the current value
+                                      );
+                                    }}
                                   />
                                 )}
                               />
@@ -582,6 +695,7 @@ console.log(dayOffDates);
                   <textarea
                     className="input-box overflow-y-min h-20 w-full overflow-y-auto pt-2"
                     rows="4"
+                    value={leaveReason}
                     onChange={(e) => {
                       setLeaveReason(e.target.value);
                     }}

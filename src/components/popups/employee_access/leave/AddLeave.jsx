@@ -11,7 +11,7 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlusIcon, Trash2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -41,6 +41,7 @@ export default function AddLeave({
   const [employeeId, setEmployeeId] = useState("");
   const [dayOffDates, setDayOffDates] = useState([]);
   const [droperrors, setDroperrors] = useState(null);
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -321,7 +322,9 @@ export default function AddLeave({
       // Success message and page reload
       if (res) {
         toast.success(res?.data?.message);
-        window.location.reload();
+        queryClient.invalidateQueries(["employeeLeaveList"]);
+        setPopupOpen(false);
+        setDayOffDates([]);
       }
     } catch (error) {
       console.error(error);
