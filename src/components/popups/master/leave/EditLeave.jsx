@@ -1,474 +1,257 @@
 import { newRequest } from "@/api";
 import {
-  EMPLOYEE_LEAVE_REQUEST,
   EMPLOYEE_LEAVE_SHIFTS,
-  EMPLOYEE_LEAVE_TYPE,
-  EMPLOYEE_TEAM_LEAVE_APPLY,
   EMPLOYEE_TEAM_LEAVE_TYPE,
   EMPLOYEE_TEAM_LIST,
   LEAVE_REQUEST_LIST,
   LEAVE_REQUEST_UPDATE,
 } from "@/api/master";
-import { useUserStore } from "@/lib/slices/auth.slice";
+import { LeaveSchema } from "@/schema/dashboard/leave/LeaveSchema";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { PlusIcon, Trash2, X } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { X } from "lucide-react";
+import React, { useEffect } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
-import * as Yup from "yup";
 
-const LeaveSchema = Yup.object({
-  leave_type: Yup.string(),
-});
-
-export default function EditLeave({
-  popupOpen,
-  ViewEdit,
-  setPopupOpen,
-  id,
-  userId,
-}) {
-  const { user } = useUserStore((state) => ({ user: state.user }));
-  const [loader, setLoader] = useState(false);
-  const [selectedLeaveType, setSelectedLeaveType] = useState("");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [dateRange, setDateRange] = useState([]);
-  const [shiftOptions, setShiftOptions] = useState([]);
-  const [leaveType, setLeaveType] = useState([]);
-  const [leaveReason, setLeaveReason] = useState("");
-  const [teamList, setTeamList] = useState([]);
-  const [employeeId, setEmployeeId] = useState("");
-  const [dayOffDates, setDayOffDates] = useState([]);
-  const hasPrefilledRef = useRef(false);
+export default function EditLeave({ popupOpen, setPopupOpen, id, userId }) {
   const queryClient = useQueryClient();
 
+  const { control, handleSubmit, setValue, reset, watch, register, getValues } =
+    useForm({
+      resolver: yupResolver(LeaveSchema),
+      defaultValues: {
+        employee_name: null,
+        leaveType: null,
+        reason: "",
+        from_date: "",
+        to_date: "",
+        leave_period: [],
+      },
+    });
+
   const {
-    register,
-    handleSubmit,
+    fields: leavePeriodFields,
+    replace,
+  } = useFieldArray({
     control,
-    reset,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: yupResolver(LeaveSchema),
-  });
-  console.log(user);
-  console.log(userId, id);
-
-  const { data: leaveDetails } = useQuery({
-    queryKey: ["leaveDetails", userId, id],
-    queryFn: () =>
-      newRequest
-        .get(`${LEAVE_REQUEST_LIST}/${id}`, {
-          params: { user_id: userId },
-        })
-        .then((res) => res.data),
-    enabled: !!userId && !!id,
+    name: "leave_period",
   });
 
-  function close() {
-    hasPrefilledRef.current = false;
-    setPopupOpen(false);
-    window.location.reload();
-  }
-  console.log(shiftOptions);
+  const watchLeavePeriod = watch("leave_period");
+  const watchFromDate = watch("from_date");
+  const watchToDate = watch("to_date");
+  const selectedEmployee = watch("employee_name")?.value;
+  const selectedLeaveType = watch("leaveType")?.value;
 
-  useEffect(() => {
-    if (popupOpen) {
-      hasPrefilledRef.current = false;
-      setDateRange([]);
-      setShiftOptions({});
-      setDayOffDates([]);
-      reset();
-    }
-  }, [popupOpen]);
-
-  const leaveSchedule = [
+  // ------------------ Leave Schedules ------------------
+  const leaveScheduleOptions = [
     { label: "Half Day", value: "half_day" },
     { label: "Full Day", value: "full_day" },
   ];
 
-  const leaveScheduleSection = [
+  const leaveScheduleSectionOptions = [
     { label: "First Half", value: "first_half" },
     { label: "Second Half", value: "second_half" },
   ];
 
+  // ------------------ Fetch Leave Details ------------------
+  const { data: leaveDetails } = useQuery({
+    queryKey: ["leaveDetails", userId, id],
+    queryFn: async () => {
+      const res = await newRequest.get(`${LEAVE_REQUEST_LIST}/${id}`, {
+        params: { user_id: userId },
+      });
+      return res?.data ?? null;
+    },
+    enabled: !!userId && !!id,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: false,
+  });
+
   useEffect(() => {
     if (!leaveDetails) return;
 
-    setFromDate(leaveDetails?.from_date);
-    setToDate(leaveDetails?.to_date);
-
-    // Prefill basic info
     setValue("employee_name", {
-      label: leaveDetails?.employee.first_name,
-      value: leaveDetails?.employee.id,
+      label: leaveDetails.employee.first_name,
+      value: leaveDetails.employee.id,
     });
+
     setValue("leaveType", {
-      label: leaveDetails?.leave_type,
-      value: leaveDetails?.leave_type_id,
+      label: leaveDetails.leave_type,
+      value: leaveDetails.leave_type_id,
     });
-    setLeaveReason(leaveDetails?.reason);
-    setSelectedLeaveType(leaveDetails?.leave_type_id);
+
+    setValue("reason", leaveDetails.reason);
+    setValue("from_date", leaveDetails.from_date);
+    setValue("to_date", leaveDetails.to_date);
+
+    replace(
+      leaveDetails.leave_period.map((item) => ({
+        date: item.date,
+        is_day_off: item.shift_name?.toLowerCase() === "day off",
+        shift_id: item.shift_id ?? null,
+        leave_schedule: item.leave_schedule ?? null,
+        leave_schedule_section: item.leave_schedule_section ?? null,
+      })),
+    );
   }, [leaveDetails]);
 
-  useEffect(() => {
-    if (
-      hasPrefilledRef.current ||
-      !leaveDetails ||
-      dateRange.length === 0 ||
-      Object.keys(shiftOptions).length === 0
-    ) {
-      return;
-    }
-
-    const updatedDateRange = [...dateRange];
-    const prefilledDayOff = [];
-
-    leaveDetails.leave_period.forEach((leaveItem) => {
-      const index = updatedDateRange.findIndex(
-        (d) => d.date === leaveItem.date,
-      );
-      if (index === -1) return;
-
-      // DAY OFF
-      if (leaveItem.shift_name?.toLowerCase() === "day off") {
-        prefilledDayOff.push(leaveItem.date);
-        updatedDateRange[index] = { date: leaveItem.date };
-        return;
-      }
-
-      // SHIFT
-      const shiftsForThisDate = shiftOptions[leaveItem.date] || [];
-      const matchedShift = shiftsForThisDate.find((s) =>
-        s.label.includes(leaveItem.shift_name),
-      );
-
-      updatedDateRange[index] = {
-        ...updatedDateRange[index],
-        shift_id: matchedShift?.value,
-        roster_id: matchedShift?.id,
-        leave_schedule: leaveItem.leave_schedule,
-        leave_schedule_section: leaveItem.leave_schedule_section || null,
-      };
-
-      // RHF PREFILL (UI)
-      setValue(
-        `leave_schedule-${index}`,
-        leaveSchedule.find((o) => o.value === leaveItem.leave_schedule),
-      );
-
-      if (leaveItem.leave_schedule === "half_day") {
-        setValue(
-          `leave_schedule_section-${index}`,
-          leaveScheduleSection.find(
-            (o) => o.value === leaveItem.leave_schedule_section,
-          ),
-        );
-      }
-
-      if (matchedShift) {
-        setValue(`additionalShift-${index}`, matchedShift.value);
-      }
-    });
-
-    setDateRange(updatedDateRange);
-    setDayOffDates(prefilledDayOff);
-
-    hasPrefilledRef.current = true;
-  }, [leaveDetails, dateRange, shiftOptions]);
-
-  console.log(dateRange);
-
-  const handleLeaveTypeChange = (selectedOption) => {
-    setSelectedLeaveType(selectedOption.value);
-  };
-
+  // ------------------ Employee Team List ------------------
   const { data: employeeTeamList = [] } = useQuery({
     queryKey: ["employeeTeamList"],
     queryFn: () => newRequest.get(EMPLOYEE_TEAM_LIST).then((res) => res.data),
   });
 
-  useEffect(() => {
-    if (employeeTeamList?.length) {
-      const options = employeeTeamList?.map((team) => ({
-        label: team?.name,
-        value: team?.id,
-      }));
-      setTeamList(options);
-    }
-  }, [employeeTeamList]);
+  const employeeOptions = employeeTeamList.map((team) => ({
+    label: team.name,
+    value: team.id,
+  }));
 
-  const { data: employeeLeaveShift = [] } = useQuery({
+  // ------------------ Employee Leave Type ------------------
+  const { data: employeeLeaveType = [] } = useQuery({
+    queryKey: ["employeeLeaveType", selectedEmployee],
+    queryFn: async () => {
+      if (!selectedEmployee) return [];
+      const response = await newRequest.get(
+        `${EMPLOYEE_TEAM_LEAVE_TYPE}/${selectedEmployee}`,
+      );
+      return response.data || [];
+    },
+    enabled: !!selectedEmployee,
+  });
+
+  const leaveTypeOptions = employeeLeaveType
+    .filter(
+      (type) =>
+        type.already_taked_leaves < Number(type.leave_types?.emp_no_days),
+    )
+    .map((type) => ({
+      label: type.leave_types.display_name,
+      value: type.leave_types.id,
+    }));
+
+  // ------------------ Fetch Shifts Based on Date Range ------------------
+  const { data: employeeLeaveShifts = [] } = useQuery({
     queryKey: [
-      "employeeLeaveShift",
-      fromDate,
-      toDate,
-      user?.employee_data,
+      "employeeLeaveShifts",
+      selectedEmployee,
+      watchFromDate,
+      watchToDate,
       selectedLeaveType,
     ],
-    queryFn: () =>
-      newRequest
-        .get(EMPLOYEE_LEAVE_SHIFTS, {
-          params: {
-            from_date: fromDate,
-            to_date: toDate,
-            employee_id: leaveDetails?.employee_id,
-          },
-        })
-        .then((res) => res.data),
+    queryFn: async () => {
+      if (
+        !selectedEmployee ||
+        !watchFromDate ||
+        !watchToDate ||
+        !selectedLeaveType
+      )
+        return [];
+      const response = await newRequest.get(EMPLOYEE_LEAVE_SHIFTS, {
+        params: {
+          employee_id: selectedEmployee,
+          from_date: watchFromDate,
+          to_date: watchToDate,
+        },
+      });
+      return response.data || [];
+    },
     enabled:
-      !!fromDate &&
-      !!toDate &&
-      !!leaveDetails?.employee_id &&
+      !!selectedEmployee &&
+      !!watchFromDate &&
+      !!watchToDate &&
       !!selectedLeaveType,
   });
-  console.log(shiftOptions);
 
+  // ------------------ Map Shifts to Each Date ------------------
+  const shiftOptionsMap = {};
+  employeeLeaveShifts.forEach((item) => {
+    shiftOptionsMap[item.date] = item.data.map((d) => ({
+      label: d.name,
+      value: d.shift_id,
+      id: d.roster_id,
+    }));
+  });
+
+  // ------------------ Generate Leave Period Array ------------------
   useEffect(() => {
-    if (!employeeLeaveShift?.length) return;
-    const formatted = {};
+    if (!watchFromDate || !watchToDate) return;
 
-    employeeLeaveShift.forEach((item) => {
-      formatted[item.date] = item.data.map((d) => ({
-        label: d.name,
-        value: d.shift_id,
-        id: d.roster_id,
-      }));
-    });
+    const start = new Date(watchFromDate);
+    const end = new Date(watchToDate);
+    const existing = getValues("leave_period") || [];
 
-    setShiftOptions(formatted);
-  }, [employeeLeaveShift]);
+    const dates = [];
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const formatted = d.toISOString().split("T")[0];
+      const found = existing.find((i) => i.date === formatted);
 
-  useEffect(() => {
-    if (employeeId) {
-      const fetchEmployeeTeamLeaveType = async () => {
-        try {
-          const response = await newRequest.get(
-            `${EMPLOYEE_TEAM_LEAVE_TYPE}/${employeeId}`,
-          );
-          const employeeTeamLeaveType = response.data || [];
-
-          if (employeeTeamLeaveType?.length) {
-            const options = employeeTeamLeaveType
-              ?.filter(
-                (type) =>
-                  type.already_taked_leaves <=
-                  Number(type.leave_types?.emp_no_days),
-              )
-              .map((type) => ({
-                label: type.leave_types.display_name,
-                value: type.leave_types.id,
-              }));
-
-            setLeaveType(options); // Set filtered options to the state
-          }
-        } catch (error) {
-          console.error("Error fetching employee team leave type:", error);
-        }
-      };
-
-      fetchEmployeeTeamLeaveType();
-    } else {
-      const fetchEmployeeLeaveType = async () => {
-        try {
-          const response = await newRequest.get(EMPLOYEE_LEAVE_TYPE);
-          const employeeLeaveType = Array.isArray(response?.data?.data)
-            ? response?.data?.data
-            : [];
-          if (employeeLeaveType?.length) {
-            const options = employeeLeaveType
-              .filter(
-                (type) => type.already_taked_leaves < Number(type?.emp_no_days),
-              )
-              ?.map((type) => ({
-                label: type.display_name,
-                value: type.id,
-              }));
-
-            setLeaveType(options); // Set filtered options to the state
-          }
-        } catch (error) {
-          console.error("Error fetching employee leave type:", error);
-        }
-      };
-
-      fetchEmployeeLeaveType();
+      dates.push({
+        date: formatted,
+        is_day_off: found?.is_day_off || false,
+        shift_id: found?.shift_id ?? null,
+        leave_schedule: found?.leave_schedule ?? null,
+        leave_schedule_section: found?.leave_schedule_section ?? null,
+      });
     }
-  }, [employeeId]);
+
+    replace(dates);
+  }, [watchFromDate, watchToDate]);
 
   useEffect(() => {
-    const getDateRange = (fromDate, toDate) => {
-      const startDate = new Date(fromDate); // fromDate is already yyyy-mm-dd
-      const endDate = new Date(toDate);
-      const dates = [];
+    leavePeriodFields.forEach((_, index) => {
+      const isDayOff = watch(`leave_period.${index}.is_day_off`);
 
-      for (
-        let d = new Date(startDate);
-        d <= endDate;
-        d.setDate(d.getDate() + 1)
-      ) {
-        // Format date as yyyy-mm-dd
-        const formattedDate = d.toISOString().split("T")[0]; // Extracts only the yyyy-mm-dd part
-        dates.push({ date: formattedDate });
+      if (isDayOff) {
+        setValue(`leave_period.${index}.shift_id`, null);
+        setValue(`leave_period.${index}.leave_schedule`, null);
+        setValue(`leave_period.${index}.leave_schedule_section`, null);
       }
+    });
+  }, [watch("leave_period"), leavePeriodFields.length]);
 
-      return dates;
-    };
-
-    // Validate input and generate the dates
-    if (fromDate && toDate && dateRange.length === 0) {
-      const generatedDates = getDateRange(fromDate, toDate);
-      setDateRange(generatedDates); // Update state with the generated dates
-    }
-  }, [fromDate, toDate]);
-
-  const updateDateRange = (field, selectedOption, index) => {
-    // Clone the existing data array to avoid direct mutation
-    const updatedData = [...dateRange];
-
-    // Dynamically update the field value and roaster_id based on selectedOption
-    updatedData[index] = {
-      ...updatedData[index],
-      [field]: selectedOption ? selectedOption.value : null, // Set the dynamically passed field
-    };
-
-    // Update the state with the new data
-    setDateRange(updatedData);
-  };
-
-  const updateDateRanges = (field, selectedOption, index) => {
-    // Clone the existing data array to avoid direct mutation
-    const updatedData = [...dateRange];
-    // Dynamically update the field value and roaster_id based on selectedOption
-    updatedData[index] = {
-      ...updatedData[index],
-      [field]: selectedOption ? selectedOption.value : null, // Set the dynamically passed field
-      roster_id: selectedOption ? selectedOption.id : null, // Set roaster_id from selectedOption
-    };
-
-    // Update the state with the new data
-    setDateRange(updatedData);
-  };
-
-  const handleShiftChange = (selectedOption, index) => {
-    updateDateRanges("shift_id", selectedOption, index);
-  };
-
-  const handleShiftSchedule = (selectedOption, index, onChange) => {
-    onChange(selectedOption); // 🔑 MUST update RHF
-    updateDateRange("leave_schedule", selectedOption, index);
-  };
-
-  const handleShiftScheduleSection = (selectedOption, index) => {
-    updateDateRange("leave_schedule_section", selectedOption, index);
-  };
-
-  const handleDateShift = (date) => {
-    const updatedDateRange = [...dateRange, date];
-    updatedDateRange.sort((a, b) => new Date(a.date) - new Date(b.date));
-    setDateRange(updatedDateRange);
-  };
-
-  const handleDelete = (index) => {
-    const updatedData = dateRange.filter((_, i) => i !== index); // Remove the item at the given index
-    setDateRange(updatedData); // Update the state
-  };
-
-  const handleDayOffToggle = (date, checked, index) => {
-    if (checked) {
-      // Add to day off list
-      setDayOffDates((prev) => [...prev, date]);
-
-      // Clear dateRange values
-      setDateRange((prev) =>
-        prev.map((item, i) =>
-          i === index
-            ? {
-                date: item.date, // keep only date
-              }
-            : item,
-        ),
-      );
-
-      // Clear RHF values
-      setValue(`additionalShift-${index}`, null);
-      setValue(`leave_schedule-${index}`, null);
-      setValue(`leave_schedule_section-${index}`, null);
-    } else {
-      // Remove from day off list
-      setDayOffDates((prev) => prev.filter((d) => d !== date));
-    }
-  };
-
-  console.log(dayOffDates);
-
-  const onSubmit = async () => {
-    setLoader(true);
-
+  // ------------------ Submit ------------------
+  const onSubmit = async (values) => {
     try {
-      const leave_periods = dateRange.map((item) => {
-        // 🟡 DAY OFF → only date
-        if (dayOffDates.includes(item.date)) {
-          return { date: item.date };
-        }
-
-        const payload = {
+      const leave_periods = values.leave_period.map((item) => {
+        if (item.dayOff) return { date: item.date };
+        return {
           date: item.date,
+          shift_id: item.shift_id,
+          leave_schedule: item.leave_schedule,
+          leave_schedule_section: item.leave_schedule_section || null,
         };
-
-        // shift
-        if (item.shift_id) payload.shift_id = item.shift_id;
-        if (item.roster_id) payload.roster_id = item.roster_id;
-
-        // leave schedule
-        if (item.leave_schedule) {
-          payload.leave_schedule = item.leave_schedule;
-
-          if (
-            item.leave_schedule === "half_day" &&
-            item.leave_schedule_section
-          ) {
-            payload.leave_schedule_section = item.leave_schedule_section;
-          }
-        }
-
-        return payload;
       });
 
-      const formData = {
+      const payload = {
         leave_status_id: 2,
-        descriptions: leaveReason,
+        descriptions: values.reason,
         leave_periods,
-        day_off_date: dayOffDates,
       };
 
       const res = await newRequest.post(
         `${LEAVE_REQUEST_UPDATE}/${id}`,
-        formData,
+        payload,
         {
           params: { user_id: userId },
         },
       );
 
       toast.success(res?.data?.message);
-      queryClient.invalidateQueries(["servicesList"]);
+      queryClient.invalidateQueries(["leaveDetails", userId, id]);
       setPopupOpen(false);
-      window.location.reload();
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.error || "An error occurred.");
-    } finally {
-      setLoader(false);
+      toast.error(error?.response?.data?.error || "An error occurred");
     }
   };
+
+  const close = () => setPopupOpen(false);
 
   return (
     <>
@@ -504,26 +287,16 @@ export default function EditLeave({
                           isSearchable={true}
                           isDisabled={true}
                           styles={customSelectStyles}
-                          options={teamList}
+                          options={employeeOptions}
                           placeholder="Select Leave Type"
                           className="input-box w-full text-black caret-white"
-                          onChange={(e) => {
-                            setEmployeeId(e?.value);
-                          }}
                         />
                       )}
                     />
                   </div>
 
                   <div className="flex w-full flex-col gap-2">
-                    <label className="text-sm font-medium">
-                      Leave Type
-                      {/* {leaveType.length === 0 && (
-                        <span style={{ color: "red" }}>
-                          [No Leave Available For You]
-                        </span>
-                      )} */}
-                    </label>
+                    <label className="text-sm font-medium">Leave Type</label>
                     <Controller
                       name="leaveType"
                       control={control}
@@ -534,13 +307,9 @@ export default function EditLeave({
                           isSearchable={true}
                           isDisabled={true}
                           styles={customSelectStyles}
-                          options={leaveType}
+                          options={leaveTypeOptions}
                           placeholder="Select Leave Type"
                           className="input-box w-full text-black caret-white"
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleLeaveTypeChange(e);
-                          }}
                         />
                       )}
                     />
@@ -551,10 +320,9 @@ export default function EditLeave({
                     <label className="text-sm font-medium">Start Date</label>
                     <input
                       type="date"
-                      onChange={(e) => {
-                        setFromDate(e.target.value);
-                      }}
-                      value={fromDate}
+                      {...register("from_date")}
+                      placeholder="From Date"
+                      disabled
                       className="input-box w-full pr-2"
                     />
                   </div>
@@ -562,167 +330,143 @@ export default function EditLeave({
                     <label className="text-sm font-medium">End Date</label>
                     <input
                       type="date"
-                      min={fromDate}
-                      onChange={(e) => {
-                        setToDate(e.target.value);
-                      }}
-                      value={toDate}
+                      min={watchFromDate}
+                      {...register("to_date")}
+                      placeholder="To Date"
+                      disabled
                       className="input-box w-full pr-2"
                     />
                   </div>
                 </div>
 
-                {dateRange && (
-                  <>
-                    {dateRange?.map((date, index) => {
-                      const shiftsForThisDate = shiftOptions[date.date] || []; // <<-- Filter by date
+                <>
+                  {leavePeriodFields.map((item, index) => {
+                    const shiftsForThisDate = shiftOptionsMap[item.date] || [];
+                    const isDayOff = watch(`leave_period.${index}.is_day_off`);
 
-                      return (
-                        <div
-                          key={index}
-                          className="mt-4 flex items-center justify-center gap-3 border-t"
-                        >
-                          {/* Display the date */}
-                          <div className="w-ful mt-4 flex min-w-36 flex-col justify-center gap-2">
-                            <h1 className="w-full whitespace-nowrap text-sm font-semibold text-textcolor-darkCharcoal">
-                              {date.date}
-                            </h1>
-                            <p className="flex w-full gap-2">
-                              <input
-                                type="checkbox"
-                                name="dayoff"
-                                checked={dayOffDates.includes(date.date)}
-                                onChange={(e) =>
-                                  handleDayOffToggle(
-                                    date.date,
-                                    e.target.checked,
-                                    index,
-                                  )
-                                }
-                              />
-                              <label htmlFor="dayoff" className="text-xs">
-                                Mark as dayoff
-                              </label>
-                            </p>
-                          </div>
+                    return (
+                      <div
+                        key={item.id}
+                        className="mt-4 flex items-center justify-center gap-3 border-t"
+                      >
+                        {/* DATE + DAY OFF */}
+                        <div className="w-ful mt-4 flex min-w-36 flex-col justify-center gap-2">
+                          <h1 className="w-full whitespace-nowrap text-sm font-semibold text-textcolor-darkCharcoal">
+                            {item.date}
+                          </h1>
 
-                          {/* Shift Selection */}
+                          <p className="flex w-full gap-2">
+                            <Controller
+                              name={`leave_period.${index}.is_day_off`}
+                              control={control}
+                              render={({ field }) => (
+                                <input
+                                  type="checkbox"
+                                  {...field}
+                                  checked={field.value || false}
+                                />
+                              )}
+                            />
+                            <label className="text-xs">Mark as dayoff</label>
+                          </p>
+                        </div>
+
+                        {/* 🔽 WHOLE SECTION HIDES WHEN DAY OFF */}
+                        <div className="flex w-full items-center gap-3">
+                          {/* SHIFT */}
                           <div className="mt-4 w-full">
                             <Controller
-                              name={`additionalShift-${index}`}
+                              name={`leave_period.${index}.shift_id`}
                               control={control}
-                              rules={{ required: true }}
                               render={({ field }) => (
                                 <Select
-                                  {...field}
                                   isSearchable
-                                  options={shiftsForThisDate} // <<-- ONLY shifts for this date
+                                  options={shiftsForThisDate}
                                   placeholder="Select Shift"
+                                  isDisabled={isDayOff}
                                   className="input-box w-full text-black"
-                                  onChange={(selectedOption) => {
-                                    field.onChange(selectedOption?.value);
-                                    handleShiftChange(selectedOption, index);
-                                  }}
-                                  value={shiftsForThisDate.find(
-                                    (option) => option.value === field.value,
-                                  )}
-                                  isDisabled={dayOffDates.includes(date.date)}
+                                  value={
+                                    isDayOff
+                                      ? null
+                                      : shiftsForThisDate.find(
+                                          (opt) => opt.value === field.value,
+                                        ) || null
+                                  }
+                                  onChange={(opt) => field.onChange(opt?.value)}
                                 />
                               )}
                             />
                           </div>
 
-                          {/* Leave Schedule */}
+                          {/* LEAVE SCHEDULE */}
                           <div className="mt-4 w-full">
                             <Controller
-                              name={`leave_schedule-${index}`}
+                              name={`leave_period.${index}.leave_schedule`}
                               control={control}
-                              rules={{ required: true }}
                               render={({ field }) => (
                                 <Select
-                                  {...field}
                                   isSearchable
                                   styles={customSelectStyles}
-                                  options={leaveSchedule}
+                                  options={leaveScheduleOptions}
                                   placeholder="Select Leave Type"
-                                  className="input-box w-full text-black caret-white"
-                                  value={field.value || null}
-                                  isDisabled={dayOffDates.includes(date.date)}
-                                  onChange={(selectedOption) =>
-                                    handleShiftSchedule(
-                                      selectedOption,
-                                      index,
-                                      field.onChange,
-                                    )
+                                  isDisabled={isDayOff}
+                                  className="input-box w-full text-black"
+                                  value={
+                                    isDayOff
+                                      ? null
+                                      : leaveScheduleOptions.find(
+                                          (o) => o.value === field.value,
+                                        ) || null
                                   }
+                                  onChange={(opt) => field.onChange(opt?.value)}
                                 />
                               )}
                             />
                           </div>
 
-                          {watch(`leave_schedule-${index}`)?.value ===
-                            "half_day" && (
-                            <div className="mt-4 w-full">
-                              <Controller
-                                name={`leave_schedule_section-${index}`}
-                                control={control}
-                                rules={{ required: true }}
-                                render={({ field }) => (
-                                  <Select
-                                    {...field}
-                                    isSearchable
-                                    styles={customSelectStyles}
-                                    options={leaveScheduleSection}
-                                    placeholder="Select Section"
-                                    isDisabled={dayOffDates.includes(date.date)}
-                                    className="input-box w-full text-black caret-white"
-                                    value={field.value || null} // ✅ FIX
-                                    onChange={(selectedOption) => {
-                                      field.onChange(selectedOption); // 🔑 update RHF
-                                      handleShiftScheduleSection(
-                                        selectedOption,
-                                        index,
-                                      );
-                                    }}
-                                  />
-                                )}
-                              />
-                            </div>
-                          )}
-
-                          <div key={index}>
-                            {Object.keys(shiftOptions).length >= 2 && (
-                              <>
-                                {dateCount === shiftOptions.length ? (
-                                  <span
-                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-red-600 px-3 py-3 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:outline-1 focus:outline-white"
-                                    onClick={() => handleDelete(index)}
-                                  >
-                                    <Trash2 className="size-5" />
-                                  </span>
-                                ) : (
-                                  <span
-                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-green-600 px-3 py-3 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:outline-1 focus:outline-white"
-                                    onClick={() => handleDateShift(date)}
-                                  >
-                                    <PlusIcon className="size-5" />
-                                  </span>
-                                )}
-                              </>
+                          {/* HALF DAY SECTION */}
+                          {watch(`leave_period.${index}.leave_schedule`) ===
+                            "half_day" &&
+                            !isDayOff && (
+                              <div className="mt-4 w-full">
+                                <Controller
+                                  name={`leave_period.${index}.leave_schedule_section`}
+                                  control={control}
+                                  render={({ field }) => (
+                                    <Select
+                                      isSearchable
+                                      styles={customSelectStyles}
+                                      options={leaveScheduleSectionOptions}
+                                      placeholder="Select Section"
+                                      className="input-box w-full text-black"
+                                      value={
+                                        leaveScheduleSectionOptions.find(
+                                          (o) => o.value === field.value,
+                                        ) || null
+                                      }
+                                      onChange={(opt) =>
+                                        field.onChange(opt?.value)
+                                      }
+                                    />
+                                  )}
+                                />
+                              </div>
                             )}
-                          </div>
                         </div>
-                      );
-                    })}
-                    {/* Total Days */}
-                    <div className="group flex items-center justify-between gap-x-2 rounded-md bg-gray-darklight px-6 py-4 font-bold">
-                      <h1 className="w-3/5">Total</h1>
-                      <h1>
-                        {dateRange.length} day{dateRange.length > 1 ? "s" : ""}
-                      </h1>
-                    </div>
-                  </>
-                )}
+                      </div>
+                    );
+                  })}
+
+                  {/* TOTAL */}
+                  <div className="group flex items-center justify-between gap-x-2 rounded-md bg-gray-darklight px-6 py-4 font-bold">
+                    <h1 className="w-3/5">Total</h1>
+                    <h1>
+                      {leavePeriodFields.length} day
+                      {leavePeriodFields.length > 1 ? "s" : ""}
+                    </h1>
+                  </div>
+                </>
+
                 <div className="flex w-1/2 flex-col gap-2">
                   <label className="required text-sm font-medium">
                     Reason for Leave
@@ -730,10 +474,8 @@ export default function EditLeave({
                   <textarea
                     className="input-box overflow-y-min h-20 w-full overflow-y-auto pt-2"
                     rows="4"
-                    value={leaveReason}
-                    onChange={(e) => {
-                      setLeaveReason(e.target.value);
-                    }}
+                    {...register("reason")}
+                    placeholder="Reason"
                   />
                 </div>
                 <div className="mt-4 flex w-1/2 gap-3">
