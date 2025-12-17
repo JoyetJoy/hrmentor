@@ -76,6 +76,7 @@ export default function EditLeave({
   function close() {
     hasPrefilledRef.current = false;
     setPopupOpen(false);
+    window.location.reload();
   }
   console.log(shiftOptions);
 
@@ -381,10 +382,28 @@ export default function EditLeave({
     setDateRange(updatedData); // Update the state
   };
 
-  const handleDayOffToggle = (date, checked) => {
+  const handleDayOffToggle = (date, checked, index) => {
     if (checked) {
+      // Add to day off list
       setDayOffDates((prev) => [...prev, date]);
+
+      // Clear dateRange values
+      setDateRange((prev) =>
+        prev.map((item, i) =>
+          i === index
+            ? {
+                date: item.date, // keep only date
+              }
+            : item,
+        ),
+      );
+
+      // Clear RHF values
+      setValue(`additionalShift-${index}`, null);
+      setValue(`leave_schedule-${index}`, null);
+      setValue(`leave_schedule_section-${index}`, null);
     } else {
+      // Remove from day off list
       setDayOffDates((prev) => prev.filter((d) => d !== date));
     }
   };
@@ -442,6 +461,7 @@ export default function EditLeave({
       toast.success(res?.data?.message);
       queryClient.invalidateQueries(["servicesList"]);
       setPopupOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error(error);
       toast.error(error?.response?.data?.error || "An error occurred.");
@@ -576,6 +596,7 @@ export default function EditLeave({
                                   handleDayOffToggle(
                                     date.date,
                                     e.target.checked,
+                                    index,
                                   )
                                 }
                               />
@@ -653,6 +674,7 @@ export default function EditLeave({
                                     styles={customSelectStyles}
                                     options={leaveScheduleSection}
                                     placeholder="Select Section"
+                                    isDisabled={dayOffDates.includes(date.date)}
                                     className="input-box w-full text-black caret-white"
                                     value={field.value || null} // ✅ FIX
                                     onChange={(selectedOption) => {
@@ -667,6 +689,28 @@ export default function EditLeave({
                               />
                             </div>
                           )}
+
+                          <div key={index}>
+                            {Object.keys(shiftOptions).length >= 2 && (
+                              <>
+                                {dateCount === shiftOptions.length ? (
+                                  <span
+                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-red-600 px-3 py-3 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:outline-1 focus:outline-white"
+                                    onClick={() => handleDelete(index)}
+                                  >
+                                    <Trash2 className="size-5" />
+                                  </span>
+                                ) : (
+                                  <span
+                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-green-600 px-3 py-3 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:outline-1 focus:outline-white"
+                                    onClick={() => handleDateShift(date)}
+                                  >
+                                    <PlusIcon className="size-5" />
+                                  </span>
+                                )}
+                              </>
+                            )}
+                          </div>
                         </div>
                       );
                     })}
