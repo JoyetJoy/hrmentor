@@ -77,6 +77,17 @@ export default function EditLeave({
     hasPrefilledRef.current = false;
     setPopupOpen(false);
   }
+  console.log(shiftOptions);
+
+  useEffect(() => {
+    if (popupOpen) {
+      hasPrefilledRef.current = false;
+      setDateRange([]);
+      setShiftOptions({});
+      setDayOffDates([]);
+      reset();
+    }
+  }, [popupOpen]);
 
   const leaveSchedule = [
     { label: "Half Day", value: "half_day" },
@@ -312,7 +323,7 @@ export default function EditLeave({
     };
 
     // Validate input and generate the dates
-    if (fromDate && toDate) {
+    if (fromDate && toDate && dateRange.length === 0) {
       const generatedDates = getDateRange(fromDate, toDate);
       setDateRange(generatedDates); // Update state with the generated dates
     }
@@ -377,6 +388,7 @@ export default function EditLeave({
       setDayOffDates((prev) => prev.filter((d) => d !== date));
     }
   };
+
   console.log(dayOffDates);
 
   const onSubmit = async () => {
@@ -448,7 +460,7 @@ export default function EditLeave({
       >
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/20">
           <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel className="w-full max-w-3xl rounded bg-white px-10 py-10">
+            <DialogPanel className="w-full max-w-3xl overflow-x-auto rounded bg-white px-10 py-10">
               <div className="mb-5 flex justify-between">
                 <h1 className="text-md font-bold">Edit Leave</h1>
                 <button onClick={close}>
@@ -586,9 +598,10 @@ export default function EditLeave({
                                   options={shiftsForThisDate} // <<-- ONLY shifts for this date
                                   placeholder="Select Shift"
                                   className="input-box w-full text-black"
-                                  onChange={(selectedOption) =>
-                                    handleShiftChange(selectedOption, index)
-                                  }
+                                  onChange={(selectedOption) => {
+                                    field.onChange(selectedOption?.value);
+                                    handleShiftChange(selectedOption, index);
+                                  }}
                                   value={shiftsForThisDate.find(
                                     (option) => option.value === field.value,
                                   )}
@@ -654,28 +667,6 @@ export default function EditLeave({
                               />
                             </div>
                           )}
-
-                          <div key={index}>
-                            {shiftOptions.length >= 2 && (
-                              <>
-                                {dateCount === shiftOptions.length ? (
-                                  <span
-                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-red-600 px-3 py-3 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:outline-1 focus:outline-white"
-                                    onClick={() => handleDelete(index)}
-                                  >
-                                    <Trash2 className="size-5" />
-                                  </span>
-                                ) : (
-                                  <span
-                                    className="mt-1 flex w-fit items-center justify-center gap-2 whitespace-nowrap rounded-md bg-green-600 px-3 py-3 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:outline-1 focus:outline-white"
-                                    onClick={() => handleDateShift(date)}
-                                  >
-                                    <PlusIcon className="size-5" />
-                                  </span>
-                                )}
-                              </>
-                            )}
-                          </div>
                         </div>
                       );
                     })}
