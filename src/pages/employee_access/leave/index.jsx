@@ -182,7 +182,7 @@ export default function Leave() {
       <div className="flex gap-3 w-full">
         <LeaveSideBar />
         <div className="flex flex-col gap-10 w-full">
-          <div className="h-[16rem]">
+          <div className="h-[20rem]">
           <LeaveDiagram/>
           </div>
           {/* <img src="/assets/images/employee_access/leave.png" alt="" /> */}
