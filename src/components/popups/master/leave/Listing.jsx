@@ -21,7 +21,7 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [selectedField, setSelectedField] = useState(0);
   const [ViewEdit, setViewEdit] = useState("");
   const [editPopup, setEditPopup] = useState(false);
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
 
   const pageLimit = 10;
 
@@ -175,21 +175,23 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
               >
                 <Eye className="size-3" />
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditPopup(true);
-                  setUserId(row?.original?.user_id)
-                  setViewEdit("admin");
-                  setSelectedId(row?.original?.id);
-                }}
-                className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-              >
-                <img
-                  src="/assets/icons/admin/marker.svg"
-                  className="w-full object-contain"
-                />
-              </button>
+              {row.original?.leave_status?.leave_status_name !== "Approved" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditPopup(true);
+                    setUserId(row?.original?.user_id);
+                    setViewEdit("admin");
+                    setSelectedId(row?.original?.id);
+                  }}
+                  className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+                >
+                  <img
+                    src="/assets/icons/admin/marker.svg"
+                    className="w-full object-contain"
+                  />
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => {
