@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { LogIn, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "@/lib/slices/auth.slice";
 import Pusher from "pusher-js";
 const url = import.meta.env.VITE_CHAT_URL;
@@ -16,7 +16,6 @@ export default function Notification({
   type,
   notificationPopupOpen,
   setNotificationPopupOpen,
-  refetchNotification,
 }) {
   function close() {
     setNotificationPopupOpen(false);
@@ -25,11 +24,12 @@ export default function Notification({
   const { user } = useUserStore((state) => ({
     user: state.user,
   }));
+  const navigate = useNavigate();
 
   useEffect(() => {
     setNotification(notifications);
   }, [notifications]);
-  console.log(notifications, "notification");
+
   useEffect(() => {
     if (!user?.user?.id && type !== "admin") return; // Prevent subscription if user ID is missing
 
@@ -81,7 +81,7 @@ export default function Notification({
     };
   }, [user?.user?.id, type === "admin"]);
 
-  const handleClick = async (notificationId) => {
+  const handleClick = async (notificationId,type) => {
     if (!notificationId) return;
     const data = {
       notification_id: notificationId,
@@ -90,14 +90,15 @@ export default function Notification({
       const response = await newRequest.post(READ_NOTIFICATION, data);
 
       if (response.status === 200) {
-        if (refetchNotification) {
-          await refetchNotification();
-        }
         close();
       }
     } catch (error) {
       console.error("Error marking notification as read:", error);
     }
+    if(type === "leave_application"){
+      navigate("/admin/leave/request/awaitingapproval")
+    }
+    
   };
 
   return (
@@ -120,11 +121,10 @@ export default function Notification({
               <div className="flex flex-1 flex-col gap-3">
                 <div className="overflow-y-min mx-auto max-h-[35rem] w-full overflow-y-auto">
                   {notification?.data?.map((notification) => (
-                    <Link
-                      to={notification?.type === "leave_application" ? "/admin/leave/request/awaitingapproval" :"/admin/employee"}
-                      onClick={() => handleClick(notification?.id)}
+                    <div
+                      onClick={() => handleClick(notification?.id,notification?.type)}
                       key={notification?.id}
-                      className="mb-4 border-b border-gray-200 pb-4"
+                      className="mb-4 border-b border-gray-200 pb-4 cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
                         <div className="mt-2 flex min-h-10 min-w-10 items-center justify-center rounded-full bg-red-500 text-center text-white">
@@ -149,7 +149,7 @@ export default function Notification({
                           )}
                         </div>
                       </div>
-                    </Link>
+                    </div>
                   ))}
                   {notification?.data?.length > 0 ? (
                     <div className="mt-4 text-right">

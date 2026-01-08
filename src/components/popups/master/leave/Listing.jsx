@@ -9,7 +9,6 @@ import LeaveRequest from "./LeaveRequest";
 import { LeaveList } from "@/constants/menus/leave";
 import { SettingsSidebar } from "@/components/sidebars/recruiter/SettingsSidebar";
 import Loader from "@/components/ui/Loader";
-import EditLeave from "./EditLeave";
 
 export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,8 +19,6 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedField, setSelectedField] = useState(0);
   const [ViewEdit, setViewEdit] = useState("");
-  const [editPopup, setEditPopup] = useState(false);
-  const [userId, setUserId] = useState("");
 
   const pageLimit = 10;
 
@@ -175,23 +172,20 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
               >
                 <Eye className="size-3" />
               </button>
-              {row.original?.leave_status?.leave_status_name !== "Approved" && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditPopup(true);
-                    setUserId(row?.original?.user_id);
-                    setViewEdit("admin");
-                    setSelectedId(row?.original?.id);
-                  }}
-                  className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
-                >
-                  <img
-                    src="/assets/icons/admin/marker.svg"
-                    className="w-full object-contain"
-                  />
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setPopupOpen(true);
+                  setViewEdit("edit");
+                  setSelectedId(row?.original?.id);
+                }}
+                className="flex size-7 cursor-pointer items-center rounded-full bg-[#EBEBF0] p-2"
+              >
+                <img
+                  src="/assets/icons/admin/marker.svg"
+                  className="w-full object-contain"
+                />
+              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -208,16 +202,9 @@ export const LeaveMasters = ({ api, qrkey, colKeys, type }) => {
       ].filter(Boolean),
     [currentPage, pageLimit, colKeys],
   );
-
+  
   return (
     <>
-      <EditLeave
-        popupOpen={editPopup}
-        ViewEdit={ViewEdit}
-        setPopupOpen={setEditPopup}
-        id={selectedId}
-        userId={userId}
-      />
       <DeleteConfirmation
         open={deletePopup}
         onCancel={setDeletePopup}

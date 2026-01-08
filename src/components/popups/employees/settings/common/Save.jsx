@@ -62,6 +62,7 @@ export default function SaveEmployeeMasterForm({
     setSelectedField(0);
     reset();
   }
+
   const isWorkLocation = type === "Work Location";
 
   const onSubmit = async (data) => {
@@ -75,7 +76,7 @@ export default function SaveEmployeeMasterForm({
     setLoader(true);
     try {
       const formData = new URLSearchParams();
-      if (type === "Document Category") {
+      if(type === "Document Category"){
         formData.append("expiry_status", data?.expiry_status ? 1 : 0);
       }
       formData.append(colKeys.field1.key, data?.name);
@@ -90,7 +91,7 @@ export default function SaveEmployeeMasterForm({
       } else {
         res = await XFormRequest.post(api, formData);
       }
-      if (res?.data?.success === true || res?.status === 200) {
+      if (res?.data?.success === true) {
         toast.success(res?.data?.message);
         queryClient.invalidateQueries([qrKey]);
         close();
@@ -102,6 +103,7 @@ export default function SaveEmployeeMasterForm({
       setLoader(false);
     }
   };
+
   return (
     <Dialog
       open={popupOpen}
@@ -192,18 +194,18 @@ export default function SaveEmployeeMasterForm({
                 </div>
                 {type === "Document Category" && (
                   <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      {...register("expiry_status")}
-                      className="mr-2"
-                    />
-                    <label className="label-text">is expiry needed</label>
-                    {errors.status && (
-                      <span className="text-xs font-medium text-red-500">
-                        {errors.status?.message}
-                      </span>
-                    )}
-                  </div>
+                  <input
+                    type="checkbox"
+                    {...register("expiry_status")}
+                    className="mr-2"
+                  />
+                  <label className="label-text">is expiry needed</label>
+                  {errors.status && (
+                    <span className="text-xs font-medium text-red-500">
+                      {errors.status?.message}
+                    </span>
+                  )}
+                </div>
                 )}
 
                 <div className="mt-2 flex flex-row items-center justify-center gap-3">

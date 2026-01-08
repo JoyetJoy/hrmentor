@@ -11,10 +11,9 @@ import dayjs from "dayjs";
 import { usePermissionStore } from "@/lib/slices/auth.slice";
 import EmployeeList from "@/components/popups/employees/EmployeeList";
 import toast from "react-hot-toast";
-import { Doughnut } from "react-chartjs-2";
 export const AdminDashboard = () => {
   const [popupOpen, setPopupOpen] = useState(false);
-  const [employees, setEmployees] = useState("");
+  const [employees, setEmployees] = useState('');
   const { permissions } = usePermissionStore((state) => ({
     permissions: state.permissions,
   }));
@@ -26,67 +25,6 @@ export const AdminDashboard = () => {
     enabled: true,
     staleTime: 0,
   });
-
-  const data = {
-    labels: ["Expired", "Valid"],
-    datasets: [
-      {
-        data: [
-          admindashboard?.expired_total || 0,
-          admindashboard?.valid_total || 0,
-        ],
-        backgroundColor: ["#456EF2", "#FFA38F"],
-        hoverBackgroundColor: ["#456EF2", "#FFA38F"],
-      },
-    ],
-  };
-
-  const options = {
-    cutout: "70%",
-    plugins: {
-      legend: {
-        position: "right",
-        labels: {
-          boxWidth: 10,
-          padding: 14,
-          usePointStyle: true,
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: function (tooltipItem) {
-            return `${tooltipItem.label}: ${tooltipItem.raw}`;
-          },
-        },
-      },
-    },
-  };
-
-  const centerTextPlugin = {
-    id: "centerText",
-    beforeDraw: (chart) => {
-      const { width, height, ctx } = chart;
-
-      ctx.restore();
-      ctx.save();
-
-      const centerX = width / 2 - 40;
-      const centerY = height / 2;
-
-      const total = admindashboard?.total ?? 0; // 👈 FIX HERE
-
-      ctx.font = "12px sans-serif";
-      ctx.fillStyle = "#999";
-      ctx.textAlign = "center";
-      ctx.fillText("Total", centerX, centerY - 10);
-
-      ctx.font = "bold 16px sans-serif";
-      ctx.fillStyle = "#000";
-      ctx.fillText(`${total}`, centerX, centerY + 10);
-
-      ctx.restore();
-    },
-  };
 
   const handleClick = (event, date) => {
     if (!event?.isHoliday) {
@@ -108,7 +46,7 @@ export const AdminDashboard = () => {
           type: shift?.shift_name,
           count: shift?.employees_clocked_in_count,
           date: shift?.date,
-          emp: shift?.employees_clocked_in,
+          emp:shift?.employees_clocked_in,
           path: shift?.shift?.isHoliday
             ? ``
             : `/admin/shift/calendarview?id=${shift?.roster_id}&date=${selectdate}`,
@@ -154,14 +92,14 @@ export const AdminDashboard = () => {
     },
   ];
 
-  const Employee = (emp, shift) => {
-    if (emp.length < 1) {
-      toast("No employee found for this shift");
+  const Employee = (emp,shift)=>{
+    if(emp.length<1){
+      toast('No employee found for this shift');
       return;
     }
-    setEmployees({ emp: emp, shift: shift });
-    setPopupOpen(true);
-  };
+    setEmployees({emp:emp,shift:shift});
+    setPopupOpen(true)
+  }
 
   return (
     <div className="my-3 flex items-baseline justify-between gap-4 rounded-md">
@@ -239,7 +177,7 @@ export const AdminDashboard = () => {
                       </div>
                       {card.title === "Current Shift Status" && (
                         <div
-                          onClick={() => Employee(item?.emp, item?.type)}
+                          onClick={() => Employee(item?.emp,item?.type)}
                           className="rounded-full border bg-gray-soft p-2"
                         >
                           <MoveDiagonal
@@ -260,19 +198,6 @@ export const AdminDashboard = () => {
       </div>
       <div className="flex w-[27%] flex-col">
         <ProfileCompletionCount value={admindashboard} />
-        <div className="mt-5 w-full rounded-md bg-white px-5 py-3 shadow-sm">
-          <div className="w-[80%]">
-            <p className="font-semibold">Appraisals/Supervision</p>
-
-            {admindashboard?.total !== undefined && (
-              <Doughnut
-                data={data}
-                options={options}
-                plugins={[centerTextPlugin]}
-              />
-            )}
-          </div>
-        </div>
         <div className="mt-4 rounded-md bg-white p-6 shadow-sm">
           <h1 className="mb-4 flex items-center justify-between text-lg font-semibold text-black">
             News & Events

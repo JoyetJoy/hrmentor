@@ -16,7 +16,6 @@ export default function EmployeeNotification({
   type,
   notificationPopupOpen,
   setNotificationPopupOpen,
-  refetchNotification
 }) {
   function close() {
     setNotificationPopupOpen(false);
@@ -89,9 +88,6 @@ export default function EmployeeNotification({
       const response = await newRequest.post(READ_NOTIFICATION, data);
 
       if (response.status === 200) {
-         if (refetchNotification) {
-          await refetchNotification();
-        }
         close();
       }
     } catch (error) {

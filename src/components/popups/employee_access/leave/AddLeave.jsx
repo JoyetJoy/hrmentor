@@ -11,7 +11,7 @@ import { useUserStore } from "@/lib/slices/auth.slice";
 import { customSelectStyles } from "@/utils/customStyles";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { PlusIcon, Trash2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -40,8 +40,6 @@ export default function AddLeave({
   const [teamList, setTeamList] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
   const [dayOffDates, setDayOffDates] = useState([]);
-  const [droperrors, setDroperrors] = useState(null);
-  const queryClient = useQueryClient();
 
   const {
     register,
@@ -117,25 +115,18 @@ export default function AddLeave({
         })
         .then((res) => res.data),
     enabled:
-      !!fromDate &&
-      !!toDate &&
-      (employeeTeamHoliday ? !!employeeId : !!user?.employee_data?.id) &&
-      !!selectedLeaveType,
+      !!fromDate && !!toDate && !!user?.employee_data && !!selectedLeaveType,
   });
+  console.log(fromDate, toDate);
 
   useEffect(() => {
     if (employeeLeaveShift?.length) {
-      const formatted = {};
-
-      employeeLeaveShift.forEach((item) => {
-        formatted[item.date] = item.data.map((d) => ({
-          label: d.name,
-          value: d.shift_id,
-          id: d.roster_id,
-        }));
-      });
-
-      setShiftOptions(formatted); // <-- store as object grouped by date
+      const options = employeeLeaveShift?.map((shift) => ({
+        label: shift?.shift.name,
+        value: shift?.shift.id,
+        id: shift?.id,
+      }));
+      setShiftOptions(options);
     }
   }, [employeeLeaveShift]);
 
@@ -280,7 +271,7 @@ export default function AddLeave({
       setDayOffDates((prev) => prev.filter((d) => d !== date));
     }
   };
-  console.log(dayOffDates);
+console.log(dayOffDates);
 
   const onSubmit = async () => {
     setLoader(true);
@@ -294,7 +285,7 @@ export default function AddLeave({
         leave_start_date: fromDate,
         leave_end_date: toDate,
         leave_reason: leaveReason,
-        day_off_date: dayOffDates,
+        day_off_date: dayOffDates
       };
 
       if (
@@ -322,9 +313,7 @@ export default function AddLeave({
       // Success message and page reload
       if (res) {
         toast.success(res?.data?.message);
-        queryClient.invalidateQueries(["employeeLeaveList"]);
-        setPopupOpen(false);
-        setDayOffDates([]);
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -441,8 +430,9 @@ export default function AddLeave({
                 {dateRange && (
                   <>
                     {dateRange?.map((date, index) => {
-                      const shiftsForThisDate = shiftOptions[date.date] || []; // <<-- Filter by date
-
+                      const dateCount = dateRange.filter(
+                        (d) => d.date === date.date,
+                      ).length; // Count occurrences of the date
                       return (
                         <div
                           key={index}
@@ -480,16 +470,16 @@ export default function AddLeave({
                               render={({ field }) => (
                                 <Select
                                   {...field}
-                                  isSearchable
-                                  options={shiftsForThisDate} // <<-- ONLY shifts for this date
+                                  isSearchable={true}
+                                  options={shiftOptions}
                                   placeholder="Select Shift"
                                   className="input-box w-full text-black"
                                   onChange={(selectedOption) =>
                                     handleShiftChange(selectedOption, index)
-                                  }
-                                  value={shiftsForThisDate.find(
+                                  } // Call the handler with index
+                                  value={shiftOptions.find(
                                     (option) => option.value === field.value,
-                                  )}
+                                  )} // Set the current value
                                   isDisabled={dayOffDates.includes(date.date)}
                                 />
                               )}

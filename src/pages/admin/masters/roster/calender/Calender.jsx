@@ -267,14 +267,13 @@ const RosterCalendar = () => {
 
   const monthDays = getMonthDays();
   const weekDays = getWeekDays();
+
   const findEvents = (date, data, day) => {
     const workingDays = data?.shift?.weeks || [];
     const allDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     const selectedDay = dayjs(date).format("ddd").toUpperCase();
 
     const formattedDate = date;
-
-    // 🔹 Filter events by type
     const holidayEvents = data?.filter(
       (event) =>
         Array.isArray(event?.holidays) &&
@@ -286,6 +285,7 @@ const RosterCalendar = () => {
         Array.isArray(event?.date_swaps) &&
         event.date_swaps.includes(formattedDate),
     );
+    console.log(swapedEvents);
 
     const deletedEvents = data?.filter(
       (event) =>
@@ -302,41 +302,22 @@ const RosterCalendar = () => {
           ),
       ) || [];
 
-    // 🔹 Deduplicate leave events by user or event ID
-   // Deduplicate leaves for the current date by leave_type_id
-const leaveEvents = Array.from(
-  new Map(
-    leaveEventsRaw
-      .flatMap((event) =>
-        event.date_leaves
-          ?.filter((leave) =>
-            dayjs(leave.date).isSame(formattedDate, "day")
-          )
-          .map((leave) => [leave.leave_type_id, { ...event, leave }])
-      )
-  ).values()
-);
+    // Deduplicate leaveEvents by user (or by _id if user isn't available)
+    const leaveEvents = Array.from(
+      new Map(
+        leaveEventsRaw?.map((event) => [event._id, event]), // replace `_id` with `event.user_id` if applicable
+      ).values(),
+    );
 
-console.log(leaveEvents);
+    // console.log(leaveEvents);
 
-    // 🔹 Get shift events normally first
     let shiftEventsRaw = data?.filter(
       (event) =>
         Array.isArray(event?.date_range) &&
         event.date_range.includes(formattedDate),
     );
 
-    // 🚫 EXCLUDE shifts that have leave for the same date
-    shiftEventsRaw = shiftEventsRaw.filter((event) => {
-      const hasLeave =
-        Array.isArray(event?.date_leaves) &&
-        event.date_leaves.some((leave) =>
-          dayjs(leave.date).isSame(formattedDate, "day"),
-        );
-      return !hasLeave; // remove if leave exists on same date
-    });
-
-    // 🔹 Deduplicate by (shift_id + date)
+    // Step 2: Deduplicate by (shift_id + date) combination
     const shiftEventMap = new Map();
     shiftEventsRaw.forEach((event) => {
       const key = `${event.shift_id}_${formattedDate}`;
@@ -346,9 +327,10 @@ console.log(leaveEvents);
     });
     const shiftEvents = Array.from(shiftEventMap.values());
 
-    // 🔹 Remove duplicates between shiftEvents and other types
+    // Step 3: Create a set of shift event IDs for exclusion
     const shiftEventIds = new Set(shiftEvents?.map((event) => event._id));
 
+    // Combine dayOff candidates and filter out duplicates and shiftEvents
     const combinedDayOff = [
       ...swapedEvents,
       ...deletedEvents,
@@ -356,19 +338,19 @@ console.log(leaveEvents);
       ...leaveEvents,
     ];
 
+    // Use Map to remove duplicate events based on _id
     const dayOff = Array.from(
       new Map(
         combinedDayOff
-          .filter((event) => !shiftEventIds.has(event._id))
-          ?.map((event) => [event._id, event]),
+          .filter((event) => !shiftEventIds.has(event._id)) // remove if also in shiftEvents
+          ?.map((event) => [event._id, event]), // use _id as unique key
       ).values(),
     );
 
-    // 🔹 Identify week-offs
     const weekOffDays = allDays.filter((day) => !workingDays.includes(day));
+
     const isDayOff = weekOffDays.includes(selectedDay);
 
-    // 🔹 Requested slots for this date
     const requestedSlots = data?.requested_details?.filter((slot) =>
       dayjs(slot.date).isSame(dayjs(date), "day"),
     );
@@ -842,7 +824,7 @@ console.log(leaveEvents);
                                       ?.map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
-                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black ${leave?.leave_type_id === "AL" ? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ? "bg-[#fb643e]" : "bg-[#FBE51E]"}`}
+                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black ${leave?.leave_type_id === "AL"? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ?"bg-[#fb643e]":'bg-[#FBE51E]'}`}
                                         >
                                           <p className="text-center text-xs font-semibold">
                                             {leave.leave_name || "Leave"}
@@ -951,7 +933,7 @@ console.log(leaveEvents);
                                       ?.map((leave, i) => (
                                         <div
                                           key={`${index}-${i}`}
-                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black ${leave?.leave_type_id === "AL" ? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ? "bg-[#fc8d7a]" : "bg-[#FBE51E]"}`}
+                                          className={`h-[3.5rem] min-w-44 cursor-pointer rounded-md py-3 text-black  ${leave?.leave_type_id === "AL"? "bg-[#c5a2fb]" : leave?.leave_type_id === "170" ?"bg-[#fc8d7a]":'bg-[#FBE51E]'}`}
                                         >
                                           <p className="flex h-[3.5rem] w-full justify-center text-center text-xs font-semibold">
                                             {leave.leave_name || "Leave"}
@@ -959,98 +941,6 @@ console.log(leaveEvents);
                                         </div>
                                       )),
                                   )}
-                                  <div className="min-w-[11.4rem]">
-                                        {permissions.includes(
-                                          "roster-create",
-                                        ) && (
-                                          <button
-                                            className="text-2xl font-bold text-blue-500"
-                                            onMouseEnter={() =>
-                                              setHoveredShift({
-                                                id: emp?.employee?.id,
-                                                date: day.fullDate,
-                                                type: "add",
-                                                empid: "",
-                                              })
-                                            }
-                                            onMouseLeave={() =>
-                                              setHoveredShift({
-                                                id: emp?.employee?.id,
-                                                date: day.fullDate,
-                                                type: "",
-                                                empid: "",
-                                              })
-                                            }
-                                            onClick={() =>
-                                              changeShift(
-                                                emp?.employee?.id,
-                                                "",
-                                                day.fullDate,
-                                                "add",
-                                                emp?.employee?.department_id,
-                                                "",
-                                              )
-                                            }
-                                          >
-                                            +
-                                          </button>
-                                        )}
-
-                                        {/* Tooltip */}
-                                        {hoveredShift?.id ===
-                                          emp?.employee?.id &&
-                                          hoveredShift?.date === day.fullDate &&
-                                          hoveredShift?.type === "add" && (
-                                            <span className="absolute bottom-10 right-10 w-[7rem] rounded-md bg-gray-800 px-2 py-2 text-xs text-white shadow-md">
-                                              Add Shift
-                                            </span>
-                                          )}
-
-                                        {/* Popup Box (only opens for clicked cell) */}
-                                        {openPopup?.row === rowIndex &&
-                                          openPopup?.col === colIndex && (
-                                            <div className="absolute left-1/2 top-full z-50 -mt-28 w-64 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-md">
-                                              {/* Close Button */}
-                                              <div className="flex items-center justify-between border-b pb-2">
-                                                <span className="text-sm font-semibold">
-                                                  Select Shift
-                                                </span>
-                                                <button
-                                                  className="text-lg font-bold text-gray-500 hover:text-gray-700"
-                                                  onClick={() =>
-                                                    setOpenPopup(null)
-                                                  } // Close popup when clicked
-                                                >
-                                                  &times;
-                                                </button>
-                                              </div>
-
-                                              {/* Search Input */}
-                                              <input
-                                                type="text"
-                                                placeholder="Search shift name"
-                                                className="mt-2 w-full rounded-md border p-2 outline-none"
-                                              />
-
-                                              {/* Shift List */}
-                                              <div className="mt-2">
-                                                {filteredShifts?.map(
-                                                  (shift, index) => (
-                                                    <div
-                                                      key={index}
-                                                      className="flex justify-between border-b p-2 text-sm last:border-none"
-                                                    >
-                                                      <span>{shift.name}</span>
-                                                      <span className="text-gray-500">
-                                                        {shift.time}
-                                                      </span>
-                                                    </div>
-                                                  ),
-                                                )}
-                                              </div>
-                                            </div>
-                                          )}
-                                      </div>
                                 </div>
                               ) : dayOff?.length > 0 ? (
                                 <div className="overflow-y-min flex h-[12rem] w-full min-w-[11.4rem] flex-col gap-3 overflow-y-auto">
