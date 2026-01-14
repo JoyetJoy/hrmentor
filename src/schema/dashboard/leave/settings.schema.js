@@ -105,17 +105,30 @@ export const SettingsLeaveSchema = Yup.object().shape({
       return true;
     },
   ),
-  accural_monthly: Yup.object().test(
+  accural_monthly: Yup.object()
+  .nullable()
+  .test(
     "accrual-monthly-test",
     "Accrual monthly is required",
     function (value) {
-      const { accrualType } = this.parent;
-      if (accrualType === "bycycle" && !value?.value) {
-        return false;
+      const { accrualType, accural_period } = this.parent;
+console.log(this.parent);
+
+      // ✅ FIRST EXIT: if period is monthly → NOT REQUIRED
+      if (accural_period?.value === "monthly") {
+        return true;
       }
-      return true;
-    },
+
+      // ✅ SECOND EXIT: if not bycycle → NOT REQUIRED
+      if (accrualType !== "bycycle") {
+        return true;
+      }
+
+      // ❌ Required only here
+      return !!value?.value;
+    }
   ),
+
   accrual_leave: Yup.string().test(
     "accrual-leave-test",
     "Accrual leave is required",
@@ -127,17 +140,7 @@ export const SettingsLeaveSchema = Yup.object().shape({
       return true;
     },
   ),
-  accural_monthly: Yup.object().test(
-    "accrual-monthly-test",
-    "Accrual monthly is required",
-    function (value) {
-      const { accrualType } = this.parent;
-      if (accrualType === "bycycle" && !value) {
-        return false;
-      }
-      return true;
-    },
-  ),
+  
   accrual_leave: Yup.string().test(
     "accrual-leave-test",
     "Accrual leave is required",

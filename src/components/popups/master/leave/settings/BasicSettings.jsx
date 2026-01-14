@@ -267,7 +267,7 @@ const BasicSettings = ({ formtype = "save" }) => {
       let res;
 
       if (id) {
-        res = await newRequest.post(`${HOLIDAY_STATUS}/${id}`, formData);
+        res = await newRequest.patch(`${HOLIDAY_STATUS}/${id}`, formData);
       } else {
         res = await newRequest.post(HOLIDAY_STATUS, formData);
       }

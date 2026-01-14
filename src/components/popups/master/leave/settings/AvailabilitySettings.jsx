@@ -39,6 +39,10 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
   const [loader, setLoader] = useState(false);
   const { user } = useUserStore((state) => ({ user: state.user }));
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const {id} = useParams();
+  console.log(id);
+  
 
   const getStoredData = () => {
     const storedData = localStorage.getItem("myData");
@@ -47,9 +51,6 @@ const AvailabilitySettings = ({ formtype = "save" }) => {
 
   const storedData = getStoredData();
   const { id: routeId } = useParams();
-  const [searchParams] = useSearchParams();
-
-  const id = searchParams.get("id") || routeId || storedData?.id || null;
 
   useEffect(() => {
     const data = { id };
@@ -195,8 +196,13 @@ useEffect(() => {
       if (formData.role_availability.length === 0) {
         return toast.error("Select Role Availability");
       }
+      let res;
 
-      const res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
+      if (id) {
+              res = await newRequest.patch(`${HOLIDAY_AVAILABLE_SETTING}/${id}`, formData);
+            } else {
+              res = await newRequest.post(HOLIDAY_AVAILABLE_SETTING, formData);
+            }
 
       if (res.data.success === true) {
         toast.success("Leave created successfully");
