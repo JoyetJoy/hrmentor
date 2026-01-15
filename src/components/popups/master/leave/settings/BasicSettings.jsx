@@ -70,6 +70,7 @@ const BasicSettings = ({ formtype = "save" }) => {
     CarryForward_isOn,
     CarryForwardExpire_isOn,
     Encashments_isOn,
+    accural_period
   } = watch();
   console.log(errors);
 
@@ -241,13 +242,12 @@ const BasicSettings = ({ formtype = "save" }) => {
         code: data.code,
         pay_type: data.pay_type,
         description: data.description,
-        units: 'hours',
+        units: "hours",
         status: data.status,
         valid_from: moment(data.valid_from).format("YYYY-MM-DD"),
         accural_type: accrualType,
         accural_period: data?.accural_period?.value,
         accural_day: data?.accural_day?.value,
-        accural_monthly: data?.accural_monthly?.value,
         accural_at: data?.accural_at?.value,
         accrual_leave: data.accrual_leave,
         specific_days: data.specific_days,
@@ -262,6 +262,10 @@ const BasicSettings = ({ formtype = "save" }) => {
         encashments_pay: "basicpay",
         max_encashments: Number(encashmentsPay) ?? 0,
         no_of_days: data.no_of_days ?? 0,
+        ...(accrualType === "bycycle" &&
+          data?.accural_period?.value !== "monthly" && {
+            accural_monthly: data?.accural_monthly?.value,
+          }),
       };
 
       let res;
@@ -419,33 +423,33 @@ const BasicSettings = ({ formtype = "save" }) => {
                   </span>
                 )}
               </div>
-                <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
-                  <label className="required label-text">Units</label>
-                  <div className="flex gap-3">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="units"
-                        value={"days"}
-                        onClick={() => setUnits("days")}
-                        className="radio-black"
-                        checked={units == "days"}
-                      />
-                      <label className="text-sm font-normal">Days</label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="units"
-                        value="hours"
-                        onClick={() => setUnits("hours")}
-                        className="radio-black"
-                        checked={units === "hours"}
-                      />
-                      <label className="text-sm font-normal">Hours</label>
-                    </div>
+              <div className="group mt-2 flex flex-col gap-1.5 text-[0.85rem] font-medium">
+                <label className="required label-text">Units</label>
+                <div className="flex gap-3">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="units"
+                      value={"days"}
+                      onClick={() => setUnits("days")}
+                      className="radio-black"
+                      checked={units == "days"}
+                    />
+                    <label className="text-sm font-normal">Days</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="units"
+                      value="hours"
+                      onClick={() => setUnits("hours")}
+                      className="radio-black"
+                      checked={units === "hours"}
+                    />
+                    <label className="text-sm font-normal">Hours</label>
                   </div>
                 </div>
+              </div>
             </div>
             {/* Description */}
             <div className="group col-span-2 flex flex-col gap-1.5 py-2">
@@ -576,7 +580,7 @@ const BasicSettings = ({ formtype = "save" }) => {
                   )}
                 </div>
                 {/* Accrual Month */}
-                {accuralPeriod?.value !== "monthly" && (
+                {accural_period?.value !== "monthly" && (
                   <div className="group flex flex-col gap-1.5 py-2">
                     <label className="label-text">Accrual Month(s)</label>
                     <Controller
